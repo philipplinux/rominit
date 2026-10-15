@@ -15,3 +15,11 @@ CREATE TABLE IF NOT EXISTS comments (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS comments_rom ON comments (rom, id);
+
+CREATE TABLE IF NOT EXISTS reports (
+  id INTEGER PRIMARY KEY,
+  page TEXT NOT NULL,  -- path + query of the page, e.g. /?device=starlte
+  voter TEXT NOT NULL, -- salted address hash, for the rate limit only
+  text TEXT NOT NULL,
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

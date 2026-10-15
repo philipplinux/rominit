@@ -218,6 +218,22 @@ function devicePicker(index) {
   return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search, list);
 }
 
+/** "Something wrong on this page?" form; falls back to a GitHub issue link. */
+function reportBox() {
+  const page = location.pathname + location.search;
+  const text = h('textarea', { className: 'confirmation-input', placeholder: 'What is wrong or missing? (wrong file, broken step, outdated info…)', maxLength: 2000, rows: 3 });
+  const send = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Send report' }), status = h('small', {});
+  const issue = `https://github.com/philipplinux/rominit/issues/new?title=${encodeURIComponent(`Problem on ${page}`)}`;
+  send.addEventListener('click', async () => {
+    status.textContent = 'Sending…';
+    const response = await fetch('./api/reports', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page, text: text.value }) }).catch(() => null);
+    const reply = await response?.json().catch(() => ({}));
+    status.textContent = response?.ok ? 'Thanks, report sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
+    if (response?.ok) text.value = '';
+  });
+  return h('details', { className: 'page-section report' }, h('summary', {}, h('span', { textContent: 'Something wrong on this page?' }), h('small', { textContent: 'report it' })),
+    h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
+}
 async function start() {
   if (!supported) main.append(h('p', { className: 'experimental-note', textContent: 'Open this page over HTTPS in desktop Chrome or Edge: flashing needs WebUSB.' }));
   const codename = params.get('device');
@@ -264,4 +280,4 @@ async function start() {
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
         ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length))))]));
 }
-start().catch(error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
+start().then(() => main.append(reportBox()), error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));

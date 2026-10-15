@@ -56,4 +56,6 @@ npm run build && npx wrangler pages deploy
 npx wrangler pages secret put SALT      # any long random string
 ```
 
+Reports from "Something wrong on this page?": `npx wrangler d1 execute rominit --remote --command "SELECT id, page, text, at FROM reports ORDER BY id DESC LIMIT 50"`.
+
 Local: `echo SALT=dev > .dev.vars`, `npx wrangler d1 execute rominit --local --file schema.sql`, `npx wrangler pages dev dist`.
