@@ -241,17 +241,25 @@ function benchBox(rom, key) {
   function waitFor(code) {
     const url = `${location.origin}/b/${code}`;
     const sound = h('input', { type: 'checkbox' });
-    const ways = linux ? [['On the phone (terminal)', ''], ['SSH from a computer', `ssh ${loginUser}@<phone address> `], ['ADB from a computer', 'adb shell ']]
+    const ways = linux ? [['On the phone (terminal)', ''], ['SSH from a computer', 'ssh'], ['ADB from a computer', 'adb shell ']]
       : [['ADB from a computer', 'adb shell '], ['On the phone (terminal app)', '']];
     let way = ways[0][1];
+    // Stays in this browser only: user@address or an ~/.ssh/config alias.
+    const target = h('input', { type: 'text', className: 'bench-target', spellcheck: false, placeholder: `${loginUser}@192.168.1.50 or an ssh alias`, value: (() => { try { return localStorage.getItem('rominit.sshTarget') ?? ''; } catch { return ''; } })() });
+    const targetRow = h('label', { className: 'field-help', hidden: true }, 'SSH login: ', target);
     const command = h('code', { className: 'bench-command' });
-    const render = () => { const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh'; command.textContent = `curl -fsSL ${url} | ${way}${way && sound.checked ? `'${sh}'` : sh} | curl -fsS --data-binary @- ${url}`; };
+    const render = () => {
+      const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh', prefix = way === 'ssh' ? `ssh ${target.value.trim() || `${loginUser}@<phone address>`} ` : way;
+      targetRow.hidden = way !== 'ssh';
+      command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -fsS --data-binary @- ${url}`;
+    };
+    target.addEventListener('input', () => { try { localStorage.setItem('rominit.sshTarget', target.value.trim()); } catch { /* private window */ } render(); });
     const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
       onclick(/** @type {Event} */ e) { way = prefix; for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render(); } })));
     sound.addEventListener('change', render); render();
     const waiting = h('div', { className: 'bench-wait' }, h('span', { className: 'breath', ariaHidden: 'true' }), h('span', { textContent: 'Waiting for your phone… breathe in, breathe out.' }));
     box.replaceChildren(
-      h('p', { className: 'field-label', textContent: 'Run this, wherever your phone has a shell' }), tabs,
+      h('p', { className: 'field-label', textContent: 'Run this, wherever your phone has a shell' }), tabs, targetRow,
       h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
       h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
