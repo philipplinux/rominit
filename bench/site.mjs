@@ -124,6 +124,22 @@ test('broken ROMs are listed but not flashable', async () => {
   await page.unroute('**/catalog/starlte.json');
 });
 
+test('section 0 screenshot slideshow: arrows and counter, wraps around', async () => {
+  await page.route('**/catalog/starlte.json', async route => {
+    const device = await (await route.fetch()).json();
+    device.roms[0].screenshots = [1, 2, 3].map(n => ({ src: `data:image/png;base64,${PNG.toString('base64')}`, caption: `shot ${n}` }));
+    await route.fulfill({ json: device });
+  });
+  await page.goto(`${BASE}/?device=starlte`);
+  const show = page.locator('.slideshow');
+  await show.getByText('1 / 3').waitFor();
+  await show.locator('.slide-next').click();
+  await show.getByText('2 / 3').waitFor();
+  await show.locator('.slide-prev').click(); await show.getByText('1 / 3').waitFor();
+  await show.locator('.slide-prev').click(); await show.getByText('3 / 3').waitFor();
+  await page.unroute('**/catalog/starlte.json');
+});
+
 test('flash button stays locked without phone, files, consent and confirm phrase', async () => {
   await page.goto(`${BASE}/?device=starlte`);
   const card = page.locator('.stage-card').first();

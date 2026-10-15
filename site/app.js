@@ -72,6 +72,21 @@ function countsRow(key) {
     views.textContent = `${n.view} view${n.view === 1 ? '' : 's'}`; flashes.textContent = `${n.flash} successful flash${n.flash === 1 ? '' : 'es'}`; row.hidden = false; }, () => {});
   return row;
 }
+/**
+ * Screenshots or GIFs of the ROM running, one at a time with arrows and "2 / 5" when there are several. Swipe works through scroll-snap.
+ * @param {{src:string, caption?:string}[]} shots
+ */
+function slideshow(shots) {
+  const track = h('div', { className: 'slides' }, ...shots.map(shot => h('figure', {}, h('img', { src: shot.src, alt: shot.caption ?? '', loading: 'lazy' }), shot.caption && h('figcaption', { textContent: shot.caption }))));
+  if (shots.length < 2) return h('div', { className: 'slideshow' }, track);
+  const counter = h('span', { className: 'slide-count', textContent: `1 / ${shots.length}` });
+  const at = () => Math.round(track.scrollLeft / track.clientWidth);
+  const go = (/** @type {number} */ step) => track.scrollTo({ left: ((at() + step + shots.length) % shots.length) * track.clientWidth, behavior: 'smooth' });
+  track.addEventListener('scroll', () => { counter.textContent = `${at() + 1} / ${shots.length}`; });
+  return h('div', { className: 'slideshow' }, track,
+    h('button', { className: 'slide-prev', type: 'button', 'aria-label': 'Previous screenshot', textContent: '‹', onclick: () => go(-1) }),
+    h('button', { className: 'slide-next', type: 'button', 'aria-label': 'Next screenshot', textContent: '›', onclick: () => go(1) }), counter);
+}
 /** User stars from the ratings API; stays hidden where there is no API (static preview). @param {string} key `<codename>/<rom id>` */
 function starsRow(key) {
   const summary = h('span', { className: 'feature' }), status = h('small', {});
@@ -325,6 +340,7 @@ async function start() {
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect,
+      rom?.screenshots?.length && slideshow(rom.screenshots),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),

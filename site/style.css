@@ -300,3 +300,12 @@ progress::-moz-progress-bar { background: var(--teal); }
 .back-link { display: inline-block; margin-bottom: .9rem; color: var(--muted); font-size: .65rem; letter-spacing: .13em; text-decoration: none; }
 .back-link:hover { color: var(--teal); }
 .topbar-note a { margin-right: .9rem; color: var(--amber); text-decoration: none; }
+
+.slideshow { position: relative; max-width: 420px; }
+.slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border: 1px solid var(--line); }
+.slides figure { flex: 0 0 100%; margin: 0; scroll-snap-align: center; text-align: center; }
+.slides img { display: block; width: 100%; max-height: 420px; object-fit: contain; }
+.slides figcaption { font-size: .7rem; color: var(--faint); padding: .25rem; }
+.slide-prev, .slide-next { position: absolute; top: 40%; border: 1px solid var(--line); background: rgb(0 0 0 / .6); color: inherit; font-size: 1.4rem; width: 2rem; height: 2.4rem; cursor: pointer; }
+.slide-prev { left: 4px; } .slide-next { right: 4px; }
+.slide-count { position: absolute; right: 6px; bottom: 6px; font-size: .7rem; background: rgb(0 0 0 / .6); padding: .1rem .35rem; }
