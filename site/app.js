@@ -46,6 +46,10 @@ const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstr
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
   `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), complete(rating, 'phone', true)].map(text => h('span', { className: 'feature', textContent: text })));
+/** Default login, shown where people look for it. @param {string} login `user / password` */
+const loginRow = login => { const [user, password] = login.split(' / ');
+  return h('p', { className: 'rating' }, h('strong', { textContent: 'login' }), h('span', { className: 'feature', textContent: `user: ${user}` }),
+    h('span', { className: 'feature', textContent: `password: ${password}` }), h('small', { textContent: 'change it after the first login (passwd)' })); };
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
@@ -288,11 +292,13 @@ async function start() {
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
-      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''}${rom.login ? ` Login afterwards: \`${rom.login}\`, change it.` : ''} `), rom.homepage && link(rom.homepage, 'Release page')),
+      rom?.login && loginRow(rom.login),
+      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `), rom.homepage && link(rom.homepage, 'Release page')),
       rom && commentsBox(`${device.codename}/${rom.id}`)]),
     section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
       tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
     section('2 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
+      rom?.login && loginRow(rom.login),
       rom && h('div', { className: 'stages' }, ...cards(rom, 'rom'))]),
     section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),

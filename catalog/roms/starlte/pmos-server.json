@@ -64,6 +64,7 @@
       },
       "notes": "Runs on real hardware. Flashing through the browser is not hardware-tested yet.",
       "homepage": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9",
+      "login": "user / changeme",
       "stages": [
         {
           "title": "Install TWRP",

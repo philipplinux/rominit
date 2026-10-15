@@ -48,6 +48,7 @@ export function problems(device, romFile) {
     need(SAFE.test(rom.id ?? ''), `${at}: id missing or unsafe`);
     // `stock` ROMs are the way back; the page lists them under Recover / revert.
     need(['verified', 'experimental', 'imported', 'stock'].includes(rom.tier), `${at}: tier must be verified, experimental, imported or stock`);
+    need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
     const features = rom.rating?.features ?? {};
     need(/^\d{4}-\d{2}-\d{2}$/.test(rom.rating?.checked ?? '') && FEATURES.every(f => STATES.includes(features[f])) && Object.keys(features).length === FEATURES.length,
