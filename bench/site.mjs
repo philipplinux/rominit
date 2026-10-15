@@ -399,6 +399,13 @@ test('favorites: ♡ asks signed-out users to sign in; signed in it toggles and 
   await signIn(null);
 });
 
+test('maintainer: scraped placeholder is marked unverified until someone claims the ROM', async () => {
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  const row = page.locator('.rating', { has: page.locator('strong', { hasText: 'maintainer' }) });
+  await row.locator('.maintainer-hint', { hasText: 'philipplinux' }).waitFor();
+  assert.match(await row.innerText(), /unverified · found at github\.com · subject to verification/);
+});
+
 test('report form', async () => {
   await page.goto(`${BASE}/?device=starlte`);
   await page.locator('.report summary').click();

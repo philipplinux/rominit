@@ -223,12 +223,15 @@ function commentsBox(key) {
   load();
   return box;
 }
-/** "maintainer: name (all postmarketOS)"; verified owners only. Hidden where there is no API. @param {string} key */
-function ownersRow(key) {
+/** "maintainer: name (all postmarketOS)"; verified owners, else the scraped placeholder. Hidden where there is no API. @param {string} key @param {{name:string, avatar?:string, source:string}} [hint] */
+function ownersRow(key, hint) {
   const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'maintainer' }));
+  // Scraped maintainer (catalog `maintainer`): a placeholder, always marked unverified until they claim the ROM.
+  const placeholder = () => hint ? [h('span', { className: 'feature maintainer-hint' }, hint.avatar && h('img', { src: hint.avatar, alt: '', width: 18, height: 18 }), hint.name),
+    h('small', {}, 'unverified · found at ', link(hint.source, new URL(hint.source).hostname), ' · subject to verification')] : [h('span', { className: 'feature untested', textContent: 'no verified maintainer yet' })];
   fetch(`./api/owners?rom=${encodeURIComponent(key)}`).then(r => r.ok ? r.json() : Promise.reject()).then((/** @type {any[]} */ owners) => {
     row.append(...(owners.length ? owners.map(o => h('span', { className: 'feature works', textContent: `✓ ${o.name}${o.scope.startsWith('rom:') ? '' : ` (${o.scope.replace(':', ' ')})`}` }))
-      : [h('span', { className: 'feature untested', textContent: 'no verified maintainer yet' })]));
+      : placeholder()));
     row.hidden = false;
   }, () => {});
   return row;
@@ -676,7 +679,7 @@ async function start() {
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
-      rom && ownersRow(`${device.codename}/${rom.id}`),
+      rom && ownersRow(`${device.codename}/${rom.id}`, rom.maintainer),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
