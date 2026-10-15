@@ -310,7 +310,7 @@ progress::-moz-progress-bar { background: var(--teal); }
 .slide-prev { left: 4px; } .slide-next { right: 4px; }
 .slide-count { position: absolute; right: 6px; bottom: 6px; font-size: .7rem; background: rgb(0 0 0 / .6); padding: .1rem .35rem; }
 
-.badge { border: 1px solid var(--amber); color: var(--amber); font-size: .58rem; letter-spacing: .1em; padding: .1rem .35rem; }
+.badge { margin-right: auto; border: 1px solid var(--amber); color: var(--amber); font-size: .58rem; letter-spacing: .1em; padding: .1rem .35rem; }
 .guide { margin: 0; padding-left: 1.3rem; font-size: .78rem; line-height: 1.55; }
 .guide li + li { margin-top: .35rem; }
 .pivots { font-size: .75rem; border-left: 2px solid var(--amber); padding: .3rem .7rem; }
