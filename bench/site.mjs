@@ -67,7 +67,7 @@ test('section 0 opens with ROM source and source code links', async () => {
   await page.goto(`${BASE}/?device=laurel_sprout`);
   const row = page.locator('.lock-path > .source-row');
   assert.equal(await row.locator('a', { hasText: 'Source code' }).getAttribute('href'), 'https://github.com/philipplinux/mia3-postmarketos');
-  assert.equal(await page.locator('.lock-path > *').first().getAttribute('class'), 'slideshow no-shot');
+  assert.equal(await page.locator('.lock-path > *').first().getAttribute('class'), 'slideshow');
   assert.ok(await row.locator('a', { hasText: 'ROM source' }).count());
 });
 
