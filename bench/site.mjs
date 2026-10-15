@@ -411,8 +411,8 @@ test('report form', async () => {
   await page.goto(`${BASE}/?device=starlte`);
   await page.locator('.report summary').click();
   await page.locator('.report textarea').fill('bench report');
-  await page.getByRole('button', { name: 'Send report' }).click();
-  await page.getByText('Thanks, report sent.').waitFor();
+  await page.getByRole('button', { name: 'Send ticket' }).click();
+  await page.getByText('Thanks, ticket sent.').waitFor();
   assert.match(d1('--command', 'SELECT page FROM reports'), /device=starlte/);
 });
 

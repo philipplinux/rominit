@@ -465,3 +465,5 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .popular li.missed a { color: var(--red, #e88); }
 .inbox-sub { padding: 0 1.75rem; }
 .bench-output { max-height: 20rem; overflow: auto; font-size: .7rem; white-space: pre-wrap; }
+.inbox-rom { display: block; font-size: 1rem; }
+.inbox-actions { display: flex; gap: .5rem; margin: .4rem 0; }

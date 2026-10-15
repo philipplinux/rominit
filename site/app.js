@@ -77,7 +77,7 @@ const loginRow = login => { const [user, password] = login.split(' / ');
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
-    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked}` }));
+    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked}${rating.tested ? ` · phone test accepted ${rating.tested}` : ''}` }));
 /** Count one view or flash of a ROM; failures are ignored. @param {string} rom @param {'view'|'flash'} kind */
 const bump = (rom, kind) => fetch('./api/counts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom, kind }) }).catch(() => {});
 /** "120 views · 12 successful flashes"; counts this view first. Hidden where there is no API. @param {string} key */
@@ -246,6 +246,8 @@ function ownersRow(key, hint) {
 }
 /** Phone test tiers, in tap order; `inconclusive` only comes from a probe that failed. */
 const TIERS = ['full', 'partial', 'broken', 'blocked', 'untested', 'n/a'];
+/** Phone test tier → catalog feature state; tiers missing here say nothing about the feature. */
+const TIER_STATE = /** @type {Record<string, string>} */ ({ full: 'works', partial: 'partial', broken: 'broken', 'n/a': 'n/a' });
 const TIER_MARK = /** @type {Record<string, string>} */ ({ full: '✓', partial: '~', broken: '✗', blocked: '⊘', untested: '·', 'n/a': '–', inconclusive: '?' });
 const TIER_HELP = /** @type {Record<string, string>} */ ({ full: 'works fully', partial: 'works in part', broken: 'does not work', blocked: 'needs something first (SIM, card, cable)',
   untested: 'not tried yet', 'n/a': 'this phone has none', inconclusive: 'the test script failed here; reported for a fix' });
@@ -595,7 +597,8 @@ async function favoritesView(index) {
 }
 
 /** Admin inbox: three folders, always shown with their counts: page reports (by section), phone tests, device searches. */
-async function inboxView() {
+/** @param {any[]} index */
+async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
@@ -603,8 +606,8 @@ async function inboxView() {
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
-  const folder = (name, hint, n, body) => h('details', { className: 'page-section inbox-group', open: n > 0 },
-    h('summary', {}, h('span', { textContent: `${name} · ${n}` }), h('small', { textContent: hint })), ...(n ? body : [h('p', { className: 'empty-files', textContent: 'Nothing here.' })]));
+  const folder = (name, hint, n, body, total = n) => h('details', { className: 'page-section inbox-group', open: n > 0 },
+    h('summary', {}, h('span', { textContent: `${name} · ${n}` }), h('small', { textContent: hint })), ...(total ? body : [h('p', { className: 'empty-files', textContent: 'Nothing here.' })]));
   /** "File as [label] [File]"; filing removes the item. @param {string} inbox @param {string} ref @param {HTMLElement} li */
   const fileAs = (inbox, ref, li) => {
     const label = h('select', {}, ...labels.map((/** @type {string} */ l) => h('option', { textContent: l })));
@@ -613,21 +616,37 @@ async function inboxView() {
       if (ok) li.remove(); else li.append(h('small', { textContent: ' could not file' }));
     } }));
   };
+  /** One phone test: which ROM, what it changes vs the catalog, and the moves to the other sub-folders. @param {any} x */
+  const benchItem = x => {
+    const final = JSON.parse(x.final ?? '{}'), [codename, id] = String(x.rom).split('/');
+    const d = index.find(i => i.codename === codename), rom = d?.roms.find((/** @type {any} */ r) => r.id === id);
+    const changes = Object.entries(final).filter(([f, tier]) => TIER_STATE[tier] && rom && TIER_STATE[tier] !== rom.rating.features[f])
+      .map(([f, tier]) => `${LABEL[f] ?? f}: ${rom.rating.features[f]} → ${TIER_STATE[tier]}`);
+    const move = (/** @type {string} */ action, /** @type {string} */ text, primary = false) => h('button', { type: 'button', className: `button ${primary ? 'button-primary' : 'button-secondary'}`, textContent: text, async onclick() {
+      const ok = (await fetch('./api/inbox', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ inbox: 'benchmarks', ref: x.ref, action }) })).ok;
+      if (ok) location.reload(); else li.append(h('small', { textContent: ' could not save' }));
+    } });
+    const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`,
+        textContent: d ? `${d.vendor} ${d.name} · ${rom ? `${rom.name} ${rom.version}` : `${id} (no longer in the catalog)`}` : x.rom })),
+      h('small', { textContent: `${x.at} UTC · ${x.rom}${x.accepted ? ` · approved ${x.accepted}` : ''}` }),
+      x.note && h('p', { textContent: x.note }),
+      h('p', { className: 'field-help', textContent: changes.length ? `Changes vs catalog (${changes.length}): ${changes.join(' · ')}` : 'No changes vs the catalog rating.' }),
+      h('div', { className: 'inbox-actions' }, ...(x.state === 'review' ? [move('approve', 'Approve', true), move('reject', 'Reject')] : [move('review', 'Back to review')])),
+      h('details', {}, h('summary', { textContent: 'card and script output' }), h('pre', { className: 'bench-output', textContent: `${JSON.stringify(final, null, 1)}\n\n${x.output ?? ''}` })));
+    return li;
+  };
   const by = /** @type {Record<string, any[]>} */ ({});
   for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
   card.append(
-    folder('Reports', 'page reports, by section', reports.length, Object.entries(by).sort(([a], [b]) => a.localeCompare(b)).map(([section, items]) =>
+    folder('Tickets', 'page tickets, by section', reports.length, Object.entries(by).sort(([a], [b]) => a.localeCompare(b)).map(([section, items]) =>
       h('div', { className: 'inbox-sub' }, h('p', { className: 'field-label', textContent: `${section} · ${items.length}` }), h('ol', { className: 'comments' }, ...items.map(x => {
         const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }));
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
-    folder('Benchmarks', 'submitted phone tests', benchmarks.length, [h('ol', { className: 'comments' }, ...benchmarks.map((/** @type {any} */ x) => {
-      const body = JSON.parse(x.body ?? '{}'), [codename] = String(x.rom).split('/');
-      const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: `./?device=${encodeURIComponent(codename)}`, textContent: x.rom })),
-        body.note && h('p', { textContent: body.note }),
-        h('details', {}, h('summary', { textContent: 'card and script output' }), h('pre', { className: 'bench-output', textContent: `${JSON.stringify(body.final, null, 1)}\n\n${body.output ?? ''}` })));
-      return li.append(fileAs('benchmarks', x.ref, li)), li;
-    }))]),
+    folder('Benchmarks', `phone tests · ${benchmarks.approved.length} approved · ${benchmarks.rejected.length} rejected`, benchmarks.review.length,
+      [['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'review' },
+        h('summary', { className: 'field-label', textContent: `${title} · ${benchmarks[state].length}` }),
+        h('ol', { className: 'comments' }, ...benchmarks[state].map(benchItem)))), Object.values(benchmarks).flat().length),
     folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
   return card;
@@ -651,20 +670,20 @@ function reportBox() {
   const page = location.pathname + location.search;
   const text = h('textarea', { className: 'confirmation-input', placeholder: 'What is wrong or missing? (wrong file, broken step, outdated info…)', maxLength: 2000, rows: 3 });
   const where = h('select', { className: 'report-section' }, h('option', { value: '', textContent: 'Whole page' }));
-  const send = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Send report' }), status = h('small', {});
+  const send = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Send ticket' }), status = h('small', {});
   const issue = `https://github.com/philipplinux/rominit/issues/new?title=${encodeURIComponent(`Problem on ${page}`)}`;
   send.addEventListener('click', async () => {
     status.textContent = 'Sending…';
     const response = await fetch('./api/reports', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page, text: text.value, section: where.value }) }).catch(() => null);
     const reply = await response?.json().catch(() => ({}));
-    status.textContent = response?.ok ? 'Thanks, report sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
+    status.textContent = response?.ok ? 'Thanks, ticket sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
   const box = h('details', { className: 'page-section report', ontoggle() {
     if (where.isConnected) return; // built on first open, from this page's own sections
     for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
     text.before(h('label', { className: 'field-help' }, 'About: ', where));
-  } }, h('summary', {}, h('span', { textContent: 'S · Submit report' }), h('small', { textContent: 'something wrong on this page?' })),
+  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket' }), h('small', { textContent: 'something wrong on this page?' })),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
   return box;
 }
@@ -681,12 +700,20 @@ async function start() {
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
-    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView() : devicePicker(index));
+    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
     return;
   }
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
   if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
+  // Accepted phone tests override the catalog's feature states; blocked / untested / inconclusive keep the catalog value.
+  const tested = await fetch(`./api/bench?device=${encodeURIComponent(codename)}`).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  for (const r of device.roms) {
+    const run = tested[`${codename}/${r.id}`];
+    if (!run) continue;
+    for (const [f, tier] of Object.entries(run.final)) if (TIER_STATE[tier] && f in r.rating.features) r.rating.features[f] = TIER_STATE[tier];
+    r.rating.tested = run.accepted.slice(0, 10);
+  }
   const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 20 + (r.vetting === 'curated' ? 0 : 10) + Object.keys(STATUSES).indexOf(r.status);
   const roms = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').sort((/** @type {any} */ a, /** @type {any} */ b) => rank(a) - rank(b));
   const stock = device.roms.filter((/** @type {any} */ r) => r.origin === 'stock');

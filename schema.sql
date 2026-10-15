@@ -75,7 +75,8 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   output TEXT,             -- what the script printed, up to 128 KB, package list included
   final TEXT,              -- JSON {feature: status} after the user's corrections
   note TEXT,
-  submitted TEXT
+  submitted TEXT,
+  accepted TEXT           -- set by an admin: the card's results now show on the ROM page
 );
 
 -- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports). Add one by adding a UNION arm.

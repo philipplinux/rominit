@@ -1,4 +1,4 @@
-// Phone test runs. POST {rom} starts one ({code}); GET ?code= polls for the script output; POST {code, final, note} submits the corrected card.
+// Phone test runs. GET ?device= lists accepted results. POST {rom} starts one ({code}); GET ?code= polls for the script output; POST {code, final, note} submits the corrected card.
 import { json, voterOf } from '../_lib/api.js';
 import { romInfo, userOf } from '../_lib/auth.js';
 
@@ -7,6 +7,11 @@ const code = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => 'abcd
 
 /** @param {{request:Request, env:any}} context */
 export async function onRequestGet({ request, env }) {
+  const device = new URL(request.url).searchParams.get('device');
+  if (device) { // accepted results per ROM of this device, newest wins: { "<codename>/<rom id>": { final, accepted } }
+    const { results } = await env.DB.prepare("SELECT rom, final, accepted FROM bench_runs WHERE accepted IS NOT NULL AND rom LIKE ?1 || '/%' ORDER BY accepted").bind(device).all();
+    return Response.json(Object.fromEntries(results.map((/** @type {any} */ r) => [r.rom, { final: JSON.parse(r.final), accepted: r.accepted }])), { headers: { 'cache-control': 'public, max-age=60' } });
+  }
   const run = await env.DB.prepare('SELECT output, submitted FROM bench_runs WHERE code = ?1').bind(new URL(request.url).searchParams.get('code') ?? '').first();
   return run ? json({ output: run.output, submitted: !!run.submitted }) : json({ error: 'unknown code' }, 404);
 }
