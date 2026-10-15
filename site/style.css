@@ -432,3 +432,13 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .lock-end .login-box { grid-column: 1; grid-row: 1; margin: 0 1.2rem 0 0; justify-self: end; }
 @media (max-width: 640px) { .lock-end { grid-template-columns: 1fr auto; } .lock-end .login-box { grid-column: 1 / -1; justify-self: center; margin: 0 0 1rem; } .lock-end .lock-in { grid-column: 1; grid-row: 2; } .lock-end::after { grid-column: 2; grid-row: 2; } }
 .lock-end + .intro-copy { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgb(255 255 255 / 8%); }
+.topbar-side { display: grid; justify-items: end; gap: .3rem; }
+.topbar-side .account { margin: 0; }
+.signin-pop { margin: auto; padding: 1.4rem; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); color: inherit; display: none; gap: .7rem; min-width: 17rem; }
+.signin-pop:popover-open { display: grid; }
+.signin-pop::backdrop { background: rgb(0 0 0 / 55%); }
+.signin-pop small { color: var(--muted); max-width: 17rem; }
+.signin-badge { display: flex; align-items: center; justify-content: center; gap: .6rem; padding: .65rem 1rem; border-radius: 6px; font: 500 .9rem/1.2 system-ui, sans-serif; letter-spacing: 0; text-transform: none; text-decoration: none; }
+.signin-badge.google { background: #fff; color: #1f1f1f; border: 1px solid #747775; }
+.signin-badge.github { background: #24292f; color: #fff; border: 1px solid #57606a; }
+.signin-badge:hover { filter: brightness(1.08); }

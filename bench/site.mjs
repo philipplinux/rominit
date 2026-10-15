@@ -71,6 +71,16 @@ test('section 0 opens with ROM source and source code links', async () => {
   assert.ok(await row.locator('a', { hasText: 'ROM source' }).count());
 });
 
+test('header: SIGN IN under EXPERIMENTAL opens a popup with provider badges', async () => {
+  await page.goto(`${BASE}/?device=starlte`);
+  await page.locator('.topbar-side .account button', { hasText: 'SIGN IN' }).click();
+  const badge = page.locator('#signin .signin-badge.github');
+  await badge.waitFor();
+  assert.match(await badge.getAttribute('href') ?? '', /^\.\/auth\/github\/login\?return=%2F%3Fdevice%3Dstarlte$/);
+  await page.keyboard.press('Escape');
+  assert.equal(await badge.isVisible(), false);
+});
+
 test('device tree: All › vendor › series › family › variant, unsupported greyed with why', async () => {
   await page.goto(BASE);
   const tree = page.locator('.device-tree');
@@ -266,7 +276,7 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
 
   await signIn('ada', 'owner', `rom:${rom}`);
   await page.reload();
-  await page.locator('.topbar-note').getByText('ada ·').waitFor();
+  await page.locator('.topbar-side .account').getByText('ada ·').waitFor();
   await page.locator('.rating', { hasText: 'maintainer' }).getByText('✓ ada').waitFor();
   await box.locator('textarea').fill('bench comment');
   await box.locator('input[type=file]').setInputFiles({ name: 'shot.png', mimeType: 'image/png', buffer: PNG });
