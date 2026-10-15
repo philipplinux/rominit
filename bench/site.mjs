@@ -48,6 +48,21 @@ test('coffee link in header and footer', async () => {
   assert.equal(await page.locator(`.footer a[href="${DONATE}"]`).count(), 1);
 });
 
+test('header nav: search, Brands, Popular; disclaimer names Chrome/Edge and × hides it for good', async () => {
+await page.goto(`${BASE}/?view=brands`);
+assert.match(await page.locator('.disclaimer').innerText(), /Use at your own risk[\s\S]*Chrome or Edge/i);
+await page.locator('.brand-tile', { hasText: 'Xiaomi' }).click();
+assert.equal(await page.locator('#main input[type=search]').inputValue(), 'Xiaomi');
+await page.goto(`${BASE}/?view=popular`);
+await page.locator('.sitenav a[aria-current]', { hasText: 'Popular' }).waitFor();
+await page.locator('.flash-card', { hasText: 'Popular phones' }).waitFor();
+await page.locator('.disclaimer-close').click();
+assert.equal(await page.locator('.disclaimer').count(), 0);
+await page.reload();
+assert.equal(await page.locator('.disclaimer').count(), 0);
+await page.evaluate(() => localStorage.removeItem('rominit.noticeHidden'));
+});
+
 test('device tree: All › vendor › series › family › variant, unsupported greyed with why', async () => {
   await page.goto(BASE);
   const tree = page.locator('.device-tree');

@@ -509,6 +509,29 @@ function devicePicker(index) {
   return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search, list);
 }
 
+/** One tile per vendor, linking to the device list filtered to it. @param {any[]} index */
+function brandsView(index) {
+  /** @type {Record<string, any[]>} */ const by = {};
+  for (const d of index) (by[d.vendor] ??= []).push(d);
+  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Brands' }),
+    h('div', { className: 'brand-tiles' }, ...Object.entries(by).sort(([x], [y]) => x.localeCompare(y)).map(([vendor, devices]) =>
+      h('a', { className: 'brand-tile', href: `./?q=${encodeURIComponent(vendor)}` }, h('strong', { textContent: vendor }),
+        h('small', { textContent: `${devices.length} phone${devices.length === 1 ? '' : 's'} · ${devices.reduce((n, d) => n + d.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').length, 0)} ROMs` })))));
+}
+
+/** Phones ranked by successful flashes, then views, from the counts API. @param {any[]} index */
+async function popularView(index) {
+  const counts = await fetch('./api/counts', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
+  const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Popular phones' }));
+  if (!counts) return card.append(h('p', { className: 'empty-files', textContent: 'Popularity needs the live site.' })), card;
+  const sum = (/** @type {any} */ d, /** @type {string} */ kind) => d.roms.reduce((/** @type {number} */ n, /** @type {any} */ r) => n + (counts[`${d.codename}/${r.id}`]?.[kind] ?? 0), 0);
+  const ranked = index.map(d => ({ d, flash: sum(d, 'flash'), view: sum(d, 'view') })).sort((x, y) => y.flash - x.flash || y.view - x.view);
+  card.append(h('ol', { className: 'selected-files popular' }, ...ranked.map(({ d, flash, view }) => h('li', {},
+    h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: `${d.vendor} ${d.variant}` }), ` · ${flash} flash${flash === 1 ? '' : 'es'} · ${view} view${view === 1 ? '' : 's'}`))),
+    h('small', { className: 'field-help', textContent: 'Counted through this site: successful flashes first, then views.' }));
+  return card;
+}
+
 /** "Something wrong on this page?" form; falls back to a GitHub issue link. */
 function reportBox() {
   const page = location.pathname + location.search;
@@ -526,11 +549,19 @@ function reportBox() {
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
 }
 async function start() {
-  if (!supported) main.append(h('p', { className: 'experimental-note', textContent: 'Open this page over HTTPS in desktop Chrome or Edge: flashing needs WebUSB.' }));
-  const codename = params.get('device');
+  const codename = params.get('device'), view = params.get('view');
+  // Disclaimer × hides it; remembered per browser.
+  const notice = document.querySelector('.disclaimer');
+  try { if (localStorage.getItem('rominit.noticeHidden')) notice?.remove(); } catch {}
+  notice?.querySelector('button')?.addEventListener('click', () => { notice.remove(); try { localStorage.setItem('rominit.noticeHidden', '1'); } catch {} });
+  // Header nav: mark where we are and keep the search text.
+  const navSearch = /** @type {HTMLInputElement|null} */ (document.querySelector('.sitenav input'));
+  if (navSearch) navSearch.value = params.get('q') ?? '';
+  if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
+  for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
-    main.append(devicePicker(index));
+    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : devicePicker(index));
     return;
   }
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
@@ -587,7 +618,7 @@ async function start() {
   const infoSection = section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
-      rom ? h('div', { className: 'lock-path' }, rom?.screenshots?.length && slideshow(rom.screenshots),
+      rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
