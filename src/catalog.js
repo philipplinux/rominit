@@ -21,6 +21,9 @@ export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Who built the ROM. `stock` ROMs are the way back; the page lists them under Recover / revert. */
 export const ORIGINS = { official: 'built and released by the OS project', unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
+/** How far ROMinit vouches for a ROM. Only a person sets `curated`; scrapers always write `scraped`. */
+export const VETTING = { curated: 'endorsed by its community or ROMinit (GrapheneOS, mainline postmarketOS / Nura, our own builds)',
+  scraped: 'found by a scraper; subject to verification' };
 /** How usable the release is, best first. `broken` ROMs stay listed for the record but cannot be flashed here. */
 export const STATUSES = { stable: 'daily-driver ready', beta: 'mostly works, known rough edges', nightly: 'automatic build, untested',
   experimental: 'early port, expect bugs', legacy: 'old release, superseded or no longer updated', broken: 'known not to boot or flash' };
@@ -58,8 +61,7 @@ export function problems(device, romFile) {
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;
     need(SAFE.test(rom.id ?? ''), `${at}: id missing or unsafe`);
-    // curated: a ROMinit maintainer picked it and checked files and ratings by hand (imported entries are not).
-    need(typeof rom.curated === 'boolean', `${at}: curated must be true or false`);
+    need(rom.vetting in VETTING, `${at}: vetting must be ${Object.keys(VETTING).join(' or ')}`);
     need(rom.origin in ORIGINS && rom.status in STATUSES, `${at}: origin (${Object.keys(ORIGINS).join('/')}) and status (${Object.keys(STATUSES).join('/')}) are required`);
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.

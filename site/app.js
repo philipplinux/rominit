@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -46,8 +46,9 @@ const score = rating => `${complete(rating, 'computer')} · ${complete(rating, '
 const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent: 'release' }),
   h('span', { className: 'feature', title: ORIGINS[rom.origin], textContent: rom.origin }),
   h('span', { className: `feature ${({ stable: 'works', legacy: 'untested', broken: 'broken' })[rom.status] ?? 'partial'}`, title: STATUSES[rom.status], textContent: rom.status }),
-  rom.curated && h('span', { className: 'feature works', title: 'picked and checked by hand by ROMinit maintainers', textContent: 'curated ★' }),
-  h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}${rom.curated ? '; checked by hand by ROMinit' : ''}` }));
+  rom.vetting === 'curated' ? h('span', { className: 'feature works', title: VETTING.curated, textContent: 'curated ★' })
+    : h('span', { className: 'feature partial', title: VETTING.scraped, textContent: 'scraped · unverified' }),
+  h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}; ${VETTING[rom.vetting]}` }));
 const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
 /** Where the ROM comes from: release page and source code, first thing in section 0. @param {any} rom */
 const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key) => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
@@ -186,6 +187,8 @@ me.then(info => {
     document.querySelector('.sitenav a[href="./?view=favorites"]')?.after(link);
   }
 });
+/** Arrow looping back counter-clockwise into a circle (start over). */
+const REWIND_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.64-6.36L3 8.25"/><path d="M3 3v5.25h5.25"/></svg>';
 const ROLE_LABEL = /** @type {Record<string, string>} */ ({ owner: 'maintainer', moderator: 'moderator', admin: 'admin' });
 
 /** Comments of one ROM; hidden where there is no API. Text only, never HTML. Posting needs an account. @param {string} key `<codename>/<rom id>` */
@@ -540,7 +543,7 @@ function stageCard(device, stage, n, count, key) {
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
   const list = h('div', { className: 'device-tree' });
-  const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}${r.curated ? ', curated' : ''}, ${score(r.rating)})`).join(', ');
+  const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating)})`).join(', ');
   const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
   /** Variants we know but cannot flash, listed so owners see why. */
   const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
@@ -556,8 +559,12 @@ function devicePicker(index) {
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems)))))))));
-    if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
+    if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the phones people look for get added first.' }));
+    clearTimeout(logTimer);
+    const q = search.value.trim();
+    if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);
   };
+  let logTimer = 0; // logs the search once typing pauses, not every keystroke
   search.addEventListener('input', render);
   render();
   return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search, list);
@@ -593,6 +600,11 @@ async function inboxView() {
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
   const { reports, labels } = await r.json();
+  const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
+  if (searches.length) card.append(h('details', { className: 'page-section inbox-group', open: true },
+    h('summary', {}, h('span', { textContent: 'Searches · last 90 days' }), h('small', { textContent: 'no-match first, by people' })),
+    h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
+      h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))));
   if (!reports.length) return card.append(h('p', { className: 'empty-files', textContent: 'Inbox zero: no unsorted reports.' })), card;
   const by = /** @type {Record<string, any[]>} */ ({});
   for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
@@ -664,13 +676,13 @@ async function start() {
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
   if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
-  const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 20 + (r.curated ? 0 : 10) + Object.keys(STATUSES).indexOf(r.status);
+  const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 20 + (r.vetting === 'curated' ? 0 : 10) + Object.keys(STATUSES).indexOf(r.status);
   const roms = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').sort((/** @type {any} */ a, /** @type {any} */ b) => rank(a) - rank(b));
   const stock = device.roms.filter((/** @type {any} */ r) => r.origin === 'stock');
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
   const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
-    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}${r.curated ? ', curated' : ''})`, r.id, false, r === rom)))).filter(g => g.children.length));
+    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}, ${r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
@@ -779,7 +791,7 @@ async function start() {
       h('div', { className: 'title-row' }, h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
         h('button', { className: 'start-over', type: 'button', title: 'Forget progress on this phone and start from section 0', onclick() {
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
-          h('span', { className: 'rewind', textContent: '⏪', ariaHidden: 'true' }), h('small', { textContent: 'Start over' }))),
+          Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     infoSection,
     unlockSection,

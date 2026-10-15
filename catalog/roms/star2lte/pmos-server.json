@@ -8,7 +8,7 @@
       "version": "v2026.10.15-s9plus",
       "origin": "unofficial",
       "status": "experimental",
-      "curated": true,
+      "vetting": "curated",
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

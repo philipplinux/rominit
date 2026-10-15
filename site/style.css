@@ -359,10 +359,9 @@ p.rate-label { margin: .3rem 0 .5rem; }
 
 .title-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .start-over { flex: none; display: grid; justify-items: center; gap: .15rem; border: 1px solid var(--line, #333); background: none; color: var(--muted); font: inherit; padding: .5rem .7rem; cursor: pointer; }
-.start-over .rewind { font-size: 2rem; line-height: 1; filter: grayscale(1); }
+.start-over .rewind { display: block; line-height: 0; }
 .start-over small { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; }
 .start-over:hover { color: var(--amber); border-color: var(--amber); }
-.start-over:hover .rewind { filter: none; }
 
 .account { margin-right: .8rem; }
 .link-button { border: 0; background: none; padding: 0; color: var(--amber); font: inherit; letter-spacing: inherit; cursor: pointer; text-decoration: underline; }
@@ -463,3 +462,4 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .page-section.report > summary > span::before { content: '⚑ '; color: #e8706a; }
 .report-section { font: inherit; background: var(--panel, #1b1b1b); color: inherit; border: 1px solid #444; padding: .2rem .4rem; }
 .inbox-group .comments select { font: inherit; }
+.popular li.missed a { color: var(--red, #e88); }
