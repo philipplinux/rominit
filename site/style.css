@@ -81,14 +81,14 @@ kbd {
 .topbar-note { display: flex; align-items: center; gap: .55rem; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px rgb(230 195 154 / 45%); }
 
-.intro { max-width: 720px; padding: 64px 0 32px; }
+.intro { padding: 64px 0 32px; }
 .eyebrow { margin: 0 0 .75rem; color: var(--teal); font-size: .65rem; font-weight: 700; letter-spacing: .13em; }
 .eyebrow span { color: var(--faint); }
 h1, h2, h3, p { margin-top: 0; }
 h1 { margin-bottom: .7rem; font-size: clamp(2.3rem, 6vw, 4.5rem); line-height: 1.06; letter-spacing: -.075em; }
 h1 span { color: var(--teal); }
 @media (min-width: 700px) { h1 { white-space: nowrap; font-size: clamp(2rem, 4.6vw, 4.5rem); } }
-.intro-copy { max-width: 590px; margin-bottom: 1rem; color: #b3ab9d; font-size: .95rem; }
+.intro-copy { max-width: 980px; margin-bottom: 1rem; color: #b3ab9d; font-size: .95rem; }
 .experimental-note { display: inline-block; margin: 0; border-left: 2px solid var(--amber); padding: .32rem .7rem; color: #c4bcae; font-size: .72rem; }
 .experimental-note strong { color: var(--amber); }
 .experimental-note a { color: var(--amber); }
