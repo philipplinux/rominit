@@ -33,7 +33,7 @@ Record the URL of every claim. No URL, no claim: leave it `untested` or out.
 
 - `id`, `os`, `name` (builder in brackets for unofficial: "LineageOS (ivanmeler build)"), `version` with build date
 - `origin`, `status`, `vetting`, `rating` (see section 4)
-- `homepage` (builder's page), `source` (kernel/device tree repo, if published), `maintainer {name, source}` (the builder's profile; leave `avatar` out unless we store one)
+- `homepage` (builder's page), `source` (kernel/device tree repo, if published), `maintainer {name, source}` (the builder's profile; leave `avatar` out unless we store one). The name is display text only: never match it to a ROMinit account with the same username; ownership comes only from a role an admin grants after checking. Everything scraped shows a PLACEHOLDER marker on the site
 - `slots` (ab / single), `requirements` (bootloader / firmware version, wipes, which slot)
 - `notes`: one short paragraph: who built it, patch level, prerequisites, gapps advice
 - `stages`: files pinned by `name`, `size`, `sha256`, https `source` page and optional direct `url`; steps from the recipe's verbs

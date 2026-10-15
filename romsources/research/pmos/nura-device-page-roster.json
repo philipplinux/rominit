@@ -1,0 +1,8308 @@
+{
+  "captured_at": "2026-10-15T22:37:13+00:00",
+  "source": "https://wiki.nura.eco/api.php",
+  "category": "Category:Devices",
+  "count": 1660,
+  "pages": [
+    {
+      "pageid": 3956,
+      "ns": 0,
+      "title": "Acer Aspire 1 A114-61 (acer-aspire1)"
+    },
+    {
+      "pageid": 3562,
+      "ns": 0,
+      "title": "Acer Chromebook 13 CB5-311 (google-nyan-big)"
+    },
+    {
+      "pageid": 4103,
+      "ns": 0,
+      "title": "Acer Chromebook 311 (C722/C722T) (google-willow)"
+    },
+    {
+      "pageid": 4101,
+      "ns": 0,
+      "title": "Acer Chromebook 311 (CB311-11H / CB311-11HT) (google-kenzo)"
+    },
+    {
+      "pageid": 4095,
+      "ns": 0,
+      "title": "Acer Chromebook 314 (CB314-2H / CB314-2HT) (google-cozmo)"
+    },
+    {
+      "pageid": 5379,
+      "ns": 0,
+      "title": "Acer Chromebook 511 (google-limozeen)"
+    },
+    {
+      "pageid": 6752,
+      "ns": 0,
+      "title": "Acer Chromebook 514 (CB514-2H / CB514-2HT) (google-spherion)"
+    },
+    {
+      "pageid": 4127,
+      "ns": 0,
+      "title": "Acer Chromebook R13 (google-elm)"
+    },
+    {
+      "pageid": 3903,
+      "ns": 0,
+      "title": "Acer Chromebook Spin 311 (CP311-3H) (google-juniper)"
+    },
+    {
+      "pageid": 5388,
+      "ns": 0,
+      "title": "Acer Chromebook Spin 311 (R722T) (google-pico)"
+    },
+    {
+      "pageid": 6753,
+      "ns": 0,
+      "title": "Acer Chromebook Spin 513 (CP513-2H) (google-tomato)"
+    },
+    {
+      "pageid": 5296,
+      "ns": 0,
+      "title": "Acer Chromebook Spin 513 (google-lazor)"
+    },
+    {
+      "pageid": 2497,
+      "ns": 0,
+      "title": "Acer Chromebook Tab 10 (google-scarlet)"
+    },
+    {
+      "pageid": 5383,
+      "ns": 0,
+      "title": "Acer Chromebook Tab 510 (google-quackingstick)"
+    },
+    {
+      "pageid": 1940,
+      "ns": 0,
+      "title": "Acer CloudMobile S500 (acer-swing)"
+    },
+    {
+      "pageid": 12338,
+      "ns": 0,
+      "title": "Acer Iconia One 7 (acer-b1-780)"
+    },
+    {
+      "pageid": 1312,
+      "ns": 0,
+      "title": "Acer Iconia Tab A200 (acer-picasso-e)"
+    },
+    {
+      "pageid": 1311,
+      "ns": 0,
+      "title": "Acer Iconia Tab A500 (acer-picasso)"
+    },
+    {
+      "pageid": 6344,
+      "ns": 0,
+      "title": "Acer Iconia Tab A700 (acer-picasso2)"
+    },
+    {
+      "pageid": 4235,
+      "ns": 0,
+      "title": "Acer Iconia Talk S (acer-a1-724)"
+    },
+    {
+      "pageid": 1290,
+      "ns": 0,
+      "title": "Acer Iconia w511"
+    },
+    {
+      "pageid": 5737,
+      "ns": 0,
+      "title": "Acer Liquid Z330 (acer-t01)"
+    },
+    {
+      "pageid": 7911,
+      "ns": 0,
+      "title": "Acer Liquid Z520 (acer-wt96520a1)"
+    },
+    {
+      "pageid": 2502,
+      "ns": 0,
+      "title": "Acer Liquid Zest 4G (acer-miro)"
+    },
+    {
+      "pageid": 3388,
+      "ns": 0,
+      "title": "Acer Liquid Zest 4G (acer-t07)"
+    },
+    {
+      "pageid": 3078,
+      "ns": 0,
+      "title": "AGM A8 (agm-grip)"
+    },
+    {
+      "pageid": 4605,
+      "ns": 0,
+      "title": "Ainol Novo 10 Hero"
+    },
+    {
+      "pageid": 2462,
+      "ns": 0,
+      "title": "Alcatel Idol 3 4.7\" (alcatel-idol347)"
+    },
+    {
+      "pageid": 3382,
+      "ns": 0,
+      "title": "Alcatel Idol 3 5.5\" (alcatel-idol3)"
+    },
+    {
+      "pageid": 6408,
+      "ns": 0,
+      "title": "Alcatel MyFlip (alcatel-gflip2)"
+    },
+    {
+      "pageid": 6944,
+      "ns": 0,
+      "title": "Alcatel One Touch Pop C1 (alcatel-yaris35-gsm)"
+    },
+    {
+      "pageid": 2578,
+      "ns": 0,
+      "title": "Alcatel OneTouch Pixi 4 (5) 5010D (alcatel-5010d)"
+    },
+    {
+      "pageid": 11332,
+      "ns": 0,
+      "title": "Alcatel OneTouch Pixi 7 (alcatel-pixi2-7-4g-tmo)"
+    },
+    {
+      "pageid": 1432,
+      "ns": 0,
+      "title": "Alcatel OneTouch Pop 7S (alcatel-pop7lte)"
+    },
+    {
+      "pageid": 9513,
+      "ns": 0,
+      "title": "Alcatel OneTouch Pop C7 (alcatel-yarisxl)"
+    },
+    {
+      "pageid": 11985,
+      "ns": 0,
+      "title": "Alcatel OT Pixi3 (10) (alcatel-8079)"
+    },
+    {
+      "pageid": 2498,
+      "ns": 0,
+      "title": "Alcatel Pixi 4 (4) (alcatel-pixi4-4)"
+    },
+    {
+      "pageid": 3424,
+      "ns": 0,
+      "title": "Alcatel Pop 2 (4.5) (alcatel-alto45)"
+    },
+    {
+      "pageid": 8514,
+      "ns": 0,
+      "title": "Alpha Robotics Speedybot (alpha-speedybot)"
+    },
+    {
+      "pageid": 6340,
+      "ns": 0,
+      "title": "ALPS pri6750 66t m (alps-pri6750 66t m)"
+    },
+    {
+      "pageid": 6025,
+      "ns": 0,
+      "title": "Amazon Echo Dot 2nd gen (amazon-biscuit)"
+    },
+    {
+      "pageid": 6226,
+      "ns": 0,
+      "title": "Amazon Echo Show 5 (amazon-checkers)"
+    },
+    {
+      "pageid": 11293,
+      "ns": 0,
+      "title": "Amazon Echo Show 5 (amazon-cronos)"
+    },
+    {
+      "pageid": 11218,
+      "ns": 0,
+      "title": "Amazon Echo Show 8 (amazon-crown)"
+    },
+    {
+      "pageid": 10262,
+      "ns": 0,
+      "title": "Amazon Echo Spot 2017 (amazon-rook)"
+    },
+    {
+      "pageid": 8307,
+      "ns": 0,
+      "title": "Amazon Echo Spot 2024 (amazon-baklava)"
+    },
+    {
+      "pageid": 997,
+      "ns": 0,
+      "title": "Amazon Fire 7 2015 (amazon-ford)"
+    },
+    {
+      "pageid": 1176,
+      "ns": 0,
+      "title": "Amazon Fire 7 2017 (amazon-austin)"
+    },
+    {
+      "pageid": 1672,
+      "ns": 0,
+      "title": "Amazon Fire 7 2019 (amazon-mustang)"
+    },
+    {
+      "pageid": 1552,
+      "ns": 0,
+      "title": "Amazon Fire HD 10 (amazon-suez)"
+    },
+    {
+      "pageid": 13177,
+      "ns": 0,
+      "title": "Amazon Fire HD 8 2015 (amazon-thebes)"
+    },
+    {
+      "pageid": 1746,
+      "ns": 0,
+      "title": "Amazon Fire HD 8 2017 (amazon-douglas)"
+    },
+    {
+      "pageid": 2712,
+      "ns": 0,
+      "title": "Amazon Fire HD 8 2018 (amazon-karnak)"
+    },
+    {
+      "pageid": 10788,
+      "ns": 0,
+      "title": "Amazon Fire HD 8 2020 (onyx)"
+    },
+    {
+      "pageid": 1102,
+      "ns": 0,
+      "title": "Amazon Fire TV"
+    },
+    {
+      "pageid": 920,
+      "ns": 0,
+      "title": "Amazon Fire TV (amazon-bueller)"
+    },
+    {
+      "pageid": 2550,
+      "ns": 0,
+      "title": "Amazon Fire TV 2 (amazon-sloane)"
+    },
+    {
+      "pageid": 3867,
+      "ns": 0,
+      "title": "Amazon Fire TV 3 (amazon-needle)"
+    },
+    {
+      "pageid": 3086,
+      "ns": 0,
+      "title": "Amazon Fire TV Stick 1st gen (amazon-montoya)"
+    },
+    {
+      "pageid": 2906,
+      "ns": 0,
+      "title": "Amazon Fire TV Stick 4K (amazon-mantis)"
+    },
+    {
+      "pageid": 1378,
+      "ns": 0,
+      "title": "Amazon Fire TV Stick Basic Edition (amazon-tank)"
+    },
+    {
+      "pageid": 6529,
+      "ns": 0,
+      "title": "Amazon Fire TV Stick Lite (amazon-sheldon)"
+    },
+    {
+      "pageid": 567,
+      "ns": 0,
+      "title": "Amazon Fire-Phone (amazon-kodiak)"
+    },
+    {
+      "pageid": 3094,
+      "ns": 0,
+      "title": "Amazon Kindle 4 (amazon-yoshi)"
+    },
+    {
+      "pageid": 1608,
+      "ns": 0,
+      "title": "Amazon Kindle Fire (amazon-otter)"
+    },
+    {
+      "pageid": 1607,
+      "ns": 0,
+      "title": "Amazon Kindle Fire HD (amazon-tate)"
+    },
+    {
+      "pageid": 2236,
+      "ns": 0,
+      "title": "Amazon Kindle Fire HD 3rd Generation (amazon-soho)"
+    },
+    {
+      "pageid": 291,
+      "ns": 0,
+      "title": "Amazon Kindle Fire HDX (amazon-thor)"
+    },
+    {
+      "pageid": 14339,
+      "ns": 0,
+      "title": "Amazon Kindle Paperwhite 3 (amazon-wario)"
+    },
+    {
+      "pageid": 5008,
+      "ns": 0,
+      "title": "Amediatech X96 air (amediatech-x96-air)"
+    },
+    {
+      "pageid": 5007,
+      "ns": 0,
+      "title": "Amediatech X96 max plus (amediatech-x96-max-plus)"
+    },
+    {
+      "pageid": 4724,
+      "ns": 0,
+      "title": "Amediatech X96 mini (amediatech-x96-mini)"
+    },
+    {
+      "pageid": 10100,
+      "ns": 0,
+      "title": "Amediatech X96Q (amediatech-x96q)"
+    },
+    {
+      "pageid": 7309,
+      "ns": 0,
+      "title": "Amlogic Generic AArch64 TV Box (amlogic-aarch64-tvbox)"
+    },
+    {
+      "pageid": 13476,
+      "ns": 0,
+      "title": "Anbernic H700 Handheld (anbernic-rgxxxx)"
+    },
+    {
+      "pageid": 9978,
+      "ns": 0,
+      "title": "Anbernic RG35XX SP (anbernic-rg35xx-sp)"
+    },
+    {
+      "pageid": 8692,
+      "ns": 0,
+      "title": "Anyon e"
+    },
+    {
+      "pageid": 4126,
+      "ns": 0,
+      "title": "AOpen Chromebase Mini (google-veyron-tiger)"
+    },
+    {
+      "pageid": 4443,
+      "ns": 0,
+      "title": "AOpen Chromebook Commercial Tab (google-druwl)"
+    },
+    {
+      "pageid": 4111,
+      "ns": 0,
+      "title": "AOpen Chromebox Mini (google-veyron-fievel)"
+    },
+    {
+      "pageid": 9841,
+      "ns": 0,
+      "title": "Apple Generic iDevice (apple-idevice)"
+    },
+    {
+      "pageid": 3281,
+      "ns": 0,
+      "title": "Apple iBridge T2 (apple-ibridgeT2)"
+    },
+    {
+      "pageid": 1129,
+      "ns": 0,
+      "title": "Apple iPad 1G (apple-k48)"
+    },
+    {
+      "pageid": 10433,
+      "ns": 0,
+      "title": "Apple iPad 2 (apple-k93)"
+    },
+    {
+      "pageid": 7830,
+      "ns": 0,
+      "title": "Apple iPad 3 (apple-j1)"
+    },
+    {
+      "pageid": 2971,
+      "ns": 0,
+      "title": "Apple iPad 6th gen (apple-j71b)"
+    },
+    {
+      "pageid": 12990,
+      "ns": 0,
+      "title": "Apple iPad 7 (Wi-Fi) (apple-j171)"
+    },
+    {
+      "pageid": 13986,
+      "ns": 0,
+      "title": "Apple iPad Air (Wi-Fi) (apple-j71)"
+    },
+    {
+      "pageid": 10472,
+      "ns": 0,
+      "title": "Apple iPad Air 2 (apple-j81)"
+    },
+    {
+      "pageid": 2479,
+      "ns": 0,
+      "title": "Apple iPad Air 2 (apple-j82)"
+    },
+    {
+      "pageid": 4003,
+      "ns": 0,
+      "title": "Apple iPad mini (apple-p105)"
+    },
+    {
+      "pageid": 14444,
+      "ns": 0,
+      "title": "Apple iPad mini 2 (Wi-Fi) (apple-j85)"
+    },
+    {
+      "pageid": 12368,
+      "ns": 0,
+      "title": "Apple iPad Mini 4 (apple-j96)"
+    },
+    {
+      "pageid": 14400,
+      "ns": 0,
+      "title": "Apple iPhone 11 (apple-n104)"
+    },
+    {
+      "pageid": 2626,
+      "ns": 0,
+      "title": "Apple iPhone 12 mini (apple-d52g)"
+    },
+    {
+      "pageid": 2096,
+      "ns": 0,
+      "title": "Apple iPhone 3G (apple-n82)"
+    },
+    {
+      "pageid": 12574,
+      "ns": 0,
+      "title": "Apple iPhone 3GS (apple-n88)"
+    },
+    {
+      "pageid": 2093,
+      "ns": 0,
+      "title": "Apple iPhone 4 (apple-n90)"
+    },
+    {
+      "pageid": 2631,
+      "ns": 0,
+      "title": "Apple iPhone 4s (apple-n94)"
+    },
+    {
+      "pageid": 2624,
+      "ns": 0,
+      "title": "Apple iPhone 5 (apple-n41)"
+    },
+    {
+      "pageid": 1892,
+      "ns": 0,
+      "title": "Apple iPhone 5s (apple-n51)"
+    },
+    {
+      "pageid": 8304,
+      "ns": 0,
+      "title": "Apple iPhone 6 (apple-n61)"
+    },
+    {
+      "pageid": 5499,
+      "ns": 0,
+      "title": "Apple iPhone 6s/6s+ (apple-n71)"
+    },
+    {
+      "pageid": 1527,
+      "ns": 0,
+      "title": "Apple iPhone 7/7+ (apple-d10)"
+    },
+    {
+      "pageid": 4013,
+      "ns": 0,
+      "title": "Apple iPhone 8 (apple-d20)"
+    },
+    {
+      "pageid": 2630,
+      "ns": 0,
+      "title": "Apple iPhone SE (1st generation) (apple-n69)"
+    },
+    {
+      "pageid": 9695,
+      "ns": 0,
+      "title": "Apple iPhone X (Global) (apple-d22)"
+    },
+    {
+      "pageid": 15,
+      "ns": 0,
+      "title": "Apple iPod Touch 1G (apple-n45)"
+    },
+    {
+      "pageid": 10459,
+      "ns": 0,
+      "title": "Apple M-series Macs (apple-mac-aarch64)"
+    },
+    {
+      "pageid": 8063,
+      "ns": 0,
+      "title": "Apple M1 Generic Port"
+    },
+    {
+      "pageid": 4905,
+      "ns": 0,
+      "title": "Apple Mac mini 2020 M1 (apple-j274)"
+    },
+    {
+      "pageid": 3266,
+      "ns": 0,
+      "title": "Apple Macbook Air M1 (apple-tonga)"
+    },
+    {
+      "pageid": 8993,
+      "ns": 0,
+      "title": "Apple TV 1G (apple-itv)"
+    },
+    {
+      "pageid": 10659,
+      "ns": 0,
+      "title": "Apple TV HD (apple-j42d)"
+    },
+    {
+      "pageid": 269,
+      "ns": 0,
+      "title": "Archos 80 G9 (archos-a80)"
+    },
+    {
+      "pageid": 4877,
+      "ns": 0,
+      "title": "Archos Sense 55s (archos-ac55ses)"
+    },
+    {
+      "pageid": 11914,
+      "ns": 0,
+      "title": "Arduino Uno Q"
+    },
+    {
+      "pageid": 3298,
+      "ns": 0,
+      "title": "ARK Benefit A3 (ark-peach)"
+    },
+    {
+      "pageid": 1730,
+      "ns": 0,
+      "title": "Arrow DragonBoard 410c (arrow-db410c)"
+    },
+    {
+      "pageid": 5085,
+      "ns": 0,
+      "title": "Arrow DragonBoard 820c (arrow-db820c)"
+    },
+    {
+      "pageid": 4109,
+      "ns": 0,
+      "title": "ASUS Chromebit CS10 (google-veyron-mickey)"
+    },
+    {
+      "pageid": 3667,
+      "ns": 0,
+      "title": "ASUS Chromebook C201 (google-veyron-speedy)"
+    },
+    {
+      "pageid": 3892,
+      "ns": 0,
+      "title": "ASUS Chromebook C202XA (google-hana)"
+    },
+    {
+      "pageid": 13080,
+      "ns": 0,
+      "title": "ASUS Chromebook CM30 Detachable (CM3001) (google-starmie)"
+    },
+    {
+      "pageid": 4983,
+      "ns": 0,
+      "title": "ASUS Chromebook CZ1 (google-cerise)"
+    },
+    {
+      "pageid": 4099,
+      "ns": 0,
+      "title": "ASUS Chromebook Detachable CM3 (CM3000) (google-kakadu)"
+    },
+    {
+      "pageid": 4656,
+      "ns": 0,
+      "title": "ASUS Chromebook Detachable CZ1 (google-katsu)"
+    },
+    {
+      "pageid": 3670,
+      "ns": 0,
+      "title": "ASUS Chromebook Flip C100 (google-veyron-minnie)"
+    },
+    {
+      "pageid": 4439,
+      "ns": 0,
+      "title": "ASUS Chromebook Flip C101 (google-bob)"
+    },
+    {
+      "pageid": 4096,
+      "ns": 0,
+      "title": "ASUS Chromebook Flip CM3 (CM3200, MT8183) (google-damu)"
+    },
+    {
+      "pageid": 6634,
+      "ns": 0,
+      "title": "ASUS Chromebook Flip CM3 (CM3200, MT8192) (google-hayato)"
+    },
+    {
+      "pageid": 4984,
+      "ns": 0,
+      "title": "ASUS Chromebook Flip CZ1 (google-stern)"
+    },
+    {
+      "pageid": 4442,
+      "ns": 0,
+      "title": "ASUS Chromebook Tablet CT100 (google-dumo)"
+    },
+    {
+      "pageid": 72,
+      "ns": 0,
+      "title": "ASUS Eee Pad Transformer (asus-tf101)"
+    },
+    {
+      "pageid": 6974,
+      "ns": 0,
+      "title": "Asus Max M1 (asus-x00p)"
+    },
+    {
+      "pageid": 11101,
+      "ns": 0,
+      "title": "ASUS MeMO Pad 10 (ME102A) (asus-k00f)"
+    },
+    {
+      "pageid": 824,
+      "ns": 0,
+      "title": "ASUS MeMO Pad 7 (asus-me176c)"
+    },
+    {
+      "pageid": 1988,
+      "ns": 0,
+      "title": "ASUS MeMO Pad 7 (ME70C) (asus-k01a)"
+    },
+    {
+      "pageid": 601,
+      "ns": 0,
+      "title": "ASUS MeMO Pad FHD 10 (asus-duma)"
+    },
+    {
+      "pageid": 6260,
+      "ns": 0,
+      "title": "ASUS MeMO Pad FHD 10 (ME302C) (asus-redhookbay)"
+    },
+    {
+      "pageid": 8533,
+      "ns": 0,
+      "title": "ASUS PadFone T004 (asus-a86)"
+    },
+    {
+      "pageid": 11646,
+      "ns": 0,
+      "title": "Asus Tinker Board (asus-tinker-board)"
+    },
+    {
+      "pageid": 2029,
+      "ns": 0,
+      "title": "Asus Transformer Pad (asus-tf103c)"
+    },
+    {
+      "pageid": 246,
+      "ns": 0,
+      "title": "ASUS Transformer Pad (asus-tf300t)"
+    },
+    {
+      "pageid": 1885,
+      "ns": 0,
+      "title": "ASUS Transformer Pad (TF701T) (asus-tf701t)"
+    },
+    {
+      "pageid": 2962,
+      "ns": 0,
+      "title": "ASUS Transformer Pad 3G (asus-tf300tg)"
+    },
+    {
+      "pageid": 232,
+      "ns": 0,
+      "title": "Asus Transformer Pad Infinity TF700T (asus-tf700t)"
+    },
+    {
+      "pageid": 738,
+      "ns": 0,
+      "title": "ASUS Transformer Prime (asus-tf201)"
+    },
+    {
+      "pageid": 9613,
+      "ns": 0,
+      "title": "ASUS Vivobook S 15 (asus-s5507q)"
+    },
+    {
+      "pageid": 3047,
+      "ns": 0,
+      "title": "ASUS VivoTab RT"
+    },
+    {
+      "pageid": 2035,
+      "ns": 0,
+      "title": "ASUS ZenFone 2 Laser (720p) (asus-z00l)"
+    },
+    {
+      "pageid": 1979,
+      "ns": 0,
+      "title": "Asus Zenfone 2 Laser (asus-z00ed)"
+    },
+    {
+      "pageid": 591,
+      "ns": 0,
+      "title": "Asus Zenfone 2 Laser/Selfie (1080p) (asus-z00t)"
+    },
+    {
+      "pageid": 4429,
+      "ns": 0,
+      "title": "Asus Zenfone 3 (asus-zenfone3)"
+    },
+    {
+      "pageid": 13639,
+      "ns": 0,
+      "title": "Asus Zenfone 3 (asus-zenfone3max)"
+    },
+    {
+      "pageid": 1547,
+      "ns": 0,
+      "title": "Asus Zenfone 4 (asus-z01k)"
+    },
+    {
+      "pageid": 438,
+      "ns": 0,
+      "title": "Asus Zenfone 5 (asus-t00f)"
+    },
+    {
+      "pageid": 2706,
+      "ns": 0,
+      "title": "Asus Zenfone 5 (asus-t00j)"
+    },
+    {
+      "pageid": 7475,
+      "ns": 0,
+      "title": "Asus Zenfone 6/6Z (asus-i01wd)"
+    },
+    {
+      "pageid": 4836,
+      "ns": 0,
+      "title": "Asus Zenfone 8 (asus-sake)"
+    },
+    {
+      "pageid": 686,
+      "ns": 0,
+      "title": "ASUS Zenfone Go (asus-z00vd)"
+    },
+    {
+      "pageid": 11623,
+      "ns": 0,
+      "title": "ASUS Zenfone Go (asus-zb245kg)"
+    },
+    {
+      "pageid": 1881,
+      "ns": 0,
+      "title": "Asus Zenfone Max Pro M1 (asus-x00td)"
+    },
+    {
+      "pageid": 2144,
+      "ns": 0,
+      "title": "Asus Zenfone Max ZC550KL (asus-z010d)"
+    },
+    {
+      "pageid": 7356,
+      "ns": 0,
+      "title": "Asus Zenfone Zoom (asus-z00xs)"
+    },
+    {
+      "pageid": 1091,
+      "ns": 0,
+      "title": "Asus ZenPad 7 (asus-p01z)"
+    },
+    {
+      "pageid": 3436,
+      "ns": 0,
+      "title": "Asus ZenPad 8 (asus-p024)"
+    },
+    {
+      "pageid": 186,
+      "ns": 0,
+      "title": "Asus ZenWatch 2 (asus-sparrow)"
+    },
+    {
+      "pageid": 14319,
+      "ns": 0,
+      "title": "Atari 2600+"
+    },
+    {
+      "pageid": 14320,
+      "ns": 0,
+      "title": "Atari 7800+"
+    },
+    {
+      "pageid": 14317,
+      "ns": 0,
+      "title": "Atari VCS (2021)"
+    },
+    {
+      "pageid": 11661,
+      "ns": 0,
+      "title": "Ayaneo Pocket S2 (ayaneo-pocket-s2)"
+    },
+    {
+      "pageid": 6910,
+      "ns": 0,
+      "title": "AYN Odin (ayn-odin)"
+    },
+    {
+      "pageid": 13819,
+      "ns": 0,
+      "title": "AYN Odin 3 (ayn-odin-3)"
+    },
+    {
+      "pageid": 11104,
+      "ns": 0,
+      "title": "AYN Thor (ayn-thor)"
+    },
+    {
+      "pageid": 8290,
+      "ns": 0,
+      "title": "Banana Pi BPI-CM4 (bananapi-bpi-cm4)"
+    },
+    {
+      "pageid": 8288,
+      "ns": 0,
+      "title": "Banana Pi BPI-CM4IO Baseboard with BPI-CM4 SoM (bananapi-bpi-cm4-cm4io)"
+    },
+    {
+      "pageid": 8058,
+      "ns": 0,
+      "title": "Banana Pi BPI-F3 (bananapi-bpi-f3)"
+    },
+    {
+      "pageid": 8412,
+      "ns": 0,
+      "title": "Banana Pi BPI-M2 Zero (bananapi-bpi-m2-zero)"
+    },
+    {
+      "pageid": 8994,
+      "ns": 0,
+      "title": "Barnes & Noble Nook Color (barnesnoble-encore)"
+    },
+    {
+      "pageid": 11308,
+      "ns": 0,
+      "title": "Barnes & Noble Nook Simple Touch (barnesnoble-zoom2)"
+    },
+    {
+      "pageid": 3129,
+      "ns": 0,
+      "title": "Barns and Noble Nook HD+ (barnsnoble-ovation)"
+    },
+    {
+      "pageid": 1301,
+      "ns": 0,
+      "title": "Barns and Noble Nook Tablet (barnsnoble-acclaim)"
+    },
+    {
+      "pageid": 8380,
+      "ns": 0,
+      "title": "Barns and Noble Nook Tablet 10.1 2018 (barnsnoble-bntv650)"
+    },
+    {
+      "pageid": 8706,
+      "ns": 0,
+      "title": "Beelink GT-King (beelink-gtking)"
+    },
+    {
+      "pageid": 4742,
+      "ns": 0,
+      "title": "Beelink gt1 (Ultimate) (beelink-gt1)"
+    },
+    {
+      "pageid": 7432,
+      "ns": 0,
+      "title": "Black Shark 5 Pro (blackshark-katyusha)"
+    },
+    {
+      "pageid": 17,
+      "ns": 0,
+      "title": "BlackBerry Bold Touch 9900 (blackberry-dakota)"
+    },
+    {
+      "pageid": 1804,
+      "ns": 0,
+      "title": "BlackBerry Classic"
+    },
+    {
+      "pageid": 10022,
+      "ns": 0,
+      "title": "BlackBerry KEY2 (blackberry-athena)"
+    },
+    {
+      "pageid": 10740,
+      "ns": 0,
+      "title": "BlackBerry KEY2 Generic (blackberry-key2-generic)"
+    },
+    {
+      "pageid": 9913,
+      "ns": 0,
+      "title": "BlackBerry KEY2 LE (blackberry-luna)"
+    },
+    {
+      "pageid": 8144,
+      "ns": 0,
+      "title": "BlackBerry Passport (blackberry-wolverine)"
+    },
+    {
+      "pageid": 2032,
+      "ns": 0,
+      "title": "BlackBerry PlayBook (blackberry-playbook)"
+    },
+    {
+      "pageid": 14394,
+      "ns": 0,
+      "title": "Blackview FORT1 (FORT 1 NEU)"
+    },
+    {
+      "pageid": 10997,
+      "ns": 0,
+      "title": "Blackview Tab 15 Pro (blackview-tab15pro)"
+    },
+    {
+      "pageid": 11711,
+      "ns": 0,
+      "title": "BLU G64"
+    },
+    {
+      "pageid": 3250,
+      "ns": 0,
+      "title": "BLU Win HD LTE (blu-ql850)"
+    },
+    {
+      "pageid": 5403,
+      "ns": 0,
+      "title": "BOOX Poke2 (boox-poke2)"
+    },
+    {
+      "pageid": 5706,
+      "ns": 0,
+      "title": "BQ Aquaris E5 HD (bq-vegetahd)"
+    },
+    {
+      "pageid": 2114,
+      "ns": 0,
+      "title": "BQ Aquaris M10 (bq-cooler)"
+    },
+    {
+      "pageid": 2327,
+      "ns": 0,
+      "title": "BQ Aquaris M10 FHD (bq-frieza)"
+    },
+    {
+      "pageid": 2424,
+      "ns": 0,
+      "title": "BQ Aquaris M5 (bq-piccolo)"
+    },
+    {
+      "pageid": 299,
+      "ns": 0,
+      "title": "BQ Aquaris U (bq-chaozu)"
+    },
+    {
+      "pageid": 6843,
+      "ns": 0,
+      "title": "BQ Aquaris U Plus (bq-tenshi)"
+    },
+    {
+      "pageid": 6269,
+      "ns": 0,
+      "title": "BQ Aquaris X / BQ Aquaris X Pro (bq-bardock / bq-bardockpro)"
+    },
+    {
+      "pageid": 8383,
+      "ns": 0,
+      "title": "BQ Aquaris X2 (bq-zangya)"
+    },
+    {
+      "pageid": 1508,
+      "ns": 0,
+      "title": "BQ Aquaris X5 (bq-paella)"
+    },
+    {
+      "pageid": 1531,
+      "ns": 0,
+      "title": "BQ Aquaris X5 Plus (bq-gohan)"
+    },
+    {
+      "pageid": 8967,
+      "ns": 0,
+      "title": "BQ Curie (bq-curie)"
+    },
+    {
+      "pageid": 3845,
+      "ns": 0,
+      "title": "Casio G'zOne (casio-ca201l)"
+    },
+    {
+      "pageid": 7827,
+      "ns": 0,
+      "title": "Casper Via F1 (casper-via f1)"
+    },
+    {
+      "pageid": 8535,
+      "ns": 0,
+      "title": "Cat S22 Flip (cat-s22-flip)"
+    },
+    {
+      "pageid": 4084,
+      "ns": 0,
+      "title": "CDI eduGear Chromebook K (google-veyron-jerry)"
+    },
+    {
+      "pageid": 4122,
+      "ns": 0,
+      "title": "CDI EduGear Chromebook M (google-veyron-mighty)"
+    },
+    {
+      "pageid": 966,
+      "ns": 0,
+      "title": "CHUWI Hi10 Plus (chuwi-hi10plus)"
+    },
+    {
+      "pageid": 9621,
+      "ns": 0,
+      "title": "ClockworkPi uConsole (clockworkpi-uconsole-radxa-cm5)"
+    },
+    {
+      "pageid": 5648,
+      "ns": 0,
+      "title": "ClockworkPi uConsole (clockworkpi-uconsole-rpi)"
+    },
+    {
+      "pageid": 8439,
+      "ns": 0,
+      "title": "Clockworkpi-gameshell"
+    },
+    {
+      "pageid": 13268,
+      "ns": 0,
+      "title": "CMCC A1 / M623C (wingtech-wt86621)"
+    },
+    {
+      "pageid": 13218,
+      "ns": 0,
+      "title": "CMCC N2 / YU Yureka 2(wingtech-wt89536)"
+    },
+    {
+      "pageid": 8810,
+      "ns": 0,
+      "title": "Comma 3X (comma-3x)"
+    },
+    {
+      "pageid": 10496,
+      "ns": 0,
+      "title": "Compulab Trim-Slice (compulab-trimslice)"
+    },
+    {
+      "pageid": 21,
+      "ns": 0,
+      "title": "Coolpad Modena 2 (coolpad-modena2)"
+    },
+    {
+      "pageid": 4840,
+      "ns": 0,
+      "title": "Coolpad Y80D (coolpad-coolpady80d)"
+    },
+    {
+      "pageid": 4082,
+      "ns": 0,
+      "title": "CTL Chromebook J2 / J4 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 4444,
+      "ns": 0,
+      "title": "CTL Chromebook Tablet Tx1 (google-druwl)"
+    },
+    {
+      "pageid": 1967,
+      "ns": 0,
+      "title": "Cubietech Cubieboard (cubietech-cubieboard)"
+    },
+    {
+      "pageid": 3611,
+      "ns": 0,
+      "title": "CutiePi Tablet (cutiepi-tablet)"
+    },
+    {
+      "pageid": 8113,
+      "ns": 0,
+      "title": "DeepComputing DC-ROMA LAPTOP II (dc-roma-laptop-ii)"
+    },
+    {
+      "pageid": 7894,
+      "ns": 0,
+      "title": "DeepComputing DC-ROMA PAD II (dc-roma-pad-ii)"
+    },
+    {
+      "pageid": 14433,
+      "ns": 0,
+      "title": "Dell Inspiron 3521 (2013)"
+    },
+    {
+      "pageid": 10776,
+      "ns": 0,
+      "title": "Dell Venue 10 Pro (5055) (dell-t14g)"
+    },
+    {
+      "pageid": 5115,
+      "ns": 0,
+      "title": "Dell Venue 8 Pro (3845) (dell-t01d)"
+    },
+    {
+      "pageid": 11216,
+      "ns": 0,
+      "title": "Dell Wyse 3020 (dell-ariel)"
+    },
+    {
+      "pageid": 2,
+      "ns": 0,
+      "title": "Devices"
+    },
+    {
+      "pageid": 1640,
+      "ns": 0,
+      "title": "Digma 1538E 4G (ps1150ml)"
+    },
+    {
+      "pageid": 3757,
+      "ns": 0,
+      "title": "DNS AirTab M83w (dns-airtab-m83w)"
+    },
+    {
+      "pageid": 4610,
+      "ns": 0,
+      "title": "DongshanPi NeZha STU (dongshanpi-nezhastu)"
+    },
+    {
+      "pageid": 13447,
+      "ns": 0,
+      "title": "DooGee X5 Pro (doogee-x5pro)"
+    },
+    {
+      "pageid": 11720,
+      "ns": 0,
+      "title": "Doro 8035 (doro-dsb0170)"
+    },
+    {
+      "pageid": 14345,
+      "ns": 0,
+      "title": "Doro 8100 (doro-dsb0400)"
+    },
+    {
+      "pageid": 8015,
+      "ns": 0,
+      "title": "Duoqin F21 Pro (duoqin-f21pro)"
+    },
+    {
+      "pageid": 5382,
+      "ns": 0,
+      "title": "Dynabook Chromebook C1 (google-pompom)"
+    },
+    {
+      "pageid": 12420,
+      "ns": 0,
+      "title": "EEBBK S5(eebbk-h7000)"
+    },
+    {
+      "pageid": 12376,
+      "ns": 0,
+      "title": "Elo I-series Android AIO 2.0 (elo-aaio2)"
+    },
+    {
+      "pageid": 4085,
+      "ns": 0,
+      "title": "Epik Chromebook ELB1101 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 4480,
+      "ns": 0,
+      "title": "Epson Moverio BT-200 (epson-embt2ws)"
+    },
+    {
+      "pageid": 12290,
+      "ns": 0,
+      "title": "Essential Gem (essential-gem)"
+    },
+    {
+      "pageid": 1178,
+      "ns": 0,
+      "title": "Essential Phone (essential-mata)"
+    },
+    {
+      "pageid": 1576,
+      "ns": 0,
+      "title": "F(x)tec Pro1(x) (fxtec-qx1000)"
+    },
+    {
+      "pageid": 4024,
+      "ns": 0,
+      "title": "F(x)tec Pro1X (fxtec-qx1050)"
+    },
+    {
+      "pageid": 9789,
+      "ns": 0,
+      "title": "Fairphone (Gen. 6) (fairphone-fp6)"
+    },
+    {
+      "pageid": 584,
+      "ns": 0,
+      "title": "Fairphone 1 (fairphone-fp1)"
+    },
+    {
+      "pageid": 26,
+      "ns": 0,
+      "title": "Fairphone 2 (fairphone-fp2)"
+    },
+    {
+      "pageid": 1164,
+      "ns": 0,
+      "title": "Fairphone 3 (fairphone-fp3)"
+    },
+    {
+      "pageid": 3037,
+      "ns": 0,
+      "title": "Fairphone 4 (fairphone-fp4)"
+    },
+    {
+      "pageid": 5502,
+      "ns": 0,
+      "title": "Fairphone 5 (fairphone-fp5)"
+    },
+    {
+      "pageid": 7516,
+      "ns": 0,
+      "title": "FarEasTone Smart 506 (fareastone-smart506)"
+    },
+    {
+      "pageid": 8865,
+      "ns": 0,
+      "title": "Fernsehfee 3.0 (tcu-fernsehfee3)"
+    },
+    {
+      "pageid": 12889,
+      "ns": 0,
+      "title": "FiberHome HG680-P (fiberhome-hg680p)"
+    },
+    {
+      "pageid": 912,
+      "ns": 0,
+      "title": "Finepower F1 (finepower-f1)"
+    },
+    {
+      "pageid": 14165,
+      "ns": 0,
+      "title": "Flock Safety Camera (flock-falcon)"
+    },
+    {
+      "pageid": 1308,
+      "ns": 0,
+      "title": "Fly Spark (fly-iq4404)"
+    },
+    {
+      "pageid": 10563,
+      "ns": 0,
+      "title": "Fossil Gen 6 (fossil-hoki)"
+    },
+    {
+      "pageid": 8690,
+      "ns": 0,
+      "title": "FriendlyElec CM3588 (friendlyelec-cm3588)"
+    },
+    {
+      "pageid": 7602,
+      "ns": 0,
+      "title": "Fujitsu F-08E (fujitsu-f08e)"
+    },
+    {
+      "pageid": 12053,
+      "ns": 0,
+      "title": "FuriLabs FuriPhone FLX1 (furilabs-krypton)"
+    },
+    {
+      "pageid": 7586,
+      "ns": 0,
+      "title": "Fydetab Duo (fyde-fydetab-duo)"
+    },
+    {
+      "pageid": 7517,
+      "ns": 0,
+      "title": "G-PLUS FL8005A (gplus-fl8005a)"
+    },
+    {
+      "pageid": 456,
+      "ns": 0,
+      "title": "Geeksphone Peak (gp-peak)"
+    },
+    {
+      "pageid": 460,
+      "ns": 0,
+      "title": "Geeksphone Revolution (gp-revolution)"
+    },
+    {
+      "pageid": 6854,
+      "ns": 0,
+      "title": "General Mobile E-Tab 4 (gm-mehmet)"
+    },
+    {
+      "pageid": 11820,
+      "ns": 0,
+      "title": "General Mobile GM 5 Plus (gm-shamrock)"
+    },
+    {
+      "pageid": 7925,
+      "ns": 0,
+      "title": "General Mobile GM 8 Go"
+    },
+    {
+      "pageid": 10614,
+      "ns": 0,
+      "title": "Generic loongarch64 (generic-loongarch64)"
+    },
+    {
+      "pageid": 7960,
+      "ns": 0,
+      "title": "Generic ppc64le (generic-ppc64le)"
+    },
+    {
+      "pageid": 10296,
+      "ns": 0,
+      "title": "Generic RK322X (rockchip-rk322x)"
+    },
+    {
+      "pageid": 726,
+      "ns": 0,
+      "title": "Generic x64 UEFI device"
+    },
+    {
+      "pageid": 6677,
+      "ns": 0,
+      "title": "Generic x86 64 (generic-x86 64)"
+    },
+    {
+      "pageid": 4253,
+      "ns": 0,
+      "title": "Geniatech MyGica V1200 / Geniatech MyGica ATV1200 / Geniatech MyGica A6 / Geniatech MyGica A300 (geniatech-rmx0312)"
+    },
+    {
+      "pageid": 13699,
+      "ns": 0,
+      "title": "Gigaset GS290 (gigaset-gs290)"
+    },
+    {
+      "pageid": 11755,
+      "ns": 0,
+      "title": "Gigaset GS4 (gigaset-gs4)"
+    },
+    {
+      "pageid": 4575,
+      "ns": 0,
+      "title": "Gini w5 (gini-w5)"
+    },
+    {
+      "pageid": 2447,
+      "ns": 0,
+      "title": "GoClever Orion 70L (goclever-gcta741l)"
+    },
+    {
+      "pageid": 8716,
+      "ns": 0,
+      "title": "GoClever Quantum 700N (goclever-tq700n)"
+    },
+    {
+      "pageid": 2433,
+      "ns": 0,
+      "title": "Goclever Quantum2 400 (goclever-quantum2400)"
+    },
+    {
+      "pageid": 6633,
+      "ns": 0,
+      "title": "Google Asurada Chromebook (google-asurada)"
+    },
+    {
+      "pageid": 6669,
+      "ns": 0,
+      "title": "Google Cherry Chromebook (google-cherry)"
+    },
+    {
+      "pageid": 4682,
+      "ns": 0,
+      "title": "Google Chromebooks with x64 CPU (google-x64cros)"
+    },
+    {
+      "pageid": 596,
+      "ns": 0,
+      "title": "Google Chromecast (google-anchovy)"
+    },
+    {
+      "pageid": 6670,
+      "ns": 0,
+      "title": "Google Corsola Chromebook (google-corsola)"
+    },
+    {
+      "pageid": 48,
+      "ns": 0,
+      "title": "Google Galaxy Nexus GSM (samsung-maguro)"
+    },
+    {
+      "pageid": 351,
+      "ns": 0,
+      "title": "Google Glass (Explorer Edition) (google-glass)"
+    },
+    {
+      "pageid": 5293,
+      "ns": 0,
+      "title": "Google Gru Chromebook (google-gru)"
+    },
+    {
+      "pageid": 5291,
+      "ns": 0,
+      "title": "Google Kukui Chromebook (google-kukui)"
+    },
+    {
+      "pageid": 419,
+      "ns": 0,
+      "title": "Google Nexus 10 (google-manta)"
+    },
+    {
+      "pageid": 82,
+      "ns": 0,
+      "title": "Google Nexus 4 (lg-mako)"
+    },
+    {
+      "pageid": 81,
+      "ns": 0,
+      "title": "Google Nexus 5 (lg-hammerhead)"
+    },
+    {
+      "pageid": 356,
+      "ns": 0,
+      "title": "Google Nexus 5X (lg-bullhead)"
+    },
+    {
+      "pageid": 393,
+      "ns": 0,
+      "title": "Google Nexus 6 (motorola-shamu)"
+    },
+    {
+      "pageid": 213,
+      "ns": 0,
+      "title": "Google Nexus 6P (huawei-angler)"
+    },
+    {
+      "pageid": 71,
+      "ns": 0,
+      "title": "Google Nexus 7 2012 (asus-grouper)"
+    },
+    {
+      "pageid": 1942,
+      "ns": 0,
+      "title": "Google Nexus 7 2012 GSM (asus-tilapia)"
+    },
+    {
+      "pageid": 251,
+      "ns": 0,
+      "title": "Google Nexus 7 2013 (asus-flo)"
+    },
+    {
+      "pageid": 1498,
+      "ns": 0,
+      "title": "Google Nexus 7 2013 LTE (asus-deb)"
+    },
+    {
+      "pageid": 527,
+      "ns": 0,
+      "title": "Google Nexus 9 (htc-flounder)"
+    },
+    {
+      "pageid": 5292,
+      "ns": 0,
+      "title": "Google Oak Chromebook (google-oak)"
+    },
+    {
+      "pageid": 515,
+      "ns": 0,
+      "title": "Google Pixel (google-pixel)"
+    },
+    {
+      "pageid": 14315,
+      "ns": 0,
+      "title": "Google Pixel 10 (google-frankel)"
+    },
+    {
+      "pageid": 13945,
+      "ns": 0,
+      "title": "Google Pixel 10a (google-stallion)"
+    },
+    {
+      "pageid": 2037,
+      "ns": 0,
+      "title": "Google Pixel 2 XL (google-taimen)"
+    },
+    {
+      "pageid": 2959,
+      "ns": 0,
+      "title": "Google Pixel 3 (google-blueline)"
+    },
+    {
+      "pageid": 736,
+      "ns": 0,
+      "title": "Google Pixel 3 XL (google-crosshatch)"
+    },
+    {
+      "pageid": 2640,
+      "ns": 0,
+      "title": "Google Pixel 3a (google-sargo)"
+    },
+    {
+      "pageid": 5417,
+      "ns": 0,
+      "title": "Google Pixel 3a XL (google-bonito)"
+    },
+    {
+      "pageid": 9994,
+      "ns": 0,
+      "title": "Google Pixel 4 (google-flame)"
+    },
+    {
+      "pageid": 2763,
+      "ns": 0,
+      "title": "Google Pixel 4 XL (google-coral)"
+    },
+    {
+      "pageid": 14130,
+      "ns": 0,
+      "title": "Google Pixel 4a (5G) (google-bramble)"
+    },
+    {
+      "pageid": 4062,
+      "ns": 0,
+      "title": "Google Pixel 4a (google-sunfish)"
+    },
+    {
+      "pageid": 6425,
+      "ns": 0,
+      "title": "Google Pixel 5 (google-redfin)"
+    },
+    {
+      "pageid": 11292,
+      "ns": 0,
+      "title": "Google Pixel 5a (google-barbet)"
+    },
+    {
+      "pageid": 5567,
+      "ns": 0,
+      "title": "Google Pixel 6 (google-oriole)"
+    },
+    {
+      "pageid": 5568,
+      "ns": 0,
+      "title": "Google Pixel 6 Pro (google-raven)"
+    },
+    {
+      "pageid": 4313,
+      "ns": 0,
+      "title": "Google Pixel 6a (google-bluejay)"
+    },
+    {
+      "pageid": 8793,
+      "ns": 0,
+      "title": "Google Pixel 7 (google-panther)"
+    },
+    {
+      "pageid": 11140,
+      "ns": 0,
+      "title": "Google Pixel 7 Pro (google-cheetah)"
+    },
+    {
+      "pageid": 7808,
+      "ns": 0,
+      "title": "Google Pixel 7a (google-lynx)"
+    },
+    {
+      "pageid": 8838,
+      "ns": 0,
+      "title": "Google Pixel 8 (google-shiba)"
+    },
+    {
+      "pageid": 10982,
+      "ns": 0,
+      "title": "Google Pixel 8 Pro (google-husky)"
+    },
+    {
+      "pageid": 12974,
+      "ns": 0,
+      "title": "Google Pixel 8a (google-akita)"
+    },
+    {
+      "pageid": 8305,
+      "ns": 0,
+      "title": "Google Pixel 9 (google-tokay)"
+    },
+    {
+      "pageid": 8437,
+      "ns": 0,
+      "title": "Google Pixel 9 Pro Fold (google-comet)"
+    },
+    {
+      "pageid": 11099,
+      "ns": 0,
+      "title": "Google Pixel 9 Pro XL (google-komodo)"
+    },
+    {
+      "pageid": 10543,
+      "ns": 0,
+      "title": "Google Pixel 9a (google-tegu)"
+    },
+    {
+      "pageid": 4865,
+      "ns": 0,
+      "title": "Google Pixel C (google-smaug)"
+    },
+    {
+      "pageid": 12229,
+      "ns": 0,
+      "title": "Google Pixel Tablet (google-tangorpro)"
+    },
+    {
+      "pageid": 7575,
+      "ns": 0,
+      "title": "Google Pixel Watch 2 (google-eos)"
+    },
+    {
+      "pageid": 13053,
+      "ns": 0,
+      "title": "Google Pixel Watch 3 45mm LTE (google-luna)"
+    },
+    {
+      "pageid": 5281,
+      "ns": 0,
+      "title": "Google Trogdor Chromebook (google-trogdor)"
+    },
+    {
+      "pageid": 5282,
+      "ns": 0,
+      "title": "Google Veyron Chromebook (google-veyron)"
+    },
+    {
+      "pageid": 6394,
+      "ns": 0,
+      "title": "Google WiFi (google-gale)"
+    },
+    {
+      "pageid": 4113,
+      "ns": 0,
+      "title": "Haier Chromebook 11 (google-veyron-jaq)"
+    },
+    {
+      "pageid": 4120,
+      "ns": 0,
+      "title": "Haier Chromebook 11e (google-veyron-mighty)"
+    },
+    {
+      "pageid": 10571,
+      "ns": 0,
+      "title": "Haier G151 (haier-g151)"
+    },
+    {
+      "pageid": 10476,
+      "ns": 0,
+      "title": "HEADWOLF FPad 3 (headwolf-fpad3)"
+    },
+    {
+      "pageid": 4446,
+      "ns": 0,
+      "title": "Hisense A9 (hisense-hlte556n)"
+    },
+    {
+      "pageid": 4086,
+      "ns": 0,
+      "title": "HiSense Chromebook 11 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 1163,
+      "ns": 0,
+      "title": "Hisense Sero 7 Pro (hisense-m470bsa)"
+    },
+    {
+      "pageid": 836,
+      "ns": 0,
+      "title": "HMD Global Nokia 1 (nokia-frt)"
+    },
+    {
+      "pageid": 8477,
+      "ns": 0,
+      "title": "HMD Global Nokia 1 Plus (nokia-ant)"
+    },
+    {
+      "pageid": 1995,
+      "ns": 0,
+      "title": "HMD Global Nokia 3 (nokia-NE1)"
+    },
+    {
+      "pageid": 4530,
+      "ns": 0,
+      "title": "HMD Global Nokia 3.1 (nokia-ES2)"
+    },
+    {
+      "pageid": 3570,
+      "ns": 0,
+      "title": "HMD Global Nokia 4.2 (nokia-panther)"
+    },
+    {
+      "pageid": 2025,
+      "ns": 0,
+      "title": "HMD Global Nokia 5 (nokia-nd1)"
+    },
+    {
+      "pageid": 9823,
+      "ns": 0,
+      "title": "HMD Global Nokia 5.1 (nokia-CO2)"
+    },
+    {
+      "pageid": 3072,
+      "ns": 0,
+      "title": "HMD Global Nokia 6 (nokia-ple)"
+    },
+    {
+      "pageid": 3169,
+      "ns": 0,
+      "title": "HMD Global Nokia 6.1 (nokia-PL2)"
+    },
+    {
+      "pageid": 4759,
+      "ns": 0,
+      "title": "HMD Global Nokia 6.1 Plus (nokia-DRG)"
+    },
+    {
+      "pageid": 4803,
+      "ns": 0,
+      "title": "HMD Global Nokia 7.2 (nokia-daredevil)"
+    },
+    {
+      "pageid": 12011,
+      "ns": 0,
+      "title": "HMD Global Nokia 8 (nokia-NB1)"
+    },
+    {
+      "pageid": 7518,
+      "ns": 0,
+      "title": "Hometech 8MZ"
+    },
+    {
+      "pageid": 4296,
+      "ns": 0,
+      "title": "HomeX X1 (AK1708m-16)"
+    },
+    {
+      "pageid": 4587,
+      "ns": 0,
+      "title": "HomTom HT20 (homtom-ht20)"
+    },
+    {
+      "pageid": 9977,
+      "ns": 0,
+      "title": "Honor 6A (huawei-delhi)"
+    },
+    {
+      "pageid": 4564,
+      "ns": 0,
+      "title": "HP Chromebook 11 G1 (google-spring)"
+    },
+    {
+      "pageid": 4100,
+      "ns": 0,
+      "title": "HP Chromebook 11a (google-kappa)"
+    },
+    {
+      "pageid": 5386,
+      "ns": 0,
+      "title": "HP Chromebook 11MK G9 EE (google-esche)"
+    },
+    {
+      "pageid": 3722,
+      "ns": 0,
+      "title": "HP Chromebook 14 G3 (google-nyan-blaze)"
+    },
+    {
+      "pageid": 5298,
+      "ns": 0,
+      "title": "HP Chromebook X2 (google-coachz)"
+    },
+    {
+      "pageid": 4094,
+      "ns": 0,
+      "title": "HP Chromebook x360 11MK G3 EE (google-burnet)"
+    },
+    {
+      "pageid": 6673,
+      "ns": 0,
+      "title": "HP Chromebook x360 13b-ca0xxx (google-dojo)"
+    },
+    {
+      "pageid": 13219,
+      "ns": 0,
+      "title": "HP Chromebox Enterprise G4 (gladios)"
+    },
+    {
+      "pageid": 7408,
+      "ns": 0,
+      "title": "HP Elite x3 (hp-falcon)"
+    },
+    {
+      "pageid": 10847,
+      "ns": 0,
+      "title": "HP EliteBook Ultra G1q (hp-elitebook-ultra-g1q)"
+    },
+    {
+      "pageid": 5378,
+      "ns": 0,
+      "title": "HP Fortis 11 G9 Q Chromebook (google-kingoftown)"
+    },
+    {
+      "pageid": 6742,
+      "ns": 0,
+      "title": "HP Jornada 680 (hp-jornada680)"
+    },
+    {
+      "pageid": 871,
+      "ns": 0,
+      "title": "HP Slate 21 (hp-phobos)"
+    },
+    {
+      "pageid": 76,
+      "ns": 0,
+      "title": "HP TouchPad (hp-tenderloin)"
+    },
+    {
+      "pageid": 2242,
+      "ns": 0,
+      "title": "HTC 10 (htc-pme)"
+    },
+    {
+      "pageid": 7633,
+      "ns": 0,
+      "title": "HTC 5G Hub (htc-rtxspr)"
+    },
+    {
+      "pageid": 30,
+      "ns": 0,
+      "title": "HTC Desire (htc-bravo)"
+    },
+    {
+      "pageid": 940,
+      "ns": 0,
+      "title": "HTC Desire 610 (htc-a3ul)"
+    },
+    {
+      "pageid": 1968,
+      "ns": 0,
+      "title": "HTC Desire 620 (htc-a31ul)"
+    },
+    {
+      "pageid": 14059,
+      "ns": 0,
+      "title": "HTC Desire 628 (Unlocked) (htc-v36bml dugl)"
+    },
+    {
+      "pageid": 13791,
+      "ns": 0,
+      "title": "HTC Desire 628 Dual (htc-v36bml dugl)"
+    },
+    {
+      "pageid": 2773,
+      "ns": 0,
+      "title": "HTC Desire 700 Duos (htc-cp5dug)"
+    },
+    {
+      "pageid": 525,
+      "ns": 0,
+      "title": "HTC Desire 816 single SIM (htc-a5ul)"
+    },
+    {
+      "pageid": 2004,
+      "ns": 0,
+      "title": "HTC Desire 820 Dual SIM (htc-a51dtul)"
+    },
+    {
+      "pageid": 2002,
+      "ns": 0,
+      "title": "HTC Desire 820 Single SIM (htc-a51tuhl)"
+    },
+    {
+      "pageid": 2198,
+      "ns": 0,
+      "title": "HTC Desire C (htc-golfu)"
+    },
+    {
+      "pageid": 29,
+      "ns": 0,
+      "title": "HTC Desire HD (htc-ace)"
+    },
+    {
+      "pageid": 588,
+      "ns": 0,
+      "title": "HTC Desire S (htc-saga)"
+    },
+    {
+      "pageid": 1136,
+      "ns": 0,
+      "title": "HTC Desire X (htc-protou)"
+    },
+    {
+      "pageid": 78,
+      "ns": 0,
+      "title": "HTC Desire Z (htc-vision)"
+    },
+    {
+      "pageid": 77,
+      "ns": 0,
+      "title": "HTC Droid DNA (htc-monarudo)"
+    },
+    {
+      "pageid": 1595,
+      "ns": 0,
+      "title": "HTC Evo 4G (htc-supersonic)"
+    },
+    {
+      "pageid": 507,
+      "ns": 0,
+      "title": "HTC HD2 (htc-leo)"
+    },
+    {
+      "pageid": 518,
+      "ns": 0,
+      "title": "HTC Incredible S (htc-vivo)"
+    },
+    {
+      "pageid": 2034,
+      "ns": 0,
+      "title": "HTC myTouch 3G Slide (htc-espresso)"
+    },
+    {
+      "pageid": 572,
+      "ns": 0,
+      "title": "HTC Nexus One (htc-passion)"
+    },
+    {
+      "pageid": 934,
+      "ns": 0,
+      "title": "HTC One M7 (htc-m7)"
+    },
+    {
+      "pageid": 528,
+      "ns": 0,
+      "title": "HTC One M8 (htc-m8)"
+    },
+    {
+      "pageid": 2335,
+      "ns": 0,
+      "title": "HTC One M8s (htc-m8qlul)"
+    },
+    {
+      "pageid": 1172,
+      "ns": 0,
+      "title": "HTC One Mini 2 (htc-memul)"
+    },
+    {
+      "pageid": 859,
+      "ns": 0,
+      "title": "HTC One S (htc-ville)"
+    },
+    {
+      "pageid": 728,
+      "ns": 0,
+      "title": "HTC One SV (htc-k2ul)"
+    },
+    {
+      "pageid": 1274,
+      "ns": 0,
+      "title": "HTC One V (htc-primou)"
+    },
+    {
+      "pageid": 1946,
+      "ns": 0,
+      "title": "HTC One X (htc-endeavoru)"
+    },
+    {
+      "pageid": 1529,
+      "ns": 0,
+      "title": "HTC One X+ (htc-endeavor-c2)"
+    },
+    {
+      "pageid": 860,
+      "ns": 0,
+      "title": "HTC One XL (htc-evita)"
+    },
+    {
+      "pageid": 2815,
+      "ns": 0,
+      "title": "HTC Sensation (htc-pyramid)"
+    },
+    {
+      "pageid": 1878,
+      "ns": 0,
+      "title": "HTC Touch Pro2 (htc-rhodium)"
+    },
+    {
+      "pageid": 1400,
+      "ns": 0,
+      "title": "HTC U11 (htc-ocn)"
+    },
+    {
+      "pageid": 6653,
+      "ns": 0,
+      "title": "HTC U12+ (htc-imedugl)"
+    },
+    {
+      "pageid": 464,
+      "ns": 0,
+      "title": "HTC Wildfire (htc-buzz)"
+    },
+    {
+      "pageid": 4239,
+      "ns": 0,
+      "title": "HTV box HTV 3 (htv-box-htv-3)"
+    },
+    {
+      "pageid": 8229,
+      "ns": 0,
+      "title": "Huawei Ascend D1 Quad XL (huawei-u9510e)"
+    },
+    {
+      "pageid": 3558,
+      "ns": 0,
+      "title": "Huawei Ascend G330 (huawei-u8825)"
+    },
+    {
+      "pageid": 611,
+      "ns": 0,
+      "title": "Huawei Ascend G510 (huawei-u8951)"
+    },
+    {
+      "pageid": 2700,
+      "ns": 0,
+      "title": "Huawei Ascend G525 (huawei-g525)"
+    },
+    {
+      "pageid": 647,
+      "ns": 0,
+      "title": "Huawei Ascend G620S (huawei-cherry)"
+    },
+    {
+      "pageid": 3300,
+      "ns": 0,
+      "title": "Huawei Ascend G7 (huawei-g7)"
+    },
+    {
+      "pageid": 1591,
+      "ns": 0,
+      "title": "Huawei Ascend Mate 7"
+    },
+    {
+      "pageid": 3199,
+      "ns": 0,
+      "title": "Huawei Ascend P6 (huawei-edge)"
+    },
+    {
+      "pageid": 881,
+      "ns": 0,
+      "title": "Huawei Ascend P7 (huawei-sophia)"
+    },
+    {
+      "pageid": 1319,
+      "ns": 0,
+      "title": "Huawei Ascend Y300 (huawei-y300)"
+    },
+    {
+      "pageid": 33,
+      "ns": 0,
+      "title": "Huawei Ascend Y530 (huawei-y530)"
+    },
+    {
+      "pageid": 11875,
+      "ns": 0,
+      "title": "Huawei C8813 (huawei-c8813)"
+    },
+    {
+      "pageid": 12531,
+      "ns": 0,
+      "title": "Huawei E3276 (huawei-e3276)"
+    },
+    {
+      "pageid": 7218,
+      "ns": 0,
+      "title": "Huawei E8372h-153 (huawei-e8372h-153)"
+    },
+    {
+      "pageid": 8381,
+      "ns": 0,
+      "title": "Huawei G7 Plus / G8 / GX8 / Maimang 4 (huawei-rio)"
+    },
+    {
+      "pageid": 11383,
+      "ns": 0,
+      "title": "Huawei Honor 4A (huawei-scale)"
+    },
+    {
+      "pageid": 5367,
+      "ns": 0,
+      "title": "Huawei Honor 5X/GR5 (2016) (huawei-kiwi)"
+    },
+    {
+      "pageid": 6451,
+      "ns": 0,
+      "title": "Huawei Honor 6X (huawei-berlin)"
+    },
+    {
+      "pageid": 4963,
+      "ns": 0,
+      "title": "Huawei Honor 7 (huawei-plank)"
+    },
+    {
+      "pageid": 4016,
+      "ns": 0,
+      "title": "Huawei Honor 7C (huawei-autumn)"
+    },
+    {
+      "pageid": 7256,
+      "ns": 0,
+      "title": "Huawei Honor 7S (huawei-dura)"
+    },
+    {
+      "pageid": 2687,
+      "ns": 0,
+      "title": "Huawei Honor 8 (huawei-frd)"
+    },
+    {
+      "pageid": 875,
+      "ns": 0,
+      "title": "Huawei Honor 9 Lite (huawei-leland)"
+    },
+    {
+      "pageid": 8740,
+      "ns": 0,
+      "title": "Huawei Honor Holly/3C Lite (huawei-holly)"
+    },
+    {
+      "pageid": 5265,
+      "ns": 0,
+      "title": "Huawei Maimang 5 (huawei-milan)"
+    },
+    {
+      "pageid": 3341,
+      "ns": 0,
+      "title": "HUAWEI MateBook E 2019 (huawei-planck)"
+    },
+    {
+      "pageid": 10364,
+      "ns": 0,
+      "title": "Huawei MatePad T8 (huawei-kobe2)"
+    },
+    {
+      "pageid": 14058,
+      "ns": 0,
+      "title": "Huawei MediaPad 10 FHD"
+    },
+    {
+      "pageid": 3490,
+      "ns": 0,
+      "title": "Huawei Mediapad 10 Link+ (huawei-s10-231u)"
+    },
+    {
+      "pageid": 8455,
+      "ns": 0,
+      "title": "Huawei Mediapad M5 Lite 10 (huawei-bach2)"
+    },
+    {
+      "pageid": 826,
+      "ns": 0,
+      "title": "Huawei Mediapad M5 pro (huawei-cameron)"
+    },
+    {
+      "pageid": 6512,
+      "ns": 0,
+      "title": "Huawei Mediapad T1 10 A21L (hwt1a21l)"
+    },
+    {
+      "pageid": 4613,
+      "ns": 0,
+      "title": "Huawei Mediapad T1 8.0 Pro (huawei-t18p0)"
+    },
+    {
+      "pageid": 8028,
+      "ns": 0,
+      "title": "Huawei Mediapad T3 10 (huawei-agassi)"
+    },
+    {
+      "pageid": 11628,
+      "ns": 0,
+      "title": "Huawei Mediapad T3 8 (huawei-kobe)"
+    },
+    {
+      "pageid": 9426,
+      "ns": 0,
+      "title": "Huawei MediaPad T5 (huawei-agassi2)"
+    },
+    {
+      "pageid": 8153,
+      "ns": 0,
+      "title": "Huawei P Smart (huawei-figo)"
+    },
+    {
+      "pageid": 2223,
+      "ns": 0,
+      "title": "Huawei P10 Lite (huawei-warsaw)"
+    },
+    {
+      "pageid": 6148,
+      "ns": 0,
+      "title": "Huawei P20 Lite (huawei-anne)"
+    },
+    {
+      "pageid": 1612,
+      "ns": 0,
+      "title": "Huawei P8 Lite (huawei-alice)"
+    },
+    {
+      "pageid": 9268,
+      "ns": 0,
+      "title": "Huawei P8 Lite 2017 (huawei-prague)"
+    },
+    {
+      "pageid": 2772,
+      "ns": 0,
+      "title": "Huawei P9 lite (huawei-venus)"
+    },
+    {
+      "pageid": 2994,
+      "ns": 0,
+      "title": "Huawei Watch (huawei-sturgeon)"
+    },
+    {
+      "pageid": 1068,
+      "ns": 0,
+      "title": "Huawei Y3 II 3G (huawei-lua-u22)"
+    },
+    {
+      "pageid": 8918,
+      "ns": 0,
+      "title": "Huawei Y3 II 4G (huawei-lua-l21)"
+    },
+    {
+      "pageid": 2022,
+      "ns": 0,
+      "title": "Huawei Y360-U61 (huawei-y360-u61)"
+    },
+    {
+      "pageid": 10452,
+      "ns": 0,
+      "title": "Huawei Y5 2019 (huawei-kansas-b)"
+    },
+    {
+      "pageid": 2156,
+      "ns": 0,
+      "title": "Huawei Y560 (huawei-y560)"
+    },
+    {
+      "pageid": 10888,
+      "ns": 0,
+      "title": "Huawei Y6 2019 (huawei-madrid)"
+    },
+    {
+      "pageid": 3301,
+      "ns": 0,
+      "title": "Huawei Y635 (huawei-y635)"
+    },
+    {
+      "pageid": 7177,
+      "ns": 0,
+      "title": "Huawei Y6II/Honor 5A (huawei-cambodia)"
+    },
+    {
+      "pageid": 5457,
+      "ns": 0,
+      "title": "ICareDx PSS\u20101 RT\u2010PCR Testing System (icaredx-pss-1)"
+    },
+    {
+      "pageid": 5091,
+      "ns": 0,
+      "title": "INet Tek D70 A33 (inet-a33)"
+    },
+    {
+      "pageid": 660,
+      "ns": 0,
+      "title": "Inet-Tek Inet-1 (inet-inet1)"
+    },
+    {
+      "pageid": 8357,
+      "ns": 0,
+      "title": "Infinix Hot 12 Play NFC (infinix-leo)"
+    },
+    {
+      "pageid": 11817,
+      "ns": 0,
+      "title": "Infinix Hot 30 (infinix-x6831)"
+    },
+    {
+      "pageid": 13640,
+      "ns": 0,
+      "title": "Infinix Hot 30i (infinix-hot-30i)"
+    },
+    {
+      "pageid": 12035,
+      "ns": 0,
+      "title": "Infinix Note 30 VIP (infinix-x6710)"
+    },
+    {
+      "pageid": 479,
+      "ns": 0,
+      "title": "InFocus New Tab F1 (infocus-flatfish)"
+    },
+    {
+      "pageid": 8512,
+      "ns": 0,
+      "title": "InkBOOK Prime (inkbook-prime)"
+    },
+    {
+      "pageid": 10037,
+      "ns": 0,
+      "title": "Innioasis G3 (alps-g3)"
+    },
+    {
+      "pageid": 12972,
+      "ns": 0,
+      "title": "Innioasis Y1 (alps-y1)"
+    },
+    {
+      "pageid": 3866,
+      "ns": 0,
+      "title": "Insignia Fire TV Edition (Full HD) (amazon-blanche)"
+    },
+    {
+      "pageid": 4149,
+      "ns": 0,
+      "title": "Intex Aqua Q1 (intex-aqua-q1)"
+    },
+    {
+      "pageid": 2797,
+      "ns": 0,
+      "title": "JingPad A1 (jingpad-a1)"
+    },
+    {
+      "pageid": 9653,
+      "ns": 0,
+      "title": "Jolla C/Intex Aqua Fish (jolla-l500d)"
+    },
+    {
+      "pageid": 9134,
+      "ns": 0,
+      "title": "Jolla C2 (jolla-c2)"
+    },
+    {
+      "pageid": 13643,
+      "ns": 0,
+      "title": "Jolla Phone (2026) (jolla-jp2601)"
+    },
+    {
+      "pageid": 79,
+      "ns": 0,
+      "title": "Jolla Phone (jolla-sbj)"
+    },
+    {
+      "pageid": 1180,
+      "ns": 0,
+      "title": "Just5 Freedom X1 (k06ntc a)"
+    },
+    {
+      "pageid": 8629,
+      "ns": 0,
+      "title": "Khadas VIM3 (khadas-vim3)"
+    },
+    {
+      "pageid": 9046,
+      "ns": 0,
+      "title": "Kickpi K2B H618 (kickpi-k2b-h618)"
+    },
+    {
+      "pageid": 7547,
+      "ns": 0,
+      "title": "KING JIM POMERA DM200 (kingjim-onyx2)"
+    },
+    {
+      "pageid": 7549,
+      "ns": 0,
+      "title": "KING JIM POMERA DM250 (kingjim-onyx3)"
+    },
+    {
+      "pageid": 10929,
+      "ns": 0,
+      "title": "KINGSUN P1 (kingsun-p1)"
+    },
+    {
+      "pageid": 2503,
+      "ns": 0,
+      "title": "Klipad KL3669 (klipad-rel)"
+    },
+    {
+      "pageid": 6433,
+      "ns": 0,
+      "title": "Kobo Arc 7HD (kobo-cardhu)"
+    },
+    {
+      "pageid": 585,
+      "ns": 0,
+      "title": "Kobo Aura (kobo-aura)"
+    },
+    {
+      "pageid": 10378,
+      "ns": 0,
+      "title": "Kobo Aura Edition 2 (kobo-auratwo)"
+    },
+    {
+      "pageid": 7236,
+      "ns": 0,
+      "title": "Kobo Clara 2E (kobo-clara2e)"
+    },
+    {
+      "pageid": 10342,
+      "ns": 0,
+      "title": "Kobo Clara BW"
+    },
+    {
+      "pageid": 1016,
+      "ns": 0,
+      "title": "Kobo Clara HD (kobo-clara)"
+    },
+    {
+      "pageid": 866,
+      "ns": 0,
+      "title": "Kobo Glo (kobo-kraken)"
+    },
+    {
+      "pageid": 2301,
+      "ns": 0,
+      "title": "Kobo Glo HD (kobo-glo-hd)"
+    },
+    {
+      "pageid": 10347,
+      "ns": 0,
+      "title": "Kobo Libra 2"
+    },
+    {
+      "pageid": 3268,
+      "ns": 0,
+      "title": "Kobo Libra H2O (kobo-librah2o)"
+    },
+    {
+      "pageid": 7033,
+      "ns": 0,
+      "title": "Kobo Nia (kobo-nia)"
+    },
+    {
+      "pageid": 768,
+      "ns": 0,
+      "title": "Kosagi Fernvale (kosagi-fernvale)"
+    },
+    {
+      "pageid": 8633,
+      "ns": 0,
+      "title": "KTC msd6a358m2c1 (ktc-msd6a358m2c1)"
+    },
+    {
+      "pageid": 10228,
+      "ns": 0,
+      "title": "Kyocera KC-T302DT"
+    },
+    {
+      "pageid": 9430,
+      "ns": 0,
+      "title": "Kyocera KC-T302DT/ZU"
+    },
+    {
+      "pageid": 80,
+      "ns": 0,
+      "title": "Land Rover A9 (landrover-a9)"
+    },
+    {
+      "pageid": 2470,
+      "ns": 0,
+      "title": "Lark FreeMe 70.2S (lark-freeme-70-2s)"
+    },
+    {
+      "pageid": 4115,
+      "ns": 0,
+      "title": "Lava Xolo Chromebook (google-veyron-jaq)"
+    },
+    {
+      "pageid": 5542,
+      "ns": 0,
+      "title": "LeapFrog Leapster GS (leapfrog-lucy)"
+    },
+    {
+      "pageid": 3223,
+      "ns": 0,
+      "title": "LeEco Le 1s (leeco-x3)"
+    },
+    {
+      "pageid": 386,
+      "ns": 0,
+      "title": "LeEco Le 2 (leeco-s2)"
+    },
+    {
+      "pageid": 5224,
+      "ns": 0,
+      "title": "LeEco Le Max2 (leeco-x2)"
+    },
+    {
+      "pageid": 2719,
+      "ns": 0,
+      "title": "LeEco Le Pro3 (leeco-zl1)"
+    },
+    {
+      "pageid": 2911,
+      "ns": 0,
+      "title": "Lego Mindstorms EV3 (lego-ev3)"
+    },
+    {
+      "pageid": 3890,
+      "ns": 0,
+      "title": "Lenovo 100e Chromebook 2nd Gen (MTK) (google-hana)"
+    },
+    {
+      "pageid": 4655,
+      "ns": 0,
+      "title": "Lenovo 100e Chromebook 2nd Gen MTK 2 (google-makomo)"
+    },
+    {
+      "pageid": 4102,
+      "ns": 0,
+      "title": "Lenovo 10e Chromebook Tablet (google-kodama)"
+    },
+    {
+      "pageid": 3881,
+      "ns": 0,
+      "title": "Lenovo 300e Chromebook (google-hana)"
+    },
+    {
+      "pageid": 3891,
+      "ns": 0,
+      "title": "Lenovo 300e Chromebook 2nd Gen (MTK) (google-hana)"
+    },
+    {
+      "pageid": 6846,
+      "ns": 0,
+      "title": "Lenovo 300e Yoga Chromebook Gen 4 (google-steelix)"
+    },
+    {
+      "pageid": 7189,
+      "ns": 0,
+      "title": "Lenovo A369i (lenovo-a369i)"
+    },
+    {
+      "pageid": 2265,
+      "ns": 0,
+      "title": "Lenovo A6000 (lenovo-a6000)"
+    },
+    {
+      "pageid": 1133,
+      "ns": 0,
+      "title": "Lenovo A6010 (lenovo-a6010)"
+    },
+    {
+      "pageid": 3888,
+      "ns": 0,
+      "title": "Lenovo Chromebook C330 (google-hana)"
+    },
+    {
+      "pageid": 9936,
+      "ns": 0,
+      "title": "Lenovo Chromebook Plus 14 (google-navi)"
+    },
+    {
+      "pageid": 3889,
+      "ns": 0,
+      "title": "Lenovo Chromebook S330 (google-hana)"
+    },
+    {
+      "pageid": 4105,
+      "ns": 0,
+      "title": "Lenovo Flex 11 Chromebook (google-hana)"
+    },
+    {
+      "pageid": 6906,
+      "ns": 0,
+      "title": "Lenovo Flex 5G (lenovo-82ak)"
+    },
+    {
+      "pageid": 4650,
+      "ns": 0,
+      "title": "Lenovo Flex 5G (lenovo-flex-5g)"
+    },
+    {
+      "pageid": 4098,
+      "ns": 0,
+      "title": "Lenovo IdeaPad 3 Chromebook (MT8183) (google-fennel14)"
+    },
+    {
+      "pageid": 5299,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Duet 3 (google-wormdingler)"
+    },
+    {
+      "pageid": 5300,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Duet 5 (google-homestar)"
+    },
+    {
+      "pageid": 3982,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Duet Chromebook (google-krane)"
+    },
+    {
+      "pageid": 3893,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Flex 3 Chromebook (CB-11M735) (google-hana)"
+    },
+    {
+      "pageid": 4097,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Flex 3 Chromebook (MT8183) (google-fennel)"
+    },
+    {
+      "pageid": 13311,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Slim 3 15AMN8 (lenovo-82xq)"
+    },
+    {
+      "pageid": 6985,
+      "ns": 0,
+      "title": "Lenovo IdeaPad Slim 3 Chromebook (14M868) (google-magneton)"
+    },
+    {
+      "pageid": 2656,
+      "ns": 0,
+      "title": "Lenovo IdeaTab A3000 (lenovo-a3000)"
+    },
+    {
+      "pageid": 12219,
+      "ns": 0,
+      "title": "Lenovo IdeaTab A7600-H (lenovo-lvp9)"
+    },
+    {
+      "pageid": 2969,
+      "ns": 0,
+      "title": "Lenovo K4 Note (lenovo-k5fpr)"
+    },
+    {
+      "pageid": 6224,
+      "ns": 0,
+      "title": "Lenovo K5 Play (lenovo-l38011)"
+    },
+    {
+      "pageid": 6781,
+      "ns": 0,
+      "title": "Lenovo K6 Note (lenovo-karatep)"
+    },
+    {
+      "pageid": 348,
+      "ns": 0,
+      "title": "Lenovo K6 Power (lenovo-karate)"
+    },
+    {
+      "pageid": 10083,
+      "ns": 0,
+      "title": "Lenovo K8 Note (lenovo-manning)"
+    },
+    {
+      "pageid": 4718,
+      "ns": 0,
+      "title": "Lenovo Legion Y700"
+    },
+    {
+      "pageid": 3880,
+      "ns": 0,
+      "title": "Lenovo N23 Yoga Chromebook (google-hana)"
+    },
+    {
+      "pageid": 3285,
+      "ns": 0,
+      "title": "Lenovo P2 (lenovo-kuntao)"
+    },
+    {
+      "pageid": 4695,
+      "ns": 0,
+      "title": "Lenovo PHAB (lenovo-phoebe)"
+    },
+    {
+      "pageid": 1908,
+      "ns": 0,
+      "title": "Lenovo PHAB Plus (lenovo-phoenix)"
+    },
+    {
+      "pageid": 3243,
+      "ns": 0,
+      "title": "Lenovo Smart Tab M10 FHD Plus (lenovo-x606f)"
+    },
+    {
+      "pageid": 4838,
+      "ns": 0,
+      "title": "Lenovo Smart Tab M10 FHD Plus (lenovo-x606x)"
+    },
+    {
+      "pageid": 10515,
+      "ns": 0,
+      "title": "Lenovo TAB 2 A8-50F (lenovo-a8-50f)"
+    },
+    {
+      "pageid": 10271,
+      "ns": 0,
+      "title": "Lenovo Tab 4 10 (lenovo-tb-x304l)"
+    },
+    {
+      "pageid": 2468,
+      "ns": 0,
+      "title": "Lenovo Tab 4 8 (lenovo-tb8504f)"
+    },
+    {
+      "pageid": 10310,
+      "ns": 0,
+      "title": "Lenovo Tab 4 8 (lenovo-tb8504x)"
+    },
+    {
+      "pageid": 13898,
+      "ns": 0,
+      "title": "Lenovo Tab 7 Essential (lenovo-tb-7104i)"
+    },
+    {
+      "pageid": 8012,
+      "ns": 0,
+      "title": "Lenovo Tab 7 Essential (lenovo-tb7304f)"
+    },
+    {
+      "pageid": 3472,
+      "ns": 0,
+      "title": "Lenovo Tab M10"
+    },
+    {
+      "pageid": 2838,
+      "ns": 0,
+      "title": "Lenovo Tab M10 FHD Plus (lenovo tbx606)"
+    },
+    {
+      "pageid": 9600,
+      "ns": 0,
+      "title": "Lenovo Tab M10 HD (lenovo-tbx505x)"
+    },
+    {
+      "pageid": 13349,
+      "ns": 0,
+      "title": "Lenovo Tab M10 HD 2nd Gen (lenovo-tbx306x/f)"
+    },
+    {
+      "pageid": 14176,
+      "ns": 0,
+      "title": "Lenovo Tab M8 (4th Gen)"
+    },
+    {
+      "pageid": 11195,
+      "ns": 0,
+      "title": "Lenovo Tab M8 HD (akita row call / akita row wifi)"
+    },
+    {
+      "pageid": 3219,
+      "ns": 0,
+      "title": "Lenovo Tab P11 (lenovo-j606f)"
+    },
+    {
+      "pageid": 3396,
+      "ns": 0,
+      "title": "Lenovo Tab P11 Pro (lenovo-j706f)"
+    },
+    {
+      "pageid": 8462,
+      "ns": 0,
+      "title": "Lenovo Tab Plus (lenovo-tb351fu)"
+    },
+    {
+      "pageid": 4945,
+      "ns": 0,
+      "title": "Lenovo Tab2 A10-30L (lenovo-achilles)"
+    },
+    {
+      "pageid": 3811,
+      "ns": 0,
+      "title": "Lenovo Tab3 7 Essential (lenovo-tb3-710i)"
+    },
+    {
+      "pageid": 3902,
+      "ns": 0,
+      "title": "Lenovo TAB4 10 Plus (lenovo-tb-x704f)"
+    },
+    {
+      "pageid": 4463,
+      "ns": 0,
+      "title": "Lenovo ThinkPad Tablet (lenovo-indigo)"
+    },
+    {
+      "pageid": 5734,
+      "ns": 0,
+      "title": "Lenovo ThinkPad X13s (lenovo-21bx)"
+    },
+    {
+      "pageid": 6892,
+      "ns": 0,
+      "title": "Lenovo ThinkSmart View (lenovo-cd-18781y)"
+    },
+    {
+      "pageid": 4574,
+      "ns": 0,
+      "title": "Lenovo Vibe K5 (lenovo-a6020a40)"
+    },
+    {
+      "pageid": 4886,
+      "ns": 0,
+      "title": "Lenovo Vibe K5 Plus (lenovo-a6020a46)"
+    },
+    {
+      "pageid": 2303,
+      "ns": 0,
+      "title": "Lenovo Vibe P1m (lenovo-p1m)"
+    },
+    {
+      "pageid": 5098,
+      "ns": 0,
+      "title": "Lenovo Xiaoxin Pad 2022 (lenovo-tb128fu)"
+    },
+    {
+      "pageid": 7454,
+      "ns": 0,
+      "title": "Lenovo Xiaoxin Pad Pro 12.6 (lenovo-q706f)"
+    },
+    {
+      "pageid": 3192,
+      "ns": 0,
+      "title": "Lenovo Xiaoxin Pad Pro 2021 (lenovo-j716f)"
+    },
+    {
+      "pageid": 6905,
+      "ns": 0,
+      "title": "Lenovo Yoga 5G (lenovo-81xe)"
+    },
+    {
+      "pageid": 4649,
+      "ns": 0,
+      "title": "Lenovo Yoga 5G (lenovo-yoga-5g)"
+    },
+    {
+      "pageid": 6560,
+      "ns": 0,
+      "title": "Lenovo Yoga c630 (lenovo-yoga-c630)"
+    },
+    {
+      "pageid": 8004,
+      "ns": 0,
+      "title": "Lenovo Yoga Slim 7x (lenovo-yoga-slim7x)"
+    },
+    {
+      "pageid": 2750,
+      "ns": 0,
+      "title": "Lenovo Yoga Tab 3 10 LTE/WiFi (lenovo-lxf-p5100)"
+    },
+    {
+      "pageid": 3203,
+      "ns": 0,
+      "title": "Lenovo Yoga Tab 3 8 LTE/WiFi (lenovo-lxf-p5000)"
+    },
+    {
+      "pageid": 9177,
+      "ns": 0,
+      "title": "Lenovo YOGA Tablet 8/10 (lenovo-blade)"
+    },
+    {
+      "pageid": 1481,
+      "ns": 0,
+      "title": "Lenovo ZUK Z2 Plus (zuk-z2-plus)"
+    },
+    {
+      "pageid": 1346,
+      "ns": 0,
+      "title": "Lenovo ZUK Z2 Pro (zuk-z2-row)"
+    },
+    {
+      "pageid": 13405,
+      "ns": 0,
+      "title": "Lenovo-tb520fu"
+    },
+    {
+      "pageid": 4249,
+      "ns": 0,
+      "title": "LETV U2 (letv-lba-011-hk)"
+    },
+    {
+      "pageid": 1426,
+      "ns": 0,
+      "title": "LG Bello II (lg-x150)"
+    },
+    {
+      "pageid": 1646,
+      "ns": 0,
+      "title": "LG Doubleplay (lg-c729)"
+    },
+    {
+      "pageid": 9580,
+      "ns": 0,
+      "title": "LG FS660 (LG-Tribute)"
+    },
+    {
+      "pageid": 3718,
+      "ns": 0,
+      "title": "LG Fx0 (lg-madai)"
+    },
+    {
+      "pageid": 3715,
+      "ns": 0,
+      "title": "LG G Pad 8.3 LTE (lg-altev)"
+    },
+    {
+      "pageid": 14088,
+      "ns": 0,
+      "title": "LG G Pad X2 8.0 Plus"
+    },
+    {
+      "pageid": 238,
+      "ns": 0,
+      "title": "LG G Watch (lg-dory)"
+    },
+    {
+      "pageid": 184,
+      "ns": 0,
+      "title": "LG G Watch R (lg-lenok)"
+    },
+    {
+      "pageid": 2569,
+      "ns": 0,
+      "title": "LG G2 International (lg-d802)"
+    },
+    {
+      "pageid": 2604,
+      "ns": 0,
+      "title": "LG G2 Korean (lg-f320)"
+    },
+    {
+      "pageid": 4068,
+      "ns": 0,
+      "title": "LG G2 mini (lg-g2m)"
+    },
+    {
+      "pageid": 2154,
+      "ns": 0,
+      "title": "LG G3 (T-Mobile) (lg-d851)"
+    },
+    {
+      "pageid": 902,
+      "ns": 0,
+      "title": "LG G3 Beat (lg-d722)"
+    },
+    {
+      "pageid": 37,
+      "ns": 0,
+      "title": "LG G3 Europe (lg-d855)"
+    },
+    {
+      "pageid": 379,
+      "ns": 0,
+      "title": "LG G4 International (lg-h815)"
+    },
+    {
+      "pageid": 2430,
+      "ns": 0,
+      "title": "LG G5 (lg-h850)"
+    },
+    {
+      "pageid": 2117,
+      "ns": 0,
+      "title": "LG G6 (lg-h870)"
+    },
+    {
+      "pageid": 3055,
+      "ns": 0,
+      "title": "LG G7 ThinQ (lg-judyln)"
+    },
+    {
+      "pageid": 4184,
+      "ns": 0,
+      "title": "LG G8X ThinQ (lg-mh2lm)"
+    },
+    {
+      "pageid": 324,
+      "ns": 0,
+      "title": "LG Joy (lg-h220)"
+    },
+    {
+      "pageid": 2259,
+      "ns": 0,
+      "title": "LG K10 (lg-m216)"
+    },
+    {
+      "pageid": 2736,
+      "ns": 0,
+      "title": "LG K4 (lg-m160e)"
+    },
+    {
+      "pageid": 4666,
+      "ns": 0,
+      "title": "LG K4 2016 (lg-k130f)"
+    },
+    {
+      "pageid": 3704,
+      "ns": 0,
+      "title": "LG K40 AT&T (lg-mmh4x)"
+    },
+    {
+      "pageid": 3980,
+      "ns": 0,
+      "title": "LG K5 (lg-x220ds)"
+    },
+    {
+      "pageid": 495,
+      "ns": 0,
+      "title": "LG K7 (lg-m1)"
+    },
+    {
+      "pageid": 2392,
+      "ns": 0,
+      "title": "LG L Fino (lg-d295)"
+    },
+    {
+      "pageid": 305,
+      "ns": 0,
+      "title": "LG L65 Dual SIM D285 (lg-d285)"
+    },
+    {
+      "pageid": 669,
+      "ns": 0,
+      "title": "LG L70 (lg-w5)"
+    },
+    {
+      "pageid": 3178,
+      "ns": 0,
+      "title": "LG L90 (lg-w7)"
+    },
+    {
+      "pageid": 4557,
+      "ns": 0,
+      "title": "LG Leon LTE (lg-c50)"
+    },
+    {
+      "pageid": 11635,
+      "ns": 0,
+      "title": "LG Optimus 2X (lg-star)"
+    },
+    {
+      "pageid": 1008,
+      "ns": 0,
+      "title": "LG Optimus 3D (lg-p920)"
+    },
+    {
+      "pageid": 2984,
+      "ns": 0,
+      "title": "LG Optimus 4X HD (lg-p880)"
+    },
+    {
+      "pageid": 2394,
+      "ns": 0,
+      "title": "LG Optimus L3 II (lg-vee3e)"
+    },
+    {
+      "pageid": 960,
+      "ns": 0,
+      "title": "LG Optimus L5 (lg-e610)"
+    },
+    {
+      "pageid": 1033,
+      "ns": 0,
+      "title": "LG Optimus L7 (lg-p700)"
+    },
+    {
+      "pageid": 6733,
+      "ns": 0,
+      "title": "LG Optimus L7 II (lg-vee7e)"
+    },
+    {
+      "pageid": 1605,
+      "ns": 0,
+      "title": "LG Optimus Slider (lg-vm701)"
+    },
+    {
+      "pageid": 4032,
+      "ns": 0,
+      "title": "LG Optimus Vu (lg-p895)"
+    },
+    {
+      "pageid": 11458,
+      "ns": 0,
+      "title": "LG Q6 (lg-m700)"
+    },
+    {
+      "pageid": 1597,
+      "ns": 0,
+      "title": "LG Spirit 4G LTE (lg-c70n)"
+    },
+    {
+      "pageid": 6946,
+      "ns": 0,
+      "title": "LG Stylo 3 Plus (lg-sf340n)"
+    },
+    {
+      "pageid": 2691,
+      "ns": 0,
+      "title": "LG V20 (lg-elsa)"
+    },
+    {
+      "pageid": 3054,
+      "ns": 0,
+      "title": "LG V35 ThinQ (lg-judyp)"
+    },
+    {
+      "pageid": 597,
+      "ns": 0,
+      "title": "LG V500 (lg-v500)"
+    },
+    {
+      "pageid": 9543,
+      "ns": 0,
+      "title": "LG Vu 3 (lg-f300)"
+    },
+    {
+      "pageid": 10274,
+      "ns": 0,
+      "title": "LG Watch Urbane (lg-bass)"
+    },
+    {
+      "pageid": 6562,
+      "ns": 0,
+      "title": "LG Wine Smart 2015 (lg-h410)"
+    },
+    {
+      "pageid": 5380,
+      "ns": 0,
+      "title": "Libera-Merdeka Chromebook C100/C110/C120/C150 (google-pazquel)"
+    },
+    {
+      "pageid": 5421,
+      "ns": 0,
+      "title": "Libre Computer AML-S805X-AC-V1.0 (librecomputer-lafrite)"
+    },
+    {
+      "pageid": 5418,
+      "ns": 0,
+      "title": "Libre Computer AML-S905X-CC-V1.0 (librecomputer-lepotato)"
+    },
+    {
+      "pageid": 5703,
+      "ns": 0,
+      "title": "Libre Computer Cottonwood (librecomputer-cottonwood)"
+    },
+    {
+      "pageid": 14259,
+      "ns": 0,
+      "title": "Light L16 (light-lfc)"
+    },
+    {
+      "pageid": 3977,
+      "ns": 0,
+      "title": "Light phone 2"
+    },
+    {
+      "pageid": 8461,
+      "ns": 0,
+      "title": "LincPlus T4 (lincplus-t4)"
+    },
+    {
+      "pageid": 6273,
+      "ns": 0,
+      "title": "Linksys EA9350 V3 / MR5500 (linksys-jamaica)"
+    },
+    {
+      "pageid": 8232,
+      "ns": 0,
+      "title": "Linksys WRT1900ACS/WRT1900ACS V2 (linksys-shelby)"
+    },
+    {
+      "pageid": 9564,
+      "ns": 0,
+      "title": "LubanCat 5.BTB"
+    },
+    {
+      "pageid": 4119,
+      "ns": 0,
+      "title": "Lumos Education Chromebook (google-veyron-mighty)"
+    },
+    {
+      "pageid": 7806,
+      "ns": 0,
+      "title": "Lynx R1 (lynx-r1)"
+    },
+    {
+      "pageid": 4387,
+      "ns": 0,
+      "title": "MangoPi MQ-Pro (mangopi-mq-pro)"
+    },
+    {
+      "pageid": 1152,
+      "ns": 0,
+      "title": "Marshall London (marshall-london)"
+    },
+    {
+      "pageid": 4087,
+      "ns": 0,
+      "title": "Mecer Xpression V2 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 9932,
+      "ns": 0,
+      "title": "Mecha Comet (mecha-comet-m)"
+    },
+    {
+      "pageid": 4767,
+      "ns": 0,
+      "title": "Mecool KM2 Plus (mecool-yyc)"
+    },
+    {
+      "pageid": 12557,
+      "ns": 0,
+      "title": "MediaTek MT6789 (mediatek-mt6789)"
+    },
+    {
+      "pageid": 6421,
+      "ns": 0,
+      "title": "Mediatek ZH960"
+    },
+    {
+      "pageid": 11727,
+      "ns": 0,
+      "title": "Medion Akoya E2212T"
+    },
+    {
+      "pageid": 11127,
+      "ns": 0,
+      "title": "Medion Akoya P2214T"
+    },
+    {
+      "pageid": 4112,
+      "ns": 0,
+      "title": "Medion Chromebook S2013 (google-veyron-jaq)"
+    },
+    {
+      "pageid": 4116,
+      "ns": 0,
+      "title": "Medion Chromebook S2015 (google-veyron-mighty)"
+    },
+    {
+      "pageid": 10305,
+      "ns": 0,
+      "title": "Medion Lifetab P10610"
+    },
+    {
+      "pageid": 1309,
+      "ns": 0,
+      "title": "Medion Lifetab S9714 (medion-kai)"
+    },
+    {
+      "pageid": 3729,
+      "ns": 0,
+      "title": "Meizu 16th (meizu-m1882)"
+    },
+    {
+      "pageid": 2733,
+      "ns": 0,
+      "title": "Meizu M2 (meizu-mblu2)"
+    },
+    {
+      "pageid": 2557,
+      "ns": 0,
+      "title": "Meizu M2 Note (meizu-m571)"
+    },
+    {
+      "pageid": 4640,
+      "ns": 0,
+      "title": "Meizu M3 Note (meizu-l681)"
+    },
+    {
+      "pageid": 11519,
+      "ns": 0,
+      "title": "Meizu M6 (meizu-m711h)"
+    },
+    {
+      "pageid": 3092,
+      "ns": 0,
+      "title": "Meizu M6 Note (meizu-meilan-note-6)"
+    },
+    {
+      "pageid": 745,
+      "ns": 0,
+      "title": "Meizu Pro 5 (meizu-turbo)"
+    },
+    {
+      "pageid": 10008,
+      "ns": 0,
+      "title": "META Quest 3S (panther)"
+    },
+    {
+      "pageid": 1680,
+      "ns": 0,
+      "title": "Microsoft Lumia 535 (msft-chakra)"
+    },
+    {
+      "pageid": 2629,
+      "ns": 0,
+      "title": "Microsoft Lumia 550 (microsoft-saimaa)"
+    },
+    {
+      "pageid": 1384,
+      "ns": 0,
+      "title": "Microsoft Lumia 640 (microsoft-dempsey)"
+    },
+    {
+      "pageid": 4861,
+      "ns": 0,
+      "title": "Microsoft Lumia 640 XL (microsoft-makepeace)"
+    },
+    {
+      "pageid": 1950,
+      "ns": 0,
+      "title": "Microsoft Lumia 650 LTE (microsoft-saana)"
+    },
+    {
+      "pageid": 1898,
+      "ns": 0,
+      "title": "Microsoft Lumia 950 (microsoft-talkman)"
+    },
+    {
+      "pageid": 1203,
+      "ns": 0,
+      "title": "Microsoft Lumia 950 XL (microsoft-cityman)"
+    },
+    {
+      "pageid": 3070,
+      "ns": 0,
+      "title": "Microsoft Surface 2 (microsoft-surface-2)"
+    },
+    {
+      "pageid": 4412,
+      "ns": 0,
+      "title": "Microsoft Surface Duo (microsoft-surface-duo)"
+    },
+    {
+      "pageid": 12192,
+      "ns": 0,
+      "title": "Microsoft Surface Duo 2 (microsoft-surface-duo2)"
+    },
+    {
+      "pageid": 9044,
+      "ns": 0,
+      "title": "Microsoft Surface Go 3 (microsoft-surface-go-3)"
+    },
+    {
+      "pageid": 10138,
+      "ns": 0,
+      "title": "Microsoft Surface Pro 3"
+    },
+    {
+      "pageid": 2804,
+      "ns": 0,
+      "title": "Microsoft Surface Pro 4 (microsoft-surface-pro4)"
+    },
+    {
+      "pageid": 8666,
+      "ns": 0,
+      "title": "Microsoft Surface Pro 5 (Project Cobalt)"
+    },
+    {
+      "pageid": 2759,
+      "ns": 0,
+      "title": "Microsoft Surface RT (microsoft-surface-rt)"
+    },
+    {
+      "pageid": 7843,
+      "ns": 0,
+      "title": "Microsoft Surfaces with x64 CPU (microsoft-x64surface)"
+    },
+    {
+      "pageid": 6454,
+      "ns": 0,
+      "title": "Microsoft Windows Devkit 2023 (microsoft-volterra)"
+    },
+    {
+      "pageid": 8056,
+      "ns": 0,
+      "title": "Milk-V Jupiter (milkv-jupiter)"
+    },
+    {
+      "pageid": 9013,
+      "ns": 0,
+      "title": "Minimal Phone"
+    },
+    {
+      "pageid": 10102,
+      "ns": 0,
+      "title": "MNT Research Reform 2 with BPI-CM4 (mnt-reform2-bpi-cm4)"
+    },
+    {
+      "pageid": 2058,
+      "ns": 0,
+      "title": "Mobvoi Ticwatch E/S"
+    },
+    {
+      "pageid": 2853,
+      "ns": 0,
+      "title": "Mobvoi Ticwatch E3 (mobvoi-ricefish)"
+    },
+    {
+      "pageid": 1911,
+      "ns": 0,
+      "title": "Mobvoi Ticwatch Pro (mobvoi-catfish)"
+    },
+    {
+      "pageid": 9785,
+      "ns": 0,
+      "title": "Mobvoi Ticwatch Pro 3 LTE (mobvoi-rover)"
+    },
+    {
+      "pageid": 476,
+      "ns": 0,
+      "title": "Motorola Droid 4 (motorola-maserati)"
+    },
+    {
+      "pageid": 2635,
+      "ns": 0,
+      "title": "Motorola Droid X2 (motorola-daytona)"
+    },
+    {
+      "pageid": 11789,
+      "ns": 0,
+      "title": "Motorola Edge 2021 (motorola-berlna)"
+    },
+    {
+      "pageid": 12193,
+      "ns": 0,
+      "title": "Motorola Edge 30 (motorola-dubai)"
+    },
+    {
+      "pageid": 8450,
+      "ns": 0,
+      "title": "Motorola Milestone (motorola-milestone)"
+    },
+    {
+      "pageid": 8578,
+      "ns": 0,
+      "title": "Motorola Milestone 2 (motorola-milestone2)"
+    },
+    {
+      "pageid": 3719,
+      "ns": 0,
+      "title": "Motorola Moto C Plus (motorola-panelli)"
+    },
+    {
+      "pageid": 2298,
+      "ns": 0,
+      "title": "Motorola Moto E 2014 (motorola-condor)"
+    },
+    {
+      "pageid": 690,
+      "ns": 0,
+      "title": "Motorola Moto E 2015 (motorola-surnia)"
+    },
+    {
+      "pageid": 1483,
+      "ns": 0,
+      "title": "Motorola Moto E4 (motorola-perry)"
+    },
+    {
+      "pageid": 8414,
+      "ns": 0,
+      "title": "Motorola Moto E5 (motorola-nora)"
+    },
+    {
+      "pageid": 3484,
+      "ns": 0,
+      "title": "Motorola Moto E5 Play (motorola-james)"
+    },
+    {
+      "pageid": 4799,
+      "ns": 0,
+      "title": "Motorola Moto E5 Plus (motorola-hannah)"
+    },
+    {
+      "pageid": 2674,
+      "ns": 0,
+      "title": "Motorola Moto E6 (motorola-surfna)"
+    },
+    {
+      "pageid": 432,
+      "ns": 0,
+      "title": "Motorola Moto G 2013 (motorola-falcon)"
+    },
+    {
+      "pageid": 83,
+      "ns": 0,
+      "title": "Motorola Moto G 2014 (motorola-titan)"
+    },
+    {
+      "pageid": 273,
+      "ns": 0,
+      "title": "Motorola Moto G 2015 (motorola-osprey)"
+    },
+    {
+      "pageid": 486,
+      "ns": 0,
+      "title": "Motorola Moto G 4G 2013 (motorola-peregrine)"
+    },
+    {
+      "pageid": 3183,
+      "ns": 0,
+      "title": "Motorola Moto G 5G (motorola-kiev)"
+    },
+    {
+      "pageid": 1437,
+      "ns": 0,
+      "title": "Motorola Moto G LTE (2014) (motorola-thea)"
+    },
+    {
+      "pageid": 12848,
+      "ns": 0,
+      "title": "Motorola Moto G Power (2020) (motorola-sofia)"
+    },
+    {
+      "pageid": 5540,
+      "ns": 0,
+      "title": "Motorola Moto G Stylus (2021) (minsk)"
+    },
+    {
+      "pageid": 7094,
+      "ns": 0,
+      "title": "Motorola Moto G100 (motorola-nio)"
+    },
+    {
+      "pageid": 10418,
+      "ns": 0,
+      "title": "Motorola Moto G13 / G23 (motorola-penangf)"
+    },
+    {
+      "pageid": 2300,
+      "ns": 0,
+      "title": "Motorola Moto G3 Turbo Edition (motorola-merlin)"
+    },
+    {
+      "pageid": 10064,
+      "ns": 0,
+      "title": "Motorola Moto G30 (motorola-caprip)"
+    },
+    {
+      "pageid": 10285,
+      "ns": 0,
+      "title": "Motorola Moto G32 (motorola-devon)"
+    },
+    {
+      "pageid": 539,
+      "ns": 0,
+      "title": "Motorola Moto G4 (motorola-athene)"
+    },
+    {
+      "pageid": 547,
+      "ns": 0,
+      "title": "Motorola Moto G4 Play (motorola-harpia)"
+    },
+    {
+      "pageid": 11984,
+      "ns": 0,
+      "title": "Motorola Moto G45 5G (motorola-fogos)"
+    },
+    {
+      "pageid": 841,
+      "ns": 0,
+      "title": "Motorola Moto G5 (motorola-cedric)"
+    },
+    {
+      "pageid": 411,
+      "ns": 0,
+      "title": "Motorola Moto G5 Plus (motorola-potter)"
+    },
+    {
+      "pageid": 14439,
+      "ns": 0,
+      "title": "Motorola Moto G50 (motorola-ibiza)"
+    },
+    {
+      "pageid": 11884,
+      "ns": 0,
+      "title": "Motorola Moto G52 (motorola-rhode)"
+    },
+    {
+      "pageid": 919,
+      "ns": 0,
+      "title": "Motorola Moto G5s (motorola-montana)"
+    },
+    {
+      "pageid": 1446,
+      "ns": 0,
+      "title": "Motorola Moto G6 (motorola-ali)"
+    },
+    {
+      "pageid": 3066,
+      "ns": 0,
+      "title": "Motorola Moto G6 Play (motorola-aljeter)"
+    },
+    {
+      "pageid": 2933,
+      "ns": 0,
+      "title": "Motorola Moto G7 (motorola-river)"
+    },
+    {
+      "pageid": 1363,
+      "ns": 0,
+      "title": "Motorola Moto G7 Play (motorola-channel)"
+    },
+    {
+      "pageid": 11854,
+      "ns": 0,
+      "title": "Motorola Moto G7 Plus (motorola-lake)"
+    },
+    {
+      "pageid": 1874,
+      "ns": 0,
+      "title": "Motorola Moto G7 Power (motorola-ocean)"
+    },
+    {
+      "pageid": 12422,
+      "ns": 0,
+      "title": "Motorola Moto G72 (motorola-vicky)"
+    },
+    {
+      "pageid": 10027,
+      "ns": 0,
+      "title": "Motorola Moto G8 Plus (motorola-doha)"
+    },
+    {
+      "pageid": 6916,
+      "ns": 0,
+      "title": "Motorola Moto G82 5G"
+    },
+    {
+      "pageid": 11334,
+      "ns": 0,
+      "title": "Motorola Moto G85 (motorola-malmo)"
+    },
+    {
+      "pageid": 11878,
+      "ns": 0,
+      "title": "Motorola Moto G9 Play (motorola-guamp)"
+    },
+    {
+      "pageid": 2647,
+      "ns": 0,
+      "title": "Motorola Moto G9 Plus (motorola-odessa)"
+    },
+    {
+      "pageid": 12066,
+      "ns": 0,
+      "title": "Motorola Moto G9 Power (motorola-cebu)"
+    },
+    {
+      "pageid": 1415,
+      "ns": 0,
+      "title": "Motorola Moto One Hyper (motorola-def)"
+    },
+    {
+      "pageid": 427,
+      "ns": 0,
+      "title": "Motorola Moto X (motorola-ghost)"
+    },
+    {
+      "pageid": 1074,
+      "ns": 0,
+      "title": "Motorola Moto X Play (motorola-lux)"
+    },
+    {
+      "pageid": 1741,
+      "ns": 0,
+      "title": "Motorola Moto X4 (motorola-payton)"
+    },
+    {
+      "pageid": 1952,
+      "ns": 0,
+      "title": "Motorola Moto Z2 Force (motorola-nash)"
+    },
+    {
+      "pageid": 11718,
+      "ns": 0,
+      "title": "Motorola Moto Z2 Play (motorola-albus)"
+    },
+    {
+      "pageid": 8789,
+      "ns": 0,
+      "title": "Motorola Moto Z3 Play (motorola-beckham)"
+    },
+    {
+      "pageid": 9249,
+      "ns": 0,
+      "title": "Motorola One Action (motorola-troika)"
+    },
+    {
+      "pageid": 12001,
+      "ns": 0,
+      "title": "Motorola One Fusion (motorola-astro)"
+    },
+    {
+      "pageid": 12002,
+      "ns": 0,
+      "title": "Motorola One Fusion+ (motorola-liber)"
+    },
+    {
+      "pageid": 3151,
+      "ns": 0,
+      "title": "Motorola Photon Q (motorola-asanti)"
+    },
+    {
+      "pageid": 12194,
+      "ns": 0,
+      "title": "Motorola Razr 40 (motorola-lynkco)"
+    },
+    {
+      "pageid": 3239,
+      "ns": 0,
+      "title": "Motorola RAZR i (XT890) (motorola-smi)"
+    },
+    {
+      "pageid": 11791,
+      "ns": 0,
+      "title": "Motorola RAZR+ 2024 (motorola-arcfox)"
+    },
+    {
+      "pageid": 6976,
+      "ns": 0,
+      "title": "Motorola ThinkPhone by motorola (motorola-bronco)"
+    },
+    {
+      "pageid": 1734,
+      "ns": 0,
+      "title": "Motorola Z Play (motorola-addison)"
+    },
+    {
+      "pageid": 41,
+      "ns": 0,
+      "title": "Mozilla Flame (t2m-flame)"
+    },
+    {
+      "pageid": 590,
+      "ns": 0,
+      "title": "MT6572 Obscure (mediatek-mt6572obscure)"
+    },
+    {
+      "pageid": 9710,
+      "ns": 0,
+      "title": "MTO M9 (mto-m9)"
+    },
+    {
+      "pageid": 7474,
+      "ns": 0,
+      "title": "Multilaser M7s Quad Core (multilaser-astar-ococci)"
+    },
+    {
+      "pageid": 2385,
+      "ns": 0,
+      "title": "Nasa Ingenuity (nasa-ingenuity)"
+    },
+    {
+      "pageid": 9015,
+      "ns": 0,
+      "title": "Navitech qxv-522w primo"
+    },
+    {
+      "pageid": 1375,
+      "ns": 0,
+      "title": "Navon iQ7 2018"
+    },
+    {
+      "pageid": 4088,
+      "ns": 0,
+      "title": "NComputing Chromebook CX100 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 9424,
+      "ns": 0,
+      "title": "NEC LifeTouch L (nec-lifetouchl)"
+    },
+    {
+      "pageid": 268,
+      "ns": 0,
+      "title": "NEC Terrain (nec-terrain)"
+    },
+    {
+      "pageid": 14310,
+      "ns": 0,
+      "title": "Neffos C9 (neffos-tp707a)"
+    },
+    {
+      "pageid": 4389,
+      "ns": 0,
+      "title": "Netgear PTV3000 (netgear-ptv300)"
+    },
+    {
+      "pageid": 4124,
+      "ns": 0,
+      "title": "Nexian Chromebook 11.6\" (google-veyron-mighty)"
+    },
+    {
+      "pageid": 11966,
+      "ns": 0,
+      "title": "NexPhone (nex-nexphone)"
+    },
+    {
+      "pageid": 1474,
+      "ns": 0,
+      "title": "Next Thing Co. CHIP (ntc-chip)"
+    },
+    {
+      "pageid": 434,
+      "ns": 0,
+      "title": "Nextbit Robin (nextbit-ether)"
+    },
+    {
+      "pageid": 2817,
+      "ns": 0,
+      "title": "Nextbook 8 (nextbook-nxm865fd)"
+    },
+    {
+      "pageid": 307,
+      "ns": 0,
+      "title": "NGM WeMove Action (ngn-wemove-action)"
+    },
+    {
+      "pageid": 2515,
+      "ns": 0,
+      "title": "Nintendo 3DS (nintendo-ctr)"
+    },
+    {
+      "pageid": 13578,
+      "ns": 0,
+      "title": "Nintendo DS (nintendo-ntr)"
+    },
+    {
+      "pageid": 13608,
+      "ns": 0,
+      "title": "Nintendo Gameboy Advance (nintendo-agb)"
+    },
+    {
+      "pageid": 13581,
+      "ns": 0,
+      "title": "Nintendo GameCube (nintendo-dolphin)"
+    },
+    {
+      "pageid": 586,
+      "ns": 0,
+      "title": "Nintendo Switch (nintendo-nx)"
+    },
+    {
+      "pageid": 13580,
+      "ns": 0,
+      "title": "Nintendo Wii (nintendo-revolution)"
+    },
+    {
+      "pageid": 13582,
+      "ns": 0,
+      "title": "Nintendo Wii U (nintendo-cafe)"
+    },
+    {
+      "pageid": 1314,
+      "ns": 0,
+      "title": "Nobby 230 (nobby-230)"
+    },
+    {
+      "pageid": 1477,
+      "ns": 0,
+      "title": "Nokia 2720 Flip (nokia-beatles)"
+    },
+    {
+      "pageid": 5294,
+      "ns": 0,
+      "title": "Nokia 2780 Flip (nokia-weeknd)"
+    },
+    {
+      "pageid": 4509,
+      "ns": 0,
+      "title": "Nokia 6300 4G (nokia-leo)"
+    },
+    {
+      "pageid": 4093,
+      "ns": 0,
+      "title": "Nokia 8000 4G (nokia-sparkler)"
+    },
+    {
+      "pageid": 2084,
+      "ns": 0,
+      "title": "Nokia 8110 4G (nokia-argon)"
+    },
+    {
+      "pageid": 653,
+      "ns": 0,
+      "title": "Nokia Lumia 520 (nokia-fame)"
+    },
+    {
+      "pageid": 2964,
+      "ns": 0,
+      "title": "Nokia Lumia 530 (nokia-rock)"
+    },
+    {
+      "pageid": 1135,
+      "ns": 0,
+      "title": "Nokia Lumia 620 (nokia-sand)"
+    },
+    {
+      "pageid": 2948,
+      "ns": 0,
+      "title": "Nokia Lumia 625 (nokia-rm941)"
+    },
+    {
+      "pageid": 2517,
+      "ns": 0,
+      "title": "Nokia Lumia 630 (nokia-moneypenny)"
+    },
+    {
+      "pageid": 642,
+      "ns": 0,
+      "title": "Nokia Lumia 720 (nokia-zeal)"
+    },
+    {
+      "pageid": 3158,
+      "ns": 0,
+      "title": "Nokia Lumia 730 (nokia-superman)"
+    },
+    {
+      "pageid": 3933,
+      "ns": 0,
+      "title": "Nokia Lumia 820 (nokia-arrow)"
+    },
+    {
+      "pageid": 3126,
+      "ns": 0,
+      "title": "Nokia Lumia 830 (nokia-tesla)"
+    },
+    {
+      "pageid": 1957,
+      "ns": 0,
+      "title": "Nokia Lumia 920 (nokia-phi)"
+    },
+    {
+      "pageid": 3974,
+      "ns": 0,
+      "title": "Nokia Lumia 925 (nokia-catwalk)"
+    },
+    {
+      "pageid": 1647,
+      "ns": 0,
+      "title": "Nokia Lumia 930 (nokia-martini)"
+    },
+    {
+      "pageid": 3077,
+      "ns": 0,
+      "title": "Nokia N8 (nokia-vasco)"
+    },
+    {
+      "pageid": 4980,
+      "ns": 0,
+      "title": "Nokia N810 (nokia-selene)"
+    },
+    {
+      "pageid": 5313,
+      "ns": 0,
+      "title": "Nokia N9 (nokia-n9)"
+    },
+    {
+      "pageid": 4,
+      "ns": 0,
+      "title": "Nokia N900 (nokia-n900)"
+    },
+    {
+      "pageid": 301,
+      "ns": 0,
+      "title": "Nokia N950 (nokia-n950)"
+    },
+    {
+      "pageid": 9291,
+      "ns": 0,
+      "title": "NordicTrack C990 (nordictrack-c990)"
+    },
+    {
+      "pageid": 7460,
+      "ns": 0,
+      "title": "Nothing CMF Phone 1 (nothing-tetris)"
+    },
+    {
+      "pageid": 7062,
+      "ns": 0,
+      "title": "Nothing Phone 1 (nothing-spacewar)"
+    },
+    {
+      "pageid": 6612,
+      "ns": 0,
+      "title": "Nothing Phone 2 (nothing-pong)"
+    },
+    {
+      "pageid": 10398,
+      "ns": 0,
+      "title": "Nothing Phone 2a (nothing-pacman)"
+    },
+    {
+      "pageid": 8949,
+      "ns": 0,
+      "title": "Nothing Phone 3a (nothing-asteroids)"
+    },
+    {
+      "pageid": 13048,
+      "ns": 0,
+      "title": "Nothing Phone 4a (nothing-frogger)"
+    },
+    {
+      "pageid": 14183,
+      "ns": 0,
+      "title": "Nothing Phone 4a Pro (nothing-froggerpro)"
+    },
+    {
+      "pageid": 10344,
+      "ns": 0,
+      "title": "Nubia Mini 5G (TP1803)"
+    },
+    {
+      "pageid": 4632,
+      "ns": 0,
+      "title": "Nubia Z17"
+    },
+    {
+      "pageid": 2514,
+      "ns": 0,
+      "title": "Nvidia Shield Tablet (nvidia-shieldtablet)"
+    },
+    {
+      "pageid": 5498,
+      "ns": 0,
+      "title": "Nvidia SHIELD TV 2015 / 2015 Pro / 2017 Pro (nvidia-foster)"
+    },
+    {
+      "pageid": 2606,
+      "ns": 0,
+      "title": "Nvidia Shield TV Pro 2019 (nvidia-mdarcy)"
+    },
+    {
+      "pageid": 5575,
+      "ns": 0,
+      "title": "Nvidia Tegra armv7 (nvidia-tegra-armv7)"
+    },
+    {
+      "pageid": 1478,
+      "ns": 0,
+      "title": "NVIDIA Tegra Note 7 (nvidia-tegratab)"
+    },
+    {
+      "pageid": 4459,
+      "ns": 0,
+      "title": "Oculus Go (oculus-pacific)"
+    },
+    {
+      "pageid": 11239,
+      "ns": 0,
+      "title": "ODROID C2 (odroid-c2)"
+    },
+    {
+      "pageid": 8257,
+      "ns": 0,
+      "title": "ODROID C4 (odroid-c4)"
+    },
+    {
+      "pageid": 2686,
+      "ns": 0,
+      "title": "ODROID HC2 (odroid-hc2)"
+    },
+    {
+      "pageid": 4311,
+      "ns": 0,
+      "title": "ODROID N2 (odroid-n2)"
+    },
+    {
+      "pageid": 4309,
+      "ns": 0,
+      "title": "ODROID N2+ (odroid-n2plus)"
+    },
+    {
+      "pageid": 4873,
+      "ns": 0,
+      "title": "ODROID U2 (odroid-u2)"
+    },
+    {
+      "pageid": 3322,
+      "ns": 0,
+      "title": "ODROID XU4 (odroid-xu4)"
+    },
+    {
+      "pageid": 8638,
+      "ns": 0,
+      "title": "ODYS Thor 10 +3G (odys-sofia3gr)"
+    },
+    {
+      "pageid": 3930,
+      "ns": 0,
+      "title": "ODYS WinPad X9 (odys-winpad-x9)"
+    },
+    {
+      "pageid": 6519,
+      "ns": 0,
+      "title": "OLIMEX Teres-I (olimex-teres i)"
+    },
+    {
+      "pageid": 11493,
+      "ns": 0,
+      "title": "OnePlus 10 Pro (oneplus-negroni)"
+    },
+    {
+      "pageid": 9784,
+      "ns": 0,
+      "title": "OnePlus 13 (oneplus-dodge)"
+    },
+    {
+      "pageid": 10945,
+      "ns": 0,
+      "title": "OnePlus 13s (oneplus-pagani)"
+    },
+    {
+      "pageid": 11583,
+      "ns": 0,
+      "title": "OnePlus 15 (oneplus-infiniti)"
+    },
+    {
+      "pageid": 950,
+      "ns": 0,
+      "title": "OnePlus 3 (oneplus-oneplus3)"
+    },
+    {
+      "pageid": 1374,
+      "ns": 0,
+      "title": "OnePlus 3T (oneplus-oneplus3t)"
+    },
+    {
+      "pageid": 1082,
+      "ns": 0,
+      "title": "OnePlus 5 (oneplus-cheeseburger)"
+    },
+    {
+      "pageid": 3165,
+      "ns": 0,
+      "title": "OnePlus 5T (oneplus-dumpling)"
+    },
+    {
+      "pageid": 1418,
+      "ns": 0,
+      "title": "OnePlus 6 (oneplus-enchilada)"
+    },
+    {
+      "pageid": 2494,
+      "ns": 0,
+      "title": "OnePlus 6T (oneplus-fajita)"
+    },
+    {
+      "pageid": 1846,
+      "ns": 0,
+      "title": "OnePlus 7 (oneplus-guacamoleb)"
+    },
+    {
+      "pageid": 1435,
+      "ns": 0,
+      "title": "OnePlus 7 Pro (oneplus-guacamole)"
+    },
+    {
+      "pageid": 8169,
+      "ns": 0,
+      "title": "OnePlus 7T Pro (oneplus-hotdog)"
+    },
+    {
+      "pageid": 10803,
+      "ns": 0,
+      "title": "OnePlus 8 (oneplus-instantnoodle)"
+    },
+    {
+      "pageid": 4753,
+      "ns": 0,
+      "title": "OnePlus 8 Pro (oneplus-instantnoodlep)"
+    },
+    {
+      "pageid": 2810,
+      "ns": 0,
+      "title": "OnePlus 8T (oneplus-kebab)"
+    },
+    {
+      "pageid": 2782,
+      "ns": 0,
+      "title": "OnePlus 9 & 9 Pro (oneplus-lemonade & oneplus-lemonadep)"
+    },
+    {
+      "pageid": 8478,
+      "ns": 0,
+      "title": "OnePlus 9RT (oneplus-martini)"
+    },
+    {
+      "pageid": 9472,
+      "ns": 0,
+      "title": "OnePlus Ace 3 (oneplus-aston)"
+    },
+    {
+      "pageid": 12917,
+      "ns": 0,
+      "title": "OnePlus Ace 6 (oneplus-ktm)"
+    },
+    {
+      "pageid": 3640,
+      "ns": 0,
+      "title": "OnePlus Nord (oneplus-avicii)"
+    },
+    {
+      "pageid": 10537,
+      "ns": 0,
+      "title": "OnePlus Nord 2 5G (oneplus-denniz)"
+    },
+    {
+      "pageid": 12505,
+      "ns": 0,
+      "title": "OnePlus Nord CE 3 (oneplus-ziti)"
+    },
+    {
+      "pageid": 9700,
+      "ns": 0,
+      "title": "OnePlus Nord CE 3 Lite 5G (oneplus-larry)"
+    },
+    {
+      "pageid": 8147,
+      "ns": 0,
+      "title": "OnePlus Nord N10 5G (oneplus-billie)"
+    },
+    {
+      "pageid": 2377,
+      "ns": 0,
+      "title": "OnePlus Nord N100 (oneplus-billie2)"
+    },
+    {
+      "pageid": 4167,
+      "ns": 0,
+      "title": "OnePlus Nord N200 (oneplus-dre)"
+    },
+    {
+      "pageid": 227,
+      "ns": 0,
+      "title": "OnePlus One (oneplus-bacon)"
+    },
+    {
+      "pageid": 519,
+      "ns": 0,
+      "title": "OnePlus Two (oneplus-oneplus2)"
+    },
+    {
+      "pageid": 7220,
+      "ns": 0,
+      "title": "OnePlus Watch 2 (oneplus-opwwe231)"
+    },
+    {
+      "pageid": 297,
+      "ns": 0,
+      "title": "OnePlus X (oneplus-onyx)"
+    },
+    {
+      "pageid": 14350,
+      "ns": 0,
+      "title": "Onn 11 Core Tablet (onn-t405a)"
+    },
+    {
+      "pageid": 5270,
+      "ns": 0,
+      "title": "Onn Tablet Gen 3 (onn-kelvin)"
+    },
+    {
+      "pageid": 13599,
+      "ns": 0,
+      "title": "Onn Tablet Gen 4 (onn-obsidian)"
+    },
+    {
+      "pageid": 3044,
+      "ns": 0,
+      "title": "Onn UHD (askey-sti6140d360)"
+    },
+    {
+      "pageid": 8289,
+      "ns": 0,
+      "title": "ONYX BOOX Go 6 (onyx-go6)"
+    },
+    {
+      "pageid": 10286,
+      "ns": 0,
+      "title": "Onyx Boox Leaf"
+    },
+    {
+      "pageid": 10343,
+      "ns": 0,
+      "title": "Onyx Boox Page"
+    },
+    {
+      "pageid": 10799,
+      "ns": 0,
+      "title": "Onyx Boox Poke3"
+    },
+    {
+      "pageid": 12151,
+      "ns": 0,
+      "title": "Oppo A17 (oppo-a17)"
+    },
+    {
+      "pageid": 2091,
+      "ns": 0,
+      "title": "Oppo A31 (oppo-a31t)"
+    },
+    {
+      "pageid": 1652,
+      "ns": 0,
+      "title": "Oppo A37 (oppo-a37f)"
+    },
+    {
+      "pageid": 12487,
+      "ns": 0,
+      "title": "Oppo A53 (oppo-a53)"
+    },
+    {
+      "pageid": 967,
+      "ns": 0,
+      "title": "Oppo Find 7a (oppo-find-7a)"
+    },
+    {
+      "pageid": 11698,
+      "ns": 0,
+      "title": "Oppo Find X7 Ultra (oppo-pangu)"
+    },
+    {
+      "pageid": 1651,
+      "ns": 0,
+      "title": "Oppo Mirror5s (oppo-a51f)"
+    },
+    {
+      "pageid": 3637,
+      "ns": 0,
+      "title": "Oppo Neo 5 (oppo-r1201)"
+    },
+    {
+      "pageid": 5414,
+      "ns": 0,
+      "title": "Oppo Reno Z (oppo-cph1979)"
+    },
+    {
+      "pageid": 5381,
+      "ns": 0,
+      "title": "Orbic Chromebook 4G (google-pazquel)"
+    },
+    {
+      "pageid": 13498,
+      "ns": 0,
+      "title": "Orbic journey V"
+    },
+    {
+      "pageid": 7308,
+      "ns": 0,
+      "title": "OTT X96 (ott-x96)"
+    },
+    {
+      "pageid": 265,
+      "ns": 0,
+      "title": "Ouya (ouya-ouya)"
+    },
+    {
+      "pageid": 3754,
+      "ns": 0,
+      "title": "Oysters T74ER (oysters t74er)"
+    },
+    {
+      "pageid": 3254,
+      "ns": 0,
+      "title": "Oysters T84Bi 4G (oysters-t84bi-4g)"
+    },
+    {
+      "pageid": 3293,
+      "ns": 0,
+      "title": "Palm Pre (palm-castle)"
+    },
+    {
+      "pageid": 14355,
+      "ns": 0,
+      "title": "Panasonic Toughbook FZ-T1 (panasonic-fz-t1)"
+    },
+    {
+      "pageid": 2311,
+      "ns": 0,
+      "title": "Pantech SKY VEGA S5 (pantech-ef44)"
+    },
+    {
+      "pageid": 2530,
+      "ns": 0,
+      "title": "Pantech VEGA R3 (pantech-ef50)"
+    },
+    {
+      "pageid": 4117,
+      "ns": 0,
+      "title": "PCMerge Chromebook (PCM-116E / PCM-116EB) (google-veyron-mighty)"
+    },
+    {
+      "pageid": 1357,
+      "ns": 0,
+      "title": "Pegatron Chagall (pegatron-chagall)"
+    },
+    {
+      "pageid": 670,
+      "ns": 0,
+      "title": "PINE64 A64-LTS (pine64-a64lts)"
+    },
+    {
+      "pageid": 936,
+      "ns": 0,
+      "title": "PINE64 Don't be evil devkit (pine64-dontbeevil)"
+    },
+    {
+      "pageid": 4754,
+      "ns": 0,
+      "title": "Pine64 Ox64"
+    },
+    {
+      "pageid": 1328,
+      "ns": 0,
+      "title": "PINE64 Pinebook Pro (pine64-pinebookpro)"
+    },
+    {
+      "pageid": 2939,
+      "ns": 0,
+      "title": "PINE64 PineNote (pine64-pinenote)"
+    },
+    {
+      "pageid": 1145,
+      "ns": 0,
+      "title": "PINE64 PinePhone (pine64-pinephone)"
+    },
+    {
+      "pageid": 3068,
+      "ns": 0,
+      "title": "PINE64 PinePhone Pro (pine64-pinephonepro)"
+    },
+    {
+      "pageid": 1060,
+      "ns": 0,
+      "title": "PINE64 PineTab (pine64-pinetab)"
+    },
+    {
+      "pageid": 5215,
+      "ns": 0,
+      "title": "PINE64 PineTab 2 (pine64-pinetab2)"
+    },
+    {
+      "pageid": 7783,
+      "ns": 0,
+      "title": "PINE64 PineTab-V (pine64-pinetab-v)"
+    },
+    {
+      "pageid": 6256,
+      "ns": 0,
+      "title": "Pine64 Quartz64 (pine64-quartz64)"
+    },
+    {
+      "pageid": 2757,
+      "ns": 0,
+      "title": "Pine64 Rock64 (pine64-rock64)"
+    },
+    {
+      "pageid": 1503,
+      "ns": 0,
+      "title": "PINE64 RockPro64 (pine64-rockpro64)"
+    },
+    {
+      "pageid": 5099,
+      "ns": 0,
+      "title": "Pine64-quartz64-a"
+    },
+    {
+      "pageid": 5238,
+      "ns": 0,
+      "title": "Pine64-quartz64-b"
+    },
+    {
+      "pageid": 1264,
+      "ns": 0,
+      "title": "Planet Computers Cosmo Communicator (planet-cosmocom)"
+    },
+    {
+      "pageid": 578,
+      "ns": 0,
+      "title": "Planet Computers Gemini PDA (planet-geminipda)"
+    },
+    {
+      "pageid": 6229,
+      "ns": 0,
+      "title": "Playdate (panic-playdate)"
+    },
+    {
+      "pageid": 6769,
+      "ns": 0,
+      "title": "PocketBook 614 plus (pocketbook-614-plus)"
+    },
+    {
+      "pageid": 12013,
+      "ns": 0,
+      "title": "PocketBook InkPad 4"
+    },
+    {
+      "pageid": 5535,
+      "ns": 0,
+      "title": "PocketBook Touch HD (pocketbook-pb631)"
+    },
+    {
+      "pageid": 5655,
+      "ns": 0,
+      "title": "POCKIT (pockit)"
+    },
+    {
+      "pageid": 2748,
+      "ns": 0,
+      "title": "Poin2 Chromebook 11 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 3887,
+      "ns": 0,
+      "title": "Poin2 Chromebook 11C (google-hana)"
+    },
+    {
+      "pageid": 3886,
+      "ns": 0,
+      "title": "Poin2 Chromebook 14 (google-hana)"
+    },
+    {
+      "pageid": 4089,
+      "ns": 0,
+      "title": "Positivo Chromebook CH1190 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 6887,
+      "ns": 0,
+      "title": "PostmarketOS Trailblazer (postmarketos-trailblazer)"
+    },
+    {
+      "pageid": 7995,
+      "ns": 0,
+      "title": "Powerway Dreamtab DRN-X500 (astar)"
+    },
+    {
+      "pageid": 6841,
+      "ns": 0,
+      "title": "Powkiddy X55 (powkiddy-x55)"
+    },
+    {
+      "pageid": 3231,
+      "ns": 0,
+      "title": "Prestigio MultiPad PMT5008 3G (prestigio-pmt5008-3g)"
+    },
+    {
+      "pageid": 9212,
+      "ns": 0,
+      "title": "Prestigio Multipad Wize 3151 (prestigio-pmt3151)"
+    },
+    {
+      "pageid": 9208,
+      "ns": 0,
+      "title": "PRoot aarch64 (proot-aarch64)"
+    },
+    {
+      "pageid": 10409,
+      "ns": 0,
+      "title": "Proscan Elite"
+    },
+    {
+      "pageid": 1179,
+      "ns": 0,
+      "title": "Proscan PLT9650G (proscan-plt9650g)"
+    },
+    {
+      "pageid": 4123,
+      "ns": 0,
+      "title": "Prowise Chromebook Entryline (google-veyron-mighty)"
+    },
+    {
+      "pageid": 1463,
+      "ns": 0,
+      "title": "Purism Librem5 (purism-librem5)"
+    },
+    {
+      "pageid": 837,
+      "ns": 0,
+      "title": "Purism Librem5 Devkit (purism-librem5dev)"
+    },
+    {
+      "pageid": 6276,
+      "ns": 0,
+      "title": "PxPhone I5 TV WIFI"
+    },
+    {
+      "pageid": 397,
+      "ns": 0,
+      "title": "QEMU aarch64 (qemu-aarch64)"
+    },
+    {
+      "pageid": 84,
+      "ns": 0,
+      "title": "QEMU amd64 (qemu-amd64)"
+    },
+    {
+      "pageid": 85,
+      "ns": 0,
+      "title": "QEMU armv7 (qemu-armv7)"
+    },
+    {
+      "pageid": 10595,
+      "ns": 0,
+      "title": "QEMU loongarch64 (qemu-loongarch64)"
+    },
+    {
+      "pageid": 267,
+      "ns": 0,
+      "title": "QEMU Nokia N900 (qemu-rx51)"
+    },
+    {
+      "pageid": 4203,
+      "ns": 0,
+      "title": "QEMU riscv64 (qemu-riscv64)"
+    },
+    {
+      "pageid": 8499,
+      "ns": 0,
+      "title": "QEMU s390x (qemu-s390x)"
+    },
+    {
+      "pageid": 10853,
+      "ns": 0,
+      "title": "Qualcomm MSM8226 (qcom-msm8226)"
+    },
+    {
+      "pageid": 7255,
+      "ns": 0,
+      "title": "Qualcomm MSM8909 (qcom-msm8909)"
+    },
+    {
+      "pageid": 6877,
+      "ns": 0,
+      "title": "Qualcomm MSM8916 (qcom-msm8916)"
+    },
+    {
+      "pageid": 7788,
+      "ns": 0,
+      "title": "Qualcomm MSM8953 (qcom-msm8953)"
+    },
+    {
+      "pageid": 9231,
+      "ns": 0,
+      "title": "Qualcomm MSM8956 (qcom-msm8956)"
+    },
+    {
+      "pageid": 7840,
+      "ns": 0,
+      "title": "Qualcomm MSM89x7 (qcom-msm89x7)"
+    },
+    {
+      "pageid": 11797,
+      "ns": 0,
+      "title": "Qualcomm QCS6490 (qcom-qcs6490)"
+    },
+    {
+      "pageid": 10281,
+      "ns": 0,
+      "title": "Qualcomm QRD8250 (qualcomm-qrd8250)"
+    },
+    {
+      "pageid": 11197,
+      "ns": 0,
+      "title": "Qualcomm QRD8635 (qualcomm-qrd8635)"
+    },
+    {
+      "pageid": 9707,
+      "ns": 0,
+      "title": "Qualcomm RBx (qcom-rbx)"
+    },
+    {
+      "pageid": 5401,
+      "ns": 0,
+      "title": "Qualcomm SDM845 (qualcomm-sdm845)"
+    },
+    {
+      "pageid": 13915,
+      "ns": 0,
+      "title": "Qualcomm SM7125 (qcom-sm7125)"
+    },
+    {
+      "pageid": 8790,
+      "ns": 0,
+      "title": "Qualcomm SM7150 (qcom-sm7150)"
+    },
+    {
+      "pageid": 7391,
+      "ns": 0,
+      "title": "Rabbit R1 (rabbit-r1)"
+    },
+    {
+      "pageid": 11779,
+      "ns": 0,
+      "title": "Radxa Dragon Q6A (radxa-dragon-q6a)"
+    },
+    {
+      "pageid": 13637,
+      "ns": 0,
+      "title": "Radxa Dragon Q8B (radxa-dragon-q8b)"
+    },
+    {
+      "pageid": 10967,
+      "ns": 0,
+      "title": "Radxa Orion O6 (radxa-orion-o6)"
+    },
+    {
+      "pageid": 3334,
+      "ns": 0,
+      "title": "Radxa Zero (radxa-zero)"
+    },
+    {
+      "pageid": 415,
+      "ns": 0,
+      "title": "Raspberry Pi"
+    },
+    {
+      "pageid": 834,
+      "ns": 0,
+      "title": "Raspberry Pi 1 / 2 (raspberry-pi)"
+    },
+    {
+      "pageid": 832,
+      "ns": 0,
+      "title": "Raspberry Pi 3 (raspberry-pi3)"
+    },
+    {
+      "pageid": 1071,
+      "ns": 0,
+      "title": "Raspberry Pi 4 (raspberry-pi4)"
+    },
+    {
+      "pageid": 8346,
+      "ns": 0,
+      "title": "Raspberry Pi 5 (raspberry-pi5)"
+    },
+    {
+      "pageid": 7681,
+      "ns": 0,
+      "title": "Raspberry Pi Compute Module 4 (raspberry-picm4)"
+    },
+    {
+      "pageid": 7685,
+      "ns": 0,
+      "title": "Raspberry Pi Compute Module 4 IO Board (raspberry-picm4ioboard)"
+    },
+    {
+      "pageid": 831,
+      "ns": 0,
+      "title": "Raspberry Pi Zero (raspberry-pi0)"
+    },
+    {
+      "pageid": 11839,
+      "ns": 0,
+      "title": "Razer Phone (razer-cheryl)"
+    },
+    {
+      "pageid": 10408,
+      "ns": 0,
+      "title": "RCA 10 Viking Pro"
+    },
+    {
+      "pageid": 4992,
+      "ns": 0,
+      "title": "RCA Voyager III (sofiaboard)"
+    },
+    {
+      "pageid": 5676,
+      "ns": 0,
+      "title": "Realme 3 Pro (realme-rmx1851)"
+    },
+    {
+      "pageid": 11377,
+      "ns": 0,
+      "title": "Realme 7 5G (realme-rmx2111)"
+    },
+    {
+      "pageid": 11300,
+      "ns": 0,
+      "title": "Realme C15 (realme-rmx2180)"
+    },
+    {
+      "pageid": 9955,
+      "ns": 0,
+      "title": "Realme C3 (realme-monet)"
+    },
+    {
+      "pageid": 12618,
+      "ns": 0,
+      "title": "Realme C35 (realme-rmx3511)"
+    },
+    {
+      "pageid": 10596,
+      "ns": 0,
+      "title": "Realme C53 (realme-rmx3760)"
+    },
+    {
+      "pageid": 14435,
+      "ns": 0,
+      "title": "Realme C71 (realme-rmx5303)"
+    },
+    {
+      "pageid": 5525,
+      "ns": 0,
+      "title": "Realme GT 2 (realme-porsche)"
+    },
+    {
+      "pageid": 6338,
+      "ns": 0,
+      "title": "Realme GT Master (realme-lunaa)"
+    },
+    {
+      "pageid": 6405,
+      "ns": 0,
+      "title": "Realme GT Neo 3T/Q5 Pro (realme-rmx3371)"
+    },
+    {
+      "pageid": 8259,
+      "ns": 0,
+      "title": "Realme GT Neo5 150W (realme-senna-b)"
+    },
+    {
+      "pageid": 11876,
+      "ns": 0,
+      "title": "Realme GT Neo6 SE / GT Neo6 / GT 6 / GT 6T (realme-bale)"
+    },
+    {
+      "pageid": 13766,
+      "ns": 0,
+      "title": "Realme Note 50 (realme-rmx3834)"
+    },
+    {
+      "pageid": 8005,
+      "ns": 0,
+      "title": "Realme X3 (realme-x3)"
+    },
+    {
+      "pageid": 12086,
+      "ns": 0,
+      "title": "Redmi 10 (xiaomi-eos)"
+    },
+    {
+      "pageid": 12403,
+      "ns": 0,
+      "title": "Reeder S19 Max Pro S (reeder-s19maxpros)"
+    },
+    {
+      "pageid": 7528,
+      "ns": 0,
+      "title": "ReMarkable 1 (remarkable-zero-gravitas)"
+    },
+    {
+      "pageid": 7529,
+      "ns": 0,
+      "title": "ReMarkable 2 (remarkable-zero-sugar)"
+    },
+    {
+      "pageid": 12134,
+      "ns": 0,
+      "title": "ReMarkable Paper Pro Move (remarkable-chiappa)"
+    },
+    {
+      "pageid": 13214,
+      "ns": 0,
+      "title": "Rephone"
+    },
+    {
+      "pageid": 9477,
+      "ns": 0,
+      "title": "Retroid Pocket 5 (retroidpocket-rp5)"
+    },
+    {
+      "pageid": 3998,
+      "ns": 0,
+      "title": "Samsung A9 2018 (samsung-a9y18qlte)"
+    },
+    {
+      "pageid": 766,
+      "ns": 0,
+      "title": "Samsung Acclaim (samsung-sch-r880)"
+    },
+    {
+      "pageid": 1905,
+      "ns": 0,
+      "title": "Samsung Ativ S (samsung-i8750)"
+    },
+    {
+      "pageid": 617,
+      "ns": 0,
+      "title": "Samsung Captivate Glide (samsung-i927)"
+    },
+    {
+      "pageid": 3350,
+      "ns": 0,
+      "title": "Samsung Chromebook (google-snow)"
+    },
+    {
+      "pageid": 3351,
+      "ns": 0,
+      "title": "Samsung Chromebook 2 11.6\" (google-peach-pit)"
+    },
+    {
+      "pageid": 3488,
+      "ns": 0,
+      "title": "Samsung Chromebook 2 13.3\" (google-peach-pi)"
+    },
+    {
+      "pageid": 3695,
+      "ns": 0,
+      "title": "Samsung Chromebook Plus (google-kevin)"
+    },
+    {
+      "pageid": 391,
+      "ns": 0,
+      "title": "Samsung Exhibit II 4G (samsung-t679)"
+    },
+    {
+      "pageid": 11745,
+      "ns": 0,
+      "title": "Samsung Exynos 7 (samsung-exynos7)"
+    },
+    {
+      "pageid": 13454,
+      "ns": 0,
+      "title": "Samsung Exynos 9820 (samsung-exynos9820)"
+    },
+    {
+      "pageid": 11327,
+      "ns": 0,
+      "title": "Samsung Galaxy 3 (samsung-apollo)"
+    },
+    {
+      "pageid": 2894,
+      "ns": 0,
+      "title": "Samsung Galaxy A01 (samsung-a01q)"
+    },
+    {
+      "pageid": 8283,
+      "ns": 0,
+      "title": "Samsung Galaxy A04 (samsung-a04)"
+    },
+    {
+      "pageid": 12452,
+      "ns": 0,
+      "title": "Samsung Galaxy A04s (samsung-a04s)"
+    },
+    {
+      "pageid": 8370,
+      "ns": 0,
+      "title": "Samsung Galaxy A05s (samsung-a05s)"
+    },
+    {
+      "pageid": 4304,
+      "ns": 0,
+      "title": "Samsung Galaxy A10 (samsung-a10)"
+    },
+    {
+      "pageid": 12447,
+      "ns": 0,
+      "title": "Samsung Galaxy A12 (samsung-a12)"
+    },
+    {
+      "pageid": 12446,
+      "ns": 0,
+      "title": "Samsung Galaxy A12 Nacho (samsung-a12s)"
+    },
+    {
+      "pageid": 12449,
+      "ns": 0,
+      "title": "Samsung Galaxy A13 (samsung-a13)"
+    },
+    {
+      "pageid": 12450,
+      "ns": 0,
+      "title": "Samsung Galaxy A13 (samsung-a13ve)"
+    },
+    {
+      "pageid": 11868,
+      "ns": 0,
+      "title": "Samsung Galaxy A13 5G (samsung-a13x)"
+    },
+    {
+      "pageid": 12457,
+      "ns": 0,
+      "title": "Samsung Galaxy A14 (samsung-a14)"
+    },
+    {
+      "pageid": 12458,
+      "ns": 0,
+      "title": "Samsung Galaxy A14 (samsung-a14m)"
+    },
+    {
+      "pageid": 12456,
+      "ns": 0,
+      "title": "Samsung Galaxy A14 5G (samsung-a14x)"
+    },
+    {
+      "pageid": 12495,
+      "ns": 0,
+      "title": "Samsung Galaxy A14 5G (samsung-a14xm)"
+    },
+    {
+      "pageid": 12052,
+      "ns": 0,
+      "title": "Samsung Galaxy A15 5G (samsung-a15x)"
+    },
+    {
+      "pageid": 5724,
+      "ns": 0,
+      "title": "Samsung Galaxy A2 Core (samsung-a2corelte)"
+    },
+    {
+      "pageid": 2286,
+      "ns": 0,
+      "title": "Samsung Galaxy A20 (samsung-a20)"
+    },
+    {
+      "pageid": 6714,
+      "ns": 0,
+      "title": "Samsung Galaxy A20e (samsung-a20e)"
+    },
+    {
+      "pageid": 10361,
+      "ns": 0,
+      "title": "Samsung Galaxy A20s (samsung-a20s)"
+    },
+    {
+      "pageid": 11852,
+      "ns": 0,
+      "title": "Samsung Galaxy A21s (samsung-a21s)"
+    },
+    {
+      "pageid": 13450,
+      "ns": 0,
+      "title": "Samsung Galaxy A22 5G (samsung-a22x)"
+    },
+    {
+      "pageid": 14436,
+      "ns": 0,
+      "title": "Samsung Galaxy A23 (samsung-a23)"
+    },
+    {
+      "pageid": 4195,
+      "ns": 0,
+      "title": "Samsung Galaxy A3"
+    },
+    {
+      "pageid": 1087,
+      "ns": 0,
+      "title": "Samsung Galaxy A3 2015 (samsung-a3)"
+    },
+    {
+      "pageid": 2168,
+      "ns": 0,
+      "title": "Samsung Galaxy A3 2017 (samsung-a3y17lte)"
+    },
+    {
+      "pageid": 3345,
+      "ns": 0,
+      "title": "Samsung Galaxy A30 (samsung-a30)"
+    },
+    {
+      "pageid": 9254,
+      "ns": 0,
+      "title": "Samsung Galaxy A31 (samsung-a31)"
+    },
+    {
+      "pageid": 6644,
+      "ns": 0,
+      "title": "Samsung Galaxy A32 4G (samsung-a32)"
+    },
+    {
+      "pageid": 12933,
+      "ns": 0,
+      "title": "Samsung Galaxy A33 5G (samsung-a33x)"
+    },
+    {
+      "pageid": 7205,
+      "ns": 0,
+      "title": "Samsung Galaxy A34 5G (samsung-a34x)"
+    },
+    {
+      "pageid": 10206,
+      "ns": 0,
+      "title": "Samsung Galaxy A40 (samsung-a40)"
+    },
+    {
+      "pageid": 3805,
+      "ns": 0,
+      "title": "Samsung Galaxy A5"
+    },
+    {
+      "pageid": 1052,
+      "ns": 0,
+      "title": "Samsung Galaxy A5 (2017) (samsung-a5y17lte)"
+    },
+    {
+      "pageid": 1083,
+      "ns": 0,
+      "title": "Samsung Galaxy A5 2015 (samsung-a5)"
+    },
+    {
+      "pageid": 2008,
+      "ns": 0,
+      "title": "Samsung Galaxy A5 2016 (samsung-a5xelte)"
+    },
+    {
+      "pageid": 2444,
+      "ns": 0,
+      "title": "Samsung Galaxy A50 (samsung-a50)"
+    },
+    {
+      "pageid": 8132,
+      "ns": 0,
+      "title": "Samsung Galaxy A51 (samsung-a51)"
+    },
+    {
+      "pageid": 12051,
+      "ns": 0,
+      "title": "Samsung Galaxy A51 5G (samsung-a51x)"
+    },
+    {
+      "pageid": 3556,
+      "ns": 0,
+      "title": "Samsung Galaxy A52 (samsung-a52q)"
+    },
+    {
+      "pageid": 5252,
+      "ns": 0,
+      "title": "Samsung Galaxy A52s 5G (samsung-a52sxq)"
+    },
+    {
+      "pageid": 4790,
+      "ns": 0,
+      "title": "Samsung Galaxy A53 5G (samsung-a53x)"
+    },
+    {
+      "pageid": 12213,
+      "ns": 0,
+      "title": "Samsung Galaxy A55 5G (samsung-a55x)"
+    },
+    {
+      "pageid": 4005,
+      "ns": 0,
+      "title": "Samsung Galaxy A6 (samsung-a6lte)"
+    },
+    {
+      "pageid": 3656,
+      "ns": 0,
+      "title": "Samsung Galaxy A6+ 2018 (samsung-a6plte)"
+    },
+    {
+      "pageid": 3235,
+      "ns": 0,
+      "title": "Samsung Galaxy A7"
+    },
+    {
+      "pageid": 3236,
+      "ns": 0,
+      "title": "Samsung Galaxy A7 2015 (samsung-a7)"
+    },
+    {
+      "pageid": 3107,
+      "ns": 0,
+      "title": "Samsung Galaxy A7 2018 (samsung-a7y18lte)"
+    },
+    {
+      "pageid": 2566,
+      "ns": 0,
+      "title": "Samsung Galaxy A70 (samsung-a70q)"
+    },
+    {
+      "pageid": 8175,
+      "ns": 0,
+      "title": "Samsung Galaxy A71 (samsung-a71)"
+    },
+    {
+      "pageid": 12656,
+      "ns": 0,
+      "title": "Samsung Galaxy A71 5G (samsung-a71x)"
+    },
+    {
+      "pageid": 3554,
+      "ns": 0,
+      "title": "Samsung Galaxy A72 (samsung-a72q)"
+    },
+    {
+      "pageid": 2079,
+      "ns": 0,
+      "title": "Samsung Galaxy A8 2018 (samsung-jackpotlte)"
+    },
+    {
+      "pageid": 2113,
+      "ns": 0,
+      "title": "Samsung Galaxy A8+ 2018 (samsung-jackpot2lte)"
+    },
+    {
+      "pageid": 1239,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace (samsung-s5830)"
+    },
+    {
+      "pageid": 1694,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace 2 (samsung-codina)"
+    },
+    {
+      "pageid": 4552,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace 3 3G (samsung-logan)"
+    },
+    {
+      "pageid": 5080,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace 3 Duos (samsung-logands)"
+    },
+    {
+      "pageid": 2921,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace 3 LTE (samsung-loganrelte)"
+    },
+    {
+      "pageid": 4220,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace 4 (samsung-heatqlte)"
+    },
+    {
+      "pageid": 440,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace i (samsung-cooperve)"
+    },
+    {
+      "pageid": 388,
+      "ns": 0,
+      "title": "Samsung Galaxy Ace II X (samsung-kylessopen)"
+    },
+    {
+      "pageid": 3003,
+      "ns": 0,
+      "title": "Samsung Galaxy Alpha (samsung-sltexx)"
+    },
+    {
+      "pageid": 3827,
+      "ns": 0,
+      "title": "Samsung Galaxy Amp (samsung-kyle)"
+    },
+    {
+      "pageid": 6951,
+      "ns": 0,
+      "title": "Samsung Galaxy Avant/Galaxy Core LTE (samsung-afyonltecan)"
+    },
+    {
+      "pageid": 3825,
+      "ns": 0,
+      "title": "Samsung Galaxy Beam (samsung-gavini)"
+    },
+    {
+      "pageid": 4651,
+      "ns": 0,
+      "title": "Samsung Galaxy Book S (samsung-w767)"
+    },
+    {
+      "pageid": 3190,
+      "ns": 0,
+      "title": "Samsung Galaxy Camera"
+    },
+    {
+      "pageid": 1906,
+      "ns": 0,
+      "title": "Samsung Galaxy Camera (samsung-gd1)"
+    },
+    {
+      "pageid": 1796,
+      "ns": 0,
+      "title": "Samsung Galaxy Camera 2 (samsung-sf2wifi)"
+    },
+    {
+      "pageid": 1044,
+      "ns": 0,
+      "title": "Samsung Galaxy Chat (samsung-zanin)"
+    },
+    {
+      "pageid": 7949,
+      "ns": 0,
+      "title": "Samsung Galaxy Core"
+    },
+    {
+      "pageid": 3671,
+      "ns": 0,
+      "title": "Samsung Galaxy Core (samsung-arubaslim)"
+    },
+    {
+      "pageid": 8524,
+      "ns": 0,
+      "title": "Samsung Galaxy Core 2 Duos (samsung-kanas)"
+    },
+    {
+      "pageid": 3984,
+      "ns": 0,
+      "title": "Samsung Galaxy Core LTE (samsung-afyonlte)"
+    },
+    {
+      "pageid": 2044,
+      "ns": 0,
+      "title": "Samsung Galaxy Core Plus (samsung-cs02)"
+    },
+    {
+      "pageid": 1958,
+      "ns": 0,
+      "title": "Samsung Galaxy Core Prime"
+    },
+    {
+      "pageid": 10213,
+      "ns": 0,
+      "title": "Samsung Galaxy Core Prime (samsung-coreprimeve3g)"
+    },
+    {
+      "pageid": 6921,
+      "ns": 0,
+      "title": "Samsung Galaxy Core Prime LTE (samsung-rossa)"
+    },
+    {
+      "pageid": 1959,
+      "ns": 0,
+      "title": "Samsung Galaxy Core Prime VE LTE (samsung-coreprimevelte)"
+    },
+    {
+      "pageid": 3816,
+      "ns": 0,
+      "title": "Samsung Galaxy E5 (samsung-e5)"
+    },
+    {
+      "pageid": 3217,
+      "ns": 0,
+      "title": "Samsung Galaxy E7 (samsung-e7)"
+    },
+    {
+      "pageid": 3823,
+      "ns": 0,
+      "title": "Samsung Galaxy Exhibit (samsung-codina-tmo)"
+    },
+    {
+      "pageid": 1284,
+      "ns": 0,
+      "title": "Samsung Galaxy Express SGH-I437 (samsung-expressatt)"
+    },
+    {
+      "pageid": 1386,
+      "ns": 0,
+      "title": "Samsung Galaxy Fame (samsung-nevisp)"
+    },
+    {
+      "pageid": 7948,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand"
+    },
+    {
+      "pageid": 1550,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand 2 (samsung-ms013g)"
+    },
+    {
+      "pageid": 6361,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Duos (samsung-baffin)"
+    },
+    {
+      "pageid": 3652,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Max (samsung-grandmax)"
+    },
+    {
+      "pageid": 903,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Neo (samsung-baffinlite)"
+    },
+    {
+      "pageid": 2903,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Neo Plus (samsung-grandneove3g)"
+    },
+    {
+      "pageid": 4436,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Prime"
+    },
+    {
+      "pageid": 6909,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Prime (samsung-fortuna)"
+    },
+    {
+      "pageid": 1969,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Prime Plus (samsung-grandpplte)"
+    },
+    {
+      "pageid": 3290,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Prime VE 3G (samsung-grandprimeve3g)"
+    },
+    {
+      "pageid": 3115,
+      "ns": 0,
+      "title": "Samsung Galaxy Grand Prime VE LTE (samsung-grandprimevelte)"
+    },
+    {
+      "pageid": 11322,
+      "ns": 0,
+      "title": "Samsung Galaxy J1 (2016)"
+    },
+    {
+      "pageid": 3145,
+      "ns": 0,
+      "title": "Samsung Galaxy J1 (samsung-j13g)"
+    },
+    {
+      "pageid": 1064,
+      "ns": 0,
+      "title": "Samsung Galaxy J1 mini (samsung-j1mini3g)"
+    },
+    {
+      "pageid": 6461,
+      "ns": 0,
+      "title": "Samsung Galaxy J1 mini (samsung-j1minilte)"
+    },
+    {
+      "pageid": 8807,
+      "ns": 0,
+      "title": "Samsung Galaxy J2 (samsung-j2lte)"
+    },
+    {
+      "pageid": 2950,
+      "ns": 0,
+      "title": "Samsung Galaxy J2 (samsung-j2xnlte)"
+    },
+    {
+      "pageid": 8555,
+      "ns": 0,
+      "title": "Samsung Galaxy J2 Prime (samsung-grandpplteub)"
+    },
+    {
+      "pageid": 4107,
+      "ns": 0,
+      "title": "Samsung Galaxy J2 Pro 2018 (samsung-j2y18lte)"
+    },
+    {
+      "pageid": 8393,
+      "ns": 0,
+      "title": "Samsung Galaxy J3 (2017) (samsung-j3y17lte)"
+    },
+    {
+      "pageid": 1568,
+      "ns": 0,
+      "title": "Samsung Galaxy J3 2016 (samsung-j3ltetw, samsung-j3ltespr)"
+    },
+    {
+      "pageid": 4752,
+      "ns": 0,
+      "title": "Samsung Galaxy J3 2016 (samsung-j3xnlte)"
+    },
+    {
+      "pageid": 7895,
+      "ns": 0,
+      "title": "Samsung Galaxy J4 (samsung-j4lte)"
+    },
+    {
+      "pageid": 1579,
+      "ns": 0,
+      "title": "Samsung Galaxy J4+ (samsung-j4primelte)"
+    },
+    {
+      "pageid": 1572,
+      "ns": 0,
+      "title": "Samsung Galaxy J5 2015 (samsung-j5)"
+    },
+    {
+      "pageid": 2489,
+      "ns": 0,
+      "title": "Samsung Galaxy J5 2016 (samsung-j5x)"
+    },
+    {
+      "pageid": 6676,
+      "ns": 0,
+      "title": "Samsung Galaxy J5 2017 (samsung-j5y17lte)"
+    },
+    {
+      "pageid": 6500,
+      "ns": 0,
+      "title": "Samsung Galaxy J6 2018 (samsung-j6lte)"
+    },
+    {
+      "pageid": 2007,
+      "ns": 0,
+      "title": "Samsung Galaxy J6 Plus (samsung-j6primelte)"
+    },
+    {
+      "pageid": 2233,
+      "ns": 0,
+      "title": "Samsung Galaxy J7 (2016) (samsung-j7xelte)"
+    },
+    {
+      "pageid": 4193,
+      "ns": 0,
+      "title": "Samsung Galaxy J7 (samsung-j7elte)"
+    },
+    {
+      "pageid": 2798,
+      "ns": 0,
+      "title": "Samsung Galaxy J7 (T-Mobile) (samsung-j7eltetmo)"
+    },
+    {
+      "pageid": 3359,
+      "ns": 0,
+      "title": "Samsung Galaxy J7 Prime (samsung-on7xelte)"
+    },
+    {
+      "pageid": 5771,
+      "ns": 0,
+      "title": "Samsung Galaxy J7 Pro (samsung-j7y17lte)"
+    },
+    {
+      "pageid": 4039,
+      "ns": 0,
+      "title": "Samsung Galaxy J8 2018 (samsung-j8y18lte)"
+    },
+    {
+      "pageid": 3708,
+      "ns": 0,
+      "title": "Samsung Galaxy K Zoom (samsung-m2alte)"
+    },
+    {
+      "pageid": 10754,
+      "ns": 0,
+      "title": "Samsung Galaxy M01 Core"
+    },
+    {
+      "pageid": 12049,
+      "ns": 0,
+      "title": "Samsung Galaxy M12 (samsung-m12)"
+    },
+    {
+      "pageid": 12657,
+      "ns": 0,
+      "title": "Samsung Galaxy M13 (samsung-m13)"
+    },
+    {
+      "pageid": 12655,
+      "ns": 0,
+      "title": "Samsung Galaxy M14 5G (samsung-m14x)"
+    },
+    {
+      "pageid": 12858,
+      "ns": 0,
+      "title": "Samsung Galaxy M20 (samsung-m20lte)"
+    },
+    {
+      "pageid": 7217,
+      "ns": 0,
+      "title": "Samsung Galaxy M52 5G (samsung-m52xq)"
+    },
+    {
+      "pageid": 352,
+      "ns": 0,
+      "title": "Samsung Galaxy Mini 2 (samsung-jena)"
+    },
+    {
+      "pageid": 6884,
+      "ns": 0,
+      "title": "Samsung Galaxy Note (samsung-q1)"
+    },
+    {
+      "pageid": 12257,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 10 (samsung-d1s)"
+    },
+    {
+      "pageid": 3720,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 10+ (samsung-d2s)"
+    },
+    {
+      "pageid": 879,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 10.1 (samsung-p4note)"
+    },
+    {
+      "pageid": 2547,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 10.1 2014 (samsung-n1awifi)"
+    },
+    {
+      "pageid": 11061,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 10.1 2014 LTE (samsung-lt03lte)"
+    },
+    {
+      "pageid": 5402,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 20 (samsung-c1s)"
+    },
+    {
+      "pageid": 5608,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 3 (samsung-ha3g)"
+    },
+    {
+      "pageid": 916,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 3 (samsung-hlte)"
+    },
+    {
+      "pageid": 994,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 4 (samsung-treltexx)"
+    },
+    {
+      "pageid": 2880,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 4 (samsung-trltexx)"
+    },
+    {
+      "pageid": 2865,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 4 S-LTE (samsung-tre3calte)"
+    },
+    {
+      "pageid": 12202,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 5 (samsung-noblelte)"
+    },
+    {
+      "pageid": 6582,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 8"
+    },
+    {
+      "pageid": 3261,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 8 (samsung-greatlte)"
+    },
+    {
+      "pageid": 1459,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 8 (samsung-greatqlte)"
+    },
+    {
+      "pageid": 3748,
+      "ns": 0,
+      "title": "Samsung Galaxy Note 8.0 (samsung-kona)"
+    },
+    {
+      "pageid": 12201,
+      "ns": 0,
+      "title": "Samsung Galaxy Note FE (samsung-gracerlte)"
+    },
+    {
+      "pageid": 49,
+      "ns": 0,
+      "title": "Samsung Galaxy Note II (samsung-t03g)"
+    },
+    {
+      "pageid": 3218,
+      "ns": 0,
+      "title": "Samsung Galaxy Note II LTE (samsung-t0lte)"
+    },
+    {
+      "pageid": 3148,
+      "ns": 0,
+      "title": "Samsung Galaxy Note Pro 12.2 (WiFi) (samsung-v1awifi)"
+    },
+    {
+      "pageid": 3373,
+      "ns": 0,
+      "title": "Samsung Galaxy Note9 (samsung-crownlte)"
+    },
+    {
+      "pageid": 1984,
+      "ns": 0,
+      "title": "Samsung Galaxy On7 (2015) (samsung-on7)"
+    },
+    {
+      "pageid": 599,
+      "ns": 0,
+      "title": "Samsung Galaxy Pocket (samsung-s5300)"
+    },
+    {
+      "pageid": 979,
+      "ns": 0,
+      "title": "Samsung Galaxy Pocket Neo (samsung-corsica)"
+    },
+    {
+      "pageid": 646,
+      "ns": 0,
+      "title": "Samsung Galaxy Pop Plus (samsung-s5570i)"
+    },
+    {
+      "pageid": 2230,
+      "ns": 0,
+      "title": "Samsung Galaxy Premier (samsung-superior)"
+    },
+    {
+      "pageid": 430,
+      "ns": 0,
+      "title": "Samsung Galaxy S (samsung-i9000)"
+    },
+    {
+      "pageid": 50,
+      "ns": 0,
+      "title": "Samsung Galaxy S Advance (samsung-janice)"
+    },
+    {
+      "pageid": 86,
+      "ns": 0,
+      "title": "Samsung Galaxy S Duos (samsung-s7562)"
+    },
+    {
+      "pageid": 2956,
+      "ns": 0,
+      "title": "Samsung Galaxy S II (samsung-i9100g)"
+    },
+    {
+      "pageid": 3305,
+      "ns": 0,
+      "title": "Samsung Galaxy S II LTE (samsung-celox)"
+    },
+    {
+      "pageid": 271,
+      "ns": 0,
+      "title": "Samsung Galaxy S III (samsung-m0)"
+    },
+    {
+      "pageid": 3017,
+      "ns": 0,
+      "title": "Samsung Galaxy S III LTE (samsung-m3)"
+    },
+    {
+      "pageid": 545,
+      "ns": 0,
+      "title": "Samsung Galaxy S III mini (samsung-golden)"
+    },
+    {
+      "pageid": 1711,
+      "ns": 0,
+      "title": "Samsung Galaxy S III Neo (samsung-s3ve3g)"
+    },
+    {
+      "pageid": 1024,
+      "ns": 0,
+      "title": "Samsung Galaxy S Plus (samsung-ariesve)"
+    },
+    {
+      "pageid": 901,
+      "ns": 0,
+      "title": "Samsung Galaxy S Relay 4G (samsung-apexq)"
+    },
+    {
+      "pageid": 3202,
+      "ns": 0,
+      "title": "Samsung Galaxy S10 (samsung-beyond1lte)"
+    },
+    {
+      "pageid": 8605,
+      "ns": 0,
+      "title": "Samsung Galaxy S10+ (samsung-beyond2lte)"
+    },
+    {
+      "pageid": 7201,
+      "ns": 0,
+      "title": "Samsung Galaxy S10e (samsung-beyond0lte)"
+    },
+    {
+      "pageid": 10412,
+      "ns": 0,
+      "title": "Samsung Galaxy S20 (samsung-x1q)"
+    },
+    {
+      "pageid": 7964,
+      "ns": 0,
+      "title": "Samsung Galaxy S20 5G (samsung-x1s)"
+    },
+    {
+      "pageid": 12677,
+      "ns": 0,
+      "title": "Samsung Galaxy S20 FE (samsung-r8s)"
+    },
+    {
+      "pageid": 10042,
+      "ns": 0,
+      "title": "Samsung Galaxy S20 FE 5G (samsung-r8q)"
+    },
+    {
+      "pageid": 10155,
+      "ns": 0,
+      "title": "Samsung Galaxy S20 Ultra (samsung-z3s)"
+    },
+    {
+      "pageid": 14252,
+      "ns": 0,
+      "title": "Samsung Galaxy S20+ (samsung-y2s)"
+    },
+    {
+      "pageid": 14353,
+      "ns": 0,
+      "title": "Samsung Galaxy S21 5G (samsung-o1s)"
+    },
+    {
+      "pageid": 12922,
+      "ns": 0,
+      "title": "Samsung Galaxy S21 FE 5G (samsung-r9q2)"
+    },
+    {
+      "pageid": 5097,
+      "ns": 0,
+      "title": "Samsung Galaxy S21 Ultra (samsung-p3s)"
+    },
+    {
+      "pageid": 9531,
+      "ns": 0,
+      "title": "Samsung Galaxy S22 5G (samsung-r0q)"
+    },
+    {
+      "pageid": 10625,
+      "ns": 0,
+      "title": "Samsung Galaxy S22+ (samsung-g0s)"
+    },
+    {
+      "pageid": 10460,
+      "ns": 0,
+      "title": "Samsung Galaxy S23 (samsung-dm1q)"
+    },
+    {
+      "pageid": 10848,
+      "ns": 0,
+      "title": "Samsung Galaxy S23 Ultra (samsung-dm3q)"
+    },
+    {
+      "pageid": 11625,
+      "ns": 0,
+      "title": "Samsung Galaxy S24 FE (samsung-r12)"
+    },
+    {
+      "pageid": 6706,
+      "ns": 0,
+      "title": "Samsung Galaxy S24 Ultra (samsung-e3q)"
+    },
+    {
+      "pageid": 11762,
+      "ns": 0,
+      "title": "Samsung Galaxy S25 (samsung-pa1q)"
+    },
+    {
+      "pageid": 13701,
+      "ns": 0,
+      "title": "Samsung Galaxy S26 (samsung-miracle)"
+    },
+    {
+      "pageid": 359,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 (samsung-jflte)"
+    },
+    {
+      "pageid": 9232,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 Advance (samsung-ks01lte)"
+    },
+    {
+      "pageid": 11704,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 Exynos (samsung-ja3g)"
+    },
+    {
+      "pageid": 687,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 Mini dual sim (samsung-serranodsdd)"
+    },
+    {
+      "pageid": 400,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 Mini LTE (samsung-serranolte)"
+    },
+    {
+      "pageid": 1276,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 Mini Value Edition (samsung-serranove)"
+    },
+    {
+      "pageid": 2209,
+      "ns": 0,
+      "title": "Samsung Galaxy S4 Value Edition (samsung-jfvelte)"
+    },
+    {
+      "pageid": 3112,
+      "ns": 0,
+      "title": "Samsung Galaxy S5 (International 3G) (samsung-k3gxx)"
+    },
+    {
+      "pageid": 355,
+      "ns": 0,
+      "title": "Samsung Galaxy S5 (samsung-klte)"
+    },
+    {
+      "pageid": 87,
+      "ns": 0,
+      "title": "Samsung Galaxy S5 mini (samsung-kminilte)"
+    },
+    {
+      "pageid": 3222,
+      "ns": 0,
+      "title": "Samsung Galaxy S5 Neo (samsung-s5neolte)"
+    },
+    {
+      "pageid": 1533,
+      "ns": 0,
+      "title": "Samsung Galaxy S5 Plus (samsung-kccat6)"
+    },
+    {
+      "pageid": 1079,
+      "ns": 0,
+      "title": "Samsung Galaxy S6 (samsung-zerofltexx)"
+    },
+    {
+      "pageid": 2149,
+      "ns": 0,
+      "title": "Samsung Galaxy S6 Edge (samsung-zeroltexx)"
+    },
+    {
+      "pageid": 10757,
+      "ns": 0,
+      "title": "Samsung Galaxy S6 Edge+ (samsung-zenlte)"
+    },
+    {
+      "pageid": 426,
+      "ns": 0,
+      "title": "Samsung Galaxy S7 (samsung-herolte)"
+    },
+    {
+      "pageid": 863,
+      "ns": 0,
+      "title": "Samsung Galaxy S7 Edge (samsung-hero2lte)"
+    },
+    {
+      "pageid": 9592,
+      "ns": 0,
+      "title": "Samsung Galaxy S8 (samsung-dreamlte)"
+    },
+    {
+      "pageid": 1972,
+      "ns": 0,
+      "title": "Samsung Galaxy S8+ (samsung-dream2lte)"
+    },
+    {
+      "pageid": 954,
+      "ns": 0,
+      "title": "Samsung Galaxy S9 (samsung-starlte)"
+    },
+    {
+      "pageid": 1712,
+      "ns": 0,
+      "title": "Samsung Galaxy S9 (samsung-starqltechn)"
+    },
+    {
+      "pageid": 4966,
+      "ns": 0,
+      "title": "Samsung Galaxy S9+ (samsung-star2lte)"
+    },
+    {
+      "pageid": 88,
+      "ns": 0,
+      "title": "Samsung Galaxy SII (samsung-i9100)"
+    },
+    {
+      "pageid": 8089,
+      "ns": 0,
+      "title": "Samsung Galaxy SII Plus (samsung-s2vep)"
+    },
+    {
+      "pageid": 303,
+      "ns": 0,
+      "title": "Samsung Galaxy SIII I747 (samsung-i747m)"
+    },
+    {
+      "pageid": 632,
+      "ns": 0,
+      "title": "Samsung Galaxy SIII mini Value Edition (samsung-i8200)"
+    },
+    {
+      "pageid": 1717,
+      "ns": 0,
+      "title": "Samsung Galaxy SIII SCH-I535 (samsung-d2vzw)"
+    },
+    {
+      "pageid": 315,
+      "ns": 0,
+      "title": "Samsung Galaxy SL (samsung-i9003)"
+    },
+    {
+      "pageid": 11329,
+      "ns": 0,
+      "title": "Samsung Galaxy Spica (samsung-spica)"
+    },
+    {
+      "pageid": 343,
+      "ns": 0,
+      "title": "Samsung Galaxy Star (samsung-mint)"
+    },
+    {
+      "pageid": 491,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 10.1 (samsung-p4wifi)"
+    },
+    {
+      "pageid": 4996,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 2"
+    },
+    {
+      "pageid": 369,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 2 10.1 (3G and Wifi) (samsung-espresso10)"
+    },
+    {
+      "pageid": 1614,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 2 7.0 (samsung-espresso7)"
+    },
+    {
+      "pageid": 4887,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3"
+    },
+    {
+      "pageid": 2225,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3 10.1 3G (samsung-santos103g)"
+    },
+    {
+      "pageid": 2427,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3 10.1 Wi-Fi (samsung-santos10wifi)"
+    },
+    {
+      "pageid": 563,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3 7.0 (samsung-lt023g)"
+    },
+    {
+      "pageid": 898,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3 8.0 (samsung-lt01)"
+    },
+    {
+      "pageid": 3976,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3 Lite (samsung-goyavewifi)"
+    },
+    {
+      "pageid": 3081,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 3 Lite 7.0 (samsung-goyawifi)"
+    },
+    {
+      "pageid": 6122,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4"
+    },
+    {
+      "pageid": 1413,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4 10.1 2015 (samsung-matisseve)"
+    },
+    {
+      "pageid": 4609,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4 10.1 LTE (samsung-matisselte)"
+    },
+    {
+      "pageid": 10840,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4 10.1 Wi-Fi (samsung-matissewifi)"
+    },
+    {
+      "pageid": 1035,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4 7.0 (samsung-degaswifi)"
+    },
+    {
+      "pageid": 7800,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4 7.0 LTE (samsung-degaslte)"
+    },
+    {
+      "pageid": 5615,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab 4 8.0 Wi-Fi (samsung-milletwifi)"
+    },
+    {
+      "pageid": 9447,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 10.1 (2019) (samsung-gta3xl)"
+    },
+    {
+      "pageid": 11209,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 10.1 2016 (samsung-gtaxlwifi)"
+    },
+    {
+      "pageid": 6466,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 7.0 (2016) (samsung-gtexslte)"
+    },
+    {
+      "pageid": 3541,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 7.0 (2016) (samsung-gtexswifi)"
+    },
+    {
+      "pageid": 2563,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 8.0 2015 (samsung-gt58)"
+    },
+    {
+      "pageid": 3374,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 8.0 2018 (samsung-sm-t590)"
+    },
+    {
+      "pageid": 3477,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 8.0 2019 (samsung-gtowifi)"
+    },
+    {
+      "pageid": 3631,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 8.0 With S Pen (2019) (samsung-wisdom)"
+    },
+    {
+      "pageid": 1139,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A 9.7 2015 (samsung-gt510)"
+    },
+    {
+      "pageid": 4601,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A7 (samsung-gta4l)"
+    },
+    {
+      "pageid": 5552,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A7 Lite (samsung-gta7litewifi)"
+    },
+    {
+      "pageid": 9001,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab A9+ (samsung-gta9p)"
+    },
+    {
+      "pageid": 7056,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab E 7.0 (SM-T116) (samsung-goyave3g)"
+    },
+    {
+      "pageid": 1514,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab E 9.6 (SM-T560) (samsung-gtelwifi)"
+    },
+    {
+      "pageid": 3154,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab E 9.6 (SM-T560NU) (samsung-gtelwifiue)"
+    },
+    {
+      "pageid": 1814,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab E 9.6 (SM-T561) (samsung-gtel3g)"
+    },
+    {
+      "pageid": 4535,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab Pro 10.1 Wi-Fi (SM-T520) (samsung-n2awifi)"
+    },
+    {
+      "pageid": 4701,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab Pro 8.4 WIFI (samsung-mondrianwifi)"
+    },
+    {
+      "pageid": 1250,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S 10.5 LTE (samsung-chagalllte)"
+    },
+    {
+      "pageid": 1535,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S 10.5 WiFi (samsung-chagallwifi)"
+    },
+    {
+      "pageid": 2383,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S 8.4 LTE (samsung-klimtlte)"
+    },
+    {
+      "pageid": 3988,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S2 8.0 LTE (samsung-gts28velte)"
+    },
+    {
+      "pageid": 12916,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S2 8.0 Wi-Fi (samsung-gts28vewifi)"
+    },
+    {
+      "pageid": 3063,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S2 9.7 LTE (samsung-gts210lte)"
+    },
+    {
+      "pageid": 963,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S2 9.7 LTE (samsung-gts210velte)"
+    },
+    {
+      "pageid": 522,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S2 9.7 Wifi (samsung-gts210vewifi)"
+    },
+    {
+      "pageid": 12119,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S3 (samsung-gts3l)"
+    },
+    {
+      "pageid": 4698,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S4 (Wi-Fi) (samsung-gts4lwifi)"
+    },
+    {
+      "pageid": 13674,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S5e LTE (samsung-gts4lv)"
+    },
+    {
+      "pageid": 2400,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S5e Wi-Fi (samsung-gts4lvwifi)"
+    },
+    {
+      "pageid": 12402,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S6 (samsung-gts6l)"
+    },
+    {
+      "pageid": 11220,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S6 Lite (2020) (samsung-gta4xl)"
+    },
+    {
+      "pageid": 8646,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S6 Lite (2022) (samsung-gta4xlve)"
+    },
+    {
+      "pageid": 12649,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S6 Lite (2024) (samsung-gta4xls)"
+    },
+    {
+      "pageid": 13996,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S7 FE Wi-Fi (samsung-gts7fewifi)"
+    },
+    {
+      "pageid": 13686,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S8 WiFi (samsung-gts8wifi)"
+    },
+    {
+      "pageid": 8854,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab S9 (Wi-Fi) (samsung-gts9wifi)"
+    },
+    {
+      "pageid": 3710,
+      "ns": 0,
+      "title": "Samsung Galaxy Tab Wifi GT-P1010 (samsung-p1lite)"
+    },
+    {
+      "pageid": 581,
+      "ns": 0,
+      "title": "Samsung Galaxy Trend Lite (samsung-kylevess)"
+    },
+    {
+      "pageid": 626,
+      "ns": 0,
+      "title": "Samsung Galaxy Trend Plus / S Duos 2 (samsung-kylepro)"
+    },
+    {
+      "pageid": 2852,
+      "ns": 0,
+      "title": "Samsung Galaxy W (samsung-i8150)"
+    },
+    {
+      "pageid": 4159,
+      "ns": 0,
+      "title": "Samsung Galaxy Watch (samsung-galileo)"
+    },
+    {
+      "pageid": 1790,
+      "ns": 0,
+      "title": "Samsung Galaxy Xcover 2 (samsung-skomer)"
+    },
+    {
+      "pageid": 3634,
+      "ns": 0,
+      "title": "Samsung Galaxy Xcover 3 (samsung-xcover3lte)"
+    },
+    {
+      "pageid": 2729,
+      "ns": 0,
+      "title": "Samsung Galaxy Xcover 4 (samsung-xcover4lte)"
+    },
+    {
+      "pageid": 11870,
+      "ns": 0,
+      "title": "Samsung Galaxy XCover 5 (samsung-xcover5)"
+    },
+    {
+      "pageid": 11865,
+      "ns": 0,
+      "title": "Samsung Galaxy XCover Pro (samsung-xcoverpro)"
+    },
+    {
+      "pageid": 10802,
+      "ns": 0,
+      "title": "Samsung Galaxy XR"
+    },
+    {
+      "pageid": 956,
+      "ns": 0,
+      "title": "Samsung Galaxy Y (samsung-totoro)"
+    },
+    {
+      "pageid": 1209,
+      "ns": 0,
+      "title": "Samsung Galaxy Young (samsung-royss)"
+    },
+    {
+      "pageid": 13368,
+      "ns": 0,
+      "title": "Samsung Galaxy Young 2 (samsung-young23g)"
+    },
+    {
+      "pageid": 1801,
+      "ns": 0,
+      "title": "Samsung Galaxy Young NFC (samsung-royssnfc)"
+    },
+    {
+      "pageid": 10410,
+      "ns": 0,
+      "title": "Samsung Galaxy Z Flip 5 (samsung-b5q)"
+    },
+    {
+      "pageid": 8753,
+      "ns": 0,
+      "title": "Samsung Galaxy Z Flip3 5G (samsung-b2q)"
+    },
+    {
+      "pageid": 6829,
+      "ns": 0,
+      "title": "Samsung Galaxy Z Fold5 (samsung-q5q)"
+    },
+    {
+      "pageid": 2252,
+      "ns": 0,
+      "title": "Samsung Gear 2 (samsung-rinato)"
+    },
+    {
+      "pageid": 4797,
+      "ns": 0,
+      "title": "Samsung J\u00e9t (samsung-s8000)"
+    },
+    {
+      "pageid": 1800,
+      "ns": 0,
+      "title": "Samsung Nexus S (samsung-crespo)"
+    },
+    {
+      "pageid": 1445,
+      "ns": 0,
+      "title": "Samsung Star (samsung-gt-s5230)"
+    },
+    {
+      "pageid": 577,
+      "ns": 0,
+      "title": "Samsung Wave 2 (samsung-s8530)"
+    },
+    {
+      "pageid": 3699,
+      "ns": 0,
+      "title": "Samsung Z1 (samsung-kiran)"
+    },
+    {
+      "pageid": 4121,
+      "ns": 0,
+      "title": "Sector 5 E1 Rugged Chromebook (google-veyron-mighty)"
+    },
+    {
+      "pageid": 361,
+      "ns": 0,
+      "title": "Selecline Smartphone 5 (auchan-s6s5in3g)"
+    },
+    {
+      "pageid": 11619,
+      "ns": 0,
+      "title": "Semc-urushi"
+    },
+    {
+      "pageid": 8552,
+      "ns": 0,
+      "title": "Senraise H10"
+    },
+    {
+      "pageid": 10416,
+      "ns": 0,
+      "title": "Serioux FasTab S716 (serioux-s716)"
+    },
+    {
+      "pageid": 1407,
+      "ns": 0,
+      "title": "SHARP AQUOS PHONE SERIE SHL22 (sharp-shl22)"
+    },
+    {
+      "pageid": 3171,
+      "ns": 0,
+      "title": "SHIFT SHIFT6mq (shift-axolotl)"
+    },
+    {
+      "pageid": 6788,
+      "ns": 0,
+      "title": "SHIFT SHIFTphone 8 (shift-otter)"
+    },
+    {
+      "pageid": 8806,
+      "ns": 0,
+      "title": "SiFive HiFive Premier P550 (sifive-hifive-premier-p550)"
+    },
+    {
+      "pageid": 8511,
+      "ns": 0,
+      "title": "SiFive HiFive Unleashed (sifive-hifive-unleashed)"
+    },
+    {
+      "pageid": 8059,
+      "ns": 0,
+      "title": "Sipeed Lichee Pi 3A (sipeed-licheepi3a)"
+    },
+    {
+      "pageid": 4508,
+      "ns": 0,
+      "title": "Sipeed Lichee Pi 4A (sipeed-licheepi4a)"
+    },
+    {
+      "pageid": 3302,
+      "ns": 0,
+      "title": "Sipeed Lichee Pi Zero (sipeed-licheezero)"
+    },
+    {
+      "pageid": 4884,
+      "ns": 0,
+      "title": "Sipeed M1s DOCK (sipeed-m1sdock)"
+    },
+    {
+      "pageid": 2589,
+      "ns": 0,
+      "title": "SKY I'm Back (pantech-ef71)"
+    },
+    {
+      "pageid": 13081,
+      "ns": 0,
+      "title": "Smartisan T1 (smartisan-sfo)"
+    },
+    {
+      "pageid": 7679,
+      "ns": 0,
+      "title": "Solidrun CuBox (solidrun-cubox)"
+    },
+    {
+      "pageid": 1471,
+      "ns": 0,
+      "title": "Sony Bravia KDL-43W755C (sony-braviaw700)"
+    },
+    {
+      "pageid": 11459,
+      "ns": 0,
+      "title": "Sony Bravia KDL-48R550C (sony-bravia550c)"
+    },
+    {
+      "pageid": 602,
+      "ns": 0,
+      "title": "Sony Ericsson Live With Walkman (sony-coconut)"
+    },
+    {
+      "pageid": 6473,
+      "ns": 0,
+      "title": "Sony Ericsson Satio (semc-kokoro)"
+    },
+    {
+      "pageid": 89,
+      "ns": 0,
+      "title": "Sony Ericsson Xperia Arc (semc-anzu)"
+    },
+    {
+      "pageid": 559,
+      "ns": 0,
+      "title": "Sony Ericsson Xperia mini (semc-smultron)"
+    },
+    {
+      "pageid": 1582,
+      "ns": 0,
+      "title": "Sony Ericsson Xperia Mini Pro (sony-mango)"
+    },
+    {
+      "pageid": 2697,
+      "ns": 0,
+      "title": "Sony Ericsson Xperia Pro (semc-iyokan)"
+    },
+    {
+      "pageid": 4152,
+      "ns": 0,
+      "title": "Sony Ericsson Xperia X8 (semc-shakira)"
+    },
+    {
+      "pageid": 11305,
+      "ns": 0,
+      "title": "Sony Playstation 3 (sony-ps3)"
+    },
+    {
+      "pageid": 7333,
+      "ns": 0,
+      "title": "Sony Playstation 4 (sony-ps4)"
+    },
+    {
+      "pageid": 12709,
+      "ns": 0,
+      "title": "Sony PlayStation 5 (sony-ps5)"
+    },
+    {
+      "pageid": 3536,
+      "ns": 0,
+      "title": "Sony PlayStation Vita (sony-psvita)"
+    },
+    {
+      "pageid": 484,
+      "ns": 0,
+      "title": "Sony SmartWatch 3 (sony-tetra)"
+    },
+    {
+      "pageid": 4851,
+      "ns": 0,
+      "title": "Sony Tablet S (sony-nbx03)"
+    },
+    {
+      "pageid": 13931,
+      "ns": 0,
+      "title": "Sony Xperia 1 (sony-griffin)"
+    },
+    {
+      "pageid": 5082,
+      "ns": 0,
+      "title": "Sony Xperia 1 II (sony-pdx203)"
+    },
+    {
+      "pageid": 10366,
+      "ns": 0,
+      "title": "Sony Xperia 1 III (sony-pdx215)"
+    },
+    {
+      "pageid": 10947,
+      "ns": 0,
+      "title": "Sony Xperia 1 IV (sony-pdx223)"
+    },
+    {
+      "pageid": 12903,
+      "ns": 0,
+      "title": "Sony Xperia 1 VI (sony-pdx245)"
+    },
+    {
+      "pageid": 1827,
+      "ns": 0,
+      "title": "Sony Xperia 10 (sony-kirin)"
+    },
+    {
+      "pageid": 1981,
+      "ns": 0,
+      "title": "Sony Xperia 10 II (sony-pdx201)"
+    },
+    {
+      "pageid": 2716,
+      "ns": 0,
+      "title": "Sony Xperia 10 III (sony-pdx213)"
+    },
+    {
+      "pageid": 6918,
+      "ns": 0,
+      "title": "Sony Xperia 10 IV"
+    },
+    {
+      "pageid": 1828,
+      "ns": 0,
+      "title": "Sony Xperia 10 Plus (sony-mermaid)"
+    },
+    {
+      "pageid": 13932,
+      "ns": 0,
+      "title": "Sony Xperia 5 (sony-bahamut)"
+    },
+    {
+      "pageid": 3693,
+      "ns": 0,
+      "title": "Sony Xperia 5 II (sony-pdx206)"
+    },
+    {
+      "pageid": 13930,
+      "ns": 0,
+      "title": "Sony Xperia 5 III (sony-pdx214)"
+    },
+    {
+      "pageid": 636,
+      "ns": 0,
+      "title": "Sony Xperia acro S (sony-hikari)"
+    },
+    {
+      "pageid": 65,
+      "ns": 0,
+      "title": "Sony Xperia E Dual (sony-nanhu)"
+    },
+    {
+      "pageid": 2628,
+      "ns": 0,
+      "title": "Sony Xperia E1 (sony-falconss)"
+    },
+    {
+      "pageid": 7795,
+      "ns": 0,
+      "title": "Sony Xperia E3 Dual (D2212)"
+    },
+    {
+      "pageid": 4828,
+      "ns": 0,
+      "title": "Sony Xperia Go (sony-lotus)"
+    },
+    {
+      "pageid": 389,
+      "ns": 0,
+      "title": "Sony Xperia J (sony-jlo)"
+    },
+    {
+      "pageid": 664,
+      "ns": 0,
+      "title": "Sony Xperia L (sony-taoshan)"
+    },
+    {
+      "pageid": 11160,
+      "ns": 0,
+      "title": "Sony Xperia L4 (sony-dragon)"
+    },
+    {
+      "pageid": 609,
+      "ns": 0,
+      "title": "Sony Xperia M (sony-nicki)"
+    },
+    {
+      "pageid": 1779,
+      "ns": 0,
+      "title": "Sony Xperia M2 (sony-eagle)"
+    },
+    {
+      "pageid": 733,
+      "ns": 0,
+      "title": "Sony Xperia M4 Aqua (sony-tulip)"
+    },
+    {
+      "pageid": 1782,
+      "ns": 0,
+      "title": "Sony Xperia M5 (sony-hollyss)"
+    },
+    {
+      "pageid": 1577,
+      "ns": 0,
+      "title": "Sony Xperia P (sony-nypon)"
+    },
+    {
+      "pageid": 926,
+      "ns": 0,
+      "title": "Sony Xperia SP (sony-huashan)"
+    },
+    {
+      "pageid": 3295,
+      "ns": 0,
+      "title": "Sony Xperia T (sony-mint)"
+    },
+    {
+      "pageid": 410,
+      "ns": 0,
+      "title": "Sony Xperia T3 (sony-seagull)"
+    },
+    {
+      "pageid": 1686,
+      "ns": 0,
+      "title": "Sony Xperia U (sony-kumquat)"
+    },
+    {
+      "pageid": 1032,
+      "ns": 0,
+      "title": "Sony Xperia X (sony-suzu)"
+    },
+    {
+      "pageid": 1575,
+      "ns": 0,
+      "title": "Sony Xperia X Compact (sony-kugo)"
+    },
+    {
+      "pageid": 1990,
+      "ns": 0,
+      "title": "Sony Xperia XA (sony-tuba)"
+    },
+    {
+      "pageid": 2140,
+      "ns": 0,
+      "title": "Sony Xperia XA Ultra (sony-ukulele)"
+    },
+    {
+      "pageid": 11005,
+      "ns": 0,
+      "title": "Sony Xperia XA1 Ultra (sony-redwood)"
+    },
+    {
+      "pageid": 1816,
+      "ns": 0,
+      "title": "Sony Xperia XA2 (sony-pioneer)"
+    },
+    {
+      "pageid": 1825,
+      "ns": 0,
+      "title": "Sony Xperia XA2 Plus (sony-voyager)"
+    },
+    {
+      "pageid": 1823,
+      "ns": 0,
+      "title": "Sony Xperia XA2 Ultra (sony-discovery)"
+    },
+    {
+      "pageid": 1915,
+      "ns": 0,
+      "title": "Sony Xperia XZ (sony-kagura)"
+    },
+    {
+      "pageid": 1980,
+      "ns": 0,
+      "title": "Sony Xperia XZ Premium (sony-maple)"
+    },
+    {
+      "pageid": 2173,
+      "ns": 0,
+      "title": "Sony Xperia XZ1 (sony-poplar)"
+    },
+    {
+      "pageid": 1212,
+      "ns": 0,
+      "title": "Sony Xperia XZ1 Compact (sony-lilac)"
+    },
+    {
+      "pageid": 2595,
+      "ns": 0,
+      "title": "Sony Xperia XZ2 (sony-akari)"
+    },
+    {
+      "pageid": 5171,
+      "ns": 0,
+      "title": "Sony Xperia XZ2 Compact (sony-apollo)"
+    },
+    {
+      "pageid": 5121,
+      "ns": 0,
+      "title": "Sony Xperia XZ3 (sony-akatsuki)"
+    },
+    {
+      "pageid": 66,
+      "ns": 0,
+      "title": "Sony Xperia Z (sony-yuga)"
+    },
+    {
+      "pageid": 7374,
+      "ns": 0,
+      "title": "Sony Xperia Z Ultra (sony-togari)"
+    },
+    {
+      "pageid": 333,
+      "ns": 0,
+      "title": "Sony Xperia Z1 (sony-honami)"
+    },
+    {
+      "pageid": 90,
+      "ns": 0,
+      "title": "Sony Xperia Z1 Compact (sony-amami)"
+    },
+    {
+      "pageid": 68,
+      "ns": 0,
+      "title": "Sony Xperia Z2 (sony-sirius)"
+    },
+    {
+      "pageid": 67,
+      "ns": 0,
+      "title": "Sony Xperia Z2 Tablet (sony-castor-windy)"
+    },
+    {
+      "pageid": 1654,
+      "ns": 0,
+      "title": "Sony Xperia Z2 Tablet LTE (sony-castor)"
+    },
+    {
+      "pageid": 1381,
+      "ns": 0,
+      "title": "Sony Xperia Z3 (sony-leo)"
+    },
+    {
+      "pageid": 446,
+      "ns": 0,
+      "title": "Sony Xperia Z3 Tablet Compact (sony-scorpion)"
+    },
+    {
+      "pageid": 2678,
+      "ns": 0,
+      "title": "Sony Xperia Z3+ (sony-ivy)"
+    },
+    {
+      "pageid": 69,
+      "ns": 0,
+      "title": "Sony Xperia Z3C (sony-aries)"
+    },
+    {
+      "pageid": 1433,
+      "ns": 0,
+      "title": "Sony Xperia Z5 (sony-sumire)"
+    },
+    {
+      "pageid": 2603,
+      "ns": 0,
+      "title": "Sony Xperia Z5 Compact (sony-suzuran)"
+    },
+    {
+      "pageid": 3274,
+      "ns": 0,
+      "title": "Sourceparts Pocket P.C. (sourceparts-pocketpc)"
+    },
+    {
+      "pageid": 8104,
+      "ns": 0,
+      "title": "SpacemiT MUSE Book (spacemit-muse-book)"
+    },
+    {
+      "pageid": 10889,
+      "ns": 0,
+      "title": "SQFMI Beepy (sqfmi-beepy)"
+    },
+    {
+      "pageid": 4763,
+      "ns": 0,
+      "title": "StarFive VisionFive 2 (starfive-visionfive2)"
+    },
+    {
+      "pageid": 9933,
+      "ns": 0,
+      "title": "Starway Andromeda S8 (starway-andromeda-s8)"
+    },
+    {
+      "pageid": 13434,
+      "ns": 0,
+      "title": "Surface Go 2 (surface-go-2)"
+    },
+    {
+      "pageid": 12996,
+      "ns": 0,
+      "title": "T-Mobile Revvl 4 (tmobile-tokyo lite 4g)"
+    },
+    {
+      "pageid": 7336,
+      "ns": 0,
+      "title": "TCL 403 (tcl-rio)"
+    },
+    {
+      "pageid": 5187,
+      "ns": 0,
+      "title": "TCL A3 (tcl-bangkok tf)"
+    },
+    {
+      "pageid": 8078,
+      "ns": 0,
+      "title": "Teclast M50"
+    },
+    {
+      "pageid": 8236,
+      "ns": 0,
+      "title": "Teclast P30"
+    },
+    {
+      "pageid": 9120,
+      "ns": 0,
+      "title": "Teclast P30T (teclast-p30t)"
+    },
+    {
+      "pageid": 8079,
+      "ns": 0,
+      "title": "Teclast P50"
+    },
+    {
+      "pageid": 9121,
+      "ns": 0,
+      "title": "Teclast P85T (teclast-p85t)"
+    },
+    {
+      "pageid": 2432,
+      "ns": 0,
+      "title": "Teclast P89 Mini (teclast-p89mini)"
+    },
+    {
+      "pageid": 14351,
+      "ns": 0,
+      "title": "Teclast T40 Air (teclast-t40-air)"
+    },
+    {
+      "pageid": 14087,
+      "ns": 0,
+      "title": "Teclast T40Pro (teclast-t40pro)"
+    },
+    {
+      "pageid": 7983,
+      "ns": 0,
+      "title": "Teclast T40S revision 2 (teclast-t40s-rev2)"
+    },
+    {
+      "pageid": 7985,
+      "ns": 0,
+      "title": "Teclast T45HD (teclast-t45hd)"
+    },
+    {
+      "pageid": 8080,
+      "ns": 0,
+      "title": "Teclast T50"
+    },
+    {
+      "pageid": 9119,
+      "ns": 0,
+      "title": "Teclast T50 Max (teclast-t50max)"
+    },
+    {
+      "pageid": 9122,
+      "ns": 0,
+      "title": "Teclast T60AI (teclast-t60ai)"
+    },
+    {
+      "pageid": 9118,
+      "ns": 0,
+      "title": "Teclast T65 Max (teclast-t65max)"
+    },
+    {
+      "pageid": 374,
+      "ns": 0,
+      "title": "Teclast X80 Pro (teclast-x80pro)"
+    },
+    {
+      "pageid": 14127,
+      "ns": 0,
+      "title": "Tecno Pova 5 (tecno-lh7n)"
+    },
+    {
+      "pageid": 10019,
+      "ns": 0,
+      "title": "Tecno Pova 6 (tecno-li7)"
+    },
+    {
+      "pageid": 9161,
+      "ns": 0,
+      "title": "Telekom Puls (alcatel-ttab)"
+    },
+    {
+      "pageid": 2085,
+      "ns": 0,
+      "title": "Teracube One (teracube-one)"
+    },
+    {
+      "pageid": 4906,
+      "ns": 0,
+      "title": "Thundercomm Dragonboard-845c (thundercomm-db845c)"
+    },
+    {
+      "pageid": 14248,
+      "ns": 0,
+      "title": "Thundercomm Rubik Pi 3 (thundercomm-rubikpi3)"
+    },
+    {
+      "pageid": 5071,
+      "ns": 0,
+      "title": "Ti-nspire"
+    },
+    {
+      "pageid": 3267,
+      "ns": 0,
+      "title": "Ticwatch C2+ (mobvoi-skipjack)"
+    },
+    {
+      "pageid": 8351,
+      "ns": 0,
+      "title": "Tigermedia Tigerbox TOUCH (tigermedia-tigerbox)"
+    },
+    {
+      "pageid": 4705,
+      "ns": 0,
+      "title": "Timex FamilyConnect Senior (timex-senior)"
+    },
+    {
+      "pageid": 1088,
+      "ns": 0,
+      "title": "Tokio Techbook (tokio-techbook)"
+    },
+    {
+      "pageid": 7617,
+      "ns": 0,
+      "title": "Tolino Page 2 (tolino-page2)"
+    },
+    {
+      "pageid": 8529,
+      "ns": 0,
+      "title": "Tolino Shine (tolino-shine)"
+    },
+    {
+      "pageid": 3246,
+      "ns": 0,
+      "title": "Tolino Shine 2HD (tolino-shine2hd)"
+    },
+    {
+      "pageid": 3244,
+      "ns": 0,
+      "title": "Tolino Shine 3 (tolino-shine3)"
+    },
+    {
+      "pageid": 2321,
+      "ns": 0,
+      "title": "Tolino Vision (tolino-ntx 6sl)"
+    },
+    {
+      "pageid": 2324,
+      "ns": 0,
+      "title": "Topwise A721 (topwise-a721)"
+    },
+    {
+      "pageid": 7265,
+      "ns": 0,
+      "title": "Toradex Colibri T30"
+    },
+    {
+      "pageid": 12517,
+      "ns": 0,
+      "title": "Toshiba AC100(paz00)"
+    },
+    {
+      "pageid": 7603,
+      "ns": 0,
+      "title": "Toshiba Excite 7 (toshiba-at7a8)"
+    },
+    {
+      "pageid": 7604,
+      "ns": 0,
+      "title": "Toshiba Excite 7c (toshiba-at7b)"
+    },
+    {
+      "pageid": 7605,
+      "ns": 0,
+      "title": "Toshiba Excite Go (toshiba-at7c8)"
+    },
+    {
+      "pageid": 6304,
+      "ns": 0,
+      "title": "TP-Link Archer C7 V5 (tp-link-archer-c7-v5)"
+    },
+    {
+      "pageid": 1243,
+      "ns": 0,
+      "title": "TP-Link Neffos C7s (neffos-c7s)"
+    },
+    {
+      "pageid": 2186,
+      "ns": 0,
+      "title": "TrekStor Surftab Duo W1 (trekstor-surftabduow1)"
+    },
+    {
+      "pageid": 3335,
+      "ns": 0,
+      "title": "TrekStor SurfTab ventos 7.0 HD (mid-g30ref)"
+    },
+    {
+      "pageid": 927,
+      "ns": 0,
+      "title": "TrekStor Surftab Wintron 7.0 (surftab-wintron7.0)"
+    },
+    {
+      "pageid": 4393,
+      "ns": 0,
+      "title": "Tronsmart Draco H3 (tronsmart-dracoh3)"
+    },
+    {
+      "pageid": 4114,
+      "ns": 0,
+      "title": "True IDC Chromebook 11 (google-veyron-jaq)"
+    },
+    {
+      "pageid": 6261,
+      "ns": 0,
+      "title": "Turris Omnia (turris-omnia)"
+    },
+    {
+      "pageid": 13670,
+      "ns": 0,
+      "title": "Turris Omnia NG (turris-omnia-ng)"
+    },
+    {
+      "pageid": 8703,
+      "ns": 0,
+      "title": "Ugoos AM3 (ugoos-am3)"
+    },
+    {
+      "pageid": 2792,
+      "ns": 0,
+      "title": "Umidigi F2 (umidigi-f2)"
+    },
+    {
+      "pageid": 10566,
+      "ns": 0,
+      "title": "Unihertz Jelly Pro N (unihertz-nanot)"
+    },
+    {
+      "pageid": 12233,
+      "ns": 0,
+      "title": "Unihertz Jelly Star (unihertz-jelly-star)"
+    },
+    {
+      "pageid": 10918,
+      "ns": 0,
+      "title": "Unihertz Titan 2 (unihertz-titan-2)"
+    },
+    {
+      "pageid": 5189,
+      "ns": 0,
+      "title": "Unihertz Titan Pocket (unihertz-titan-pocket)"
+    },
+    {
+      "pageid": 6472,
+      "ns": 0,
+      "title": "Upvel UM-514TV"
+    },
+    {
+      "pageid": 4717,
+      "ns": 0,
+      "title": "Valve Steam Deck (valve-jupiter)"
+    },
+    {
+      "pageid": 11662,
+      "ns": 0,
+      "title": "Valve Steam Frame (valve-deckard)"
+    },
+    {
+      "pageid": 8125,
+      "ns": 0,
+      "title": "Valve Steam Link (valve-steamlink)"
+    },
+    {
+      "pageid": 7651,
+      "ns": 0,
+      "title": "Vensmile M8S (mbx-pufangda s812)"
+    },
+    {
+      "pageid": 4713,
+      "ns": 0,
+      "title": "Verizon Ellipsis 7 QMV7B (verizon-qmv7b)"
+    },
+    {
+      "pageid": 1261,
+      "ns": 0,
+      "title": "Verizon Wear24 (verizon-dorado)"
+    },
+    {
+      "pageid": 12723,
+      "ns": 0,
+      "title": "Vernee Apollo Lite (vernee-k15tb-a)"
+    },
+    {
+      "pageid": 1862,
+      "ns": 0,
+      "title": "Vernee Thor (vernee-k506)"
+    },
+    {
+      "pageid": 8863,
+      "ns": 0,
+      "title": "Vestel Venus 5530 (vestel-pars)"
+    },
+    {
+      "pageid": 12698,
+      "ns": 0,
+      "title": "Vestel Venus V5 (vestel-teos)"
+    },
+    {
+      "pageid": 4090,
+      "ns": 0,
+      "title": "VideoNet Chromebook BL10 (google-veyron-jerry)"
+    },
+    {
+      "pageid": 4620,
+      "ns": 0,
+      "title": "Videostrong KII Pro (videostrong-kii-pro)"
+    },
+    {
+      "pageid": 4125,
+      "ns": 0,
+      "title": "Viglen Chromebook 11 (google-veyron-mighty)"
+    },
+    {
+      "pageid": 12266,
+      "ns": 0,
+      "title": "Vivo CDP(vivo-cdp-1)"
+    },
+    {
+      "pageid": 6406,
+      "ns": 0,
+      "title": "Vivo Y21L (vivo-y21l)"
+    },
+    {
+      "pageid": 13212,
+      "ns": 0,
+      "title": "Vivo Y28L (vivo-pd1403l)"
+    },
+    {
+      "pageid": 13620,
+      "ns": 0,
+      "title": "Vivo Y66i (vivo-PD1621B)"
+    },
+    {
+      "pageid": 624,
+      "ns": 0,
+      "title": "Vodafone 858 Smart (huawei-u8160)"
+    },
+    {
+      "pageid": 3738,
+      "ns": 0,
+      "title": "Volla Phone 22 (volla-mimameid)"
+    },
+    {
+      "pageid": 3911,
+      "ns": 0,
+      "title": "Volla Phone X (volla-yggdrasilx)"
+    },
+    {
+      "pageid": 4675,
+      "ns": 0,
+      "title": "Volla Phone X23 (volla-vidofnir)"
+    },
+    {
+      "pageid": 13147,
+      "ns": 0,
+      "title": "Vsmart Active 1 (vsmart-zangyapro)"
+    },
+    {
+      "pageid": 12579,
+      "ns": 0,
+      "title": "Vsmart Joy 3 (vsmart-casuarina)"
+    },
+    {
+      "pageid": 5644,
+      "ns": 0,
+      "title": "Vsmart Star 4 (vsmart-willowpro)"
+    },
+    {
+      "pageid": 10658,
+      "ns": 0,
+      "title": "WD MyCloud Gen2 (wd-glacier)"
+    },
+    {
+      "pageid": 2124,
+      "ns": 0,
+      "title": "WEXLER Tab 7t (wexler-qc750)"
+    },
+    {
+      "pageid": 1001,
+      "ns": 0,
+      "title": "Wiko Fever (wiko-fever)"
+    },
+    {
+      "pageid": 2339,
+      "ns": 0,
+      "title": "Wiko Harry (wiko-harry)"
+    },
+    {
+      "pageid": 1267,
+      "ns": 0,
+      "title": "Wiko Lenny 2 (wiko-lenny2)"
+    },
+    {
+      "pageid": 321,
+      "ns": 0,
+      "title": "Wiko Lenny 3 (wiko-lenny3)"
+    },
+    {
+      "pageid": 3095,
+      "ns": 0,
+      "title": "Wiko Lenny 5 (wiko-lenny5)"
+    },
+    {
+      "pageid": 492,
+      "ns": 0,
+      "title": "Wiko Sunset 2 (wiko-sunset2)"
+    },
+    {
+      "pageid": 989,
+      "ns": 0,
+      "title": "Wiko U FEEL (wiko-ufeel)"
+    },
+    {
+      "pageid": 2860,
+      "ns": 0,
+      "title": "Wiko View (wiko-v12bnlite)"
+    },
+    {
+      "pageid": 1037,
+      "ns": 0,
+      "title": "Wileyfox Swift (wileyfox-crackling)"
+    },
+    {
+      "pageid": 2061,
+      "ns": 0,
+      "title": "Wileyfox Swift 2X (wileyfox-marmite)"
+    },
+    {
+      "pageid": 6870,
+      "ns": 0,
+      "title": "Windows RT devices"
+    },
+    {
+      "pageid": 11822,
+      "ns": 0,
+      "title": "WinLink E850-96 (winlink-e850-96)"
+    },
+    {
+      "pageid": 7327,
+      "ns": 0,
+      "title": "Xiaomi 11 Lite 5G NE / 11 LE (xiaomi-lisa)"
+    },
+    {
+      "pageid": 5423,
+      "ns": 0,
+      "title": "Xiaomi 12 (xiaomi-cupid)"
+    },
+    {
+      "pageid": 10431,
+      "ns": 0,
+      "title": "Xiaomi 12 Lite (xiaomi-taoyao)"
+    },
+    {
+      "pageid": 6222,
+      "ns": 0,
+      "title": "Xiaomi 12 Pro (xiaomi-zeus)"
+    },
+    {
+      "pageid": 6613,
+      "ns": 0,
+      "title": "Xiaomi 12S Pro (xiaomi-unicorn)"
+    },
+    {
+      "pageid": 6561,
+      "ns": 0,
+      "title": "Xiaomi 12S Ultra (xiaomi-thor)"
+    },
+    {
+      "pageid": 6218,
+      "ns": 0,
+      "title": "Xiaomi 12T Pro / Redmi K50 Ultra (xiaomi-diting)"
+    },
+    {
+      "pageid": 12474,
+      "ns": 0,
+      "title": "Xiaomi 13 lite"
+    },
+    {
+      "pageid": 13000,
+      "ns": 0,
+      "title": "Xiaomi 14 (xiaomi-houji)"
+    },
+    {
+      "pageid": 12308,
+      "ns": 0,
+      "title": "Xiaomi 17 (xiaomi-pudding)"
+    },
+    {
+      "pageid": 11200,
+      "ns": 0,
+      "title": "Xiaomi 17 pro max"
+    },
+    {
+      "pageid": 14445,
+      "ns": 0,
+      "title": "Xiaomi 17 Ultra (xiaomi-nezha)"
+    },
+    {
+      "pageid": 2575,
+      "ns": 0,
+      "title": "Xiaomi Mi 10 (xiaomi-umi)"
+    },
+    {
+      "pageid": 6388,
+      "ns": 0,
+      "title": "Xiaomi Mi 10 Lite 5G (xiaomi-monet)"
+    },
+    {
+      "pageid": 5344,
+      "ns": 0,
+      "title": "Xiaomi Mi 10i / Mi 10T Lite / Redmi Note 9 Pro 5G (xiaomi-gauguin)"
+    },
+    {
+      "pageid": 5212,
+      "ns": 0,
+      "title": "Xiaomi Mi 10T / Redmi K30S Ultra (xiaomi-apollo)"
+    },
+    {
+      "pageid": 4893,
+      "ns": 0,
+      "title": "Xiaomi Mi 11 (xiaomi-venus)"
+    },
+    {
+      "pageid": 4608,
+      "ns": 0,
+      "title": "Xiaomi Mi 11 Lite 4G (xiaomi-courbet)"
+    },
+    {
+      "pageid": 6678,
+      "ns": 0,
+      "title": "Xiaomi Mi 11 Ultra (xiaomi-star)"
+    },
+    {
+      "pageid": 849,
+      "ns": 0,
+      "title": "Xiaomi Mi 2 (xiaomi-aries)"
+    },
+    {
+      "pageid": 641,
+      "ns": 0,
+      "title": "Xiaomi Mi 3 (xiaomi-cancro)"
+    },
+    {
+      "pageid": 1867,
+      "ns": 0,
+      "title": "Xiaomi Mi 4c (xiaomi-libra)"
+    },
+    {
+      "pageid": 1593,
+      "ns": 0,
+      "title": "Xiaomi Mi 4i (xiaomi-ferrari)"
+    },
+    {
+      "pageid": 696,
+      "ns": 0,
+      "title": "Xiaomi Mi 5 (xiaomi-gemini)"
+    },
+    {
+      "pageid": 5581,
+      "ns": 0,
+      "title": "Xiaomi Mi 5s (xiaomi-capricorn)"
+    },
+    {
+      "pageid": 3614,
+      "ns": 0,
+      "title": "Xiaomi Mi 5s Plus (xiaomi-natrium)"
+    },
+    {
+      "pageid": 2801,
+      "ns": 0,
+      "title": "Xiaomi Mi 5X (xiaomi-tiffany)"
+    },
+    {
+      "pageid": 1004,
+      "ns": 0,
+      "title": "Xiaomi Mi 6 (xiaomi-sagit)"
+    },
+    {
+      "pageid": 1890,
+      "ns": 0,
+      "title": "Xiaomi Mi 8 (SDM845) (xiaomi-dipper, xiaomi-equuleus, xiaomi-ursa)"
+    },
+    {
+      "pageid": 3228,
+      "ns": 0,
+      "title": "Xiaomi Mi 8 Lite (xiaomi-platina)"
+    },
+    {
+      "pageid": 1693,
+      "ns": 0,
+      "title": "Xiaomi Mi 9 (xiaomi-cepheus)"
+    },
+    {
+      "pageid": 9884,
+      "ns": 0,
+      "title": "Xiaomi Mi 9 Lite (xiaomi-pyxis)"
+    },
+    {
+      "pageid": 11416,
+      "ns": 0,
+      "title": "Xiaomi Mi 9 SE (xiaomi-grus)"
+    },
+    {
+      "pageid": 5326,
+      "ns": 0,
+      "title": "Xiaomi Mi 9T / Redmi K20 (xiaomi-davinci)"
+    },
+    {
+      "pageid": 7538,
+      "ns": 0,
+      "title": "Xiaomi Mi 9T Pro / Redmi K20 Pro (xiaomi-raphael)"
+    },
+    {
+      "pageid": 852,
+      "ns": 0,
+      "title": "Xiaomi Mi A1 (xiaomi-tissot)"
+    },
+    {
+      "pageid": 1332,
+      "ns": 0,
+      "title": "Xiaomi Mi A2 (xiaomi-jasmine sprout)"
+    },
+    {
+      "pageid": 1997,
+      "ns": 0,
+      "title": "Xiaomi Mi A2 Lite (xiaomi-daisy)"
+    },
+    {
+      "pageid": 2887,
+      "ns": 0,
+      "title": "Xiaomi Mi A3 (xiaomi-laurel)"
+    },
+    {
+      "pageid": 6608,
+      "ns": 0,
+      "title": "Xiaomi Mi Box 3 (xiaomi-once)"
+    },
+    {
+      "pageid": 13324,
+      "ns": 0,
+      "title": "Xiaomi Mi Max 2 (xiaomi-oxygen)"
+    },
+    {
+      "pageid": 3924,
+      "ns": 0,
+      "title": "Xiaomi Mi Max 3 (xiaomi-nitrogen)"
+    },
+    {
+      "pageid": 3586,
+      "ns": 0,
+      "title": "Xiaomi Mi Mix 2S (xiaomi-polaris)"
+    },
+    {
+      "pageid": 3639,
+      "ns": 0,
+      "title": "Xiaomi Mi Mix 3 (xiaomi-perseus)"
+    },
+    {
+      "pageid": 7513,
+      "ns": 0,
+      "title": "Xiaomi Mi Note 10 / Mi CC9 Pro (xiaomi-tucana)"
+    },
+    {
+      "pageid": 5857,
+      "ns": 0,
+      "title": "Xiaomi Mi Note 10 Lite (xiaomi-toco)"
+    },
+    {
+      "pageid": 1788,
+      "ns": 0,
+      "title": "Xiaomi Mi Note 2 (xiaomi-scorpio)"
+    },
+    {
+      "pageid": 1506,
+      "ns": 0,
+      "title": "Xiaomi Mi Note 3 (xiaomi-jason)"
+    },
+    {
+      "pageid": 4425,
+      "ns": 0,
+      "title": "Xiaomi Mi Pad (xiaomi-mocha)"
+    },
+    {
+      "pageid": 8607,
+      "ns": 0,
+      "title": "Xiaomi Mi Pad 2 (xiaomi-latte)"
+    },
+    {
+      "pageid": 2405,
+      "ns": 0,
+      "title": "Xiaomi Mi Pad 4 (xiaomi-clover)"
+    },
+    {
+      "pageid": 7546,
+      "ns": 0,
+      "title": "Xiaomi Mi Smart Clock (xiaomi-x04g)"
+    },
+    {
+      "pageid": 4974,
+      "ns": 0,
+      "title": "Xiaomi Mi TV Stick (xiaomi-aquaman)"
+    },
+    {
+      "pageid": 3688,
+      "ns": 0,
+      "title": "Xiaomi Pad 5 (xiaomi-nabu)"
+    },
+    {
+      "pageid": 3327,
+      "ns": 0,
+      "title": "Xiaomi Pad 5 Pro (xiaomi-elish)"
+    },
+    {
+      "pageid": 10851,
+      "ns": 0,
+      "title": "Xiaomi Pad 5 Pro 5G (xiaomi-enuma)"
+    },
+    {
+      "pageid": 5748,
+      "ns": 0,
+      "title": "Xiaomi Pad 6 (xiaomi-pipa)"
+    },
+    {
+      "pageid": 11596,
+      "ns": 0,
+      "title": "Xiaomi Pad 6S Pro 12.4 (xiaomi-sheng)"
+    },
+    {
+      "pageid": 12985,
+      "ns": 0,
+      "title": "Xiaomi Pad 7 (xiaomi-uke)"
+    },
+    {
+      "pageid": 12679,
+      "ns": 0,
+      "title": "Xiaomi Pad 7 Pro (xiaomi-muyu)"
+    },
+    {
+      "pageid": 13067,
+      "ns": 0,
+      "title": "Xiaomi Pad 8 Pro"
+    },
+    {
+      "pageid": 1018,
+      "ns": 0,
+      "title": "Xiaomi POCO F1 (xiaomi-beryllium)"
+    },
+    {
+      "pageid": 2053,
+      "ns": 0,
+      "title": "Xiaomi POCO F2 Pro / Redmi K30 Pro (xiaomi-lmi)"
+    },
+    {
+      "pageid": 2637,
+      "ns": 0,
+      "title": "Xiaomi POCO F3 / Redmi K40 / Mi 11X (xiaomi-alioth)"
+    },
+    {
+      "pageid": 6228,
+      "ns": 0,
+      "title": "Xiaomi POCO F5 / Redmi Note 12 Turbo (xiaomi-marble)"
+    },
+    {
+      "pageid": 6223,
+      "ns": 0,
+      "title": "Xiaomi POCO F5 Pro / Redmi K60 (xiaomi-mondrian)"
+    },
+    {
+      "pageid": 8382,
+      "ns": 0,
+      "title": "Xiaomi POCO F6 / Redmi Turbo 3 (xiaomi-peridot)"
+    },
+    {
+      "pageid": 14322,
+      "ns": 0,
+      "title": "Xiaomi POCO F6 Pro/ Redmi K70 (xiaomi-vermeer)"
+    },
+    {
+      "pageid": 3207,
+      "ns": 0,
+      "title": "Xiaomi POCO M2 Pro / Redmi Note 9S / Redmi Note 9 Pro / Redmi Note 9 Pro Max / Redmi Note 10 Lite (xiaomi-miatoll)"
+    },
+    {
+      "pageid": 8609,
+      "ns": 0,
+      "title": "Xiaomi POCO M3 (xiaomi-citrus)"
+    },
+    {
+      "pageid": 10660,
+      "ns": 0,
+      "title": "Xiaomi POCO M3 Pro / Redmi Note 10 5G / Redmi Note 10T / Redmi Note 11SE (China) (xiaomi-camellia)"
+    },
+    {
+      "pageid": 12993,
+      "ns": 0,
+      "title": "Xiaomi POCO M5 (xiaomi-stone)"
+    },
+    {
+      "pageid": 13441,
+      "ns": 0,
+      "title": "Xiaomi POCO M6 4G / Xiaomi Redmi 13 4G (xiaomi-moon)"
+    },
+    {
+      "pageid": 12774,
+      "ns": 0,
+      "title": "Xiaomi POCO M6 Pro 4G / Redmi Note 13 Pro 4G / Redmi Note 14S (xiaomi-emerald)"
+    },
+    {
+      "pageid": 10656,
+      "ns": 0,
+      "title": "Xiaomi POCO X2 / Redmi K30 (xiaomi-phoenix)"
+    },
+    {
+      "pageid": 2221,
+      "ns": 0,
+      "title": "Xiaomi POCO X3 NFC (xiaomi-surya)"
+    },
+    {
+      "pageid": 3414,
+      "ns": 0,
+      "title": "Xiaomi POCO X3 Pro (xiaomi-vayu)"
+    },
+    {
+      "pageid": 11338,
+      "ns": 0,
+      "title": "Xiaomi POCO X5 (xiaomi-moonstone)"
+    },
+    {
+      "pageid": 8831,
+      "ns": 0,
+      "title": "Xiaomi POCO X5 Pro / Redmi Note 12 Pro Speed (xiaomi-redwood)"
+    },
+    {
+      "pageid": 9193,
+      "ns": 0,
+      "title": "Xiaomi POCO X6 / Redmi Note 13 Pro 5G (xiaomi-garnet)"
+    },
+    {
+      "pageid": 7789,
+      "ns": 0,
+      "title": "Xiaomi Redmi 10 2022 (xiaomi-selene)"
+    },
+    {
+      "pageid": 6793,
+      "ns": 0,
+      "title": "Xiaomi Redmi 10C (xiaomi-fog)"
+    },
+    {
+      "pageid": 6705,
+      "ns": 0,
+      "title": "Xiaomi Redmi 12 (xiaomi-fire)"
+    },
+    {
+      "pageid": 11269,
+      "ns": 0,
+      "title": "Xiaomi Redmi 12C (xiaomi-earth)"
+    },
+    {
+      "pageid": 9226,
+      "ns": 0,
+      "title": "Xiaomi Redmi 14C (xiaomi-lake)"
+    },
+    {
+      "pageid": 12188,
+      "ns": 0,
+      "title": "Xiaomi Redmi 15 (xiaomi-spring)"
+    },
+    {
+      "pageid": 12187,
+      "ns": 0,
+      "title": "Xiaomi Redmi 15 5G (xiaomi-spring)"
+    },
+    {
+      "pageid": 451,
+      "ns": 0,
+      "title": "Xiaomi Redmi 1S (xiaomi-armani)"
+    },
+    {
+      "pageid": 711,
+      "ns": 0,
+      "title": "Xiaomi Redmi 2 (xiaomi-wt88047)"
+    },
+    {
+      "pageid": 4453,
+      "ns": 0,
+      "title": "Xiaomi Redmi 2A (xiaomi-lte26007)"
+    },
+    {
+      "pageid": 372,
+      "ns": 0,
+      "title": "Xiaomi Redmi 3 (xiaomi-ido)"
+    },
+    {
+      "pageid": 3187,
+      "ns": 0,
+      "title": "Xiaomi Redmi 3S (xiaomi-land)"
+    },
+    {
+      "pageid": 4369,
+      "ns": 0,
+      "title": "Xiaomi Redmi 4 Prime (xiaomi-markw)"
+    },
+    {
+      "pageid": 8331,
+      "ns": 0,
+      "title": "Xiaomi Redmi 4 Standart (xiaomi-prada)"
+    },
+    {
+      "pageid": 1512,
+      "ns": 0,
+      "title": "Xiaomi Redmi 4A (xiaomi-rolex)"
+    },
+    {
+      "pageid": 509,
+      "ns": 0,
+      "title": "Xiaomi Redmi 4X (xiaomi-santoni)"
+    },
+    {
+      "pageid": 6358,
+      "ns": 0,
+      "title": "Xiaomi Redmi 5 (xiaomi-rosy)"
+    },
+    {
+      "pageid": 1626,
+      "ns": 0,
+      "title": "Xiaomi Redmi 5 Plus (xiaomi-vince)"
+    },
+    {
+      "pageid": 2106,
+      "ns": 0,
+      "title": "Xiaomi Redmi 5A (xiaomi-riva)"
+    },
+    {
+      "pageid": 5598,
+      "ns": 0,
+      "title": "Xiaomi Redmi 6 (xiaomi-cereus)"
+    },
+    {
+      "pageid": 1521,
+      "ns": 0,
+      "title": "Xiaomi Redmi 6A (xiaomi-cactus)"
+    },
+    {
+      "pageid": 2756,
+      "ns": 0,
+      "title": "Xiaomi Redmi 7 (xiaomi-onclite)"
+    },
+    {
+      "pageid": 4798,
+      "ns": 0,
+      "title": "Xiaomi Redmi 7A (xiaomi-pine)"
+    },
+    {
+      "pageid": 4011,
+      "ns": 0,
+      "title": "Xiaomi Redmi 8 (xiaomi-olive)"
+    },
+    {
+      "pageid": 2194,
+      "ns": 0,
+      "title": "Xiaomi Redmi 9 (xiaomi-lancelot)"
+    },
+    {
+      "pageid": 7740,
+      "ns": 0,
+      "title": "Xiaomi Redmi 9A (xiaomi-dandelion)"
+    },
+    {
+      "pageid": 5490,
+      "ns": 0,
+      "title": "Xiaomi Redmi 9C (xiaomi-angelica)"
+    },
+    {
+      "pageid": 9511,
+      "ns": 0,
+      "title": "Xiaomi Redmi 9C NFC (xiaomi-angelican)"
+    },
+    {
+      "pageid": 12335,
+      "ns": 0,
+      "title": "Xiaomi Redmi 9T (xiaomi-lime)"
+    },
+    {
+      "pageid": 4348,
+      "ns": 0,
+      "title": "Xiaomi Redmi 9T NFC (xiaomi-lemon)"
+    },
+    {
+      "pageid": 13928,
+      "ns": 0,
+      "title": "Xiaomi Redmi A2 (xiaomi-water)"
+    },
+    {
+      "pageid": 3760,
+      "ns": 0,
+      "title": "Xiaomi Redmi Go (xiaomi-tiare)"
+    },
+    {
+      "pageid": 13325,
+      "ns": 0,
+      "title": "Xiaomi Redmi K30 5G / Redmi K30i (xiaomi-picasso)"
+    },
+    {
+      "pageid": 7338,
+      "ns": 0,
+      "title": "Xiaomi Redmi K70 Pro (xiaomi-manet)"
+    },
+    {
+      "pageid": 3331,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 10 Pro (xiaomi-sweet)"
+    },
+    {
+      "pageid": 9173,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 10S / POCO M5s (xiaomi-rosemary)"
+    },
+    {
+      "pageid": 9034,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 11 (xiaomi-spes)"
+    },
+    {
+      "pageid": 14132,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 11T Pro (+) / POCO X4 GT / Redmi K50i (xiaomi-xaga)"
+    },
+    {
+      "pageid": 11337,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 12 5G (xiaomi-sunstone)"
+    },
+    {
+      "pageid": 6952,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 12 Pro (xiaomi-sweet k6a)"
+    },
+    {
+      "pageid": 13796,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 12R / Redmi 12 5G / POCO M6 Pro 5G (xiaomi-sky)"
+    },
+    {
+      "pageid": 10287,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 13 (xiaomi-sapphire)"
+    },
+    {
+      "pageid": 12776,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 14 4G (xiaomi-tanzanite)"
+    },
+    {
+      "pageid": 12581,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 14 Pro+ (xiaomi-amethyst)"
+    },
+    {
+      "pageid": 14133,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 15 5G (xiaomi-kunzite)"
+    },
+    {
+      "pageid": 1011,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 3 (xiaomi-kenzo)"
+    },
+    {
+      "pageid": 540,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 4 (xiaomi-mido)"
+    },
+    {
+      "pageid": 8152,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 4 (xiaomi-nikel)"
+    },
+    {
+      "pageid": 2395,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 4G (xiaomi-dior)"
+    },
+    {
+      "pageid": 1466,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 5 Pro (xiaomi-whyred)"
+    },
+    {
+      "pageid": 7701,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 5A (xiaomi-ugglite)"
+    },
+    {
+      "pageid": 4464,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 5A Prime (xiaomi-ugg)"
+    },
+    {
+      "pageid": 3555,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 6 Pro (xiaomi-tulip)"
+    },
+    {
+      "pageid": 1054,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 7 (xiaomi-lavender)"
+    },
+    {
+      "pageid": 2205,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 7 Pro (xiaomi-violet)"
+    },
+    {
+      "pageid": 3377,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 8 (xiaomi-ginkgo)"
+    },
+    {
+      "pageid": 2314,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 8 Pro (xiaomi-begonia)"
+    },
+    {
+      "pageid": 1562,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 8T (xiaomi-willow)"
+    },
+    {
+      "pageid": 6693,
+      "ns": 0,
+      "title": "Xiaomi Redmi Note 9 / Redmi 10X 4G (xiaomi-merlin)"
+    },
+    {
+      "pageid": 5389,
+      "ns": 0,
+      "title": "Xiaomi Redmi Pad (xiaomi-yunluo)"
+    },
+    {
+      "pageid": 9792,
+      "ns": 0,
+      "title": "Xiaomi Redmi Pad Pro / POCO Pad (xiaomi-dizi)"
+    },
+    {
+      "pageid": 3591,
+      "ns": 0,
+      "title": "Xiaomi Redmi S2 / Redmi Y2 (xiaomi-ysl)"
+    },
+    {
+      "pageid": 1739,
+      "ns": 0,
+      "title": "Xtreamer Multi-Console"
+    },
+    {
+      "pageid": 7823,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 2G IoT (xunlong-orangepi-2g-iot)"
+    },
+    {
+      "pageid": 2704,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 3 (xunlong-orangepi3)"
+    },
+    {
+      "pageid": 9002,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 4 (xunlong-orangepi4)"
+    },
+    {
+      "pageid": 11954,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 4 Pro (xunlong-orangepi4-pro)"
+    },
+    {
+      "pageid": 557,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 4G-IoT (xunlong-orangepi4giot)"
+    },
+    {
+      "pageid": 6207,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 5 (xunlong-orangepi-5)"
+    },
+    {
+      "pageid": 7253,
+      "ns": 0,
+      "title": "Xunlong Orange Pi 5 Plus (xunlong-orangepi5-plus)"
+    },
+    {
+      "pageid": 8932,
+      "ns": 0,
+      "title": "Xunlong Orange Pi CM5 (xunlong-orangepi-cm5)"
+    },
+    {
+      "pageid": 4560,
+      "ns": 0,
+      "title": "Xunlong Orange Pi PC (xunlong-orangepi-pc)"
+    },
+    {
+      "pageid": 9473,
+      "ns": 0,
+      "title": "Xunlong Orange Pi RV2 (xunlong-orangepi-rv2)"
+    },
+    {
+      "pageid": 11465,
+      "ns": 0,
+      "title": "Xunlong Orange Pi Zero 2W (xunlong-orangepi-zero2w)"
+    },
+    {
+      "pageid": 10942,
+      "ns": 0,
+      "title": "Xunlong Orange Pi Zero 3 (xunlong-orangepi-zero3)"
+    },
+    {
+      "pageid": 1295,
+      "ns": 0,
+      "title": "Yu Yureka (yu-tomato)"
+    },
+    {
+      "pageid": 4846,
+      "ns": 0,
+      "title": "Zhihe series LTE dongles (generic-zhihe)"
+    },
+    {
+      "pageid": 11992,
+      "ns": 0,
+      "title": "Zinwa Q25 (zinwa-q25)"
+    },
+    {
+      "pageid": 2945,
+      "ns": 0,
+      "title": "ZTE Axon 7 (zte-axon7)"
+    },
+    {
+      "pageid": 12489,
+      "ns": 0,
+      "title": "ZTE Blade A7 2019 (MediaTek)"
+    },
+    {
+      "pageid": 949,
+      "ns": 0,
+      "title": "ZTE Blade AF3 (zte-p731a20)"
+    },
+    {
+      "pageid": 10901,
+      "ns": 0,
+      "title": "ZTE Blade L7"
+    },
+    {
+      "pageid": 9972,
+      "ns": 0,
+      "title": "ZTE Blade V7 Lite (zte-v0720)"
+    },
+    {
+      "pageid": 2995,
+      "ns": 0,
+      "title": "ZTE Blade V9 (zte-p450f10)"
+    },
+    {
+      "pageid": 2570,
+      "ns": 0,
+      "title": "ZTE Blade X3 (zte-t620)"
+    },
+    {
+      "pageid": 14235,
+      "ns": 0,
+      "title": "ZTE Geek 2 (zte-geek2)"
+    },
+    {
+      "pageid": 1255,
+      "ns": 0,
+      "title": "ZTE Grand X Max+ (zte-z987)"
+    },
+    {
+      "pageid": 497,
+      "ns": 0,
+      "title": "ZTE Kis 3 (zte-kis3)"
+    },
+    {
+      "pageid": 9763,
+      "ns": 0,
+      "title": "ZTE nubia RedMagic 10 Pro (nubia-slogan)"
+    },
+    {
+      "pageid": 14321,
+      "ns": 0,
+      "title": "ZTE nubia Z80 Ultra (nubia-qwbarley)"
+    },
+    {
+      "pageid": 12859,
+      "ns": 0,
+      "title": "ZTE ZXV10 B860H (zte-b860h)"
+    },
+    {
+      "pageid": 6796,
+      "ns": 0,
+      "title": "ZTE ZXV10 B860H V5 (zte-b860hv5)"
+    },
+    {
+      "pageid": 1852,
+      "ns": 0,
+      "title": "Zuk Z1 (zuk-z1-ham)"
+    }
+  ]
+}

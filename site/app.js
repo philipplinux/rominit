@@ -47,7 +47,7 @@ const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent
   h('span', { className: 'feature', title: ORIGINS[rom.origin], textContent: rom.origin }),
   h('span', { className: `feature ${({ stable: 'works', legacy: 'untested', broken: 'broken' })[rom.status] ?? 'partial'}`, title: STATUSES[rom.status], textContent: rom.status }),
   rom.vetting === 'curated' ? h('span', { className: 'feature works', title: VETTING.curated, textContent: 'curated ★' })
-    : h('span', { className: 'feature partial', title: VETTING.scraped, textContent: 'scraped · unverified' }),
+    : h('span', { className: 'feature partial', title: VETTING.scraped, textContent: 'scraped · unverified' }, placeholderMark()),
   h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}; ${VETTING[rom.vetting]}` }));
 const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
 /** Where the ROM comes from: release page and source code, first thing in section 0. @param {any} rom */
@@ -232,10 +232,12 @@ function commentsBox(key) {
   return box;
 }
 /** "maintainer: name (all postmarketOS)"; verified owners, else the scraped placeholder. Hidden where there is no API. @param {string} key @param {{name:string, avatar?:string, source:string}} [hint] */
+/** Marks anything a scraper filled in. A scraped name is only text: never matched to an account with that username; owners come from roles an admin grants. */
+const placeholderMark = () => h('span', { className: 'placeholder-mark', title: 'Filled in by a scraper: not checked, and not linked to any ROMinit account with this name.', textContent: 'placeholder' });
 function ownersRow(key, hint) {
   const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'maintainer' }));
   // Scraped maintainer (catalog `maintainer`): a placeholder, always marked unverified until they claim the ROM.
-  const placeholder = () => hint ? [h('span', { className: 'feature maintainer-hint' }, hint.avatar && h('img', { src: hint.avatar, alt: '', width: 18, height: 18 }), hint.name),
+  const placeholder = () => hint ? [h('span', { className: 'feature maintainer-hint' }, hint.avatar && h('img', { src: hint.avatar, alt: '', width: 18, height: 18 }), hint.name, placeholderMark()),
     h('small', {}, 'unverified · found at ', link(hint.source, new URL(hint.source).hostname), ' · subject to verification')] : [h('span', { className: 'feature untested', textContent: 'no verified maintainer yet' })];
   fetch(`./api/owners?rom=${encodeURIComponent(key)}`).then(r => r.ok ? r.json() : Promise.reject()).then((/** @type {any[]} */ owners) => {
     row.append(...(owners.length ? owners.map(o => h('span', { className: 'feature works', textContent: `✓ ${o.name}${o.scope.startsWith('rom:') ? '' : ` (${o.scope.replace(':', ' ')})`}` }))
@@ -738,7 +740,7 @@ async function start() {
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
   const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
-    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}, ${r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
+    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}, ${r.vetting === 'scraped' ? 'scraped placeholder' : r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
@@ -846,6 +848,8 @@ async function start() {
       ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {
         e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
       '. Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }), '.')));
+  // Scraped ROM: its info and flash steps are placeholders until checked.
+  if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark());
   if (romCards.length) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   main.append(
     h('section', { className: 'intro' },

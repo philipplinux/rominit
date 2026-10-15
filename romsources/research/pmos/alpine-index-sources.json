@@ -1,0 +1,1111 @@
+{
+  "captured_at": "2026-10-15T22:45:36+00:00",
+  "sources": {
+    "stable/aarch64": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/aarch64/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 12:54:21 GMT",
+      "content_length": "529431",
+      "http_status": 200,
+      "origin": "Alpine:v3.24",
+      "package_count": 5983,
+      "overlap_package_count": 6,
+      "version_conflicts": [
+        {
+          "package": "xkeyboard-config-lang",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-doc",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-dev",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "stable/armv7": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/armv7/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 12:54:21 GMT",
+      "content_length": "527046",
+      "http_status": 200,
+      "origin": "Alpine:v3.24",
+      "package_count": 5958,
+      "overlap_package_count": 6,
+      "version_conflicts": [
+        {
+          "package": "xkeyboard-config-doc",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-dev",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-lang",
+          "pmos_version": "99992.47-r0",
+          "alpine_version": "2.47-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "stable/x86_64": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/x86_64/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 08:50:56 GMT",
+      "content_length": "528376",
+      "http_status": 200,
+      "origin": "Alpine:v3.24",
+      "package_count": 5961,
+      "overlap_package_count": 2,
+      "version_conflicts": [
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/aarch64": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/aarch64/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:48:23 GMT",
+      "content_length": "532390",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 6034,
+      "overlap_package_count": 12,
+      "version_conflicts": [
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-doc",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-lang",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-dev",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/armhf": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/armhf/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:48:40 GMT",
+      "content_length": "525979",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 5973,
+      "overlap_package_count": 2,
+      "version_conflicts": [
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/armv7": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/armv7/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:48:33 GMT",
+      "content_length": "529982",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 6009,
+      "overlap_package_count": 12,
+      "version_conflicts": [
+        {
+          "package": "xkeyboard-config-lang",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-dev",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "xkeyboard-config-doc",
+          "pmos_version": "99992.48-r0",
+          "alpine_version": "2.48-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/x86_64": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/x86_64/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:51:03 GMT",
+      "content_length": "531400",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 6013,
+      "overlap_package_count": 8,
+      "version_conflicts": [
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/x86": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/x86/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:48:32 GMT",
+      "content_length": "529031",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 6003,
+      "overlap_package_count": 8,
+      "version_conflicts": [
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/loongarch64": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/loongarch64/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:50:25 GMT",
+      "content_length": "528003",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 5968,
+      "overlap_package_count": 8,
+      "version_conflicts": [
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/riscv64": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/riscv64/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 18:24:58 GMT",
+      "content_length": "525221",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 5959,
+      "overlap_package_count": 8,
+      "version_conflicts": [
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        }
+      ]
+    },
+    "edge/ppc64le": {
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/ppc64le/APKINDEX.tar.gz",
+      "last_modified": "Thu, 15 Oct 2026 17:48:10 GMT",
+      "content_length": "525429",
+      "http_status": 200,
+      "origin": "Alpine:edge",
+      "package_count": 5966,
+      "overlap_package_count": 8,
+      "version_conflicts": [
+        {
+          "package": "eudev",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-netifnames",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-rule-generator",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-doc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-openrc",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "eudev-hwids",
+          "pmos_version": "9999.3.2.14-r7",
+          "alpine_version": "3.2.14-r8",
+          "selected": "postmarketOS"
+        },
+        {
+          "package": "akms-doc",
+          "pmos_version": "99990.3.0-r1",
+          "alpine_version": "0.3.0-r0",
+          "selected": "postmarketOS"
+        }
+      ]
+    }
+  },
+  "pmos_precedence": "For duplicate package names, postmarketOS APKINDEX records replace Alpine base records.",
+  "duplicate_package_conflicts": {
+    "stable/aarch64": [
+      {
+        "package": "xkeyboard-config-lang",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-doc",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-dev",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      }
+    ],
+    "stable/armv7": [
+      {
+        "package": "xkeyboard-config-doc",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-dev",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-lang",
+        "pmos_version": "99992.47-r0",
+        "alpine_version": "2.47-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      }
+    ],
+    "stable/x86_64": [
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/aarch64": [
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-doc",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-lang",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-dev",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/armhf": [
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/armv7": [
+      {
+        "package": "xkeyboard-config-lang",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-dev",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "xkeyboard-config-doc",
+        "pmos_version": "99992.48-r0",
+        "alpine_version": "2.48-r0",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/x86_64": [
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/x86": [
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/loongarch64": [
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/riscv64": [
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      }
+    ],
+    "edge/ppc64le": [
+      {
+        "package": "eudev",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-netifnames",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-rule-generator",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-doc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-openrc",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "eudev-hwids",
+        "pmos_version": "9999.3.2.14-r7",
+        "alpine_version": "3.2.14-r8",
+        "selected": "postmarketOS"
+      },
+      {
+        "package": "akms-doc",
+        "pmos_version": "99990.3.0-r1",
+        "alpine_version": "0.3.0-r0",
+        "selected": "postmarketOS"
+      }
+    ]
+  }
+}
