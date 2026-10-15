@@ -4,3 +4,5 @@ dist/
 *.tar*
 *.zip
 *.log
+.wrangler/
+.dev.vars

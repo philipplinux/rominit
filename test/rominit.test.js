@@ -138,3 +138,17 @@ test('completeness counts partial as half and skips n/a', () => {
 test('checksum streams to the right digest', async () => {
   assert.equal(await checksum(new Blob(['abc'])), sha('abc'));
 });
+
+test('ratings API validates votes and stores only a hashed address', async () => {
+  const { onRequestPost } = await import('../functions/api/ratings.js');
+  const runs = [];
+  const env = { SALT: 'test', DB: { prepare: () => ({ bind: (...args) => ({ run: async () => runs.push(args) }) }) },
+    ASSETS: { fetch: async () => Response.json(devices.map(d => ({ codename: d.codename, roms: d.roms }))) } };
+  const post = body => onRequestPost({ env, request: new Request('https://x/api/ratings', { method: 'POST', body: JSON.stringify(body), headers: { 'cf-connecting-ip': '203.0.113.9' } }) });
+  assert.equal((await post({ rom: 'starlte/pmos-server', stars: 6 })).status, 400);
+  assert.equal((await post({ rom: 'starlte/nope', stars: 5 })).status, 404);
+  assert.equal((await onRequestPost({ env: { ...env, SALT: '' }, request: new Request('https://x', { method: 'POST', body: '{}' }) })).status, 503);
+  const rom = `starlte/${device('starlte').roms[0].id}`;
+  assert.equal((await post({ rom, stars: 4 })).status, 200);
+  assert.deepEqual(runs.map(([r, voter, stars]) => [r, /^[0-9a-f]{64}$/.test(voter), stars]), [[rom, true, 4]]);
+});

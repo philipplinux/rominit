@@ -43,3 +43,17 @@ npm run build   # dist/
 ## Support
 
 Free and MIT licensed. If it saved your phone: [buy me a coffee](https://www.buymeacoffee.com/philipplinux).
+
+## Hosting
+
+Cloudflare Pages serves `dist/` (static, no bandwidth cost). The only server code is `functions/api/ratings.js`: user star ratings in D1, one vote per address per ROM, stored as a salted hash. Firmware never passes through it.
+
+```sh
+npx wrangler login
+npx wrangler d1 create rominit          # put the id into wrangler.toml
+npx wrangler d1 execute rominit --remote --file schema.sql
+npm run build && npx wrangler pages deploy
+npx wrangler pages secret put SALT      # any long random string
+```
+
+Local: `echo SALT=dev > .dev.vars`, `npx wrangler d1 execute rominit --local --file schema.sql`, `npx wrangler pages dev dist`.

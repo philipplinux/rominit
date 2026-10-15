@@ -46,7 +46,27 @@ const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.k
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
-    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked} · user ratings coming` }));
+    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked}` }));
+/** User stars from the ratings API; stays hidden where there is no API (static preview). @param {string} key `<codename>/<rom id>` */
+function starsRow(key) {
+  const summary = h('span', { className: 'feature' }), status = h('small', {});
+  const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'users' }), summary);
+  const show = (/** @type {any} */ all) => { const r = all[key]; summary.textContent = r ? `★ ${r.stars} / 5 · ${r.votes} vote${r.votes === 1 ? '' : 's'}` : 'no votes yet'; row.hidden = false; };
+  const load = () => fetch('./api/ratings', { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then(show, () => {});
+  for (const n of [1, 2, 3, 4, 5]) {
+    const button = h('button', { type: 'button', className: 'feature star', textContent: '★'.repeat(n), title: `Rate ${n} of 5` });
+    button.addEventListener('click', async () => {
+      status.textContent = 'Saving…';
+      const response = await fetch('./api/ratings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, stars: n }) }).catch(() => null);
+      status.textContent = response?.ok ? `Thanks, you rated ${n} / 5.` : 'Could not save the rating.';
+      load();
+    });
+    row.append(button);
+  }
+  row.append(status);
+  load();
+  return row;
+}
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB' };
 /** One readable line per step for the card. @param {any[]} step */
@@ -206,6 +226,7 @@ async function start() {
       tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
     section('2 · ROM', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
+      rom && starsRow(`${device.codename}/${rom.id}`),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
