@@ -1,0 +1,26 @@
+{
+  "source_project": "https://gitlab.postmarketos.org/postmarketOS/pmaports",
+  "source_default_branch": "main",
+  "source_commit": "0e458a2417d6f5ed61c7b70621d5632e30136091",
+  "source_commit_url": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/commit/0e458a2417d6f5ed61c7b70621d5632e30136091",
+  "source_tree": "device/*/device-*/APKBUILD and matching kernel APKBUILDs under device/*/",
+  "regeneration": "python archived-recipes.py /path/to/pmaports-checkout",
+  "method": "Read APKBUILD text only. Static top-level pkgname/pkgver/pkgrel/depends/source/url/_commit/_tag fields are extracted; APKBUILD shell is never executed. Device-to-kernel links use explicit linux-* tokens in depends. Source URL templates are retained without expanding shell variables; the recipe url field is recorded separately.",
+  "interpretation": "These are package recipes present at the snapshot commit, including archived/unmaintained recipes. Recipe presence and package version do not establish maintained support or a bootable port. pkgver/pkgrel are APK package versions, not necessarily uname -r.",
+  "counts": {
+    "archived_device_recipes": 456,
+    "output_rows": 456,
+    "static_device_to_kernel_links_resolved": 422,
+    "device_recipes_with_unresolved_items": 119,
+    "current_device_kernel_recipes_indexed": 428,
+    "all_device_recipes": 669,
+    "all_device_output_rows": 669,
+    "all_device_static_kernel_links_resolved": 594,
+    "all_device_recipes_with_unresolved_items": 277
+  },
+  "known_limits": [
+    "Computed, conditional, or indirect shell values remain blank or are marked unresolved; the parser does not evaluate them.",
+    "Only explicit linux-* package tokens in the device recipe depends field create a mapping.",
+    "Source URL templates and the separate recipe url field are preserved as written; templates may contain unresolved shell variables."
+  ]
+}

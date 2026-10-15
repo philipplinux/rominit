@@ -6,6 +6,3 @@ dist/
 *.log
 .wrangler/
 .dev.vars
-romsources/
-.agents/
-.claude/
