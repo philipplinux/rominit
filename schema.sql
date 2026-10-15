@@ -44,8 +44,9 @@ CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   provider TEXT NOT NULL,  -- google | github
   subject TEXT NOT NULL,   -- the provider's stable user id
-  name TEXT NOT NULL,
-  email TEXT,
+  name TEXT NOT NULL,      -- shown on comments; the provider's name until the user picks one
+  name_chosen INTEGER NOT NULL DEFAULT 0, -- 1 once picked: logins no longer overwrite it
+  email TEXT,              -- never shown; only matched against ADMINS
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (provider, subject)
 );

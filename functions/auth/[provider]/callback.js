@@ -6,7 +6,7 @@ async function profile(name, token) {
   const headers = { authorization: `Bearer ${token}`, 'user-agent': 'rominit', accept: 'application/json' };
   if (name === 'google') {
     const p = await (await fetch('https://openidconnect.googleapis.com/v1/userinfo', { headers })).json();
-    return { subject: String(p.sub), name: p.name || p.email, email: p.email_verified ? p.email : null };
+    return { subject: String(p.sub), name: p.name || 'user', email: p.email_verified ? p.email : null };
   }
   const p = await (await fetch('https://api.github.com/user', { headers })).json();
   const emails = await (await fetch('https://api.github.com/user/emails', { headers })).json().catch(() => []);
@@ -26,7 +26,7 @@ export async function onRequestGet({ request, env, params }) {
   if (!access_token) return new Response('login failed at the provider', { status: 502 });
   const p = await profile(name, access_token);
   const user = await env.DB.prepare(`INSERT INTO users (provider, subject, name, email) VALUES (?1, ?2, ?3, ?4)
-    ON CONFLICT (provider, subject) DO UPDATE SET name = excluded.name, email = excluded.email RETURNING id`).bind(name, p.subject, String(p.name).slice(0, 60), p.email).first();
+    ON CONFLICT (provider, subject) DO UPDATE SET name = CASE WHEN users.name_chosen THEN users.name ELSE excluded.name END, email = excluded.email RETURNING id`).bind(name, p.subject, String(p.name).slice(0, 60), p.email).first();
   const token = randomToken();
   await env.DB.prepare("INSERT INTO sessions (token, user_id, expires) VALUES (?1, ?2, datetime('now', '+30 days'))").bind(await sha256hex(token), user.id).run();
   const headers = new Headers({ location: safeReturn(back) });

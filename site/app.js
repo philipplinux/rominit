@@ -145,7 +145,18 @@ const PROVIDER_LOGOS = /** @type {Record<string, string>} */ ({
 me.then(info => {
   if (!info?.providers.length && !info?.user) return;
   const slot = h('span', { className: 'account' });
-  if (info.user) slot.append(`${info.user.name} · `, h('button', { type: 'button', className: 'link-button', textContent: 'SIGN OUT', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }));
+  if (info.user) {
+    const input = h('input', { value: info.user.name, maxLength: 30, required: true }), status = h('small', { textContent: 'Shown on your comments. Your email is never shown.' });
+    const pop = h('form', { id: 'username', popover: 'auto', className: 'signin-pop', async onsubmit(/** @type {Event} */ e) {
+      e.preventDefault();
+      const r = await fetch('./api/me', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: input.value }) });
+      const body = await r.json().catch(() => ({}));
+      if (r.ok) location.reload(); else status.textContent = body.error ?? 'could not save';
+    } }, h('strong', { textContent: 'Your username' }), input, h('button', { type: 'submit', className: 'button', textContent: 'Save' }), status);
+    const edit = h('button', { type: 'button', className: 'link-button', title: 'Change your username', textContent: `${info.user.name} ✎` });
+    edit.popoverTargetElement = pop;
+    slot.append(edit, ' · ', h('button', { type: 'button', className: 'link-button', textContent: 'SIGN OUT', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }), pop);
+  }
   else {
     const back = encodeURIComponent(location.pathname + location.search);
     const pop = h('div', { id: 'signin', popover: 'auto', className: 'signin-pop' }, h('strong', { textContent: 'Sign in to ROMinit' }),

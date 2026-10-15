@@ -276,7 +276,7 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
 
   await signIn('ada', 'owner', `rom:${rom}`);
   await page.reload();
-  await page.locator('.topbar-side .account').getByText('ada ·').waitFor();
+  await page.locator('.topbar-side .account').getByText('ada ✎').waitFor();
   await page.locator('.rating', { hasText: 'maintainer' }).getByText('✓ ada').waitFor();
   await box.locator('textarea').fill('bench comment');
   await box.locator('input[type=file]').setInputFiles({ name: 'shot.png', mimeType: 'image/png', buffer: PNG });
@@ -361,6 +361,24 @@ test('phone test: one command, script output becomes a tappable report card with
   assert.match(row, /\\"touch\\":\\"full\\"/); assert.match(row, /\\"camera\\":\\"blocked\\"/); assert.match(row, /\\"gps\\":\\"inconclusive\\"/);
   assert.equal((await fetch(url[1])).status, 404, 'code closes after submit');
   assert.match(d1('--command', `SELECT inbox FROM inbox WHERE ref = '${code}'`), /"inbox": "benchmarks"/, 'submitted card lands in the benchmarks inbox');
+});
+
+test('pick a username: checked, unique, kept; email never shown', async () => {
+  await signIn('grace');
+  await page.goto(`${BASE}/?device=starlte`);
+  const edit = page.locator('.topbar-side .account button', { hasText: 'grace ✎' });
+  await edit.click();
+  const form = page.locator('#username');
+  await form.locator('input').fill('grace@example.com');
+  await form.getByRole('button', { name: 'Save' }).click();
+  await form.getByText('2 to 30 letters').waitFor();
+  await form.locator('input').fill('ADA');
+  await form.getByRole('button', { name: 'Save' }).click();
+  await form.getByText('that name is taken').waitFor();
+  await form.locator('input').fill('Grace H');
+  await form.getByRole('button', { name: 'Save' }).click();
+  await page.locator('.topbar-side .account button', { hasText: 'Grace H ✎' }).waitFor();
+  await signIn(null);
 });
 
 test('report form', async () => {

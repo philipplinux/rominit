@@ -442,3 +442,4 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .signin-badge.google { background: #fff; color: #1f1f1f; border: 1px solid #747775; }
 .signin-badge.github { background: #24292f; color: #fff; border: 1px solid #57606a; }
 .signin-badge:hover { filter: brightness(1.08); }
+.signin-pop input { padding: .5rem .6rem; border: 1px solid var(--line); background: rgb(0 0 0 / 25%); color: inherit; font: inherit; }
