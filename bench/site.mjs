@@ -134,7 +134,7 @@ test('ROM select groups by origin; stock ROMs only under Recover / revert', asyn
   await page.goto(`${BASE}/?device=laurel_sprout`);
   const labels = await page.locator('select optgroup').evaluateAll(groups => groups.map(g => g.getAttribute('label')));
   assert.ok(!labels.includes('stock'), 'stock is not offered as a ROM');
-  const revert = page.locator('details.page-section', { hasText: '5 · Recover / revert' });
+  const revert = page.locator('details.page-section', { hasText: 'R · Recover / revert' });
   await revert.locator(':scope > summary').click();
   assert.equal(await revert.locator('.stage-card').count(), 1);
   assert.match(await revert.locator('.stage-card details summary').innerText(), /^\d+ steps$/, 'long step lists collapse');
