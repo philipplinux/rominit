@@ -297,3 +297,6 @@ progress::-moz-progress-bar { background: var(--teal); }
 .device-tree .unsupported { color: var(--faint); }
 .device-tree li { display: block; }
 .device-tree li a { white-space: nowrap; }
+.back-link { display: inline-block; margin-bottom: .9rem; color: var(--muted); font-size: .65rem; letter-spacing: .13em; text-decoration: none; }
+.back-link:hover { color: var(--teal); }
+.topbar-note a { margin-right: .9rem; color: var(--amber); text-decoration: none; }

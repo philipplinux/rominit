@@ -57,5 +57,6 @@ npx wrangler pages secret put SALT      # any long random string
 ```
 
 Reports from "Something wrong on this page?": `npx wrangler d1 execute rominit --remote --command "SELECT id, page, text, at FROM reports ORDER BY id DESC LIMIT 50"`.
+Comment screenshots stay hidden until approved. Pending: `npx wrangler d1 execute rominit --remote --command "SELECT comment_id FROM comment_images WHERE approved = 0"`. Approve: `... --command "UPDATE comment_images SET approved = 1 WHERE comment_id = <id>"`. Delete a comment: `... --command "DELETE FROM comment_images WHERE comment_id = <id>; DELETE FROM comments WHERE id = <id>"`.
 
 Local: `echo SALT=dev > .dev.vars`, `npx wrangler d1 execute rominit --local --file schema.sql`, `npx wrangler pages dev dist`.

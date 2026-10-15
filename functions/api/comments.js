@@ -1,13 +1,17 @@
 // Comments per ROM: Cloudflare Pages Function with D1 binding `DB` and secret `SALT`.
 // Plain text only (the page renders it with textContent), plus an optional WebP screenshot the browser
-// re-encoded (strips EXIF). Remove one with:
+// re-encoded (strips EXIF). Screenshots stay hidden until approved:
+//   npx wrangler d1 execute rominit --remote --command "SELECT comment_id FROM comment_images WHERE approved = 0"
+//   (look: download the blob or set approved for a moment) then
+//   npx wrangler d1 execute rominit --remote --command "UPDATE comment_images SET approved = 1 WHERE comment_id = <id>"
+// Remove one with:
 //   npx wrangler d1 execute rominit --remote --command "DELETE FROM comment_images WHERE comment_id = <id>; DELETE FROM comments WHERE id = <id>"
 import { json, knownRom, voterOf } from '../_lib/api.js';
 
 /** Newest 100 comments of one ROM. @param {{request:Request, env:any}} context */
 export async function onRequestGet({ request, env }) {
   const rom = new URL(request.url).searchParams.get('rom') ?? '';
-  const { results } = await env.DB.prepare(`SELECT c.id, c.name, c.text, c.at, i.comment_id IS NOT NULL AS image FROM comments c
+  const { results } = await env.DB.prepare(`SELECT c.id, c.name, c.text, c.at, CASE WHEN i.comment_id IS NULL THEN NULL WHEN i.approved THEN 'approved' ELSE 'pending' END AS image FROM comments c
     LEFT JOIN comment_images i ON i.comment_id = c.id WHERE c.rom = ?1 ORDER BY c.id DESC LIMIT 100`).bind(rom).all();
   return json(results);
 }

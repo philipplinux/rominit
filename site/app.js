@@ -103,7 +103,8 @@ function commentsBox(key) {
   const url = `./api/comments?rom=${encodeURIComponent(key)}`;
   const load = () => fetch(url, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then((/** @type {any[]} */ rows) => {
     list.replaceChildren(...rows.map(c => h('li', {}, h('small', { textContent: `${c.name} · ${c.at.slice(0, 16)} UTC` }), h('p', { textContent: c.text }),
-      c.image ? h('a', { href: `./api/image?id=${c.id}`, target: '_blank' }, h('img', { src: `./api/image?id=${c.id}`, alt: 'screenshot', loading: 'lazy' })) : '')));
+      c.image === 'approved' ? h('a', { href: `./api/image?id=${c.id}`, target: '_blank' }, h('img', { src: `./api/image?id=${c.id}`, alt: 'screenshot', loading: 'lazy' }))
+        : c.image ? h('small', { textContent: 'Screenshot awaiting review.' }) : '')));
     if (!rows.length) list.append(h('li', {}, h('small', { textContent: 'No comments yet.' })));
     box.hidden = false;
   }, () => {});
@@ -113,7 +114,7 @@ function commentsBox(key) {
     try { image = await webp(shot.files?.[0]); } catch { status.textContent = 'Could not use that screenshot (too large or not an image).'; return; }
     const response = await fetch('./api/comments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, name: name.value, text: text.value, image }) }).catch(() => null);
     const reply = await response?.json().catch(() => ({}));
-    status.textContent = response?.ok ? 'Posted.' : `Could not post: ${reply?.error ?? 'network error'}.`;
+    status.textContent = response?.ok ? (image ? 'Posted. The screenshot shows after review.' : 'Posted.') : `Could not post: ${reply?.error ?? 'network error'}.`;
     if (response?.ok) { text.value = ''; shot.value = ''; load(); }
   });
   load();
@@ -303,6 +304,8 @@ async function start() {
   const tools = rom && flashable(rom) ? cards(rom, 'tools') : [];
   main.append(
     h('section', { className: 'intro' },
+      h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {
+        if (document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } } }),
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),
         ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),

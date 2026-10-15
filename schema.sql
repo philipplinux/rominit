@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS comments (
 CREATE INDEX IF NOT EXISTS comments_rom ON comments (rom, id);
 CREATE TABLE IF NOT EXISTS comment_images (
   comment_id INTEGER PRIMARY KEY, -- comments.id
-  data BLOB NOT NULL              -- WebP, re-encoded in the browser, <= 400 KB
+  data BLOB NOT NULL,             -- WebP, re-encoded in the browser, <= 400 KB
+  approved INTEGER NOT NULL DEFAULT 0 -- served only once the owner sets 1
 );
 
 CREATE TABLE IF NOT EXISTS reports (
