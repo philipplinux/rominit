@@ -333,7 +333,7 @@ function benchBox(rom, key) {
     const send = h('button', { type: 'button', className: 'button button-primary', textContent: 'Send report card', async onclick() {
       send.disabled = true; status.textContent = 'Sending…';
       const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, final, note: note.value }) }).catch(() => null);
-      if (r?.ok) { status.textContent = 'Thank you! Your report card helps the next person pick a ROM.'; send.textContent = '✓ Sent'; }
+      if (r?.ok) { status.textContent = 'Thank you! Your report card helps the next person pick a ROM.'; send.textContent = '✓ Sent'; box.dispatchEvent(new Event('bench-sent', { bubbles: true })); }
       else { send.disabled = false; status.textContent = `Could not send: ${(await r?.json().catch(() => ({})))?.error ?? 'network error'}.`; }
     } });
     const failed = FEATURES.filter(f => features[f]?.status === 'inconclusive');
@@ -560,7 +560,7 @@ async function start() {
   // Progress on this phone in one record per device: locked-in ROM, ticked unlock steps, TWRP, flashed ROMs.
   // ponytail: this browser only; user accounts can sync the same record later.
   const progressKey = `progress:${codename}`;
-  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[]}} */ let progress = {};
+  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[], tested?:string[]}} */ let progress = {};
   try { progress = JSON.parse(localStorage.getItem(progressKey) ?? '{}'); } catch { /* private window */ }
   const save = () => { try { localStorage.setItem(progressKey, JSON.stringify(progress)); } catch { /* private window */ } };
   /** @type {HTMLButtonElement[]} */ const lockButtons = [];
@@ -574,8 +574,9 @@ async function start() {
     return button;
   };
   const infoSection = section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
-      h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect, lockButton(),
-      rom?.screenshots?.length && slideshow(rom.screenshots),
+      h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
+      // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
+      rom ? h('div', { className: 'lock-path' }, rom?.screenshots?.length && slideshow(rom.screenshots),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
@@ -583,8 +584,8 @@ async function start() {
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
-      rom && requirementsRow(rom),
-      rom && lockButton(),
+      rom && requirementsRow(rom)) : '',
+      rom && h('div', { className: 'lock-end' }, lockButton()),
       rom?.login && loginRow(rom.login),
       rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `), rom.homepage && link(rom.homepage, 'Release page')),
       rom && commentsBox(`${device.codename}/${rom.id}`)], rom ? 'REQUIRED' : '');
@@ -613,6 +614,10 @@ async function start() {
   let twrpDone = 0;
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
   if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
+  // Optional, so never amber; it goes green once a report card for this ROM was sent from this browser.
+  const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`)], 'OPTIONAL');
+  const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
+  if (rom) { testSection.addEventListener('bench-sent', () => { progress.tested = [...new Set([...progress.tested ?? [], rom.id])]; save(); markTested(); }); markTested(); }
   const romCards = rom && flashable(rom) ? cards(rom, 'rom') : [];
   const romSection = section('3 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
       rom && requirementsRow(rom),
@@ -641,7 +646,7 @@ async function start() {
     unlockSection,
     twrpSection,
     romSection,
-    rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`)]),
+    testSection,
     section('5 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),

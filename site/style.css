@@ -323,9 +323,9 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .pivots dd { margin: .15rem 0 0; }
 
 .page-section.required { border-color: var(--amber); background: rgb(230 195 154 / 7%); }
-.page-section.required.done { border-color: var(--teal); background: rgb(168 197 160 / 8%); }
+.page-section.done { border-color: var(--teal); background: rgb(168 197 160 / 8%); }
 .page-section.done .badge { border-color: var(--teal); color: var(--teal); }
-.page-section:not(.required) .badge { border-color: var(--line); color: var(--faint); }
+.page-section:not(.required):not(.done) .badge { border-color: var(--line); color: var(--faint); }
 .guide label { cursor: pointer; }
 
 .congrats { border-left: 2px solid var(--teal); padding: .5rem .8rem; color: var(--teal); }
@@ -336,6 +336,16 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .requirements { font-size: .75rem; }
 .lock-in { margin-top: .5rem; max-width: calc(100% - 2 * clamp(16px, 3vw, 28px)); white-space: normal; text-align: left; }
 .done .lock-in { border-color: var(--teal); color: var(--teal); }
+.rom-pick { display: flex; flex-wrap: wrap; gap: .6rem; align-items: stretch; }
+.rom-pick select { flex: 1 1 18rem; min-width: 0; }
+.rom-pick .lock-in { margin-top: 0; flex: 0 1 auto; }
+.lock-path { --arrow: var(--amber); --gap: 2.5rem; position: relative; margin-right: var(--gap) !important; padding-right: 1.5rem; border-right: 2px dashed var(--arrow); border-bottom-right-radius: 14px; padding-bottom: 1.2rem; }
+.lock-path::after { content: ''; position: absolute; bottom: 0; left: calc(50% + var(--gap) / 2); right: -2px; border-bottom: 2px dashed var(--arrow); border-bottom-right-radius: 14px; }
+.lock-path::before { content: '▼'; position: absolute; bottom: -1.05rem; left: calc(50% + var(--gap) / 2); transform: translateX(-50%); color: var(--arrow); font-size: .9rem; line-height: 1; }
+.done .lock-path { --arrow: var(--teal); }
+.lock-end { display: flex; justify-content: center; margin-top: 1.4rem !important; }
+.lock-end .lock-in { margin-top: 0; text-align: center; }
+@media (max-width: 640px) { .lock-path { --gap: 1rem; padding-right: .8rem; } }
 
 .start-over { float: right; border: 0; background: none; color: var(--faint); font: inherit; font-size: .6rem; letter-spacing: .08em; cursor: pointer; text-decoration: underline; }
 

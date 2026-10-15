@@ -320,6 +320,8 @@ test('phone test: one command, script output becomes a tappable report card with
   assert.match(await camera.getAttribute('class') ?? '', /blocked/);
   await test4.getByRole('button', { name: 'Send report card' }).click();
   await test4.getByText('Thank you!').waitFor();
+  assert.equal(await test4.locator(':scope > summary .badge').innerText(), 'COMPLETED', 'optional section 4 goes green once sent');
+  assert.ok(await test4.evaluate(el => el.classList.contains('done')));
   const code = url[1].split('/').pop();
   const row = d1('--command', `SELECT final, submitted FROM bench_runs WHERE code = '${code}'`);
   assert.match(row, /\\"touch\\":\\"full\\"/); assert.match(row, /\\"camera\\":\\"blocked\\"/); assert.match(row, /\\"gps\\":\\"inconclusive\\"/);
