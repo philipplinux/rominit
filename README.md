@@ -29,6 +29,7 @@ Copy an existing device as a template.
 npm ci
 npm run check   # types
 npm test        # recipes, catalog validator, downloads
+npm run bench   # website end to end: real Chromium against wrangler pages dev + fresh local D1 (build first; CHROMIUM, BENCH_PORT)
 npm run build   # dist/
 ```
 
