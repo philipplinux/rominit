@@ -101,7 +101,7 @@ test('ROM select groups by origin; stock ROMs only under Recover / revert', asyn
   await page.goto(`${BASE}/?device=laurel_sprout`);
   const labels = await page.locator('select optgroup').evaluateAll(groups => groups.map(g => g.getAttribute('label')));
   assert.ok(!labels.includes('stock'), 'stock is not offered as a ROM');
-  const revert = page.locator('details.page-section', { hasText: '4 · Recover / revert' });
+  const revert = page.locator('details.page-section', { hasText: '5 · Recover / revert' });
   await revert.locator(':scope > summary').click();
   assert.equal(await revert.locator('.stage-card').count(), 1);
   assert.match(await revert.locator('.stage-card details summary').innerText(), /^\d+ steps$/, 'long step lists collapse');
@@ -116,7 +116,7 @@ test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
 test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM, recover', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
   await page.locator('.page-section').nth(4).waitFor();
-  assert.deepEqual((await page.locator('.page-section > summary > span').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 5), ['0', '1', '2', '3', '4']);
+  assert.deepEqual((await page.locator('.page-section > summary > span').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 6), ['0', '1', '2', '3', '4', '5']);
   const unlock = page.locator('details.page-section', { hasText: '1 · Unlock bootloader' });
   assert.equal(await unlock.first().locator(':scope > summary .badge').innerText(), 'REQUIRED');
   assert.ok(await unlock.first().locator('.guide li').count() >= 4);
@@ -275,6 +275,48 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
   await signIn(null);
   await page.reload();
   await box.getByText('No comments yet.').waitFor();
+});
+
+test('phone test: one command, script output becomes a tappable report card with a few questions', async () => {
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  const test4 = page.locator('details.page-section', { hasText: '4 · Test your phone' });
+  await test4.locator('summary').first().click();
+  await test4.getByRole('button', { name: 'Start a phone test' }).click();
+  const command = await test4.locator('.bench-command').innerText();
+  const url = command.match(/curl -fsSL (\S+) \| sh \| curl -fsS --data-binary @- (\S+)$/);
+  assert.ok(url && url[1] === url[2], command);
+  await test4.getByLabel('Also check speaker and vibration').check();
+  assert.match(await test4.locator('.bench-command').innerText(), /\| ROMINIT_SOUND=1 sh \|/);
+  await test4.getByRole('tab', { name: 'SSH from a computer' }).click();
+  assert.match(await test4.locator('.bench-command').innerText(), /\| ssh user@<phone address> 'ROMINIT_SOUND=1 sh' \|/);
+  const script = await (await fetch(url[1])).text();
+  assert.match(script, /^#!\/bin\/sh\n# ROMinit phone test for Linux/, 'postmarketOS gets the Linux script');
+  assert.equal((await fetch(url[1], { method: 'POST', body: 'hello' })).status, 400);
+  const output = ['@ script linux 1', '@ model Xiaomi Mi A3', '@debug tools nmcli', 'flashing full booted', 'wifi full wlan0 connected', 'touch ask Does touch follow your finger?',
+    'audio ask Play any sound: does the speaker work?', 'camera broken no camera driver', 'sdcard blocked insert one', 'gps inconclusive probe p_gps exit 2: mmcli: not found', '@pkgs openssh-server phosh', '@ done'].join('\n');
+  assert.equal((await fetch(url[1], { method: 'POST', body: output })).status, 200);
+  await test4.getByText('Report card', { exact: true }).waitFor({ timeout: 10000 });
+  assert.equal(await test4.locator('.bench-tile.full').count(), 2);
+  assert.match(await test4.locator('.bench-tile.inconclusive').innerText(), /GPS[\s\S]*\? inconclusive/);
+  assert.match(await test4.locator('.bench-debug pre').textContent() ?? '', /gps: probe p_gps exit 2: mmcli: not found\ntools nmcli/);
+  assert.match(await test4.locator('.rating', { hasText: 'found in 2 packages' }).innerText(), /✓ SSH[\s\S]*✗ Docker \*/);
+  assert.match(await test4.locator('.hints', { hasText: 'Change the default password' }).innerText(), /ssh -t user@<phone address> passwd/);
+  assert.equal(await test4.locator('.bench-q').count(), 3, 'three questions at first');
+  assert.match(await test4.locator('.bench-q').first().innerText(), /Does touch follow your finger/);
+  await test4.locator('.bench-q').first().getByRole('button', { name: '👍 yes' }).click();
+  assert.match(await test4.locator('.bench-tile.full').filter({ hasText: 'touch' }).innerText(), /✓ full/);
+  await test4.getByRole('button', { name: /Answer more/ }).click();
+  assert.ok(await test4.locator('.bench-q').count() > 10, 'all questions on request');
+  const camera = test4.locator('.bench-tile', { hasText: 'camera' }).first();
+  await camera.click(); // broken → blocked
+  assert.match(await camera.getAttribute('class') ?? '', /blocked/);
+  await test4.getByRole('button', { name: 'Send report card' }).click();
+  await test4.getByText('Thank you!').waitFor();
+  const code = url[1].split('/').pop();
+  const row = d1('--command', `SELECT final, submitted FROM bench_runs WHERE code = '${code}'`);
+  assert.match(row, /\\"touch\\":\\"full\\"/); assert.match(row, /\\"camera\\":\\"blocked\\"/); assert.match(row, /\\"gps\\":\\"inconclusive\\"/);
+  assert.equal((await fetch(url[1])).status, 404, 'code closes after submit');
+  assert.match(d1('--command', `SELECT inbox FROM inbox WHERE ref = '${code}'`), /"inbox": "benchmarks"/, 'submitted card lands in the benchmarks inbox');
 });
 
 test('report form', async () => {

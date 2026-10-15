@@ -61,3 +61,32 @@ CREATE TABLE IF NOT EXISTS roles (
   scope TEXT NOT NULL,     -- * | os:<os> | vendor:<vendor> | device:<codename> | rom:<codename>/<rom id>
   PRIMARY KEY (user_id, role, scope)
 );
+
+-- Phone tests: the page starts a run, the phone's script fetches and posts back through the run's code, the user corrects and submits.
+-- Script fixes: SELECT rom, output FROM bench_runs WHERE output LIKE '% inconclusive %' (each line names the probe, exit code and error).
+CREATE TABLE IF NOT EXISTS bench_runs (
+  code TEXT PRIMARY KEY,   -- random, valid for an hour until submitted
+  rom TEXT NOT NULL,
+  voter TEXT NOT NULL,
+  user_id INTEGER,
+  created TEXT NOT NULL DEFAULT (datetime('now')),
+  output TEXT,             -- what the script printed, up to 128 KB, package list included
+  final TEXT,              -- JSON {feature: status} after the user's corrections
+  note TEXT,
+  submitted TEXT
+);
+
+-- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports). Add one by adding a UNION arm.
+-- An LLM (or a person) sorts each item with scripts/inbox.mjs; sorted items leave the inbox.
+CREATE TABLE IF NOT EXISTS triage (
+  inbox TEXT NOT NULL,
+  ref TEXT NOT NULL,       -- bench_runs.code or reports.id
+  label TEXT NOT NULL CHECK (label IN ('script-fix', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other')),
+  summary TEXT NOT NULL,
+  at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (inbox, ref)
+);
+CREATE VIEW IF NOT EXISTS inbox AS
+  SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
+  UNION ALL
+  SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports;

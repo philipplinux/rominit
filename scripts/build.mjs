@@ -17,6 +17,7 @@ for (const device of devices) await writeFile(`dist/catalog/${device.codename}.j
 
 await cp('site/style.css', 'dist/style.css');
 await cp('site/logos', 'dist/logos', { recursive: true });
+await cp('site/bench', 'dist/bench', { recursive: true });
 await writeFile('dist/404.html', '<!doctype html><meta charset="utf-8"><title>Not found · ROMinit</title><p>Not found. <a href="/">ROMinit</a></p>\n'); // without it Pages answers every missing path with index.html
 await build({ entryPoints: ['site/app.js'], outfile: 'dist/app.js', bundle: true,
   format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });

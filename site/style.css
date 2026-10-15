@@ -338,3 +338,33 @@ progress::-moz-progress-bar { background: var(--teal); }
 .comments .role { border: 1px solid var(--teal); color: var(--teal); padding: 0 .3rem; font-weight: 400; }
 .comments .hidden-comment { opacity: .5; }
 .mod-actions { display: block; margin-top: .3rem; }
+
+/* Phone test: calm colours, tiles fade in one by one */
+.bench { display: grid; gap: .8rem; }
+.bench-tabs { display: flex; flex-wrap: wrap; gap: .4rem; }
+.bench-tabs button { border: 1px solid var(--line); background: var(--panel); padding: .3rem .7rem; cursor: pointer; }
+.bench-tabs [aria-selected=true] { border-color: var(--teal); color: var(--teal); }
+.bench-run { display: flex; gap: .5rem; align-items: stretch; }
+.bench-command { flex: 1; min-width: 0; overflow-wrap: anywhere; padding: .6rem; background: var(--panel-raised); border: 1px solid var(--line); font-size: .8rem; }
+.bench-wait { display: flex; gap: .8rem; align-items: center; color: var(--muted); }
+.breath { width: 18px; height: 18px; border-radius: 50%; background: var(--teal); animation: breath 4s ease-in-out infinite; }
+@keyframes breath { 50% { transform: scale(1.8); opacity: .35; } }
+.bench-score strong { font-size: 2rem; color: var(--teal); }
+.bench-score span { color: var(--muted); }
+.bench-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: .4rem; }
+.bench-tile { display: grid; gap: .1rem; text-align: left; padding: .5rem .6rem; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); cursor: pointer;
+  animation: tile-in .5s ease both; transition: background .3s, border-color .3s; }
+@keyframes tile-in { from { opacity: 0; transform: translateY(6px); } }
+.bench-tile .icon { font-size: 1.3rem; }
+.bench-tile small { font-size: .7rem; }
+.bench-tile.full { border-color: var(--teal-dim); background: #1f2a1e; } .bench-tile.full small { color: var(--teal); }
+.bench-tile.partial { border-color: #4a3f2c; background: #29241b; } .bench-tile.partial small { color: var(--amber); }
+.bench-tile.broken { border-color: #4a2f2e; background: #2a1d1c; } .bench-tile.broken small { color: #e2a3a0; }
+.bench-tile.blocked small { color: #a9b8d6; } .bench-tile.blocked { border-color: #2f3647; }
+.bench-tile.untested small, .bench-tile.na small { color: var(--faint); } .bench-tile.na { opacity: .55; }
+.bench-tile.inconclusive { border-style: dashed; border-color: var(--amber); } .bench-tile.inconclusive small { color: var(--amber); }
+.bench-q { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; padding: .4rem 0; border-bottom: 1px solid var(--line); }
+.bench-q > span:nth-child(2) { flex: 1 1 14rem; }
+.bench-q.answered { opacity: .5; }
+.bench-debug pre { white-space: pre-wrap; font-size: .75rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .breath, .bench-tile { animation: none; } }

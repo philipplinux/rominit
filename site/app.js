@@ -188,6 +188,156 @@ function ownersRow(key) {
   }, () => {});
   return row;
 }
+/** Phone test tiers, in tap order; `inconclusive` only comes from a probe that failed. */
+const TIERS = ['full', 'partial', 'broken', 'blocked', 'untested', 'n/a'];
+const TIER_MARK = /** @type {Record<string, string>} */ ({ full: '✓', partial: '~', broken: '✗', blocked: '⊘', untested: '·', 'n/a': '–', inconclusive: '?' });
+const TIER_HELP = /** @type {Record<string, string>} */ ({ full: 'works fully', partial: 'works in part', broken: 'does not work', blocked: 'needs something first (SIM, card, cable)',
+  untested: 'not tried yet', 'n/a': 'this phone has none', inconclusive: 'the test script failed here; reported for a fix' });
+const ICON = /** @type {Record<string, string>} */ ({ flashing: '⚡', usb_net: '🔌', storage: '💾', sdcard: '🗂', battery: '🔋', screen: '🖥', touch: '👆', gpu: '🎮', audio: '🔊',
+  camera: '📷', camera_flash: '🔦', ir: '📡', wifi: '📶', bluetooth: '🔵', gps: '🧭', nfc: '💳', calls: '📞', sms: '💬', data: '🌐', fde: '🔒', otg: '🔗', hdmi: '📺',
+  fingerprint: '☝', accelerometer: '🔄', magnetometer: '🧲', light: '💡', proximity: '✋', hall: '📕', haptics: '📳', barometer: '🌡' });
+/** What installed packages reveal about a ROM's includes; each test gets the package set. */
+const SHIPS = /** @type {Record<string, (p:Set<string>) => boolean>} */ ({
+  ssh: p => ['openssh-server', 'openssh', 'dropbear'].some(x => p.has(x)),
+  docker: p => p.has('docker') || p.has('podman') || p.has('docker.io'),
+  phone_ui: p => [...p].some(x => /^(phosh|plasma-mobile|sxmo-|gnome-shell-mobile|lomiri)/.test(x)),
+  android_apps: p => p.has('waydroid') || p.has('com.android.vending') || p.has('org.fdroid.fdroid'),
+  google_play: p => p.has('com.android.vending') && ![...p].some(x => x.startsWith('org.microg')),
+  microg: p => [...p].some(x => x.startsWith('org.microg')),
+  root: p => p.has('com.topjohnwu.magisk') || p.has('me.weishu.kernelsu') || p.has('sudo') || p.has('doas'),
+});
+/** Script output → {features: {f: {status, note}}, info: [], debug: [], packages}. @param {string} output */
+function parseBench(output) {
+  /** @type {Record<string, {status:string, note:string}>} */ const features = {};
+  const info = [], debug = [], packages = new Set();
+  for (const line of output.split('\n')) {
+    const m = line.match(/^([a-z_]+) (full|partial|broken|blocked|untested|ask|inconclusive) ?(.*)$/);
+    if (m && FEATURES.includes(m[1])) features[m[1]] = { status: m[2], note: m[3] };
+    else if (line.startsWith('@debug ')) debug.push(line.slice(7));
+    else if (line.startsWith('@pkgs ')) for (const name of line.slice(6).split(' ')) if (name) packages.add(name);
+    else if (line.startsWith('@ ') && line !== '@ done') info.push(line.slice(2));
+  }
+  return { features, info, debug, packages };
+}
+/**
+ * "4 · Test your phone": one command runs a read-only script on the phone (on it, over SSH or ADB), the page waits for its output,
+ * shows a report card the user corrects by tapping, asks a few questions (all on request) and submits it.
+ * @param {any} rom @param {string} key
+ */
+function benchBox(rom, key) {
+  const linux = rom.os === 'postmarketOS';
+  const [loginUser, loginPassword] = (rom.login ?? 'user / ').split(' / ');
+  const box = h('div', { className: 'bench' });
+  const start = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Start a phone test' });
+  box.append(h('p', { className: 'intro-copy', textContent: 'One command checks every feature on the phone in a few seconds. It only reads, changes nothing and stays silent. Then you fix anything it got wrong with a tap.' }), start);
+  start.addEventListener('click', async () => {
+    start.disabled = true;
+    const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key }) }).catch(() => null);
+    const reply = await r?.json().catch(() => ({}));
+    if (!r?.ok) { start.disabled = false; box.append(h('p', { className: 'status', textContent: `Could not start: ${reply?.error ?? 'network error'}.` })); return; }
+    waitFor(reply.code);
+  });
+  /** @param {string} code */
+  function waitFor(code) {
+    const url = `${location.origin}/b/${code}`;
+    const sound = h('input', { type: 'checkbox' });
+    const ways = linux ? [['On the phone (terminal)', ''], ['SSH from a computer', `ssh ${loginUser}@<phone address> `], ['ADB from a computer', 'adb shell ']]
+      : [['ADB from a computer', 'adb shell '], ['On the phone (terminal app)', '']];
+    let way = ways[0][1];
+    const command = h('code', { className: 'bench-command' });
+    const render = () => { const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh'; command.textContent = `curl -fsSL ${url} | ${way}${way && sound.checked ? `'${sh}'` : sh} | curl -fsS --data-binary @- ${url}`; };
+    const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
+      onclick(/** @type {Event} */ e) { way = prefix; for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render(); } })));
+    sound.addEventListener('change', render); render();
+    const waiting = h('div', { className: 'bench-wait' }, h('span', { className: 'breath', ariaHidden: 'true' }), h('span', { textContent: 'Waiting for your phone… breathe in, breathe out.' }));
+    box.replaceChildren(
+      h('p', { className: 'field-label', textContent: 'Run this, wherever your phone has a shell' }), tabs,
+      h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
+        await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
+      h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
+      h('p', { className: 'field-help', textContent: `Test code ${code}, valid for an hour. No network on the phone? Use SSH or ADB from a computer; the computer does the downloading.${linux ? '' : ' A terminal app lacks the permissions for most checks; ADB works best.'}` }),
+      waiting);
+    const started = Date.now();
+    const poll = async () => {
+      if (!box.isConnected || Date.now() - started > 3600_000) return;
+      const run = await fetch(`./api/bench?code=${code}`, { cache: 'no-store' }).then(r => r.json()).catch(() => null);
+      if (run?.output) card(code, run.output); else setTimeout(poll, 3000);
+    };
+    poll();
+  }
+  /** @param {string} code @param {string} output */
+  function card(code, output) {
+    const { features, info, debug, packages } = parseBench(output);
+    /** @type {Record<string, string>} */ const final = {};
+    for (const f of FEATURES) final[f] = rom.rating?.features?.[f] === 'n/a' ? 'n/a' : features[f]?.status === 'ask' ? 'untested' : features[f]?.status ?? 'untested';
+    const tiles = /** @type {Record<string, HTMLButtonElement>} */ ({});
+    const score = h('div', { className: 'bench-score' });
+    const paint = (/** @type {string} */ f) => {
+      const t = tiles[f]; t.className = `bench-tile ${final[f] === 'n/a' ? 'na' : final[f]}`;
+      t.title = `${TIER_HELP[final[f]]}${features[f]?.note ? ` · ${features[f].note}` : ''} · tap to change`;
+      /** @type {HTMLElement} */ (t.lastChild).textContent = `${TIER_MARK[final[f]]} ${final[f]}`;
+      const counted = FEATURES.filter(x => final[x] !== 'n/a'), n = (/** @type {string} */ s) => counted.filter(x => final[x] === s).length;
+      score.replaceChildren(h('strong', { textContent: `${Math.round(100 * (n('full') + n('partial') / 2) / (counted.length || 1))}%` }),
+        h('span', { textContent: ` works · ${n('full')} full · ${n('partial')} partial · ${n('broken')} broken · ${n('blocked')} blocked · ${n('untested') + n('inconclusive')} open` }));
+    };
+    let delay = 0;
+    const groups = Object.entries(FEATURE_GROUPS).map(([group, list]) => h('div', { className: 'bench-group' }, h('p', { className: 'field-label', textContent: group }),
+      h('div', { className: 'bench-tiles' }, ...list.map(f => {
+        tiles[f] = h('button', { type: 'button', style: `animation-delay:${(delay++) * 40}ms`, onclick() { final[f] = TIERS[(TIERS.indexOf(final[f]) + 1) % TIERS.length]; paint(f); } },
+          h('span', { className: 'icon', textContent: ICON[f] ?? '•' }), h('span', { textContent: LABEL[f] ?? f.replace(/_/g, ' ') }), h('small', {}));
+        return tiles[f];
+      }))));
+    for (const f of FEATURES) paint(f);
+    // A few questions per person; the rest only on request, so nobody gets a survey.
+    const asked = new Set();
+    const pool = [...FEATURES.filter(f => features[f]?.status === 'ask'),
+      ...FEATURES.filter(f => final[f] === 'untested' && features[f]?.status !== 'ask').sort(() => Math.random() - .5)];
+    const questions = h('div', { className: 'bench-questions' });
+    const more = h('button', { type: 'button', className: 'link-button' });
+    const ask = (/** @type {number} */ count) => {
+      for (const f of pool.filter(f => !asked.has(f)).slice(0, count)) {
+        asked.add(f);
+        const q = features[f]?.status === 'ask' ? features[f].note : `Have you tried ${LABEL[f] ?? f.replace(/_/g, ' ')}? Does it work?`;
+        const row = h('div', { className: 'bench-q' }, h('span', { className: 'icon', textContent: ICON[f] ?? '•' }), h('span', { textContent: q }));
+        for (const [label, tier] of [['👍 yes', 'full'], ['〰 partly', 'partial'], ['👎 no', 'broken'], ['skip', '']])
+          row.append(h('button', { type: 'button', className: 'button button-secondary', textContent: label, onclick() { if (tier) { final[f] = tier; paint(f); } row.classList.add('answered'); row.querySelectorAll('button').forEach(b => { b.disabled = true; }); } }));
+        questions.append(row);
+      }
+      const left = pool.filter(f => !asked.has(f)).length;
+      more.hidden = !left; more.textContent = `Answer more (${left} left)`;
+    };
+    more.addEventListener('click', () => ask(pool.length));
+    ask(3);
+    const note = h('textarea', { className: 'confirmation-input', placeholder: 'Anything the test missed? (optional)', maxLength: 2000, rows: 2 });
+    const status = h('small', {});
+    const send = h('button', { type: 'button', className: 'button button-primary', textContent: 'Send report card', async onclick() {
+      send.disabled = true; status.textContent = 'Sending…';
+      const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, final, note: note.value }) }).catch(() => null);
+      if (r?.ok) { status.textContent = 'Thank you! Your report card helps the next person pick a ROM.'; send.textContent = '✓ Sent'; }
+      else { send.disabled = false; status.textContent = `Could not send: ${(await r?.json().catch(() => ({})))?.error ?? 'network error'}.`; }
+    } });
+    const failed = FEATURES.filter(f => features[f]?.status === 'inconclusive');
+    // What the package list says the ROM ships, next to what the catalog claims.
+    const ships = packages.size ? h('p', { className: 'rating' }, h('strong', { textContent: `found in ${packages.size} packages` }),
+      ...Object.entries(SHIPS).map(([key, test]) => { const found = test(packages), claim = rom.rating?.includes?.[key];
+        return h('span', { className: `feature ${found ? 'works' : 'untested'}`, title: claim && (claim === 'yes') !== found ? `catalog says ${claim}` : '',
+          textContent: `${found ? '✓' : '✗'} ${LABEL[key] ?? key}${claim && (claim === 'yes') !== found ? ' *' : ''}` }); })) : '';
+    // Default passwords are public: offer the change, typed on the phone so it never reaches this page.
+    const password = rom.login && linux ? h('div', { className: 'hints' }, h('strong', { textContent: 'Change the default password' }),
+      h('p', { className: 'field-help', textContent: `${loginUser} / ${loginPassword} is printed on this page for everyone. Change it now; you type the new one on the phone (or in your SSH session), so it never reaches ROMinit.` }),
+      h('code', { className: 'bench-command', textContent: 'passwd' }), ' on the phone, or ',
+      h('code', { className: 'bench-command', textContent: `ssh -t ${loginUser}@<phone address> passwd` })) : '';
+    box.replaceChildren(h('p', { className: 'field-label', textContent: 'Report card' }), score,
+      info.length ? h('p', { className: 'field-help', textContent: info.join(' · ') }) : '',
+      questions.childElementCount || pool.length ? h('div', {}, h('p', { className: 'field-label', textContent: 'Quick questions' }), questions, more) : '',
+      h('p', { className: 'field-help', textContent: 'Tap any tile to correct it: full → partial → broken → blocked → untested → n/a.' }),
+      ...groups,
+      failed.length ? h('details', { className: 'bench-debug' }, h('summary', { textContent: `${failed.length} check${failed.length > 1 ? 's' : ''} inconclusive: the script failed there (sent with your card so it gets fixed)` }),
+        h('pre', { textContent: [...failed.map(f => `${f}: ${features[f].note}`), ...debug].join('\n') })) : '',
+      ships, note, send, status, password);
+  }
+  return box;
+}
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP ADB SIDELOAD' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
 /** One readable line per step for the card. @param {any[]} step */
@@ -470,7 +620,8 @@ async function start() {
     unlockSection,
     twrpSection,
     romSection,
-    section('4 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
+    rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`)]),
+    section('5 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
         ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`))))]));

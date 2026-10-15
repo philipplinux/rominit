@@ -6,7 +6,8 @@
     "build": "node scripts/build.mjs",
     "test": "node --test",
     "check": "tsc --noEmit",
-    "bench": "node --test --test-concurrency=1 bench/site.mjs"
+    "bench": "node --test --test-concurrency=1 bench/site.mjs",
+    "inbox": "node scripts/inbox.mjs"
   },
   "dependencies": {
     "@lineageos-infra/libmjolnir": "0.7.4",
