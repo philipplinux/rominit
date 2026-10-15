@@ -325,6 +325,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .page-section.required { border-color: var(--amber); background: rgb(230 195 154 / 7%); }
 .page-section.required.done { border-color: var(--teal); background: rgb(168 197 160 / 8%); }
 .page-section.done .badge { border-color: var(--teal); color: var(--teal); }
+.page-section:not(.required) .badge { border-color: var(--line); color: var(--faint); }
 .guide label { cursor: pointer; }
 
 .congrats { border-left: 2px solid var(--teal); padding: .5rem .8rem; color: var(--teal); }

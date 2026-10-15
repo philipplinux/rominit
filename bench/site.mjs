@@ -279,6 +279,8 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
 
 test('phone test: one command, script output becomes a tappable report card with a few questions', async () => {
   await page.goto(`${BASE}/?device=laurel_sprout`);
+  // The Mi A3 postmarketOS image needs no TWRP: the collapsed section says so instead of staying blank.
+  assert.equal(await page.locator('details.page-section', { hasText: '2 · TWRP recovery' }).locator(':scope > summary .badge').innerText(), 'NOT REQUIRED');
   const test4 = page.locator('details.page-section', { hasText: '4 · Test your phone' });
   await test4.locator('summary').first().click();
   await test4.getByRole('button', { name: 'Start a phone test' }).click();

@@ -601,7 +601,7 @@ async function start() {
     h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
-    unlock.url && link(unlock.url, 'Full unlock guide')] : [h('p', { className: 'field-help', textContent: 'This phone needs no bootloader unlock.' })], unlock ? 'REQUIRED' : '');
+    unlock.url && link(unlock.url, 'Full unlock guide')] : [h('p', { className: 'field-help', textContent: 'This phone needs no bootloader unlock.' })], unlock ? 'REQUIRED' : 'NOT REQUIRED');
   if (unlock) required(unlockSection, () => {
     progress.steps = stepBoxes.flatMap((box, i) => box.checked ? [i] : []); progress.unlocked = alreadyUnlocked.checked; save();
     return alreadyUnlocked.checked || stepBoxes.every(box => box.checked);
@@ -609,7 +609,7 @@ async function start() {
   const haveTwrp = h('input', { type: 'checkbox', checked: !!progress.twrp });
   const twrpSection = section('2 · TWRP recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,
     tools.length ? [h('label', { className: 'field-help' }, haveTwrp, ' TWRP is already installed on this phone'), h('div', { className: 'stages' }, ...tools)]
-      : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : '');
+      : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : 'NOT REQUIRED');
   let twrpDone = 0;
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
   if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
