@@ -676,8 +676,8 @@ async function start() {
     return alreadyUnlocked.checked || stepBoxes.every(box => box.checked);
   });
   const haveTwrp = h('input', { type: 'checkbox', checked: !!progress.twrp });
-  const twrpSection = section('2 · TWRP recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,
-    tools.length ? [h('label', { className: 'field-help' }, haveTwrp, ' TWRP is already installed on this phone'), h('div', { className: 'stages' }, ...tools)]
+  const twrpSection = section('2 · Custom recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,
+    tools.length ? [h('label', { className: 'field-help' }, haveTwrp, ' A custom recovery (TWRP or similar) is already installed on this phone'), h('div', { className: 'stages' }, ...tools)]
       : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : 'NOT REQUIRED');
   let twrpDone = 0;
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });

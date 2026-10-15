@@ -155,7 +155,7 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   assert.ok(await unlock.first().locator('.guide li').count() >= 4);
   await unlock.first().locator('.pivots summary').click();
   assert.equal(await unlock.first().locator('.pivots a[href="https://samfw.com/"]').count(), 1);
-  assert.equal(await page.locator('details.page-section', { hasText: '2 · TWRP recovery' }).locator(':scope > summary .badge').innerText(), 'REQUIRED');
+  assert.equal(await page.locator('details.page-section', { hasText: '2 · Custom recovery' }).locator(':scope > summary .badge').innerText(), 'REQUIRED');
   const first = unlock.first();
   assert.match(await first.getAttribute('class') ?? '', /required(?! done)/);
   for (const box of await first.locator('.guide input[type=checkbox]').all()) await box.check();
@@ -163,8 +163,8 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   assert.equal(await first.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false);
   await page.reload(); // ticks are remembered
   assert.match(await page.locator('details.page-section', { hasText: '1 · Unlock bootloader' }).first().getAttribute('class') ?? '', /done/);
-  const twrp = page.locator('details.page-section', { hasText: '2 · TWRP recovery' });
-  await twrp.getByLabel('TWRP is already installed').check();
+  const twrp = page.locator('details.page-section', { hasText: '2 · Custom recovery' });
+  await twrp.getByLabel('custom recovery (TWRP or similar) is already installed').check();
   assert.equal(await twrp.locator(':scope > summary .badge').innerText(), 'COMPLETED');
   assert.equal(await twrp.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false, 'completed section collapses');
   await page.reload(); // every section's progress is remembered
@@ -313,7 +313,7 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
 test('phone test: one command, script output becomes a tappable report card with a few questions', async () => {
   await page.goto(`${BASE}/?device=laurel_sprout`);
   // The Mi A3 postmarketOS image needs no TWRP: the collapsed section says so instead of staying blank.
-  assert.equal(await page.locator('details.page-section', { hasText: '2 · TWRP recovery' }).locator(':scope > summary .badge').innerText(), 'NOT REQUIRED');
+  assert.equal(await page.locator('details.page-section', { hasText: '2 · Custom recovery' }).locator(':scope > summary .badge').innerText(), 'NOT REQUIRED');
   const test4 = page.locator('details.page-section', { hasText: '4 · Test your phone' });
   await test4.locator('summary').first().click();
   await test4.getByRole('button', { name: 'Start a phone test' }).click();
