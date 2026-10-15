@@ -268,7 +268,7 @@ async function start() {
   const romSelect = h('select', { className: 'confirmation-input' }, ...roms.map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.tier})`, r.id, false, r === rom)));
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
-  /** One of the three collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
+  /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
   const section = (title, hint, open, body) => h('details', { className: 'page-section', open },
     h('summary', {}, h('span', { textContent: title }), h('small', { textContent: hint })), ...body);
   /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
@@ -280,17 +280,18 @@ async function start() {
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL DEVICES' }), ` // ${device.vendor.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
-    section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
-      tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
-    section('2 · ROM', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
+    section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
       rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''}${rom.login ? ` Login afterwards: \`${rom.login}\`, change it.` : ''} `), rom.homepage && link(rom.homepage, 'Release page')),
-      rom && h('div', { className: 'stages' }, ...cards(rom, 'rom')),
       rom && commentsBox(`${device.codename}/${rom.id}`)]),
+    section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
+      tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
+    section('2 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
+      rom && h('div', { className: 'stages' }, ...cards(rom, 'rom'))]),
     section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
