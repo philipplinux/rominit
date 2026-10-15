@@ -48,7 +48,7 @@ export async function run(adb, { device, files, steps }, report, assertSession) 
   if (adb.banner.device && !adb.banner.device.startsWith(expected)) // TWRP may report hero2ltexx for hero2lte
     throw Error(`Expected ${expected}; phone reports ${adb.banner.device}. Nothing written.`);
   const byName = Object.fromEntries(files.map(f => [f.name, f]));
-  for (const file of files) {
+  for (const file of files.filter(f => f.sha256)) { // '' = the user skipped verification for a newer file
     const digest = await checksum(file.file, fraction => report(`Checking SHA-256: ${file.name}`, fraction));
     if (digest !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
   }

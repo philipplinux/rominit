@@ -435,7 +435,8 @@ function stageCard(device, stage, n, count, key) {
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
   const selected = h('ul', { className: 'selected-files' }, h('li', { className: 'empty-files', textContent: 'No files selected' }));
   const options = (stage.options ?? []).map(option => h('input', { type: 'checkbox', checked: option.default }));
-  const risk = h('input', { type: 'checkbox' });
+  const risk = h('input', { type: 'checkbox' }), unverified = h('input', { type: 'checkbox' });
+  let picked = /** @type {File[]} */ ([]);
   const confirm = h('input', { className: 'confirmation-input', type: 'text', placeholder: stage.confirm, autocomplete: 'off', spellcheck: false });
   const flash = h('button', { className: 'button button-primary', type: 'button', disabled: true, textContent: `Run stage ${n}` });
   const progress = h('progress', { max: 100, value: 0 });
@@ -456,9 +457,11 @@ function stageCard(device, stage, n, count, key) {
     if (st.lost || !st.session) throw Error('USB session lost. Reload the page before reconnecting; no automatic retry.');
   };
   const pick = (/** @type {File[]} */ files) => {
+    picked = files;
+    if (!files.length) return;
     try {
-      st.files = selectFiles(stage, files);
-      selected.replaceChildren(...st.files.map(f => h('li', { textContent: `${f.name} (${size(f.size)})` })));
+      st.files = selectFiles(stage, files, unverified.checked);
+      selected.replaceChildren(...st.files.map(f => h('li', { textContent: `${f.file.name} (${size(f.size)})${f.sha256 ? '' : ' · UNVERIFIED'}` })));
     } catch (error) {
       st.files = null;
       selected.replaceChildren(h('li', { textContent: message(error) }));
@@ -500,6 +503,7 @@ function stageCard(device, stage, n, count, key) {
     } finally { st.busy = false; update(); }
   });
   risk.addEventListener('change', update);
+  unverified.addEventListener('change', () => pick(picked));
   confirm.addEventListener('input', update);
   update();
 
@@ -521,6 +525,8 @@ function stageCard(device, stage, n, count, key) {
     h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
       h('span', {}, h('strong', { textContent: `Choose ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
     selected,
+    h('label', { className: 'risk-check skip-verify' }, unverified, h('span', {}, h('strong', { textContent: 'Skip verification: ' }),
+      'my file is newer than the one listed here. Size and SHA-256 are not checked; the stored steps still run. Only if you trust the file and it is for this exact phone.')),
     ...(stage.options ?? []).map((option, i) => h('label', { className: 'risk-check' }, options[i], h('span', { textContent: option.label }))),
     h('label', { className: 'risk-check' }, risk, h('span', {}, h('strong', { textContent: 'I understand: ' }), stage.warning)),
     h('label', { className: 'field-label confirmation-label' }, 'Type ', h('code', { textContent: stage.confirm }), ' to confirm'),

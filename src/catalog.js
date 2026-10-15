@@ -118,10 +118,17 @@ export function stepsFor(stage, enabled = {}) {
 }
 
 /** Matches picked/downloaded files to the stage's pins by name and size; the hash is checked by the recipe.
- * @param {any} stage @param {Iterable<File>} files */
-export function selectFiles(stage, files) {
+ * `unverified`: the user takes a newer file than the catalog pins; size and hash are not checked (sha256 ''),
+ * and a single-file stage takes any name. The stored steps still run.
+ * @param {any} stage @param {Iterable<File>} files @param {boolean} unverified */
+export function selectFiles(stage, files, unverified = false) {
   const selected = [...files];
   if (selected.length !== stage.files.length) throw Error(`Select exactly ${stage.files.map(f => f.name).join(', ')}.`);
+  if (unverified) return stage.files.map(pin => {
+    const matches = stage.files.length === 1 ? selected : selected.filter(file => file.name === pin.name);
+    if (matches.length !== 1) throw Error(`${pin.name} is missing or duplicated; with several files the names must match.`);
+    return { ...pin, size: matches[0].size, sha256: '', file: matches[0] };
+  });
   return stage.files.map(pin => {
     const matches = selected.filter(file => file.name === pin.name);
     if (matches.length !== 1 || matches[0].size !== pin.size) throw Error(`${pin.name} is missing, duplicated, or has the wrong size.`);

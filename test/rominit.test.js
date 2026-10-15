@@ -123,6 +123,9 @@ test('file selection, consent and options', () => {
   assert.equal(selectFiles(stage, files).length, 3);
   assert.throws(() => selectFiles(stage, files.slice(1)), /Select exactly/);
   assert.throws(() => selectFiles(stage, [...files.slice(1), { ...files[0], size: 1 }]), /wrong size/);
+  const loose = selectFiles(stage, [...files.slice(1), { ...files[0], size: 1 }], true);
+  assert.ok(loose.every(f => f.sha256 === '') && loose.some(f => f.size === 1));
+  assert.throws(() => selectFiles(stage, [...files.slice(1), { ...files[0], name: 'other.img' }], true), /names must match/);
   assert.throws(() => assertConsent(stage, { consent: true, confirmation: 'erase s9' }));
   assertConsent(stage, { consent: true, confirmation: stage.confirm });
   assert.ok(!stepsFor(stage).some(([verb]) => verb === 'mkfs_ext4'));
