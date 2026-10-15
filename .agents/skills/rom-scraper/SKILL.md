@@ -62,6 +62,7 @@ When in doubt pick the more cautious value (lower status, `untested`).
 
 ## 6. Hand off
 
+0. Add or update `catalog/notes/<codename>/<rom-id>.md` (format in `catalog/notes/README.md`): pitfalls you found, and one diary line for this run. Read it first if it exists.
 1. `npm test && npm run build` (the build fails on any catalog problem); fix until green.
 2. One commit per device: `catalog: <codename> <os> <version> (scraped)`.
 3. Report: a table of what was added (device, ROM, status, support), plus open questions (missing source repo, unclear prerequisites, conflicting reports). Deploying is the owner's call; scraped entries go live labelled "scraped · unverified".
