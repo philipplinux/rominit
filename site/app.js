@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, USES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -42,6 +42,11 @@ const complete = (rating, use, details = false) => {
   return `as ${use} ${completeness(rating, USES[use])}%${details && untested ? ` (${untested} untested)` : ''}`;
 };
 const score = rating => `${complete(rating, 'computer')} · ${complete(rating, 'phone')} · ${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
+/** Origin and status chips, colored like the feature states. @param {any} rom */
+const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent: 'release' }),
+  h('span', { className: 'feature', title: ORIGINS[rom.origin], textContent: rom.origin }),
+  h('span', { className: `feature ${({ stable: 'works', legacy: 'untested', broken: 'broken' })[rom.status] ?? 'partial'}`, title: STATUSES[rom.status], textContent: rom.status }),
+  h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}` }));
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
@@ -232,7 +237,7 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const hits = index.filter(d => words.every(w => [d.vendor, d.name, d.codename, ...d.models].join(' ').toLowerCase().includes(w)));
     list.replaceChildren(...hits.map(d => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: `${d.vendor} ${d.name}` }),
-      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.filter(r => r.tier !== 'stock').map(r => `${r.os} ${r.version} (${score(r.rating)})`).join(', ')}`)));
+      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.filter(r => r.origin !== 'stock').map(r => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${score(r.rating)})`).join(', ')}`)));
     if (!hits.length) list.append(h('li', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
   };
   search.addEventListener('input', render);
@@ -267,11 +272,14 @@ async function start() {
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
   if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
-  const roms = device.roms.filter((/** @type {any} */ r) => r.tier !== 'stock');
-  const stock = device.roms.filter((/** @type {any} */ r) => r.tier === 'stock');
+  const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 10 + Object.keys(STATUSES).indexOf(r.status);
+  const roms = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').sort((/** @type {any} */ a, /** @type {any} */ b) => rank(a) - rank(b));
+  const stock = device.roms.filter((/** @type {any} */ r) => r.origin === 'stock');
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
-  const romSelect = h('select', { className: 'confirmation-input' }, ...roms.map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.tier})`, r.id, false, r === rom)));
+  const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
+    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status})`, r.id, false, r === rom)))).filter(g => g.children.length));
+  const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
@@ -280,14 +288,15 @@ async function start() {
   /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
   const cards = (r, which) => r.stages.flatMap((/** @type {any} */ stage, /** @type {number} */ i) =>
     stage.section === which ? [stageCard(device, stage, i + 1, r.stages.length)] : []);
-  const tools = rom ? cards(rom, 'tools') : [];
+  const tools = rom && flashable(rom) ? cards(rom, 'tools') : [];
   main.append(
     h('section', { className: 'intro' },
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL DEVICES' }), ` // ${device.vendor.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
-    section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
+    section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect,
+      rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
@@ -299,7 +308,8 @@ async function start() {
       tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
     section('2 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
       rom?.login && loginRow(rom.login),
-      rom && h('div', { className: 'stages' }, ...cards(rom, 'rom'))]),
+      rom && (flashable(rom) ? h('div', { className: 'stages' }, ...cards(rom, 'rom'))
+        : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))]),
     section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),

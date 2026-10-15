@@ -194,9 +194,15 @@ test('untar reads a gzip tar with long names and skips unwanted entries', async 
 });
 
 test('stock archive recipe refuses a newer anti-rollback level before reading the archive', async () => {
-  const dev = device('laurel_sprout'), stock = dev.roms.find(r => r.tier === 'stock'), stage = stock.stages[0];
+  const dev = device('laurel_sprout'), stock = dev.roms.find(r => r.origin === 'stock'), stage = stock.stages[0];
   const fb = fastboot({ anti: '1' });
   await assert.rejects(recipes['fastboot-tgz'].run(fb, { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) }, noop, noop), /anti-rollback level 1/);
   assert.deepEqual(fb.log, []);
   assert.ok(!stage.steps.some(([verb, arg]) => /lock/.test(`${verb}${arg}`)), 'stock restore must never lock');
+});
+
+test('every ROM has a known origin and status', () => {
+  for (const d of devices) for (const r of d.roms) assert.ok(r.origin && r.status, `${d.codename}/${r.id}`);
+  const dev = device('laurel_sprout');
+  assert.deepEqual(problems(dev, { device: dev.codename, roms: [{ ...dev.roms[0], status: 'great' }] }).filter(p => /status/.test(p)).length, 1);
 });

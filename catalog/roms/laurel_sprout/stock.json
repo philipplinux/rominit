@@ -6,7 +6,8 @@
       "os": "Android",
       "name": "Stock Android One (global)",
       "version": "V12.0.23.0.RFQMIXM",
-      "tier": "stock",
+      "origin": "stock",
+      "status": "stable",
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

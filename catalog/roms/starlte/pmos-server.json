@@ -6,7 +6,8 @@
       "os": "postmarketOS",
       "name": "postmarketOS server",
       "version": "v2026.10.15-s9",
-      "tier": "experimental",
+      "origin": "unofficial",
+      "status": "experimental",
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

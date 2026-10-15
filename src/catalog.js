@@ -18,6 +18,11 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
+/** Who built the ROM. `stock` ROMs are the way back; the page lists them under Recover / revert. */
+export const ORIGINS = { official: 'built and released by the OS project', unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
+/** How usable the release is, best first. `broken` ROMs stay listed for the record but cannot be flashed here. */
+export const STATUSES = { stable: 'daily-driver ready', beta: 'mostly works, known rough edges', nightly: 'automatic build, untested',
+  experimental: 'early port, expect bugs', legacy: 'old release, superseded or no longer updated', broken: 'known not to boot or flash' };
 /** Share of hardware features that work (partial counts half), 0-100. @param {any} rating */
 /** Which features matter for each way of using the phone. */
 export const USES = {
@@ -46,8 +51,7 @@ export function problems(device, romFile) {
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;
     need(SAFE.test(rom.id ?? ''), `${at}: id missing or unsafe`);
-    // `stock` ROMs are the way back; the page lists them under Recover / revert.
-    need(['verified', 'experimental', 'imported', 'stock'].includes(rom.tier), `${at}: tier must be verified, experimental, imported or stock`);
+    need(rom.origin in ORIGINS && rom.status in STATUSES, `${at}: origin (${Object.keys(ORIGINS).join('/')}) and status (${Object.keys(STATUSES).join('/')}) are required`);
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
     const features = rom.rating?.features ?? {};
