@@ -51,6 +51,8 @@ export function problems(device, romFile) {
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;
     need(SAFE.test(rom.id ?? ''), `${at}: id missing or unsafe`);
+    // curated: a ROMinit maintainer picked it and checked files and ratings by hand (imported entries are not).
+    need(typeof rom.curated === 'boolean', `${at}: curated must be true or false`);
     need(rom.origin in ORIGINS && rom.status in STATUSES, `${at}: origin (${Object.keys(ORIGINS).join('/')}) and status (${Object.keys(STATUSES).join('/')}) are required`);
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);

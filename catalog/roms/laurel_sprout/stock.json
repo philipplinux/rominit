@@ -8,6 +8,7 @@
       "version": "V12.0.23.0.RFQMIXM",
       "origin": "stock",
       "status": "stable",
+      "curated": true,
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

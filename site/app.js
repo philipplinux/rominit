@@ -46,7 +46,8 @@ const score = rating => `${complete(rating, 'computer')} · ${complete(rating, '
 const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent: 'release' }),
   h('span', { className: 'feature', title: ORIGINS[rom.origin], textContent: rom.origin }),
   h('span', { className: `feature ${({ stable: 'works', legacy: 'untested', broken: 'broken' })[rom.status] ?? 'partial'}`, title: STATUSES[rom.status], textContent: rom.status }),
-  h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}` }));
+  rom.curated && h('span', { className: 'feature works', title: 'picked and checked by hand by ROMinit maintainers', textContent: 'curated ★' }),
+  h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}${rom.curated ? '; checked by hand by ROMinit' : ''}` }));
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
@@ -237,7 +238,7 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const hits = index.filter(d => words.every(w => [d.vendor, d.name, d.codename, ...d.models].join(' ').toLowerCase().includes(w)));
     list.replaceChildren(...hits.map(d => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: `${d.vendor} ${d.name}` }),
-      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.filter(r => r.origin !== 'stock').map(r => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${score(r.rating)})`).join(', ')}`)));
+      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.filter(r => r.origin !== 'stock').map(r => `${r.os} ${r.version} (${r.origin}, ${r.status}${r.curated ? ', curated' : ''}, ${score(r.rating)})`).join(', ')}`)));
     if (!hits.length) list.append(h('li', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
   };
   search.addEventListener('input', render);
@@ -272,13 +273,13 @@ async function start() {
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
   if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
-  const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 10 + Object.keys(STATUSES).indexOf(r.status);
+  const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 20 + (r.curated ? 0 : 10) + Object.keys(STATUSES).indexOf(r.status);
   const roms = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').sort((/** @type {any} */ a, /** @type {any} */ b) => rank(a) - rank(b));
   const stock = device.roms.filter((/** @type {any} */ r) => r.origin === 'stock');
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
   const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
-    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status})`, r.id, false, r === rom)))).filter(g => g.children.length));
+    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}${r.curated ? ', curated' : ''})`, r.id, false, r === rom)))).filter(g => g.children.length));
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
