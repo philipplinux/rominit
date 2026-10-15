@@ -2,8 +2,17 @@
   "codename": "laurel_sprout",
   "vendor": "Xiaomi",
   "name": "Mi A3",
-  "models": ["M1906F9SH"],
-  "detect": { "fastboot": { "product": "laurel_sprout" } },
+  "series": "Mi A",
+  "family": "Mi A3",
+  "variant": "Mi A3 · global",
+  "models": [
+    "M1906F9SH"
+  ],
+  "detect": {
+    "fastboot": {
+      "product": "laurel_sprout"
+    }
+  },
   "modes": {
     "fastboot": "Power off. Hold Volume Down + Power until the FASTBOOT screen shows, then plug in USB."
   },

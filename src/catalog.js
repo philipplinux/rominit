@@ -47,6 +47,8 @@ export function problems(device, romFile) {
   const need = (ok, text) => { if (!ok) out.push(text); };
   need(SAFE.test(device?.codename ?? ''), 'device.codename missing or unsafe');
   need(device?.vendor && device?.name, `${device?.codename}: vendor and name are required`);
+  need(device?.series && device?.family && device?.variant, `${device?.codename}: series, family and variant are required (All › vendor › series › family › variant)`);
+  need((device?.unsupported ?? []).every(u => u.name && u.models?.length && u.why), `${device?.codename}: unsupported variants need name, models and why`);
   need(romFile?.device === device?.codename, `rom file device "${romFile?.device}" ≠ ${device?.codename}`);
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;

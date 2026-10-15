@@ -10,8 +10,8 @@ assert(!errors.length, `Catalog problems:\n${errors.join('\n')}`);
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist/catalog', { recursive: true });
 // The page loads the small index first, then one file per picked device.
-const index = devices.map(({ codename, vendor, name, models, roms }) => ({ codename, vendor, name, models,
-  roms: roms.map(({ id, os, name, version, origin, status, curated, rating }) => ({ id, os, name, version, origin, status, curated, rating })) }));
+const index = devices.map(({ codename, vendor, name, series, family, variant, unsupported, models, roms }) => ({ codename, vendor, name, series, family, variant, unsupported, models,
+  roms: roms.filter(r => r.origin !== 'stock').map(({ id, os, name, version, origin, status, curated, rating }) => ({ id, os, name, version, origin, status, curated, rating })) }));
 await writeFile('dist/catalog/index.json', JSON.stringify(index));
 for (const device of devices) await writeFile(`dist/catalog/${device.codename}.json`, JSON.stringify(device));
 

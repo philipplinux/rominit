@@ -2,9 +2,27 @@
   "codename": "starlte",
   "vendor": "Samsung",
   "name": "Galaxy S9",
-  "models": ["SM-G960F"],
+  "series": "Galaxy S",
+  "family": "Galaxy S9",
+  "variant": "S9 · Exynos",
+  "unsupported": [
+    {
+      "name": "S9 · Snapdragon",
+      "models": [
+        "SM-G9600"
+      ],
+      "why": "Qualcomm chip: different kernel, bootloader and partitions"
+    }
+  ],
+  "models": [
+    "SM-G960F"
+  ],
   "notes": "Exynos only. Not for the Snapdragon models (SM-G9600, SM-G9650).",
-  "detect": { "adb": { "device": "starlte" } },
+  "detect": {
+    "adb": {
+      "device": "starlte"
+    }
+  },
   "modes": {
     "download": "Power off. Hold Volume Down + Bixby, plug in USB, press Volume Up to enter Download Mode.",
     "recovery": "Hold Volume Up + Bixby + Power until the TWRP screen appears. Do not mount system, vendor or data."

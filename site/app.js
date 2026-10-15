@@ -232,14 +232,25 @@ function stageCard(device, stage, n, count) {
 
 /** @param {any[]} index */
 function devicePicker(index) {
-  const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true });
-  const list = h('ul', { className: 'selected-files' });
+  const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
+  const list = h('div', { className: 'device-tree' });
+  const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}${r.curated ? ', curated' : ''}, ${score(r.rating)})`).join(', ');
+  const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
+  /** Variants we know but cannot flash, listed so owners see why. */
+  const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
   const render = () => {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
-    const hits = index.filter(d => words.every(w => [d.vendor, d.name, d.codename, ...d.models].join(' ').toLowerCase().includes(w)));
-    list.replaceChildren(...hits.map(d => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: `${d.vendor} ${d.name}` }),
-      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.filter(r => r.origin !== 'stock').map(r => `${r.os} ${r.version} (${r.origin}, ${r.status}${r.curated ? ', curated' : ''}, ${score(r.rating)})`).join(', ')}`)));
-    if (!hits.length) list.append(h('li', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
+    const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
+    const hits = index.filter(d => words.every(w => text(d).includes(w)));
+    // All › vendor › series › family › variant
+    /** @type {Record<string, Record<string, Record<string, any[]>>>} */ const tree = {};
+    for (const d of hits) ((tree[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.vendor][d.series][d.family] ?? []), d];
+    const sorted = (/** @type {object} */ o) => Object.entries(o).sort(([x], [y]) => x.localeCompare(y));
+    list.replaceChildren(...sorted(tree).map(([vendor, series]) => h('details', { open: true }, h('summary', { textContent: vendor }),
+      ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
+        ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
+          h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems)))))))));
+    if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
   };
   search.addEventListener('input', render);
   render();
@@ -292,7 +303,8 @@ async function start() {
   const tools = rom && flashable(rom) ? cards(rom, 'tools') : [];
   main.append(
     h('section', { className: 'intro' },
-      h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL DEVICES' }), ` // ${device.vendor.toUpperCase()}`),
+      h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),
+        ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
