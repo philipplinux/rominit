@@ -123,19 +123,46 @@ async function webp(file) {
   }
   throw Error('screenshot too large');
 }
-/** Comments of one ROM; hidden where there is no API. Text only, never HTML. @param {string} key `<codename>/<rom id>` */
+/** Who is signed in and which logins exist; null without the API. @type {Promise<{user:any, providers:string[]}|null>} */
+const me = fetch('./api/me', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
+const PROVIDER_NAMES = /** @type {Record<string, string>} */ ({ google: 'Google', github: 'GitHub' });
+/** "Sign in with Google · GitHub", returning to this page. @param {string[]} providers */
+const signInLinks = providers => providers.flatMap((p, i) => [i ? ' · ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: PROVIDER_NAMES[p] ?? p })]);
+/** Header: sign in, or name + sign out. */
+me.then(info => {
+  if (!info?.providers.length && !info?.user) return;
+  const slot = h('span', { className: 'account' });
+  if (info.user) slot.append(`${info.user.name} · `, h('button', { type: 'button', className: 'link-button', textContent: 'SIGN OUT', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }));
+  else slot.append('SIGN IN: ', ...signInLinks(info.providers));
+  document.querySelector('.topbar-note')?.prepend(slot, ' ');
+});
+const ROLE_LABEL = /** @type {Record<string, string>} */ ({ owner: 'maintainer', moderator: 'moderator', admin: 'admin' });
+
+/** Comments of one ROM; hidden where there is no API. Text only, never HTML. Posting needs an account. @param {string} key `<codename>/<rom id>` */
 function commentsBox(key) {
   const list = h('ol', { className: 'comments' }), status = h('small', {});
-  const name = h('input', { className: 'confirmation-input', placeholder: 'name (optional)', maxLength: 40 });
   const text = h('textarea', { className: 'confirmation-input', placeholder: 'How did it go on your phone?', maxLength: 2000, rows: 3 });
   const shot = h('input', { type: 'file', accept: 'image/*', title: 'Screenshot (optional)' });
   const post = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Post comment' });
-  const box = h('div', { className: 'comment-box', hidden: true }, h('p', { className: 'field-label', textContent: 'Comments' }), list, name, text, h('label', { className: 'field-help' }, 'Screenshot (optional): ', shot), post, status);
+  const form = h('div', { className: 'comment-form', hidden: true }, text, h('label', { className: 'field-help' }, 'Screenshot (optional): ', shot), post, status);
+  const signIn = h('p', { className: 'field-help', hidden: true });
+  const box = h('div', { className: 'comment-box', hidden: true }, h('p', { className: 'field-label', textContent: 'Comments' }), list, signIn, form);
+  me.then(info => {
+    if (info?.user) form.hidden = false;
+    else { signIn.hidden = false; signIn.append(...(info?.providers.length ? ['Sign in to comment: ', ...signInLinks(info.providers)] : ['Comments need an account; sign-in is not set up here yet.'])); }
+  });
   const url = `./api/comments?rom=${encodeURIComponent(key)}`;
+  /** Owner / moderator / admin action on one comment. @param {number} comment @param {string} action */
+  const moderate = (comment, action) => h('button', { type: 'button', className: 'link-button', textContent: action, async onclick() {
+    const r = await fetch('./api/moderate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ comment, action }) }).catch(() => null);
+    if (r?.ok) load(); else status.textContent = `Could not ${action}: ${(await r?.json().catch(() => ({})))?.error ?? 'network error'}.`; } });
   const load = () => fetch(url, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then((/** @type {any[]} */ rows) => {
-    list.replaceChildren(...rows.map(c => h('li', {}, h('small', { textContent: `${c.name} · ${c.at.slice(0, 16)} UTC` }), h('p', { textContent: c.text }),
-      c.image === 'approved' ? h('a', { href: `./api/image?id=${c.id}`, target: '_blank' }, h('img', { src: `./api/image?id=${c.id}`, alt: 'screenshot', loading: 'lazy' }))
-        : c.image ? h('small', { textContent: 'Screenshot awaiting review.' }) : '')));
+    list.replaceChildren(...rows.map(c => h('li', { className: c.hidden ? 'hidden-comment' : '' },
+      h('small', {}, c.name, c.role ? ' ' : '', c.role && h('b', { className: 'role', textContent: ROLE_LABEL[c.role] }), ` · ${c.provider ? `${PROVIDER_NAMES[c.provider] ?? c.provider} · ` : ''}${c.at.slice(0, 16)} UTC${c.hidden ? ' · hidden' : ''}`),
+      h('p', { textContent: c.text }),
+      c.image === 'approved' || (c.image && c.moderate) ? h('a', { href: `./api/image?id=${c.id}`, target: '_blank' }, h('img', { src: `./api/image?id=${c.id}`, alt: 'screenshot', loading: 'lazy' }))
+        : c.image ? h('small', { textContent: 'Screenshot awaiting review.' }) : '',
+      c.moderate && h('small', { className: 'mod-actions' }, moderate(c.id, c.hidden ? 'show' : 'hide'), c.image === 'pending' && ' · ', c.image === 'pending' && moderate(c.id, 'approve')))));
     if (!rows.length) list.append(h('li', {}, h('small', { textContent: 'No comments yet.' })));
     box.hidden = false;
   }, () => {});
@@ -143,13 +170,23 @@ function commentsBox(key) {
     status.textContent = 'Posting…';
     let image = null;
     try { image = await webp(shot.files?.[0]); } catch { status.textContent = 'Could not use that screenshot (too large or not an image).'; return; }
-    const response = await fetch('./api/comments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, name: name.value, text: text.value, image }) }).catch(() => null);
+    const response = await fetch('./api/comments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, text: text.value, image }) }).catch(() => null);
     const reply = await response?.json().catch(() => ({}));
     status.textContent = response?.ok ? (image ? 'Posted. The screenshot shows after review.' : 'Posted.') : `Could not post: ${reply?.error ?? 'network error'}.`;
     if (response?.ok) { text.value = ''; shot.value = ''; load(); }
   });
   load();
   return box;
+}
+/** "maintainer: name (all postmarketOS)"; verified owners only. Hidden where there is no API. @param {string} key */
+function ownersRow(key) {
+  const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'maintainer' }));
+  fetch(`./api/owners?rom=${encodeURIComponent(key)}`).then(r => r.ok ? r.json() : Promise.reject()).then((/** @type {any[]} */ owners) => {
+    row.append(...(owners.length ? owners.map(o => h('span', { className: 'feature works', textContent: `✓ ${o.name}${o.scope.startsWith('rom:') ? '' : ` (${o.scope.replace(':', ' ')})`}` }))
+      : [h('span', { className: 'feature untested', textContent: 'no verified maintainer yet' })]));
+    row.hidden = false;
+  }, () => {});
+  return row;
 }
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP ADB SIDELOAD' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
@@ -352,7 +389,7 @@ async function start() {
   // Progress on this phone in one record per device: locked-in ROM, ticked unlock steps, TWRP, flashed ROMs.
   // ponytail: this browser only; user accounts can sync the same record later.
   const progressKey = `progress:${codename}`;
-  /** @type {{rom?:string, steps?:number[], twrp?:boolean, flashed?:string[]}} */ let progress = {};
+  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[]}} */ let progress = {};
   try { progress = JSON.parse(localStorage.getItem(progressKey) ?? '{}'); } catch { /* private window */ }
   const save = () => { try { localStorage.setItem(progressKey, JSON.stringify(progress)); } catch { /* private window */ } };
   /** @type {HTMLButtonElement[]} */ const lockButtons = [];
@@ -371,6 +408,7 @@ async function start() {
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
+      rom && ownersRow(`${device.codename}/${rom.id}`),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
@@ -384,16 +422,18 @@ async function start() {
     return progress.rom === rom.id;
   });
   const unlock = device.unlock;
+  const alreadyUnlocked = h('input', { type: 'checkbox', checked: !!progress.unlocked });
   const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: progress.steps?.includes(i) ?? false }));
   const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
+    h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this phone'),
     unlock.hints?.length && h('div', { className: 'hints' }, h('strong', { textContent: 'Good to know' }), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
     h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
     unlock.url && link(unlock.url, 'Full unlock guide')] : [h('p', { className: 'field-help', textContent: 'This phone needs no bootloader unlock.' })], unlock ? 'REQUIRED' : '');
   if (unlock) required(unlockSection, () => {
-    progress.steps = stepBoxes.flatMap((box, i) => box.checked ? [i] : []); save();
-    return stepBoxes.every(box => box.checked);
+    progress.steps = stepBoxes.flatMap((box, i) => box.checked ? [i] : []); progress.unlocked = alreadyUnlocked.checked; save();
+    return alreadyUnlocked.checked || stepBoxes.every(box => box.checked);
   });
   const haveTwrp = h('input', { type: 'checkbox', checked: !!progress.twrp });
   const twrpSection = section('2 · TWRP recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,

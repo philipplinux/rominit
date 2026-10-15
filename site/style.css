@@ -332,3 +332,9 @@ progress::-moz-progress-bar { background: var(--teal); }
 .done .lock-in { border-color: var(--teal); color: var(--teal); }
 
 .start-over { float: right; border: 0; background: none; color: var(--faint); font: inherit; font-size: .6rem; letter-spacing: .08em; cursor: pointer; text-decoration: underline; }
+
+.account { margin-right: .8rem; }
+.link-button { border: 0; background: none; padding: 0; color: var(--amber); font: inherit; letter-spacing: inherit; cursor: pointer; text-decoration: underline; }
+.comments .role { border: 1px solid var(--teal); color: var(--teal); padding: 0 .3rem; font-weight: 400; }
+.comments .hidden-comment { opacity: .5; }
+.mod-actions { display: block; margin-top: .3rem; }

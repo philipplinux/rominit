@@ -154,21 +154,36 @@ test('ratings API validates votes and stores only a hashed address', async () =>
   assert.deepEqual(runs.map(([r, voter, stars]) => [r, /^[0-9a-f]{64}$/.test(voter), stars]), [[rom, true, 4]]);
 });
 
-test('comments API checks length, ROM and rate limit', async () => {
+test('comments API needs an account, checks length, ROM and rate limit', async () => {
   const { onRequestPost } = await import('../functions/api/comments.js');
   let recent = null; const inserts = [];
-  const env = { SALT: 'test', ASSETS: { fetch: async () => Response.json(devices.map(d => ({ codename: d.codename, roms: d.roms }))) },
-    DB: { prepare: sql => ({ bind: (...args) => ({ first: async () => recent, run: async () => inserts.push([sql, args]) }) }) } };
-  const post = body => onRequestPost({ env, request: new Request('https://x/api/comments', { method: 'POST', body: JSON.stringify(body) }) });
+  const user = { id: 7, provider: 'github', name: 'Ada', email: 'ada@example.org' };
+  const env = { SALT: 'test', ASSETS: { fetch: async () => Response.json(devices.map(d => ({ codename: d.codename, vendor: d.vendor, roms: d.roms }))) },
+    DB: { prepare: sql => ({ bind: (...args) => ({
+      first: async () => sql.includes('FROM sessions') ? (args[0] === sha('good') ? user : null) : recent,
+      all: async () => ({ results: [] }),
+      run: async () => (inserts.push([sql, args]), { meta: { last_row_id: 1 } }) }) }) } };
+  const post = (body, sid = 'good') => onRequestPost({ env, request: new Request('https://x/api/comments', { method: 'POST', body: JSON.stringify(body), headers: { cookie: `sid=${sid}` } }) });
   const rom = `starlte/${device('starlte').roms[0].id}`;
+  assert.equal((await post({ rom, text: 'hi' }, 'bad')).status, 401);
   assert.equal((await post({ rom, text: '  ' })).status, 400);
   assert.equal((await post({ rom, text: 'x'.repeat(2001) })).status, 400);
   assert.equal((await post({ rom: 'starlte/nope', text: 'hi' })).status, 404);
   assert.equal((await post({ rom, text: 'hi', image: btoa('<svg onload=alert(1)>') })).status, 400);
   assert.equal((await post({ rom, text: ' works great ' })).status, 200);
-  assert.deepEqual(inserts[0][1].filter((_, i) => i !== 1), [rom, 'anonymous', 'works great']);
+  assert.deepEqual(inserts[0][1].filter((_, i) => i !== 1), [rom, 'Ada', 'works great', 7]);
   recent = { 1: 1 };
   assert.equal((await post({ rom, text: 'again' })).status, 429);
+});
+
+test('role scopes and return paths', async () => {
+  const { covers, roleOver, safeReturn } = await import('../functions/_lib/auth.js');
+  const rom = { key: 'starlte/pmos', codename: 'starlte', vendor: 'Samsung', os: 'postmarketOS' };
+  assert.deepEqual(['*', 'os:postmarketOS', 'vendor:Samsung', 'device:starlte', 'rom:starlte/pmos', 'os:LineageOS', 'rom:starlte/other', 'device:'].map(s => covers(s, rom)),
+    [true, true, true, true, true, false, false, false]);
+  assert.equal(roleOver([{ role: 'moderator', scope: '*' }, { role: 'owner', scope: 'rom:starlte/pmos' }], rom), 'owner');
+  assert.equal(roleOver([{ role: 'owner', scope: 'device:hero2lte' }], rom), null);
+  assert.deepEqual(['/x?y=1', '//evil.com', '/\\evil', 'https://evil.com', 5].map(safeReturn), ['/x?y=1', '/', '/', '/', '/']);
 });
 
 test('untar reads a gzip tar with long names and skips unwanted entries', async () => {

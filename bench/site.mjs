@@ -2,6 +2,7 @@
 // Run: npm run build && npm run bench   (CHROMIUM=/path/to/chrome to override the browser)
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -23,7 +24,7 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR
 before(async () => {
   if (await fetch(BASE).then(() => true, () => false)) throw Error(`port ${PORT} is busy; set BENCH_PORT`);
   d1('--file', 'schema.sql');
-  server = spawn('npx', ['wrangler', 'pages', 'dev', 'dist', '--port', String(PORT), '--ip', '127.0.0.1', '--persist-to', state, '--binding', 'SALT=bench'], { stdio: 'ignore', detached: true });
+  server = spawn('npx', ['wrangler', 'pages', 'dev', 'dist', '--port', String(PORT), '--ip', '127.0.0.1', '--persist-to', state, '--binding', 'SALT=bench', '--binding', 'GITHUB_CLIENT_ID=bench', '--binding', 'GITHUB_CLIENT_SECRET=bench'], { stdio: 'ignore', detached: true });
   for (let i = 0; ; i++) {
     if (await fetch(BASE).then(r => r.ok, () => false)) break;
     if (i > 120) throw Error('wrangler pages dev did not start');
@@ -138,6 +139,9 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   await page.locator('.start-over').click();
   await page.locator('.page-section').nth(4).waitFor();
   assert.equal(await page.locator('details.page-section.done').count(), 0);
+  await page.getByLabel('Bootloader is already unlocked').check(); // skips the steps
+  assert.equal(await page.locator('details.page-section', { hasText: '1 · Unlock bootloader' }).first().locator(':scope > summary .badge').innerText(), 'COMPLETED');
+  await page.locator('.start-over').click();
 });
 
 test('section 0 completes by locking in the ROM; install requirements and A/B flag shown', async () => {
@@ -217,23 +221,60 @@ test('view and flash counters per ROM, once per window', async () => {
   await page.getByText('1 view', { exact: true }).waitFor();
 });
 
-test('comment with screenshot stays hidden until approved, then shows capped', async () => {
+/** Signs the page in as a fresh local account; null signs out. @param {string|null} name @param {string} [role] @param {string} [scope] */
+async function signIn(name, role, scope) {
+  await page.context().clearCookies();
+  if (!name) return;
+  const token = `bench-${name}`, hash = createHash('sha256').update(token).digest('hex');
+  d1('--command', `INSERT OR IGNORE INTO users (provider, subject, name) VALUES ('github', '${name}', '${name}');
+    INSERT OR IGNORE INTO sessions (token, user_id, expires) SELECT '${hash}', id, datetime('now', '+1 day') FROM users WHERE subject = '${name}';
+    ${role ? `INSERT INTO roles (user_id, role, scope) SELECT id, '${role}', '${scope}' FROM users WHERE subject = '${name}';` : ''}`);
+  await page.context().addCookies([{ name: 'sid', value: token, url: BASE }]);
+}
+
+test('comments need sign-in; owner badge; moderator approves screenshots and hides comments in the page', async () => {
+  await signIn(null);
   await page.goto(`${BASE}/?device=starlte`);
   const box = page.locator('.comment-box').first();
+  await box.getByText('Sign in to comment:').waitFor();
+  assert.match(await box.getByRole('link', { name: 'GitHub' }).getAttribute('href') ?? '', /^\.\/auth\/github\/login\?return=%2F%3Fdevice%3Dstarlte/);
+  assert.equal(await box.locator('textarea').isVisible(), false);
+  const rom = `starlte/${await page.locator('select').inputValue()}`;
+
+  await signIn('ada', 'owner', `rom:${rom}`);
+  await page.reload();
+  await page.locator('.topbar-note').getByText('ada ·').waitFor();
+  await page.locator('.rating', { hasText: 'maintainer' }).getByText('✓ ada').waitFor();
   await box.locator('textarea').fill('bench comment');
   await box.locator('input[type=file]').setInputFiles({ name: 'shot.png', mimeType: 'image/png', buffer: PNG });
   await box.getByRole('button', { name: 'Post comment' }).click();
   await box.getByText('Posted. The screenshot shows after review.').waitFor();
-  await box.getByText('Screenshot awaiting review.').waitFor();
-  const [{ id }] = await (await fetch(`${BASE}/api/comments?rom=starlte/${await page.locator('select').inputValue()}`)).json();
-  assert.equal((await fetch(`${BASE}/api/image?id=${id}`)).status, 404);
-  d1('--command', `UPDATE comment_images SET approved = 1 WHERE comment_id = ${Number(id)}`);
-  assert.equal((await fetch(`${BASE}/api/image?id=${id}`)).headers.get('content-type'), 'image/webp');
+  assert.equal(await box.locator('.comments .role').first().innerText(), 'maintainer');
+  const [{ id }] = await (await fetch(`${BASE}/api/comments?rom=${rom}`)).json();
+  assert.equal((await fetch(`${BASE}/api/image?id=${id}`)).status, 404, 'pending screenshot hidden from the public');
+
+  await signIn('mo', 'moderator', 'vendor:Samsung');
   await page.reload();
-  const img = page.locator('.comments img');
+  await box.locator('.comments img').waitFor(); // moderators see it for review
+  await box.getByRole('button', { name: 'approve' }).click();
+  await box.getByRole('button', { name: 'approve' }).waitFor({ state: 'detached' });
+  assert.equal((await fetch(`${BASE}/api/image?id=${id}`)).headers.get('content-type'), 'image/webp');
+
+  await signIn(null);
+  await page.reload();
+  const img = box.locator('.comments img');
   await img.waitFor();
   assert.ok(await img.evaluate(el => /** @type {HTMLImageElement} */ (el).naturalWidth > 0));
   assert.equal(await img.evaluate(el => getComputedStyle(el).maxHeight), '240px');
+  assert.equal(await box.getByRole('button', { name: 'hide' }).count(), 0, 'no moderation for the public');
+
+  await signIn('mo');
+  await page.reload();
+  await box.getByRole('button', { name: 'hide' }).click();
+  await box.getByText('· hidden').waitFor();
+  await signIn(null);
+  await page.reload();
+  await box.getByText('No comments yet.').waitFor();
 });
 
 test('report form', async () => {
