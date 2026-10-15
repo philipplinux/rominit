@@ -631,8 +631,7 @@ async function start() {
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
       rom && requirementsRow(rom)) : '',
-      rom && h('div', { className: 'lock-end' }, lockButton()),
-      rom?.login && loginRow(rom.login),
+      rom && h('div', { className: 'lock-end' }, rom.login && loginRow(rom.login), lockButton()),
       rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `)),
       rom && commentsBox(`${device.codename}/${rom.id}`)], rom ? 'REQUIRED' : '');
   if (rom) required(infoSection, () => {

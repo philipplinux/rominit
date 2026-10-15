@@ -352,7 +352,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .lock-path { margin-bottom: 0 !important; padding-right: 1.5rem; padding-bottom: 1.4rem; border-right: 2px dashed var(--arrow); }
 /* The dashed line runs down the right edge and turns left into the button's right side. */
 .lock-end { display: grid; grid-template-columns: 1fr auto 1fr; margin-top: 0 !important; }
-.lock-end .lock-in { grid-column: 2; margin-top: 0; max-width: none; text-align: center; position: relative; }
+.lock-end .lock-in { grid-column: 2; align-self: center; margin-top: 0; max-width: none; text-align: center; position: relative; }
 .lock-end .lock-in::after { content: '◀'; position: absolute; left: 100%; top: 50%; transform: translate(.15rem, -50%); color: var(--arrow); font-size: .8rem; line-height: 1; }
 .lock-end::after { content: ''; grid-column: 3; align-self: start; height: 50%; margin-left: 1rem; border-right: 2px dashed var(--arrow); border-bottom: 2px dashed var(--arrow); border-bottom-right-radius: 14px; }
 @media (max-width: 640px) { .lock-path, .lock-end { --gap: 1rem; } .lock-path { padding-right: .8rem; } }
@@ -429,3 +429,5 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .login-box pre { margin: 0; padding: .8rem 1.4rem; border: 1px solid var(--amber); background: rgb(0 0 0 / 25%); text-align: left; font-size: 1rem; }
 .login-box small { color: var(--muted); }
 .comment-box { border-top: 1px solid rgb(255 255 255 / 8%); padding-top: 1.5rem; }
+.lock-end .login-box { grid-column: 1; grid-row: 1; margin: 0 1.2rem 0 0; justify-self: end; }
+@media (max-width: 640px) { .lock-end { grid-template-columns: 1fr auto; } .lock-end .login-box { grid-column: 1 / -1; justify-self: center; margin: 0 0 1rem; } .lock-end .lock-in { grid-column: 1; grid-row: 2; } .lock-end::after { grid-column: 2; grid-row: 2; } }
