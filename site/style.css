@@ -357,7 +357,12 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .lock-end::after { content: ''; grid-column: 3; align-self: start; height: 50%; margin-left: 1rem; border-right: 2px dashed var(--arrow); border-bottom: 2px dashed var(--arrow); border-bottom-right-radius: 14px; }
 @media (max-width: 640px) { .lock-path, .lock-end { --gap: 1rem; } .lock-path { padding-right: .8rem; } }
 
-.start-over { float: right; border: 0; background: none; color: var(--faint); font: inherit; font-size: .6rem; letter-spacing: .08em; cursor: pointer; text-decoration: underline; }
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.start-over { flex: none; display: grid; justify-items: center; gap: .15rem; border: 1px solid var(--line, #333); background: none; color: var(--muted); font: inherit; padding: .5rem .7rem; cursor: pointer; }
+.start-over .rewind { font-size: 2rem; line-height: 1; filter: grayscale(1); }
+.start-over small { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; }
+.start-over:hover { color: var(--amber); border-color: var(--amber); }
+.start-over:hover .rewind { filter: none; }
 
 .account { margin-right: .8rem; }
 .link-button { border: 0; background: none; padding: 0; color: var(--amber); font: inherit; letter-spacing: inherit; cursor: pointer; text-decoration: underline; }
@@ -456,3 +461,5 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .page-section.report { border-color: rgb(226 110 100 / 45%); background: rgb(226 90 80 / 6%); }
 .page-section.report > summary > span { color: #f0a29b; }
 .page-section.report > summary > span::before { content: '⚑ '; color: #e8706a; }
+.report-section { font: inherit; background: var(--panel, #1b1b1b); color: inherit; border: 1px solid #444; padding: .2rem .4rem; }
+.inbox-group .comments select { font: inherit; }

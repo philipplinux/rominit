@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS reports (
   page TEXT NOT NULL,  -- path + query of the page, e.g. /?device=starlte
   voter TEXT NOT NULL, -- salted address hash, for the rate limit only
   text TEXT NOT NULL,
-  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  section TEXT -- which page section it is about ("2 · Custom recovery"), or NULL for the whole page
 );
 
 CREATE TABLE IF NOT EXISTS counts (

@@ -180,6 +180,11 @@ me.then(info => {
     slot.append(open, pop);
   }
   document.querySelector('.topbar-side')?.append(slot);
+  if (info.user?.roles.some((/** @type {any} */ r) => r.role === 'admin')) {
+    const link = h('a', { href: './?view=inbox', textContent: 'Inbox' });
+    if (!params.get('device') && params.get('view') === 'inbox') link.setAttribute('aria-current', 'page');
+    document.querySelector('.sitenav a[href="./?view=favorites"]')?.after(link);
+  }
 });
 const ROLE_LABEL = /** @type {Record<string, string>} */ ({ owner: 'maintainer', moderator: 'moderator', admin: 'admin' });
 
@@ -576,6 +581,29 @@ async function favoritesView(index) {
   return card;
 }
 
+/** Admin inbox: unsorted page reports, grouped by the section they are about. */
+async function inboxView() {
+  const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox · page reports' }));
+  const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
+  if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
+  const { reports, labels } = await r.json();
+  if (!reports.length) return card.append(h('p', { className: 'empty-files', textContent: 'Inbox zero: no unsorted reports.' })), card;
+  const by = /** @type {Record<string, any[]>} */ ({});
+  for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
+  for (const [section, items] of Object.entries(by).sort(([a], [b]) => a.localeCompare(b))) card.append(h('details', { className: 'page-section inbox-group', open: true },
+    h('summary', {}, h('span', { textContent: section }), h('small', { textContent: `${items.length} report${items.length === 1 ? '' : 's'}` })),
+    h('ol', { className: 'comments' }, ...items.map(x => {
+      const label = h('select', {}, ...labels.map((/** @type {string} */ l) => h('option', { textContent: l })));
+      const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }), h('label', { className: 'field-help' }, 'File as ', label, ' ',
+        h('button', { type: 'button', className: 'button button-secondary', textContent: 'File', async onclick() {
+          const ok = (await fetch('./api/inbox', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ref: x.id, label: label.value }) })).ok;
+          if (ok) li.remove(); else li.append(h('small', { textContent: ' could not file' }));
+        } })));
+      return li;
+    }))));
+  return card;
+}
+
 /** Phones ranked by successful flashes, then views, from the counts API. @param {any[]} index */
 async function popularView(index) {
   const counts = await fetch('./api/counts', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
@@ -593,17 +621,23 @@ async function popularView(index) {
 function reportBox() {
   const page = location.pathname + location.search;
   const text = h('textarea', { className: 'confirmation-input', placeholder: 'What is wrong or missing? (wrong file, broken step, outdated info…)', maxLength: 2000, rows: 3 });
+  const where = h('select', { className: 'report-section' }, h('option', { value: '', textContent: 'Whole page' }));
   const send = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Send report' }), status = h('small', {});
   const issue = `https://github.com/philipplinux/rominit/issues/new?title=${encodeURIComponent(`Problem on ${page}`)}`;
   send.addEventListener('click', async () => {
     status.textContent = 'Sending…';
-    const response = await fetch('./api/reports', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page, text: text.value }) }).catch(() => null);
+    const response = await fetch('./api/reports', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page, text: text.value, section: where.value }) }).catch(() => null);
     const reply = await response?.json().catch(() => ({}));
     status.textContent = response?.ok ? 'Thanks, report sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
-  return h('details', { className: 'page-section report' }, h('summary', {}, h('span', { textContent: 'S · Submit report' }), h('small', { textContent: 'something wrong on this page?' })),
+  const box = h('details', { className: 'page-section report', ontoggle() {
+    if (where.isConnected) return; // built on first open, from this page's own sections
+    for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
+    text.before(h('label', { className: 'field-help' }, 'About: ', where));
+  } }, h('summary', {}, h('span', { textContent: 'S · Submit report' }), h('small', { textContent: 'something wrong on this page?' })),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
+  return box;
 }
 async function start() {
   const codename = params.get('device'), view = params.get('view');
@@ -618,7 +652,7 @@ async function start() {
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
-    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : devicePicker(index));
+    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView() : devicePicker(index));
     return;
   }
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
@@ -736,9 +770,10 @@ async function start() {
         if (document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } } }),
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),
         ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
-      h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
-      h('button', { className: 'start-over', type: 'button', textContent: 'Start over (forget progress on this phone)', onclick() {
-        try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } }),
+      h('div', { className: 'title-row' }, h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
+        h('button', { className: 'start-over', type: 'button', title: 'Forget progress on this phone and start from section 0', onclick() {
+          try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
+          h('span', { className: 'rewind', textContent: '⏪', ariaHidden: 'true' }), h('small', { textContent: 'Start over' }))),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     infoSection,
     unlockSection,
