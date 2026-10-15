@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, USES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -36,13 +36,16 @@ const includesRows = rating => ['yes', 'optional', 'no'].map(value => {
     ...items.map(i => h('span', { className: 'feature', textContent: LABEL[i] ?? i })));
 });
 /** "7/10 work" summary for lists. @param {any} rating */
-const untested = rating => FEATURES.filter(f => rating.features[f] === 'untested').length;
-const complete = rating => `${completeness(rating)}% works${untested(rating) ? ` (${untested(rating)} untested)` : ''}`;
-const score = rating => `${complete(rating)} · ${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
+/** "as computer 67% (4 untested)" @param {any} rating @param {'computer'|'phone'} use @param {boolean} details */
+const complete = (rating, use, details = false) => {
+  const untested = USES[use].filter(f => rating.features[f] === 'untested').length;
+  return `as ${use} ${completeness(rating, USES[use])}%${details && untested ? ` (${untested} untested)` : ''}`;
+};
+const score = rating => `${complete(rating, 'computer')} · ${complete(rating, 'phone')} · ${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
-  `built ${rating.released}`, `support: ${rating.support}`, complete(rating)].map(text => h('span', { className: 'feature', textContent: text })));
+  `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), complete(rating, 'phone', true)].map(text => h('span', { className: 'feature', textContent: text })));
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { FEATURES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, USES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -133,6 +133,7 @@ test('completeness counts partial as half and skips n/a', () => {
   const features = Object.fromEntries(FEATURES.map((f, i) => [f, ['works', 'partial', 'broken', 'n/a'][i % 4]]));
   const present = FEATURES.filter((_, i) => i % 4 !== 3).length, worth = FEATURES.reduce((sum, _, i) => sum + [1, 0.5, 0, 0][i % 4], 0);
   assert.equal(completeness({ features }), Math.round(100 * worth / present));
+  for (const list of Object.values(USES)) assert.ok(list.every(f => FEATURES.includes(f)));
 });
 
 test('checksum streams to the right digest', async () => {

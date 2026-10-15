@@ -18,8 +18,15 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Share of hardware features that work (partial counts half), 0-100. @param {any} rating */
-export function completeness(rating) {
-  const present = FEATURES.filter(f => rating.features[f] !== 'n/a');
+/** Which features matter for each way of using the phone. */
+export const USES = {
+  computer: ['flashing', 'usb_net', 'storage', 'sdcard', 'battery', 'screen', 'gpu', 'audio', 'wifi', 'bluetooth', 'otg', 'hdmi', 'fde'],
+  phone: ['screen', 'touch', 'battery', 'audio', 'calls', 'sms', 'data', 'camera', 'camera_flash', 'gps', 'wifi', 'bluetooth',
+    'accelerometer', 'proximity', 'light', 'haptics', 'fingerprint', 'nfc'],
+};
+/** Share of the given features that work (partial counts half, n/a skipped), 0-100. @param {any} rating @param {string[]} features */
+export function completeness(rating, features = FEATURES) {
+  const present = features.filter(f => rating.features[f] !== 'n/a');
   return Math.round(100 * present.reduce((sum, f) => sum + (({ works: 1, partial: 0.5 })[rating.features[f]] ?? 0), 0) / present.length);
 }
 const SHA = /^[0-9a-f]{64}$/;
