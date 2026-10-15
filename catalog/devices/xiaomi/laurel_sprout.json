@@ -18,7 +18,25 @@
   },
   "unlock": {
     "text": "Unlocked bootloader needed: `fastboot flashing unlock` (wipes the phone).",
-    "url": "https://wiki.lineageos.org/devices/laurel_sprout/install/"
+    "url": "https://wiki.lineageos.org/devices/laurel_sprout/install/",
+    "steps": [
+      "Back up everything. Unlocking erases the phone.",
+      "Settings › About phone: tap Build number 7 times to turn on Developer options.",
+      "Settings › System › Developer options: OEM unlocking on.",
+      "Power off, then hold Power + Volume Down for fastboot mode. On a computer run `fastboot flashing unlock`, pick Unlock with the volume keys and press Power. The phone wipes and restarts.",
+      "Back in fastboot mode, the flasher checks `unlocked: yes` itself before writing anything. Go to step 2."
+    ],
+    "pivots": [
+      {
+        "problem": "Bootloop after flashing",
+        "fix": "Fastboot mode (Power + Volume Down) still works. Step 4 restores Xiaomi stock."
+      }
+    ],
+    "hints": [
+      "Android One phone: no Mi Unlock app and no waiting period, `fastboot flashing unlock` is enough.",
+      "OEM unlocking stays grey until the phone has been online once: connect to Wi-Fi for a minute.",
+      "Charge to at least 50 % and use a data USB cable."
+    ]
   },
   "recovery": {
     "text": "Quick way: slot a still holds stock Android: `fastboot set_active a`, then `fastboot -w`. Full restore: the stock package below.",

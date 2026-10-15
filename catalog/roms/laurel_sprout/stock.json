@@ -376,6 +376,12 @@
             ]
           ]
         }
+      ],
+      "slots": "ab",
+      "requirements": [
+        "Unlocked bootloader; it stays unlocked afterwards.",
+        "Writes both slots (a and b), like Xiaomi's flash_all.sh.",
+        "Anti-rollback: the flasher refuses if the phone is newer than this package."
       ]
     }
   ]

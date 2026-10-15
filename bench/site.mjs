@@ -100,7 +100,7 @@ test('ROM select groups by origin; stock ROMs only under Recover / revert', asyn
   await page.goto(`${BASE}/?device=laurel_sprout`);
   const labels = await page.locator('select optgroup').evaluateAll(groups => groups.map(g => g.getAttribute('label')));
   assert.ok(!labels.includes('stock'), 'stock is not offered as a ROM');
-  const revert = page.locator('details.page-section', { hasText: '3 · Recover / revert' });
+  const revert = page.locator('details.page-section', { hasText: '4 · Recover / revert' });
   await revert.locator(':scope > summary').click();
   assert.equal(await revert.locator('.stage-card').count(), 1);
   assert.match(await revert.locator('.stage-card details summary').innerText(), /^\d+ steps$/, 'long step lists collapse');
@@ -110,6 +110,46 @@ test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
   assert.deepEqual(await page.locator('.version-chip').allInnerTexts(), ['ODIN', 'TWRP-SIDELOAD']);
   assert.match(await page.locator('select').inputValue(), /^lineage-21/);
+});
+
+test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM, recover', async () => {
+  await page.goto(`${BASE}/?device=hero2lte`);
+  await page.locator('.page-section').nth(4).waitFor();
+  assert.deepEqual((await page.locator('.page-section > summary > span').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 5), ['0', '1', '2', '3', '4']);
+  const unlock = page.locator('details.page-section', { hasText: '1 · Unlock bootloader' });
+  assert.equal(await unlock.first().locator(':scope > summary .badge').innerText(), 'REQUIRED');
+  assert.ok(await unlock.first().locator('.guide li').count() >= 4);
+  await unlock.first().locator('.pivots summary').click();
+  assert.equal(await unlock.first().locator('.pivots a[href="https://samfw.com/"]').count(), 1);
+  assert.equal(await page.locator('details.page-section', { hasText: '2 · TWRP recovery' }).locator(':scope > summary .badge').innerText(), 'REQUIRED');
+  const first = unlock.first();
+  assert.match(await first.getAttribute('class') ?? '', /required(?! done)/);
+  for (const box of await first.locator('.guide input[type=checkbox]').all()) await box.check();
+  assert.match(await first.getAttribute('class') ?? '', /done/);
+  assert.equal(await first.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false);
+  await page.reload(); // ticks are remembered
+  assert.match(await page.locator('details.page-section', { hasText: '1 · Unlock bootloader' }).first().getAttribute('class') ?? '', /done/);
+  const twrp = page.locator('details.page-section', { hasText: '2 · TWRP recovery' });
+  await twrp.getByLabel('TWRP is already installed').check();
+  assert.equal(await twrp.locator(':scope > summary .badge').innerText(), 'COMPLETED');
+  assert.equal(await twrp.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false, 'completed section collapses');
+});
+
+test('section 0 completes by locking in the ROM; install requirements and A/B flag shown', async () => {
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  const info = page.locator('details.page-section').first();
+  await info.locator('.requirements').getByText('A/B slots').waitFor();
+  assert.equal(await page.locator('.hints').count(), 1, 'vendor hints in the unlock guide');
+  assert.equal(await info.locator('.lock-in').count(), 2, 'by the select and under the features');
+  await info.locator('.lock-in').last().click();
+  assert.equal(await info.locator(':scope > summary .badge').innerText(), 'COMPLETED');
+  assert.equal(await info.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false);
+  await page.reload();
+  const again = page.locator('details.page-section').first();
+  assert.match(await again.getAttribute('class') ?? '', /done/);
+  await again.locator(':scope > summary').click();
+  await again.locator('.lock-in').first().click(); // unlock again for the later tests
+  assert.equal(await again.locator(':scope > summary .badge').innerText(), 'REQUIRED');
 });
 
 test('broken ROMs are listed but not flashable', async () => {

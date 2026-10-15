@@ -87,6 +87,10 @@ function slideshow(shots) {
     h('button', { className: 'slide-prev', type: 'button', 'aria-label': 'Previous screenshot', textContent: '‹', onclick: () => go(-1) }),
     h('button', { className: 'slide-next', type: 'button', 'aria-label': 'Next screenshot', textContent: '›', onclick: () => go(1) }), counter);
 }
+/** A/B or single slot plus everything the install assumes. @param {any} rom */
+const requirementsRow = rom => h('div', { className: 'requirements' }, h('p', { className: 'rating' }, h('strong', { textContent: 'install' }),
+  h('span', { className: 'feature', textContent: rom.slots === 'ab' ? 'A/B slots' : 'single slot' })),
+  h('ul', {}, ...rom.requirements.map((/** @type {string} */ r) => h('li', {}, ...rich(r)))));
 /** User stars from the ratings API; stays hidden where there is no API (static preview). @param {string} key `<codename>/<rom id>` */
 function starsRow(key) {
   const summary = h('span', { className: 'feature' }), status = h('small', {});
@@ -220,9 +224,9 @@ function stageCard(device, stage, n, count, key) {
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
       await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
       st.finished = true;
+      status.dispatchEvent(new Event('stage-done', { bubbles: true })); // turns a required page section green
       log.append(h('li', {}, ...rich(stage.done)));
       if (n === count) bump(key, 'flash');
-      if (n === count) log.append(h('li', {}, 'Worked? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: 'Buy the maintainer a coffee' }), '.'));
     } catch (error) {
       st.lost = true;
       report(`STOPPED: ${message(error)} Do not retry blindly; reload the page first.`);
@@ -232,7 +236,7 @@ function stageCard(device, stage, n, count, key) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [device.modes[stage.mode], protocol !== 'adb' && protocol !== 'sideload' && device.unlock?.text, 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
+  const guide = [device.modes[stage.mode], protocol !== 'adb' && protocol !== 'sideload' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },
@@ -324,12 +328,92 @@ async function start() {
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
-  const section = (title, hint, open, body) => h('details', { className: 'page-section', open },
-    h('summary', {}, h('span', { textContent: title }), h('small', { textContent: hint })), ...body);
+  const section = (title, hint, open, body, badge = '') => h('details', { className: 'page-section', open },
+    h('summary', {}, h('span', { textContent: title }), badge && h('b', { className: 'badge', textContent: badge }), h('small', { textContent: hint })), ...body);
   /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
   const cards = (r, which) => r.stages.flatMap((/** @type {any} */ stage, /** @type {number} */ i) =>
     stage.section === which ? [stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)] : []);
   const tools = rom && flashable(rom) ? cards(rom, 'tools') : [];
+  /**
+   * Required sections are amber until done, then green and (by default) collapsed. @param {any} el @param {() => boolean} done @param {() => void} [onDone]
+   */
+  const required = (el, done, onDone = () => { el.open = false; }) => {
+    el.classList.add('required');
+    let was = false;
+    const update = () => {
+      const ok = done();
+      el.classList.toggle('done', ok); el.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'REQUIRED';
+      if (ok && !was) onDone();
+      was = ok;
+    };
+    el.addEventListener('change', update); el.addEventListener('stage-done', update); update();
+    return el;
+  };
+  const lockKey = `rom-locked:${codename}`;
+  let locked = ''; try { locked = localStorage.getItem(lockKey) ?? ''; } catch { /* private window */ }
+  /** @type {HTMLButtonElement[]} */ const lockButtons = [];
+  /** "Lock in this ROM", next to the select and under the features; locking completes section 0. */
+  const lockButton = () => {
+    const button = h('button', { className: 'button button-secondary lock-in', type: 'button', onclick() {
+      locked = locked === rom.id ? '' : rom.id;
+      try { localStorage.setItem(lockKey, locked); } catch { /* private window */ }
+      infoSection.dispatchEvent(new Event('change'));
+    } });
+    lockButtons.push(button);
+    return button;
+  };
+  const infoSection = section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
+      h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect, lockButton(),
+      rom?.screenshots?.length && slideshow(rom.screenshots),
+      rom && kindRow(rom),
+      rom && starsRow(`${device.codename}/${rom.id}`),
+      rom && countsRow(`${device.codename}/${rom.id}`),
+      rom && ratingRow(rom.rating),
+      rom && metaRow(rom.rating),
+      ...(rom ? includesRows(rom.rating) : []),
+      rom && requirementsRow(rom),
+      rom && lockButton(),
+      rom?.login && loginRow(rom.login),
+      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `), rom.homepage && link(rom.homepage, 'Release page')),
+      rom && commentsBox(`${device.codename}/${rom.id}`)], rom ? 'REQUIRED' : '');
+  if (rom) required(infoSection, () => {
+    for (const b of lockButtons) b.textContent = locked === rom.id ? '✓ Locked in · change' : `Lock in ${rom.name} ${rom.version}`;
+    return locked === rom.id;
+  });
+  const unlock = device.unlock, saved = `unlocked-steps:${codename}`;
+  /** Ticked unlock steps survive a reload (the 7-day Samsung wait). */
+  let ticked = []; try { ticked = JSON.parse(localStorage.getItem(saved) ?? '[]'); } catch { /* private window */ }
+  const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: ticked.includes(i) }));
+  const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
+    unlock.hints?.length && h('div', { className: 'hints' }, h('strong', { textContent: 'Good to know' }), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
+    h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
+    unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
+      h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
+    unlock.url && link(unlock.url, 'Full unlock guide')] : [h('p', { className: 'field-help', textContent: 'This phone needs no bootloader unlock.' })], unlock ? 'REQUIRED' : '');
+  if (unlock) required(unlockSection, () => {
+    try { localStorage.setItem(saved, JSON.stringify(stepBoxes.flatMap((box, i) => box.checked ? [i] : []))); } catch { /* private window */ }
+    return stepBoxes.every(box => box.checked);
+  });
+  const haveTwrp = h('input', { type: 'checkbox' });
+  const twrpSection = section('2 · TWRP recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,
+    tools.length ? [h('label', { className: 'field-help' }, haveTwrp, ' TWRP is already installed on this phone'), h('div', { className: 'stages' }, ...tools)]
+      : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : '');
+  let twrpDone = 0;
+  twrpSection.addEventListener('stage-done', () => twrpDone++);
+  if (tools.length) required(twrpSection, () => haveTwrp.checked || twrpDone >= tools.length);
+  const romCards = rom && flashable(rom) ? cards(rom, 'rom') : [];
+  const romSection = section('3 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
+      rom && requirementsRow(rom),
+      rom?.login && loginRow(rom.login),
+      rom && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
+        : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length ? 'REQUIRED' : '');
+  let romDone = 0;
+  romSection.addEventListener('stage-done', () => romDone++);
+  if (romCards.length) required(romSection, () => romDone >= romCards.length, () => romSection.querySelector(':scope > summary').after(
+    h('p', { className: 'congrats' }, h('strong', { textContent: `Congratulations, ${rom.name} is on your ${device.name}!` }),
+      ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {
+        e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
+      '. Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }), '.')));
   main.append(
     h('section', { className: 'intro' },
       h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {
@@ -338,25 +422,11 @@ async function start() {
         ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
-    section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
-      h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect,
-      rom?.screenshots?.length && slideshow(rom.screenshots),
-      rom && kindRow(rom),
-      rom && starsRow(`${device.codename}/${rom.id}`),
-      rom && countsRow(`${device.codename}/${rom.id}`),
-      rom && ratingRow(rom.rating),
-      rom && metaRow(rom.rating),
-      ...(rom ? includesRows(rom.rating) : []),
-      rom?.login && loginRow(rom.login),
-      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `), rom.homepage && link(rom.homepage, 'Release page')),
-      rom && commentsBox(`${device.codename}/${rom.id}`)]),
-    section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
-      tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
-    section('2 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
-      rom?.login && loginRow(rom.login),
-      rom && (flashable(rom) ? h('div', { className: 'stages' }, ...cards(rom, 'rom'))
-        : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))]),
-    section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
+    infoSection,
+    unlockSection,
+    twrpSection,
+    romSection,
+    section('4 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
         ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`))))]));

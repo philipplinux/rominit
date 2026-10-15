@@ -309,3 +309,24 @@ progress::-moz-progress-bar { background: var(--teal); }
 .slide-prev, .slide-next { position: absolute; top: 40%; border: 1px solid var(--line); background: rgb(0 0 0 / .6); color: inherit; font-size: 1.4rem; width: 2rem; height: 2.4rem; cursor: pointer; }
 .slide-prev { left: 4px; } .slide-next { right: 4px; }
 .slide-count { position: absolute; right: 6px; bottom: 6px; font-size: .7rem; background: rgb(0 0 0 / .6); padding: .1rem .35rem; }
+
+.badge { border: 1px solid var(--amber); color: var(--amber); font-size: .58rem; letter-spacing: .1em; padding: .1rem .35rem; }
+.guide { margin: 0; padding-left: 1.3rem; font-size: .78rem; line-height: 1.55; }
+.guide li + li { margin-top: .35rem; }
+.pivots { font-size: .75rem; border-left: 2px solid var(--amber); padding: .3rem .7rem; }
+.pivots summary { color: var(--amber); cursor: pointer; }
+.pivots dt { margin-top: .5rem; color: var(--amber); }
+.pivots dd { margin: .15rem 0 0; }
+
+.page-section.required { border-color: var(--amber); background: rgb(230 195 154 / 7%); }
+.page-section.required.done { border-color: var(--teal); background: rgb(168 197 160 / 8%); }
+.page-section.done .badge { border-color: var(--teal); color: var(--teal); }
+.guide label { cursor: pointer; }
+
+.congrats { border-left: 2px solid var(--teal); padding: .5rem .8rem; color: var(--teal); }
+
+.hints { font-size: .75rem; border-left: 2px solid var(--teal); padding: .3rem .7rem; }
+.hints ul, .requirements ul { margin: .3rem 0 0; padding-left: 1.1rem; }
+.requirements { font-size: .75rem; }
+.lock-in { margin-top: .5rem; max-width: calc(100% - 2 * clamp(16px, 3vw, 28px)); white-space: normal; text-align: left; }
+.done .lock-in { border-color: var(--teal); color: var(--teal); }

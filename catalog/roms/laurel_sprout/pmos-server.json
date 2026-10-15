@@ -128,6 +128,12 @@
           ],
           "done": "First boot takes about a minute, then `ssh user@172.16.42.1` over USB."
         }
+      ],
+      "slots": "ab",
+      "requirements": [
+        "Unlocked bootloader (step 1).",
+        "Installs to slot b and makes it active; stock Android stays on slot a.",
+        "Erases userdata (all Android data)."
       ]
     }
   ]

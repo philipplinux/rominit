@@ -35,7 +35,39 @@
     "sideload": "Boot TWRP (Volume Up + Home + Power). Coming from Samsung firmware or another ROM: Wipe › Format Data, type yes (erases everything on the phone). Then Advanced › ADB Sideload, swipe to start."
   },
   "unlock": {
-    "text": "OEM unlock must be enabled in Android developer options before anything can be flashed."
+    "text": "OEM unlocking must be on before anything can be flashed.",
+    "steps": [
+      "Back up everything. Unlocking and the later Format Data erase the phone.",
+      "Settings › About phone › Software information: Android version must be 8.0.0. On 7.x, update through Settings › Software update first, or flash Android 8 stock from SamFW (see Stuck?).",
+      "Tap Build number 7 times to turn on Developer options.",
+      "Settings › Developer options › OEM unlocking: on, and confirm. Exynos Samsungs have no fastboot unlock command; this switch is the unlock.",
+      "Remove your Google and Samsung accounts (Settings › Accounts), so the phone does not ask for them again (FRP) after the wipe.",
+      "Boot Download Mode (Volume Down + Home + Power, then Volume Up) and read the small text top left: `FRP LOCK: OFF`, and no `RMM STATE: Prenormal` or `KG STATE: Prenormal`. All clear: go to step 2."
+    ],
+    "pivots": [
+      {
+        "problem": "OEM unlocking is missing from Developer options",
+        "fix": "Samsung hides it for 7 days after setup or a reset. Faster: Settings › General management › Date and time, turn Automatic off and set the date a month back, then Software update › Download updates manually, reboot and look again. Otherwise keep the phone online for 7 days (168 h) without rebooting."
+      },
+      {
+        "problem": "`RMM STATE` or `KG STATE: Prenormal`, or Odin says “Only official released binaries are allowed to be flashed”",
+        "fix": "The phone is in Samsung's 7-day lock. Flash nothing custom yet: boot Android, stay online without rebooting until OEM unlocking appears, then retry."
+      },
+      {
+        "problem": "Soft-locked: “Custom binary blocked by FRP lock”, a bootloop or a black screen",
+        "fix": "Download Mode still works. Get the stock firmware for your exact model and CSC from SamFW, flash BL, AP, CP and CSC with Odin, boot Android, then start this guide again.",
+        "url": "https://samfw.com/"
+      },
+      {
+        "problem": "After a reset the phone asks for the previous Google account",
+        "fix": "That is Google's FRP. Sign in with the account that was on the phone; ROMinit does not bypass it."
+      }
+    ],
+    "hints": [
+      "OEM unlocking only appears after the phone has been online: connect to Wi-Fi for a minute. Right after setup or a reset Samsung can hide it for up to 7 days.",
+      "Charge to at least 50 % and use a data USB cable; charge-only cables never show up.",
+      "Exynos models only. The Snapdragon (US) models cannot be unlocked at all."
+    ]
   },
   "recovery": {
     "text": "Download Mode still works after a bootloop: SamFW has the stock firmware and an Odin-style tool to go back to Android.",

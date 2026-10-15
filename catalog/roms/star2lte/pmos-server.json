@@ -173,6 +173,12 @@
           ],
           "done": "Images written and verified on the phone. First boot and SSH still need checking by hand."
         }
+      ],
+      "slots": "single",
+      "requirements": [
+        "OEM unlocking on (step 1).",
+        "TWRP from step 2; boot straight into it after flashing.",
+        "Overwrites SYSTEM, VENDOR and BOOT: Android is gone until stock is flashed again."
       ]
     }
   ]

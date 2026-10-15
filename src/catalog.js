@@ -50,6 +50,10 @@ export function problems(device, romFile) {
   need(device?.vendor && device?.name, `${device?.codename}: vendor and name are required`);
   need(device?.series && device?.family && device?.variant, `${device?.codename}: series, family and variant are required (All › vendor › series › family › variant)`);
   need((device?.unsupported ?? []).every(u => u.name && u.models?.length && u.why), `${device?.codename}: unsupported variants need name, models and why`);
+  const unlock = device?.unlock;
+  need(unlock === undefined || (unlock.text && unlock.steps?.length && [...unlock.steps, ...unlock.hints ?? []].every(step => typeof step === 'string')
+    && (unlock.pivots ?? []).every(p => p.problem && p.fix && (p.url === undefined || p.url.startsWith('https://')))),
+  `${device?.codename}: unlock needs text and steps (hints are strings); each pivot needs problem, fix and an https url if any`);
   need(romFile?.device === device?.codename, `rom file device "${romFile?.device}" ≠ ${device?.codename}`);
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;
@@ -58,6 +62,8 @@ export function problems(device, romFile) {
     need(typeof rom.curated === 'boolean', `${at}: curated must be true or false`);
     need(rom.origin in ORIGINS && rom.status in STATUSES, `${at}: origin (${Object.keys(ORIGINS).join('/')}) and status (${Object.keys(STATUSES).join('/')}) are required`);
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
+    // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.
+    need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
     const features = rom.rating?.features ?? {};
     need(/^\d{4}-\d{2}-\d{2}$/.test(rom.rating?.checked ?? '') && FEATURES.every(f => STATES.includes(features[f])) && Object.keys(features).length === FEATURES.length,

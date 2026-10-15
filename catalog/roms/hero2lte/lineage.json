@@ -120,8 +120,15 @@
               "lineage-21.0-20240620-UNOFFICIAL-hero2lte.zip"
             ]
           ],
-          "done": "TWRP installed the zip. Tap Reboot \u203a System; the first boot takes a few minutes."
+          "done": "TWRP installed the zip. Tap Reboot › System; the first boot takes a few minutes."
         }
+      ],
+      "slots": "single",
+      "requirements": [
+        "Samsung Android 8.0 firmware (bootloader) on the phone; flash Oreo stock from SamFW first if it is on Android 7.",
+        "TWRP from step 2.",
+        "Format Data in TWRP before the sideload: erases the phone.",
+        "Google apps (optional): sideload MindTheGapps 14 right after, before the first boot."
       ]
     },
     {
@@ -243,8 +250,15 @@
               "lineage-20.0-20250628-UNOFFICIAL-hero2lte.zip"
             ]
           ],
-          "done": "TWRP installed the zip. Tap Reboot \u203a System; the first boot takes a few minutes."
+          "done": "TWRP installed the zip. Tap Reboot › System; the first boot takes a few minutes."
         }
+      ],
+      "slots": "single",
+      "requirements": [
+        "Samsung Android 8.0 firmware (bootloader) on the phone; flash Oreo stock from SamFW first if it is on Android 7.",
+        "TWRP from step 2.",
+        "Format Data in TWRP before the sideload: erases the phone.",
+        "Google apps (optional): sideload MindTheGapps 13 right after, before the first boot."
       ]
     }
   ]
