@@ -9,6 +9,13 @@
       "tier": "experimental",
       "rating": {
         "checked": "2026-10-15",
+        "kernel": {
+          "version": "7.2.3",
+          "type": "mainline"
+        },
+        "base": "postmarketOS edge",
+        "released": "2026-10-13",
+        "support": "active",
         "features": {
           "display": "works",
           "touch": "works",
@@ -20,6 +27,19 @@
           "camera": "broken",
           "mobile": "broken",
           "gps": "untested"
+        },
+        "includes": {
+          "google_play": "no",
+          "microg": "no",
+          "android_apps": "no",
+          "phone_ui": "no",
+          "root": "yes",
+          "updates": "yes",
+          "encryption": "no",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "yes",
+          "docker": "yes"
         }
       },
       "notes": "Runs on real hardware. Flashing through the browser is not hardware-tested yet.",

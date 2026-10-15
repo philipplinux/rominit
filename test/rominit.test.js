@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { assertConsent, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -28,8 +28,11 @@ test('validator rejects bad entries', () => {
   stage.files[1].sha256 = 'nope';
   stage.confirm = 'yes';
   bad.roms[0].rating.features.wifi = 'great';
+  delete bad.roms[0].rating.includes.root;
+  bad.roms[0].rating.kernel.type = 'vendor';
+  delete bad.roms[0].rating.support;
   const found = problems(dev, bad).join('\n');
-  for (const text of ['unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
+  for (const text of ['unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs', 'rating.includes needs', 'rating.kernel needs', 'support']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
 });
 
 /** Fake fastboot that records commands. */
@@ -124,6 +127,11 @@ test('file selection, consent and options', () => {
   assertConsent(stage, { consent: true, confirmation: stage.confirm });
   assert.ok(!stepsFor(stage).some(([verb]) => verb === 'mkfs_ext4'));
   assert.ok(!stepsFor(stage, { reboot: false }).some(([verb]) => verb === 'reboot'));
+});
+
+test('completeness counts partial as half', () => {
+  const features = Object.fromEntries(FEATURES.map((f, i) => [f, i < 7 ? 'works' : i < 9 ? 'partial' : 'broken']));
+  assert.equal(completeness({ features }), 80);
 });
 
 test('checksum streams to the right digest', async () => {

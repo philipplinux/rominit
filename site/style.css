@@ -270,3 +270,7 @@ progress::-moz-progress-bar { background: var(--teal); }
 .feature.broken { color: #e98b7a; }
 .feature.untested { color: var(--faint); }
 .rating small { align-self: center; color: var(--faint); }
+.rating.includes strong { min-width: 5.5rem; align-self: center; font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
+.rating.includes.yes .feature { border-color: var(--teal-dim); color: var(--teal); }
+.rating.includes.optional .feature { color: var(--amber); }
+.rating.includes.no .feature { color: var(--faint); text-decoration: line-through; }

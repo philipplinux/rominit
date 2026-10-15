@@ -1,4 +1,4 @@
-import { FEATURES, assertConsent, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, INCLUDES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -26,9 +26,22 @@ const go = (/** @type {Record<string,string>} */ query) => { location.search = `
 
 const size = (/** @type {number} */ bytes) => bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(0)} KiB` : `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
 const MARK = { works: '✓', partial: '~', broken: '✗', untested: '?' };
-const LABEL = { usb_net: 'usb net', wifi: 'wi-fi', mobile: 'calls/data' };
+const LABEL = { usb_net: 'usb net', wifi: 'wi-fi', mobile: 'calls/data', google_play: 'Google Play', microg: 'microG', android_apps: 'Android apps',
+  phone_ui: 'phone UI', updates: 'updates', encryption: 'encryption', relock: 'bootloader relock', banking_apps: 'banking apps', ssh: 'SSH', docker: 'Docker' };
+/** Includes / lacks rows; optional items are listed as add-ons. @param {any} rating */
+const includesRows = rating => ['yes', 'optional', 'no'].map(value => {
+  const items = INCLUDES.filter(i => rating.includes[i] === value);
+  return items.length > 0 && h('p', { className: `rating includes ${value}` }, h('strong', { textContent: ({ yes: 'Includes', optional: 'Add-on', no: 'Lacks' })[value] }),
+    ...items.map(i => h('span', { className: 'feature', textContent: LABEL[i] ?? i })));
+});
 /** "7/10 work" summary for lists. @param {any} rating */
-const score = rating => `${FEATURES.filter(f => rating.features[f] === 'works').length}/${FEATURES.length} work`;
+const untested = rating => FEATURES.filter(f => rating.features[f] === 'untested').length;
+const complete = rating => `${completeness(rating)}% works${untested(rating) ? ` (${untested(rating)} untested)` : ''}`;
+const score = rating => `${complete(rating)} · ${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
+const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
+/** Kernel, base, build date and support. @param {any} rating */
+const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
+  `built ${rating.released}`, `support: ${rating.support}`, complete(rating)].map(text => h('span', { className: 'feature', textContent: text })));
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('p', { className: 'rating' }, ...FEATURES.map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
   textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })), h('small', { textContent: ` curated ${rating.checked} · user ratings coming` }));
@@ -192,6 +205,8 @@ async function start() {
     section('2 · ROM', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
       rom && ratingRow(rom.rating),
+      rom && metaRow(rom.rating),
+      ...(rom ? includesRows(rom.rating) : []),
       rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''}${rom.login ? ` Login afterwards: \`${rom.login}\`, change it.` : ''} `), rom.homepage && link(rom.homepage, 'Release page')),
       rom && h('div', { className: 'stages' }, ...cards(rom, 'rom'))]),
     section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [

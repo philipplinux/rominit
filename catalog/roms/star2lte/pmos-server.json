@@ -9,6 +9,13 @@
       "tier": "experimental",
       "rating": {
         "checked": "2026-10-15",
+        "kernel": {
+          "version": "4.9.299",
+          "type": "downstream"
+        },
+        "base": "postmarketOS edge",
+        "released": "2026-10-15",
+        "support": "active",
         "features": {
           "display": "untested",
           "touch": "untested",
@@ -20,6 +27,19 @@
           "camera": "broken",
           "mobile": "untested",
           "gps": "untested"
+        },
+        "includes": {
+          "google_play": "no",
+          "microg": "no",
+          "android_apps": "no",
+          "phone_ui": "no",
+          "root": "yes",
+          "updates": "yes",
+          "encryption": "no",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "yes",
+          "docker": "yes"
         }
       },
       "notes": "Untested on real hardware: same build as the S9 with the star2lte kernel config, DTB and TWRP.",

@@ -8,6 +8,15 @@ export const recipes = { fastboot, odin, 'twrp-dd': twrpDd };
 /** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
 export const FEATURES = ['display', 'touch', 'wifi', 'bluetooth', 'usb_net', 'gpu', 'audio', 'camera', 'mobile', 'gps'];
 export const STATES = ['works', 'partial', 'broken', 'untested'];
+/** What a ROM includes or lacks, the usual reasons to pick one: yes, no, or optional (an add-on the user can install). */
+export const INCLUDES = ['google_play', 'microg', 'android_apps', 'phone_ui', 'root', 'updates', 'encryption', 'relock', 'banking_apps', 'ssh', 'docker'];
+export const OPTIONS = ['yes', 'no', 'optional'];
+/** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
+export const KERNELS = ['mainline', 'downstream'];
+export const SUPPORT = ['active', 'maintenance', 'abandoned'];
+/** Share of hardware features that work (partial counts half), 0-100. @param {any} rating */
+export const completeness = rating =>
+  Math.round(100 * FEATURES.reduce((sum, f) => sum + (({ works: 1, partial: 0.5 })[rating.features[f]] ?? 0), 0) / FEATURES.length);
 const SHA = /^[0-9a-f]{64}$/;
 // Partition names, labels and slots end up in fastboot commands and TWRP shell lines.
 const SAFE = /^[A-Za-z0-9_.-]+$/;
@@ -30,6 +39,13 @@ export function problems(device, romFile) {
     const features = rom.rating?.features ?? {};
     need(/^\d{4}-\d{2}-\d{2}$/.test(rom.rating?.checked ?? '') && FEATURES.every(f => STATES.includes(features[f])) && Object.keys(features).length === FEATURES.length,
       `${at}: rating needs a checked date and exactly these features (${STATES.join('/')}): ${FEATURES.join(', ')}`);
+    const rating = rom.rating ?? {};
+    need(/^\d+\.\d+(\.\d+)?$/.test(rating.kernel?.version ?? '') && KERNELS.includes(rating.kernel?.type), `${at}: rating.kernel needs version and type (${KERNELS.join('/')})`);
+    need(rating.base && /^\d{4}-\d{2}-\d{2}$/.test(rating.released ?? '') && SUPPORT.includes(rating.support),
+      `${at}: rating needs base, released date and support (${SUPPORT.join('/')})`);
+    const includes = rom.rating?.includes ?? {};
+    need(INCLUDES.every(i => OPTIONS.includes(includes[i])) && Object.keys(includes).length === INCLUDES.length,
+      `${at}: rating.includes needs exactly these (${OPTIONS.join('/')}): ${INCLUDES.join(', ')}`);
     for (const [i, stage] of (rom.stages ?? []).entries()) {
       const where = `${at} stage ${i + 1}`;
       const recipe = recipes[stage.recipe];
