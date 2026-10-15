@@ -1,6 +1,6 @@
-// Admin inbox. GET: unsorted page reports, and phone tests split into review / approved / rejected.
+// Admin inbox. GET: unsorted page reports, and phone tests split into new / review / approved / rejected.
 // POST {inbox: 'reports', ref, label}: file a report (it leaves the inbox; scripts/inbox.mjs files from the CLI).
-// POST {inbox: 'benchmarks', ref, action: approve | reject | review}: approved results show on the ROM page; review moves it back.
+// POST {inbox: 'benchmarks', ref, action: new | review | approve | reject}: approved results show on the ROM page.
 import { userOf } from '../_lib/auth.js';
 import { json } from '../_lib/api.js';
 
@@ -12,12 +12,12 @@ const isAdmin = async (env, request) => (await userOf(env, request))?.roles.some
 export async function onRequestGet({ request, env }) {
   if (!await isAdmin(env, request)) return json({ error: 'admins only' }, 403);
   const reports = await env.DB.prepare("SELECT r.id, r.page, r.section, r.text, r.at FROM reports r LEFT JOIN triage t ON t.inbox = 'reports' AND t.ref = CAST(r.id AS TEXT) WHERE t.ref IS NULL ORDER BY r.at DESC LIMIT 500").all();
-  // review: not triaged · approved: accepted · rejected: triaged without being accepted. Decided ones: newest 50 each.
+  // new: untouched · review: review set · approved: accepted · rejected: triaged without being accepted. Decided ones: newest 50 each.
   const runs = await env.DB.prepare(`SELECT b.code AS ref, b.submitted AS at, b.rom, b.note, b.final, b.output, b.accepted,
-      CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' ELSE 'review' END AS state
+      CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' WHEN b.review IS NOT NULL THEN 'review' ELSE 'new' END AS state
     FROM bench_runs b LEFT JOIN triage t ON t.inbox = 'benchmarks' AND t.ref = b.code WHERE b.submitted IS NOT NULL ORDER BY b.submitted DESC LIMIT 300`).all();
-  const benchmarks = { review: [], approved: [], rejected: [] };
-  for (const run of runs.results) if (run.state === 'review' || benchmarks[run.state].length < 50) benchmarks[run.state].push(run);
+  const benchmarks = { new: [], review: [], approved: [], rejected: [] };
+  for (const run of runs.results) if (['new', 'review'].includes(run.state) || benchmarks[run.state].length < 50) benchmarks[run.state].push(run);
   return json({ reports: reports.results, benchmarks, labels: LABELS });
 }
 
@@ -26,12 +26,12 @@ export async function onRequestPost({ request, env }) {
   if (!await isAdmin(env, request)) return json({ error: 'admins only' }, 403);
   const { inbox, ref, label, action } = await request.json().catch(() => ({}));
   if (typeof ref !== 'string' || !ref || ref.length > 64) return json({ error: 'needs ref' }, 400);
-  if (inbox === 'benchmarks' && ['approve', 'reject', 'review'].includes(action)) {
-    const { meta } = await env.DB.prepare(`UPDATE bench_runs SET accepted = ${action === 'approve' ? "datetime('now')" : 'NULL'} WHERE code = ?1 AND submitted IS NOT NULL`).bind(ref).run();
+  if (inbox === 'benchmarks' && ['new', 'review', 'approve', 'reject'].includes(action)) {
+    const { meta } = await env.DB.prepare(`UPDATE bench_runs SET accepted = ${action === 'approve' ? "datetime('now')" : 'NULL'}, review = ${action === 'new' ? 'NULL' : "coalesce(review, datetime('now'))"} WHERE code = ?1 AND submitted IS NOT NULL`).bind(ref).run();
     if (!meta.changes) return json({ error: 'unknown test' }, 404);
-    if (action === 'review') await env.DB.prepare("DELETE FROM triage WHERE inbox = 'benchmarks' AND ref = ?1").bind(ref).run();
+    if (action === 'new' || action === 'review') await env.DB.prepare("DELETE FROM triage WHERE inbox = 'benchmarks' AND ref = ?1").bind(ref).run();
     else await env.DB.prepare("INSERT OR REPLACE INTO triage (inbox, ref, label, summary) VALUES ('benchmarks', ?1, ?2, ?3)")
-      .bind(ref, action === 'approve' ? 'catalog-update' : 'other', action === 'approve' ? 'approved: shown on the ROM page' : 'rejected on the site').run();
+      .bind(ref, ...{ approve: ['catalog-update', 'approved: shown on the ROM page'], reject: ['other', 'rejected on the site'] }[action]).run();
     return json({ ok: true });
   }
   if (inbox !== 'reports' || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);

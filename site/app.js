@@ -631,7 +631,8 @@ async function inboxView(index) {
       h('small', { textContent: `${x.at} UTC · ${x.rom}${x.accepted ? ` · approved ${x.accepted}` : ''}` }),
       x.note && h('p', { textContent: x.note }),
       h('p', { className: 'field-help', textContent: changes.length ? `Changes vs catalog (${changes.length}): ${changes.join(' · ')}` : 'No changes vs the catalog rating.' }),
-      h('div', { className: 'inbox-actions' }, ...(x.state === 'review' ? [move('approve', 'Approve', true), move('reject', 'Reject')] : [move('review', 'Back to review')])),
+      h('div', { className: 'inbox-actions' }, ...{ new: [move('approve', 'Approve', true), move('reject', 'Reject'), move('review', 'Review later')],
+        review: [move('approve', 'Approve', true), move('reject', 'Reject'), move('new', 'Back to new')] }[x.state] ?? [move('review', 'Back to review')]),
       h('details', {}, h('summary', { textContent: 'card and script output' }), h('pre', { className: 'bench-output', textContent: `${JSON.stringify(final, null, 1)}\n\n${x.output ?? ''}` })));
     return li;
   };
@@ -643,8 +644,8 @@ async function inboxView(index) {
         const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }));
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
-    folder('Benchmarks', `phone tests · ${benchmarks.approved.length} approved · ${benchmarks.rejected.length} rejected`, benchmarks.review.length,
-      [['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'review' },
+    folder('Benchmarks', `phone tests · ${benchmarks.new.length} new · ${benchmarks.review.length} in review · ${benchmarks.approved.length} approved · ${benchmarks.rejected.length} rejected`, benchmarks.new.length + benchmarks.review.length,
+      [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
         h('summary', { className: 'field-label', textContent: `${title} · ${benchmarks[state].length}` }),
         h('ol', { className: 'comments' }, ...benchmarks[state].map(benchItem)))), Object.values(benchmarks).flat().length),
     folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },

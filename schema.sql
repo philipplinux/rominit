@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   final TEXT,              -- JSON {feature: status} after the user's corrections
   note TEXT,
   submitted TEXT,
-  accepted TEXT           -- set by an admin: the card's results now show on the ROM page
+  accepted TEXT,          -- set by an admin: the card's results now show on the ROM page
+  review TEXT             -- set when an admin moves it from New to Review
 );
 
 -- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports). Add one by adding a UNION arm.
