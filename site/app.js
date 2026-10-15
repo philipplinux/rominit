@@ -241,29 +241,33 @@ function benchBox(rom, key) {
   function waitFor(code) {
     const url = `${location.origin}/b/${code}`;
     const sound = h('input', { type: 'checkbox' });
-    const ways = linux ? [['On the phone (terminal)', ''], ['SSH from a computer', 'ssh'], ['ADB from a computer', 'adb shell ']]
+    // Browsers cannot open SSH themselves, so the page builds the one command: USB uses postmarketOS' fixed USB-network address.
+    const ssh = `ssh -o StrictHostKeyChecking=accept-new ${loginUser}@`;
+    const ways = linux ? [['USB cable', 'usb'], ['Wi-Fi', 'wifi'], ['Terminal on the phone', '']]
       : [['ADB from a computer', 'adb shell '], ['On the phone (terminal app)', '']];
     let way = ways[0][1];
-    // Stays in this browser only: user@address or an ~/.ssh/config alias.
-    const target = h('input', { type: 'text', className: 'bench-target', spellcheck: false, placeholder: `${loginUser}@192.168.1.50 or an ssh alias`, value: (() => { try { return localStorage.getItem('rominit.sshTarget') ?? ''; } catch { return ''; } })() });
-    const targetRow = h('label', { className: 'field-help', hidden: true }, 'SSH login: ', target);
+    const ip = h('input', { type: 'text', className: 'bench-target', inputMode: 'decimal', spellcheck: false, placeholder: '192.168.1.50',
+      value: (() => { try { return localStorage.getItem('rominit.phoneIp') ?? ''; } catch { return ''; } })() });
+    const ipRow = h('label', { className: 'field-help', hidden: true }, 'Phone IP address (Settings → Wi-Fi, or `ip a` on the phone): ', ip);
     const command = h('code', { className: 'bench-command' });
     const render = () => {
-      const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh', prefix = way === 'ssh' ? `ssh ${target.value.trim() || `${loginUser}@<phone address>`} ` : way;
-      targetRow.hidden = way !== 'ssh';
+      const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh';
+      const prefix = way === 'usb' ? `${ssh}172.16.42.1 ` : way === 'wifi' ? `${ssh}${ip.value.trim() || '<phone IP>'} ` : way;
+      ipRow.hidden = way !== 'wifi';
       command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -fsS --data-binary @- ${url}`;
     };
-    target.addEventListener('input', () => { try { localStorage.setItem('rominit.sshTarget', target.value.trim()); } catch { /* private window */ } render(); });
+    ip.addEventListener('input', () => { try { localStorage.setItem('rominit.phoneIp', ip.value.trim()); } catch { /* private window */ } render(); });
     const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
       onclick(/** @type {Event} */ e) { way = prefix; for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render(); } })));
     sound.addEventListener('change', render); render();
     const waiting = h('div', { className: 'bench-wait' }, h('span', { className: 'breath', ariaHidden: 'true' }), h('span', { textContent: 'Waiting for your phone… breathe in, breathe out.' }));
     box.replaceChildren(
-      h('p', { className: 'field-label', textContent: 'Run this, wherever your phone has a shell' }), tabs, targetRow,
+      h('p', { className: 'field-label', textContent: linux ? 'How is the phone connected?' : 'Run this, wherever your phone has a shell' }), tabs, ipRow,
       h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
       h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
-      h('p', { className: 'field-help', textContent: `Test code ${code}, valid for an hour. No network on the phone? Use SSH or ADB from a computer; the computer does the downloading.${linux ? '' : ' A terminal app lacks the permissions for most checks; ADB works best.'}` }),
+      h('p', { className: 'field-help', textContent: linux ? `Paste it into a terminal on your computer. When asked, type the password ${loginPassword || 'from above'}. Test code ${code}, valid for an hour.`
+        : `Test code ${code}, valid for an hour. No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.` }),
       waiting);
     const started = Date.now();
     const poll = async () => {

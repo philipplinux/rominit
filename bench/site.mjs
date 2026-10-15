@@ -282,13 +282,16 @@ test('phone test: one command, script output becomes a tappable report card with
   const test4 = page.locator('details.page-section', { hasText: '4 · Test your phone' });
   await test4.locator('summary').first().click();
   await test4.getByRole('button', { name: 'Start a phone test' }).click();
-  const command = await test4.locator('.bench-command').innerText();
-  const url = command.match(/curl -fsSL (\S+) \| sh \| curl -fsS --data-binary @- (\S+)$/);
+  const command = await test4.locator('.bench-command').innerText(); // USB is the default for postmarketOS
+  const url = command.match(/curl -fsSL (\S+) \| ssh -o StrictHostKeyChecking=accept-new user@172\.16\.42\.1 sh \| curl -fsS --data-binary @- (\S+)$/);
   assert.ok(url && url[1] === url[2], command);
   await test4.getByLabel('Also check speaker and vibration').check();
+  assert.match(await test4.locator('.bench-command').innerText(), /user@172\.16\.42\.1 'ROMINIT_SOUND=1 sh' \|/);
+  await test4.getByRole('tab', { name: 'Wi-Fi' }).click();
+  await test4.getByLabel(/Phone IP address/).fill('192.168.1.77');
+  assert.match(await test4.locator('.bench-command').innerText(), /\| ssh -o StrictHostKeyChecking=accept-new user@192\.168\.1\.77 'ROMINIT_SOUND=1 sh' \|/);
+  await test4.getByRole('tab', { name: 'Terminal on the phone' }).click();
   assert.match(await test4.locator('.bench-command').innerText(), /\| ROMINIT_SOUND=1 sh \|/);
-  await test4.getByRole('tab', { name: 'SSH from a computer' }).click();
-  assert.match(await test4.locator('.bench-command').innerText(), /\| ssh user@<phone address> 'ROMINIT_SOUND=1 sh' \|/);
   const script = await (await fetch(url[1])).text();
   assert.match(script, /^#!\/bin\/sh\n# ROMinit phone test for Linux/, 'postmarketOS gets the Linux script');
   assert.equal((await fetch(url[1], { method: 'POST', body: 'hello' })).status, 400);
