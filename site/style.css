@@ -431,3 +431,4 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .comment-box { border-top: 1px solid rgb(255 255 255 / 8%); padding-top: 1.5rem; }
 .lock-end .login-box { grid-column: 1; grid-row: 1; margin: 0 1.2rem 0 0; justify-self: end; }
 @media (max-width: 640px) { .lock-end { grid-template-columns: 1fr auto; } .lock-end .login-box { grid-column: 1 / -1; justify-self: center; margin: 0 0 1rem; } .lock-end .lock-in { grid-column: 1; grid-row: 2; } .lock-end::after { grid-column: 2; grid-row: 2; } }
+.lock-end + .intro-copy { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgb(255 255 255 / 8%); }
