@@ -394,3 +394,6 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .bench-q.answered { opacity: .5; }
 .bench-debug pre { white-space: pre-wrap; font-size: .75rem; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .breath, .bench-tile { animation: none; } }
+
+.disclaimer { margin: .8rem 0 0; padding: .7rem 1rem; border: 2px solid #e2a3a0; background: rgb(226 163 160 / 12%); color: #f0c9c6; text-align: center; font-size: .95rem; letter-spacing: .02em; }
+.disclaimer strong { color: #ffb4ae; font-size: 1.15rem; margin-right: .4rem; text-transform: uppercase; }
