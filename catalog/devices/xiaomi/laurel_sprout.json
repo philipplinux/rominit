@@ -1,0 +1,18 @@
+{
+  "codename": "laurel_sprout",
+  "vendor": "Xiaomi",
+  "name": "Mi A3",
+  "models": ["M1906F9SH"],
+  "detect": { "fastboot": { "product": "laurel_sprout" } },
+  "modes": {
+    "fastboot": "Power off. Hold Volume Down + Power until the FASTBOOT screen shows, then plug in USB."
+  },
+  "unlock": {
+    "text": "Unlocked bootloader needed: `fastboot flashing unlock` (wipes the phone).",
+    "url": "https://wiki.lineageos.org/devices/laurel_sprout/install/"
+  },
+  "recovery": {
+    "text": "Slot a still holds stock Android: `fastboot set_active a`, then `fastboot -w`. Or flash a stock ROM with the usual tools.",
+    "url": "https://wiki.lineageos.org/devices/laurel_sprout/install/"
+  }
+}

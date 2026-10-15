@@ -1,0 +1,19 @@
+{
+  "codename": "starlte",
+  "vendor": "Samsung",
+  "name": "Galaxy S9",
+  "models": ["SM-G960F"],
+  "notes": "Exynos only. Not for the Snapdragon models (SM-G9600, SM-G9650).",
+  "detect": { "adb": { "device": "starlte" } },
+  "modes": {
+    "download": "Power off. Hold Volume Down + Bixby, plug in USB, press Volume Up to enter Download Mode.",
+    "recovery": "Hold Volume Up + Bixby + Power until the TWRP screen appears. Do not mount system, vendor or data."
+  },
+  "unlock": {
+    "text": "OEM unlock must be enabled in Android developer options before anything can be flashed."
+  },
+  "recovery": {
+    "text": "Download Mode still works after a bootloop: SamFW has the stock firmware and an Odin-style tool to go back to Android.",
+    "url": "https://samfw.com/"
+  }
+}

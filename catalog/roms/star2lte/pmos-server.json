@@ -1,0 +1,124 @@
+{
+  "device": "star2lte",
+  "roms": [
+    {
+      "id": "pmos-server-v2026.10.15-s9plus",
+      "os": "postmarketOS",
+      "name": "postmarketOS server",
+      "version": "v2026.10.15-s9plus",
+      "tier": "experimental",
+      "notes": "Untested on real hardware: same build as the S9 with the star2lte kernel config, DTB and TWRP.",
+      "homepage": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9plus",
+      "stages": [
+        {
+          "title": "Install TWRP",
+          "optional": "Skip if TWRP is already installed.",
+          "recipe": "odin",
+          "mode": "download",
+          "confirm": "FLASH TWRP",
+          "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot restores the stock recovery.",
+          "require_pit": [
+            "BOOT",
+            "SYSTEM",
+            "VENDOR",
+            "USERDATA"
+          ],
+          "files": [
+            {
+              "name": "twrp-3.7.0_9-0-star2lte.img",
+              "size": 42670080,
+              "sha256": "f674dab0134f3c929982077b6a3a8de7df209a45c76ead80bc009381bcd835e1",
+              "urls": [
+                "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/twrp-3.7.0_9-0-star2lte.img"
+              ]
+            }
+          ],
+          "steps": [
+            [
+              "flash",
+              "RECOVERY",
+              "twrp-3.7.0_9-0-star2lte.img"
+            ]
+          ],
+          "done": "TWRP written. Hold Volume Down + Power until the screen is black, then immediately hold Volume Up + Bixby + Power until TWRP appears."
+        },
+        {
+          "title": "Flash the postmarketOS server image",
+          "recipe": "twrp-dd",
+          "mode": "recovery",
+          "confirm": "ERASE S9+",
+          "warning": "Overwrites SYSTEM, VENDOR and BOOT. Android is gone until the full stock ROM is flashed again.",
+          "by_name": "/dev/block/platform/11120000.ufs/by-name",
+          "files": [
+            {
+              "name": "samsung-star2lte-root.img",
+              "size": 1318060032,
+              "sha256": "52be430de46e5478543c0a73368b122e6df19d35f3d3268df56a2c3614f4e3a3",
+              "urls": [
+                "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/samsung-star2lte-root.img"
+              ]
+            },
+            {
+              "name": "samsung-star2lte-boot.img",
+              "size": 536870912,
+              "sha256": "ba70491a69b330ded787cc3a0a08424bfb39fca2b476e379e5012f883a27fe5b",
+              "urls": [
+                "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/samsung-star2lte-boot.img"
+              ]
+            },
+            {
+              "name": "boot.img",
+              "size": 38756352,
+              "sha256": "e8eb714114300eb5de1c67f58c51a5eef7262394773f1abe37931f4b16fb61b7",
+              "urls": [
+                "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/boot.img"
+              ]
+            }
+          ],
+          "steps": [
+            [
+              "write",
+              "SYSTEM",
+              "samsung-star2lte-root.img"
+            ],
+            [
+              "write",
+              "VENDOR",
+              "samsung-star2lte-boot.img"
+            ],
+            [
+              "write",
+              "BOOT",
+              "boot.img"
+            ]
+          ],
+          "options": [
+            {
+              "id": "format",
+              "label": "Also format USERDATA as ext4 with label s9-srv. Erases all Android user data.",
+              "default": false,
+              "steps": [
+                [
+                  "mkfs_ext4",
+                  "USERDATA",
+                  "s9-srv"
+                ]
+              ]
+            },
+            {
+              "id": "reboot",
+              "label": "Reboot when done.",
+              "default": true,
+              "steps": [
+                [
+                  "reboot"
+                ]
+              ]
+            }
+          ],
+          "done": "Images written and verified on the phone. First boot and SSH still need checking by hand."
+        }
+      ]
+    }
+  ]
+}
