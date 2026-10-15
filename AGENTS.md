@@ -6,7 +6,7 @@
 - Tasks: `~/Documents/Vault/wiki/tasks/ROMinit.md`
 - Log: `~/Documents/Vault/wiki/logs/ROMinit - Execution Log.md`
 
-Log work there. Never wipe the Mi A3 for tests; nothing audible on owner devices without asking (bench sound is opt-in, `ROMINIT_SOUND=1`).
+Log work there. Concept ideas, plans and scope ideas (new device categories, AI agent, pricing) go into the Vault tasks/hub, not into repo files; the repo holds only code, catalog data and docs for what exists. Never wipe the Mi A3 for tests; nothing audible on owner devices without asking (bench sound is opt-in, `ROMINIT_SOUND=1`).
 
 ## Keep it agent-ready (AI flashing comes later)
 
