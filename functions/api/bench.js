@@ -1,4 +1,4 @@
-// Phone test runs. GET ?device= lists accepted results. POST {rom} starts one ({code}); GET ?code= polls for the script output; POST {code, final, note} submits the corrected card.
+// Phone test runs. GET ?device= lists accepted results. POST {rom} starts one ({code}); GET ?code= polls for the script output, and once sent returns the card and its review state; POST {code, final, note} submits the corrected card.
 import { json, voterOf } from '../_lib/api.js';
 import { romInfo, userOf } from '../_lib/auth.js';
 
@@ -7,13 +7,23 @@ const code = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => 'abcd
 
 /** @param {{request:Request, env:any}} context */
 export async function onRequestGet({ request, env }) {
-  const device = new URL(request.url).searchParams.get('device');
+  const device = new URL(request.url).searchParams.get('device'), mine = new URL(request.url).searchParams.get('mine');
+  if (mine) { // the signed-in user's sent cards for one ROM, newest first; codes: null tells the page to use this browser's own list
+    const user = await userOf(env, request);
+    if (!user) return json({ codes: null });
+    const { results } = await env.DB.prepare('SELECT code FROM bench_runs WHERE user_id = ?1 AND rom = ?2 AND submitted IS NOT NULL ORDER BY submitted DESC LIMIT 20').bind(user.id, mine).all();
+    return json({ codes: results.map((/** @type {any} */ r) => r.code) });
+  }
   if (device) { // accepted results per ROM of this device, newest wins: { "<codename>/<rom id>": { final, accepted } }
     const { results } = await env.DB.prepare("SELECT rom, final, accepted FROM bench_runs WHERE accepted IS NOT NULL AND rom LIKE ?1 || '/%' ORDER BY accepted").bind(device).all();
     return Response.json(Object.fromEntries(results.map((/** @type {any} */ r) => [r.rom, { final: JSON.parse(r.final), accepted: r.accepted }])), { headers: { 'cache-control': 'public, max-age=60' } });
   }
-  const run = await env.DB.prepare('SELECT output, submitted FROM bench_runs WHERE code = ?1').bind(new URL(request.url).searchParams.get('code') ?? '').first();
-  return run ? json({ output: run.output, submitted: !!run.submitted }) : json({ error: 'unknown code' }, 404);
+  // state as in the admin inbox: new · review · approved · rejected (not counted). The code is the sender's secret.
+  const run = await env.DB.prepare(`SELECT b.output, b.submitted, b.final,
+      CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' WHEN b.review IS NOT NULL THEN 'review' ELSE 'new' END AS state
+    FROM bench_runs b LEFT JOIN triage t ON t.inbox = 'benchmarks' AND t.ref = b.code WHERE b.code = ?1`).bind(new URL(request.url).searchParams.get('code') ?? '').first();
+  if (!run) return json({ error: 'unknown code' }, 404);
+  return json(run.submitted ? { output: run.output, submitted: true, at: run.submitted, final: JSON.parse(run.final), state: run.state } : { output: run.output, submitted: false });
 }
 
 /** @param {{request:Request, env:any}} context */

@@ -247,6 +247,8 @@ function ownersRow(key, hint) {
 /** Phone test tiers, in tap order; `inconclusive` only comes from a probe that failed. */
 const TIERS = ['full', 'partial', 'broken', 'blocked', 'untested', 'n/a'];
 /** Phone test tier → catalog feature state; tiers missing here say nothing about the feature. */
+/** Review state of a sent card, as the sender sees it: [text, feature class]. */
+const BENCH_STATE = /** @type {Record<string, string[]>} */ ({ new: ['received · waiting for review', 'untested'], review: ['in review', 'partial'], approved: ['approved · shown on this page', 'works'], rejected: ['not counted', 'broken'] });
 const TIER_STATE = /** @type {Record<string, string>} */ ({ full: 'works', partial: 'partial', broken: 'broken', 'n/a': 'n/a' });
 const TIER_MARK = /** @type {Record<string, string>} */ ({ full: '✓', partial: '~', broken: '✗', blocked: '⊘', untested: '·', 'n/a': '–', inconclusive: '?' });
 const TIER_HELP = /** @type {Record<string, string>} */ ({ full: 'works fully', partial: 'works in part', broken: 'does not work', blocked: 'needs something first (SIM, card, cable)',
@@ -282,7 +284,7 @@ function parseBench(output) {
  * shows a report card the user corrects by tapping, asks a few questions (all on request) and submits it.
  * @param {any} rom @param {string} key
  */
-function benchBox(rom, key) {
+function benchBox(rom, key, sent = /** @type {string[]} */ ([])) {
   const linux = rom.os === 'postmarketOS';
   const [loginUser, loginPassword] = (rom.login ?? 'user / ').split(' / ');
   let sshHost = `${loginUser}@<phone address>`; // last USB / Wi-Fi target, reused in the password hint
@@ -296,6 +298,21 @@ function benchBox(rom, key) {
     if (!r?.ok) { start.disabled = false; box.append(h('p', { className: 'status', textContent: `Could not start: ${reply?.error ?? 'network error'}.` })); return; }
     waitFor(reply.code);
   });
+  // Your sent cards and where review stands: from your account when signed in, else the codes this browser kept, else none.
+  fetch(`./api/bench?mine=${encodeURIComponent(key)}`).then(r => r.json()).catch(() => ({})).then(({ codes }) => (codes = codes ?? [...sent].reverse()) &&
+    codes.length && box.prepend(h('div', { className: 'bench-sent' }, h('p', { className: 'field-label', textContent: 'Your report cards' }), ...codes.map((/** @type {string} */ code) => {
+    const row = h('div', {}, h('small', { textContent: 'Loading…' }));
+    fetch(`./api/bench?code=${encodeURIComponent(code)}`).then(r => r.ok ? r.json() : null).then(card => {
+      if (!card?.submitted) { row.remove(); return; }
+      const [state, cls] = BENCH_STATE[card.state] ?? [card.state, 'untested'];
+      const counts = Object.values(card.final).reduce((/** @type {Record<string, number>} */ n, /** @type {any} */ t) => ({ ...n, [t]: (n[t] ?? 0) + 1 }), {});
+      row.replaceChildren(h('p', { className: 'rating' }, h('span', { className: `feature ${cls}`, textContent: state }),
+          h('small', { textContent: ` sent ${card.at} UTC · ${Object.entries(counts).map(([t, n]) => `${n} ${t}`).join(' · ')}` })),
+        h('details', {}, h('summary', { textContent: 'show card' }), h('p', { className: 'rating' },
+          ...Object.entries(card.final).map(([f, t]) => h('span', { className: `feature ${TIER_STATE[/** @type {string} */ (t)] ?? 'untested'}`, textContent: `${LABEL[f] ?? f}: ${t}` })))));
+    }).catch(() => row.remove());
+    return row;
+  }))));
   /** @param {string} code */
   function waitFor(code) {
     const url = `${location.origin}/b/${code}`;
@@ -396,7 +413,7 @@ function benchBox(rom, key) {
             h('a', { className: 'button button-primary bench-donate', href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }),
             h('small', { textContent: 'One-off, any amount, through Buy Me a Coffee.' })));
         box.prepend(thanks); thanks.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        box.dispatchEvent(new Event('bench-sent', { bubbles: true }));
+        box.dispatchEvent(new CustomEvent('bench-sent', { bubbles: true, detail: code }));
       }
       else { send.disabled = false; status.textContent = `Could not send: ${(await r?.json().catch(() => ({})))?.error ?? 'network error'}.`; }
     } });
@@ -749,7 +766,7 @@ async function start() {
   // Progress on this phone in one record per device: locked-in ROM, ticked unlock steps, TWRP, flashed ROMs.
   // ponytail: this browser only; user accounts can sync the same record later.
   const progressKey = `progress:${codename}`;
-  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[], tested?:string[]}} */ let progress = {};
+  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[], flashedElsewhere?:string[], tested?:string[], cards?:Record<string, string[]>}} */ let progress = {};
   try { progress = JSON.parse(localStorage.getItem(progressKey) ?? '{}'); } catch { /* private window */ }
   const save = () => { try { localStorage.setItem(progressKey, JSON.stringify(progress)); } catch { /* private window */ } };
   /** @type {HTMLButtonElement[]} */ const lockButtons = [];
@@ -804,23 +821,32 @@ async function start() {
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
   if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
   // Optional, so never amber; it goes green once a report card for this ROM was sent from this browser.
-  const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`)], 'OPTIONAL');
+  const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [])], 'OPTIONAL');
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
-  if (rom) { testSection.addEventListener('bench-sent', () => { progress.tested = [...new Set([...progress.tested ?? [], rom.id])]; save(); markTested(); }); markTested(); }
+  if (rom) { testSection.addEventListener('bench-sent', (/** @type {any} */ e) => { progress.tested = [...new Set([...progress.tested ?? [], rom.id])]; progress.cards = { ...progress.cards, [rom.id]: [...progress.cards?.[rom.id] ?? [], e.detail] }; save(); markTested(); }); markTested(); }
   const romCards = rom && flashable(rom) ? cards(rom, 'rom') : [];
+  // Flashed some other way (own tools, another guide): counts as done, but marked unconfirmed since ROMinit did not see it.
+  const flashedElsewhere = h('input', { type: 'checkbox', checked: !!rom && !!progress.flashedElsewhere?.includes(rom.id) });
   const romSection = section('3 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
       rom && requirementsRow(rom),
       rom?.login && loginRow(rom.login),
+      romCards.length && h('label', { className: 'field-help' }, flashedElsewhere, ' I flashed this ROM another way (marked unconfirmed)'),
       rom && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
         : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length ? 'REQUIRED' : '');
   let romDone = 0;
   romSection.addEventListener('stage-done', () => {
     if (++romDone >= romCards.length) { progress.flashed = [...new Set([...progress.flashed ?? [], rom.id])]; save(); } });
-  if (romCards.length) required(romSection, () => !!progress.flashed?.includes(rom.id), () => romSection.querySelector(':scope > summary').after(
+  const romFlashed = () => {
+    progress.flashedElsewhere = [...(progress.flashedElsewhere ?? []).filter(id => id !== rom.id), ...flashedElsewhere.checked ? [rom.id] : []]; save();
+    return !!progress.flashed?.includes(rom.id) || flashedElsewhere.checked;
+  };
+  const unconfirmed = () => { if (romSection.classList.contains('done') && !progress.flashed?.includes(rom.id)) romSection.querySelector(':scope > summary .badge').textContent = 'COMPLETED · UNCONFIRMED'; };
+  if (romCards.length) required(romSection, romFlashed, () => romSection.querySelector(':scope > summary').after(
     h('p', { className: 'congrats' }, h('strong', { textContent: `Congratulations, ${rom.name} is on your ${device.name}!` }),
       ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {
         e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
       '. Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }), '.')));
+  if (romCards.length) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   main.append(
     h('section', { className: 'intro' },
       h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {
