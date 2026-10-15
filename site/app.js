@@ -602,7 +602,7 @@ function reportBox() {
     status.textContent = response?.ok ? 'Thanks, report sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
-  return h('details', { className: 'page-section report' }, h('summary', {}, h('span', { textContent: 'Something wrong on this page?' }), h('small', { textContent: 'report it' })),
+  return h('details', { className: 'page-section report' }, h('summary', {}, h('span', { textContent: 'S · Submit report' }), h('small', { textContent: 'something wrong on this page?' })),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
 }
 async function start() {
@@ -745,6 +745,8 @@ async function start() {
     twrpSection,
     romSection,
     testSection,
+    // R and S sit apart from the numbered flow: a way back, and a way to tell us something is wrong.
+    h('p', { className: 'side-divider', textContent: 'when things go wrong' }),
     section('R · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),

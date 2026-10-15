@@ -149,7 +149,8 @@ test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
 test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM, recover', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
   await page.locator('.page-section').nth(4).waitFor();
-  assert.deepEqual((await page.locator('.page-section > summary > span').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 6), ['0', '1', '2', '3', '4', '5']);
+  assert.deepEqual((await page.locator('.page-section > summary > span').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 6), ['0', '1', '2', '3', '4', 'R']);
+  await page.locator('.side-divider').waitFor();
   const unlock = page.locator('details.page-section', { hasText: '1 · Unlock bootloader' });
   assert.equal(await unlock.first().locator(':scope > summary .badge').innerText(), 'REQUIRED');
   assert.ok(await unlock.first().locator('.guide li').count() >= 4);

@@ -447,3 +447,12 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .favorite:hover, .favorite.on { border-color: #e88; color: #f2a0a0; }
 .maintainer-hint { display: inline-flex; align-items: center; gap: .4rem; }
 .maintainer-hint img { border-radius: 50%; }
+.side-divider { display: flex; align-items: center; gap: 1rem; margin: 3.5rem 0 1rem !important; color: var(--faint, var(--muted)); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+.side-divider::before, .side-divider::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
+/* R: hazard tape, yellow. S: a flag and a faint red hue. */
+.side-divider + .page-section { position: relative; border-color: #e0b400; background: rgb(240 196 0 / 5%); overflow: hidden; }
+.side-divider + .page-section::before { content: ''; display: block; height: 10px; background: repeating-linear-gradient(-45deg, #f2c200 0 14px, #141414 14px 28px); }
+.side-divider + .page-section > summary > span { color: #f2c200; }
+.page-section.report { border-color: rgb(226 110 100 / 45%); background: rgb(226 90 80 / 6%); }
+.page-section.report > summary > span { color: #f0a29b; }
+.page-section.report > summary > span::before { content: '⚑ '; color: #e8706a; }
