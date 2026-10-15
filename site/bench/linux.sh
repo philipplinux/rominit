@@ -8,6 +8,7 @@ say() { echo "$*"; }
 has() { command -v "$1" >/dev/null 2>&1; }
 # t <feature> <probe function>: runs the probe in a subshell; keeps its last status line, else reports why it gave none.
 t() {
+  printf '\rROMinit: checking %-16s' "$1" >&2 # progress on the terminal; results go to stdout
   out=$( ( "$2" ) 2>&1 ); rc=$?
   line=$(printf '%s\n' "$out" | grep -E '^(full|partial|broken|blocked|untested|ask) ' | tail -n 1)
   if [ -n "$line" ]; then say "$1 $line"
@@ -15,6 +16,7 @@ t() {
 }
 
 say "@ script linux $VERSION"
+echo "ROMinit: connected to the phone, running checks (a few seconds)..." >&2
 say "@ kernel $(uname -sr 2>&1)"
 say "@ model $(tr -d "\0" 2>/dev/null < /proc/device-tree/model || cat /sys/class/dmi/id/product_name 2>/dev/null)"
 say "@ os $(. /etc/os-release 2>/dev/null; echo "$PRETTY_NAME")"
@@ -115,3 +117,4 @@ for f in flashing usb_net storage sdcard battery screen touch gpu audio camera c
 # Installed packages, so the page can tell what the ROM ships (SSH, Docker, phone UI…).
 say "@pkgs $( { apk info 2>/dev/null || dpkg-query -W -f '${Package}\n' 2>/dev/null || pacman -Qq 2>/dev/null; } | tr '\n' ' ')"
 say "@ done"
+printf '\rROMinit: all checks done, sending results...\n' >&2

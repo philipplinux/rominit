@@ -7,6 +7,7 @@ VERSION=1
 say() { echo "$*"; }
 has() { command -v "$1" >/dev/null 2>&1; }
 t() {
+  printf '\rROMinit: checking %-16s' "$1" >&2 # progress on the terminal; results go to stdout
   out=$( ( "$2" ) 2>&1 ); rc=$?
   line=$(printf '%s\n' "$out" | grep -E '^(full|partial|broken|blocked|untested|ask) ' | tail -n 1)
   if [ -n "$line" ]; then say "$1 $line"
@@ -16,6 +17,7 @@ t() {
 FEATURES_LIST=$(pm list features 2>/dev/null)
 SENSORS=$(dumpsys sensorservice 2>/dev/null | sed -n '1,/^$/p;/Sensor List/,/^$/p')
 say "@ script android $VERSION"
+echo "ROMinit: connected to the phone, running checks (a few seconds)..." >&2
 say "@ kernel $(uname -sr 2>&1)"
 say "@ model $(getprop ro.product.manufacturer) $(getprop ro.product.model) ($(getprop ro.product.device))"
 say "@ os $(getprop ro.build.display.id) Android $(getprop ro.build.version.release)"
@@ -81,3 +83,4 @@ for f in flashing usb_net storage sdcard battery screen touch gpu audio camera c
 # Installed packages, so the page can tell what the ROM ships (Google Play, microG, root…).
 say "@pkgs $(pm list packages 2>/dev/null | sed 's/^package://' | tr '\n' ' ')"
 say "@ done"
+printf '\rROMinit: all checks done, sending results...\n' >&2

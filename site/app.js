@@ -97,17 +97,22 @@ function starsRow(key) {
   const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'users' }), summary);
   const show = (/** @type {any} */ all) => { const r = all[key]; summary.textContent = r ? `★ ${r.stars} / 5 · ${r.votes} vote${r.votes === 1 ? '' : 's'}` : 'no votes yet'; row.hidden = false; };
   const load = () => fetch('./api/ratings', { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then(show, () => {});
+  // Five empty stars that fill up to the pointer, so it reads as "rate me" rather than as a score.
+  const input = h('span', { className: 'rate stars-input', role: 'group', ariaLabel: 'Your rating' }, h('span', { className: 'rate-label', textContent: 'rate it' }));
+  const fill = (/** @type {number} */ upTo) => input.querySelectorAll('button').forEach((b, i) => { b.textContent = i < upTo ? '★' : '☆'; });
+  input.addEventListener('mouseleave', () => fill(0));
   for (const n of [1, 2, 3, 4, 5]) {
-    const button = h('button', { type: 'button', className: 'feature star', textContent: '★'.repeat(n), title: `Rate ${n} of 5` });
+    const button = h('button', { type: 'button', textContent: '☆', title: `Rate ${n} of 5`, ariaLabel: `${n} of 5 stars` });
+    button.addEventListener('mouseenter', () => fill(n)); button.addEventListener('focus', () => fill(n));
     button.addEventListener('click', async () => {
       status.textContent = 'Saving…';
       const response = await fetch('./api/ratings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, stars: n }) }).catch(() => null);
       status.textContent = response?.ok ? `Thanks, you rated ${n} / 5.` : 'Could not save the rating.';
       load();
     });
-    row.append(button);
+    input.append(button);
   }
-  row.append(status);
+  row.append(input, status);
   load();
   return row;
 }
@@ -227,6 +232,7 @@ function parseBench(output) {
 function benchBox(rom, key) {
   const linux = rom.os === 'postmarketOS';
   const [loginUser, loginPassword] = (rom.login ?? 'user / ').split(' / ');
+  let sshHost = `${loginUser}@<phone address>`; // last USB / Wi-Fi target, reused in the password hint
   const box = h('div', { className: 'bench' });
   const start = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Start a phone test' });
   box.append(h('p', { className: 'intro-copy', textContent: 'One command checks every feature on the phone in a few seconds. It only reads, changes nothing and stays silent. Then you fix anything it got wrong with a tap.' }), start);
@@ -242,7 +248,7 @@ function benchBox(rom, key) {
     const url = `${location.origin}/b/${code}`;
     const sound = h('input', { type: 'checkbox' });
     // Browsers cannot open SSH themselves, so the page builds the one command: USB uses postmarketOS' fixed USB-network address.
-    const ssh = `ssh -o StrictHostKeyChecking=accept-new ${loginUser}@`;
+    const ssh = 'ssh -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new ';
     const ways = linux ? [['USB cable', 'usb'], ['Wi-Fi', 'wifi'], ['Terminal on the phone', '']]
       : [['ADB from a computer', 'adb shell '], ['On the phone (terminal app)', '']];
     let way = ways[0][1];
@@ -252,9 +258,10 @@ function benchBox(rom, key) {
     const command = h('code', { className: 'bench-command' });
     const render = () => {
       const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh';
-      const prefix = way === 'usb' ? `${ssh}172.16.42.1 ` : way === 'wifi' ? `${ssh}${ip.value.trim() || '<phone IP>'} ` : way;
+      if (way === 'usb' || way === 'wifi') sshHost = `${loginUser}@${way === 'usb' ? '172.16.42.1' : ip.value.trim() || '<phone IP>'}`;
+      const prefix = way === 'usb' || way === 'wifi' ? `${ssh}${sshHost} ` : way;
       ipRow.hidden = way !== 'wifi';
-      command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -fsS --data-binary @- ${url}`;
+      command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -sS --data-binary @- ${url}`;
     };
     ip.addEventListener('input', () => { try { localStorage.setItem('rominit.phoneIp', ip.value.trim()); } catch { /* private window */ } render(); });
     const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
@@ -273,7 +280,8 @@ function benchBox(rom, key) {
     const poll = async () => {
       if (!box.isConnected || Date.now() - started > 3600_000) return;
       const run = await fetch(`./api/bench?code=${code}`, { cache: 'no-store' }).then(r => r.json()).catch(() => null);
-      if (run?.output) card(code, run.output); else setTimeout(poll, 3000);
+      if (run?.output?.startsWith('@ failed')) waiting.lastChild.textContent = 'Nothing came from the phone last time: check the cable or IP, then run the command again. Still listening…';
+      if (run?.output && !run.output.startsWith('@ failed')) card(code, run.output); else setTimeout(poll, 3000);
     };
     poll();
   }
@@ -338,8 +346,9 @@ function benchBox(rom, key) {
     const password = rom.login && linux ? h('div', { className: 'hints' }, h('strong', { textContent: 'Change the default password' }),
       h('p', { className: 'field-help', textContent: `${loginUser} / ${loginPassword} is printed on this page for everyone. Change it now; you type the new one on the phone (or in your SSH session), so it never reaches ROMinit.` }),
       h('code', { className: 'bench-command', textContent: 'passwd' }), ' on the phone, or ',
-      h('code', { className: 'bench-command', textContent: `ssh -t ${loginUser}@<phone address> passwd` })) : '';
+      h('code', { className: 'bench-command', textContent: `ssh -t ${sshHost} passwd` })) : '';
     box.replaceChildren(h('p', { className: 'field-label', textContent: 'Report card' }), score,
+      h('p', { className: 'rate-label', textContent: '✎ tap any tile to correct it' }),
       info.length ? h('p', { className: 'field-help', textContent: info.join(' · ') }) : '',
       questions.childElementCount || pool.length ? h('div', {}, h('p', { className: 'field-label', textContent: 'Quick questions' }), questions, more) : '',
       h('p', { className: 'field-help', textContent: 'Tap any tile to correct it: full → partial → broken → blocked → untested → n/a.' }),

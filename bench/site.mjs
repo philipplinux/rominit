@@ -204,7 +204,7 @@ test('unknown device', async () => {
 
 test('user stars', async () => {
   await page.goto(`${BASE}/?device=starlte`);
-  await page.locator('button.star[title="Rate 4 of 5"]').click();
+  await page.getByRole('button', { name: '4 of 5 stars' }).click();
   await page.getByText('Thanks, you rated 4 / 5.').waitFor();
   await page.getByText('★ 4 / 5 · 1 vote').waitFor();
 });
@@ -283,18 +283,21 @@ test('phone test: one command, script output becomes a tappable report card with
   await test4.locator('summary').first().click();
   await test4.getByRole('button', { name: 'Start a phone test' }).click();
   const command = await test4.locator('.bench-command').innerText(); // USB is the default for postmarketOS
-  const url = command.match(/curl -fsSL (\S+) \| ssh -o StrictHostKeyChecking=accept-new user@172\.16\.42\.1 sh \| curl -fsS --data-binary @- (\S+)$/);
+  const url = command.match(/curl -fsSL (\S+) \| ssh -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new user@172\.16\.42\.1 sh \| curl -sS --data-binary @- (\S+)$/);
   assert.ok(url && url[1] === url[2], command);
   await test4.getByLabel('Also check speaker and vibration').check();
   assert.match(await test4.locator('.bench-command').innerText(), /user@172\.16\.42\.1 'ROMINIT_SOUND=1 sh' \|/);
   await test4.getByRole('tab', { name: 'Wi-Fi' }).click();
   await test4.getByLabel(/Phone IP address/).fill('192.168.1.77');
-  assert.match(await test4.locator('.bench-command').innerText(), /\| ssh -o StrictHostKeyChecking=accept-new user@192\.168\.1\.77 'ROMINIT_SOUND=1 sh' \|/);
+  assert.match(await test4.locator('.bench-command').innerText(), /\| ssh -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new user@192\.168\.1\.77 'ROMINIT_SOUND=1 sh' \|/);
   await test4.getByRole('tab', { name: 'Terminal on the phone' }).click();
   assert.match(await test4.locator('.bench-command').innerText(), /\| ROMINIT_SOUND=1 sh \|/);
   const script = await (await fetch(url[1])).text();
   assert.match(script, /^#!\/bin\/sh\n# ROMinit phone test for Linux/, 'postmarketOS gets the Linux script');
   assert.equal((await fetch(url[1], { method: 'POST', body: 'hello' })).status, 400);
+  const failed = await fetch(url[1], { method: 'POST', body: '' }); // SSH never connected: terminal and page both say so
+  assert.match(await failed.text(), /nothing came from the phone/);
+  await test4.getByText(/Nothing came from the phone last time/).waitFor({ timeout: 10000 });
   const output = ['@ script linux 1', '@ model Xiaomi Mi A3', '@debug tools nmcli', 'flashing full booted', 'wifi full wlan0 connected', 'touch ask Does touch follow your finger?',
     'audio ask Play any sound: does the speaker work?', 'camera broken no camera driver', 'sdcard blocked insert one', 'gps inconclusive probe p_gps exit 2: mmcli: not found', '@pkgs openssh-server phosh', '@ done'].join('\n');
   assert.equal((await fetch(url[1], { method: 'POST', body: output })).status, 200);
@@ -303,7 +306,7 @@ test('phone test: one command, script output becomes a tappable report card with
   assert.match(await test4.locator('.bench-tile.inconclusive').innerText(), /GPS[\s\S]*\? inconclusive/);
   assert.match(await test4.locator('.bench-debug pre').textContent() ?? '', /gps: probe p_gps exit 2: mmcli: not found\ntools nmcli/);
   assert.match(await test4.locator('.rating', { hasText: 'found in 2 packages' }).innerText(), /✓ SSH[\s\S]*✗ Docker \*/);
-  assert.match(await test4.locator('.hints', { hasText: 'Change the default password' }).innerText(), /ssh -t user@<phone address> passwd/);
+  assert.match(await test4.locator('.hints', { hasText: 'Change the default password' }).innerText(), /ssh -t user@192\.168\.1\.77 passwd/);
   assert.equal(await test4.locator('.bench-q').count(), 3, 'three questions at first');
   assert.match(await test4.locator('.bench-q').first().innerText(), /Does touch follow your finger/);
   await test4.locator('.bench-q').first().getByRole('button', { name: '👍 yes' }).click();
