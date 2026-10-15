@@ -91,3 +91,9 @@ CREATE VIEW IF NOT EXISTS inbox AS
   SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
   UNION ALL
   SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports;
+CREATE TABLE IF NOT EXISTS favorites (
+  user_id INTEGER NOT NULL, -- users.id
+  rom TEXT NOT NULL,        -- <codename>/<rom id>
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, rom)
+);

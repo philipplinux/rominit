@@ -50,8 +50,21 @@ const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent
   h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}${rom.curated ? '; checked by hand by ROMinit' : ''}` }));
 const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
 /** Where the ROM comes from: release page and source code, first thing in section 0. @param {any} rom */
-const sourceRow = rom => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
-  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }));
+const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key) => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
+  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }), favoriteButton(key));
+/** "♥ Favorite 3", like a GitHub star; signed out it opens the sign-in popup. Hidden without the API. @param {string} key `<codename>/<rom id>` */
+function favoriteButton(key) {
+  const button = h('button', { type: 'button', className: 'favorite', hidden: true });
+  let state = { count: 0, mine: false };
+  const show = () => { button.textContent = `${state.mine ? '♥ Favorited' : '♡ Favorite'} · ${state.count}`; button.classList.toggle('on', state.mine); button.hidden = false; };
+  fetch(`./api/favorites?rom=${encodeURIComponent(key)}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then(s => { state = s; show(); }, () => {});
+  button.onclick = async () => {
+    if (!(await me)?.user) return /** @type {any} */ (document.getElementById('signin'))?.showPopover();
+    const on = !state.mine, r = await fetch('./api/favorites', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, on }) });
+    if (r.ok) { state = { count: state.count + (on ? 1 : -1), mine: on }; show(); }
+  };
+  return button;
+}
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
@@ -546,6 +559,20 @@ function brandsView(index) {
         h('small', { textContent: `${devices.length} phone${devices.length === 1 ? '' : 's'} · ${devices.reduce((n, d) => n + d.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').length, 0)} ROMs` })))));
 }
 
+/** The signed-in user's ♥ ROMs. @param {any[]} index */
+async function favoritesView(index) {
+  const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Your favorites' }));
+  const r = await fetch('./api/favorites', { cache: 'no-store' }).catch(() => null);
+  if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Sign in to keep favorites: tap ♡ Favorite on any ROM. They follow you to every browser.' })), card;
+  const list = await r.json();
+  if (!list.length) return card.append(h('p', { className: 'empty-files', textContent: 'Nothing yet: tap ♡ Favorite on any ROM.' })), card;
+  card.append(h('ol', { className: 'selected-files popular' }, ...list.map((/** @type {{rom:string}} */ { rom }) => {
+    const [codename, id] = rom.split('/'), d = index.find(x => x.codename === codename), m = d?.roms.find((/** @type {any} */ x) => x.id === id);
+    return h('li', {}, h('a', { href: `?device=${encodeURIComponent(codename)}`, textContent: d ? `${d.vendor} ${d.variant}` : codename }), ` · ${m ? `${m.name} ${m.version}` : id}`);
+  })));
+  return card;
+}
+
 /** Phones ranked by successful flashes, then views, from the counts API. @param {any[]} index */
 async function popularView(index) {
   const counts = await fetch('./api/counts', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
@@ -588,7 +615,7 @@ async function start() {
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
-    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : devicePicker(index));
+    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : devicePicker(index));
     return;
   }
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
@@ -645,7 +672,7 @@ async function start() {
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
-      rom && sourceRow(rom),
+      rom && sourceRow(rom, `${device.codename}/${rom.id}`),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),

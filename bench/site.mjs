@@ -381,6 +381,24 @@ test('pick a username: checked, unique, kept; email never shown', async () => {
   await signIn(null);
 });
 
+test('favorites: ♡ asks signed-out users to sign in; signed in it toggles and lists on the favorites page', async () => {
+  await signIn(null);
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  await page.locator('.favorite', { hasText: '♡ Favorite · 0' }).click();
+  await page.locator('#signin .signin-badge').first().waitFor();
+  await page.keyboard.press('Escape');
+  await signIn('linus');
+  await page.reload();
+  await page.locator('.favorite', { hasText: '♡ Favorite · 0' }).click();
+  await page.locator('.favorite', { hasText: '♥ Favorited · 1' }).waitFor();
+  await page.goto(`${BASE}/?view=favorites`);
+  await page.locator('.flash-card', { hasText: 'Your favorites' }).getByRole('link', { name: 'Xiaomi Mi A3' }).waitFor();
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  await page.locator('.favorite', { hasText: '♥ Favorited · 1' }).click();
+  await page.locator('.favorite', { hasText: '♡ Favorite · 0' }).waitFor();
+  await signIn(null);
+});
+
 test('report form', async () => {
   await page.goto(`${BASE}/?device=starlte`);
   await page.locator('.report summary').click();
