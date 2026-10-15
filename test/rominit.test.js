@@ -223,3 +223,18 @@ test('sideload serves the blocks the phone asks for and stops at DONEDONE', asyn
   const bad = { ...adb, banner: { device: 'starlte' } };
   await assert.rejects(recipes['twrp-sideload'].run(bad, { device: { detect: { adb: { device: 'hero2lte' } } }, files: [], steps: [] }, () => {}, () => {}), /phone reports starlte/);
 });
+
+test('counter counts views and flashes once per window', async () => {
+  const { onRequestPost } = await import('../functions/api/counts.js');
+  let recent = null; const inserts = [];
+  const env = { SALT: 'test', ASSETS: { fetch: async () => Response.json(devices.map(d => ({ codename: d.codename, roms: d.roms }))) },
+    DB: { prepare: () => ({ bind: (...args) => ({ first: async () => recent, run: async () => inserts.push(args) }) }) } };
+  const post = body => onRequestPost({ env, request: new Request('https://x/api/flashes', { method: 'POST', body: JSON.stringify(body) }) });
+  const rom = `starlte/${device('starlte').roms[0].id}`;
+  assert.equal((await post({ rom: 'starlte/nope', kind: 'view' })).status, 404);
+  assert.equal((await post({ rom, kind: 'download' })).status, 400);
+  assert.deepEqual(await (await post({ rom, kind: 'flash' })).json(), { ok: true, counted: true });
+  recent = { 1: 1 };
+  assert.deepEqual(await (await post({ rom, kind: 'view' })).json(), { ok: true, counted: false });
+  assert.equal(inserts.length, 1);
+});

@@ -28,3 +28,11 @@ CREATE TABLE IF NOT EXISTS reports (
   text TEXT NOT NULL,
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS counts (
+  rom TEXT NOT NULL,   -- <codename>/<rom id>
+  kind TEXT NOT NULL CHECK (kind IN ('view', 'flash')),
+  voter TEXT NOT NULL, -- salted address hash, for the dedupe window only
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS counts_rom ON counts (rom, kind, voter, at);

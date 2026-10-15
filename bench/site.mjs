@@ -144,6 +144,18 @@ test('user stars', async () => {
   await page.getByText('★ 4 / 5 · 1 vote').waitFor();
 });
 
+test('view and flash counters per ROM, once per window', async () => {
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  await page.getByText('1 view', { exact: true }).waitFor();
+  await page.getByText('0 successful flashes').waitFor();
+  const rom = `laurel_sprout/${await page.locator('select').inputValue()}`;
+  const post = () => fetch(`${BASE}/api/counts`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom, kind: 'flash' }) }).then(r => r.json());
+  assert.deepEqual([await post(), await post()], [{ ok: true, counted: true }, { ok: true, counted: false }]);
+  await page.reload();
+  await page.getByText('1 successful flash', { exact: true }).waitFor();
+  await page.getByText('1 view', { exact: true }).waitFor();
+});
+
 test('comment with screenshot stays hidden until approved, then shows capped', async () => {
   await page.goto(`${BASE}/?device=starlte`);
   const box = page.locator('.comment-box').first();

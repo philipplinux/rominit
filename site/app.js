@@ -60,6 +60,18 @@ const loginRow = login => { const [user, password] = login.split(' / ');
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
     textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked}` }));
+/** Count one view or flash of a ROM; failures are ignored. @param {string} rom @param {'view'|'flash'} kind */
+const bump = (rom, kind) => fetch('./api/counts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom, kind }) }).catch(() => {});
+/** "120 views · 12 successful flashes"; counts this view first. Hidden where there is no API. @param {string} key */
+function countsRow(key) {
+  const views = h('span', { className: 'feature' }), flashes = h('span', { className: 'feature' });
+  const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'stats' }), views, flashes,
+    h('small', { textContent: 'views and successful flashes through this page, once per visitor per day / hour' }));
+  bump(key, 'view').then(() => fetch('./api/counts', { cache: 'no-store' })).then(r => r?.ok ? r.json() : Promise.reject()).then((/** @type {any} */ all) => {
+    const n = all[key] ?? { view: 0, flash: 0 };
+    views.textContent = `${n.view} view${n.view === 1 ? '' : 's'}`; flashes.textContent = `${n.flash} successful flash${n.flash === 1 ? '' : 'es'}`; row.hidden = false; }, () => {});
+  return row;
+}
 /** User stars from the ratings API; stays hidden where there is no API (static preview). @param {string} key `<codename>/<rom id>` */
 function starsRow(key) {
   const summary = h('span', { className: 'feature' }), status = h('small', {});
@@ -126,8 +138,8 @@ const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', a
 const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → ${a}`, erase: `erase ${a}`, set_active: `switch to slot ${a}`,
   reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
 
-/** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count */
-function stageCard(device, stage, n, count) {
+/** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count @param {string} key `<codename>/<rom id>` */
+function stageCard(device, stage, n, count, key) {
   const { protocol } = recipes[stage.recipe];
   const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false,
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
@@ -194,7 +206,8 @@ function stageCard(device, stage, n, count) {
       await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
       st.finished = true;
       log.append(h('li', {}, ...rich(stage.done)));
-      if (n === count) log.append(h('li', {}, 'Worked? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: 'Buy the maintainer a beer' }), '.'));
+      if (n === count) bump(key, 'flash');
+      if (n === count) log.append(h('li', {}, 'Worked? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: 'Buy the maintainer a coffee' }), '.'));
     } catch (error) {
       st.lost = true;
       report(`STOPPED: ${message(error)} Do not retry blindly; reload the page first.`);
@@ -300,7 +313,7 @@ async function start() {
     h('summary', {}, h('span', { textContent: title }), h('small', { textContent: hint })), ...body);
   /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
   const cards = (r, which) => r.stages.flatMap((/** @type {any} */ stage, /** @type {number} */ i) =>
-    stage.section === which ? [stageCard(device, stage, i + 1, r.stages.length)] : []);
+    stage.section === which ? [stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)] : []);
   const tools = rom && flashable(rom) ? cards(rom, 'tools') : [];
   main.append(
     h('section', { className: 'intro' },
@@ -314,6 +327,7 @@ async function start() {
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect,
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
+      rom && countsRow(`${device.codename}/${rom.id}`),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),
       ...(rom ? includesRows(rom.rating) : []),
@@ -329,6 +343,6 @@ async function start() {
     section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
-        ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length))))]));
+        ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`))))]));
 }
 start().then(() => main.append(reportBox()), error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
