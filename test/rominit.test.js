@@ -164,6 +164,7 @@ test('comments API checks length, ROM and rate limit', async () => {
   assert.equal((await post({ rom, text: '  ' })).status, 400);
   assert.equal((await post({ rom, text: 'x'.repeat(2001) })).status, 400);
   assert.equal((await post({ rom: 'starlte/nope', text: 'hi' })).status, 404);
+  assert.equal((await post({ rom, text: 'hi', image: btoa('<svg onload=alert(1)>') })).status, 400);
   assert.equal((await post({ rom, text: ' works great ' })).status, 200);
   assert.deepEqual(inserts[0][1].filter((_, i) => i !== 1), [rom, 'anonymous', 'works great']);
   recent = { 1: 1 };

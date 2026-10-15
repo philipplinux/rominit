@@ -70,25 +70,41 @@ function starsRow(key) {
   load();
   return row;
 }
+/** Re-encode a screenshot as WebP, at most 1280 px wide/high; drops EXIF (location) on the way. Returns base64 or null. @param {File|undefined} file */
+async function webp(file) {
+  if (!file) return null;
+  const bitmap = await createImageBitmap(file), scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
+  const canvas = Object.assign(document.createElement('canvas'), { width: Math.round(bitmap.width * scale), height: Math.round(bitmap.height * scale) });
+  canvas.getContext('2d')?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  for (const quality of [0.8, 0.6, 0.4]) {
+    const blob = await new Promise(done => canvas.toBlob(done, 'image/webp', quality));
+    if (blob && blob.size <= 400_000) return btoa(Array.from(new Uint8Array(await blob.arrayBuffer()), b => String.fromCharCode(b)).join(''));
+  }
+  throw Error('screenshot too large');
+}
 /** Comments of one ROM; hidden where there is no API. Text only, never HTML. @param {string} key `<codename>/<rom id>` */
 function commentsBox(key) {
   const list = h('ol', { className: 'comments' }), status = h('small', {});
   const name = h('input', { className: 'confirmation-input', placeholder: 'name (optional)', maxLength: 40 });
   const text = h('textarea', { className: 'confirmation-input', placeholder: 'How did it go on your phone?', maxLength: 2000, rows: 3 });
+  const shot = h('input', { type: 'file', accept: 'image/*', title: 'Screenshot (optional)' });
   const post = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Post comment' });
-  const box = h('div', { className: 'comment-box', hidden: true }, h('p', { className: 'field-label', textContent: 'Comments' }), list, name, text, post, status);
+  const box = h('div', { className: 'comment-box', hidden: true }, h('p', { className: 'field-label', textContent: 'Comments' }), list, name, text, h('label', { className: 'field-help' }, 'Screenshot (optional): ', shot), post, status);
   const url = `./api/comments?rom=${encodeURIComponent(key)}`;
   const load = () => fetch(url, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then((/** @type {any[]} */ rows) => {
-    list.replaceChildren(...rows.map(c => h('li', {}, h('small', { textContent: `${c.name} · ${c.at.slice(0, 16)} UTC` }), h('p', { textContent: c.text }))));
+    list.replaceChildren(...rows.map(c => h('li', {}, h('small', { textContent: `${c.name} · ${c.at.slice(0, 16)} UTC` }), h('p', { textContent: c.text }),
+      c.image ? h('a', { href: `./api/image?id=${c.id}`, target: '_blank' }, h('img', { src: `./api/image?id=${c.id}`, alt: 'screenshot', loading: 'lazy' })) : '')));
     if (!rows.length) list.append(h('li', {}, h('small', { textContent: 'No comments yet.' })));
     box.hidden = false;
   }, () => {});
   post.addEventListener('click', async () => {
     status.textContent = 'Posting…';
-    const response = await fetch('./api/comments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, name: name.value, text: text.value }) }).catch(() => null);
+    let image = null;
+    try { image = await webp(shot.files?.[0]); } catch { status.textContent = 'Could not use that screenshot (too large or not an image).'; return; }
+    const response = await fetch('./api/comments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key, name: name.value, text: text.value, image }) }).catch(() => null);
     const reply = await response?.json().catch(() => ({}));
     status.textContent = response?.ok ? 'Posted.' : `Could not post: ${reply?.error ?? 'network error'}.`;
-    if (response?.ok) { text.value = ''; load(); }
+    if (response?.ok) { text.value = ''; shot.value = ''; load(); }
   });
   load();
   return box;

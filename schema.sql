@@ -15,6 +15,10 @@ CREATE TABLE IF NOT EXISTS comments (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS comments_rom ON comments (rom, id);
+CREATE TABLE IF NOT EXISTS comment_images (
+  comment_id INTEGER PRIMARY KEY, -- comments.id
+  data BLOB NOT NULL              -- WebP, re-encoded in the browser, <= 400 KB
+);
 
 CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY,
