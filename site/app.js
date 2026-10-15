@@ -1,4 +1,4 @@
-import { FEATURES, INCLUDES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -26,7 +26,8 @@ const go = (/** @type {Record<string,string>} */ query) => { location.search = `
 
 const size = (/** @type {number} */ bytes) => bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(0)} KiB` : `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
 const MARK = { works: '✓', partial: '~', broken: '✗', untested: '?' };
-const LABEL = { usb_net: 'usb net', wifi: 'wi-fi', mobile: 'calls/data', google_play: 'Google Play', microg: 'microG', android_apps: 'Android apps',
+const LABEL = { usb_net: 'USB networking', wifi: 'Wi-Fi', gpu: '3D acceleration', camera_flash: 'camera flash', ir: 'IR blaster', gps: 'GPS', nfc: 'NFC',
+  data: 'mobile data', fde: 'disk encryption', otg: 'USB OTG', hdmi: 'HDMI/DP', light: 'ambient light', hall: 'hall sensor', sdcard: 'SD card', google_play: 'Google Play', microg: 'microG', android_apps: 'Android apps',
   phone_ui: 'phone UI', updates: 'updates', encryption: 'encryption', relock: 'bootloader relock', banking_apps: 'banking apps', ssh: 'SSH', docker: 'Docker' };
 /** Includes / lacks rows; optional items are listed as add-ons. @param {any} rating */
 const includesRows = rating => ['yes', 'optional', 'no'].map(value => {
@@ -43,8 +44,9 @@ const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstr
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
   `built ${rating.released}`, `support: ${rating.support}`, complete(rating)].map(text => h('span', { className: 'feature', textContent: text })));
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
-const ratingRow = rating => h('p', { className: 'rating' }, ...FEATURES.map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
-  textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })), h('small', { textContent: ` curated ${rating.checked} · user ratings coming` }));
+const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
+  ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
+    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked} · user ratings coming` }));
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB' };
 /** One readable line per step for the card. @param {any[]} step */

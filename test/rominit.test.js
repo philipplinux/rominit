@@ -32,7 +32,7 @@ test('validator rejects bad entries', () => {
   bad.roms[0].rating.kernel.type = 'vendor';
   delete bad.roms[0].rating.support;
   const found = problems(dev, bad).join('\n');
-  for (const text of ['unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs', 'rating.includes needs', 'rating.kernel needs', 'support']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
+  for (const text of ['unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs a checked date', 'rating.includes needs', 'rating.kernel needs', 'support']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
 });
 
 /** Fake fastboot that records commands. */
@@ -129,9 +129,10 @@ test('file selection, consent and options', () => {
   assert.ok(!stepsFor(stage, { reboot: false }).some(([verb]) => verb === 'reboot'));
 });
 
-test('completeness counts partial as half', () => {
-  const features = Object.fromEntries(FEATURES.map((f, i) => [f, i < 7 ? 'works' : i < 9 ? 'partial' : 'broken']));
-  assert.equal(completeness({ features }), 80);
+test('completeness counts partial as half and skips n/a', () => {
+  const features = Object.fromEntries(FEATURES.map((f, i) => [f, ['works', 'partial', 'broken', 'n/a'][i % 4]]));
+  const present = FEATURES.filter((_, i) => i % 4 !== 3).length, worth = FEATURES.reduce((sum, _, i) => sum + [1, 0.5, 0, 0][i % 4], 0);
+  assert.equal(completeness({ features }), Math.round(100 * worth / present));
 });
 
 test('checksum streams to the right digest', async () => {

@@ -6,8 +6,11 @@ import * as twrpDd from './recipes/twrp-dd.js';
 export const recipes = { fastboot, odin, 'twrp-dd': twrpDd };
 
 /** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
-export const FEATURES = ['display', 'touch', 'wifi', 'bluetooth', 'usb_net', 'gpu', 'audio', 'camera', 'mobile', 'gps'];
-export const STATES = ['works', 'partial', 'broken', 'untested'];
+/** Feature table of the postmarketOS/Nura device wiki, grouped like its sections. */
+export const FEATURE_GROUPS = {'basics':  ['flashing',  'usb_net',  'storage',  'sdcard',  'battery',  'screen',  'touch'],  'multimedia':  ['gpu',  'audio',  'camera',  'camera_flash',  'ir'],  'connectivity':  ['wifi',  'bluetooth',  'gps',  'nfc'],  'modem':  ['calls',  'sms',  'data'],  'misc':  ['fde',  'otg',  'hdmi',  'fingerprint'],  'sensors':  ['accelerometer',  'magnetometer',  'light',  'proximity',  'hall',  'haptics',  'barometer']};
+export const FEATURES = Object.values(FEATURE_GROUPS).flat();
+/** n/a = the phone has no such hardware; left out of completeness. */
+export const STATES = ['works', 'partial', 'broken', 'untested', 'n/a'];
 /** What a ROM includes or lacks, the usual reasons to pick one: yes, no, or optional (an add-on the user can install). */
 export const INCLUDES = ['google_play', 'microg', 'android_apps', 'phone_ui', 'root', 'updates', 'encryption', 'relock', 'banking_apps', 'ssh', 'docker'];
 export const OPTIONS = ['yes', 'no', 'optional'];
@@ -15,8 +18,10 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Share of hardware features that work (partial counts half), 0-100. @param {any} rating */
-export const completeness = rating =>
-  Math.round(100 * FEATURES.reduce((sum, f) => sum + (({ works: 1, partial: 0.5 })[rating.features[f]] ?? 0), 0) / FEATURES.length);
+export function completeness(rating) {
+  const present = FEATURES.filter(f => rating.features[f] !== 'n/a');
+  return Math.round(100 * present.reduce((sum, f) => sum + (({ works: 1, partial: 0.5 })[rating.features[f]] ?? 0), 0) / present.length);
+}
 const SHA = /^[0-9a-f]{64}$/;
 // Partition names, labels and slots end up in fastboot commands and TWRP shell lines.
 const SAFE = /^[A-Za-z0-9_.-]+$/;
