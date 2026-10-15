@@ -5,3 +5,13 @@ CREATE TABLE IF NOT EXISTS ratings (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (rom, voter)
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+  id INTEGER PRIMARY KEY,
+  rom TEXT NOT NULL,   -- <codename>/<rom id>
+  voter TEXT NOT NULL, -- salted address hash, for the rate limit only; never sent to the page
+  name TEXT NOT NULL,
+  text TEXT NOT NULL,
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS comments_rom ON comments (rom, id);

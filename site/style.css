@@ -278,3 +278,9 @@ progress::-moz-progress-bar { background: var(--teal); }
 .rating.includes.optional .feature { color: var(--amber); }
 .rating.includes.no .feature { color: var(--faint); text-decoration: line-through; }
 .feature.star { background: none; color: var(--amber); font: inherit; cursor: pointer; }
+.comment-box { display: grid; gap: .5rem; margin-top: 1.5rem; }
+.comments { display: grid; gap: .6rem; margin: 0; padding: 0; list-style: none; }
+.comments li { border-left: 2px solid var(--line); padding-left: .75rem; }
+.comments small { color: var(--faint); }
+.comments p { margin: .2rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.comment-box .button { justify-self: start; }
