@@ -573,7 +573,7 @@ function devicePicker(index) {
   const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
   const render = () => {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
-    const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
+    const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
     const hits = index.filter(d => words.every(w => text(d).includes(w)));
     // All › vendor › series › family › variant
     /** @type {Record<string, Record<string, Record<string, any[]>>>} */ const tree = {};
@@ -594,14 +594,17 @@ function devicePicker(index) {
   return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search, list);
 }
 
-/** One tile per vendor, linking to the device list filtered to it. @param {any[]} index */
-function brandsView(index) {
+/** One tile per group (phone brand or ROM project), linking to the device list filtered to it.
+ * @param {any[]} index @param {string} title @param {(d:any) => string[]} keysOf @param {(r:any, k:string) => boolean} counts */
+function tilesView(index, title, keysOf, counts) {
   /** @type {Record<string, any[]>} */ const by = {};
-  for (const d of index) (by[d.vendor] ??= []).push(d);
-  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Brands' }),
-    h('div', { className: 'brand-tiles' }, ...Object.entries(by).sort(([x], [y]) => x.localeCompare(y)).map(([vendor, devices]) =>
-      h('a', { className: 'brand-tile', href: `./?q=${encodeURIComponent(vendor)}` }, h('strong', { textContent: vendor }),
-        h('small', { textContent: `${devices.length} phone${devices.length === 1 ? '' : 's'} · ${devices.reduce((n, d) => n + d.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').length, 0)} ROMs` })))));
+  for (const d of index) for (const k of new Set(keysOf(d))) (by[k] ??= []).push(d);
+  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: title }),
+    h('div', { className: 'brand-tiles' }, ...Object.entries(by).sort(([x], [y]) => x.localeCompare(y)).map(([k, devices]) => {
+      const roms = devices.reduce((n, d) => n + d.roms.filter((/** @type {any} */ r) => counts(r, k)).length, 0);
+      return h('a', { className: 'brand-tile', href: `./?q=${encodeURIComponent(k)}` }, h('strong', { textContent: k }),
+        h('small', { textContent: `${devices.length} phone${devices.length === 1 ? '' : 's'} · ${roms} ROM${roms === 1 ? '' : 's'}` }));
+    })));
 }
 
 /** The signed-in user's ♥ ROMs. @param {any[]} index */
@@ -724,7 +727,7 @@ async function start() {
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
-    main.append(view === 'brands' ? brandsView(index) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
+    main.append(view === 'brands' ? tilesView(index, 'Brands', d => [d.vendor], () => true) : view === 'projects' ? tilesView(index, 'Projects', d => d.roms.map((/** @type {any} */ r) => r.os), (r, k) => r.os === k) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
     return;
   }
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
