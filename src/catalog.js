@@ -21,7 +21,8 @@ export function problems(device, romFile) {
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;
     need(SAFE.test(rom.id ?? ''), `${at}: id missing or unsafe`);
-    need(['verified', 'experimental', 'imported'].includes(rom.tier), `${at}: tier must be verified, experimental or imported`);
+    // `stock` ROMs are the way back; the page lists them under Recover / revert.
+    need(['verified', 'experimental', 'imported', 'stock'].includes(rom.tier), `${at}: tier must be verified, experimental, imported or stock`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
     for (const [i, stage] of (rom.stages ?? []).entries()) {
       const where = `${at} stage ${i + 1}`;
@@ -29,13 +30,15 @@ export function problems(device, romFile) {
       need(recipe, `${where}: unknown recipe "${stage.recipe}"`);
       need(device.modes?.[stage.mode], `${where}: device has no instructions for mode "${stage.mode}"`);
       need(stage.title && stage.warning && /^[A-Z0-9 +]{4,}$/.test(stage.confirm ?? ''), `${where}: title, warning and an upper-case confirm phrase are required`);
+      need(['tools', 'rom'].includes(stage.section), `${where}: section must be tools or rom`);
       if (stage.recipe === 'twrp-dd') need(PATH.test(stage.by_name ?? ''), `${where}: by_name must be an absolute path`);
       const names = new Set();
       for (const file of stage.files ?? []) {
         need(SAFE.test(file.name ?? '') && !names.has(file.name), `${where}: file name "${file.name}" unsafe or duplicated`);
         names.add(file.name);
         need(Number.isSafeInteger(file.size) && file.size > 0 && SHA.test(file.sha256 ?? ''), `${where}: ${file.name} needs size and sha256`);
-        need(file.urls?.length && file.urls.every(url => url.startsWith('https://')), `${where}: ${file.name} needs https urls`);
+        // Files are never mirrored: `source` is the publisher's page, `urls` only direct links on that publisher's servers (may be empty).
+        need(file.source?.startsWith('https://') && Array.isArray(file.urls) && file.urls.every(url => url.startsWith('https://')), `${where}: ${file.name} needs an https source page and https urls`);
       }
       const used = new Set();
       const steps = [...stage.steps ?? [], ...(stage.options ?? []).flatMap(option => option.steps ?? [])];

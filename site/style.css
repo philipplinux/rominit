@@ -254,3 +254,11 @@ progress::-moz-progress-bar { background: var(--teal); }
 .stage-steps { margin-top: 14px; }
 
 .download-button { width: 100%; margin-bottom: 10px; }
+
+.page-section { margin-bottom: 18px; border: 1px solid var(--line); background: rgb(16 27 31 / 60%); }
+.page-section > summary { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 18px clamp(16px, 3vw, 28px); cursor: pointer; font-size: 1.1rem; font-weight: 700; letter-spacing: -.03em; }
+.page-section > summary small { color: var(--muted); font-size: .65rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+.page-section[open] > summary { border-bottom: 1px solid var(--line); }
+.page-section > :not(summary) { margin: 18px clamp(16px, 3vw, 28px); }
+.page-section .flash-card { border-color: var(--teal-dim); }
+.page-section > select { width: calc(100% - 2 * clamp(16px, 3vw, 28px)); }

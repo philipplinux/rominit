@@ -39,9 +39,10 @@ function stageCard(device, stage, n, count) {
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
   const status = h('p', { className: 'status', role: 'status', textContent: `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
+  // Files with direct links are fetched from the publisher when the stage runs; the rest the user downloads from the source page.
+  const direct = stage.files.every(f => f.urls.length);
   const total = stage.files.reduce((sum, f) => sum + f.size, 0);
-  const download = h('button', { className: 'button button-secondary download-button', type: 'button',
-    textContent: `Download ${stage.files.length === 1 ? stage.files[0].name : `the ${stage.files.length} files`} (${(total / 1024 / 1024).toFixed(0)} MiB)` });
+  const save = h('input', { type: 'checkbox' });
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
   const selected = h('ul', { className: 'selected-files' }, h('li', { className: 'empty-files', textContent: 'No files selected' }));
   const options = (stage.options ?? []).map(option => h('input', { type: 'checkbox', checked: option.default }));
@@ -54,8 +55,7 @@ function stageCard(device, stage, n, count) {
 
   const update = () => {
     connectButton.disabled = !supported || st.busy || st.session !== null || st.lost;
-    flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !st.files || !risk.checked || confirm.value !== stage.confirm;
-    download.disabled = st.busy;
+    flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !(st.files || direct) || !risk.checked || confirm.value !== stage.confirm;
   };
   const report = (/** @type {string} */ text, fraction = 0) => {
     status.textContent = text;
@@ -88,30 +88,34 @@ function stageCard(device, stage, n, count) {
     st.busy = true; update();
     try {
       Object.assign(st, await connect(protocol));
-      report('Connected. Download or pick the files, confirm, and run.');
+      report(direct ? 'Connected. Confirm and run: the files download from source first.' : 'Connected. Choose the files, confirm, and run.');
     } catch (error) {
       report(`${message(error)} Reload to try again.`);
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
-  download.addEventListener('click', async () => {
-    st.busy = true; update();
-    try {
-      const files = [];
-      for (const pin of stage.files) files.push(await fetchPinned(pin, f => report(`Downloading ${pin.name}`, f)));
-      pick(files);
-      report('Downloaded and selected. The SHA-256 is checked before anything is written.', 1);
-    } catch (error) {
-      report(message(error));
-    } finally { st.busy = false; update(); }
-  });
+  /** Downloads every file from its publisher; nothing is cached, only saved to disk when asked. */
+  const download = async () => {
+    const files = [];
+    for (const pin of stage.files) {
+      const file = await fetchPinned(pin, f => report(`Downloading ${pin.name} from source`, f));
+      if (save.checked) {
+        const link = h('a', { href: URL.createObjectURL(file), download: file.name });
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 60_000);
+      }
+      files.push(file);
+    }
+    return selectFiles(stage, files);
+  };
   flash.addEventListener('click', async () => {
-    if (flash.disabled || !st.files) return;
+    if (flash.disabled) return;
     st.busy = true; update();
     try {
       assertConsent(stage, { consent: risk.checked, confirmation: confirm.value });
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
-      await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
+      const files = st.files ?? await download();
+      await recipes[stage.recipe].run(st.session, { device, stage, files, steps: stepsFor(stage, enabled) }, report, assertSession);
       st.finished = true;
       log.append(h('li', {}, ...rich(stage.done)));
       if (n === count) log.append(h('li', {}, 'Worked? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: 'Buy the maintainer a beer' }), '.'));
@@ -124,7 +128,8 @@ function stageCard(device, stage, n, count) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [device.modes[stage.mode], protocol !== 'adb' && device.unlock?.text, 'Connect first: it tells you right away if the phone is busy. Then download the files or pick copies you already have.']
+  const guide = [device.modes[stage.mode], protocol !== 'adb' && device.unlock?.text, direct ? 'Connect first: it tells you right away if the phone is busy. Running downloads the files from their source, or choose copies you already have.'
+    : 'Download the files from the source links below, then connect and choose them.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },
@@ -134,9 +139,11 @@ function stageCard(device, stage, n, count) {
     h('p', { className: 'field-help', textContent: `Steps: ${stepsFor(stage).map(describe).join(' · ')}.` }),
     h('ol', { className: 'guide-list stage-steps' }, ...guide),
     h('div', { className: 'connect-row' }, connectButton, status),
-    download,
+    h('ul', { className: 'selected-files' }, ...stage.files.map(f => h('li', {}, `${f.name} (${(f.size / 1024 / 1024).toFixed(1)} MiB) · `,
+      h('a', { href: f.source, target: '_blank', rel: 'noopener noreferrer', textContent: f.urls.length ? 'source' : 'get it from source' })))),
+    direct && h('label', { className: 'risk-check' }, save, h('span', { textContent: `Also save the downloaded files (${(total / 1024 / 1024).toFixed(0)} MiB) to disk. Nothing is cached otherwise.` })),
     h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
-      h('span', {}, h('strong', { textContent: `Or choose ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
+      h('span', {}, h('strong', { textContent: `${direct ? 'Or choose' : 'Choose'} ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
     selected,
     ...(stage.options ?? []).map((option, i) => h('label', { className: 'risk-check' }, options[i], h('span', { textContent: option.label }))),
     h('label', { className: 'risk-check' }, risk, h('span', {}, h('strong', { textContent: 'I understand: ' }), stage.warning)),
@@ -174,19 +181,34 @@ async function start() {
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
   if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
-  const rom = device.roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? device.roms[0];
+  const roms = device.roms.filter((/** @type {any} */ r) => r.tier !== 'stock');
+  const stock = device.roms.filter((/** @type {any} */ r) => r.tier === 'stock');
+  const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
-  const romSelect = h('select', { className: 'confirmation-input' }, ...device.roms.map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.tier})`, r.id, false, r === rom)));
+  const romSelect = h('select', { className: 'confirmation-input' }, ...roms.map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.tier})`, r.id, false, r === rom)));
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
-  main.append(h('section', { className: 'intro' },
-    h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL DEVICES' }), ` // ${device.vendor.toUpperCase()}`),
-    h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
-    h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; nothing is uploaded.` }),
-    h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
-    rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''}${rom.login ? ` Login afterwards: \`${rom.login}\`, change it.` : ''} `),
-      rom.homepage && h('a', { href: rom.homepage, target: '_blank', rel: 'noopener noreferrer', textContent: 'Release page' })),
-    device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ',
-      device.recovery.url && h('a', { href: device.recovery.url, target: '_blank', rel: 'noopener noreferrer', textContent: 'More' }))));
-  if (rom) main.append(h('div', { className: 'stages' }, ...rom.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, rom.stages.length))));
+  const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
+  /** One of the three collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
+  const section = (title, hint, open, body) => h('details', { className: 'page-section', open },
+    h('summary', {}, h('span', { textContent: title }), h('small', { textContent: hint })), ...body);
+  /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
+  const cards = (r, which) => r.stages.flatMap((/** @type {any} */ stage, /** @type {number} */ i) =>
+    stage.section === which ? [stageCard(device, stage, i + 1, r.stages.length)] : []);
+  const tools = rom ? cards(rom, 'tools') : [];
+  main.append(
+    h('section', { className: 'intro' },
+      h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL DEVICES' }), ` // ${device.vendor.toUpperCase()}`),
+      h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
+      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; files come straight from their source and nothing is uploaded.` })),
+    section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
+      tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
+    section('2 · ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
+      h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
+      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''}${rom.login ? ` Login afterwards: \`${rom.login}\`, change it.` : ''} `), rom.homepage && link(rom.homepage, 'Release page')),
+      rom && h('div', { className: 'stages' }, ...cards(rom, 'rom'))]),
+    section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
+      device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
+      ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
+        ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length))))]));
 }
 start().catch(error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));

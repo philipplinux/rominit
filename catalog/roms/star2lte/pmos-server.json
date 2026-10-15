@@ -12,6 +12,7 @@
       "stages": [
         {
           "title": "Install TWRP",
+          "section": "tools",
           "optional": "Skip if TWRP is already installed.",
           "recipe": "odin",
           "mode": "download",
@@ -28,9 +29,8 @@
               "name": "twrp-3.7.0_9-0-star2lte.img",
               "size": 42670080,
               "sha256": "f674dab0134f3c929982077b6a3a8de7df209a45c76ead80bc009381bcd835e1",
-              "urls": [
-                "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/twrp-3.7.0_9-0-star2lte.img"
-              ]
+              "urls": [],
+              "source": "https://dl.twrp.me/star2lte/twrp-3.7.0_9-0-star2lte.img.html"
             }
           ],
           "steps": [
@@ -44,6 +44,7 @@
         },
         {
           "title": "Flash the postmarketOS server image",
+          "section": "rom",
           "recipe": "twrp-dd",
           "mode": "recovery",
           "confirm": "ERASE S9+",
@@ -56,7 +57,8 @@
               "sha256": "52be430de46e5478543c0a73368b122e6df19d35f3d3268df56a2c3614f4e3a3",
               "urls": [
                 "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/samsung-star2lte-root.img"
-              ]
+              ],
+              "source": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9plus"
             },
             {
               "name": "samsung-star2lte-boot.img",
@@ -64,7 +66,8 @@
               "sha256": "ba70491a69b330ded787cc3a0a08424bfb39fca2b476e379e5012f883a27fe5b",
               "urls": [
                 "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/samsung-star2lte-boot.img"
-              ]
+              ],
+              "source": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9plus"
             },
             {
               "name": "boot.img",
@@ -72,7 +75,8 @@
               "sha256": "e8eb714114300eb5de1c67f58c51a5eef7262394773f1abe37931f4b16fb61b7",
               "urls": [
                 "https://huggingface.co/PhilippLinux/s9-postmarketos/resolve/main/v2026.10.15-s9plus/boot.img"
-              ]
+              ],
+              "source": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9plus"
             }
           ],
           "steps": [
