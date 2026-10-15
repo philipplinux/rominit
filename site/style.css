@@ -328,6 +328,14 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .page-section:not(.required):not(.done) .badge { border-color: var(--line); color: var(--faint); }
 .guide label { cursor: pointer; }
 
+.bench-thanks { display: grid; justify-items: center; gap: .4rem; text-align: center; padding: 1.6rem 1rem; margin-bottom: 1.2rem; border: 1px solid var(--teal); border-radius: 14px;
+  background: rgb(168 197 160 / 10%); animation: tile-in .6s ease both; }
+.bench-thanks p { margin: 0; max-width: 34rem; }
+.bench-thanks-title { font-size: 1.8rem; font-weight: 700; color: var(--teal); }
+.bench-appeal { display: grid; justify-items: center; gap: .5rem; margin-top: 1rem; padding: 1.1rem 1.2rem; max-width: 36rem; border: 1px solid var(--amber); border-radius: 12px; background: rgb(230 195 154 / 8%); color: #ece4d4; }
+.bench-appeal-title { font-size: 1.1rem; font-weight: 700; color: var(--amber); }
+.bench-appeal small { color: var(--muted); }
+.bench-donate { width: auto; text-decoration: none; margin-top: .6rem; font-size: 1rem; padding: .7rem 1.4rem; }
 .congrats { border-left: 2px solid var(--teal); padding: .5rem .8rem; color: var(--teal); }
 
 .hints { font-size: .75rem; border-left: 2px solid var(--teal); padding: .3rem .7rem; }

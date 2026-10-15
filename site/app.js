@@ -333,7 +333,18 @@ function benchBox(rom, key) {
     const send = h('button', { type: 'button', className: 'button button-primary', textContent: 'Send report card', async onclick() {
       send.disabled = true; status.textContent = 'Sending…';
       const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, final, note: note.value }) }).catch(() => null);
-      if (r?.ok) { status.textContent = 'Thank you! Your report card helps the next person pick a ROM.'; send.textContent = '✓ Sent'; box.dispatchEvent(new Event('bench-sent', { bubbles: true })); }
+      if (r?.ok) {
+        status.textContent = ''; send.textContent = '✓ Sent';
+        const thanks = h('div', { className: 'bench-thanks' }, h('p', { className: 'bench-thanks-title', textContent: 'Thank you! 🎉' }),
+          h('p', { textContent: `Your report card for ${rom.name} is in. It shows the next person what really works on this phone, and tells the ROM's makers what to fix.` }),
+          h('div', { className: 'bench-appeal' },
+            h('p', { className: 'bench-appeal-title', textContent: 'Please help keep ROMinit going.' }),
+            h('p', { textContent: 'ROMinit is made by one person. It has no ads, no tracking and no paywall, and we want to keep it that way. Most people who use it never chip in, and that is fine. But if ROMinit saved you an evening of forum threads and bricked-phone panic, the price of one coffee keeps it running for the next person. Thank you.' }),
+            h('a', { className: 'button button-primary bench-donate', href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }),
+            h('small', { textContent: 'One-off, any amount, through Buy Me a Coffee.' })));
+        box.prepend(thanks); thanks.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        box.dispatchEvent(new Event('bench-sent', { bubbles: true }));
+      }
       else { send.disabled = false; status.textContent = `Could not send: ${(await r?.json().catch(() => ({})))?.error ?? 'network error'}.`; }
     } });
     const failed = FEATURES.filter(f => features[f]?.status === 'inconclusive');
