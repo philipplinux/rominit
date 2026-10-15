@@ -27,6 +27,9 @@ export async function onRequestGet({ request, env, params }) {
   const p = await profile(name, access_token);
   const user = await env.DB.prepare(`INSERT INTO users (provider, subject, name, email) VALUES (?1, ?2, ?3, ?4)
     ON CONFLICT (provider, subject) DO UPDATE SET name = CASE WHEN users.name_chosen THEN users.name ELSE excluded.name END, email = excluded.email RETURNING id`).bind(name, p.subject, String(p.name).slice(0, 60), p.email).first();
+  // Names stay unique (case-insensitive): a provider name someone already uses gets "-<id>" until the user picks one.
+  await env.DB.prepare(`UPDATE users SET name = name || '-' || id WHERE id = ?1 AND name_chosen = 0
+    AND EXISTS (SELECT 1 FROM users o WHERE o.id != ?1 AND lower(o.name) = lower(users.name))`).bind(user.id).run();
   const token = randomToken();
   await env.DB.prepare("INSERT INTO sessions (token, user_id, expires) VALUES (?1, ?2, datetime('now', '+30 days'))").bind(await sha256hex(token), user.id).run();
   const headers = new Headers({ location: safeReturn(back) });
