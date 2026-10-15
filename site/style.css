@@ -263,3 +263,10 @@ progress::-moz-progress-bar { background: var(--teal); }
 .page-section .flash-card { border-color: var(--teal-dim); }
 .page-section > select { width: calc(100% - 2 * clamp(16px, 3vw, 28px)); }
 .file-links li { display: block; }
+.rating { display: flex; flex-wrap: wrap; gap: 6px; font-size: .7rem; }
+.feature { border: 1px solid var(--line); padding: .2rem .45rem; }
+.feature.works { border-color: var(--teal-dim); color: var(--teal); }
+.feature.partial { color: var(--amber); }
+.feature.broken { color: #e98b7a; }
+.feature.untested { color: var(--faint); }
+.rating small { align-self: center; color: var(--faint); }

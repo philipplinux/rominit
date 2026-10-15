@@ -5,6 +5,9 @@ import * as twrpDd from './recipes/twrp-dd.js';
 /** Recipe id → engine. `protocol` picks the USB connection, `verbs` the allowed steps and their argument counts. */
 export const recipes = { fastboot, odin, 'twrp-dd': twrpDd };
 
+/** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
+export const FEATURES = ['display', 'touch', 'wifi', 'bluetooth', 'usb_net', 'gpu', 'audio', 'camera', 'mobile', 'gps'];
+export const STATES = ['works', 'partial', 'broken', 'untested'];
 const SHA = /^[0-9a-f]{64}$/;
 // Partition names, labels and slots end up in fastboot commands and TWRP shell lines.
 const SAFE = /^[A-Za-z0-9_.-]+$/;
@@ -24,6 +27,9 @@ export function problems(device, romFile) {
     // `stock` ROMs are the way back; the page lists them under Recover / revert.
     need(['verified', 'experimental', 'imported', 'stock'].includes(rom.tier), `${at}: tier must be verified, experimental, imported or stock`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
+    const features = rom.rating?.features ?? {};
+    need(/^\d{4}-\d{2}-\d{2}$/.test(rom.rating?.checked ?? '') && FEATURES.every(f => STATES.includes(features[f])) && Object.keys(features).length === FEATURES.length,
+      `${at}: rating needs a checked date and exactly these features (${STATES.join('/')}): ${FEATURES.join(', ')}`);
     for (const [i, stage] of (rom.stages ?? []).entries()) {
       const where = `${at} stage ${i + 1}`;
       const recipe = recipes[stage.recipe];

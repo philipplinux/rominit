@@ -18,7 +18,7 @@ Safety: every file is pinned by size and SHA-256, every step verb is whitelisted
 ## Add a device
 
 1. `catalog/devices/<vendor>/<codename>.json`: name, models, `detect`, `modes` (how to reach fastboot / download / recovery), `unlock`, `recovery`.
-2. `catalog/roms/<codename>/<source>.json`: ROMs with stages; each stage names a recipe, a mode, pinned files (`name`, `size`, `sha256`, https `source` page, optional direct `url`) and `steps` like `["flash", "boot_b", "boot.img"]`.
+2. `catalog/roms/<codename>/<source>.json`: ROMs with stages; each stage names a recipe, a mode, pinned files (`name`, `size`, `sha256`, https `source` page, optional direct `url`) and `steps` like `["flash", "boot_b", "boot.img"]`. Every ROM also needs a `rating`: a `checked` date and each feature (display, touch, wifi, bluetooth, usb_net, gpu, audio, camera, mobile, gps) as works / partial / broken / untested.
 3. `npm ci && npm test && npm run build`. The validator lists every problem.
 
 Copy an existing device as a template.

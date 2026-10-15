@@ -7,6 +7,21 @@
       "name": "postmarketOS server (generic build)",
       "version": "v2026.10.13",
       "tier": "experimental",
+      "rating": {
+        "checked": "2026-10-15",
+        "features": {
+          "display": "works",
+          "touch": "works",
+          "wifi": "works",
+          "bluetooth": "works",
+          "usb_net": "works",
+          "gpu": "works",
+          "audio": "works",
+          "camera": "broken",
+          "mobile": "broken",
+          "gps": "untested"
+        }
+      },
       "notes": "Runs on real hardware. Flashing through the browser is not hardware-tested yet.",
       "homepage": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.13",
       "login": "user / changeme",

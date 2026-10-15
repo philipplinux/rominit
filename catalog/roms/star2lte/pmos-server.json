@@ -7,6 +7,21 @@
       "name": "postmarketOS server",
       "version": "v2026.10.15-s9plus",
       "tier": "experimental",
+      "rating": {
+        "checked": "2026-10-15",
+        "features": {
+          "display": "untested",
+          "touch": "untested",
+          "wifi": "untested",
+          "bluetooth": "untested",
+          "usb_net": "untested",
+          "gpu": "untested",
+          "audio": "broken",
+          "camera": "broken",
+          "mobile": "untested",
+          "gps": "untested"
+        }
+      },
       "notes": "Untested on real hardware: same build as the S9 with the star2lte kernel config, DTB and TWRP.",
       "homepage": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9plus",
       "stages": [

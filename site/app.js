@@ -1,4 +1,4 @@
-import { assertConsent, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, assertConsent, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -25,6 +25,13 @@ const main = /** @type {HTMLElement} */ (document.getElementById('main'));
 const go = (/** @type {Record<string,string>} */ query) => { location.search = `?${new URLSearchParams(query)}`; };
 
 const size = (/** @type {number} */ bytes) => bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(0)} KiB` : `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
+const MARK = { works: '✓', partial: '~', broken: '✗', untested: '?' };
+const LABEL = { usb_net: 'usb net', wifi: 'wi-fi', mobile: 'calls/data' };
+/** "7/10 work" summary for lists. @param {any} rating */
+const score = rating => `${FEATURES.filter(f => rating.features[f] === 'works').length}/${FEATURES.length} work`;
+/** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
+const ratingRow = rating => h('p', { className: 'rating' }, ...FEATURES.map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
+  textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })), h('small', { textContent: ` curated ${rating.checked} · user ratings coming` }));
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB' };
 /** One readable line per step for the card. @param {any[]} step */
@@ -142,7 +149,7 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const hits = index.filter(d => words.every(w => [d.vendor, d.name, d.codename, ...d.models].join(' ').toLowerCase().includes(w)));
     list.replaceChildren(...hits.map(d => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: `${d.vendor} ${d.name}` }),
-      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.map(r => `${r.os} ${r.version}`).join(', ')}`)));
+      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.map(r => `${r.os} ${r.version} (${score(r.rating)})`).join(', ')}`)));
     if (!hits.length) list.append(h('li', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
   };
   search.addEventListener('input', render);
@@ -182,8 +189,9 @@ async function start() {
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
       tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
-    section('2 · ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
+    section('2 · ROM', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
       h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
+      rom && ratingRow(rom.rating),
       rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''}${rom.login ? ` Login afterwards: \`${rom.login}\`, change it.` : ''} `), rom.homepage && link(rom.homepage, 'Release page')),
       rom && h('div', { className: 'stages' }, ...cards(rom, 'rom'))]),
     section('3 · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [

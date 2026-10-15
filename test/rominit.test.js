@@ -27,8 +27,9 @@ test('validator rejects bad entries', () => {
   stage.files[0].url = 'http://example.com/x';
   stage.files[1].sha256 = 'nope';
   stage.confirm = 'yes';
+  bad.roms[0].rating.features.wifi = 'great';
   const found = problems(dev, bad).join('\n');
-  for (const text of ['unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
+  for (const text of ['unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
 });
 
 /** Fake fastboot that records commands. */
