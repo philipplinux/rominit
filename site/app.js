@@ -594,31 +594,42 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: unsorted page reports, grouped by the section they are about. */
+/** Admin inbox: three folders, always shown with their counts: page reports (by section), phone tests, device searches. */
 async function inboxView() {
-  const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox · page reports' }));
+  const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, labels } = await r.json();
+  const { reports, benchmarks, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
-  if (searches.length) card.append(h('details', { className: 'page-section inbox-group', open: true },
-    h('summary', {}, h('span', { textContent: 'Searches · last 90 days' }), h('small', { textContent: 'no-match first, by people' })),
-    h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
-      h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))));
-  if (!reports.length) return card.append(h('p', { className: 'empty-files', textContent: 'Inbox zero: no unsorted reports.' })), card;
+  const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
+  /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
+  const folder = (name, hint, n, body) => h('details', { className: 'page-section inbox-group', open: n > 0 },
+    h('summary', {}, h('span', { textContent: `${name} · ${n}` }), h('small', { textContent: hint })), ...(n ? body : [h('p', { className: 'empty-files', textContent: 'Nothing here.' })]));
+  /** "File as [label] [File]"; filing removes the item. @param {string} inbox @param {string} ref @param {HTMLElement} li */
+  const fileAs = (inbox, ref, li) => {
+    const label = h('select', {}, ...labels.map((/** @type {string} */ l) => h('option', { textContent: l })));
+    return h('label', { className: 'field-help' }, 'File as ', label, ' ', h('button', { type: 'button', className: 'button button-secondary', textContent: 'File', async onclick() {
+      const ok = (await fetch('./api/inbox', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ inbox, ref, label: label.value }) })).ok;
+      if (ok) li.remove(); else li.append(h('small', { textContent: ' could not file' }));
+    } }));
+  };
   const by = /** @type {Record<string, any[]>} */ ({});
   for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
-  for (const [section, items] of Object.entries(by).sort(([a], [b]) => a.localeCompare(b))) card.append(h('details', { className: 'page-section inbox-group', open: true },
-    h('summary', {}, h('span', { textContent: section }), h('small', { textContent: `${items.length} report${items.length === 1 ? '' : 's'}` })),
-    h('ol', { className: 'comments' }, ...items.map(x => {
-      const label = h('select', {}, ...labels.map((/** @type {string} */ l) => h('option', { textContent: l })));
-      const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }), h('label', { className: 'field-help' }, 'File as ', label, ' ',
-        h('button', { type: 'button', className: 'button button-secondary', textContent: 'File', async onclick() {
-          const ok = (await fetch('./api/inbox', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ref: x.id, label: label.value }) })).ok;
-          if (ok) li.remove(); else li.append(h('small', { textContent: ' could not file' }));
-        } })));
-      return li;
-    }))));
+  card.append(
+    folder('Reports', 'page reports, by section', reports.length, Object.entries(by).sort(([a], [b]) => a.localeCompare(b)).map(([section, items]) =>
+      h('div', { className: 'inbox-sub' }, h('p', { className: 'field-label', textContent: `${section} · ${items.length}` }), h('ol', { className: 'comments' }, ...items.map(x => {
+        const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }));
+        return li.append(fileAs('reports', String(x.id), li)), li;
+      }))))),
+    folder('Benchmarks', 'submitted phone tests', benchmarks.length, [h('ol', { className: 'comments' }, ...benchmarks.map((/** @type {any} */ x) => {
+      const body = JSON.parse(x.body ?? '{}'), [codename] = String(x.rom).split('/');
+      const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: `./?device=${encodeURIComponent(codename)}`, textContent: x.rom })),
+        body.note && h('p', { textContent: body.note }),
+        h('details', {}, h('summary', { textContent: 'card and script output' }), h('pre', { className: 'bench-output', textContent: `${JSON.stringify(body.final, null, 1)}\n\n${body.output ?? ''}` })));
+      return li.append(fileAs('benchmarks', x.ref, li)), li;
+    }))]),
+    folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
+      h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
   return card;
 }
 

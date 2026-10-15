@@ -463,3 +463,5 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .report-section { font: inherit; background: var(--panel, #1b1b1b); color: inherit; border: 1px solid #444; padding: .2rem .4rem; }
 .inbox-group .comments select { font: inherit; }
 .popular li.missed a { color: var(--red, #e88); }
+.inbox-sub { padding: 0 1.75rem; }
+.bench-output { max-height: 20rem; overflow: auto; font-size: .7rem; white-space: pre-wrap; }
