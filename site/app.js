@@ -1,5 +1,4 @@
 import { assertConsent, recipes, selectFiles, stepsFor } from '../src/catalog.js';
-import { fetchPinned } from '../src/fetch.js';
 import { connect } from '../src/protocols/usb.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -25,6 +24,7 @@ const message = error => {
 const main = /** @type {HTMLElement} */ (document.getElementById('main'));
 const go = (/** @type {Record<string,string>} */ query) => { location.search = `?${new URLSearchParams(query)}`; };
 
+const size = (/** @type {number} */ bytes) => bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(0)} KiB` : `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB' };
 /** One readable line per step for the card. @param {any[]} step */
@@ -39,10 +39,6 @@ function stageCard(device, stage, n, count) {
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
   const status = h('p', { className: 'status', role: 'status', textContent: `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
-  // Files with direct links are fetched from the publisher when the stage runs; the rest the user downloads from the source page.
-  const direct = stage.files.every(f => f.urls.length);
-  const total = stage.files.reduce((sum, f) => sum + f.size, 0);
-  const save = h('input', { type: 'checkbox' });
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
   const selected = h('ul', { className: 'selected-files' }, h('li', { className: 'empty-files', textContent: 'No files selected' }));
   const options = (stage.options ?? []).map(option => h('input', { type: 'checkbox', checked: option.default }));
@@ -55,7 +51,7 @@ function stageCard(device, stage, n, count) {
 
   const update = () => {
     connectButton.disabled = !supported || st.busy || st.session !== null || st.lost;
-    flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !(st.files || direct) || !risk.checked || confirm.value !== stage.confirm;
+    flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !st.files || !risk.checked || confirm.value !== stage.confirm;
   };
   const report = (/** @type {string} */ text, fraction = 0) => {
     status.textContent = text;
@@ -69,7 +65,7 @@ function stageCard(device, stage, n, count) {
   const pick = (/** @type {File[]} */ files) => {
     try {
       st.files = selectFiles(stage, files);
-      selected.replaceChildren(...st.files.map(f => h('li', { textContent: `${f.name} (${(f.size / 1024 / 1024).toFixed(1)} MiB)` })));
+      selected.replaceChildren(...st.files.map(f => h('li', { textContent: `${f.name} (${size(f.size)})` })));
     } catch (error) {
       st.files = null;
       selected.replaceChildren(h('li', { textContent: message(error) }));
@@ -88,34 +84,19 @@ function stageCard(device, stage, n, count) {
     st.busy = true; update();
     try {
       Object.assign(st, await connect(protocol));
-      report(direct ? 'Connected. Confirm and run: the files download from source first.' : 'Connected. Choose the files, confirm, and run.');
+      report('Connected. Choose the files, confirm, and run.');
     } catch (error) {
       report(`${message(error)} Reload to try again.`);
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
-  /** Downloads every file from its publisher; nothing is cached, only saved to disk when asked. */
-  const download = async () => {
-    const files = [];
-    for (const pin of stage.files) {
-      const file = await fetchPinned(pin, f => report(`Downloading ${pin.name} from source`, f));
-      if (save.checked) {
-        const link = h('a', { href: URL.createObjectURL(file), download: file.name });
-        link.click();
-        setTimeout(() => URL.revokeObjectURL(link.href), 60_000);
-      }
-      files.push(file);
-    }
-    return selectFiles(stage, files);
-  };
   flash.addEventListener('click', async () => {
-    if (flash.disabled) return;
+    if (flash.disabled || !st.files) return;
     st.busy = true; update();
     try {
       assertConsent(stage, { consent: risk.checked, confirmation: confirm.value });
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
-      const files = st.files ?? await download();
-      await recipes[stage.recipe].run(st.session, { device, stage, files, steps: stepsFor(stage, enabled) }, report, assertSession);
+      await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
       st.finished = true;
       log.append(h('li', {}, ...rich(stage.done)));
       if (n === count) log.append(h('li', {}, 'Worked? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: 'Buy the maintainer a beer' }), '.'));
@@ -128,8 +109,7 @@ function stageCard(device, stage, n, count) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [device.modes[stage.mode], protocol !== 'adb' && device.unlock?.text, direct ? 'Connect first: it tells you right away if the phone is busy. Running downloads the files from their source, or choose copies you already have.'
-    : 'Download the files from the source links below, then connect and choose them.']
+  const guide = [device.modes[stage.mode], protocol !== 'adb' && device.unlock?.text, 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },
@@ -139,11 +119,11 @@ function stageCard(device, stage, n, count) {
     h('p', { className: 'field-help', textContent: `Steps: ${stepsFor(stage).map(describe).join(' · ')}.` }),
     h('ol', { className: 'guide-list stage-steps' }, ...guide),
     h('div', { className: 'connect-row' }, connectButton, status),
-    h('ul', { className: 'selected-files' }, ...stage.files.map(f => h('li', {}, `${f.name} (${(f.size / 1024 / 1024).toFixed(1)} MiB) · `,
-      h('a', { href: f.source, target: '_blank', rel: 'noopener noreferrer', textContent: f.urls.length ? 'source' : 'get it from source' })))),
-    direct && h('label', { className: 'risk-check' }, save, h('span', { textContent: `Also save the downloaded files (${(total / 1024 / 1024).toFixed(0)} MiB) to disk. Nothing is cached otherwise.` })),
+    h('ul', { className: 'selected-files file-links' }, ...stage.files.map(f => h('li', {}, `${f.name} (${size(f.size)}) · `,
+      f.url && h('a', { href: f.url, rel: 'noopener noreferrer', textContent: 'download' }), f.url && ' · ',
+      h('a', { href: f.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'source page' })))),
     h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
-      h('span', {}, h('strong', { textContent: `${direct ? 'Or choose' : 'Choose'} ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
+      h('span', {}, h('strong', { textContent: `Choose ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
     selected,
     ...(stage.options ?? []).map((option, i) => h('label', { className: 'risk-check' }, options[i], h('span', { textContent: option.label }))),
     h('label', { className: 'risk-check' }, risk, h('span', {}, h('strong', { textContent: 'I understand: ' }), stage.warning)),
@@ -199,7 +179,7 @@ async function start() {
     h('section', { className: 'intro' },
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL DEVICES' }), ` // ${device.vendor.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
-      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; files come straight from their source and nothing is uploaded.` })),
+      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     section('1 · Recovery tools', tools.length ? 'needed for this ROM; skip if already installed' : 'not needed for this ROM', tools.length > 0,
       tools.length ? [h('div', { className: 'stages' }, ...tools)] : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })]),
     section('2 · ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [

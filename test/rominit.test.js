@@ -3,7 +3,6 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { assertConsent, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
-import { fetchPinned } from '../src/fetch.js';
 import { checksum } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -25,7 +24,7 @@ test('validator rejects bad entries', () => {
   const bad = structuredClone(good);
   const stage = bad.roms[0].stages[0];
   stage.steps.push(['flash', 'boot;reboot', 'boot.img'], ['format', 'userdata']);
-  stage.files[0].urls = ['http://example.com/x'];
+  stage.files[0].url = 'http://example.com/x';
   stage.files[1].sha256 = 'nope';
   stage.confirm = 'yes';
   const found = problems(dev, bad).join('\n');
@@ -124,15 +123,6 @@ test('file selection, consent and options', () => {
   assertConsent(stage, { consent: true, confirmation: stage.confirm });
   assert.ok(!stepsFor(stage).some(([verb]) => verb === 'mkfs_ext4'));
   assert.ok(!stepsFor(stage, { reboot: false }).some(([verb]) => verb === 'reboot'));
-});
-
-test('fetchPinned falls back to the next mirror and checks size', async () => {
-  const pin = { name: 'a.img', size: 5, urls: ['https://dead/a.img', 'https://ok/a.img'] };
-  const get = async url => url.includes('dead') ? new Response('', { status: 404 }) : new Response('hello');
-  const file = await fetchPinned(pin, noop, get);
-  assert.equal(await file.text(), 'hello');
-  await assert.rejects(fetchPinned({ ...pin, size: 4 }, noop, get), /larger than pinned/);
-  await assert.rejects(fetchPinned({ ...pin, urls: ['https://dead/a.img'] }, noop, get), /HTTP 404/);
 });
 
 test('checksum streams to the right digest', async () => {

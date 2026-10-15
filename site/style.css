@@ -262,3 +262,4 @@ progress::-moz-progress-bar { background: var(--teal); }
 .page-section > :not(summary) { margin: 18px clamp(16px, 3vw, 28px); }
 .page-section .flash-card { border-color: var(--teal-dim); }
 .page-section > select { width: calc(100% - 2 * clamp(16px, 3vw, 28px)); }
+.file-links li { display: block; }

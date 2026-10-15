@@ -37,8 +37,8 @@ export function problems(device, romFile) {
         need(SAFE.test(file.name ?? '') && !names.has(file.name), `${where}: file name "${file.name}" unsafe or duplicated`);
         names.add(file.name);
         need(Number.isSafeInteger(file.size) && file.size > 0 && SHA.test(file.sha256 ?? ''), `${where}: ${file.name} needs size and sha256`);
-        // Files are never mirrored: `source` is the publisher's page, `urls` only direct links on that publisher's servers (may be empty).
-        need(file.source?.startsWith('https://') && Array.isArray(file.urls) && file.urls.every(url => url.startsWith('https://')), `${where}: ${file.name} needs an https source page and https urls`);
+        // ROMinit never downloads or hosts files: `source` is the publisher's page, `url` an optional direct link the user opens.
+        need(file.source?.startsWith('https://') && (file.url === undefined || file.url.startsWith('https://')), `${where}: ${file.name} needs an https source page (and an https url if any)`);
       }
       const used = new Set();
       const steps = [...stage.steps ?? [], ...(stage.options ?? []).flatMap(option => option.steps ?? [])];

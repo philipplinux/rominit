@@ -11,12 +11,14 @@ Status: experimental. 3 devices (Xiaomi Mi A3, Samsung Galaxy S9 / S9+) with pos
 - **Protocols** (`src/protocols/usb.js`): WebUSB connections for fastboot, Odin and ADB.
 - **Site** (`site/`): static page, generated from the catalog. `npm run build` writes `dist/`.
 
+Files: ROMinit never hosts, mirrors or downloads ROMs. Each file links to its publisher (self-hosted or login-protected hosts work too); you download it, then pick it, and ROMinit checks and flashes it.
+
 Safety: every file is pinned by size and SHA-256, every step verb is whitelisted per recipe, device identity is checked before the first write, and any mismatch stops the run (fail closed). Catalog data is shown as text only.
 
 ## Add a device
 
 1. `catalog/devices/<vendor>/<codename>.json`: name, models, `detect`, `modes` (how to reach fastboot / download / recovery), `unlock`, `recovery`.
-2. `catalog/roms/<codename>/<source>.json`: ROMs with stages; each stage names a recipe, a mode, pinned files (`name`, `size`, `sha256`, https `urls`) and `steps` like `["flash", "boot_b", "boot.img"]`.
+2. `catalog/roms/<codename>/<source>.json`: ROMs with stages; each stage names a recipe, a mode, pinned files (`name`, `size`, `sha256`, https `source` page, optional direct `url`) and `steps` like `["flash", "boot_b", "boot.img"]`.
 3. `npm ci && npm test && npm run build`. The validator lists every problem.
 
 Copy an existing device as a template.
