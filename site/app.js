@@ -281,7 +281,7 @@ async function start() {
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
-      h('label', { className: 'field-label', textContent: 'ROM' }), romSelect,
+      h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), romSelect,
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && ratingRow(rom.rating),
       rom && metaRow(rom.rating),

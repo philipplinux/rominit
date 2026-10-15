@@ -16,6 +16,7 @@ await writeFile('dist/catalog/index.json', JSON.stringify(index));
 for (const device of devices) await writeFile(`dist/catalog/${device.codename}.json`, JSON.stringify(device));
 
 await cp('site/style.css', 'dist/style.css');
+await cp('site/logos', 'dist/logos', { recursive: true });
 await build({ entryPoints: ['site/app.js'], outfile: 'dist/app.js', bundle: true,
   format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 // ?v=<content hash> so a redeploy is picked up despite the host's cache
@@ -35,5 +36,6 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
   assert(notice && /[Cc]opyright/.test(notice), `Missing third-party notice: ${path}`);
   notices.push(`${path}\n${notice}`);
 }
+notices.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
 await writeFile('dist/THIRD-PARTY-NOTICES.txt', notices.join('\n\n'));
 console.log(`built dist/: ${devices.length} devices, ${devices.reduce((n, d) => n + d.roms.length, 0)} ROMs`);
