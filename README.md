@@ -33,6 +33,14 @@ npm run bench   # website end to end: real Chromium against wrangler pages dev +
 npm run build   # dist/
 ```
 
+## Layout
+
+- `site/`: the web page; `functions/`: Cloudflare Pages Functions (API, sign-in); `src/`: catalog validator, recipes, USB protocols
+- `catalog/`: devices and ROMs (JSON); `schema.sql` + `migrations/`: D1 database
+- `test/`, `bench/`: unit tests and the end-to-end site bench; `scripts/`: build and catalog loading
+- `romsources/research/`: raw research data the catalog was built from (not served)
+- `.agents/skills/rom-scraper/`: agent instructions for finding ROMs and adding them to the catalog
+
 ## Roadmap
 
 1. postmarketOS importer (+ `.img.xz` decompression in the browser)
