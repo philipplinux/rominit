@@ -1,0 +1,44 @@
+{
+  "codename": "hero2lte",
+  "vendor": "Samsung",
+  "name": "Galaxy S7 edge",
+  "series": "Galaxy S",
+  "family": "Galaxy S7",
+  "variant": "S7 edge · Exynos",
+  "unsupported": [
+    {
+      "name": "S7 edge · Snapdragon",
+      "models": [
+        "SM-G935U",
+        "SM-G935A",
+        "SM-G935T",
+        "SM-G935V",
+        "SM-G935P"
+      ],
+      "why": "Qualcomm chip with a locked bootloader: no TWRP, no custom ROMs"
+    }
+  ],
+  "models": [
+    "SM-G935F",
+    "SM-G935FD",
+    "SM-G935W8"
+  ],
+  "notes": "Exynos only. Not for the US Snapdragon models (SM-G935U/A/T/V/P).",
+  "detect": {
+    "adb": {
+      "device": "hero2lte"
+    }
+  },
+  "modes": {
+    "download": "Power off. Hold Volume Down + Home + Power until the warning screen, then press Volume Up for Download Mode.",
+    "recovery": "Power off. Hold Volume Up + Home + Power until the TWRP screen appears.",
+    "sideload": "Boot TWRP (Volume Up + Home + Power). Coming from Samsung firmware or another ROM: Wipe › Format Data, type yes (erases everything on the phone). Then Advanced › ADB Sideload, swipe to start."
+  },
+  "unlock": {
+    "text": "OEM unlock must be enabled in Android developer options before anything can be flashed."
+  },
+  "recovery": {
+    "text": "Download Mode still works after a bootloop: SamFW has the stock firmware and an Odin-style tool to go back to Android.",
+    "url": "https://samfw.com/"
+  }
+}

@@ -75,6 +75,7 @@ export async function connect(protocol) {
     const odin = await connectOdin();
     return { session: odin, usb: odin.usbDevice };
   }
+  if (protocol === 'sideload') return connectAdb().then(({ adb, usb }) => ({ session: adb, usb }));
   if (protocol === 'adb') {
     const { adb, usb } = await connectAdb();
     return { session: adbShell(adb), usb };

@@ -1,0 +1,251 @@
+{
+  "device": "hero2lte",
+  "roms": [
+    {
+      "id": "lineage-21.0",
+      "os": "LineageOS",
+      "name": "LineageOS (ivanmeler build)",
+      "version": "21.0 (2024-06-20)",
+      "origin": "unofficial",
+      "status": "beta",
+      "curated": true,
+      "rating": {
+        "checked": "2026-10-15",
+        "kernel": {
+          "version": "3.18.140",
+          "type": "downstream"
+        },
+        "base": "Android 14",
+        "released": "2024-06-20",
+        "support": "abandoned",
+        "features": {
+          "flashing": "untested",
+          "usb_net": "n/a",
+          "storage": "untested",
+          "sdcard": "untested",
+          "battery": "untested",
+          "screen": "untested",
+          "touch": "untested",
+          "gpu": "untested",
+          "audio": "untested",
+          "camera": "untested",
+          "camera_flash": "untested",
+          "ir": "n/a",
+          "wifi": "untested",
+          "bluetooth": "untested",
+          "gps": "untested",
+          "nfc": "untested",
+          "calls": "untested",
+          "sms": "untested",
+          "data": "untested",
+          "fde": "untested",
+          "otg": "untested",
+          "hdmi": "n/a",
+          "fingerprint": "untested",
+          "accelerometer": "untested",
+          "magnetometer": "untested",
+          "light": "untested",
+          "proximity": "untested",
+          "hall": "untested",
+          "haptics": "untested",
+          "barometer": "untested"
+        },
+        "includes": {
+          "google_play": "optional",
+          "microg": "optional",
+          "android_apps": "yes",
+          "phone_ui": "yes",
+          "root": "optional",
+          "updates": "yes",
+          "encryption": "yes",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "no",
+          "docker": "no"
+        }
+      },
+      "notes": "Unofficial build by ivanmeler, the hero2lte TWRP maintainer. Security patch 2024-05-05. Needs Samsung's Android 8 firmware (bootloader) on the phone first. Feature ratings wait for a hardware run. Google apps: sideload MindTheGapps for Android 14 right after, before the first boot.",
+      "homepage": "https://ivanmeler.github.io/devices/hero2lte.html",
+      "stages": [
+        {
+          "title": "Install TWRP",
+          "section": "tools",
+          "optional": "Skip if TWRP is already installed.",
+          "recipe": "odin",
+          "mode": "download",
+          "confirm": "FLASH TWRP",
+          "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot restores the stock recovery.",
+          "require_pit": [
+            "BOOT",
+            "RECOVERY",
+            "SYSTEM",
+            "USERDATA"
+          ],
+          "files": [
+            {
+              "name": "twrp-3.7.0_9-1-hero2lte.img",
+              "size": 42891280,
+              "sha256": "4796aad9964dd77c97089814c7e807f0c8acc4120517ad0cebcd6f11605e8e80",
+              "source": "https://eu.dl.twrp.me/hero2lte/twrp-3.7.0_9-1-hero2lte.img.html"
+            }
+          ],
+          "steps": [
+            [
+              "flash",
+              "RECOVERY",
+              "twrp-3.7.0_9-1-hero2lte.img"
+            ]
+          ],
+          "done": "TWRP written. Hold Volume Down + Home + Power until the screen is black, then immediately hold Volume Up + Home + Power until TWRP appears."
+        },
+        {
+          "title": "Install LineageOS 21.0",
+          "section": "rom",
+          "recipe": "twrp-sideload",
+          "mode": "sideload",
+          "confirm": "INSTALL LINEAGE",
+          "warning": "Replaces Android (SYSTEM and BOOT). Format Data in TWRP first when coming from another system, which erases everything on the phone.",
+          "files": [
+            {
+              "name": "lineage-21.0-20240620-UNOFFICIAL-hero2lte.zip",
+              "size": 879459700,
+              "sha256": "f0d0e2c8e1e0f528ce1d41d38820317dffb50bbd33d2c3a7fe91a3798325d1a0",
+              "url": "https://github.com/ivanmeler/ota_provider/releases/download/hero2lte_lineage-21.0_1718909507/lineage-21.0-20240620-UNOFFICIAL-hero2lte.zip",
+              "source": "https://github.com/ivanmeler/ota_provider/releases/tag/hero2lte_lineage-21.0_1718909507"
+            }
+          ],
+          "steps": [
+            [
+              "sideload",
+              "lineage-21.0-20240620-UNOFFICIAL-hero2lte.zip"
+            ]
+          ],
+          "done": "TWRP installed the zip. Tap Reboot \u203a System; the first boot takes a few minutes."
+        }
+      ]
+    },
+    {
+      "id": "lineage-20.0",
+      "os": "LineageOS",
+      "name": "LineageOS (ivanmeler build)",
+      "version": "20.0 (2025-06-28)",
+      "origin": "unofficial",
+      "status": "beta",
+      "curated": true,
+      "rating": {
+        "checked": "2026-10-15",
+        "kernel": {
+          "version": "3.18.140",
+          "type": "downstream"
+        },
+        "base": "Android 13",
+        "released": "2025-06-28",
+        "support": "maintenance",
+        "features": {
+          "flashing": "untested",
+          "usb_net": "n/a",
+          "storage": "untested",
+          "sdcard": "untested",
+          "battery": "untested",
+          "screen": "untested",
+          "touch": "untested",
+          "gpu": "untested",
+          "audio": "untested",
+          "camera": "untested",
+          "camera_flash": "untested",
+          "ir": "n/a",
+          "wifi": "untested",
+          "bluetooth": "untested",
+          "gps": "untested",
+          "nfc": "untested",
+          "calls": "untested",
+          "sms": "untested",
+          "data": "untested",
+          "fde": "untested",
+          "otg": "untested",
+          "hdmi": "n/a",
+          "fingerprint": "untested",
+          "accelerometer": "untested",
+          "magnetometer": "untested",
+          "light": "untested",
+          "proximity": "untested",
+          "hall": "untested",
+          "haptics": "untested",
+          "barometer": "untested"
+        },
+        "includes": {
+          "google_play": "optional",
+          "microg": "optional",
+          "android_apps": "yes",
+          "phone_ui": "yes",
+          "root": "optional",
+          "updates": "yes",
+          "encryption": "yes",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "no",
+          "docker": "no"
+        }
+      },
+      "notes": "Unofficial build by ivanmeler, the hero2lte TWRP maintainer. Security patch 2025-06. Needs Samsung's Android 8 firmware (bootloader) on the phone first. Feature ratings wait for a hardware run. Google apps: sideload MindTheGapps for Android 13 right after, before the first boot.",
+      "homepage": "https://ivanmeler.github.io/devices/hero2lte.html",
+      "stages": [
+        {
+          "title": "Install TWRP",
+          "section": "tools",
+          "optional": "Skip if TWRP is already installed.",
+          "recipe": "odin",
+          "mode": "download",
+          "confirm": "FLASH TWRP",
+          "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot restores the stock recovery.",
+          "require_pit": [
+            "BOOT",
+            "RECOVERY",
+            "SYSTEM",
+            "USERDATA"
+          ],
+          "files": [
+            {
+              "name": "twrp-3.7.0_9-1-hero2lte.img",
+              "size": 42891280,
+              "sha256": "4796aad9964dd77c97089814c7e807f0c8acc4120517ad0cebcd6f11605e8e80",
+              "source": "https://eu.dl.twrp.me/hero2lte/twrp-3.7.0_9-1-hero2lte.img.html"
+            }
+          ],
+          "steps": [
+            [
+              "flash",
+              "RECOVERY",
+              "twrp-3.7.0_9-1-hero2lte.img"
+            ]
+          ],
+          "done": "TWRP written. Hold Volume Down + Home + Power until the screen is black, then immediately hold Volume Up + Home + Power until TWRP appears."
+        },
+        {
+          "title": "Install LineageOS 20.0",
+          "section": "rom",
+          "recipe": "twrp-sideload",
+          "mode": "sideload",
+          "confirm": "INSTALL LINEAGE",
+          "warning": "Replaces Android (SYSTEM and BOOT). Format Data in TWRP first when coming from another system, which erases everything on the phone.",
+          "files": [
+            {
+              "name": "lineage-20.0-20250628-UNOFFICIAL-hero2lte.zip",
+              "size": 764354817,
+              "sha256": "e5165cd6f3f001496ad06110bba025d83dc4a92874701cd8240e9249d26795f0",
+              "url": "https://github.com/ivanmeler/ota_provider/releases/download/hero2lte_lineage-20.0_1751115276/lineage-20.0-20250628-UNOFFICIAL-hero2lte.zip",
+              "source": "https://github.com/ivanmeler/ota_provider/releases/tag/hero2lte_lineage-20.0_1751115276"
+            }
+          ],
+          "steps": [
+            [
+              "sideload",
+              "lineage-20.0-20250628-UNOFFICIAL-hero2lte.zip"
+            ]
+          ],
+          "done": "TWRP installed the zip. Tap Reboot \u203a System; the first boot takes a few minutes."
+        }
+      ]
+    }
+  ]
+}

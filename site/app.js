@@ -120,11 +120,11 @@ function commentsBox(key) {
   load();
   return box;
 }
-const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)' };
-const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB' };
+const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP ADB SIDELOAD' };
+const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
 /** One readable line per step for the card. @param {any[]} step */
 const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → ${a}`, erase: `erase ${a}`, set_active: `switch to slot ${a}`,
-  reboot: 'reboot', mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
+  reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
 
 /** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count */
 function stageCard(device, stage, n, count) {
@@ -204,7 +204,7 @@ function stageCard(device, stage, n, count) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [device.modes[stage.mode], protocol !== 'adb' && device.unlock?.text, 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
+  const guide = [device.modes[stage.mode], protocol !== 'adb' && protocol !== 'sideload' && device.unlock?.text, 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },

@@ -2,9 +2,10 @@ import * as fastboot from './recipes/fastboot.js';
 import * as odin from './recipes/odin.js';
 import * as twrpDd from './recipes/twrp-dd.js';
 import * as fastbootTgz from './recipes/fastboot-tgz.js';
+import * as twrpSideload from './recipes/twrp-sideload.js';
 
 /** Recipe id → engine. `protocol` picks the USB connection, `verbs` the allowed steps and their argument counts. */
-export const recipes = { fastboot, odin, 'twrp-dd': twrpDd, 'fastboot-tgz': fastbootTgz };
+export const recipes = { fastboot, odin, 'twrp-dd': twrpDd, 'fastboot-tgz': fastbootTgz, 'twrp-sideload': twrpSideload };
 
 /** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
 /** Feature table of the postmarketOS/Nura device wiki, grouped like its sections. */

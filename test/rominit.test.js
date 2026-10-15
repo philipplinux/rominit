@@ -14,7 +14,7 @@ const noop = () => {};
 
 test('real catalog validates', () => {
   assert.deepEqual(errors, []);
-  assert.deepEqual(devices.map(d => d.codename).sort(), ['laurel_sprout', 'star2lte', 'starlte']);
+  assert.deepEqual(devices.map(d => d.codename).sort(), ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte']);
 });
 
 test('validator rejects bad entries', () => {
@@ -205,4 +205,21 @@ test('every ROM has a known origin and status', () => {
   for (const d of devices) for (const r of d.roms) assert.ok(r.origin && r.status, `${d.codename}/${r.id}`);
   const dev = device('laurel_sprout');
   assert.deepEqual(problems(dev, { device: dev.codename, roms: [{ ...dev.roms[0], status: 'great' }] }).filter(p => /status/.test(p)).length, 1);
+});
+
+test('sideload serves the blocks the phone asks for and stops at DONEDONE', async () => {
+  const zip = new Blob([new Uint8Array(65536 + 10).fill(7)]);
+  const sent = [];
+  /** @type {string} */ let service = '';
+  const asks = ['00000001', '0000000000000000DONEDONE'];
+  const adb = { banner: { device: 'hero2ltexx' }, async createSocket(/** @type {string} */ s) {
+    service = s;
+    return { readable: new ReadableStream({ pull(c) { const a = asks.shift(); a ? c.enqueue(new TextEncoder().encode(a)) : c.close(); } }),
+      writable: new WritableStream({ write(chunk) { sent.push(chunk.length); } }), close() {} };
+  } };
+  await recipes['twrp-sideload'].serve(adb, { name: 'z.zip', sha256: '', file: zip }, () => {});
+  assert.equal(service, 'sideload-host:65546:65536');
+  assert.deepEqual(sent, [10, 65536, 65536]);
+  const bad = { ...adb, banner: { device: 'starlte' } };
+  await assert.rejects(recipes['twrp-sideload'].run(bad, { device: { detect: { adb: { device: 'hero2lte' } } }, files: [], steps: [] }, () => {}, () => {}), /phone reports starlte/);
 });
