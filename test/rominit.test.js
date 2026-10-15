@@ -170,3 +170,33 @@ test('comments API checks length, ROM and rate limit', async () => {
   recent = { 1: 1 };
   assert.equal((await post({ rom, text: 'again' })).status, 429);
 });
+
+test('untar reads a gzip tar with long names and skips unwanted entries', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } = await import('node:fs');
+  const dir = mkdtempSync('/tmp/rominit-tar-'), deep = `${'d'.repeat(120)}/images`;
+  mkdirSync(`${dir}/${deep}`, { recursive: true });
+  writeFileSync(`${dir}/${deep}/boot.img`, 'x'.repeat(70000));
+  writeFileSync(`${dir}/${deep}/skip.img`, 'skip');
+  writeFileSync(`${dir}/flash_all.sh`, 'fastboot flash boot boot.img');
+  execFileSync('tar', ['--format=gnu', '-czf', `${dir}/a.tgz`, '-C', dir, deep, 'flash_all.sh']);
+  const got = {};
+  const { untar } = await import('../src/recipes/fastboot-tgz.js');
+  await untar(new Blob([readFileSync(`${dir}/a.tgz`)]).stream().pipeThrough(new DecompressionStream('gzip')), async (name, size) => {
+    if (name.endsWith('skip.img')) return null;
+    const parts = [];
+    return { write: async chunk => parts.push(chunk), close: async () => { got[name] = [size, Buffer.concat(parts).toString()]; } };
+  });
+  assert.deepEqual(got[`${deep}/boot.img`], [70000, 'x'.repeat(70000)]);
+  assert.deepEqual(got['flash_all.sh'], [28, 'fastboot flash boot boot.img']);
+  assert.equal(Object.keys(got).filter(n => n.endsWith('.img')).length, 1);
+  execFileSync('rm', ['-rf', dir]);
+});
+
+test('stock archive recipe refuses a newer anti-rollback level before reading the archive', async () => {
+  const dev = device('laurel_sprout'), stock = dev.roms.find(r => r.tier === 'stock'), stage = stock.stages[0];
+  const fb = fastboot({ anti: '1' });
+  await assert.rejects(recipes['fastboot-tgz'].run(fb, { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) }, noop, noop), /anti-rollback level 1/);
+  assert.deepEqual(fb.log, []);
+  assert.ok(!stage.steps.some(([verb, arg]) => /lock/.test(`${verb}${arg}`)), 'stock restore must never lock');
+});

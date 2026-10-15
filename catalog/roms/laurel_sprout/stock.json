@@ -1,0 +1,380 @@
+{
+  "device": "laurel_sprout",
+  "roms": [
+    {
+      "id": "stock-V12.0.23.0.RFQMIXM",
+      "os": "Android",
+      "name": "Stock Android One (global)",
+      "version": "V12.0.23.0.RFQMIXM",
+      "tier": "stock",
+      "rating": {
+        "checked": "2026-10-15",
+        "kernel": {
+          "version": "4.14.180",
+          "type": "downstream"
+        },
+        "base": "Android 11",
+        "released": "2022-05-10",
+        "support": "abandoned",
+        "features": {
+          "flashing": "works",
+          "storage": "works",
+          "sdcard": "works",
+          "battery": "works",
+          "screen": "works",
+          "touch": "works",
+          "gpu": "works",
+          "audio": "works",
+          "camera": "works",
+          "camera_flash": "works",
+          "ir": "works",
+          "wifi": "works",
+          "bluetooth": "works",
+          "gps": "works",
+          "calls": "works",
+          "sms": "works",
+          "data": "works",
+          "fde": "works",
+          "otg": "works",
+          "fingerprint": "works",
+          "accelerometer": "works",
+          "magnetometer": "works",
+          "light": "works",
+          "proximity": "works",
+          "haptics": "works",
+          "usb_net": "works",
+          "nfc": "n/a",
+          "hdmi": "n/a",
+          "hall": "n/a",
+          "barometer": "n/a"
+        },
+        "includes": {
+          "google_play": "yes",
+          "microg": "no",
+          "android_apps": "yes",
+          "phone_ui": "yes",
+          "root": "no",
+          "updates": "no",
+          "encryption": "yes",
+          "relock": "yes",
+          "banking_apps": "yes",
+          "ssh": "no",
+          "docker": "no"
+        }
+      },
+      "notes": "Xiaomi's last full fastboot package for the Mi A3 (global). Same steps as its `flash_all.sh`; the bootloader stays unlocked. Relock later with `fastboot flashing lock` only once stock boots.",
+      "homepage": "https://xiaomirom.com/en/rom/mi-a3-laurel-global-fastboot-recovery-rom/",
+      "stages": [
+        {
+          "title": "Restore stock Android",
+          "section": "rom",
+          "recipe": "fastboot-tgz",
+          "mode": "fastboot",
+          "anti": 0,
+          "confirm": "RESTORE STOCK",
+          "warning": "Wipes everything on the phone and rewrites every partition on both slots, bootloader included. Keep the cable in and the battery above 50% until it reboots. Needs about 6 GB free disk space for unpacking.",
+          "files": [
+            {
+              "name": "laurel_sprout_global_images_V12.0.23.0.RFQMIXM_20220510.0000.00_11.0_65b078bd7b.tgz",
+              "size": 2439565703,
+              "sha256": "41ed06ad6e033028a5015fac6ad940110326a9645d3cf71c114420a8a8a0d672",
+              "url": "https://bn.d.miui.com/V12.0.23.0.RFQMIXM/laurel_sprout_global_images_V12.0.23.0.RFQMIXM_20220510.0000.00_11.0_65b078bd7b.tgz",
+              "source": "https://xiaomirom.com/en/rom/mi-a3-laurel-global-fastboot-recovery-rom/"
+            }
+          ],
+          "steps": [
+            [
+              "flash",
+              "tz_a",
+              "tz.mbn"
+            ],
+            [
+              "flash",
+              "xbl_a",
+              "xbl.elf"
+            ],
+            [
+              "flash",
+              "xbl_config_a",
+              "xbl_config.elf"
+            ],
+            [
+              "flash",
+              "rpm_a",
+              "rpm.mbn"
+            ],
+            [
+              "flash",
+              "abl_a",
+              "abl.elf"
+            ],
+            [
+              "flash",
+              "tz_b",
+              "tz.mbn"
+            ],
+            [
+              "flash",
+              "xbl_b",
+              "xbl.elf"
+            ],
+            [
+              "flash",
+              "xbl_config_b",
+              "xbl_config.elf"
+            ],
+            [
+              "flash",
+              "rpm_b",
+              "rpm.mbn"
+            ],
+            [
+              "flash",
+              "abl_b",
+              "abl.elf"
+            ],
+            [
+              "flash",
+              "devcfg_a",
+              "devcfg.mbn"
+            ],
+            [
+              "flash",
+              "hyp_a",
+              "hyp.mbn"
+            ],
+            [
+              "flash",
+              "cmnlib_a",
+              "cmnlib.mbn"
+            ],
+            [
+              "flash",
+              "cmnlib64_a",
+              "cmnlib64.mbn"
+            ],
+            [
+              "flash",
+              "keymaster_a",
+              "km4.mbn"
+            ],
+            [
+              "flash",
+              "devcfg_b",
+              "devcfg.mbn"
+            ],
+            [
+              "flash",
+              "hyp_b",
+              "hyp.mbn"
+            ],
+            [
+              "flash",
+              "cmnlib_b",
+              "cmnlib.mbn"
+            ],
+            [
+              "flash",
+              "cmnlib64_b",
+              "cmnlib64.mbn"
+            ],
+            [
+              "flash",
+              "keymaster_b",
+              "km4.mbn"
+            ],
+            [
+              "flash",
+              "qupfw_a",
+              "qupv3fw.elf"
+            ],
+            [
+              "flash",
+              "imagefv_a",
+              "imagefv.elf"
+            ],
+            [
+              "flash",
+              "bluetooth_a",
+              "BTFM.bin"
+            ],
+            [
+              "flash",
+              "uefisecapp_a",
+              "uefi_sec.mbn"
+            ],
+            [
+              "flash",
+              "storsec_a",
+              "storsec.mbn"
+            ],
+            [
+              "flash",
+              "logfs",
+              "logfs_ufs_8mb.bin"
+            ],
+            [
+              "flash",
+              "dsp_a",
+              "dspso.bin"
+            ],
+            [
+              "flash",
+              "qupfw_b",
+              "qupv3fw.elf"
+            ],
+            [
+              "flash",
+              "imagefv_b",
+              "imagefv.elf"
+            ],
+            [
+              "flash",
+              "bluetooth_b",
+              "BTFM.bin"
+            ],
+            [
+              "flash",
+              "uefisecapp_b",
+              "uefi_sec.mbn"
+            ],
+            [
+              "flash",
+              "storsec_b",
+              "storsec.mbn"
+            ],
+            [
+              "flash",
+              "dsp_b",
+              "dspso.bin"
+            ],
+            [
+              "erase",
+              "boot_a"
+            ],
+            [
+              "erase",
+              "boot_b"
+            ],
+            [
+              "erase",
+              "system_a"
+            ],
+            [
+              "erase",
+              "system_b"
+            ],
+            [
+              "erase",
+              "vendor_a"
+            ],
+            [
+              "erase",
+              "vendor_b"
+            ],
+            [
+              "erase",
+              "mdtp_a"
+            ],
+            [
+              "erase",
+              "mdtp_b"
+            ],
+            [
+              "erase",
+              "userdata"
+            ],
+            [
+              "flash",
+              "apdp",
+              "apdp.mbn"
+            ],
+            [
+              "flash",
+              "modem_a",
+              "NON-HLOS.bin"
+            ],
+            [
+              "flash",
+              "vendor_a",
+              "vendor.img"
+            ],
+            [
+              "flash",
+              "system_a",
+              "system.img"
+            ],
+            [
+              "flash",
+              "dtbo_a",
+              "dtbo.img"
+            ],
+            [
+              "flash",
+              "vbmeta_a",
+              "vbmeta.img"
+            ],
+            [
+              "flash",
+              "modem_b",
+              "NON-HLOS.bin"
+            ],
+            [
+              "flash",
+              "vendor_b",
+              "vendor.img"
+            ],
+            [
+              "flash",
+              "system_b",
+              "system_other.img"
+            ],
+            [
+              "flash",
+              "dtbo_b",
+              "dtbo.img"
+            ],
+            [
+              "flash",
+              "vbmeta_b",
+              "vbmeta.img"
+            ],
+            [
+              "flash",
+              "product_a",
+              "product.img"
+            ],
+            [
+              "flash",
+              "product_b",
+              "product.img"
+            ],
+            [
+              "flash",
+              "userdata",
+              "userdata.img"
+            ],
+            [
+              "flash",
+              "metadata",
+              "metadata.img"
+            ],
+            [
+              "flash",
+              "boot_a",
+              "boot.img"
+            ],
+            [
+              "flash",
+              "boot_b",
+              "boot.img"
+            ],
+            [
+              "reboot"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

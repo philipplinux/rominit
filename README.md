@@ -7,7 +7,7 @@ Status: experimental. 3 devices (Xiaomi Mi A3, Samsung Galaxy S9 / S9+) with pos
 ## How it works
 
 - **Catalog** (`catalog/`): JSON in git, contributed through pull requests. One file per device, one file per ROM source.
-- **Recipes** (`src/recipes/`): engines that run a stage's step list. `fastboot`, `odin` (Samsung Download Mode), `twrp-dd` (writes from TWRP over ADB, reads every write back with SHA-256).
+- **Recipes** (`src/recipes/`): engines that run a stage's step list. `fastboot`, `odin` (Samsung Download Mode), `twrp-dd` (writes from TWRP over ADB, reads every write back with SHA-256), `fastboot-tgz` (a vendor stock package: checks the archive SHA-256 and the anti-rollback level, unpacks the named images into browser storage (OPFS), then runs fastboot steps; used for `tier: "stock"` restores, never locks).
 - **Protocols** (`src/protocols/usb.js`): WebUSB connections for fastboot, Odin and ADB.
 - **Site** (`site/`): static page, generated from the catalog. `npm run build` writes `dist/`.
 

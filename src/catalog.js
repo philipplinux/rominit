@@ -1,9 +1,10 @@
 import * as fastboot from './recipes/fastboot.js';
 import * as odin from './recipes/odin.js';
 import * as twrpDd from './recipes/twrp-dd.js';
+import * as fastbootTgz from './recipes/fastboot-tgz.js';
 
 /** Recipe id → engine. `protocol` picks the USB connection, `verbs` the allowed steps and their argument counts. */
-export const recipes = { fastboot, odin, 'twrp-dd': twrpDd };
+export const recipes = { fastboot, odin, 'twrp-dd': twrpDd, 'fastboot-tgz': fastbootTgz };
 
 /** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
 /** Feature table of the postmarketOS/Nura device wiki, grouped like its sections. */
@@ -65,6 +66,7 @@ export function problems(device, romFile) {
       need(device.modes?.[stage.mode], `${where}: device has no instructions for mode "${stage.mode}"`);
       need(stage.title && stage.warning && /^[A-Z0-9 +]{4,}$/.test(stage.confirm ?? ''), `${where}: title, warning and an upper-case confirm phrase are required`);
       need(['tools', 'rom'].includes(stage.section), `${where}: section must be tools or rom`);
+      if (recipe?.archive) need(Number.isInteger(stage.anti) && stage.anti >= 0, `${where}: archive stages need the package's anti-rollback level (anti)`);
       if (stage.recipe === 'twrp-dd') need(PATH.test(stage.by_name ?? ''), `${where}: by_name must be an absolute path`);
       const names = new Set();
       for (const file of stage.files ?? []) {
@@ -87,7 +89,7 @@ export function problems(device, romFile) {
           used.add(name);
         }
       }
-      need(used.size === names.size, `${where}: every file must be used by a step`);
+      need(recipe?.archive ? names.size === 1 : used.size === names.size, `${where}: ${recipe?.archive ? 'an archive recipe takes exactly one file' : 'every file must be used by a step'}`);
     }
   }
   return out;

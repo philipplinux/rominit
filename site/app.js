@@ -200,7 +200,9 @@ function stageCard(device, stage, n, count) {
       h('div', {}, h('p', { className: 'eyebrow', textContent: `STAGE ${n} OF ${count} · ${MODE[stage.mode]}` }), h('h2', { textContent: stage.title })),
       h('span', { className: 'version-chip', textContent: stage.recipe.toUpperCase() })),
     stage.optional && h('p', { className: 'field-help', textContent: stage.optional }),
-    h('p', { className: 'field-help', textContent: `Steps: ${stepsFor(stage).map(describe).join(' · ')}.` }),
+    stepsFor(stage).length > 8
+      ? h('details', { className: 'field-help' }, h('summary', { textContent: `${stepsFor(stage).length} steps` }), stepsFor(stage).map(describe).join(' · '))
+      : h('p', { className: 'field-help', textContent: `Steps: ${stepsFor(stage).map(describe).join(' · ')}.` }),
     h('ol', { className: 'guide-list stage-steps' }, ...guide),
     h('div', { className: 'connect-row' }, connectButton, status),
     h('ul', { className: 'selected-files file-links' }, ...stage.files.map(f => h('li', {}, `${f.name} (${size(f.size)}) · `,
@@ -226,7 +228,7 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const hits = index.filter(d => words.every(w => [d.vendor, d.name, d.codename, ...d.models].join(' ').toLowerCase().includes(w)));
     list.replaceChildren(...hits.map(d => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: `${d.vendor} ${d.name}` }),
-      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.map(r => `${r.os} ${r.version} (${score(r.rating)})`).join(', ')}`)));
+      ` · ${d.codename} · ${d.models.join(', ')} · ${d.roms.filter(r => r.tier !== 'stock').map(r => `${r.os} ${r.version} (${score(r.rating)})`).join(', ')}`)));
     if (!hits.length) list.append(h('li', { className: 'empty-files', textContent: 'No device matches. The catalog grows through pull requests.' }));
   };
   search.addEventListener('input', render);
