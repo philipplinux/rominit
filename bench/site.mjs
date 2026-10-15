@@ -133,6 +133,11 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   await twrp.getByLabel('TWRP is already installed').check();
   assert.equal(await twrp.locator(':scope > summary .badge').innerText(), 'COMPLETED');
   assert.equal(await twrp.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false, 'completed section collapses');
+  await page.reload(); // every section's progress is remembered
+  assert.equal(await page.locator('details.page-section.done').count(), 2);
+  await page.locator('.start-over').click();
+  await page.locator('.page-section').nth(4).waitFor();
+  assert.equal(await page.locator('details.page-section.done').count(), 0);
 });
 
 test('section 0 completes by locking in the ROM; install requirements and A/B flag shown', async () => {

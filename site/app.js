@@ -349,14 +349,17 @@ async function start() {
     el.addEventListener('change', update); el.addEventListener('stage-done', update); update();
     return el;
   };
-  const lockKey = `rom-locked:${codename}`;
-  let locked = ''; try { locked = localStorage.getItem(lockKey) ?? ''; } catch { /* private window */ }
+  // Progress on this phone in one record per device: locked-in ROM, ticked unlock steps, TWRP, flashed ROMs.
+  // ponytail: this browser only; user accounts can sync the same record later.
+  const progressKey = `progress:${codename}`;
+  /** @type {{rom?:string, steps?:number[], twrp?:boolean, flashed?:string[]}} */ let progress = {};
+  try { progress = JSON.parse(localStorage.getItem(progressKey) ?? '{}'); } catch { /* private window */ }
+  const save = () => { try { localStorage.setItem(progressKey, JSON.stringify(progress)); } catch { /* private window */ } };
   /** @type {HTMLButtonElement[]} */ const lockButtons = [];
   /** "Lock in this ROM", next to the select and under the features; locking completes section 0. */
   const lockButton = () => {
     const button = h('button', { className: 'button button-secondary lock-in', type: 'button', onclick() {
-      locked = locked === rom.id ? '' : rom.id;
-      try { localStorage.setItem(lockKey, locked); } catch { /* private window */ }
+      progress.rom = progress.rom === rom.id ? undefined : rom.id; save();
       infoSection.dispatchEvent(new Event('change'));
     } });
     lockButtons.push(button);
@@ -377,13 +380,11 @@ async function start() {
       rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `), rom.homepage && link(rom.homepage, 'Release page')),
       rom && commentsBox(`${device.codename}/${rom.id}`)], rom ? 'REQUIRED' : '');
   if (rom) required(infoSection, () => {
-    for (const b of lockButtons) b.textContent = locked === rom.id ? '✓ Locked in · change' : `Lock in ${rom.name} ${rom.version}`;
-    return locked === rom.id;
+    for (const b of lockButtons) b.textContent = progress.rom === rom.id ? '✓ Locked in · change' : `Lock in ${rom.name} ${rom.version}`;
+    return progress.rom === rom.id;
   });
-  const unlock = device.unlock, saved = `unlocked-steps:${codename}`;
-  /** Ticked unlock steps survive a reload (the 7-day Samsung wait). */
-  let ticked = []; try { ticked = JSON.parse(localStorage.getItem(saved) ?? '[]'); } catch { /* private window */ }
-  const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: ticked.includes(i) }));
+  const unlock = device.unlock;
+  const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: progress.steps?.includes(i) ?? false }));
   const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
     unlock.hints?.length && h('div', { className: 'hints' }, h('strong', { textContent: 'Good to know' }), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
     h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
@@ -391,16 +392,16 @@ async function start() {
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
     unlock.url && link(unlock.url, 'Full unlock guide')] : [h('p', { className: 'field-help', textContent: 'This phone needs no bootloader unlock.' })], unlock ? 'REQUIRED' : '');
   if (unlock) required(unlockSection, () => {
-    try { localStorage.setItem(saved, JSON.stringify(stepBoxes.flatMap((box, i) => box.checked ? [i] : []))); } catch { /* private window */ }
+    progress.steps = stepBoxes.flatMap((box, i) => box.checked ? [i] : []); save();
     return stepBoxes.every(box => box.checked);
   });
-  const haveTwrp = h('input', { type: 'checkbox' });
+  const haveTwrp = h('input', { type: 'checkbox', checked: !!progress.twrp });
   const twrpSection = section('2 · TWRP recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,
     tools.length ? [h('label', { className: 'field-help' }, haveTwrp, ' TWRP is already installed on this phone'), h('div', { className: 'stages' }, ...tools)]
       : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : '');
   let twrpDone = 0;
-  twrpSection.addEventListener('stage-done', () => twrpDone++);
-  if (tools.length) required(twrpSection, () => haveTwrp.checked || twrpDone >= tools.length);
+  twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
+  if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
   const romCards = rom && flashable(rom) ? cards(rom, 'rom') : [];
   const romSection = section('3 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
       rom && requirementsRow(rom),
@@ -408,8 +409,9 @@ async function start() {
       rom && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
         : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length ? 'REQUIRED' : '');
   let romDone = 0;
-  romSection.addEventListener('stage-done', () => romDone++);
-  if (romCards.length) required(romSection, () => romDone >= romCards.length, () => romSection.querySelector(':scope > summary').after(
+  romSection.addEventListener('stage-done', () => {
+    if (++romDone >= romCards.length) { progress.flashed = [...new Set([...progress.flashed ?? [], rom.id])]; save(); } });
+  if (romCards.length) required(romSection, () => !!progress.flashed?.includes(rom.id), () => romSection.querySelector(':scope > summary').after(
     h('p', { className: 'congrats' }, h('strong', { textContent: `Congratulations, ${rom.name} is on your ${device.name}!` }),
       ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {
         e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
@@ -421,6 +423,8 @@ async function start() {
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),
         ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
       h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
+      h('button', { className: 'start-over', type: 'button', textContent: 'Start over (forget progress on this phone)', onclick() {
+        try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } }),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
     infoSection,
     unlockSection,

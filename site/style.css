@@ -330,3 +330,5 @@ progress::-moz-progress-bar { background: var(--teal); }
 .requirements { font-size: .75rem; }
 .lock-in { margin-top: .5rem; max-width: calc(100% - 2 * clamp(16px, 3vw, 28px)); white-space: normal; text-align: left; }
 .done .lock-in { border-color: var(--teal); color: var(--teal); }
+
+.start-over { float: right; border: 0; background: none; color: var(--faint); font: inherit; font-size: .6rem; letter-spacing: .08em; cursor: pointer; text-decoration: underline; }
