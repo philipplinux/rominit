@@ -65,6 +65,7 @@
         }
       },
       "notes": "Runs on real hardware. Flashing through the browser is not hardware-tested yet.",
+      "source": "https://github.com/philipplinux/mia3-postmarketos",
       "homepage": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.13",
       "login": "user / changeme",
       "stages": [

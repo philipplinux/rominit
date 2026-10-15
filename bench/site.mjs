@@ -63,6 +63,14 @@ assert.equal(await page.locator('.disclaimer').count(), 0);
 await page.evaluate(() => localStorage.removeItem('rominit.noticeHidden'));
 });
 
+test('section 0 opens with ROM source and source code links', async () => {
+  await page.goto(`${BASE}/?device=laurel_sprout`);
+  const row = page.locator('.lock-path > .source-row');
+  assert.equal(await row.locator('a', { hasText: 'Source code' }).getAttribute('href'), 'https://github.com/philipplinux/mia3-postmarketos');
+  assert.equal(await page.locator('.lock-path > *').first().getAttribute('class'), 'slideshow no-shot');
+  assert.ok(await row.locator('a', { hasText: 'ROM source' }).count());
+});
+
 test('device tree: All › vendor › series › family › variant, unsupported greyed with why', async () => {
   await page.goto(BASE);
   const tree = page.locator('.device-tree');
@@ -105,8 +113,8 @@ test('ROM info: release chips, login in sections 0 and 2, feature groups, includ
   await page.goto(`${BASE}/?device=starlte`);
   const release = page.locator('p.rating', { has: page.locator('strong', { hasText: 'release' }) });
   assert.match(await release.innerText(), /unofficial[\s\S]*experimental[\s\S]*curated ★/);
-  assert.equal(await page.locator('p.rating', { has: page.locator('strong', { hasText: 'login' }) }).count(), 2);
-  assert.match(await text('p.rating:has(strong:text-is("login"))'), /user: user[\s\S]*password: changeme/);
+  assert.equal(await page.locator('.login-box').count(), 2);
+  assert.match(await text('.login-box pre'), /user\s+user\npassword\s+changeme/);
   for (const group of ['basics', 'multimedia', 'connectivity', 'modem', 'misc', 'sensors']) assert.equal(await page.locator('p.rating strong', { hasText: group }).count(), 1, group);
   for (const row of ['Includes', 'Lacks']) assert.equal(await page.locator('p.includes strong', { hasText: row }).count(), 1, row);
   assert.match(await text('.page-section summary small'), /as computer \d+% · as phone \d+% · downstream kernel/);

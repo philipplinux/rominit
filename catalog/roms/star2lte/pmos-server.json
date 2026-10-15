@@ -65,6 +65,7 @@
         }
       },
       "notes": "Untested on real hardware: same build as the S9 with the star2lte kernel config, DTB and TWRP.",
+      "source": "https://github.com/philipplinux/s9-postmarketos",
       "homepage": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9plus",
       "login": "user / changeme",
       "stages": [

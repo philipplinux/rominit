@@ -422,3 +422,10 @@ p.rate-label { margin: .3rem 0 .5rem; }
 }
 .slideshow img { max-height: 32rem; object-fit: contain; }
 .no-shot { display: grid; place-items: center; aspect-ratio: 9 / 19; max-width: 15rem; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); font-size: .75rem; }
+.source-row a { padding: .3rem .55rem; border: 1px solid var(--amber); color: var(--amber); text-decoration: none; }
+.source-row a:hover { background: rgb(240 180 90 / 12%); }
+.login-box { display: grid; justify-items: center; gap: .4rem; margin: 1rem 0; text-align: center; }
+.login-box strong { font-size: .68rem; letter-spacing: .09em; text-transform: uppercase; }
+.login-box pre { margin: 0; padding: .8rem 1.4rem; border: 1px solid var(--amber); background: rgb(0 0 0 / 25%); text-align: left; font-size: 1rem; }
+.login-box small { color: var(--muted); }
+.comment-box { border-top: 1px solid rgb(255 255 255 / 8%); padding-top: 1.5rem; }

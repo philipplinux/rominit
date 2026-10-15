@@ -48,14 +48,18 @@ const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent
   h('span', { className: `feature ${({ stable: 'works', legacy: 'untested', broken: 'broken' })[rom.status] ?? 'partial'}`, title: STATUSES[rom.status], textContent: rom.status }),
   rom.curated && h('span', { className: 'feature works', title: 'picked and checked by hand by ROMinit maintainers', textContent: 'curated ★' }),
   h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}${rom.curated ? '; checked by hand by ROMinit' : ''}` }));
+const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
+/** Where the ROM comes from: release page and source code, first thing in section 0. @param {any} rom */
+const sourceRow = rom => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
+  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }));
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
   `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), complete(rating, 'phone', true)].map(text => h('span', { className: 'feature', textContent: text })));
 /** Default login, shown where people look for it. @param {string} login `user / password` */
 const loginRow = login => { const [user, password] = login.split(' / ');
-  return h('p', { className: 'rating' }, h('strong', { textContent: 'login' }), h('span', { className: 'feature', textContent: `user: ${user}` }),
-    h('span', { className: 'feature', textContent: `password: ${password}` }), h('small', { textContent: 'change it after the first login (passwd)' })); };
+  return h('div', { className: 'login-box' }, h('strong', { textContent: 'login' }), h('pre', {}, h('code', { textContent: `user      ${user}\npassword  ${password}` })),
+    h('small', { textContent: 'change it after the first login (passwd)' })); };
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
@@ -576,7 +580,6 @@ async function start() {
     ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}${r.curated ? ', curated' : ''})`, r.id, false, r === rom)))).filter(g => g.children.length));
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
-  const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
   const section = (title, hint, open, body, badge = '') => h('details', { className: 'page-section', open },
     h('summary', {}, h('span', { textContent: title }), badge && h('b', { className: 'badge', textContent: badge }), h('small', { textContent: hint })), ...body);
@@ -619,6 +622,7 @@ async function start() {
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
+      rom && sourceRow(rom),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
@@ -629,7 +633,7 @@ async function start() {
       rom && requirementsRow(rom)) : '',
       rom && h('div', { className: 'lock-end' }, lockButton()),
       rom?.login && loginRow(rom.login),
-      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `), rom.homepage && link(rom.homepage, 'Release page')),
+      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `)),
       rom && commentsBox(`${device.codename}/${rom.id}`)], rom ? 'REQUIRED' : '');
   if (rom) required(infoSection, () => {
     for (const b of lockButtons) b.textContent = progress.rom === rom.id ? '✓ Locked in · change' : `Lock in ${rom.name} ${rom.version}`;
