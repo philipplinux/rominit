@@ -645,7 +645,7 @@ async function inboxView(index) {
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
     folder('Benchmarks', `phone tests · ${benchmarks.new.length} new · ${benchmarks.review.length} in review · ${benchmarks.approved.length} approved · ${benchmarks.rejected.length} rejected`, benchmarks.new.length + benchmarks.review.length,
-      [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
+      [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
         h('summary', { className: 'field-label', textContent: `${title} · ${benchmarks[state].length}` }),
         h('ol', { className: 'comments' }, ...benchmarks[state].map(benchItem)))), Object.values(benchmarks).flat().length),
     folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },

@@ -135,6 +135,7 @@ select {
 .button-secondary:hover { border-color: var(--teal); color: var(--teal); }
 .button-primary { width: 100%; border-color: var(--teal); background: var(--teal); color: #141311; }
 .button-primary:hover:not(:disabled) { border-color: #c2d6b8; background: #c2d6b8; }
+a.button-primary, a.button-primary:visited { color: #141311; } /* a:visited would turn link buttons amber on teal */
 .button:disabled { border-color: #3a362f; background: #2f2c26; color: #8f887c; cursor: not-allowed; }
 .field-help { margin: .55rem 0 0; color: var(--muted); font-size: .67rem; line-height: 1.65; }
 
@@ -453,7 +454,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .maintainer-hint img { border-radius: 50%; }
 .side-divider { display: flex; align-items: center; gap: 1rem; margin: 3.5rem 0 1rem !important; color: var(--faint, var(--muted)); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
 .side-divider::before, .side-divider::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
-/* R: hazard tape, yellow. S: a flag and a faint red hue. */
+/* R: hazard tape, yellow. T (ticket): a flag and a faint red hue. */
 .side-divider + .page-section { position: relative; border-color: #e0b400; background: rgb(240 196 0 / 5%); overflow: hidden; }
 .side-divider + .page-section::before { content: ''; display: block; height: 10px; background: repeating-linear-gradient(-45deg, #f2c200 0 14px, #141414 14px 28px); }
 .side-divider + .page-section > summary > span { color: #f2c200; }
