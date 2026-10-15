@@ -251,6 +251,8 @@ const TIERS = ['full', 'partial', 'broken', 'blocked', 'untested', 'n/a'];
 /** Phone test tier → catalog feature state; tiers missing here say nothing about the feature. */
 /** Review state of a sent card, as the sender sees it: [text, feature class]. */
 const BENCH_STATE = /** @type {Record<string, string[]>} */ ({ new: ['received · waiting for review', 'untested'], review: ['in review', 'partial'], approved: ['approved · shown on this page', 'works'], rejected: ['not counted', 'broken'] });
+/** How the tested ROM got on the phone (bench_runs.flash). */
+const FLASH_NOTE = /** @type {Record<string, string>} */ ({ verified: 'flashed through ROMinit · listed image', unmatched: '⚠ unmatched image: flashed with skip verification', elsewhere: 'flashed another way · unconfirmed' });
 const TIER_STATE = /** @type {Record<string, string>} */ ({ full: 'works', partial: 'partial', broken: 'broken', 'n/a': 'n/a' });
 const TIER_MARK = /** @type {Record<string, string>} */ ({ full: '✓', partial: '~', broken: '✗', blocked: '⊘', untested: '·', 'n/a': '–', inconclusive: '?' });
 const TIER_HELP = /** @type {Record<string, string>} */ ({ full: 'works fully', partial: 'works in part', broken: 'does not work', blocked: 'needs something first (SIM, card, cable)',
@@ -286,7 +288,7 @@ function parseBench(output) {
  * shows a report card the user corrects by tapping, asks a few questions (all on request) and submits it.
  * @param {any} rom @param {string} key
  */
-function benchBox(rom, key, sent = /** @type {string[]} */ ([])) {
+function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /** @type {string|null} */ (null)) {
   const linux = rom.os === 'postmarketOS';
   const [loginUser, loginPassword] = (rom.login ?? 'user / ').split(' / ');
   let sshHost = `${loginUser}@<phone address>`; // last USB / Wi-Fi target, reused in the password hint
@@ -309,7 +311,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([])) {
       const [state, cls] = BENCH_STATE[card.state] ?? [card.state, 'untested'];
       const counts = Object.values(card.final).reduce((/** @type {Record<string, number>} */ n, /** @type {any} */ t) => ({ ...n, [t]: (n[t] ?? 0) + 1 }), {});
       row.replaceChildren(h('p', { className: 'rating' }, h('span', { className: `feature ${cls}`, textContent: state }),
-          h('small', { textContent: ` sent ${card.at} UTC · ${Object.entries(counts).map(([t, n]) => `${n} ${t}`).join(' · ')}` })),
+          h('small', { textContent: ` sent ${card.at} UTC · ${Object.entries(counts).map(([t, n]) => `${n} ${t}`).join(' · ')} · ${FLASH_NOTE[card.flash] ?? 'flash path unknown'}` })),
         h('details', {}, h('summary', { textContent: 'show card' }), h('p', { className: 'rating' },
           ...Object.entries(card.final).map(([f, t]) => h('span', { className: `feature ${TIER_STATE[/** @type {string} */ (t)] ?? 'untested'}`, textContent: `${LABEL[f] ?? f}: ${t}` })))));
     }).catch(() => row.remove());
@@ -404,7 +406,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([])) {
     const status = h('small', {});
     const send = h('button', { type: 'button', className: 'button button-primary', textContent: 'Send report card', async onclick() {
       send.disabled = true; status.textContent = 'Sending…';
-      const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, final, note: note.value }) }).catch(() => null);
+      const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, final, note: note.value, flash: flash() }) }).catch(() => null);
       if (r?.ok) {
         status.textContent = ''; send.textContent = '✓ Sent';
         const thanks = h('div', { className: 'bench-thanks' }, h('p', { className: 'bench-thanks-title', textContent: 'Thank you! 🎉' }),
@@ -518,7 +520,7 @@ function stageCard(device, stage, n, count, key) {
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
       await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
       st.finished = true;
-      status.dispatchEvent(new Event('stage-done', { bubbles: true })); // turns a required page section green
+      status.dispatchEvent(new CustomEvent('stage-done', { bubbles: true, detail: { unmatched: unverified.checked } })); // turns a required page section green
       log.append(h('li', {}, ...rich(stage.done)));
       if (n === count) bump(key, 'flash');
     } catch (error) {
@@ -649,6 +651,7 @@ async function inboxView(index) {
     const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`,
         textContent: d ? `${d.vendor} ${d.name} · ${rom ? `${rom.name} ${rom.version}` : `${id} (no longer in the catalog)`}` : x.rom })),
       h('small', { textContent: `${x.at} UTC · ${x.rom}${x.accepted ? ` · approved ${x.accepted}` : ''}` }),
+      h('p', { className: x.flash === 'verified' ? 'field-help' : 'field-help flash-warn', textContent: FLASH_NOTE[x.flash] ?? 'flash path unknown (not flashed from this browser)' }),
       x.note && h('p', { textContent: x.note }),
       h('p', { className: 'field-help', textContent: changes.length ? `Changes vs catalog (${changes.length}): ${changes.join(' · ')}` : 'No changes vs the catalog rating.' }),
       h('div', { className: 'inbox-actions' }, ...{ new: [move('approve', 'Approve', true), move('reject', 'Reject'), move('review', 'Review later')],
@@ -769,7 +772,7 @@ async function start() {
   // Progress on this phone in one record per device: locked-in ROM, ticked unlock steps, TWRP, flashed ROMs.
   // ponytail: this browser only; user accounts can sync the same record later.
   const progressKey = `progress:${codename}`;
-  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[], flashedElsewhere?:string[], tested?:string[], cards?:Record<string, string[]>}} */ let progress = {};
+  /** @type {{rom?:string, steps?:number[], unlocked?:boolean, twrp?:boolean, flashed?:string[], flashedElsewhere?:string[], unmatched?:string[], tested?:string[], cards?:Record<string, string[]>}} */ let progress = {};
   try { progress = JSON.parse(localStorage.getItem(progressKey) ?? '{}'); } catch { /* private window */ }
   const save = () => { try { localStorage.setItem(progressKey, JSON.stringify(progress)); } catch { /* private window */ } };
   /** @type {HTMLButtonElement[]} */ const lockButtons = [];
@@ -824,7 +827,7 @@ async function start() {
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
   if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
   // Optional, so never amber; it goes green once a report card for this ROM was sent from this browser.
-  const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [])], 'OPTIONAL');
+  const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
   if (rom) { testSection.addEventListener('bench-sent', (/** @type {any} */ e) => { progress.tested = [...new Set([...progress.tested ?? [], rom.id])]; progress.cards = { ...progress.cards, [rom.id]: [...progress.cards?.[rom.id] ?? [], e.detail] }; save(); markTested(); }); markTested(); }
   const romCards = rom && flashable(rom) ? cards(rom, 'rom') : [];
@@ -836,14 +839,20 @@ async function start() {
       romCards.length && h('label', { className: 'field-help' }, flashedElsewhere, ' I flashed this ROM another way (marked unconfirmed)'),
       rom && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
         : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length ? 'REQUIRED' : '');
-  let romDone = 0;
-  romSection.addEventListener('stage-done', () => {
-    if (++romDone >= romCards.length) { progress.flashed = [...new Set([...progress.flashed ?? [], rom.id])]; save(); } });
+  let romDone = 0, romUnmatched = false;
+  romSection.addEventListener('stage-done', (/** @type {any} */ e) => {
+    romUnmatched ||= !!e.detail?.unmatched;
+    if (++romDone < romCards.length) return;
+    // Skip verification on any stage: the phone runs an image other than the listed one; a clean verified run clears that.
+    progress.flashed = [...new Set([...progress.flashed ?? [], rom.id])];
+    progress.unmatched = [...(progress.unmatched ?? []).filter(id => id !== rom.id), ...romUnmatched ? [rom.id] : []]; save(); });
+  /** How this ROM got on the phone, for the report card. */
+  const flashOf = () => progress.flashed?.includes(rom.id) ? (progress.unmatched?.includes(rom.id) ? 'unmatched' : 'verified') : progress.flashedElsewhere?.includes(rom.id) ? 'elsewhere' : null;
   const romFlashed = () => {
     progress.flashedElsewhere = [...(progress.flashedElsewhere ?? []).filter(id => id !== rom.id), ...flashedElsewhere.checked ? [rom.id] : []]; save();
     return !!progress.flashed?.includes(rom.id) || flashedElsewhere.checked;
   };
-  const unconfirmed = () => { if (romSection.classList.contains('done') && !progress.flashed?.includes(rom.id)) romSection.querySelector(':scope > summary .badge').textContent = 'COMPLETED · UNCONFIRMED'; };
+  const unconfirmed = () => { if (romSection.classList.contains('done') && flashOf() !== 'verified') romSection.querySelector(':scope > summary .badge').textContent = flashOf() === 'unmatched' ? 'COMPLETED · UNMATCHED IMAGE' : 'COMPLETED · UNCONFIRMED'; };
   if (romCards.length) required(romSection, romFlashed, () => romSection.querySelector(':scope > summary').after(
     h('p', { className: 'congrats' }, h('strong', { textContent: `Congratulations, ${rom.name} is on your ${device.name}!` }),
       ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {

@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   note TEXT,
   submitted TEXT,
   accepted TEXT,          -- set by an admin: the card's results now show on the ROM page
-  review TEXT             -- set when an admin moves it from New to Review
+  review TEXT,            -- set when an admin moves it from New to Review
+  flash TEXT              -- how the ROM got on the phone: verified | unmatched (skip verification) | elsewhere | NULL unknown
 );
 
 -- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports). Add one by adding a UNION arm.

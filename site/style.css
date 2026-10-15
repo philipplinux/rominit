@@ -473,3 +473,4 @@ p.rate-label { margin: .3rem 0 .5rem; }
 /* Skip verification: optional, right above Run, styled as a warning. */
 .risk-check.skip-verify { border: 1px dashed var(--amber); border-radius: 6px; padding: .5rem .6rem; background: rgb(240 180 90 / 6%); }
 .risk-check.skip-verify strong { color: var(--amber); }
+.flash-warn { color: var(--amber); }

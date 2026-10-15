@@ -19,11 +19,11 @@ export async function onRequestGet({ request, env }) {
     return Response.json(Object.fromEntries(results.map((/** @type {any} */ r) => [r.rom, { final: JSON.parse(r.final), accepted: r.accepted }])), { headers: { 'cache-control': 'public, max-age=60' } });
   }
   // state as in the admin inbox: new · review · approved · rejected (not counted). The code is the sender's secret.
-  const run = await env.DB.prepare(`SELECT b.output, b.submitted, b.final,
+  const run = await env.DB.prepare(`SELECT b.output, b.submitted, b.final, b.flash,
       CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' WHEN b.review IS NOT NULL THEN 'review' ELSE 'new' END AS state
     FROM bench_runs b LEFT JOIN triage t ON t.inbox = 'benchmarks' AND t.ref = b.code WHERE b.code = ?1`).bind(new URL(request.url).searchParams.get('code') ?? '').first();
   if (!run) return json({ error: 'unknown code' }, 404);
-  return json(run.submitted ? { output: run.output, submitted: true, at: run.submitted, final: JSON.parse(run.final), state: run.state } : { output: run.output, submitted: false });
+  return json(run.submitted ? { output: run.output, submitted: true, at: run.submitted, final: JSON.parse(run.final), state: run.state, flash: run.flash } : { output: run.output, submitted: false });
 }
 
 /** @param {{request:Request, env:any}} context */
@@ -39,12 +39,13 @@ export async function onRequestPost({ request, env }) {
     await env.DB.prepare('INSERT INTO bench_runs (code, rom, voter, user_id) VALUES (?1, ?2, ?3, ?4)').bind(run.code, body.rom, voter, (await userOf(env, request))?.id ?? null).run();
     return json(run);
   }
-  const { final, note } = body;
+  const { final, note, flash = null } = body;
   const entries = final && typeof final === 'object' && !Array.isArray(final) ? Object.entries(final) : [];
   if (!entries.length || entries.length > 60 || !entries.every(([k, v]) => /^[a-z_]{1,24}$/.test(k) && TIERS.includes(/** @type {string} */ (v))))
     return json({ error: 'final must map features to ' + TIERS.join('/') }, 400);
   if (note !== undefined && (typeof note !== 'string' || note.length > 2000)) return json({ error: 'note up to 2000 characters' }, 400);
-  const { meta } = await env.DB.prepare("UPDATE bench_runs SET final = ?2, note = ?3, submitted = datetime('now') WHERE code = ?1 AND submitted IS NULL AND voter = ?4")
-    .bind(String(body.code), JSON.stringify(final), note?.trim() || null, voter).run();
+  if (![null, 'verified', 'unmatched', 'elsewhere'].includes(flash)) return json({ error: 'flash must be verified, unmatched, elsewhere or null' }, 400);
+  const { meta } = await env.DB.prepare("UPDATE bench_runs SET final = ?2, note = ?3, flash = ?5, submitted = datetime('now') WHERE code = ?1 AND submitted IS NULL AND voter = ?4")
+    .bind(String(body.code), JSON.stringify(final), note?.trim() || null, voter, flash).run();
   return meta.changes ? json({ ok: true }) : json({ error: 'unknown or already submitted test' }, 404);
 }

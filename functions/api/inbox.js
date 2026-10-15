@@ -13,7 +13,7 @@ export async function onRequestGet({ request, env }) {
   if (!await isAdmin(env, request)) return json({ error: 'admins only' }, 403);
   const reports = await env.DB.prepare("SELECT r.id, r.page, r.section, r.text, r.at FROM reports r LEFT JOIN triage t ON t.inbox = 'reports' AND t.ref = CAST(r.id AS TEXT) WHERE t.ref IS NULL ORDER BY r.at DESC LIMIT 500").all();
   // new: untouched · review: review set · approved: accepted · rejected: triaged without being accepted. Decided ones: newest 50 each.
-  const runs = await env.DB.prepare(`SELECT b.code AS ref, b.submitted AS at, b.rom, b.note, b.final, b.output, b.accepted,
+  const runs = await env.DB.prepare(`SELECT b.code AS ref, b.submitted AS at, b.rom, b.note, b.final, b.output, b.accepted, b.flash,
       CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' WHEN b.review IS NOT NULL THEN 'review' ELSE 'new' END AS state
     FROM bench_runs b LEFT JOIN triage t ON t.inbox = 'benchmarks' AND t.ref = b.code WHERE b.submitted IS NOT NULL ORDER BY b.submitted DESC LIMIT 300`).all();
   const benchmarks = { new: [], review: [], approved: [], rejected: [] };
