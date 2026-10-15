@@ -5,4 +5,4 @@ compatibility_date = "2026-10-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "rominit"
-database_id = "00000000-0000-0000-0000-000000000000" # replace with the id from `wrangler d1 create rominit`
+database_id = "b3248317-fea9-47dd-a251-8b2252c76228"
