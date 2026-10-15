@@ -9,6 +9,8 @@
       "origin": "unofficial",
       "status": "beta",
       "vetting": "scraped",
+      "source": null,
+      "maintainer": { "name": "ivanmeler", "avatar": "./avatars/ivanmeler.jpg", "source": "https://ivanmeler.github.io/devices/hero2lte.html" },
       "rating": {
         "checked": "2026-10-15",
         "kernel": {
@@ -139,6 +141,8 @@
       "origin": "unofficial",
       "status": "beta",
       "vetting": "scraped",
+      "source": null,
+      "maintainer": { "name": "ivanmeler", "avatar": "./avatars/ivanmeler.jpg", "source": "https://ivanmeler.github.io/devices/hero2lte.html" },
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

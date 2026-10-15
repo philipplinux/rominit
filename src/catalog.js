@@ -63,6 +63,10 @@ export function problems(device, romFile) {
     need(SAFE.test(rom.id ?? ''), `${at}: id missing or unsafe`);
     need(rom.vetting in VETTING, `${at}: vetting must be ${Object.keys(VETTING).join(' or ')}`);
     need(rom.origin in ORIGINS && rom.status in STATUSES, `${at}: origin (${Object.keys(ORIGINS).join('/')}) and status (${Object.keys(STATUSES).join('/')}) are required`);
+    // Every ROM states these, null when there is none, so a new field shows up on every page instead of only some.
+    need('source' in rom && (rom.source === null || rom.source.startsWith?.('https://')), `${at}: source must be an https URL or null (no source code published)`);
+    need('maintainer' in rom && (rom.maintainer === null || (rom.maintainer.name && rom.maintainer.source?.startsWith('https://'))), `${at}: maintainer must be {name, source https, avatar?} or null`);
+    need(rom.screenshots === undefined || rom.screenshots.every((/** @type {any} */ s) => s.src && s.caption), `${at}: screenshots need src and caption`);
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.
     need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);

@@ -9,6 +9,8 @@
       "origin": "stock",
       "status": "stable",
       "vetting": "curated",
+      "source": null,
+      "maintainer": null,
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

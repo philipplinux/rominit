@@ -142,6 +142,7 @@ test('ROM select groups by origin; stock ROMs only under Recover / revert', asyn
 
 test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
+  await page.locator('.version-chip').nth(1).waitFor();
   assert.deepEqual(await page.locator('.version-chip').allInnerTexts(), ['ODIN', 'TWRP-SIDELOAD']);
   assert.match(await page.locator('select').inputValue(), /^lineage-21/);
 });
@@ -169,6 +170,7 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   assert.equal(await twrp.locator(':scope > summary .badge').innerText(), 'COMPLETED');
   assert.equal(await twrp.evaluate(el => /** @type {HTMLDetailsElement} */ (el).open), false, 'completed section collapses');
   await page.reload(); // every section's progress is remembered
+  await page.locator('details.page-section', { hasText: 'T · Submit ticket' }).waitFor(); // page fully drawn before counting
   assert.equal(await page.locator('details.page-section.done').count(), 2);
   await page.locator('.start-over').click();
   await page.locator('.page-section').nth(4).waitFor();
