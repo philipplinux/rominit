@@ -1046,10 +1046,11 @@ function progressRail(sections) {
   const fill = h('i', { className: 'rail-fill' }), thumb = h('i', { className: 'rail-thumb' });
   const at = (/** @type {number} */ y) => Math.min(1, Math.max(0, y / Math.max(1, document.documentElement.scrollHeight - innerHeight)));
   const place = () => {
-    // Sections near the end all map to the bottom; keep milestones at least 7% apart, pushed up from the bottom.
+    // Sections near the end all map to the bottom; keep milestones a two-line label apart, pushed up from the bottom.
+    const gap = 44 / Math.max(1, rail.clientHeight);
     const tops = sections.map(sec => at(sec.getBoundingClientRect().top + scrollY - 80));
-    for (let i = 1; i < tops.length; i++) tops[i] = Math.max(tops[i], tops[i - 1] + .07);
-    for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], (i === tops.length - 1 ? 1 : tops[i + 1] - .07));
+    for (let i = 1; i < tops.length; i++) tops[i] = Math.max(tops[i], tops[i - 1] + gap);
+    for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], (i === tops.length - 1 ? 1 : tops[i + 1] - gap));
     tops.forEach((top, i) => { dots[i].style.top = `${100 * top}%`; });
     const f = `${100 * at(scrollY)}%`;
     fill.style.height = f; thumb.style.top = f;
@@ -1065,8 +1066,9 @@ function progressRail(sections) {
   const soon = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(place); };
   addEventListener('scroll', soon, { passive: true });
   new ResizeObserver(soon).observe(document.body);
+  const rail = h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...dots);
   paint(); soon();
-  return h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...dots);
+  return rail;
 }
 start().then(() => {
   main.append(reportBox());
