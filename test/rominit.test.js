@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { FEATURES, USES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
@@ -306,7 +307,8 @@ test('host OS: detected from the browser, setup lines per protocol, errors mappe
   assert.match(browserProblem({ secure: true, host: 'windows' }) ?? '', /Edge/);
 });
 
-test('ROMvault lint: frontmatter, tags, links, index and the full net are clean', async () => {
+// ROMvault is a private checkout (git-ignored); public CI has no copy.
+test('ROMvault lint: frontmatter, tags, links, index and the full net are clean', { skip: !existsSync(new URL('../romvault/AGENTS.md', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
   const { lint } = await import('../scripts/romvault-lint.mjs');
   assert.deepEqual(lint(), []);
 });
