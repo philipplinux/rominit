@@ -38,6 +38,7 @@ npm run build   # dist/
 - `site/`: the web page; `functions/`: Cloudflare Pages Functions (API, sign-in); `src/`: catalog validator, recipes, USB protocols
 - `catalog/`: devices and ROMs (JSON); `schema.sql` + `migrations/`: D1 database
 - `test/`, `bench/`: unit tests and the end-to-end site bench; `scripts/`: build and catalog loading
+- `vault/`: source material per brand and OS project (firmware sites, tools, pitfalls), markdown
 - `romsources/research/`: raw research data the catalog was built from (not served)
 - `.agents/skills/rom-scraper/`: agent instructions for finding ROMs and adding them to the catalog
 
