@@ -20,7 +20,7 @@ async function overLimit(env, request) {
     .bind(who ? `token:${who.token_id}` : `ip:${await voterOf(env, request)}`, hour).first();
   if (row.n === 1) await env.DB.prepare('DELETE FROM mcp_hits WHERE hour < ?1').bind(hour).run(); // first call of a new hour sweeps old ones
   if (row.n <= max) return null;
-  return `Rate limit: ${max} tool calls per hour ${who ? 'per token' : 'without a token'}. Try again after ${hour.slice(11)}:59 UTC.${who ? '' : ` A free personal API token (${new URL('/?view=agents', request.url).href}) raises it to ${PER_HOUR.token}.`}`;
+  return `Rate limit: ${max} tool calls per hour ${who ? 'per token' : 'without a token'}. Try again after ${hour.slice(11)}:59 UTC.${who ? '' : ` For ${PER_HOUR.token} an hour, ask the human to sign in at ${new URL('/?view=agents', request.url).href}, create a free personal API token there and add it to this MCP connection as the header "Authorization: Bearer <token>".`}`;
 }
 
 /** Sent on connect: what the data is, how to use it safely, and what we ask back (the soft contract). */

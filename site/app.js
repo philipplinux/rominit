@@ -196,7 +196,7 @@ me.then(info => {
     } }, h('strong', { textContent: 'Your username' }), input, h('button', { type: 'submit', className: 'button', textContent: 'Save' }), status);
     const edit = h('button', { type: 'button', className: 'link-button', title: 'Change your username', textContent: `${info.user.name} ✎` });
     edit.popoverTargetElement = pop;
-    slot.append(edit, ' · ', h('button', { type: 'button', className: 'link-button', textContent: 'SIGN OUT', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }), pop);
+    slot.append(edit, ' · ', h('a', { href: './?view=agents', title: 'Personal API tokens for your AI agent (MCP)', textContent: 'API TOKENS' }), ' · ', h('button', { type: 'button', className: 'link-button', textContent: 'SIGN OUT', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }), pop);
   }
   else {
     const back = encodeURIComponent(location.pathname + location.search);
