@@ -305,3 +305,8 @@ test('host OS: detected from the browser, setup lines per protocol, errors mappe
   assert.equal(browserProblem({ usb: {}, secure: true, host: 'linux' }), null);
   assert.match(browserProblem({ secure: true, host: 'windows' }) ?? '', /Edge/);
 });
+
+test('ROMvault lint: frontmatter, tags, links, index and the full net are clean', async () => {
+  const { lint } = await import('../scripts/romvault-lint.mjs');
+  assert.deepEqual(lint(), []);
+});
