@@ -404,7 +404,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
       more.hidden = !left; more.textContent = `Answer more (${left} left)`;
     };
     more.addEventListener('click', () => ask(pool.length));
-    ask(3);
+    ask(Math.max(3, pool.filter(f => features[f]?.status === 'ask').length)); // every only-you-can-tell question together, then a few untested
     const note = h('textarea', { className: 'confirmation-input', placeholder: 'Anything the test missed? (optional)', maxLength: 2000, rows: 2 });
     const status = h('small', {});
     const send = h('button', { type: 'button', className: 'button button-primary', textContent: 'Send report card', async onclick() {
