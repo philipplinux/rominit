@@ -1033,6 +1033,40 @@ async function start() {
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
         ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
-      otherRecoveries]));
+      otherRecoveries]),
+    progressRail([infoSection, unlockSection, twrpSection, romSection, testSection].filter(Boolean)));
+}
+/** Left rail like a scrollbar: milestones 0–4 sit where their section is on the page, a marker follows the scroll,
+ * the line fills up to where you are; a milestone goes green when its section is done, amber ring on the next one to do. @param {HTMLDetailsElement[]} sections */
+function progressRail(sections) {
+  const dots = sections.map(sec => {
+    const [num, label] = (sec.querySelector(':scope > summary > span')?.textContent ?? '').split(' · ');
+    return h('a', { href: '#', title: label, onclick(/** @type {Event} */ e) { e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+      h('b', { textContent: num }), h('small', { textContent: label }));
+  });
+  const fill = h('i', { className: 'rail-fill' }), thumb = h('i', { className: 'rail-thumb' });
+  const at = (/** @type {number} */ y) => Math.min(1, Math.max(0, y / Math.max(1, document.documentElement.scrollHeight - innerHeight)));
+  const place = () => {
+    // Sections near the end all map to the bottom; keep milestones at least 7% apart, pushed up from the bottom.
+    const tops = sections.map(sec => at(sec.getBoundingClientRect().top + scrollY - 80));
+    for (let i = 1; i < tops.length; i++) tops[i] = Math.max(tops[i], tops[i - 1] + .07);
+    for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], (i === tops.length - 1 ? 1 : tops[i + 1] - .07));
+    tops.forEach((top, i) => { dots[i].style.top = `${100 * top}%`; });
+    const f = `${100 * at(scrollY)}%`;
+    fill.style.height = f; thumb.style.top = f;
+  };
+  const paint = () => {
+    const next = sections.findIndex(sec => !sec.classList.contains('done') && sec.classList.contains('required'));
+    dots.forEach((dot, i) => { dot.className = sections[i].classList.contains('done') ? 'done' : i === next ? 'next' : ''; });
+  };
+  // Sections flip their own done / required classes; opening or closing one moves the rest, so re-place on resize too.
+  const watch = new MutationObserver(paint);
+  for (const sec of sections) watch.observe(sec, { attributes: true, attributeFilter: ['class'] });
+  let frame = 0;
+  const soon = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(place); };
+  addEventListener('scroll', soon, { passive: true });
+  new ResizeObserver(soon).observe(document.body);
+  paint(); soon();
+  return h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...dots);
 }
 start().then(() => main.append(reportBox()), error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
