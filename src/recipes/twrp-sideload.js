@@ -6,7 +6,7 @@ export const verbs = { sideload: 1 };
 export const fileArg = { sideload: 0 };
 const BLOCK = 64 * 1024;
 
-/** @typedef {{banner:{device?:string}, createSocket(service:string):Promise<{readable:ReadableStream<Uint8Array>, writable:WritableStream<Uint8Array>, close():any}>}} Sideload */
+/** @typedef {{banner:{device?:string,state?:string}, createSocket(service:string):Promise<{readable:ReadableStream<Uint8Array>, writable:WritableStream<Uint8Array>, close():any}>}} Sideload */
 
 /**
  * Serves one zip over `sideload-host`: the phone sends 8 ASCII digits per wanted block and DONEDONE (or FAILFAIL) at the end.
@@ -14,7 +14,9 @@ const BLOCK = 64 * 1024;
  * @param {Sideload} adb @param {{name:string,sha256:string,file:Blob}} zip @param {(fraction:number)=>void} progress
  */
 export async function serve(adb, zip, progress) {
-  const socket = await adb.createSocket(`sideload-host:${zip.file.size}:${BLOCK}`);
+  const socket = await adb.createSocket(`sideload-host:${zip.file.size}:${BLOCK}`).catch(e => {
+    throw Error(`Phone refused the sideload (${e.message}): start it in TWRP (Advanced › ADB Sideload, swipe), then reload and connect again. Nothing written.`);
+  });
   const reader = socket.readable.getReader(), writer = socket.writable.getWriter();
   const blocks = Math.ceil(zip.file.size / BLOCK);
   let buffer = '', sent = 0;
@@ -47,6 +49,9 @@ export async function run(adb, { device, files, steps }, report, assertSession) 
   const expected = device.detect?.adb?.device;
   if (adb.banner.device && !adb.banner.device.startsWith(expected)) // TWRP may report hero2ltexx for hero2lte
     throw Error(`Expected ${expected}; phone reports ${adb.banner.device}. Nothing written.`);
+  // Normal TWRP/Android ADB has no sideload-host service; it answers the socket with a bare "Socket open failed".
+  if (adb.banner.state && adb.banner.state !== 'sideload')
+    throw Error(`Phone is in ${adb.banner.state} mode, not ADB sideload. In TWRP: Advanced › ADB Sideload, swipe, then reload and connect again. Nothing written.`);
   const byName = Object.fromEntries(files.map(f => [f.name, f]));
   for (const file of files.filter(f => f.sha256)) { // '' = the user skipped verification for a newer file
     const digest = await checksum(file.file, fraction => report(`Checking SHA-256: ${file.name}`, fraction));

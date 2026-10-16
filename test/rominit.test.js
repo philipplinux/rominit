@@ -248,6 +248,9 @@ test('sideload serves the blocks the phone asks for and stops at DONEDONE', asyn
   assert.deepEqual(sent, [10, 65536, 65536]);
   const bad = { ...adb, banner: { device: 'starlte' } };
   await assert.rejects(recipes['twrp-sideload'].run(bad, { device: { detect: { adb: { device: 'hero2lte' } } }, files: [], steps: [] }, () => {}, () => {}), /phone reports starlte/);
+  const recovery = { banner: { device: 'hero2lte', state: 'recovery' }, createSocket: async () => { throw Error('Socket open failed'); } };
+  await assert.rejects(recipes['twrp-sideload'].run(recovery, { device: { detect: { adb: { device: 'hero2lte' } } }, files: [], steps: [] }, () => {}, () => {}), /recovery mode, not ADB sideload/);
+  await assert.rejects(recipes['twrp-sideload'].serve({ banner: {}, createSocket: recovery.createSocket }, { name: 'z.zip', sha256: '', file: new Blob([]) }, () => {}), /refused the sideload/);
 });
 
 test('counter counts views and flashes once per window', async () => {
