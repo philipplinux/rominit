@@ -338,7 +338,7 @@ test('MCP: initialize, tools, search, recipe without confirm phrases, actionable
   assert.match((await call('rominit_get_device', { codename: '../x' })).content[0].text, /rominit_find_devices/);
   assert.match((await call('rominit_get_rom', { codename: 'laurel_sprout', rom_id: 'nope' })).content[0].text, new RegExp(rom.id));
   hits = 20; // the hourly limit without a token
-  assert.match((await call('rominit_find_devices', { query: 'mi a3' })).content[0].text, /Rate limit: 20 .*view=agents.*1200/);
+  assert.match((await call('rominit_find_devices', { query: 'mi a3' })).content[0].text, /Rate limit: 20 .*1200 .*sign in at https:\/\/x\/\?view=agents/);
 });
 
 test('agent API: token from the site, MCP report with it, admin inbox by outcome', async () => {
