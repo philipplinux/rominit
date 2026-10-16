@@ -1,7 +1,7 @@
 # LineageOS (ivanmeler build) 21.0 · hero2lte
 
 ## Status
-- Agent-flashed: never
+- Agent-flashed: never. Owner-flashed from the site 2026-10-16 (after the sideload-order fix): boots, probe run q3uydduw; wifi, bluetooth, GPU, sensors, NFC on, hall (SW_LID) work.
 
 ## Best path
 1. Samsung Android 8 firmware on the phone, OEM unlocking on, USB debugging on.
@@ -16,3 +16,4 @@
 ## Agent diary
 - 2026-10-16 · Claude Code · owner flashed twice from the site, both stopped at "Socket open failed"; cause: connect before starting ADB Sideload. Site now names the mode (twrp-sideload checks banner state) and the mode text says the order. Zip SHA-256 matches catalog.
 - 2026-10-16 · Claude Code · connect('sideload') now switches TWRP into sideload itself (`shell:twrp sideload`, waits up to 45 s for the phone to re-enumerate with the same serial, no second picker). Needs a hardware run.
+- 2026-10-16 · Claude Code · owner flash succeeded; probe: screen/touch/audio/camera are human questions, GPS/fingerprint need user action, no SD card/SIM. Added NFC/GPS/hall auto-checks, verified on this phone over adb.
