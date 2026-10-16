@@ -17,6 +17,18 @@ hostSelect.addEventListener('change', () => {
   try { localStorage.setItem('host', host); } catch { /* private window */ }
   document.dispatchEvent(new Event('host-change'));
 });
+// First visit: confirm the guessed computer once, since every stage's setup steps follow it.
+if (!stored) {
+  const pick = h('select', { className: 'host-confirm-select', ariaLabel: "Your computer's operating system" },
+    ...Object.entries(HOSTS).map(([id, name]) => h('option', { value: id, textContent: name, selected: id === host })));
+  const dialog = h('dialog', { className: 'host-confirm' },
+    h('form', { method: 'dialog' }, h('p', { className: 'field-label', textContent: 'Which computer are you flashing from?' }),
+      h('p', { className: 'field-help', textContent: 'ROMinit guessed it from your browser. The setup steps (drivers, USB access) follow this choice; you can change it later at the top of the page.' }),
+      pick, h('button', { className: 'button button-primary', textContent: 'Confirm' })));
+  dialog.addEventListener('close', () => { hostSelect.value = pick.value; hostSelect.dispatchEvent(new Event('change')); dialog.remove(); });
+  document.body.append(dialog);
+  dialog.showModal();
+}
 
 /** Tiny DOM builder: catalog data only ever lands in text nodes, never in innerHTML.
  * @template {keyof HTMLElementTagNameMap} K

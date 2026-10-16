@@ -488,9 +488,15 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .risk-check.skip-verify strong { color: var(--amber); }
 .flash-warn { color: var(--amber); }
 .host-pick { display: flex; align-items: center; gap: .4rem; }
-.host-pick select { font: inherit; background: transparent; color: inherit; border: 1px solid var(--line); padding: .1rem .3rem; }
+.host-pick { color: var(--amber); font-weight: 700; letter-spacing: .04em; }
+.host-pick select { font: inherit; background: rgba(230, 195, 154, .1); color: var(--amber); border: 1px solid var(--amber); border-radius: 4px; padding: .25rem .5rem; cursor: pointer; }
+.host-confirm { max-width: min(420px, calc(100vw - 32px)); border: 1px solid var(--amber); padding: 20px; background: var(--bg); color: inherit; }
+.host-confirm::backdrop { background: rgba(0, 0, 0, .6); }
+.host-confirm form { display: grid; gap: 12px; }
+.host-confirm-select { font: inherit; font-size: 1rem; padding: .5rem; background: transparent; color: var(--amber); border: 1px solid var(--amber); }
 .prereqs { border: 1px solid var(--amber); border-left-width: 3px; padding: .5rem .7rem; background: rgba(230, 195, 154, .06); color: #e4c99f; }
 .prereqs summary { cursor: pointer; color: var(--amber); }
 .prereqs ul { margin: .4rem 0 0; padding-left: 1.1rem; }
 .prereqs li { margin-bottom: .4rem; }
 .prereqs pre { margin: .3rem 0; }
+.host-pick option, .host-confirm-select option { background: var(--bg); color: #e6dfd1; }
