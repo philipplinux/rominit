@@ -480,6 +480,7 @@ function stageCard(device, stage, n, count, key) {
   const progress = h('progress', { max: 100, value: 0 });
   const percent = h('span', { textContent: '0%' });
   const log = h('ol');
+  const outcome = h('div', { className: 'outcome', hidden: true }); // big DONE / FAILED under the activity list
   // Debug log: timestamped steps, every USB call with result and timing, the full error. Copied into bug reports.
   const debugText = h('pre', { className: 'debug-log' });
   const started = Date.now();
@@ -582,6 +583,7 @@ function stageCard(device, stage, n, count, key) {
   flash.addEventListener('click', async () => {
     if (flash.disabled || !st.files) return;
     st.busy = true; update();
+    outcome.hidden = true;
     try {
       assertConsent(stage, { consent: risk.checked, confirmation: confirm.value });
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
@@ -592,12 +594,19 @@ function stageCard(device, stage, n, count, key) {
       status.dispatchEvent(new CustomEvent('stage-done', { bubbles: true, detail: { unmatched: unverified.checked } })); // turns a required page section green
       log.append(h('li', {}, ...rich(stage.done)));
       if (n === count) bump(key, 'flash');
+      outcome.className = 'outcome outcome-done';
+      outcome.replaceChildren(h('strong', { textContent: '✓ DONE' }), h('span', { textContent: n === count ? 'All stages finished. Give the first boot a few minutes.' : `Stage ${n} of ${count} finished. Go on with stage ${n + 1}.` }),
+        n === count && h('span', {}, 'Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
+      outcome.hidden = false;
     } catch (error) {
       st.lost = true;
       dbgError(error);
       debugBox.open = true;
       report(`STOPPED: ${explain(error)} ${again[0].toUpperCase()}${again.slice(1)}`);
       sendFailure();
+      outcome.className = 'outcome outcome-failed';
+      outcome.replaceChildren(h('strong', { textContent: '✗ FAILED' }), h('span', { textContent: 'The reason is the last line above. The debug log went to ROMinit so the recipe can be fixed.' }));
+      outcome.hidden = false;
     } finally { st.busy = false; update(); }
   });
   risk.addEventListener('change', update);
@@ -633,7 +642,7 @@ function stageCard(device, stage, n, count, key) {
       h('strong', { textContent: '⚠ Size and SHA-256 are then not checked: ' }), 'a wrong, corrupt or tampered file is written anyway and can brick the phone. The stored steps still run.')),
     h('div', { className: 'flash-actions' }, flash),
     h('div', { className: 'progress-row' }, progress, percent),
-    h('section', { className: 'activity' }, h('div', { className: 'activity-heading' }, h('h3', { textContent: 'Activity' }), h('span', { className: 'activity-label', textContent: 'LOCAL SESSION' })), log, debugBox));
+    h('section', { className: 'activity' }, h('div', { className: 'activity-heading' }, h('h3', { textContent: 'Activity' }), h('span', { className: 'activity-label', textContent: 'LOCAL SESSION' })), log, outcome, debugBox));
 }
 
 /** @param {any[]} index */
@@ -957,7 +966,7 @@ async function start() {
     h('p', { className: 'congrats' }, h('strong', { textContent: `Congratulations, ${rom.name} is on your ${device.name}!` }),
       ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {
         e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
-      '. Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }), '.')));
+      '.')));
   // Scraped ROM: its info and flash steps are placeholders until checked.
   if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark());
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge

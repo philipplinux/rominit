@@ -176,6 +176,12 @@ progress::-webkit-progress-value { background: var(--teal); }
 progress::-moz-progress-bar { background: var(--teal); }
 
 .activity { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 16px; }
+.outcome { display: grid; gap: .3rem; margin: 14px 0; border: 2px solid; padding: 14px 16px; font-size: .72rem; }
+.outcome[hidden] { display: none; }
+.outcome strong { font-size: 1.6rem; letter-spacing: .08em; }
+.outcome-done { border-color: var(--teal); background: rgba(168, 197, 160, .1); color: var(--teal); }
+.outcome-failed { border-color: #e2a3a0; background: rgba(226, 163, 160, .08); color: #e2a3a0; }
+.outcome a { color: inherit; font-weight: 700; }
 .activity-heading { display: flex; align-items: center; justify-content: space-between; }
 .activity-heading h3 { margin: 0; font-size: .72rem; }
 .debug-log { max-height: 320px; overflow: auto; white-space: pre-wrap; word-break: break-all; font-size: .72rem; background: var(--line); padding: 8px; border-radius: 6px; }
