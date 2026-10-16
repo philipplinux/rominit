@@ -1054,7 +1054,7 @@ function progressRail(sections) {
   const place = () => {
     const page = Math.max(1, document.documentElement.scrollHeight);
     // Two sections closer than a two-line label still get that much room; pushed up from the bottom if needed.
-    const gap = 44 / Math.max(1, rail.clientHeight);
+    const gap = Math.min(44, rail.clientHeight / sections.length) / Math.max(1, rail.clientHeight); // short window: squeeze evenly
     const tops = sections.map(sec => (sec.getBoundingClientRect().top + scrollY) / page);
     for (let i = 1; i < tops.length; i++) tops[i] = Math.max(tops[i], tops[i - 1] + gap);
     for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], i === tops.length - 1 ? 1 : tops[i + 1] - gap);
