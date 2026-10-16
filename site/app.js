@@ -1074,5 +1074,10 @@ start().then(() => {
   main.append(reportBox());
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).
   const sections = /** @type {HTMLDetailsElement[]} */ ([...main.querySelectorAll(':scope > details.page-section')]);
-  if (sections.length > 1) main.append(progressRail(sections));
+  if (sections.length < 2) return;
+  const rail = progressRail(sections);
+  // Start over moves to the top of the rail; the title-row button stays for phones, where the rail is hidden.
+  const restart = /** @type {HTMLButtonElement|null} */ (main.querySelector('.title-row .start-over'));
+  if (restart) rail.prepend(Object.assign(/** @type {HTMLButtonElement} */ (restart.cloneNode(true)), { onclick: () => restart.click() }));
+  main.append(rail);
 }, error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
