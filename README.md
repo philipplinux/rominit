@@ -27,7 +27,7 @@ Copy an existing device as a template.
 
 Standalone recovery installers live in `catalog/recoveries/<codename>/<id>.json`. Each file has `device` and one `recovery` object with `id`, `name`, `version`, `project`, `source`, `vetting`, `requirements`, `imported` (date), `imported_from` (seed provenance) and `stages`. Recovery stages use the same validated recipe verbs and pinned files as ROM stages and have `section: "tools"`.
 
-The phone page lists these under **Other recovery installers**. A matching installer already required by the selected ROM stays in **2 · Custom recovery**. Installing a recovery is separate from restoring stock firmware. Import metadata records catalog coverage, not a successful flash. TWRP seeds currently cover Samsung Galaxy S7 edge (`hero2lte`), Galaxy S9 (`starlte`) and Galaxy S9+ (`star2lte`); they are marked `scraped`.
+The phone page lists these as an opt-in **Other recovery installers** list inside **R · Recover / revert**. A matching installer already required by the selected ROM stays in **2 · Custom recovery**. Installing a recovery is separate from restoring stock firmware. Import metadata records catalog coverage, not a successful flash. TWRP seeds currently cover Samsung Galaxy S7 edge (`hero2lte`), Galaxy S9 (`starlte`) and Galaxy S9+ (`star2lte`); they are marked `scraped`.
 
 ## Develop
 

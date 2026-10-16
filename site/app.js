@@ -889,12 +889,14 @@ async function start() {
     const cards = duplicates ? [] : recovery.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, recovery.stages.length, `${device.codename}/recovery/${recovery.id}`));
     return h('div', { className: 'recovery-installer' },
       h('h3', { textContent: `${recovery.name} ${recovery.version}` }),
-      h('p', { className: 'rating source-row' }, h('strong', { textContent: 'release' }), recovery.vetting === 'scraped' && h('span', { className: 'feature partial', textContent: 'scraped · unverified' }, placeholderMark()),
+      h('p', { className: 'rating source-row' }, h('strong', { textContent: 'installer' }), recovery.vetting === 'scraped' && h('span', { className: 'feature partial', textContent: 'scraped · unverified' }, placeholderMark()),
         link(recovery.project, 'Project'), link(recovery.source, 'Device instructions')),
       h('ul', { className: 'field-help' }, ...recovery.requirements.map((/** @type {string} */ requirement) => h('li', { textContent: requirement }))),
-      duplicates ? h('p', { className: 'field-help', textContent: 'This same pinned installer is already shown in “2 · Custom recovery”.' }) : h('div', { className: 'stages' }, ...cards));
+      duplicates ? h('p', { className: 'field-help', textContent: 'This same pinned installer is already shown in section 2.' }) : h('div', { className: 'stages' }, ...cards));
   });
-  const recoveryCatalogSection = recoveryInstallers.length && section('Other recovery installers', 'optional · choose an installer only if you need it', false, [h('p', { className: 'field-help', textContent: 'Use the recovery required by your selected ROM. These installers are alternatives, and are not compatible with every ROM.' }), ...recoveryInstallers]);
+  // Opt-in, tucked into R: a recovery the selected ROM needs is already in section 2.
+  const otherRecoveries = recoveryInstallers.length && h('details', { className: 'pivots' }, h('summary', { textContent: `Other recovery installers (${recoveryInstallers.length}) · opt-in, only if you need one` }),
+    h('p', { className: 'field-help', textContent: 'Not needed for the selected ROM; a recovery it needs is in section 2. These are alternatives and are not compatible with every ROM.' }), ...recoveryInstallers);
   // Optional, so never amber; it goes green once a report card for this ROM was sent from this browser.
   const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
@@ -946,7 +948,6 @@ async function start() {
     infoSection,
     unlockSection,
     twrpSection,
-    ...(recoveryCatalogSection ? [recoveryCatalogSection] : []),
     romSection,
     testSection,
     // R and S sit apart from the numbered flow: a way back, and a way to tell us something is wrong.
@@ -954,6 +955,7 @@ async function start() {
     section('R · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
-        ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`))))]));
+        ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
+      otherRecoveries]));
 }
 start().then(() => main.append(reportBox()), error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));

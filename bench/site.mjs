@@ -116,6 +116,7 @@ test('device page: back link, breadcrumb, one-line title, section 0 first, OS lo
   const h1 = await page.locator('h1').boundingBox();
   assert.ok(h1 && h1.height < 120, 'title fits one line');
   assert.match(await text('.page-section summary'), /^0 · ROM, features & info/);
+  await page.goto(`${BASE}/?device=starlte&rom=philipplinux-pmos-server`); // official /e/OS ranks first and has no logo file
   await page.locator('img.os-logo').evaluate(img => /** @type {HTMLImageElement} */ (img).decode());
   assert.ok(await page.locator('img.os-logo').evaluate(img => /** @type {HTMLImageElement} */ (img).naturalWidth > 0), 'postmarketOS logo loads');
   await page.locator('.back-link').click();
@@ -123,7 +124,7 @@ test('device page: back link, breadcrumb, one-line title, section 0 first, OS lo
 });
 
 test('ROM info: release chips, login in sections 0 and 2, feature groups, includes', async () => {
-  await page.goto(`${BASE}/?device=starlte`);
+  await page.goto(`${BASE}/?device=starlte&rom=philipplinux-pmos-server`);
   const release = page.locator('p.rating', { has: page.locator('strong', { hasText: 'release' }) });
   assert.match(await release.innerText(), /unofficial[\s\S]*experimental[\s\S]*curated ★/);
   assert.equal(await page.locator('.login-box').count(), 2);
@@ -208,12 +209,12 @@ test('section 0 completes by locking in the ROM; install requirements and A/B fl
 test('broken ROMs are listed but not flashable', async () => {
   await page.route('**/catalog/starlte.json', async route => {
     const device = await (await route.fetch()).json();
-    device.roms[0].status = 'broken';
+    for (const rom of device.roms) rom.status = 'broken';
     await route.fulfill({ json: device });
   });
   await page.goto(`${BASE}/?device=starlte`);
   await page.getByText('Known broken:').waitFor();
-  assert.equal(await page.locator('.stage-card').count(), 0);
+  assert.equal(await page.locator('.stage-card:not(.pivots .stage-card)').count(), 0, 'opt-in recovery installers in R stay');
   await page.unroute('**/catalog/starlte.json');
 });
 
