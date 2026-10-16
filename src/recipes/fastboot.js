@@ -1,4 +1,4 @@
-import { checksum } from '../hash.js';
+import { verifyPins } from '../hash.js';
 
 export const protocol = 'fastboot';
 export const verbs = { flash: 2, erase: 1, set_active: 1, reboot: 0 };
@@ -22,7 +22,7 @@ export async function expandedSize(file) {
  * @param {(message:string,fraction:number)=>void} report @param {()=>void} assertSession
  */
 export async function run(fb, { device, files, steps }, report, assertSession) {
-  const total = 3 + files.filter(f => f.sha256).length + files.filter(f => f.name.endsWith('.img.xz')).length + steps.length;
+  const total = 4 + files.filter(f => f.name.endsWith('.img.xz')).length + steps.length;
   let step = 0;
   const say = (text, fraction = 0) => report(`Step ${step}/${total}: ${text}`, fraction);
   const next = text => { step += 1; assertSession(); say(text); };
@@ -47,11 +47,8 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
   next('Checking the bootloader is unlocked');
   if (await fb.getVariable('unlocked') !== 'yes') throw Error('Bootloader is locked. Nothing written.');
 
-  for (const file of files.filter(f => f.sha256)) { // unpacked archive members are covered by the archive's hash
-    next(`Checking SHA-256: ${file.name}`);
-    const digest = await checksum(file.file, fraction => say(`Checking SHA-256: ${file.name}`, fraction));
-    if (digest !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
-  }
+  next('Checking SHA-256');
+  await verifyPins(files, say); // unpacked archive members carry no pin: the archive's hash covers them
 
   // Check every target before decoding or writing; decoded XZ output is capped at its target size.
   next('Checking the partitions');

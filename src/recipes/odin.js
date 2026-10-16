@@ -1,4 +1,4 @@
-import { checksum } from '../hash.js';
+import { verifyPins } from '../hash.js';
 
 export const protocol = 'odin';
 export const verbs = { flash: 2 };
@@ -13,11 +13,7 @@ export const fileArg = { flash: 1 };
  */
 export async function run(odin, { device, stage, files, steps }, report, assertSession) {
   const byName = Object.fromEntries(files.map(f => [f.name, f]));
-  for (const file of files.filter(f => f.sha256)) { // '' = the user skipped verification for a newer file
-    report(`Checking SHA-256: ${file.name}`, 0);
-    const digest = await checksum(file.file, fraction => report(`Checking SHA-256: ${file.name}`, fraction));
-    if (digest !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
-  }
+  await verifyPins(files, report);
   assertSession();
   report('Reading partition table (PIT)', 0);
   await odin.beginSession();

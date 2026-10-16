@@ -1,4 +1,4 @@
-import { checksum } from '../hash.js';
+import { verifyPins } from '../hash.js';
 
 // Flashable zip (LineageOS and friends) through TWRP's ADB Sideload: the phone asks for numbered blocks, we send them.
 export const protocol = 'sideload';
@@ -53,10 +53,7 @@ export async function run(adb, { device, files, steps }, report, assertSession) 
   if (adb.banner.state && adb.banner.state !== 'sideload')
     throw Error(`Phone is in ${adb.banner.state} mode, not ADB sideload. In TWRP: Advanced › ADB Sideload, swipe, then connect again. Nothing written.`);
   const byName = Object.fromEntries(files.map(f => [f.name, f]));
-  for (const file of files.filter(f => f.sha256)) { // '' = the user skipped verification for a newer file
-    const digest = await checksum(file.file, fraction => report(`Checking SHA-256: ${file.name}`, fraction));
-    if (digest !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
-  }
+  await verifyPins(files, report);
   for (const [, name] of steps) {
     assertSession();
     report(`Sideloading ${name}`, 0);

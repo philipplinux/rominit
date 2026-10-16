@@ -12,3 +12,19 @@ export async function checksum(file, progress = () => {}) {
   }
   return hasher.digest('hex');
 }
+
+/** Pre-flight for every recipe: hashes each pinned file and stops on a mismatch before anything is written.
+ * sha256 '' = the user skipped verification for a newer file; hashed only with `all` (for a read-back).
+ * `accept` (from selectFiles) lists every hash allowed for this file, else just sha256.
+ * @param {{name:string,sha256:string,accept?:string[],file:Blob}[]} files @param {(message:string,fraction:number)=>void} report
+ * @returns {Promise<Record<string,string>>} the computed sums by file name */
+export async function verifyPins(files, report, all = false) {
+  const sums = /** @type {Record<string, string>} */ ({});
+  for (const file of files.filter(f => all || f.sha256)) {
+    const label = `Checking SHA-256: ${file.name}`;
+    report(label, 0);
+    sums[file.name] = await checksum(file.file, fraction => report(label, fraction));
+    if (file.sha256 && !(file.accept ?? [file.sha256]).includes(sums[file.name])) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
+  }
+  return sums;
+}

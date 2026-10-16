@@ -1,4 +1,4 @@
-import { checksum } from '../hash.js';
+import { verifyPins } from '../hash.js';
 
 export const protocol = 'adb';
 export const verbs = { write: 2, mkfs_ext4: 2, reboot: 0 };
@@ -74,12 +74,7 @@ export async function run(shell, job, report, assertSession) {
   for (const [verb, partition, name] of steps) {
     if (verb === 'write' && byName[name].size > sizes[partition]) throw Error(`${name} is larger than ${partition}. Nothing written.`);
   }
-  const sums = /** @type {Record<string, string>} */ ({}); // the read-back compares against these, also for unverified files
-  for (const file of files) {
-    report(`Checking SHA-256: ${file.name}`, 0);
-    sums[file.name] = await checksum(file.file, fraction => report(`Checking SHA-256: ${file.name}`, fraction));
-    if (file.sha256 && sums[file.name] !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`); // '' = user skipped verification
-  }
+  const sums = await verifyPins(files, report, true); // the read-back compares against these, also for unverified files
   // Catalog order, no retry, no rollback.
   for (const [verb, arg, extra] of steps) {
     assertSession();

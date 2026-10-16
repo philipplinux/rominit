@@ -4,7 +4,7 @@ import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { FEATURES, USES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
-import { checksum } from '../src/hash.js';
+import { checksum, verifyPins } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
 const { devices, errors } = await loadCatalog();
@@ -56,7 +56,7 @@ test('Mi A3 runs the catalog sequence', async () => {
   const dev = device('laurel_sprout'), stage = dev.roms[0].stages[0], fb = fastboot(), reports = [];
   await recipes.fastboot.run(fb, { device: dev, files: fakeFiles(stage), steps: stepsFor(stage) }, text => reports.push(text), noop);
   assert.deepEqual(fb.log, ['flash:vbmeta_b:vbmeta.img', 'erase:dtbo_b', 'flash:boot_b:boot.img', 'flash:userdata:rootfs.img', 'set_active:b', 'reboot']);
-  assert.equal(reports.at(-1), 'Step 12/12: Done.');
+  assert.equal(reports.at(-1), 'Step 10/10: Done.');
 });
 
 test('fastboot: a timed-out write is retried twice, then stops; other errors stop at once', async () => {
@@ -292,6 +292,13 @@ test('completeness counts partial as half and skips n/a', () => {
 
 test('checksum streams to the right digest', async () => {
   assert.equal(await checksum(new Blob(['abc'])), sha('abc'));
+});
+
+test('a re-uploaded revision of a pinned file is accepted, anything else stops', async () => {
+  const stage = { files: [{ name: 'boot.img', size: 3, sha256: sha('abc'), revisions: [{ size: 4, sha256: sha('abcd') }] }] };
+  for (const body of ['abc', 'abcd']) await verifyPins(selectFiles(stage, [new File([body], 'boot.img')]), noop);
+  await assert.rejects(verifyPins(selectFiles(stage, [new File(['abce'], 'boot.img')]), noop), /SHA-256 mismatch/);
+  assert.throws(() => selectFiles(stage, [new File(['ab'], 'boot.img')]), /wrong size/);
 });
 
 test('ratings API validates votes and stores only a hashed address', async () => {

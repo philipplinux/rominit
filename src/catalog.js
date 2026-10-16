@@ -64,6 +64,7 @@ export function stagesProblems(device, stages, at) {
       need(SAFE.test(file.name ?? '') && !names.has(file.name), `${where}: file name "${file.name}" unsafe or duplicated`);
       names.add(file.name);
       need(Number.isSafeInteger(file.size) && file.size > 0 && SHA.test(file.sha256 ?? ''), `${where}: ${file.name} needs size and sha256`);
+      for (const rev of file.revisions ?? []) need(Number.isSafeInteger(rev.size) && rev.size > 0 && SHA.test(rev.sha256 ?? ''), `${where}: ${file.name} revisions need size and sha256`);
       need(file.source?.startsWith('https://') && (file.url === undefined || file.url.startsWith('https://')), `${where}: ${file.name} needs an https source page (and an https url if any)`);
     }
     const used = new Set();
@@ -167,6 +168,8 @@ export function stepsFor(stage, enabled = {}) {
 }
 
 /** Matches picked/downloaded files to the stage's pins by name and size; the hash is checked by the recipe.
+ * A pin's `revisions` [{size, sha256}] are other accepted builds of the same file (the publisher re-uploaded it);
+ * `accept` lists the hashes whose size matches.
  * `unverified`: the user takes a newer file than the catalog pins; size and hash are not checked (sha256 ''),
  * and a single-file stage takes any name. The stored steps still run.
  * @param {any} stage @param {Iterable<File>} files @param {boolean} unverified */
@@ -180,8 +183,9 @@ export function selectFiles(stage, files, unverified = false) {
   });
   return stage.files.map(pin => {
     const matches = selected.filter(file => file.name === pin.name);
-    if (matches.length !== 1 || matches[0].size !== pin.size) throw Error(`${pin.name} is missing, duplicated, or has the wrong size.`);
-    return { ...pin, file: matches[0] };
+    const accept = [pin, ...pin.revisions ?? []].filter(rev => rev.size === matches[0]?.size).map(rev => rev.sha256);
+    if (matches.length !== 1 || !accept.length) throw Error(`${pin.name} is missing, duplicated, or has the wrong size.`);
+    return { ...pin, size: matches[0].size, accept, file: matches[0] };
   });
 }
 

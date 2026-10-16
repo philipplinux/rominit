@@ -1,4 +1,4 @@
-import { checksum } from '../hash.js';
+import { verifyPins } from '../hash.js';
 import * as fastboot from './fastboot.js';
 
 // Vendor fastboot package (.tgz, e.g. a Xiaomi stock ROM): one pinned archive; `flash` names an image inside it by file name.
@@ -97,8 +97,7 @@ export async function run(fb, { device, stage, files: [tgz], steps }, report, as
   // Same guard as the vendor's flash_all.sh: never install a package older than the phone's anti-rollback level.
   const anti = Number(await fb.getVariable('anti') ?? 0) || 0;
   if (anti > stage.anti) throw Error(`Phone anti-rollback level ${anti} is newer than this package (${stage.anti}). Nothing written.`);
-  const digest = tgz.sha256 && await checksum(tgz.file, fraction => report(`Checking SHA-256: ${tgz.name}`, fraction)); // '' = user skipped verification
-  if (digest !== tgz.sha256) throw Error(`SHA-256 mismatch: ${tgz.name}. Nothing written.`);
+  await verifyPins([tgz], report);
   const wanted = new Set(steps.filter(([verb]) => verb === 'flash').map(([, , name]) => name));
   const root = await navigator.storage.getDirectory();
   await root.removeEntry(DIR, { recursive: true }).catch(() => {});
