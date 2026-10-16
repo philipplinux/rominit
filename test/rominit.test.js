@@ -14,7 +14,11 @@ const noop = () => {};
 
 test('real catalog validates', () => {
   assert.deepEqual(errors, []);
-  assert.deepEqual(devices.map(d => d.codename).sort(), ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte']);
+  for (const codename of ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte', 'oriole']) assert.ok(devices.some(d => d.codename === codename), codename);
+  // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
+  const external = device('oriole');
+  assert.ok(external.roms[0].external && !external.roms[0].stages.length);
+  assert.match(problems(external, { device: 'oriole', roms: [{ ...external.roms[0], stages: device('laurel_sprout').roms[0].stages }] }).join('\n'), /external needs/);
 });
 
 test('validator rejects bad entries', () => {

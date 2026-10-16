@@ -1,0 +1,85 @@
+{
+  "device": "comet",
+  "roms": [
+    {
+      "id": "official-grapheneos",
+      "os": "GrapheneOS",
+      "name": "GrapheneOS",
+      "version": "2026100600",
+      "origin": "official",
+      "status": "stable",
+      "vetting": "scraped",
+      "rating": {
+        "checked": "2026-10-16",
+        "features": {
+          "flashing": "untested",
+          "usb_net": "untested",
+          "storage": "untested",
+          "sdcard": "n/a",
+          "battery": "untested",
+          "screen": "untested",
+          "touch": "untested",
+          "gpu": "untested",
+          "audio": "untested",
+          "camera": "untested",
+          "camera_flash": "untested",
+          "ir": "n/a",
+          "wifi": "untested",
+          "bluetooth": "untested",
+          "gps": "untested",
+          "nfc": "untested",
+          "calls": "untested",
+          "sms": "untested",
+          "data": "untested",
+          "fde": "works",
+          "otg": "untested",
+          "hdmi": "untested",
+          "fingerprint": "untested",
+          "accelerometer": "untested",
+          "magnetometer": "untested",
+          "light": "untested",
+          "proximity": "untested",
+          "hall": "untested",
+          "haptics": "untested",
+          "barometer": "untested"
+        },
+        "includes": {
+          "google_play": "optional",
+          "microg": "no",
+          "android_apps": "yes",
+          "phone_ui": "yes",
+          "root": "no",
+          "updates": "yes",
+          "encryption": "yes",
+          "relock": "yes",
+          "banking_apps": "no",
+          "ssh": "no",
+          "docker": "no"
+        },
+        "kernel": {
+          "version": "6.1",
+          "type": "downstream"
+        },
+        "base": "Android 17",
+        "released": "2026-10-06",
+        "support": "active"
+      },
+      "notes": "Hardened Android from the GrapheneOS project. Flashed with their own web installer; banking apps vary, see their usage guide.",
+      "source": "https://github.com/GrapheneOS",
+      "maintainer": null,
+      "homepage": "https://grapheneos.org/",
+      "external": {
+        "url": "https://grapheneos.org/install/web",
+        "why": "GrapheneOS publishes signed factory images without SHA-256 pins, so ROMinit cannot flash it yet. Use their official web installer (unlock, flash, relock)."
+      },
+      "stages": [],
+      "slots": "ab",
+      "requirements": [
+        "An unlockable (non-carrier-locked) unit with OEM unlocking on.",
+        "Unlocking and relocking each erase all data.",
+        "Relock the bootloader at the end (the installer has a button for it).",
+        "After install the yellow boot notice must show the key hash `af4d2c6e62be0fec54f0271b9776ff061dd8392d9f51cf6ab1551d346679e24c`."
+      ]
+    }
+  ]
+}

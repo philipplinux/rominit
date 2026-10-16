@@ -749,7 +749,7 @@ async function start() {
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
   const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
-    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${parent(r) ? '↳ ' : ''}${r.name} ${r.version} (${parent(r) ? 'superseded, ' : ''}${r.status}, ${r.vetting === 'scraped' ? 'scraped placeholder' : r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
+    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${parent(r) ? '↳ ' : ''}${r.name} ${r.version} (${parent(r) ? 'superseded, ' : ''}${r.external ? 'link-only, ' : ''}${r.status}, ${r.vetting === 'scraped' ? 'scraped placeholder' : r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
@@ -841,9 +841,10 @@ async function start() {
   const romSection = section('3 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
       rom && requirementsRow(rom),
       rom?.login && loginRow(rom.login),
-      romCards.length && h('label', { className: 'field-help' }, flashedElsewhere, ' I flashed this ROM another way (marked unconfirmed)'),
-      rom && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
-        : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length ? 'REQUIRED' : '');
+      rom?.external && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Link-only: ' }), ...rich(rom.external.why), ' ', link(rom.external.url, `Open the ${rom.os} installer`)),
+      (romCards.length || rom?.external) && h('label', { className: 'field-help' }, flashedElsewhere, rom?.external ? ` I flashed ${rom.name} with that installer` : ' I flashed this ROM another way (marked unconfirmed)'),
+      rom && !rom.external && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
+        : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length || rom?.external ? 'REQUIRED' : '');
   let romDone = 0, romUnmatched = false;
   romSection.addEventListener('stage-done', (/** @type {any} */ e) => {
     romUnmatched ||= !!e.detail?.unmatched;
@@ -858,14 +859,14 @@ async function start() {
     return !!progress.flashed?.includes(rom.id) || flashedElsewhere.checked;
   };
   const unconfirmed = () => { if (romSection.classList.contains('done') && flashOf() !== 'verified') romSection.querySelector(':scope > summary .badge').textContent = flashOf() === 'unmatched' ? 'COMPLETED · UNMATCHED IMAGE' : 'COMPLETED · UNCONFIRMED'; };
-  if (romCards.length) required(romSection, romFlashed, () => romSection.querySelector(':scope > summary').after(
+  if (romCards.length || rom?.external) required(romSection, romFlashed, () => romSection.querySelector(':scope > summary').after(
     h('p', { className: 'congrats' }, h('strong', { textContent: `Congratulations, ${rom.name} is on your ${device.name}!` }),
       ' Give it a few minutes for the first boot. ', h('a', { href: '#', textContent: 'Tell others how it went', onclick(/** @type {Event} */ e) {
         e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
       '. Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }), '.')));
   // Scraped ROM: its info and flash steps are placeholders until checked.
   if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark());
-  if (romCards.length) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
+  if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   main.append(
     h('section', { className: 'intro' },
       h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {

@@ -70,7 +70,9 @@ export function problems(device, romFile) {
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.
     need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);
-    need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
+    need(rom.os && rom.version && (rom.stages?.length || rom.external), `${at}: os, version and stages are required`);
+    // Link-only: the publisher's own installer does the flash (no pinned files yet). Kept as a marker to revisit with a real recipe.
+    need(rom.external === undefined || (rom.external.url?.startsWith('https://') && rom.external.why && !rom.stages?.length), `${at}: external needs an https url and why, and no stages`);
     // The id names a ROM line and stays put across small updates (ratings, comments and tests hang off it); a big jump is a new entry that supersedes the old one from the same publisher file.
     // <publisher>-<line>: the same line from two builders stays two entries (philipplinux-pmos-server vs official-pmos-mainline).
     const publisher = rom.origin === 'official' ? 'official' : rom.origin === 'stock' ? device.vendor : rom.maintainer?.name;

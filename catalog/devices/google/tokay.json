@@ -1,0 +1,40 @@
+{
+  "codename": "tokay",
+  "vendor": "Google",
+  "name": "Pixel 9",
+  "series": "Pixel",
+  "family": "Pixel 9",
+  "variant": "Pixel 9",
+  "models": [
+    "G2YBB",
+    "G1B60",
+    "GUR25"
+  ],
+  "notes": "Carrier-locked units (e.g. some US carrier models) may never allow OEM unlocking; buy an unlocked one.",
+  "detect": {
+    "fastboot": {
+      "product": "tokay"
+    }
+  },
+  "modes": {
+    "fastboot": "Power off. Hold Volume Down and press Power until \"Fastboot Mode\" shows with a red triangle, then plug in USB. Do not press Start."
+  },
+  "unlock": {
+    "text": "OEM unlocking must be on; the installer then unlocks over USB (wipes the phone).",
+    "url": "https://grapheneos.org/install/web#enabling-oem-unlocking",
+    "steps": [
+      "Back up everything. Unlocking erases the phone.",
+      "Settings › About phone: tap Build number until Developer options turn on.",
+      "Settings › System › Developer options: OEM unlocking on (needs internet once).",
+      "The installer unlocks the bootloader; confirm on the phone with the volume keys and Power."
+    ],
+    "hints": [
+      "Update the stock OS first so the firmware is current.",
+      "Use a direct USB-C port, no hub, and a good cable."
+    ]
+  },
+  "recovery": {
+    "text": "Back to stock: Google's flasher at flash.android.com. Before it, with the bootloader unlocked, run `fastboot erase avb_custom_key` so the GrapheneOS key is no longer trusted.",
+    "url": "https://grapheneos.org/install/web#replacing-grapheneos-with-the-stock-os"
+  }
+}
