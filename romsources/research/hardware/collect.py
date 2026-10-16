@@ -15,7 +15,8 @@ targets.csv columns: codename,vendor,name,models,gsmarena_url,variant
                 (e.g. "845" for the Snapdragon S9 variants)
 Resume: every fetched page lives in raw/ and is never fetched again; rerun after a block.
 manual.json: per-codename overrides for phones GSMArena lacks (vendor/Nura data) and fixes.
-match column: url-cited | model-exact | name-exact | name-fuzzy | manual | none.
+match column: url-cited | model-exact | name-exact | name-fuzzy | manual | not-on-gsmarena | none.
+Offline: `--selftest` checks name matching against the cached brand listings.
 Stops on HTTP 429/403 or a Turnstile page (Blocked) and writes what it has.
 """
 import csv, json, os, re, sys, time, urllib.request, urllib.error
@@ -26,7 +27,7 @@ RAW = os.path.join(HERE, "raw")
 UA = "Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0"
 DELAY = 9
 CHECKED = "2026-10-16"
-OFFLINE = "--offline" in sys.argv
+OFFLINE = "--offline" in sys.argv or "--selftest" in sys.argv
 _last = [0.0]
 
 
@@ -90,19 +91,122 @@ def norm(s):
     return re.sub(r"[^a-z0-9+]", "", s.lower())
 
 
-def lookup(brand, name):
-    idx = brand_index(brand)
-    ex = [u for u, n in idx if norm(n) == norm(name)]
-    if not ex:  # "Mi A1 (Mi 5X)" style alias suffix
-        ex = [u for u, n in idx if norm(re.sub(r"\(.*?\)", "", n)) == norm(name)]
-    if len(ex) == 1:
-        return "https://www.gsmarena.com/" + ex[0], "name-exact", ""
-    if len(ex) > 1:
-        return None, "none", "ambiguous exact: " + ", ".join(ex)
-    fz = [(u, n) for u, n in idx if norm(name) in norm(n)]
-    if len(fz) == 1:
-        return "https://www.gsmarena.com/" + fz[0][0], "name-fuzzy", "fuzzy: " + fz[0][1]
-    return None, "none", ("candidates: " + "; ".join(u for u, _ in fz[:6])) if fz else "not in brand listing"
+# vendor slugs the wikis use -> GSMArena brand(s) to search, in order (honor falls back to huawei when its listing isn't cached)
+BRAND_ALIAS = {"redmi": ["xiaomi"], "poco": ["xiaomi"], "wingtech": ["xiaomi"], "lge": ["lg"], "honor": ["honor", "huawei"],
+               "huawei": ["huawei", "honor"], "oneplus": ["oneplus"], "asus": ["asus"], "nothing": ["nothing"]}
+# Nexus devices live under their maker on GSMArena (longest prefix wins)
+NEXUS_MAKER = {"nexus 6p": "huawei", "nexus 5x": "lg", "nexus 5": "lg", "nexus 4": "lg", "nexus 6": "motorola", "nexus 7": "asus",
+               "nexus 9": "htc", "nexus 10": "samsung", "nexus player": "asus", "galaxy nexus": "samsung"}
+# not phones/tablets GSMArena lists (boards, TV boxes, handhelds, emulators)
+NOT_GSMARENA = re.compile(r"shield tv|shield portable|jetson|jamboard|\badt-?\d|radxa|odroid|banana pi|\bodin|\bthor\b|amlogic|droidlogic|s905|"
+                          r"android tv|chromecast|tv box|freebox|nintendo|switch v|retroid|emulator|sdmc|dynalink|onn\.|nexus player", re.I)
+TAIL = re.compile(r"\s+(?:4G|LTE|Wi-?Fi|GSM|5G|International|Global|Series|by \w+)$", re.I)
+
+
+def brands_for(vendor, name):
+    low = name.lower()
+    if vendor == "google":
+        for k in sorted(NEXUS_MAKER, key=len, reverse=True):
+            if low.startswith(k):
+                return [NEXUS_MAKER[k]]
+    return BRAND_ALIAS.get(vendor, [vendor])
+
+
+def variants(vendor, name):
+    """Candidate listing names, most literal first: [(text, loose)]; loose = a 5G suffix was dropped (a different phone may match)."""
+    strip = {w for w in (vendor, *BRAND_ALIAS.get(vendor, [])) if w not in ("redmi", "poco")}
+    bases = [name.strip()]
+    for w in strip:
+        r = re.sub(r"^%s\s+" % re.escape(w), "", bases[0], flags=re.I)
+        if r != bases[0]:
+            bases.append(r)
+    out = []
+    for b in bases:
+        out.append((b, False))
+        if not re.search(r"\(\s*\d{4}\s*\)", b):  # "(2015)" tells generations apart: never drop it
+            b = re.sub(r"\s*[(\[].*?[)\]]", "", b).strip()  # parentheses/brackets first: "(4G/5G)" must not be split
+        out.append((b, False))
+        b = re.split(r"\s*[/&]\s*", b)[0].strip()
+        out.append((b, False))
+        loose = False
+        while True:
+            m = TAIL.search(b)
+            if not m:
+                break
+            loose |= m.group(0).strip().lower() == "5g"
+            b = b[:m.start()].strip()
+            out.append((b, loose))
+    more = []
+    for t, lo in out:
+        if vendor in ("redmi", "poco") and t and not re.match(r"(redmi|poco|mi\b|xiaomi)", t, re.I):
+            t = re.sub(r"^RN", "Note ", t)
+            more.append(("Redmi " + t if re.match(r"note|\d", t, re.I) else t, lo))
+            more.append(("Poco " + t, lo))
+        elif t and not t.lower().startswith(vendor) and re.match(r"\d", t):
+            more.append((vendor.title() + " " + t, lo))
+    seen, res = set(), []
+    for t, lo in out + more:
+        if t and norm(t) not in seen:
+            seen.add(norm(t))
+            res.append((t, lo))
+    return res
+
+
+def _unparen(n):
+    return re.sub(r"\s*\(.*?\)", "", n)
+
+
+def _tok_prefix(v, n):
+    """norm(v) is a whole-token prefix of listing name n ("note20ultra" in "Note20 Ultra 5G", not "a5" in "A50")."""
+    nv, acc, t = norm(v), 0, set()
+    for w in re.findall(r"[a-z0-9+]+", _unparen(n).lower()):
+        acc += len(w)
+        t.add(acc)
+    return norm(_unparen(n)).startswith(nv) and len(nv) in t
+
+
+def lookup(vendor, name):
+    vs = variants(vendor, name)
+    cand, amb, empty = [], "", True
+    for brand in brands_for(vendor, name):
+        idx = brand_index(brand)
+        empty &= not idx
+        for v, loose in vs:  # exact normalized match of a variant (listing "(alias)" suffix ignored)
+            ex = list(dict.fromkeys(u for u, n in idx if norm(n) == norm(v)))  # literal beats "(china)"-style siblings
+            ex = ex or list(dict.fromkeys(u for u, n in idx if norm(_unparen(n)) == norm(v)))
+            if len(ex) == 1:
+                return "https://www.gsmarena.com/" + ex[0], "name-fuzzy" if loose else "name-exact", ("as '%s'" % v) if loose else ""
+            if len(ex) > 1 and not amb:
+                amb = "ambiguous exact: " + ", ".join(ex)
+        for v, _ in vs:  # unique whole-token prefix of a listing name
+            fz = list(dict.fromkeys((u, n) for u, n in idx if _tok_prefix(v, n)))
+            if len(fz) == 1:
+                return "https://www.gsmarena.com/" + fz[0][0], "name-fuzzy", "fuzzy: " + fz[0][1]
+            cand += [u for u, _ in fz]
+    if amb:
+        return None, "none", amb
+    if cand:
+        return None, "none", "candidates: " + "; ".join(dict.fromkeys(cand[:6]))
+    return None, "none", "brand listing not cached/empty" if empty else "not in brand listing"
+
+
+def selftest():
+    cases = [("samsung", "Galaxy A51 4G", "samsung_galaxy_a51-"), ("samsung", "Galaxy Tab S 10.5 Wi-Fi", "samsung_galaxy_tab_s_10_5-"), ("lg", "G2 (International)", "lg_g2-"),
+             ("xiaomi", "Xiaomi 11T", "xiaomi_11t-"), ("xiaomi", "Xiaomi MI9", "xiaomi_mi_9-"),
+             ("redmi", "Redmi Note 9s/Pro(india)", "xiaomi_redmi_note_9s-"), ("google", "Nexus 6P", "huawei_nexus_6p-"),
+             ("google", "Nexus 5X", "lg_nexus_5x-"), ("google", "Nexus 6", "motorola_nexus_6-"), ("google", "Nexus 9 (LTE)", "htc_nexus_9-"),
+             ("lenovo", "Lenovo A6000", "lenovo_a6000-"), ("zte", "ZTE AXON7", "zte_axon_7-"), ("oneplus", "OnePlus 5", "oneplus_5-")]
+    bad = []
+    for v, n, stem in sorted(cases):
+        u, m, note = lookup(v, n)
+        if not (u and ("/" + stem) in u and m in ("name-exact", "name-fuzzy")):
+            bad.append((v, n, stem, u, m, note))
+    for b in bad:
+        print("FAIL", b)
+    assert lookup("samsung", "Galaxy S III (AT&T)")[:2] == (None, "none")  # ambiguous stays none
+    assert not NOT_GSMARENA.search("Pixel 8a") and NOT_GSMARENA.search("Shield TV (2019) [Android TV]")
+    assert not bad, "%d selftest cases failed" % len(bad)
+    print("selftest ok: %d cases" % len(cases))
 
 
 # ---------- spec parsing ----------
@@ -194,10 +298,10 @@ def android(os_):
     if not m:
         return "", "", ""
     launch = m.group(1)
-    mx = re.search(r"(?:upgradable to|up to)\s*(?:Android\s*)?(\d+(?:\.\d+)?)", os_)
+    mx = re.search(r"upgradable to\s*(?:Android\s*)?(\d+(?:\.\d+)?)|up to\s*Android\s*(\d+(?:\.\d+)?)", os_)  # not "up to 7 major OS updates"
     parts = [p.strip() for p in os_.split(",")]
     skin = next((p for p in parts[1:] if not re.match(r"(upgradable|up to|Android|planned|\d)", p, re.I)), "")
-    return launch, mx.group(1) if mx else launch, skin
+    return launch, (mx.group(1) or mx.group(2)) if mx else launch, skin
 
 
 def num(x):
@@ -275,6 +379,8 @@ def nura_soc(codename):
 
 
 def main():
+    if "--selftest" in sys.argv:
+        return selftest()
     targets = sys.argv[sys.argv.index("--targets") + 1] if "--targets" in sys.argv else os.path.join(HERE, "targets.csv")
     rows = list(csv.DictReader(open(targets, encoding="utf-8")))
     manual = json.load(open(os.path.join(HERE, "manual.json"))) if os.path.exists(os.path.join(HERE, "manual.json")) else {}
@@ -284,12 +390,19 @@ def main():
             c = t["codename"]
             url, match, note = (t.get("gsmarena_url") or "").strip(), "url-cited", ""
             if not url and t.get("vendor") and not (c in manual and manual[c].get("no_gsmarena")):
-                url, match, note = lookup(t["vendor"], t["name"])
+                if NOT_GSMARENA.search(t["vendor"] + " " + t["name"]):
+                    url, match, note = "", "not-on-gsmarena", "board/TV box/handheld/emulator"
+                elif t["name"].strip():
+                    url, match, note = lookup(t["vendor"], t["name"])
+                else:
+                    url, match, note = "", "none", "no name"
             h = fetch(url) if url else None
             if h:
                 rec = build(t, h, url, match, note, t.get("variant"))
             else:
-                rec = {"codename": c, "name": t["name"], "gsmarena_url": "", "match": "none", "match_note": note, "checked": CHECKED,
+                if url:  # resolved offline but page not cached: the next online run only fetches these
+                    note = (note + "; " if note else "") + "page not cached"
+                rec = {"codename": c, "name": t["name"], "gsmarena_url": url or "", "match": match, "match_note": note, "checked": CHECKED,
                        "soc_source": "", "conflicts": [], "models": []}
             if c in manual:
                 m = dict(manual[c]); m.pop("no_gsmarena", None)
