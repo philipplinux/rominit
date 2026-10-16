@@ -881,7 +881,8 @@ async function start() {
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
-  const section = (title, hint, open, body, badge = '') => h('details', { className: 'page-section', open },
+  // Not needed for this phone / ROM counts as done (green, dashed on the rail).
+  const section = (title, hint, open, body, badge = '') => h('details', { className: `page-section${badge === 'NOT REQUIRED' ? ' skipped' : ''}`, open },
     h('summary', {}, h('span', { textContent: title }), badge && h('b', { className: 'badge', textContent: badge }), h('small', { textContent: hint })), ...body);
   /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
   const cards = (r, which) => r.stages.flatMap((/** @type {any} */ stage, /** @type {number} */ i) =>
@@ -1061,7 +1062,7 @@ function progressRail(sections) {
   };
   const paint = () => {
     const next = sections.findIndex(sec => !sec.classList.contains('done') && sec.classList.contains('required'));
-    marks.forEach((mark, i) => { mark.className = `rail-mark${sections[i].classList.contains('done') ? ' done' : i === next ? ' next' : ''}`; });
+    marks.forEach((mark, i) => { const c = sections[i].classList; mark.className = `rail-mark${c.contains('done') ? ' done' : c.contains('skipped') ? ' done skipped' : i === next ? ' next' : ''}`; });
   };
   // Sections flip their own done / required classes; opening or closing one moves the rest, so re-place on resize too.
   const watch = new MutationObserver(paint);

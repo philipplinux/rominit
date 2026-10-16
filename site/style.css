@@ -517,6 +517,8 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .rail-fold:hover { border-color: var(--amber); color: var(--amber); }
 .rail-mark.done a { color: var(--teal); }
 .rail-mark.done b { border-color: var(--teal); background: var(--teal); color: var(--bg); }
+.rail-mark.skipped b { border-style: dashed; background: var(--bg); color: var(--teal); }
+.page-section.skipped .badge { border-color: var(--teal); color: var(--teal); }
 .rail-mark.next a { color: var(--amber); }
 .rail-mark.next b { border-color: var(--amber); color: var(--amber); box-shadow: 0 0 0 4px rgb(230 195 154 / 18%); }
 .rail-mark a:hover b { border-color: #ece4d4; }
