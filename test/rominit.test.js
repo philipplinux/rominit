@@ -77,6 +77,14 @@ test('fastboot: a timed-out write is retried twice, then stops; other errors sto
   assert.equal(bad.calls(), 1);
 });
 
+test('failure logs lose device serial numbers', async () => {
+  const { redact } = await import('../src/debug.js');
+  const log = redact('USB device: Google Android (18d1:d00d) serial c179ce7a1e3a\nUSB disconnect event (Android serial c179ce7a1e3a)\n← fastboot.getVariable("serialno") = "c179ce7a1e3a" (2 ms)');
+  assert.ok(!log.includes('c179ce7a1e3a'), log);
+  assert.match(log, /18d1:d00d/);
+  assert.equal(redact('x'.repeat(300_000)).length, 200_000);
+});
+
 test('fastboot getvar: trims, FAIL means missing, times out instead of hanging', async () => {
   const { patientGetvar } = await import('../src/protocols/usb.js');
   assert.equal(await patientGetvar(async () => ({ text: ' b \n' }))('current-slot'), 'b');

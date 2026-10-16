@@ -36,3 +36,8 @@ export function traced(session, log, name) {
     },
   });
 }
+
+/** A debug log fit to send: device serial numbers removed (USB serial, getvar serialno), last 200 000 characters. @param {string} text */
+export function redact(text) {
+  return text.replace(/(serial(?:no)?"?\)? = )"[^"]*"/gi, '$1"‹removed›"').replace(/(serial[ :=]+)[^\s)",]+/gi, '$1‹removed›').slice(-200_000);
+}

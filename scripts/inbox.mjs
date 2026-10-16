@@ -1,12 +1,13 @@
-// Inboxes for an LLM (or a person) to sort: `benchmarks` (submitted phone tests) and `reports` (page reports).
+// Inboxes for an LLM (or a person) to sort: `benchmarks` (submitted phone tests), `reports` (page reports) and
+// `failures` (debug logs of stages that stopped: recipe-fix when the catalog steps need a change, user-side for cable/driver/mode).
 //   npm run inbox -- [--local] <inbox>                              unsorted items, one JSON object per line
 //   npm run inbox -- [--local] sort <inbox> <ref> <label> <summary>   file one (labels: see LABELS)
 // Benchmark bodies carry the script output: "inconclusive" lines are script fixes, "@pkgs" shows what the ROM ships,
 // and differences between the card and the catalog rating are catalog updates.
 import { execFileSync } from 'node:child_process';
 
-const INBOXES = ['benchmarks', 'reports'];
-const LABELS = ['script-fix', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other'];
+const INBOXES = ['benchmarks', 'reports', 'failures'];
+const LABELS = ['script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other'];
 const args = process.argv.slice(2), where = args[0] === '--local' ? (args.shift(), '--local') : '--remote';
 const quote = (/** @type {string} */ s) => `'${s.replaceAll("'", "''")}'`;
 const sql = (/** @type {string} */ command) => JSON.parse(execFileSync('npx', ['wrangler', 'd1', 'execute', 'rominit', where, '--json', '--command', command], { encoding: 'utf8', maxBuffer: 64 << 20 }))[0].results;

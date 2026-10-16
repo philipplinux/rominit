@@ -1,10 +1,10 @@
-// Admin inbox. GET: unsorted page reports, and phone tests split into new / review / approved / rejected.
-// POST {inbox: 'reports', ref, label}: file a report (it leaves the inbox; scripts/inbox.mjs files from the CLI).
+// Admin inbox. GET: unsorted page reports, unsorted flash failures, and phone tests split into new / review / approved / rejected.
+// POST {inbox: 'reports' | 'failures', ref, label}: file a report or failure (it leaves the inbox; scripts/inbox.mjs files from the CLI).
 // POST {inbox: 'benchmarks', ref, action: new | review | approve | reject}: approved results show on the ROM page.
 import { userOf } from '../_lib/auth.js';
 import { json } from '../_lib/api.js';
 
-const LABELS = ['script-fix', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other'];
+const LABELS = ['script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other'];
 /** @param {any} env @param {Request} request */
 const isAdmin = async (env, request) => (await userOf(env, request))?.roles.some(r => r.role === 'admin');
 
@@ -18,7 +18,8 @@ export async function onRequestGet({ request, env }) {
     FROM bench_runs b LEFT JOIN triage t ON t.inbox = 'benchmarks' AND t.ref = b.code WHERE b.submitted IS NOT NULL ORDER BY b.submitted DESC LIMIT 300`).all();
   const benchmarks = { new: [], review: [], approved: [], rejected: [] };
   for (const run of runs.results) if (['new', 'review'].includes(run.state) || benchmarks[run.state].length < 50) benchmarks[run.state].push(run);
-  return json({ reports: reports.results, benchmarks, labels: LABELS });
+  const failures = await env.DB.prepare("SELECT f.id, f.rom, f.stage, f.error, f.log, f.at FROM flash_failures f LEFT JOIN triage t ON t.inbox = 'failures' AND t.ref = CAST(f.id AS TEXT) WHERE t.ref IS NULL ORDER BY f.at DESC LIMIT 200").all();
+  return json({ reports: reports.results, benchmarks, failures: failures.results, labels: LABELS });
 }
 
 /** @param {{request:Request, env:any}} context */
@@ -34,7 +35,7 @@ export async function onRequestPost({ request, env }) {
       .bind(ref, ...{ approve: ['catalog-update', 'approved: shown on the ROM page'], reject: ['other', 'rejected on the site'] }[action]).run();
     return json({ ok: true });
   }
-  if (inbox !== 'reports' || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
-  await env.DB.prepare("INSERT OR REPLACE INTO triage (inbox, ref, label, summary) VALUES ('reports', ?1, ?2, 'filed on the site')").bind(ref, label).run();
+  if (!['reports', 'failures'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
+  await env.DB.prepare("INSERT OR REPLACE INTO triage (inbox, ref, label, summary) VALUES (?1, ?2, ?3, 'filed on the site')").bind(inbox, ref, label).run();
   return json({ ok: true });
 }

@@ -1,6 +1,6 @@
 import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
-import { summarize, traced } from '../src/debug.js';
+import { redact, summarize, traced } from '../src/debug.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
@@ -484,9 +484,9 @@ function stageCard(device, stage, n, count, key) {
   const debugText = h('pre', { className: 'debug-log' });
   const started = Date.now();
   const dbg = (/** @type {string} */ line) => { debugText.textContent += `+${((Date.now() - started) / 1000).toFixed(3)}s ${line}\n`; };
-  dbg(`ROMinit ${location.origin} · ${navigator.userAgent} · host ${host}${supported ? '' : ' · NO WEBUSB'}`);
+  dbg(`ROMinit ${new URL(import.meta.url).pathname}${new URL(import.meta.url).search} · ${navigator.userAgent} · host ${host} · ${navigator.language} · ${navigator.hardwareConcurrency} cores${supported ? '' : ' · NO WEBUSB'}`);
   dbg(`${device.codename} · ${key} · stage ${n}/${count} "${stage.title}" · recipe ${stage.recipe} · mode ${stage.mode}`);
-  const debugBox = h('details', { className: 'field-help debug-box' }, h('summary', { textContent: 'Debug log (copy it into a report if something fails)' }), debugText,
+  const debugBox = h('details', { className: 'field-help debug-box' }, h('summary', { textContent: 'Debug log (sent to ROMinit if the stage stops, without serial numbers)' }), debugText,
     h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy debug log', async onclick() {
       await navigator.clipboard?.writeText(debugText.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } }));
 
@@ -528,6 +528,16 @@ function stageCard(device, stage, n, count, key) {
   };
   const assertSession = () => {
     if (st.lost || !st.session) throw Error(`USB session lost. ${again}`);
+  };
+  /** A stopped stage sends its debug log to the admin inbox on its own, so the recipe can be fixed. No serial numbers.
+   */
+  const sendFailure = () => {
+    const context = { rom: key, stage: n, recipe: stage.recipe, mode: stage.mode, host, unverified: unverified.checked,
+      files: st.files?.map(f => ({ pin: f.name, size: f.file.size, sha256: f.sha256 || 'unverified' })), steps: stage.steps, online: navigator.onLine };
+    const log = redact(`${JSON.stringify(context)}\n${debugText.textContent}`);
+    fetch('./api/failures', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ rom: key, stage: n, error: status.textContent?.slice(0, 2000), log }) })
+      .then(r => { if (r.ok) dbg('Failure log sent to ROMinit (serial numbers removed) so the recipe can be fixed.'); }, () => {});
   };
   const pick = (/** @type {File[]} */ files) => {
     picked = files;
@@ -587,6 +597,7 @@ function stageCard(device, stage, n, count, key) {
       dbgError(error);
       debugBox.open = true;
       report(`STOPPED: ${explain(error)} ${again[0].toUpperCase()}${again.slice(1)}`);
+      sendFailure();
     } finally { st.busy = false; update(); }
   });
   risk.addEventListener('change', update);
@@ -683,13 +694,13 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: three folders, always shown with their counts: page reports (by section), phone tests, device searches. */
+/** Admin inbox: four folders, always shown with their counts: page reports (by section), phone tests, flash failures, device searches. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, labels } = await r.json();
+  const { reports, benchmarks, failures = [], labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -736,6 +747,13 @@ async function inboxView(index) {
       [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
         h('summary', { className: 'field-label', textContent: `${title} · ${benchmarks[state].length}` }),
         h('ol', { className: 'comments' }, ...benchmarks[state].map(benchItem)))), Object.values(benchmarks).flat().length),
+    folder('Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
+      const [codename, id] = String(x.rom).split('/');
+      const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`, textContent: `${x.rom} · stage ${x.stage}` })),
+        h('small', { textContent: ` ${x.at} UTC` }), h('p', { className: 'field-help flash-warn', textContent: x.error }),
+        h('details', {}, h('summary', { textContent: 'debug log' }), h('pre', { className: 'bench-output', textContent: x.log })));
+      return li.append(fileAs('failures', String(x.id), li)), li;
+    }))]),
     folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
   return card;
