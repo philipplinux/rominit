@@ -23,7 +23,7 @@ export async function onRequestPost({ request, env, params }) {
   const output = (await request.text()).slice(0, 131072);
   if (!output.trim()) { // the link to the phone failed before the script ran; tell the page too
     await env.DB.prepare("UPDATE bench_runs SET output = '@ failed no output' WHERE code = ?1 AND (output IS NULL OR output LIKE '@ failed%')").bind(params.code).run();
-    return text('ROMinit: nothing came from the phone. Check the USB cable (or the Wi-Fi IP) and that SSH/ADB connects, then run the same command again.\n', 400);
+    return text('ROMinit: nothing came from the phone. Check the USB cable (or the Wi-Fi IP) and that SSH/ADB connects (ADB says unauthorized: tap Allow on the phone; freshly flashed: turn USB debugging on again), then run the same command again.\n', 400);
   }
   if (!/^@ script /m.test(output)) return text('ROMinit: that does not look like test output; nothing saved.\n', 400);
   await env.DB.prepare('UPDATE bench_runs SET output = ?2 WHERE code = ?1').bind(params.code, output).run();

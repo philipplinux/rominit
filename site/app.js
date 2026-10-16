@@ -351,7 +351,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
       h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
       h('p', { className: 'field-help', textContent: linux ? `Paste it into a terminal on your computer. When asked, type the password ${loginPassword || 'from above'}. Test code ${code}, valid for an hour.`
-        : `Test code ${code}, valid for an hour. No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.` }),
+        : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.` }),
       waiting);
     const started = Date.now();
     const poll = async () => {

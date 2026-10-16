@@ -124,7 +124,7 @@
               "lineage-21.0-20240620-UNOFFICIAL-hero2lte.zip"
             ]
           ],
-          "done": "TWRP installed the zip. Tap Reboot › System; the first boot takes a few minutes."
+          "done": "TWRP installed the zip. Tap Reboot › System; the first boot takes a few minutes. For the phone test afterwards, turn USB debugging on again (Settings › About phone › tap Build number 7 times, then Developer options › USB debugging) and tap Allow when the phone asks to trust this computer."
         }
       ],
       "slots": "single",
@@ -257,7 +257,7 @@
               "lineage-20.0-20250628-UNOFFICIAL-hero2lte.zip"
             ]
           ],
-          "done": "TWRP installed the zip. Tap Reboot › System; the first boot takes a few minutes."
+          "done": "TWRP installed the zip. Tap Reboot › System; the first boot takes a few minutes. For the phone test afterwards, turn USB debugging on again (Settings › About phone › tap Build number 7 times, then Developer options › USB debugging) and tap Allow when the phone asks to trust this computer."
         }
       ],
       "slots": "single",
