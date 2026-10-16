@@ -24,3 +24,4 @@ romvault/
 # mcp-builder: local symlink to the parked Anthropic skill (~/.agents/skill-library/anthropic/mcp-builder)
 .agents/skills/mcp-builder
 .claude/skills/mcp-builder
+rominit-files/
