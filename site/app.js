@@ -317,7 +317,8 @@ function parseBench(output) {
  */
 function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /** @type {string|null} */ (null)) {
   const linux = rom.os === 'postmarketOS';
-  const [loginUser, loginPassword] = (rom.login ?? 'user / ').split(' / ');
+  const [defaultUser, defaultPassword] = (rom.login ?? 'user / ').split(' / ');
+  let loginUser = defaultUser, loginPassword = defaultPassword; // the login box below can change both
   let sshHost = `${loginUser}@<phone address>`; // last USB / Wi-Fi target, reused in the password hint
   const box = h('div', { className: 'bench' });
   const start = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Start a phone test' });
@@ -356,26 +357,36 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
     const ip = h('input', { type: 'text', className: 'bench-target', inputMode: 'decimal', spellcheck: false, placeholder: '192.168.1.50',
       value: (() => { try { return localStorage.getItem('rominit.phoneIp') ?? ''; } catch { return ''; } })() });
     const ipRow = h('label', { className: 'field-help', hidden: true }, 'Phone IP address (Settings → Wi-Fi, or `ip a` on the phone): ', ip);
+    // Changed login? Typed here, kept in this browser only: the user goes into the command, the password only into the hint.
+    const userBox = h('input', { type: 'text', className: 'bench-target', spellcheck: false, autocomplete: 'username', value: loginUser });
+    const passBox = h('input', { type: 'text', className: 'bench-target', spellcheck: false, autocomplete: 'off', value: loginPassword });
+    const loginRow = h('div', { className: 'field-help bench-login' }, h('label', {}, 'User ', userBox), ' ', h('label', {}, 'Password ', passBox),
+      h('small', { textContent: ' default from the ROM; change it if you set your own' }));
+    const hint = h('p', { className: 'field-help' });
     const command = h('code', { className: 'bench-command' });
     const render = () => {
+      loginUser = userBox.value.trim() || defaultUser; loginPassword = passBox.value;
+      loginRow.hidden = !(way === 'usb' || way === 'wifi');
       const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh';
       if (way === 'usb' || way === 'wifi') sshHost = `${loginUser}@${way === 'usb' ? '172.16.42.1' : ip.value.trim() || '<phone IP>'}`;
       const prefix = way === 'usb' || way === 'wifi' ? `${ssh}${sshHost} ` : way;
       ipRow.hidden = way !== 'wifi';
+      hint.textContent = linux ? `Paste it into a terminal on your computer. ${way ? `When asked, type the password ${loginPassword || 'you set'}. ` : ''}Test code ${code}, valid for an hour. Reflashed the phone and SSH says REMOTE HOST IDENTIFICATION HAS CHANGED? The new install has a new key: run ssh-keygen -R 172.16.42.1 (on Wi-Fi: the phone IP), then the command again.`
+        : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.`;
       command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -sS --data-binary @- ${url}`;
     };
     ip.addEventListener('input', () => { try { localStorage.setItem('rominit.phoneIp', ip.value.trim()); } catch { /* private window */ } render(); });
     const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
       onclick(/** @type {Event} */ e) { way = prefix; for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render(); } })));
+    for (const el of [sound, userBox, passBox]) el.addEventListener('input', render);
     sound.addEventListener('change', render); render();
     const waiting = h('div', { className: 'bench-wait' }, h('span', { className: 'breath', ariaHidden: 'true' }), h('span', { textContent: 'Waiting for your phone… breathe in, breathe out.' }));
     box.replaceChildren(
-      h('p', { className: 'field-label', textContent: linux ? 'How is the phone connected?' : 'Run this, wherever your phone has a shell' }), tabs, ipRow,
+      h('p', { className: 'field-label', textContent: linux ? 'How is the phone connected?' : 'Run this, wherever your phone has a shell' }), tabs, ipRow, linux ? loginRow : '',
       h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
       h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
-      h('p', { className: 'field-help', textContent: linux ? `Paste it into a terminal on your computer. When asked, type the password ${loginPassword || 'from above'}. Test code ${code}, valid for an hour. Reflashed the phone and SSH says REMOTE HOST IDENTIFICATION HAS CHANGED? The new install has a new key: run ssh-keygen -R 172.16.42.1 (on Wi-Fi: the phone IP), then the command again.`
-        : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.` }),
+      hint,
       waiting);
     const started = Date.now();
     const poll = async () => {
@@ -455,7 +466,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
         return h('span', { className: `feature ${found ? 'works' : 'untested'}`, title: claim && (claim === 'yes') !== found ? `catalog says ${claim}` : '',
           textContent: `${found ? '✓' : '✗'} ${LABEL[key] ?? key}${claim && (claim === 'yes') !== found ? ' *' : ''}` }); })) : '';
     // Default passwords are public: offer the change, typed on the phone so it never reaches this page.
-    const password = rom.login && linux ? h('div', { className: 'hints' }, h('strong', { textContent: 'Change the default password' }),
+    const password = rom.login && linux && loginPassword === defaultPassword ? h('div', { className: 'hints' }, h('strong', { textContent: 'Change the default password' }),
       h('p', { className: 'field-help', textContent: `${loginUser} / ${loginPassword} is printed on this page for everyone. Change it now; you type the new one on the phone (or in your SSH session), so it never reaches ROMinit.` }),
       h('code', { className: 'bench-command', textContent: 'passwd' }), ' on the phone, or ',
       h('code', { className: 'bench-command', textContent: `ssh -t ${sshHost} passwd` })) : '';

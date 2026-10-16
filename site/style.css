@@ -401,6 +401,9 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .bench-tabs button { border: 1px solid var(--line); background: var(--panel); padding: .3rem .7rem; cursor: pointer; }
 .bench-tabs [aria-selected=true] { border-color: var(--teal); color: var(--teal); }
 .bench-run { display: flex; gap: .5rem; align-items: stretch; }
+.bench-login { display: flex; flex-wrap: wrap; gap: .4rem .9rem; align-items: center; }
+.bench-login[hidden] { display: none; }
+.bench-login input { width: 9rem; }
 .bench-command { flex: 1; min-width: 0; overflow-wrap: anywhere; padding: .6rem; background: var(--panel-raised); border: 1px solid var(--line); font-size: .8rem; }
 .bench-wait { display: flex; gap: .8rem; align-items: center; color: var(--muted); }
 .breath { width: 18px; height: 18px; border-radius: 50%; background: var(--teal); animation: breath 4s ease-in-out infinite; }
