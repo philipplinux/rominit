@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, folderFiles, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 import { summarize, traced } from '../src/debug.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
@@ -463,6 +463,27 @@ const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → $
   reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
 
 /** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count @param {string} key `<codename>/<rom id>` */
+/** The folder "Check Downloads folder" reads, kept in IndexedDB so later visits and retries need one click, no picker. */
+const savedFolder = (/** @type {any} */ value) => new Promise((resolve, reject) => {
+  const open = indexedDB.open('rominit', 1);
+  open.onupgradeneeded = () => open.result.createObjectStore('kv');
+  open.onerror = () => reject(open.error);
+  open.onsuccess = () => {
+    const store = open.result.transaction('kv', value === undefined ? 'readonly' : 'readwrite').objectStore('kv');
+    const r = value === undefined ? store.get('folder') : value === null ? store.delete('folder') : store.put(value, 'folder');
+    r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
+  };
+});
+/** Every file in the remembered folder; asks for one (once) when there is none or access was revoked. */
+async function folderListing() {
+  let dir = await savedFolder().catch(() => null);
+  if (dir && await dir.requestPermission({ mode: 'read' }).catch(() => 'denied') !== 'granted') dir = null;
+  if (!dir) { dir = await /** @type {any} */ (window).showDirectoryPicker({ id: 'rominit', startIn: 'downloads' }); await savedFolder(dir).catch(() => {}); }
+  const files = [];
+  for await (const entry of dir.values()) if (entry.kind === 'file') files.push(await entry.getFile());
+  return { name: dir.name, files };
+}
+
 function stageCard(device, stage, n, count, key) {
   const { protocol } = recipes[stage.recipe];
   const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false, failed: false,
@@ -498,9 +519,9 @@ function stageCard(device, stage, n, count, key) {
     prereqs.replaceChildren(h('strong', { textContent: `Before you connect (${HOSTS[host]}; change it in the header):` }),
       problem && h('p', { className: 'status', textContent: `✗ ${problem}` }),
       h('ul', {}, ...items.map(p => h('li', {}, p.text, p.url && ' ', p.url && link(p.url, new URL(p.url).hostname),
-        p.command && h('pre', { className: 'debug-log', textContent: p.command }),
-        p.command && h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
-          await navigator.clipboard?.writeText(p.command ?? '').catch(() => {}); this.textContent = 'Copied'; } })))));
+        p.command && h('div', { className: 'command-row' }, h('pre', { className: 'debug-log', textContent: p.command }),
+          h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
+            await navigator.clipboard?.writeText(p.command ?? '').catch(() => {}); this.textContent = 'Copied'; } }))))));
   };
   renderPrereqs();
   document.addEventListener('host-change', renderPrereqs);
@@ -568,6 +589,21 @@ function stageCard(device, stage, n, count, key) {
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
+  const folderButton = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Check Downloads folder', hidden: !('showDirectoryPicker' in window), async onclick() {
+    try {
+      const { name, files } = await folderListing();
+      const found = folderFiles(stage, files);
+      dbg(`Folder ${name}: found ${found.map(f => `${f.name} ${f.size} B`).join(', ') || 'nothing'}`);
+      if (found.length) pick(found);
+      const missing = stage.files.filter((/** @type {any} */ pin) => !found.some(f => f.name === pin.name)).map((/** @type {any} */ pin) => pin.name);
+      if (missing.length) {
+        if (!found.length) await savedFolder(null).catch(() => {}); // wrong folder: the next click asks again
+        selected.prepend(h('li', { textContent: `Not in ${name}: ${missing.join(', ')}. Download ${missing.length > 1 ? 'them' : 'it'} above, then check again.` }));
+      }
+    } catch (error) {
+      if (/** @type {any} */ (error)?.name !== 'AbortError') selected.replaceChildren(h('li', { textContent: `Could not read the folder: ${message(error)}. If the browser refuses Downloads itself, save the files into a subfolder (e.g. Downloads/rominit) and pick that.` }));
+    }
+  } });
   flash.addEventListener('click', async () => {
     if (flash.disabled || !st.files) return;
     st.busy = true; update();
@@ -611,6 +647,7 @@ function stageCard(device, stage, n, count, key) {
       h('a', { href: f.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'source page' })))),
     h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
       h('span', {}, h('strong', { textContent: `Choose ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
+    h('p', { className: 'field-help' }, folderButton, folderButton.hidden ? '' : ' Pick your Downloads folder once; after that one click finds the files again, also after a retry or reload.'),
     selected,
     ...(stage.options ?? []).map((option, i) => h('label', { className: 'risk-check' }, options[i], h('span', { textContent: option.label }))),
     h('label', { className: 'risk-check' }, risk, h('span', {}, h('strong', { textContent: 'I understand: ' }), stage.warning)),

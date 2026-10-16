@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { FEATURES, USES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, USES, assertConsent, completeness, folderFiles, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -235,6 +235,16 @@ test('S9 ROM stage fails closed', async () => {
   bad.pipe = async command => { bad.log.push(command); return { code: 0, out: '' }; };
   await assert.rejects(recipes['twrp-dd'].run(bad, job, noop, noop), /read back wrong data/);
   assert.equal(bad.log.filter(c => c.startsWith('dd ')).length, 1);
+});
+
+test('downloads folder: finds pins by name, takes "name (1).ext" repeats, prefers the pinned size', () => {
+  const stage = s9().stages[1];
+  const [a, b] = stage.files;
+  const dot = a.name.lastIndexOf('.');
+  const repeat = `${a.name.slice(0, dot)} (2)${a.name.slice(dot)}`;
+  const found = folderFiles(stage, [new File(['x'], a.name), new File([new Uint8Array(a.size)], repeat), new File([new Uint8Array(b.size)], b.name), new File(['y'], `x${b.name}`)]);
+  assert.deepEqual(found.map(f => [f.name, f.size]), [[a.name, a.size], [b.name, b.size]]);
+  assert.equal(folderFiles(stage, [new File(['x'], a.name)])[0].size, 1); // wrong size still offered; selectFiles rejects it
 });
 
 test('file selection, consent and options', () => {

@@ -185,6 +185,18 @@ export function selectFiles(stage, files, unverified = false) {
   });
 }
 
+/** Picks the stage's pinned files out of a folder listing (e.g. Downloads). Browsers save repeats as
+ * "rootfs (1).img", so those count too; the one with the pinned size wins, renamed to the pin's name.
+ * @param {any} stage @param {File[]} files */
+export function folderFiles(stage, files) {
+  return stage.files.flatMap((/** @type {any} */ pin) => {
+    const dot = pin.name.lastIndexOf('.'), [base, ext] = dot > 0 ? [pin.name.slice(0, dot), pin.name.slice(dot)] : [pin.name, ''];
+    const same = files.filter(f => f.name === pin.name || (f.name.startsWith(`${base} (`) && /^ \(\d+\)$/.test(f.name.slice(base.length, f.name.length - ext.length)) && f.name.endsWith(ext)));
+    const best = same.find(f => f.size === pin.size) ?? same.find(f => f.name === pin.name);
+    return best ? [best.name === pin.name ? best : new File([best], pin.name, { type: best.type, lastModified: best.lastModified })] : [];
+  });
+}
+
 /** @param {any} stage @param {{consent:boolean, confirmation:string}} answer */
 export function assertConsent(stage, { consent, confirmation }) {
   if (!consent || confirmation !== stage.confirm) throw Error(`Acknowledge the warning and type ${stage.confirm}.`);
