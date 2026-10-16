@@ -138,6 +138,9 @@ select {
 .button-primary:hover:not(:disabled) { border-color: #c2d6b8; background: #c2d6b8; }
 a.button-primary, a.button-primary:visited { color: #141311; } /* a:visited would turn link buttons amber on teal */
 .button:disabled { border-color: #3a362f; background: #2f2c26; color: #8f887c; cursor: not-allowed; }
+.button.connect-connected { border-color: var(--teal); background: transparent; color: var(--teal); }
+.button.connect-failed { border-color: #e2a3a0; background: transparent; color: #e2a3a0; }
+.button.connect-retry { border-color: var(--amber); color: var(--amber); }
 .field-help { margin: .55rem 0 0; color: var(--muted); font-size: .67rem; line-height: 1.65; }
 
 .file-picker {

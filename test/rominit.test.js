@@ -367,6 +367,13 @@ test('debug trace logs calls, results and errors without changing them', async (
   assert.match(lines.join('\n'), /✗ fastboot\.flash\("boot", Blob\(2 B\)\) threw Error: boom/);
 });
 
+test('fastboot max-download-size: decimal (Qualcomm ABL) and hex both parse', async () => {
+  const { downloadSize } = await import('../src/protocols/usb.js');
+  assert.equal(downloadSize('536870912'), 0x20000000); // Mi A3 answers decimal; hex-only parsing overshot the limit
+  assert.equal(downloadSize('0x10000000'), 0x10000000);
+  assert.equal(downloadSize(null), 0x20000000);
+});
+
 test('ADB phones are moved into the mode the recipe needs', async () => {
   const { adbMove } = await import('../src/protocols/usb.js');
   assert.deepEqual(adbMove('sideload', 'sideload'), { done: true });

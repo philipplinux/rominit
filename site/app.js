@@ -465,7 +465,7 @@ const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → $
 /** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count @param {string} key `<codename>/<rom id>` */
 function stageCard(device, stage, n, count, key) {
   const { protocol } = recipes[stage.recipe];
-  const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false,
+  const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false, retry: false,
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
   const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
@@ -509,6 +509,10 @@ function stageCard(device, stage, n, count, key) {
 
   const update = () => {
     connectButton.disabled = !supported || st.busy || st.session !== null || st.lost;
+    // green connected · red session lost or stopped · yellow last connect failed, try again
+    const state = st.lost ? 'failed' : st.session ? 'connected' : st.retry ? 'retry' : '';
+    connectButton.className = `button button-secondary${state && ` connect-${state}`}`;
+    connectButton.textContent = { connected: 'Connected', failed: 'Failed · reload', retry: 'Retry connect', '': CONNECT[protocol] }[state];
     flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !st.files || !risk.checked || confirm.value !== stage.confirm;
   };
   const report = (/** @type {string} */ text, fraction = 0) => {
@@ -554,6 +558,7 @@ function stageCard(device, stage, n, count, key) {
       Object.assign(st, found, { session: traced(found.session, dbg, protocol) });
       report('Connected. Choose the files, confirm, and run.');
     } catch (error) {
+      st.retry = true;
       dbgError(error);
       report(`${explain(error)} Reload to try again.`);
     } finally { st.busy = false; update(); }

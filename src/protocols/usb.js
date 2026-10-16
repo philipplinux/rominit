@@ -114,6 +114,13 @@ export function adbShell(adb) {
   };
 }
 
+/** max-download-size as AOSP fastboot reads it: `0x` hex, else decimal; missing or bad = 512 MiB, capped at 1 GiB like the library.
+ * @param {string|null} value */
+export function downloadSize(value) {
+  const n = Number(value?.trim());
+  return Math.min(n > 0 ? n : 512 * 1024 * 1024, 1024 * 1024 * 1024);
+}
+
 /** One USB connection per catalog protocol. `usb` is the raw device, watched for disconnects.
  * @param {string} protocol @param {(line:string)=>void} [log] connect steps and the phone's identity, for the debug log
  * @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
@@ -128,6 +135,9 @@ export async function connect(protocol, log = () => {}) {
 async function open(protocol, log) {
   if (protocol === 'fastboot') {
     const fb = new FastbootDevice();
+    // android-fastboot reads max-download-size as hex only; Qualcomm ABL (Mi A3) answers in decimal, so the
+    // library over-reads it (capped at 1 GiB) and the phone refuses the split. Parse it like AOSP fastboot.
+    fb._getDownloadSize = async () => downloadSize(await fb.getVariable('max-download-size').catch(() => null));
     await fb.connect();
     return { session: fb, usb: fb.device ?? undefined };
   }
