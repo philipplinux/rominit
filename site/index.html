@@ -14,23 +14,33 @@
     <a class="skip-link" href="#main">Skip to flasher</a>
     <div class="page-shell">
       <header class="topbar">
-        <a class="wordmark" href="./" aria-label="ROMinit home">
-          <span class="wordmark-mark" aria-hidden="true">R</span>
-          <span class="wordmark-text"><span>ROMINIT <span class="wordmark-divider">/</span> USB</span><small class="topbar-note"><span class="live-dot" aria-hidden="true"></span> EXPERIMENTAL</small></span>
-        </a>
+        <div class="brand">
+          <a class="wordmark" href="./" aria-label="ROMinit home">
+            <span class="wordmark-mark" aria-hidden="true">R</span>
+            <span>ROMINIT <span class="wordmark-divider">/</span> WEBUSB</span>
+          </a>
+          <div class="brand-sub">
+            <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+              <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a></nav>
+            </details>
+            <small class="topbar-note"><span class="live-dot" aria-hidden="true"></span> EXPERIMENTAL</small>
+          </div>
+        </div>
         <nav class="sitenav" aria-label="Site">
-          <form action="./" role="search"><input type="search" name="q" placeholder="Search phones…" aria-label="Search phones"></form>
+          <div class="search-col">
+            <form action="./" role="search"><input type="search" name="q" placeholder="Search phones…" aria-label="Search phones"></form>
+            <label class="host-pick">Flashing from <select id="host" aria-label="Your computer's operating system"></select></label>
+          </div>
           <a href="./">Devices</a><a href="./?view=brands">Brands</a><a href="./?view=projects">Projects</a><a href="./?view=popular">Popular</a><a href="./?view=favorites">♥ Favorites</a>
         </nav>
         <div class="topbar-side">
-          <label class="host-pick">Flashing from <select id="host" aria-label="Your computer's operating system"></select></label>
           <span class="topbar-note"><a href="https://www.buymeacoffee.com/philipplinux">☕ BUY ME A COFFEE</a></span>
         </div>
       </header>
       <p class="disclaimer" role="note"><strong>⚠ Use at your own risk!</strong> No guarantees provided. Flashing needs Chrome or Edge (WebUSB) over HTTPS; each stage lists what your computer needs first.<button type="button" class="disclaimer-close" aria-label="Hide this notice">×</button></p>
       <main id="main"></main>
       <footer class="footer">
-        <span>ROMINIT</span>
+        <span>ROMINIT · © 2026 Philipp Baumann · <a href="./?view=about">ABOUT</a></span>
         <span><a href="https://github.com/philipplinux/rominit">SOURCE ON GITHUB</a> · <a href="https://www.buymeacoffee.com/philipplinux">☕ BUY ME A COFFEE</a> · <a href="./THIRD-PARTY-NOTICES.txt">LICENSE NOTICES</a></span>
       </footer>
     </div>

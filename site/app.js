@@ -842,6 +842,45 @@ function reportBox() {
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
   return box;
 }
+/** What the page is built from. A test keeps this in step with package.json dependencies. */
+const SOFTWARE = [
+  ['In this page (bundled into app.js)', [
+    ['android-fastboot', 'Danny Lin', 'MIT', 'https://github.com/kdrag0n/fastboot.js', 'fastboot over WebUSB'],
+    ['@yume-chan/adb, adb-daemon-webusb, adb-credential-web, stream-extra (ya-webadb)', 'Simon Chan', 'MIT', 'https://github.com/yume-chan/ya-webadb', 'ADB and sideload over WebUSB'],
+    ['@lineageos-infra/libmjolnir', 'Greg Willard (r3pwn)', 'MIT', 'https://github.com/lineageos-infra/libmjolnir', 'Samsung Odin protocol'],
+    ['@zip.js/zip.js', 'Gildas Lormeau', 'BSD-3-Clause', 'https://github.com/gildas-lormeau/zip.js', 'reads zip archives'],
+    ['hash-wasm', 'Dani Biró', 'MIT', 'https://github.com/Daninet/hash-wasm', 'SHA-256 checks'],
+    ['xzwasm', 'Steve Sanderson (with xz-embedded, public domain, and walloc, MIT)', 'MIT', 'https://github.com/SteveSanderson/xzwasm', 'unpacks .xz images'],
+  ]],
+  ['Build and hosting', [
+    ['esbuild', 'Evan Wallace', 'MIT', 'https://github.com/evanw/esbuild', 'bundles the page'],
+    ['TypeScript', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/TypeScript', 'type checks (not shipped)'],
+    ['wrangler', 'Cloudflare', 'MIT OR Apache-2.0', 'https://github.com/cloudflare/workers-sdk', 'deploys to Cloudflare Pages'],
+    ['playwright-core', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/playwright', 'bench tests (not shipped)'],
+  ]],
+  ['Pictures', [
+    ['postmarketOS logo', 'postmarketOS contributors', 'CC BY-SA 3.0', 'https://gitlab.postmarketos.org/postmarketOS/artwork', 'ROM logo'],
+    ['GrapheneOS logo and screenshots', 'GrapheneOS developers, via Wikimedia Commons', 'see each caption', 'https://commons.wikimedia.org/wiki/Category:GrapheneOS', 'ROM logo and pictures'],
+    ['Mi A3 and Galaxy S9 postmarketOS screenshots', 'ROMinit', 'MIT', 'https://github.com/philipplinux/rominit', 'taken on our own phones'],
+  ]],
+];
+function sourcesView() {
+  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'Sources & licenses' }),
+    h('p', { className: 'intro-copy' }, 'ROMinit is free software under the MIT license, © 2026 Philipp Baumann. ', link('https://github.com/philipplinux/rominit', 'Source on GitHub'), ' · ', link('./THIRD-PARTY-NOTICES.txt', 'Full license texts')),
+    ...SOFTWARE.flatMap(([group, rows]) => [h('h3', { textContent: /** @type {string} */ (group) }),
+      h('table', { className: 'license-table' }, h('tr', {}, ...['Name', 'By', 'License', 'Used for'].map(t => h('th', { textContent: t }))),
+        .../** @type {string[][]} */ (rows).map(([name, by, license, url, use]) => h('tr', {}, h('td', {}, link(url, name)), h('td', { textContent: by }), h('td', { textContent: license }), h('td', { textContent: use }))))]),
+    h('h3', { textContent: 'ROMs, firmware and device facts' }),
+    h('p', { className: 'intro-copy', textContent: 'ROMinit links to ROMs and firmware; it does not host vendor files. Each file is pinned by size and SHA-256 and every ROM page links its source page and project. Device and ROM facts come from the projects’ own wikis and release pages (LineageOS, postmarketOS, GrapheneOS and others), linked on each page. ROMinit’s own postmarketOS builds are hosted on Hugging Face (huggingface.co/PhilippLinux).' }));
+}
+function aboutView() {
+  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'About ROMinit' }),
+    h('p', { className: 'intro-copy', textContent: 'ROMinit flashes phones from the browser over WebUSB: pick your phone, pick a ROM, plug in, and the page runs the same steps you would type into fastboot, adb or Odin. Every file is checked against a pinned size and SHA-256 before it is written, and every destructive step asks you to type a confirm phrase first.' }),
+    h('p', { className: 'intro-copy', textContent: 'It runs in this browser. Files you choose stay on your computer. What reaches the server: anonymous view and flash counts, ratings, comments and tickets you send, and, if a flash stage fails, its debug log with serial numbers removed, so the recipe can be fixed. Votes and counts use a salted hash of your IP address, not the address itself.' }),
+    h('p', { className: 'intro-copy' }, 'Made by Philipp Baumann. Free software under the MIT license; ', link('https://github.com/philipplinux/rominit', 'source on GitHub'), '. Questions or problems: the ticket box at the bottom of each page, or a GitHub issue. If it saved you an afternoon, ', link(DONATE, 'buy me a coffee'), '.'),
+    h('p', { className: 'field-help', textContent: 'Flashing can brick a phone and voids warranties; ROMinit comes with no warranty. Android is a trademark of Google LLC. Phone, vendor and OS names belong to their owners; ROMinit is not affiliated with or endorsed by any of them.' }),
+    h('p', {}, h('a', { href: './?view=sources', textContent: 'Sources & licenses' })));
+}
 async function start() {
   const codename = params.get('device'), view = params.get('view');
   // Disclaimer × hides it; remembered per browser.
@@ -855,6 +894,8 @@ async function start() {
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
+    for (const a of document.querySelectorAll('.site-menu a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
+    if (view === 'sources' || view === 'about') { main.append(view === 'sources' ? sourcesView() : aboutView()); return; }
     main.append(view === 'brands' ? tilesView(index, 'Brands', d => [d.vendor], () => true) : view === 'projects' ? tilesView(index, 'Projects', d => d.roms.map((/** @type {any} */ r) => r.os), (r, k) => r.os === k) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
     return;
   }

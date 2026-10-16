@@ -483,3 +483,15 @@ test('ROMvault lint: frontmatter, tags, links, index and the full net are clean'
   const { lint } = await import('../scripts/romvault-lint.mjs');
   assert.deepEqual(lint(), []);
 });
+
+test('sources page lists every dependency', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+  const app = await readFile(new URL('../site/app.js', import.meta.url), 'utf8');
+  const listed = app.slice(app.indexOf('const SOFTWARE'), app.indexOf('function sourcesView'));
+  for (const dep of Object.keys({ ...pkg.dependencies, ...pkg.devDependencies })) {
+    if (dep.startsWith('@types/')) continue;
+    const short = dep.split('/').pop() ?? dep;
+    assert.ok(listed.includes(dep) || listed.toLowerCase().includes(short.toLowerCase()), `${dep} missing from SOFTWARE in site/app.js`);
+  }
+});
