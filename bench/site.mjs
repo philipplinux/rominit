@@ -175,11 +175,16 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   await page.reload(); // every section's progress is remembered
   await page.locator('details.page-section', { hasText: 'T · Submit ticket' }).waitFor(); // page fully drawn before counting
   assert.equal(await page.locator('details.page-section.done').count(), 2);
+  page.once('dialog', d => d.dismiss()); // Start over asks first; cancel keeps everything
+  await page.locator('.start-over').click();
+  assert.equal(await page.locator('details.page-section.done').count(), 2);
+  page.once('dialog', d => d.accept());
   await page.locator('.start-over').click();
   await page.locator('.page-section').nth(4).waitFor();
   assert.equal(await page.locator('details.page-section.done').count(), 0);
   await page.getByLabel('Bootloader is already unlocked').check(); // skips the steps
   assert.equal(await page.locator('details.page-section', { hasText: '1 · Unlock bootloader' }).first().locator(':scope > summary .badge').innerText(), 'COMPLETED');
+  page.once('dialog', d => d.accept());
   await page.locator('.start-over').click();
 });
 

@@ -875,6 +875,7 @@ async function start() {
         ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
       h('div', { className: 'title-row' }, h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
         h('button', { className: 'start-over', type: 'button', title: 'Forget progress on this phone and start from section 0', onclick() {
+          if (!confirm(`Start over on this ${device.name}? This forgets the locked-in ROM and every ticked step in this browser.`)) return;
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
           Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
