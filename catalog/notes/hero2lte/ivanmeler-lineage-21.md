@@ -17,3 +17,4 @@
 - 2026-10-16 · Claude Code · owner flashed twice from the site, both stopped at "Socket open failed"; cause: connect before starting ADB Sideload. Site now names the mode (twrp-sideload checks banner state) and the mode text says the order. Zip SHA-256 matches catalog.
 - 2026-10-16 · Claude Code · connect('sideload') now switches TWRP into sideload itself (`shell:twrp sideload`, waits up to 45 s for the phone to re-enumerate with the same serial, no second picker). Needs a hardware run.
 - 2026-10-16 · Claude Code · owner flash succeeded; probe: screen/touch/audio/camera are human questions, GPS/fingerprint need user action, no SD card/SIM. Added NFC/GPS/hall auto-checks, verified on this phone over adb.
+- 2026-10-16 · Claude Code · owner answers (S7 edge, LineageOS 21): screen, touch, audio work; GPS probably not (unconfirmed, no fix seen); modem untested (no SIM).
