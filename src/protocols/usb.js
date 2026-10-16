@@ -17,10 +17,38 @@ export async function connectAdb() {
   if (!manager) throw Error('WebUSB is not available in this browser.');
   const device = await manager.requestDevice();
   if (!device) throw Error('No device selected.');
+  return openAdb(device);
+}
+
+/** @param {import('@yume-chan/adb-daemon-webusb').AdbDaemonWebUsbDevice} device */
+async function openAdb(device) {
   const connection = await device.connect();
   const transport = await AdbDaemonTransport.authenticate({
     serial: device.serial, connection, credentialStore: new AdbWebCredentialStore('ROMinit') });
   return { adb: new Adb(transport), usb: device.raw };
+}
+
+/** TWRP ADB sideload. Connecting in TWRP's normal ADB works too: it sends `twrp sideload` and reconnects
+ * once the phone is back in sideload mode (same browser permission, no second picker). */
+async function connectSideload() {
+  const state = (/** @type {Adb} */ adb) => /** @type {string|undefined} */ (adb.banner.state); // raw banner word; the lib's type lists fewer
+  const first = await connectAdb();
+  if (state(first.adb) === 'sideload') return first;
+  if (state(first.adb) !== 'recovery') throw Error(`Phone is in ${state(first.adb) ?? 'an unknown'} mode. Boot TWRP first.`);
+  const socket = await first.adb.createSocket('shell:twrp sideload');
+  const reader = socket.readable.getReader(); // let TWRP take the command before the link drops
+  await Promise.race([(async () => { while (!(await reader.read()).done); })().catch(() => {}), new Promise(r => setTimeout(r, 3000))]);
+  await first.adb.close().catch(() => {});
+  const manager = /** @type {NonNullable<typeof AdbDaemonWebUsbDeviceManager.BROWSER>} */ (AdbDaemonWebUsbDeviceManager.BROWSER);
+  for (let i = 0; i < 45; i++) { // adbd restarts as minadbd; the phone re-enumerates within a few seconds
+    await new Promise(r => setTimeout(r, 1000));
+    const device = (await manager.getDevices()).find(d => d.serial === first.usb.serialNumber);
+    if (!device) continue;
+    const next = await openAdb(device).catch(() => null);
+    if (next && state(next.adb) === 'sideload') return next;
+    await next?.adb.close().catch(() => {});
+  }
+  throw Error('Phone did not come back in ADB sideload mode. In TWRP: Advanced › ADB Sideload, swipe, then reload and connect again.');
 }
 
 /**
@@ -75,7 +103,7 @@ export async function connect(protocol) {
     const odin = await connectOdin();
     return { session: odin, usb: odin.usbDevice };
   }
-  if (protocol === 'sideload') return connectAdb().then(({ adb, usb }) => ({ session: adb, usb }));
+  if (protocol === 'sideload') return connectSideload().then(({ adb, usb }) => ({ session: adb, usb }));
   if (protocol === 'adb') {
     const { adb, usb } = await connectAdb();
     return { session: adbShell(adb), usb };
