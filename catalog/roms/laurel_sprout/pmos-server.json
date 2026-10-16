@@ -5,19 +5,19 @@
       "id": "philipplinux-pmos-server",
       "os": "postmarketOS",
       "name": "postmarketOS server (generic build)",
-      "version": "v2026.10.13",
+      "version": "v2026.10.16",
       "origin": "unofficial",
       "status": "experimental",
       "vetting": "curated",
       "risk": {"level": "mid", "why": "source published, but one maintainer (philipplinux) on top of postmarketOS"},
       "rating": {
-        "checked": "2026-10-15",
+        "checked": "2026-10-16",
         "kernel": {
           "version": "7.2.3",
           "type": "mainline"
         },
         "base": "postmarketOS edge",
-        "released": "2026-10-13",
+        "released": "2026-10-16",
         "support": "active",
         "features": {
           "flashing": "works",
@@ -71,7 +71,7 @@
       "screenshots": [
         { "src": "./shots/laurel_sprout/demo.gif", "caption": "tty1 console, then the on-screen dashboard tabs" }
       ],
-      "homepage": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.13",
+      "homepage": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.16",
       "login": "user / changeme",
       "stages": [
         {
@@ -86,22 +86,22 @@
               "name": "vbmeta.img",
               "size": 4096,
               "sha256": "e9f0f23cf362fd9ed921ef7da04716e987370949cef7480d26afc60fd761bf5b",
-              "url": "https://huggingface.co/PhilippLinux/mia3-postmarketos/resolve/main/v2026.10.13/vbmeta.img",
-              "source": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.13"
+              "url": "https://huggingface.co/PhilippLinux/mia3-postmarketos/resolve/main/v2026.10.16/vbmeta.img",
+              "source": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.16"
             },
             {
               "name": "rootfs.img",
-              "size": 1447425052,
-              "sha256": "f136ba022c58460d4539bb39428abaf1e0a8cbb53d9ff456a2e84632a999e830",
-              "url": "https://huggingface.co/PhilippLinux/mia3-postmarketos/resolve/main/v2026.10.13/rootfs.img",
-              "source": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.13"
+              "size": 1451496388,
+              "sha256": "723db89f483cd5f3caf372cb5cb9bc964d7f1d36ea04f3639138b4e0a00cd9a7",
+              "url": "https://huggingface.co/PhilippLinux/mia3-postmarketos/resolve/main/v2026.10.16/rootfs.img",
+              "source": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.16"
             },
             {
               "name": "boot.img",
               "size": 28131328,
-              "sha256": "cd6f984c5ecf43ae6c7fd0753a096d74cf57798852a9821e129c767451b6cd4c",
-              "url": "https://huggingface.co/PhilippLinux/mia3-postmarketos/resolve/main/v2026.10.13/boot.img",
-              "source": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.13"
+              "sha256": "3a5becdcce428a6db3327e1080ef282f080c92dc3568712f51ea1eac83c741e2",
+              "url": "https://huggingface.co/PhilippLinux/mia3-postmarketos/resolve/main/v2026.10.16/boot.img",
+              "source": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.16"
             }
           ],
           "steps": [
