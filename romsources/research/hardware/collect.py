@@ -17,7 +17,7 @@ Resume: every fetched page lives in raw/ and is never fetched again; rerun after
 manual.json: per-codename overrides for phones GSMArena lacks (vendor/Nura data) and fixes.
 match column: url-cited | model-exact | name-exact | name-fuzzy | manual | not-on-gsmarena | none.
 Offline: `--selftest` checks name matching against the cached brand listings.
-Stops on HTTP 429/403 or a Turnstile page (Blocked) and writes what it has.
+On HTTP 429/403 or a Turnstile page it stops fetching and finishes from cache (rows keep "page not cached").
 """
 import csv, json, os, re, sys, time, urllib.request, urllib.error
 from datetime import date
@@ -25,7 +25,7 @@ from datetime import date
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, "raw")
 UA = "Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0"
-DELAY = 9
+DELAY = 20
 CHECKED = "2026-10-16"
 OFFLINE = "--offline" in sys.argv or "--selftest" in sys.argv
 _last = [0.0]
@@ -33,6 +33,16 @@ _last = [0.0]
 
 class Blocked(Exception):
     pass
+
+
+_blocked = []
+
+
+def _block(why):
+    """Blocked: stop fetching, finish the run from cache so devices.* stays complete."""
+    _blocked.append(why)
+    print("BLOCKED:", why, "- finishing from cache; rerun later", file=sys.stderr)
+    return None
 
 
 def fetch(url):
@@ -43,7 +53,7 @@ def fetch(url):
     path = os.path.join(RAW, re.sub(r"[^A-Za-z0-9_.+-]", "_", url.split("gsmarena.com/")[-1]) + ".html")
     if os.path.exists(path):
         return open(path, encoding="utf-8").read()
-    if OFFLINE:
+    if OFFLINE or _blocked:
         return None
     wait = DELAY - (time.time() - _last[0])
     if wait > 0:
@@ -53,10 +63,10 @@ def fetch(url):
         h = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=40).read().decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
         if e.code in (429, 403):
-            raise Blocked("HTTP %d for %s" % (e.code, url))
+            return _block("HTTP %d for %s" % (e.code, url))
         raise
     if "Turnstile check" in h:
-        raise Blocked("Turnstile challenge for " + url)
+        return _block("Turnstile challenge for " + url)
     open(path, "w", encoding="utf-8").write(h)
     return h
 
