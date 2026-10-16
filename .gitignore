@@ -14,3 +14,5 @@ romsources/research/**/*.html
 romsources/research/**/evidence/*.bin
 romsources/research/grapheneos/manifest-source.xml
 romsources/research/grapheneos/sources/
+# Obsidian workspace of ROMvault (personal settings)
+romvault/.obsidian/
