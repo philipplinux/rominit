@@ -554,7 +554,9 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .token-form { display: flex; gap: .5rem; flex-wrap: wrap; margin: .5rem 0; }
 .token-form input { flex: 1 1 12rem; }
 .info-page pre { white-space: pre-wrap; word-break: break-all; }
-.deal { border: 1px solid var(--teal); border-radius: 8px; padding: .6rem .9rem; margin: 1rem 0; }
+/* same look as the header .disclaimer (own class: start() hides the first .disclaimer) */
+.deal { margin: 1rem 0; padding: .7rem 1rem; border: 2px solid #e2a3a0; background: rgb(226 163 160 / 12%); color: #f0c9c6; font-size: .95rem; letter-spacing: .02em; }
+.deal strong { color: #ffb4ae; font-size: 1.15rem; text-transform: uppercase; }
 .deal ul { margin: .4rem 0 0; padding-left: 1.2rem; }
 .token-new { border: 2px solid var(--teal); border-radius: 8px; padding: .8rem; margin: .6rem 0; display: grid; gap: .5rem; }
 .token-new pre { font-size: 1rem; font-weight: 700; }
