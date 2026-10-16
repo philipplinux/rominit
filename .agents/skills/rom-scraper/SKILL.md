@@ -78,7 +78,7 @@ When in doubt pick the more cautious value (lower status, `untested`).
 
 ## 5a. Newer build of an existing ROM
 
-Keep the `id`. Update `version`, the pins, `rating.released`, `rating.checked`, `rating.support`, and re-check `requirements` (bootloader / firmware prerequisites change between builds); add a diary line to the notes file. Commit as `catalog: <codename> <rom-id> → <version>`. A `curated` ROM is not edited: put the new version, pins and source URLs in the report, and a person applies them. Recovery (TWRP etc.) tool stages: copy the pins from an existing ROM for that phone until the recovery catalog exists.
+Keep the `id`. Update `version`, the pins, `rating.released`, `rating.checked`, `rating.support`, and re-check `requirements` (bootloader / firmware prerequisites change between builds); add a diary line to the notes file. Commit as `catalog: <codename> <rom-id> → <version>`. A `curated` ROM may be updated too, but only with the owner's approval: make the edit (keep `vetting: curated`) as its own commit on a branch `scraper/<codename>-<rom-id>`, never on main, and list it in the report under "needs approval" with the new version, pins and source URLs. The owner merges it or drops it. Recovery (TWRP etc.) tool stages: copy the pins from an existing ROM for that phone until the recovery catalog exists.
 
 ## 6. Hand off
 
