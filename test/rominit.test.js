@@ -74,6 +74,53 @@ test('Mi A3 fails closed before writing', async () => {
   }
 });
 
+test('fastboot verifies compressed XZ bytes, sizes and flashes the decoded image', async () => {
+  const dev = device('laurel_sprout');
+  const compressed = Buffer.from('/Td6WFoAAAFpIt42BMAWEiEBFgAAAAAAAAAAAKdRd54BABFkZWNvZGVkIGJvb3QgaW1hZ2UAAAAuT/5iAAEuEk/NONiQQpkNAQAAAAABWVo=', 'base64');
+  const file = { name: 'boot.img.xz', sha256: createHash('sha256').update(compressed).digest('hex'), file: new Blob([compressed]) };
+  const fb = fastboot({ 'partition-size:boot_b': '0x12' });
+  await recipes.fastboot.run(fb, { device: dev, files: [file], steps: [['flash', 'boot_b', file.name]] }, noop, noop);
+  assert.deepEqual(fb.log, ['flash:boot_b:decoded boot image']);
+
+  const corrupt = Buffer.from(compressed); corrupt[corrupt.length - 1] ^= 1;
+  const bad = { ...file, sha256: createHash('sha256').update(corrupt).digest('hex'), file: new Blob([corrupt]) };
+  const untouched = fastboot();
+  await assert.rejects(recipes.fastboot.run(untouched, { device: dev, files: [bad], steps: [['flash', 'boot_b', bad.name]] }, noop, noop), /Could not decode boot\.img\.xz/);
+  assert.deepEqual(untouched.log, []);
+});
+
+test('fastboot removes OPFS decoded images after a flash failure', async () => {
+  const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  const removed = [];
+  const root = {
+    getDirectoryHandle: async () => ({ getFileHandle: async () => {
+      const chunks = [];
+      return { createWritable: async () => new WritableStream({ write: chunk => chunks.push(chunk) }), getFile: async () => new Blob(chunks) };
+    } }),
+    removeEntry: async name => { removed.push(name); },
+  };
+  Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { storage: { getDirectory: async () => root } } });
+  Object.defineProperty(globalThis, 'window', { configurable: true, value: {} });
+  try {
+    const dev = device('laurel_sprout');
+    const bytes = Buffer.from('/Td6WFoAAAFpIt42BMAWEiEBFgAAAAAAAAAAAKdRd54BABFkZWNvZGVkIGJvb3QgaW1hZ2UAAAAuT/5iAAEuEk/NONiQQpkNAQAAAAABWVo=', 'base64');
+    const file = { name: 'boot.img.xz', sha256: createHash('sha256').update(bytes).digest('hex'), file: new Blob([bytes]) };
+    const fb = fastboot(); fb.flashBlob = async () => { throw Error('flash failed'); };
+    await assert.rejects(recipes.fastboot.run(fb, { device: dev, files: [file], steps: [['flash', 'boot_b', file.name]] }, noop, noop), /flash failed/);
+    assert.equal(removed.length, 1);
+    const corrupt = Buffer.from(bytes); corrupt[corrupt.length - 1] ^= 1;
+    const bad = { ...file, sha256: createHash('sha256').update(corrupt).digest('hex'), file: new Blob([corrupt]) };
+    await assert.rejects(recipes.fastboot.run(fastboot(), { device: dev, files: [bad], steps: [['flash', 'boot_b', bad.name]] }, noop, noop), /Could not decode boot\.img\.xz/);
+    assert.equal(removed.length, 2);
+  } finally {
+    if (originalNavigator) Object.defineProperty(globalThis, 'navigator', originalNavigator);
+    else delete globalThis.navigator;
+    if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow);
+    else delete globalThis.window;
+  }
+});
+
 test('S9 TWRP stage checks the PIT and never reboots', async () => {
   const dev = device('starlte'), stage = s9().stages[0], log = [];
   const pit = names => ({ findEntryByName: n => names.includes(n) ? { partitionSize: 1e6 } : undefined });

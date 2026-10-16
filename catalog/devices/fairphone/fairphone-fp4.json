@@ -1,0 +1,35 @@
+{
+  "codename": "fairphone-fp4",
+  "vendor": "Fairphone",
+  "name": "Fairphone 4",
+  "series": "Fairphone",
+  "family": "Fairphone 4",
+  "variant": "Fairphone 4",
+  "models": ["FP4"],
+  "notes": "Install current official Fairphone firmware before postmarketOS. Fairphone fastboot restoration erases personal data.",
+  "detect": {
+    "fastboot": {
+      "product": "FP4"
+    }
+  },
+  "modes": {
+    "fastboot": "Power off and unplug USB. Hold Power + Volume Down; alternatively hold Volume Down while connecting USB to the computer.",
+    "recovery": "Power off and unplug USB, then hold Power + Volume Up."
+  },
+  "unlock": {
+    "text": "Enable OEM unlocking and unlock the bootloader using Fairphone's instructions. Unlocking erases personal data.",
+    "url": "https://support.fairphone.com/hc/en-us/articles/10492476238865-How-to-unlock-and-re-lock-the-bootloader",
+    "steps": [
+      "Back up personal data; bootloader unlocking wipes the phone.",
+      "Update to current official Fairphone firmware before installing postmarketOS.",
+      "Follow Fairphone's bootloader unlock guide and confirm the unlock on the phone."
+    ],
+    "hints": [
+      "Nura says critical partitions do not need to be unlocked."
+    ]
+  },
+  "recovery": {
+    "text": "Restore official Fairphone OS using the current factory ZIP and Fairphone's extracted flashfp4 script. This fastboot restore erases personal data.",
+    "url": "https://support.fairphone.com/hc/en-us/articles/18896094650513-How-to-manually-install-Android-on-your-Fairphone"
+  }
+}

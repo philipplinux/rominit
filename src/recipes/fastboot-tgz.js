@@ -7,6 +7,26 @@ export const verbs = fastboot.verbs;
 export const archive = true;
 const DIR = 'rominit-stock';
 
+/** Streams XZ output to OPFS; Node tests use an in-memory Blob fallback. */
+export async function decodeXzToOPFS(file) {
+  if (typeof self === 'undefined') globalThis.self = /** @type {Window & typeof globalThis} */ (globalThis);
+  const { default: xz } = await import('xzwasm');
+  const decoded = new xz.XzReadableStream(file.stream());
+  if (typeof window === 'undefined') return { file: await new Response(decoded).blob(), cleanup: async () => {} };
+  if (!navigator.storage?.getDirectory) throw Error('This browser cannot store decoded images on disk.');
+  const root = await navigator.storage.getDirectory();
+  const dirName = `rominit-xz-${crypto.randomUUID()}`;
+  const dir = await root.getDirectoryHandle(dirName, { create: true });
+  try {
+    const handle = await dir.getFileHandle('image.img', { create: true });
+    await decoded.pipeTo(await handle.createWritable());
+    return { file: await handle.getFile(), cleanup: () => root.removeEntry(dirName, { recursive: true }).catch(() => {}) };
+  } catch (error) {
+    await root.removeEntry(dirName, { recursive: true }).catch(() => {});
+    throw error;
+  }
+}
+
 /** Reads a tar stream; calls `open(name, size)` per entry, which returns a writer or null to skip.
  * Handles ustar prefixes and GNU long names, which vendor archives use.
  * @param {ReadableStream<Uint8Array>} stream

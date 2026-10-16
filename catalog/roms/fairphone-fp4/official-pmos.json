@@ -1,0 +1,118 @@
+{
+  "device": "fairphone-fp4",
+  "roms": [
+    {
+      "id": "official-pmos",
+      "os": "postmarketOS",
+      "name": "postmarketOS Phosh",
+      "version": "v26.06 · Phosh 29.1 · 2026-10-16",
+      "origin": "official",
+      "status": "beta",
+      "vetting": "scraped",
+      "risk": {
+        "level": "mid",
+        "why": "The official image and device/kernel source are published, but Nura categorizes the Fairphone 4 port as Community."
+      },
+      "rating": {
+        "checked": "2026-10-16",
+        "features": {
+          "flashing": "works",
+          "usb_net": "works",
+          "storage": "works",
+          "sdcard": "works",
+          "battery": "partial",
+          "screen": "works",
+          "touch": "works",
+          "gpu": "works",
+          "audio": "partial",
+          "camera": "partial",
+          "camera_flash": "works",
+          "ir": "n/a",
+          "wifi": "partial",
+          "bluetooth": "works",
+          "gps": "works",
+          "nfc": "broken",
+          "calls": "partial",
+          "sms": "works",
+          "data": "works",
+          "fde": "works",
+          "otg": "works",
+          "hdmi": "broken",
+          "fingerprint": "broken",
+          "accelerometer": "works",
+          "magnetometer": "works",
+          "light": "works",
+          "proximity": "works",
+          "hall": "n/a",
+          "haptics": "works",
+          "barometer": "n/a"
+        },
+        "includes": {
+          "google_play": "no",
+          "microg": "no",
+          "android_apps": "no",
+          "phone_ui": "yes",
+          "root": "yes",
+          "updates": "yes",
+          "encryption": "yes",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "yes",
+          "docker": "no"
+        },
+        "kernel": {
+          "version": "7.2",
+          "type": "mainline"
+        },
+        "base": "postmarketOS v26.06",
+        "released": "2026-10-16",
+        "support": "active"
+      },
+      "notes": "Official Nura community-category Phosh image. Nura reports several partial or broken features; current Fairphone firmware and an unlocked bootloader are required. The default login is user / 147147.",
+      "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/main/device/community/device-fairphone-fp4",
+      "maintainer": null,
+      "homepage": "https://nura.eco/install/",
+      "login": "user / 147147",
+      "stages": [
+        {
+          "title": "Install postmarketOS Phosh",
+          "section": "rom",
+          "recipe": "fastboot",
+          "mode": "fastboot",
+          "confirm": "ERASE FAIRPHONE 4",
+          "warning": "This erases Android data in userdata, replaces boot, erases dtbo and installs postmarketOS. Back up first.",
+          "files": [
+            {
+              "name": "20261016-0108-postmarketOS-v26.06-phosh-29.1-fairphone-fp4-boot.img.xz",
+              "size": 24111428,
+              "sha256": "ebefe4b345c89cf1f9a5a0957c850a5f63e526ca7063bb9f73365fc1055bb610",
+              "url": "https://images.postmarketos.org/bpo/v26.06/fairphone-fp4/phosh/20261016-0108/20261016-0108-postmarketOS-v26.06-phosh-29.1-fairphone-fp4-boot.img.xz",
+              "source": "https://images.postmarketos.org/bpo/v26.06/fairphone-fp4/phosh/20261016-0108/"
+            },
+            {
+              "name": "20261016-0108-postmarketOS-v26.06-phosh-29.1-fairphone-fp4.img.xz",
+              "size": 747754688,
+              "sha256": "f2daf4e3be6a347a2c4a68b2ed298675d72948c09235c97b27d8388ce87eef4c",
+              "url": "https://images.postmarketos.org/bpo/v26.06/fairphone-fp4/phosh/20261016-0108/20261016-0108-postmarketOS-v26.06-phosh-29.1-fairphone-fp4.img.xz",
+              "source": "https://images.postmarketos.org/bpo/v26.06/fairphone-fp4/phosh/20261016-0108/"
+            }
+          ],
+          "steps": [
+            ["flash", "boot", "20261016-0108-postmarketOS-v26.06-phosh-29.1-fairphone-fp4-boot.img.xz"],
+            ["flash", "userdata", "20261016-0108-postmarketOS-v26.06-phosh-29.1-fairphone-fp4.img.xz"],
+            ["erase", "dtbo"],
+            ["reboot"]
+          ],
+          "done": "Log in with user / 147147, then change the default password."
+        }
+      ],
+      "slots": "ab",
+      "requirements": [
+        "Current official Fairphone firmware (update before installing).",
+        "Unlocked bootloader; unlocking wipes all user data.",
+        "Fastboot product must report FP4.",
+        "Flashes boot, erases dtbo and replaces userdata, destroying Android user data."
+      ]
+    }
+  ]
+}

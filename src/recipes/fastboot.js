@@ -22,7 +22,7 @@ export async function expandedSize(file) {
  * @param {(message:string,fraction:number)=>void} report @param {()=>void} assertSession
  */
 export async function run(fb, { device, files, steps }, report, assertSession) {
-  const total = 3 + files.filter(f => f.sha256).length + steps.length;
+  const total = 3 + files.filter(f => f.sha256).length + files.filter(f => f.name.endsWith('.img.xz')).length + steps.length;
   let step = 0;
   const say = (text, fraction = 0) => report(`Step ${step}/${total}: ${text}`, fraction);
   const next = text => { step += 1; assertSession(); say(text); };
@@ -41,32 +41,48 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
     if (digest !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
   }
 
-  next('Checking the partitions');
-  for (const [verb, partition, name] of steps) {
-    if (verb === 'set_active' && !['a', 'b'].includes(partition)) throw Error(`Invalid slot ${partition}. Nothing written.`);
-    if (verb !== 'flash' && verb !== 'erase') continue;
-    const size = parseInt(await fb.getVariable(`partition-size:${partition}`) ?? '', 16);
-    if (!(size > 0)) throw Error(`Phone has no ${partition} partition. Nothing written.`);
-    // flashBlob() would resize a logical partition; logical (super) layouts need their own steps.
-    if (await fb.getVariable(`is-logical:${partition}`) === 'yes') throw Error(`${partition} is a logical partition. Nothing written.`);
-    if (verb === 'flash' && await expandedSize(byName[name].file) > size) throw Error(`${name} is larger than ${partition}. Nothing written.`);
-  }
-
-  for (const [verb, arg, name] of steps) {
-    if (verb === 'flash') {
-      next(`Writing ${name} → ${arg}`);
-      await fb.flashBlob(arg, byName[name].file, fraction => say(`Writing ${name} → ${arg}`, fraction));
-    } else if (verb === 'erase') {
-      next(`Erasing ${arg}`);
-      await fb.runCommand(`erase:${arg}`);
-    } else if (verb === 'set_active') {
-      next(`Switching to slot ${arg}`);
-      await fb.runCommand(`set_active:${arg}`);
-    } else if (verb === 'reboot') {
-      next('Rebooting');
-      // The phone may drop USB before it answers; everything is already written.
-      await fb.runCommand('reboot').catch(() => {});
+  // Verify pins against the downloaded .xz bytes above; all later size checks and flashes use decoded bytes.
+  const cleanups = [];
+  try {
+    for (const file of files.filter(f => f.name.endsWith('.img.xz'))) {
+      next(`Decoding ${file.name}`);
+      try {
+        const { decodeXzToOPFS } = await import('./fastboot-tgz.js');
+        const decoded = await decodeXzToOPFS(file.file);
+        byName[file.name] = { ...file, file: decoded.file };
+        cleanups.push(decoded.cleanup);
+      } catch (error) { throw Error(`Could not decode ${file.name}: ${error.message}. Nothing written.`); }
     }
+
+    next('Checking the partitions');
+    for (const [verb, partition, name] of steps) {
+      if (verb === 'set_active' && !['a', 'b'].includes(partition)) throw Error(`Invalid slot ${partition}. Nothing written.`);
+      if (verb !== 'flash' && verb !== 'erase') continue;
+      const size = parseInt(await fb.getVariable(`partition-size:${partition}`) ?? '', 16);
+      if (!(size > 0)) throw Error(`Phone has no ${partition} partition. Nothing written.`);
+      // flashBlob() would resize a logical partition; logical (super) layouts need their own steps.
+      if (await fb.getVariable(`is-logical:${partition}`) === 'yes') throw Error(`${partition} is a logical partition. Nothing written.`);
+      if (verb === 'flash' && await expandedSize(byName[name].file) > size) throw Error(`${name} is larger than ${partition}. Nothing written.`);
+    }
+
+    for (const [verb, arg, name] of steps) {
+      if (verb === 'flash') {
+        next(`Writing ${name} → ${arg}`);
+        await fb.flashBlob(arg, byName[name].file, fraction => say(`Writing ${name} → ${arg}`, fraction));
+      } else if (verb === 'erase') {
+        next(`Erasing ${arg}`);
+        await fb.runCommand(`erase:${arg}`);
+      } else if (verb === 'set_active') {
+        next(`Switching to slot ${arg}`);
+        await fb.runCommand(`set_active:${arg}`);
+      } else if (verb === 'reboot') {
+        next('Rebooting');
+        // The phone may drop USB before it answers; everything is already written.
+        await fb.runCommand('reboot').catch(() => {});
+      }
+    }
+    report(`Step ${total}/${total}: Done.`, 1);
+  } finally {
+    await Promise.all(cleanups.map(cleanup => cleanup()));
   }
-  report(`Step ${total}/${total}: Done.`, 1);
 }
