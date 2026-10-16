@@ -1045,8 +1045,10 @@ function progressRail(sections) {
     const fold = h('button', { type: 'button', className: 'rail-fold', onclick() { sec.open = !sec.open; } });
     const sync = () => { fold.textContent = sec.open ? '−' : '+'; fold.title = `${sec.open ? 'Close' : 'Open'} ${label}`; };
     sec.addEventListener('toggle', sync); sync();
-    return h('div', { className: 'rail-mark' }, fold, h('a', { href: '#', title: label, onclick(/** @type {Event} */ e) {
+    const mark = h('div', { className: 'rail-mark' }, fold, h('a', { href: '#', title: label, onclick(/** @type {Event} */ e) {
       e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, h('b', { textContent: num }), h('small', { textContent: label })));
+    mark.dataset.num = num; // R and T take their section's colours
+    return mark;
   });
   const fill = h('i', { className: 'rail-fill' }), thumb = h('i', { className: 'rail-thumb' });
   const place = () => {

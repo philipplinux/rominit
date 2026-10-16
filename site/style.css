@@ -521,6 +521,10 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .page-section.skipped .badge { border-color: var(--teal); color: var(--teal); }
 .rail-mark.next a { color: var(--amber); }
 .rail-mark.next b { border-color: var(--amber); color: var(--amber); box-shadow: 0 0 0 4px rgb(230 195 154 / 18%); }
+.rail-mark[data-num="R"] a { color: #f2c200; } /* same colours as the R and T sections on the page */
+.rail-mark[data-num="R"] b { border-color: #f2c200; background: repeating-linear-gradient(-45deg, rgb(242 194 0 / 35%) 0 4px, var(--bg) 4px 8px); color: #f2c200; }
+.rail-mark[data-num="T"] a { color: #f0a29b; }
+.rail-mark[data-num="T"] b { border-color: #e8706a; background: rgb(226 90 80 / 15%); color: #f0a29b; }
 .rail-mark a:hover b { border-color: #ece4d4; }
 @media (max-width: 1600px) { .progress-rail { left: max(11px, var(--gutter) / 2); } .rail-mark small, .rail-fold { display: none; } .progress-rail > .start-over { padding: .4rem; } .progress-rail > .start-over small { display: none; } }
 @media (max-width: 1240px) { .progress-rail { --dot: 20px; left: 11px; } .rail-mark b { font-size: .65rem; } }
