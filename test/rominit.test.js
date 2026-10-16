@@ -356,7 +356,9 @@ test('agent API: token from the site, MCP report with it, admin inbox by outcome
   const tokens = await import('../functions/api/tokens.js');
   const site = (fn, sid, body) => fn({ env, request: new Request('https://x/api', { method: body ? 'POST' : 'GET', body: body && JSON.stringify(body), headers: { cookie: `sid=${sid}` } }) });
   assert.equal((await site(tokens.onRequestPost, 'nobody', { name: 'x' })).status, 401);
-  const { token } = await (await site(tokens.onRequestPost, 'bob', { name: 'laptop claude' })).json();
+  assert.equal((await site(tokens.onRequestPost, 'bob', { name: 'x', days: 9999 })).status, 400);
+  const { token } = await (await site(tokens.onRequestPost, 'bob', { name: 'laptop claude', days: 30 })).json();
+  assert.equal(db.prepare("SELECT date(expires) = date('now', '+30 days') AS ok FROM api_tokens").get().ok, 1);
   assert.match(token, /^rmi_/);
   assert.equal(db.prepare('SELECT hash FROM api_tokens').get().hash, sha(token)); // only the hash is stored
   const { onRequestPost } = await import('../functions/mcp.js');

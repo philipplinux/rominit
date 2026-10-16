@@ -934,19 +934,20 @@ async function agentsView() {
       : h('p', { className: 'field-help', textContent: 'No tokens yet.' }));
   }
   const name = h('input', { placeholder: 'e.g. laptop claude', maxLength: 40, required: true }), made = h('div', {});
+  const days = h('select', { title: 'Expires after' }, ...[[7, '7 days'], [30, '30 days'], [90, '90 days'], [365, '1 year']].map(([d, label]) => new Option(`expires in ${label}`, String(d), false, d === 365)));
   const form = h('form', { className: 'token-form', async onsubmit(/** @type {Event} */ e) {
     e.preventDefault();
-    const r = await fetch('./api/tokens', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name.value }) });
+    const r = await fetch('./api/tokens', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name.value, days: Number(days.value) }) });
     const body = await r.json().catch(() => ({}));
     if (!r.ok) { made.replaceChildren(h('p', { className: 'status', textContent: body.error ?? 'could not create the token' })); return; }
     made.replaceChildren(h('p', { className: 'field-help', textContent: 'Copy it now; it is shown only once and stored only as a hash.' }), code(body.token));
     name.value = ''; listTokens();
-  } }, name, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
+  } }, name, days, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
   if (info?.user) listTokens();
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
     h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Reading needs no account: 20 tool calls an hour without a token, 1200 with one.' }),
     h('h3', { textContent: 'Your API tokens' }),
-    info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Valid for one year, revoke it any time.' }), form, made, tokens)
+    info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Pick how long it lasts (up to a year); revoke it any time.' }), form, made, tokens)
       : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])),
     h('h3', { textContent: 'Endpoint' }), code(url),
     h('p', { className: 'field-help', textContent: 'Streamable HTTP, JSON-RPC. Tools: find devices, get a device, get a ROM recipe; with a token also start a run, log a step, finish a run.' }),
