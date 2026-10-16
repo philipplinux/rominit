@@ -1,0 +1,143 @@
+{
+  "device": "starlte",
+  "roms": [
+    {
+      "id": "official-a15",
+      "os": "eOS",
+      "name": "/e/OS",
+      "version": "4.3 A15 (2026-09-17, build 677554)",
+      "origin": "official",
+      "status": "beta",
+      "vetting": "scraped",
+      "homepage": "https://images.ecloud.global/official/starlte/",
+      "source": null,
+      "maintainer": {
+        "name": "/e/OS Build Team",
+        "source": "https://doc.e.foundation/devices/starlte/"
+      },
+      "slots": "single",
+      "requirements": [
+        "The /e/OS install guide lists SM-G960F, SM-G960F/DS, SM-G960N as supported; the current ROMinit device record lists SM-G960F only.",
+        "Use the latest Android 10 stock firmware for this model, as required by the /e/OS guide.",
+        "OEM unlocking and bootloader unlock are required; unlocking and formatting data erase user data.",
+        "After flashing the /e/OS Recovery, boot directly into it, format data, then sideload the matching A15 package. Do not relock the bootloader.",
+        "Before connecting for the second stage, manually select Apply Update \u2192 Apply from ADB in /e/OS Recovery; the stage does not start the TWRP-specific auto-sideload mode."
+      ],
+      "risk": {
+        "level": "high",
+        "why": "The recovery image identifies Linux 4.9.337, but the official device metadata names the kernel repository without a publicly readable build branch; source review remains unverified."
+      },
+      "notes": "Official /e/OS infrastructure package. The download directory and package filename identify this as official, while the current device YAML reports release_type: community; channel metadata conflicts. Status is kept at beta pending resolution. Linux 4.9.337 was read from the matching official recovery image. Current exact kernel/device source branch was not publicly inspectable on 2026-10-16.",
+      "rating": {
+        "checked": "2026-10-16",
+        "kernel": {
+          "version": "4.9.337",
+          "type": "downstream"
+        },
+        "base": "AOSP 15 /e/OS 4.3",
+        "released": "2026-09-17",
+        "support": "active",
+        "features": {
+          "flashing": "untested",
+          "usb_net": "untested",
+          "storage": "untested",
+          "sdcard": "untested",
+          "battery": "untested",
+          "screen": "untested",
+          "touch": "untested",
+          "gpu": "untested",
+          "audio": "untested",
+          "camera": "untested",
+          "camera_flash": "untested",
+          "ir": "untested",
+          "wifi": "untested",
+          "bluetooth": "untested",
+          "gps": "untested",
+          "nfc": "untested",
+          "calls": "untested",
+          "sms": "untested",
+          "data": "untested",
+          "fde": "untested",
+          "otg": "untested",
+          "hdmi": "untested",
+          "fingerprint": "untested",
+          "accelerometer": "untested",
+          "magnetometer": "untested",
+          "light": "untested",
+          "proximity": "untested",
+          "hall": "untested",
+          "haptics": "untested",
+          "barometer": "untested"
+        },
+        "includes": {
+          "google_play": "no",
+          "microg": "yes",
+          "android_apps": "yes",
+          "phone_ui": "yes",
+          "root": "no",
+          "updates": "yes",
+          "encryption": "yes",
+          "relock": "no",
+          "banking_apps": "optional",
+          "ssh": "no",
+          "docker": "no"
+        }
+      },
+      "stages": [
+        {
+          "title": "Flash /e/OS Recovery",
+          "section": "tools",
+          "recipe": "odin",
+          "mode": "download",
+          "confirm": "FLASH RECOVERY",
+          "warning": "Writes the RECOVERY partition. Boot directly into /e/OS Recovery afterwards; do not boot Android first.",
+          "require_pit": [
+            "RECOVERY"
+          ],
+          "files": [
+            {
+              "name": "recovery-e-4.3-a15-20260917677554-official-starlte.img",
+              "size": 46245904,
+              "sha256": "6eeaaf9465a1d10b37282c436d8012e32430702a7a8b764dad64ce34b34db2f4",
+              "url": "https://images.ecloud.global/official/starlte/recovery-e-4.3-a15-20260917677554-official-starlte.img",
+              "source": "https://images.ecloud.global/official/starlte/"
+            }
+          ],
+          "steps": [
+            [
+              "flash",
+              "RECOVERY",
+              "recovery-e-4.3-a15-20260917677554-official-starlte.img"
+            ]
+          ],
+          "done": "Recovery written. Hold Volume Up + Bixby + Power to boot directly into /e/OS Recovery."
+        },
+        {
+          "title": "Sideload /e/OS",
+          "section": "rom",
+          "recipe": "twrp-sideload",
+          "mode": "eos-sideload",
+          "confirm": "ERASE S9",
+          "warning": "Before connecting, manually select Factory reset \u2192 Format data in /e/OS Recovery; this erases all user data. Then choose Apply Update \u2192 Apply from ADB. The latest Android 10 firmware must be installed first.",
+          "files": [
+            {
+              "name": "e-4.3-a15-20260917677554-official-starlte.zip",
+              "size": 1496354114,
+              "sha256": "10ebc9883dcc661edd7f10d2126fdbce52860afbbe0b610185e7c2da6b2603c6",
+              "url": "https://images.ecloud.global/official/starlte/e-4.3-a15-20260917677554-official-starlte.zip",
+              "source": "https://images.ecloud.global/official/starlte/"
+            }
+          ],
+          "steps": [
+            [
+              "sideload",
+              "e-4.3-a15-20260917677554-official-starlte.zip"
+            ]
+          ],
+          "done": "/e/OS package sideloaded. Follow the recovery prompts to reboot into the installed system."
+        }
+      ]
+    }
+  ],
+  "imported": "2026-10-16"
+}

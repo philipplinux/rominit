@@ -46,6 +46,61 @@ const SHA = /^[0-9a-f]{64}$/;
 const SAFE = /^[A-Za-z0-9_.-]+$/;
 const PATH = /^\/[A-Za-z0-9/._-]+$/;
 
+/** Shared checks for executable stages. @param {any} device @param {any[]} stages @param {string} at */
+export function stagesProblems(device, stages, at) {
+  const out = [];
+  const need = (ok, text) => { if (!ok) out.push(text); };
+  for (const [i, stage] of (stages ?? []).entries()) {
+    const where = `${at} stage ${i + 1}`;
+    const recipe = recipes[stage.recipe];
+    need(recipe, `${where}: unknown recipe "${stage.recipe}"`);
+    need(device.modes?.[stage.mode], `${where}: device has no instructions for mode "${stage.mode}"`);
+    need(stage.title && stage.warning && /^[A-Z0-9 +]{4,}$/.test(stage.confirm ?? ''), `${where}: title, warning and an upper-case confirm phrase are required`);
+    need(['tools', 'rom'].includes(stage.section), `${where}: section must be tools or rom`);
+    if (recipe?.archive) need(Number.isInteger(stage.anti) && stage.anti >= 0, `${where}: archive stages need the package's anti-rollback level (anti)`);
+    if (stage.recipe === 'twrp-dd') need(PATH.test(stage.by_name ?? ''), `${where}: by_name must be an absolute path`);
+    const names = new Set();
+    for (const file of stage.files ?? []) {
+      need(SAFE.test(file.name ?? '') && !names.has(file.name), `${where}: file name "${file.name}" unsafe or duplicated`);
+      names.add(file.name);
+      need(Number.isSafeInteger(file.size) && file.size > 0 && SHA.test(file.sha256 ?? ''), `${where}: ${file.name} needs size and sha256`);
+      need(file.source?.startsWith('https://') && (file.url === undefined || file.url.startsWith('https://')), `${where}: ${file.name} needs an https source page (and an https url if any)`);
+    }
+    const used = new Set();
+    const steps = [...stage.steps ?? [], ...(stage.options ?? []).flatMap(option => option.steps ?? [])];
+    need(stage.steps?.length, `${where}: no steps`);
+    for (const [verb, ...args] of steps) {
+      const arity = recipe?.verbs[verb];
+      need(arity !== undefined && args.length === arity, `${where}: step ${verb}(${args}) not allowed for ${stage.recipe}`);
+      need(args.every(arg => SAFE.test(arg)), `${where}: step ${verb} has unsafe arguments`);
+      if (recipe?.fileArg?.[verb] !== undefined) {
+        const name = args[recipe.fileArg[verb]];
+        need(names.has(name), `${where}: step ${verb} uses unknown file ${name}`);
+        used.add(name);
+      }
+    }
+    need(recipe?.archive ? names.size === 1 : used.size === names.size, `${where}: ${recipe?.archive ? 'an archive recipe takes exactly one file' : 'every file must be used by a step'}`);
+  }
+  return out;
+}
+
+/** Validate a standalone recovery catalog file. @param {any} device @param {any} recoveryFile */
+export function recoveryProblems(device, recoveryFile) {
+  const out = [];
+  const need = (ok, text) => { if (!ok) out.push(text); };
+  need(recoveryFile?.device === device?.codename, `recovery file device "${recoveryFile?.device}" ≠ ${device?.codename}`);
+  const recovery = recoveryFile?.recovery;
+  const at = `${device?.codename}/${recovery?.id}`;
+  need(SAFE.test(recovery?.id ?? ''), `${at}: id missing or unsafe`);
+  need(recovery?.name && recovery?.version && recovery?.project?.startsWith('https://') && recovery?.source?.startsWith('https://'), `${at}: name, version, project and source https URLs are required`);
+  need(['scraped', 'curated'].includes(recovery?.vetting), `${at}: vetting must be scraped or curated`);
+  need(recovery?.requirements?.length && recovery.requirements.every(r => typeof r === 'string'), `${at}: requirements must be a non-empty list`);
+  need(/^\d{4}-\d{2}-\d{2}$/.test(recovery?.imported ?? '') && recovery?.imported_from, `${at}: imported date and imported_from catalog source are required`);
+  need(recovery?.stages?.length && recovery.stages.every(stage => stage.section === 'tools'), `${at}: recovery needs tool stages only`);
+  out.push(...stagesProblems(device, recovery?.stages, at));
+  return out;
+}
+
 /** Every reason this catalog entry is unusable; empty means valid. Data comes from PRs, so it is checked, not trusted.
  * @param {any} device @param {any} romFile */
 export function problems(device, romFile) {
@@ -97,38 +152,7 @@ export function problems(device, romFile) {
     const includes = rom.rating?.includes ?? {};
     need(INCLUDES.every(i => OPTIONS.includes(includes[i])) && Object.keys(includes).length === INCLUDES.length,
       `${at}: rating.includes needs exactly these (${OPTIONS.join('/')}): ${INCLUDES.join(', ')}`);
-    for (const [i, stage] of (rom.stages ?? []).entries()) {
-      const where = `${at} stage ${i + 1}`;
-      const recipe = recipes[stage.recipe];
-      need(recipe, `${where}: unknown recipe "${stage.recipe}"`);
-      need(device.modes?.[stage.mode], `${where}: device has no instructions for mode "${stage.mode}"`);
-      need(stage.title && stage.warning && /^[A-Z0-9 +]{4,}$/.test(stage.confirm ?? ''), `${where}: title, warning and an upper-case confirm phrase are required`);
-      need(['tools', 'rom'].includes(stage.section), `${where}: section must be tools or rom`);
-      if (recipe?.archive) need(Number.isInteger(stage.anti) && stage.anti >= 0, `${where}: archive stages need the package's anti-rollback level (anti)`);
-      if (stage.recipe === 'twrp-dd') need(PATH.test(stage.by_name ?? ''), `${where}: by_name must be an absolute path`);
-      const names = new Set();
-      for (const file of stage.files ?? []) {
-        need(SAFE.test(file.name ?? '') && !names.has(file.name), `${where}: file name "${file.name}" unsafe or duplicated`);
-        names.add(file.name);
-        need(Number.isSafeInteger(file.size) && file.size > 0 && SHA.test(file.sha256 ?? ''), `${where}: ${file.name} needs size and sha256`);
-        // ROMinit never downloads or hosts files: `source` is the publisher's page, `url` an optional direct link the user opens.
-        need(file.source?.startsWith('https://') && (file.url === undefined || file.url.startsWith('https://')), `${where}: ${file.name} needs an https source page (and an https url if any)`);
-      }
-      const used = new Set();
-      const steps = [...stage.steps ?? [], ...(stage.options ?? []).flatMap(option => option.steps ?? [])];
-      need(stage.steps?.length, `${where}: no steps`);
-      for (const [verb, ...args] of steps) {
-        const arity = recipe?.verbs[verb];
-        need(arity !== undefined && args.length === arity, `${where}: step ${verb}(${args}) not allowed for ${stage.recipe}`);
-        need(args.every(arg => SAFE.test(arg)), `${where}: step ${verb} has unsafe arguments`);
-        if (recipe?.fileArg?.[verb] !== undefined) {
-          const name = args[recipe.fileArg[verb]];
-          need(names.has(name), `${where}: step ${verb} uses unknown file ${name}`);
-          used.add(name);
-        }
-      }
-      need(recipe?.archive ? names.size === 1 : used.size === names.size, `${where}: ${recipe?.archive ? 'an archive recipe takes exactly one file' : 'every file must be used by a step'}`);
-    }
+    out.push(...stagesProblems(device, rom.stages, at));
   }
   return out;
 }

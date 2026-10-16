@@ -1,5 +1,5 @@
 import { readdir, readFile } from 'node:fs/promises';
-import { problems } from '../src/catalog.js';
+import { problems, recoveryProblems } from '../src/catalog.js';
 
 const root = new URL('../catalog/', import.meta.url);
 const json = async path => JSON.parse(await readFile(new URL(path, root), 'utf8'));
@@ -13,6 +13,7 @@ export async function loadCatalog() {
       const device = await json(`devices/${vendor}/${name}`);
       if (name !== `${device.codename}.json`) errors.push(`devices/${vendor}/${name}: file name must be <codename>.json`);
       const roms = [];
+      const recoveries = [];
       const dir = new URL(`roms/${device.codename}/`, root);
       for (const file of await readdir(dir).catch(() => [])) {
         const romFile = await json(`roms/${device.codename}/${file}`);
@@ -20,7 +21,15 @@ export async function loadCatalog() {
         roms.push(...romFile.roms);
       }
       if (new Set(roms.map(r => r.id)).size !== roms.length) errors.push(`${device.codename}: duplicate ROM ids`);
-      devices.push({ ...device, roms });
+      const recoveryDir = new URL(`recoveries/${device.codename}/`, root);
+      for (const file of await readdir(recoveryDir).catch(() => [])) {
+        const recoveryFile = await json(`recoveries/${device.codename}/${file}`);
+        errors.push(...recoveryProblems(device, recoveryFile).map(p => `recoveries/${device.codename}/${file}: ${p}`));
+        if (file !== `${recoveryFile.recovery?.id}.json`) errors.push(`recoveries/${device.codename}/${file}: file name must be <recovery id>.json`);
+        recoveries.push(recoveryFile.recovery);
+      }
+      if (new Set(recoveries.map(r => r.id)).size !== recoveries.length) errors.push(`${device.codename}: duplicate recovery ids`);
+      devices.push({ ...device, roms, recoveries });
     }
   }
   if (new Set(devices.map(d => d.codename)).size !== devices.length) errors.push('duplicate device codenames');

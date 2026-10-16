@@ -883,6 +883,18 @@ async function start() {
   let twrpDone = 0;
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
   if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
+  const recoveryInstallers = (device.recoveries ?? []).map((/** @type {any} */ recovery) => {
+    const toolHashes = new Set((rom?.stages ?? []).filter((/** @type {any} */ stage) => stage.section === 'tools').flatMap((/** @type {any} */ stage) => stage.files.map((/** @type {any} */ file) => file.sha256)));
+    const duplicates = tools.length > 0 && recovery.stages.every((/** @type {any} */ stage) => stage.files.every((/** @type {any} */ file) => toolHashes.has(file.sha256)));
+    const cards = duplicates ? [] : recovery.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, recovery.stages.length, `${device.codename}/recovery/${recovery.id}`));
+    return h('div', { className: 'recovery-installer' },
+      h('h3', { textContent: `${recovery.name} ${recovery.version}` }),
+      h('p', { className: 'rating source-row' }, h('strong', { textContent: 'release' }), recovery.vetting === 'scraped' && h('span', { className: 'feature partial', textContent: 'scraped · unverified' }, placeholderMark()),
+        link(recovery.project, 'Project'), link(recovery.source, 'Device instructions')),
+      h('ul', { className: 'field-help' }, ...recovery.requirements.map((/** @type {string} */ requirement) => h('li', { textContent: requirement }))),
+      duplicates ? h('p', { className: 'field-help', textContent: 'This same pinned installer is already shown in “2 · Custom recovery”.' }) : h('div', { className: 'stages' }, ...cards));
+  });
+  const recoveryCatalogSection = recoveryInstallers.length && section('Other recovery installers', 'optional · choose an installer only if you need it', false, [h('p', { className: 'field-help', textContent: 'Use the recovery required by your selected ROM. These installers are alternatives, and are not compatible with every ROM.' }), ...recoveryInstallers]);
   // Optional, so never amber; it goes green once a report card for this ROM was sent from this browser.
   const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
@@ -934,6 +946,7 @@ async function start() {
     infoSection,
     unlockSection,
     twrpSection,
+    ...(recoveryCatalogSection ? [recoveryCatalogSection] : []),
     romSection,
     testSection,
     // R and S sit apart from the numbered flow: a way back, and a way to tell us something is wrong.

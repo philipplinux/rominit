@@ -9,6 +9,7 @@ import { checksum } from '../src/hash.js';
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
 const { devices, errors } = await loadCatalog();
 const device = (/** @type {string} */ codename) => devices.find(d => d.codename === codename);
+const s9 = () => device('starlte').roms.find(r => r.id === 'philipplinux-pmos-server'); // pick by id: ROM file order is not a contract
 /** Small fake images standing in for the stage's pinned files. */
 const fakeFiles = stage => stage.files.map(pin => ({ ...pin, size: pin.name.length, sha256: sha(pin.name), file: new Blob([pin.name]) }));
 const noop = () => {};
@@ -74,7 +75,7 @@ test('Mi A3 fails closed before writing', async () => {
 });
 
 test('S9 TWRP stage checks the PIT and never reboots', async () => {
-  const dev = device('starlte'), stage = dev.roms[0].stages[0], log = [];
+  const dev = device('starlte'), stage = s9().stages[0], log = [];
   const pit = names => ({ findEntryByName: n => names.includes(n) ? { partitionSize: 1e6 } : undefined });
   const odin = names => ({ beginSession: async () => {}, getPitData: async () => pit(names), flashPartition: async (p, f) => { log.push(`${p}:${await f.text()}`); } });
   const job = { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) };
@@ -104,7 +105,7 @@ function twrp({ product = 'starlte', mounted = ['/dev/block/USERDATA /data ext4'
 }
 
 test('S9 ROM stage writes, verifies, formats after unmounting, reboots', async () => {
-  const dev = device('starlte'), stage = dev.roms[0].stages[1], shell = twrp();
+  const dev = device('starlte'), stage = s9().stages[1], shell = twrp();
   await recipes['twrp-dd'].run(shell, { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage, { format: true }) }, noop, noop);
   const actions = shell.log.filter(c => /^(dd|umount|mke2fs|reboot)/.test(c));
   assert.deepEqual(actions.map(c => c.split(' ').slice(0, 2).join(' ')), [
@@ -112,7 +113,7 @@ test('S9 ROM stage writes, verifies, formats after unmounting, reboots', async (
 });
 
 test('S9 ROM stage fails closed', async () => {
-  const dev = device('starlte'), stage = dev.roms[0].stages[1];
+  const dev = device('starlte'), stage = s9().stages[1];
   const job = { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) };
   const wrong = twrp({ product: 'star2lte' });
   await assert.rejects(recipes['twrp-dd'].run(wrong, job, noop, noop), /Expected starlte/);
@@ -127,7 +128,7 @@ test('S9 ROM stage fails closed', async () => {
 });
 
 test('file selection, consent and options', () => {
-  const stage = device('starlte').roms[0].stages[1];
+  const stage = s9().stages[1];
   const files = stage.files.map(pin => ({ name: pin.name, size: pin.size }));
   assert.equal(selectFiles(stage, files).length, 3);
   assert.throws(() => selectFiles(stage, files.slice(1)), /Select exactly/);

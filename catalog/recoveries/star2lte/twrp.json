@@ -1,0 +1,51 @@
+{
+  "device": "star2lte",
+  "recovery": {
+    "id": "twrp",
+    "name": "TWRP",
+    "version": "3.7.0_9-0",
+    "project": "https://twrp.me/",
+    "source": "https://twrp.me/samsung/samsunggalaxys9plus.html",
+    "vetting": "scraped",
+    "requirements": [
+      "Samsung star2lte Exynos only.",
+      "Unlock the bootloader; use the exact device-specific image.",
+      "The official TWRP device page warns that allowing system modifications can prevent the stock kernel from booting because of dm-verity. Read the device instructions before permitting modifications."
+    ],
+    "imported": "2026-10-16",
+    "imported_from": "catalog/roms/star2lte/pmos-server.json",
+    "stages": [
+      {
+        "title": "Install TWRP",
+        "section": "tools",
+        "optional": "Skip if TWRP is already installed.",
+        "recipe": "odin",
+        "mode": "download",
+        "confirm": "FLASH TWRP",
+        "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot restores the stock recovery.",
+        "require_pit": [
+          "BOOT",
+          "SYSTEM",
+          "VENDOR",
+          "USERDATA"
+        ],
+        "files": [
+          {
+            "name": "twrp-3.7.0_9-0-star2lte.img",
+            "size": 42670080,
+            "sha256": "f674dab0134f3c929982077b6a3a8de7df209a45c76ead80bc009381bcd835e1",
+            "source": "https://dl.twrp.me/star2lte/twrp-3.7.0_9-0-star2lte.img.html"
+          }
+        ],
+        "steps": [
+          [
+            "flash",
+            "RECOVERY",
+            "twrp-3.7.0_9-0-star2lte.img"
+          ]
+        ],
+        "done": "TWRP written. Hold Volume Down + Power until the screen is black, then immediately hold Volume Up + Bixby + Power until TWRP appears."
+      }
+    ]
+  }
+}

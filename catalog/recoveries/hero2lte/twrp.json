@@ -1,0 +1,51 @@
+{
+  "device": "hero2lte",
+  "recovery": {
+    "id": "twrp",
+    "name": "TWRP",
+    "version": "3.7.0_9-1",
+    "project": "https://twrp.me/",
+    "source": "https://twrp.me/samsung/samsunggalaxys7edge.html",
+    "vetting": "scraped",
+    "requirements": [
+      "Samsung hero2lte Exynos only.",
+      "Unlock the bootloader; use the exact device-specific image.",
+      "The official TWRP device page warns that allowing system modifications can prevent the stock kernel from booting because of dm-verity. Read the device instructions before permitting modifications."
+    ],
+    "imported": "2026-10-16",
+    "imported_from": "catalog/roms/hero2lte/lineage.json",
+    "stages": [
+      {
+        "title": "Install TWRP",
+        "section": "tools",
+        "optional": "Skip if TWRP is already installed.",
+        "recipe": "odin",
+        "mode": "download",
+        "confirm": "FLASH TWRP",
+        "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot restores the stock recovery.",
+        "require_pit": [
+          "BOOT",
+          "RECOVERY",
+          "SYSTEM",
+          "USERDATA"
+        ],
+        "files": [
+          {
+            "name": "twrp-3.7.0_9-1-hero2lte.img",
+            "size": 42891280,
+            "sha256": "4796aad9964dd77c97089814c7e807f0c8acc4120517ad0cebcd6f11605e8e80",
+            "source": "https://eu.dl.twrp.me/hero2lte/twrp-3.7.0_9-1-hero2lte.img.html"
+          }
+        ],
+        "steps": [
+          [
+            "flash",
+            "RECOVERY",
+            "twrp-3.7.0_9-1-hero2lte.img"
+          ]
+        ],
+        "done": "TWRP written. Hold Volume Down + Home + Power until the screen is black, then immediately hold Volume Up + Home + Power until TWRP appears."
+      }
+    ]
+  }
+}
