@@ -465,7 +465,7 @@ const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → $
 /** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count @param {string} key `<codename>/<rom id>` */
 function stageCard(device, stage, n, count, key) {
   const { protocol } = recipes[stage.recipe];
-  const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false, retry: false,
+  const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false, failed: false,
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
   const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
@@ -507,12 +507,13 @@ function stageCard(device, stage, n, count, key) {
   /** Error text plus the host-specific fix. @param {unknown} error */
   const explain = error => [message(error), fixFor(message(error), host, protocol)].filter(Boolean).join(' ');
 
+  const again = `put the phone back in ${MODE[stage.mode].toLowerCase()}, press Retry connect, then run the stage again from step 1.`;
   const update = () => {
-    connectButton.disabled = !supported || st.busy || st.session !== null || st.lost;
-    // green connected · red session lost or stopped · yellow last connect failed, try again
-    const state = st.lost ? 'failed' : st.session ? 'connected' : st.retry ? 'retry' : '';
+    connectButton.disabled = !supported || st.busy || (st.session !== null && !st.lost);
+    // green connected · red connect failed (click to retry) · yellow lost or stopped mid-session (click to reconnect)
+    const state = st.lost ? 'retry' : st.session ? 'connected' : st.failed ? 'failed' : '';
     connectButton.className = `button button-secondary${state && ` connect-${state}`}`;
-    connectButton.textContent = { connected: 'Connected', failed: 'Failed · reload', retry: 'Retry connect', '': CONNECT[protocol] }[state];
+    connectButton.textContent = { connected: 'Connected', failed: 'Failed · retry connect', retry: 'Retry connect', '': CONNECT[protocol] }[state];
     flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !st.files || !risk.checked || confirm.value !== stage.confirm;
   };
   const report = (/** @type {string} */ text, fraction = 0) => {
@@ -525,7 +526,7 @@ function stageCard(device, stage, n, count, key) {
     for (let e = error; e; e = e.cause) dbg(`ERROR ${e?.name ?? ''}: ${e?.message ?? e}\n${e?.stack ?? ''}`);
   };
   const assertSession = () => {
-    if (st.lost || !st.session) throw Error('USB session lost. Reload the page before reconnecting; no automatic retry.');
+    if (st.lost || !st.session) throw Error(`USB session lost. ${again}`);
   };
   const pick = (/** @type {File[]} */ files) => {
     picked = files;
@@ -546,21 +547,24 @@ function stageCard(device, stage, n, count, key) {
     if (st.usb && event.device === st.usb && !st.finished) {
       st.lost = true;
       dbg(`USB disconnect event (${event.device.productName ?? '?'} serial ${event.device.serialNumber ?? '?'})`);
-      report('USB disconnected. The flash may be incomplete; reload before reconnecting.');
+      report(`USB disconnected. The flash may be incomplete: ${again}`);
       update();
     }
   });
   connectButton.addEventListener('click', async () => {
     st.busy = true; update();
+    // Reconnect: drop the dead session first; the stage then runs again from step 1.
+    if (st.usb?.opened) await st.usb.close().catch(() => {});
+    Object.assign(st, { session: null, usb: undefined, lost: false, failed: false, finished: false });
     try {
       dbg(`Connecting (${protocol})`);
       const found = await connect(protocol, dbg);
       Object.assign(st, found, { session: traced(found.session, dbg, protocol) });
       report('Connected. Choose the files, confirm, and run.');
     } catch (error) {
-      st.retry = true;
+      st.failed = true;
       dbgError(error);
-      report(`${explain(error)} Reload to try again.`);
+      report(`${explain(error)} Check the phone is in ${MODE[stage.mode].toLowerCase()}, then press Connect again.`);
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
@@ -581,7 +585,7 @@ function stageCard(device, stage, n, count, key) {
       st.lost = true;
       dbgError(error);
       debugBox.open = true;
-      report(`STOPPED: ${explain(error)} Do not retry blindly; reload the page first.`);
+      report(`STOPPED: ${explain(error)} ${again[0].toUpperCase()}${again.slice(1)}`);
     } finally { st.busy = false; update(); }
   });
   risk.addEventListener('change', update);

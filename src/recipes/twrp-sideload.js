@@ -15,7 +15,7 @@ const BLOCK = 64 * 1024;
  */
 export async function serve(adb, zip, progress) {
   const socket = await adb.createSocket(`sideload-host:${zip.file.size}:${BLOCK}`).catch(e => {
-    throw Error(`Phone refused the sideload (${e.message}): start it in TWRP (Advanced › ADB Sideload, swipe), then reload and connect again. Nothing written.`);
+    throw Error(`Phone refused the sideload (${e.message}): start it in TWRP (Advanced › ADB Sideload, swipe), then connect again. Nothing written.`);
   });
   const reader = socket.readable.getReader(), writer = socket.writable.getWriter();
   const blocks = Math.ceil(zip.file.size / BLOCK);
@@ -51,7 +51,7 @@ export async function run(adb, { device, files, steps }, report, assertSession) 
     throw Error(`Expected ${expected}; phone reports ${adb.banner.device}. Nothing written.`);
   // Normal TWRP/Android ADB has no sideload-host service; it answers the socket with a bare "Socket open failed".
   if (adb.banner.state && adb.banner.state !== 'sideload')
-    throw Error(`Phone is in ${adb.banner.state} mode, not ADB sideload. In TWRP: Advanced › ADB Sideload, swipe, then reload and connect again. Nothing written.`);
+    throw Error(`Phone is in ${adb.banner.state} mode, not ADB sideload. In TWRP: Advanced › ADB Sideload, swipe, then connect again. Nothing written.`);
   const byName = Object.fromEntries(files.map(f => [f.name, f]));
   for (const file of files.filter(f => f.sha256)) { // '' = the user skipped verification for a newer file
     const digest = await checksum(file.file, fraction => report(`Checking SHA-256: ${file.name}`, fraction));

@@ -27,6 +27,18 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
   const say = (text, fraction = 0) => report(`Step ${step}/${total}: ${text}`, fraction);
   const next = text => { step += 1; assertSession(); say(text); };
   const byName = Object.fromEntries(files.map(f => [f.name, f]));
+  /** Re-run a step up to twice when the phone only stopped answering (timeout) and USB is still attached. Safe: each
+   * step rewrites its whole partition, or is an erase / set_active, so repeating gives the same result.
+   * @param {string} text @param {()=>Promise<unknown>} action */
+  const attempt = async (text, action) => {
+    for (let tries = 1; ; tries += 1) {
+      try { return await action(); } catch (error) {
+        if (tries > 2 || !/Timeout of \d+ ms exceeded/.test(String(/** @type {any} */ (error)?.message ?? error))) throw error;
+        assertSession();
+        say(`${text}: phone did not answer, retrying (${tries}/2)`);
+      }
+    }
+  };
 
   next('Checking the phone model');
   const product = await fb.getVariable('product');
@@ -79,14 +91,15 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
 
     for (const [verb, arg, name] of steps) {
       if (verb === 'flash') {
-        next(`Writing ${name} → ${arg}`);
-        await fb.flashBlob(arg, byName[name].file, fraction => say(`Writing ${name} → ${arg}`, fraction));
+        const text = `Writing ${name} → ${arg}`;
+        next(text);
+        await attempt(text, () => fb.flashBlob(arg, byName[name].file, fraction => say(text, fraction)));
       } else if (verb === 'erase') {
         next(`Erasing ${arg}`);
-        await fb.runCommand(`erase:${arg}`);
+        await attempt(`Erasing ${arg}`, () => fb.runCommand(`erase:${arg}`));
       } else if (verb === 'set_active') {
         next(`Switching to slot ${arg}`);
-        await fb.runCommand(`set_active:${arg}`);
+        await attempt(`Switching to slot ${arg}`, () => fb.runCommand(`set_active:${arg}`));
       } else if (verb === 'reboot') {
         next('Rebooting');
         // The phone may drop USB before it answers; everything is already written.

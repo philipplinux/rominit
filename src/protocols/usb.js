@@ -37,7 +37,7 @@ export function adbMove(state, want) {
   if (state === want) return { done: true };
   if (state === 'device') return { send: 'reboot:recovery', wait: 'recovery', seconds: 120, say: 'Android: rebooting into TWRP' };
   if (state === 'recovery' && want === 'sideload') return { send: 'shell:twrp sideload', wait: 'sideload', seconds: 45, say: 'TWRP: starting ADB Sideload' };
-  if (state === 'sideload') return { error: "Phone is in ADB sideload, but this step needs TWRP's normal ADB. Tap Cancel in TWRP, then reload and connect again." };
+  if (state === 'sideload') return { error: "Phone is in ADB sideload, but this step needs TWRP's normal ADB. Tap Cancel in TWRP, then connect again." };
   return { error: `Phone is in ${state ?? 'an unknown'} mode. Boot TWRP first.` };
 }
 
@@ -53,7 +53,7 @@ async function connectAdbIn(want, log) {
     const move = adbMove(state(current.adb), want);
     if ('done' in move) return current;
     if ('error' in move) throw Error(move.error);
-    if (moves === 3) throw Error(`Phone did not reach ${want} mode. Boot TWRP by hand, then reload and connect again.`);
+    if (moves === 3) throw Error(`Phone did not reach ${want} mode. Boot TWRP by hand, then connect again.`);
     log(`${move.say} (${move.send})`);
     const socket = await current.adb.createSocket(move.send);
     const reader = socket.readable.getReader(); // let the phone take the command before the link drops
@@ -68,8 +68,8 @@ async function connectAdbIn(want, log) {
       if (next && state(next.adb) !== move.wait) { log(`Phone back in ${state(next.adb)}, waiting for ${move.wait}`); await next.adb.close().catch(() => {}); next = null; }
     }
     if (!next) throw Error(want === 'sideload'
-      ? 'Phone did not come back in ADB sideload mode. In TWRP: Advanced › ADB Sideload, swipe, then reload and connect again.'
-      : 'Phone did not come back in TWRP. Boot TWRP by hand, then reload and connect again.');
+      ? 'Phone did not come back in ADB sideload mode. In TWRP: Advanced › ADB Sideload, swipe, then connect again.'
+      : 'Phone did not come back in TWRP. Boot TWRP by hand, then connect again.');
     current = next;
   }
 }
@@ -121,6 +121,30 @@ export function downloadSize(value) {
   return Math.min(n > 0 ? n : 512 * 1024 * 1024, 1024 * 1024 * 1024);
 }
 
+/** @type {FastbootDevice|undefined} */
+let fastboot;
+
+/**
+ * getvar with a 15 s timeout instead of the library's fixed 10 s: right after a 1.4 GB userdata write the Mi A3
+ * bootloader answers slowly (the standalone flasher stopped there twice). The fastboot recipe retries a timed-out
+ * step twice (45 s in all). A real unplug still fails at once. Same FAIL → null and trim as the library.
+ * @param {(command:string)=>Promise<{text:string}>} run @param {number} ms
+ */
+export function patientGetvar(run, ms = 15000) {
+  return async (/** @type {string} */ name) => {
+    /** @type {ReturnType<typeof setTimeout>|undefined} */
+    let timer;
+    const timeout = new Promise((_, reject) => { timer = setTimeout(() => reject(Error(`Timeout of ${ms} ms exceeded`)), ms); });
+    try {
+      const { text } = await Promise.race([run(`getvar:${name}`), timeout]);
+      return text?.trim() || null;
+    } catch (error) {
+      if (/** @type {any} */ (error)?.status === 'FAIL') return null;
+      throw error;
+    } finally { clearTimeout(timer); }
+  };
+}
+
 /** One USB connection per catalog protocol. `usb` is the raw device, watched for disconnects.
  * @param {string} protocol @param {(line:string)=>void} [log] connect steps and the phone's identity, for the debug log
  * @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
@@ -134,7 +158,10 @@ export async function connect(protocol, log = () => {}) {
 /** @param {string} protocol @param {(line:string)=>void} log @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
 async function open(protocol, log) {
   if (protocol === 'fastboot') {
-    const fb = new FastbootDevice();
+    // One instance per page: each FastbootDevice keeps a USB "connect" listener that re-claims the phone on replug,
+    // so a second instance (Retry connect) would find the interface taken.
+    const fb = fastboot ??= new FastbootDevice();
+    fb.getVariable = patientGetvar(command => fb.runCommand(command));
     // android-fastboot reads max-download-size as hex only; Qualcomm ABL (Mi A3) answers in decimal, so the
     // library over-reads it (capped at 1 GiB) and the phone refuses the split. Parse it like AOSP fastboot.
     fb._getDownloadSize = async () => downloadSize(await fb.getVariable('max-download-size').catch(() => null));

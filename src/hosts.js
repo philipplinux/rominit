@@ -62,6 +62,8 @@ export function fixFor(error, host, protocol) {
   if (/no device selected/i.test(error)) return host === 'windows'
     ? 'Phone not in the list? Windows hides phones without the WinUSB driver: see the Zadig step above.'
     : 'Phone not in the list? Check the cable (data, not charge-only) and that the phone is in the right mode.';
+  // The phone stopped answering or vanished mid-transfer: almost always cable or hub.
+  if (/Timeout of \d+ ms exceeded|transfer error|disconnected/i.test(error)) return 'USB connection dropped: try another cable or a port directly on the PC.';
   if (!/in use|claim|access denied|security|permission/i.test(error)) return null;
   const steps = prereqsFor(host, protocol).filter(p => p.id !== 'snap' && p.id !== 'google-driver');
   return `Fix: ${steps.map(p => p.command ? `${p.text.replace(/:$/, '')} (\`${p.command.split('\n')[0]}…\`)` : p.text).join(' · ')}`;

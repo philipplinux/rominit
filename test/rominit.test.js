@@ -59,6 +59,31 @@ test('Mi A3 runs the catalog sequence', async () => {
   assert.equal(reports.at(-1), 'Step 12/12: Done.');
 });
 
+test('fastboot: a timed-out write is retried twice, then stops; other errors stop at once', async () => {
+  const dev = device('laurel_sprout'), stage = dev.roms[0].stages[0];
+  const job = () => ({ device: dev, files: fakeFiles(stage), steps: stepsFor(stage) });
+  const flaky = (/** @type {number} */ fails, message = 'Timeout of 15000 ms exceeded') => {
+    const fb = fastboot(), flash = fb.flashBlob; let calls = 0;
+    fb.flashBlob = async (partition, blob) => { if (partition === 'userdata' && fails-- > 0) { calls += 1; throw Error(message); } return flash(partition, blob); };
+    return Object.assign(fb, { calls: () => calls });
+  };
+  const ok = flaky(2), reports = [];
+  await recipes.fastboot.run(ok, job(), text => reports.push(text), noop);
+  assert.ok(ok.log.includes('flash:userdata:rootfs.img') && ok.log.includes('reboot'));
+  assert.ok(reports.some(r => /retrying \(2\/2\)/.test(r)));
+  await assert.rejects(recipes.fastboot.run(flaky(3), job(), noop, noop), /Timeout/);
+  const bad = flaky(5, 'FAIL: bad image');
+  await assert.rejects(recipes.fastboot.run(bad, job(), noop, noop), /bad image/);
+  assert.equal(bad.calls(), 1);
+});
+
+test('fastboot getvar: trims, FAIL means missing, times out instead of hanging', async () => {
+  const { patientGetvar } = await import('../src/protocols/usb.js');
+  assert.equal(await patientGetvar(async () => ({ text: ' b \n' }))('current-slot'), 'b');
+  assert.equal(await patientGetvar(async () => { throw Object.assign(Error('x'), { status: 'FAIL' }); })('nope'), null);
+  await assert.rejects(patientGetvar(() => new Promise(() => {}), 20)('slow'), /Timeout of 20 ms exceeded/);
+});
+
 test('Mi A3 fails closed before writing', async () => {
   const dev = device('laurel_sprout'), stage = dev.roms[0].stages[0];
   for (const [vars, files, pattern] of [
