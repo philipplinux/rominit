@@ -10,6 +10,7 @@
       "origin": "unofficial",
       "status": "beta",
       "vetting": "scraped",
+      "risk": {"level": "high", "why": "no source code published; one builder"},
       "source": null,
       "maintainer": { "name": "ivanmeler", "avatar": "./avatars/ivanmeler.jpg", "source": "https://ivanmeler.github.io/devices/hero2lte.html" },
       "rating": {
@@ -142,6 +143,7 @@
       "origin": "unofficial",
       "status": "beta",
       "vetting": "scraped",
+      "risk": {"level": "high", "why": "no source code published; one builder"},
       "source": null,
       "maintainer": { "name": "ivanmeler", "avatar": "./avatars/ivanmeler.jpg", "source": "https://ivanmeler.github.io/devices/hero2lte.html" },
       "rating": {

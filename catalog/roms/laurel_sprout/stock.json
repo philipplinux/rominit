@@ -9,6 +9,7 @@
       "origin": "stock",
       "status": "stable",
       "vetting": "curated",
+      "risk": {"level": "low", "why": "the phone maker's own signed firmware"},
       "source": null,
       "maintainer": null,
       "rating": {

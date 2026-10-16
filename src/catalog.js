@@ -22,6 +22,8 @@ export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Who built the ROM. `stock` ROMs are the way back; the page lists them under Recover / revert. */
 export const ORIGINS = { official: 'built and released by the OS project', maintainer: "the OS project's official build for this phone, hosted by its device maintainer", unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
 /** How far ROMinit vouches for a ROM. Only a person sets `curated`; scrapers always write `scraped`. */
+/** Security risk from reputation and contributors: who could slip something into the image, and would anyone notice. */
+export const RISKS = { low: 'source published, many contributors or the vendor itself, long track record', mid: 'source published, but one or a few maintainers', high: 'no source code or no reputation: the image cannot be checked' };
 export const VETTING = { curated: 'endorsed by its community or ROMinit (GrapheneOS, mainline postmarketOS / Nura, our own builds)',
   scraped: 'found by a scraper; subject to verification' };
 /** How usable the release is, best first. `broken` ROMs stay listed for the record but cannot be flashed here. */
@@ -70,6 +72,10 @@ export function problems(device, romFile) {
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.
     need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);
+    need(rom.risk?.level in RISKS && rom.risk.why, `${at}: risk needs level (${Object.keys(RISKS).join('/')}) and why`);
+    need(rom.source !== null || rom.origin === 'stock' || rom.risk?.level === 'high', `${at}: no source code published means risk high`);
+    // Recommended (safe): set by a person only, on official or stock builds with low risk; scrapers never write it.
+    need(rom.recommended === undefined || (rom.recommended === true && rom.risk?.level === 'low' && ['official', 'stock'].includes(rom.origin)), `${at}: recommended only on official or stock ROMs with low risk`);
     // Community pick (XDA top pick, years of releases): set by a person only, like `curated`; scrapers never write it.
     need(rom.pick === undefined || (rom.pick.text && rom.pick.url?.startsWith('https://')), `${at}: pick needs text and an https url`);
     need(rom.os && rom.version && (rom.stages?.length || rom.external), `${at}: os, version and stages are required`);

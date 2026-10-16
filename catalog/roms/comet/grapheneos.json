@@ -9,6 +9,7 @@
       "origin": "official",
       "status": "stable",
       "vetting": "curated",
+      "risk": {"level": "low", "why": "official GrapheneOS: open source, large team, signed builds with verified boot, long track record"},
       "rating": {
         "checked": "2026-10-16",
         "features": {

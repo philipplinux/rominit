@@ -9,6 +9,7 @@
       "origin": "unofficial",
       "status": "experimental",
       "vetting": "curated",
+      "risk": {"level": "mid", "why": "source published, but one maintainer (philipplinux) on top of postmarketOS"},
       "rating": {
         "checked": "2026-10-15",
         "kernel": {

@@ -38,8 +38,9 @@ test('validator rejects bad entries', () => {
   bad.roms[0].id = `pmos-${bad.roms[0].version}`;
   bad.roms[0].supersedes = 'nope';
   bad.roms[0].pick = { text: 'XDA top pick' };
+  bad.roms[0].risk = { level: 'low', why: 'x' }; bad.roms[0].source = null; bad.roms[0].recommended = true;
   const found = problems(dev, bad).join('\n');
-  for (const text of ['id must start with its publisher', 'id must not contain the version', 'supersedes must name another ROM', 'pick needs text', 'unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs a checked date', 'rating.includes needs', 'rating.kernel needs', 'support']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
+  for (const text of ['id must start with its publisher', 'id must not contain the version', 'supersedes must name another ROM', 'pick needs text', 'no source code published means risk high', 'recommended only on official', 'unsafe arguments', 'format(userdata) not allowed', 'https source page', 'needs size and sha256', 'confirm phrase', 'rating needs a checked date', 'rating.includes needs', 'rating.kernel needs', 'support']) assert.match(found, new RegExp(text.replace(/[()]/g, '\\$&')));
 });
 
 /** Fake fastboot that records commands. */
