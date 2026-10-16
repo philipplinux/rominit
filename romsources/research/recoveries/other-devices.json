@@ -1,0 +1,3964 @@
+{
+  "snapshot_date": "2026-10-16",
+  "records": [
+    {
+      "project": "PBRP",
+      "codename": "a15",
+      "model": "Samsung Galaxy A15 4G",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "AhmedMoselhi (kanged99)",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_a15-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/a15/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/a15.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "a23xq",
+      "model": "Samsung Galaxy A23 (5G)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "edward0181",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_a23xq-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/a23xq/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/a23xq.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "a52sxq",
+      "model": "Samsung Galaxy A52s (5G)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "saadelasfur14",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_a52sxq-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/a52sxq/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/a52sxq.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "a70q",
+      "model": "Samsung Galaxy A70",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aswin",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_a70q-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/a70q/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/a70q.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "alioth",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_xiaomi_alioth-pbrp",
+      "tree_last_pushed_at": "2021-12-08T08:36:57Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_xiaomi_alioth-pbrp"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "apollo",
+      "model": "Xiaomi Mi 10T/Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Akshat Sinha",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_apollo-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/apollo/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/apollo.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "avicii",
+      "model": "OnePlus Nord",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Sreeshankar K",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_avicii-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/avicii/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/avicii.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "begonia",
+      "model": "Note 8 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200720-1538",
+      "maintainer": "Flamefusion",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_redmi_begonia-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/begonia/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/redmi/begonia.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "beryllium",
+      "model": "Pocophone F1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200610-1452",
+      "maintainer": "Mohd Faraz",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_beryllium-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/beryllium/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/beryllium.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "billie",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_oneplus_billie-pbrp",
+      "tree_last_pushed_at": "2021-12-07T12:53:09Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_oneplus_billie-pbrp"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "bitra",
+      "model": "Realme GT Neo 2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SathamHussainM",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_bitra-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/bitra/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/bitra.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "bladerunner",
+      "model": "Realme X50 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SathamHussainM",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_bladerunner-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/bladerunner/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/bladerunner.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "C106",
+      "model": "C1 Dual",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200411-1012",
+      "maintainer": "Mr.Anonymous",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_coolpad_C106-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/C106/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/coolpad/C106.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "cactus",
+      "model": "Xiaomi Redmi 6A",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_cactus-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/cactus/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/cactus.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "caihong",
+      "model": "OnePlus Pad 2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Himanshu Raj",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_caihong-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/caihong/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/caihong.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "CD6",
+      "model": "TECNO CAMON 15 Air",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Mikesew1320",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_tecno_CD6-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/CD6/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/tecno/CD6.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "CE7j",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_TECNO_CE7j-pbrp",
+      "tree_last_pushed_at": "2021-05-20T17:08:43Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_TECNO_CE7j-pbrp"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "cereus",
+      "model": "Xiaomi Redmi 6",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_cereus-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/cereus/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/cereus.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "cheesedump",
+      "model": "OnePlus 5/5T",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "faoliveira78",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_cheesedump-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/cheesedump/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/cheesedump.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "citrus",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_xiaomi_citrus-pbrp",
+      "tree_last_pushed_at": "2020-12-16T14:47:28Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_xiaomi_citrus-pbrp"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "CL6",
+      "model": "TECNO Camon 30",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Andreii0514",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_TECNO_CL6-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/CL6/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/tecno/CL6.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "Cloud_Q11",
+      "model": "Intex Cloud Q11",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aryan Karan",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_intex_Cloud_Q11-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/Cloud_Q11/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/intex/Cloud_Q11.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "CPH1861",
+      "model": "Realme 1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "I_am_pronoob",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oppo_CPH1861-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/CPH1861/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oppo/CPH1861.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "curtana",
+      "model": "Xiaomi Redmi Note 9S",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_miatoll-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/curtana/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/curtana.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "daisy",
+      "model": "Mi A2 Lite",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190212-1857",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_daisy-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/daisy/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/daisy.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "dipper",
+      "model": "Mi 8",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200528-1823",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_dipper-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/dipper/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/dipper.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "dora",
+      "model": "F8131",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200608-1720",
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_sony_dora-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/dora/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/sony/dora.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "e",
+      "model": "E",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20181226-1153",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_tenor_e-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/e/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/tenor/e.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "E7746",
+      "model": "Micromax IN Note 1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_micromax_E7746-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/E7746/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/micromax/E7746.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "enchilada",
+      "model": "6",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190623-0846",
+      "maintainer": "SIDDK",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_enchilada-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/enchilada/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/enchilada.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "excalibur",
+      "model": "Xiaomi Redmi Note 9 Pro Max",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_miatoll-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/excalibur/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/excalibur.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "f41",
+      "model": "Samsung Galaxy F41",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aswin",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_f41-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/f41/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/f41.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "fajita",
+      "model": "OnePlus 6T",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SIDDK",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_fajita-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/fajita/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/fajita.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "fire",
+      "model": "Xiaomi Redmi 12",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "YudhoPatrianto",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_fire-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/fire/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/fire.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "fleur",
+      "model": "Xiaomi POCO M4 Pro 4g/Redmi Note 11s",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Shazu Khan",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_fleur-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/fleur/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/fleur.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "fog",
+      "model": "Xiaomi Redmi 10C",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Romeo13card",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_fog-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/fog/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/fog.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "garlic",
+      "model": "YU Yureka Black",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Pritish Joshi",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_yu_garlic-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/garlic/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/yu/garlic.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "garnet",
+      "model": "Xiaomi Redmi Note 13 Pro 5G/Poco X6 5G",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "kibria5",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_garnet-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/garnet/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/garnet.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "ginkgo",
+      "model": "Redmi Note 8/8T",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200415-2047",
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_ginkgo-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/ginkgo/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/ginkgo.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "ginna",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_motorola_ginna",
+      "tree_last_pushed_at": "2021-01-10T22:23:50Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_motorola_ginna"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "gram",
+      "model": "Xiaomi Poco M2 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_miatoll-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/gram/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/gram.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "guacamole",
+      "model": "OnePlus 7/7 Pro/7 Pro 5G",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Alexandria Cortez",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_guacamole-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/guacamole/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/guacamole.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "guamp",
+      "model": "Motorola G9",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "MD Raza (DelightReza)",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_motorola_guamp-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/guamp/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/motorola/guamp.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "I01WD",
+      "model": "ASUS ZenFone 6/6Z",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_asus_I01WD-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/I01WD/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/asus/I01WD.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "ido",
+      "model": "Redmi 3",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200622-0723",
+      "maintainer": "Jubayer Ahmad Shvon",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_ido-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/ido/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/ido.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "ime",
+      "model": "U12+",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "2020521-1342",
+      "maintainer": "Jean F. Rivera Ramos",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_htc_ime-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/ime/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/htc/ime.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "ivan",
+      "model": "OnePlus Nord CE 2 (5G)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "NotGanesh",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_ivan-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/ivan/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/ivan.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "jasmine_sprout",
+      "model": "Mi A2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190624-0913",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_jasmine_sprout-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/jasmine_sprout/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/jasmine_sprout.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "joyeuse",
+      "model": "Xiaomi Redmi Note 9 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_miatoll-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/joyeuse/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/joyeuse.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "juice",
+      "model": "Xiaomi Pocophone M3/Redmi 9T/Redmi 9 Power/Redmi note 9 4G",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Joemar Taroy",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_poco_juice-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/juice/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/poco/juice.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "kagura",
+      "model": "F8331",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200608-1808",
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_sony_kagura-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/kagura/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/sony/kagura.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "kenzo",
+      "model": "Redmi Note 3 Pro/SD",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200614-1327",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_kenzo-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/kenzo/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/kenzo.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "kiwi",
+      "model": "Honor 5X",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20181128-0129",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_huawei_kiwi-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/kiwi/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/huawei/kiwi.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "kuntao",
+      "model": "P2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190601-1406",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_lenovo_kuntao-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/kuntao/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/lenovo/kuntao.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "lancelot",
+      "model": "Xiaomi Redmi 9/9 Prime",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_lancelot-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/lancelot/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/lancelot.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "land",
+      "model": "Redmi 3S/3X/Prime",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200617-1210",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_land-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/land/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/land.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "lavender",
+      "model": "Redmi Note 7",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200418-1424",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_lavender-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/lavender/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/lavender.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "LD7",
+      "model": "TECNO POVA",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Punkzappa007",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_tecno_LD7-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/LD7/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/tecno/LD7.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "LI6",
+      "model": "TECNO POVA 6 NEO",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Andreii0514",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_tecno_LI6-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/LI6/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/tecno/LI6.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "lv517",
+      "model": "K20 Plus",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190207-1755",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_lge_lv517-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/lv517/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/lge/lv517.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "m20lte",
+      "model": "Samsung Galaxy M20",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "eun0115",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_m20lte-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/m20lte/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/m20lte.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "m21",
+      "model": "Samsung Galaxy M21",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Nazim",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_m21-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/m21/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/m21.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "m31",
+      "model": "Samsung Galaxy M31",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aswin",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_m31-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/m31/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/m31.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "m52xq",
+      "model": "Samsung Galaxy M52 (5G)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "GabrielARK",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_m52xq-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/m52xq/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/m52xq.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "markw",
+      "model": "Xiaomi Redmi 4 Prime",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Qisthi Iskandar Haqiki",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_markw-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/markw/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/markw.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "miatoll",
+      "model": "Miatoll",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SIDDK",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_miatoll-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/miatoll/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/miatoll.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "mido",
+      "model": "Redmi Note 4X/SD",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200610-0606",
+      "maintainer": "shashank1436",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_mido-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/mido/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/mido.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "mobee01a",
+      "model": "Water 8",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20191113-1425",
+      "maintainer": "Mohd Faraz",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_lyf_mobee01a-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/mobee01a/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/lyf/mobee01a.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "munch",
+      "model": "Xiaomi Poco F4",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Himanshu Raj",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_vayu-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/munch/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/munch.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "olive",
+      "model": "Redmi 8",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200413-1603",
+      "maintainer": "deadlylxrd",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_olive-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/olive/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/olive.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "olivewood",
+      "model": "Xiaomi Redmi 8A Pro/Dual",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aryan Sinha",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_olivewood-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/olivewood/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/olivewood.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "onc",
+      "model": "Xiaomi Redmi 7/Y3",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aryan Karan",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_onc-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/onc/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/onc.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "oneplus3",
+      "model": "OnePlus 3/3 T",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "dlasdl",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_oneplus3-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/oneplus3/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/oneplus3.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "OP6xT",
+      "model": "OnePlus 6/6T",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SIDDK",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_oneplus_OP6xT-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/OP6xT/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/oneplus/OP6xT.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "oxygen",
+      "model": "Xiaomi Mi Max 2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Mahesh Technicals",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_oxygen-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/oxygen/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/oxygen.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "P1m",
+      "model": "Vibe P1m",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20180403-1345",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_lenovo_P1m-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/P1m/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/lenovo/P1m.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "penangf",
+      "model": "Moto G23/G13",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "GitFASTBOOT",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_motorola_penangf-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/penangf/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/motorola/penangf.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "phoenix",
+      "model": "Xiaomi Redmi K30/Poco X2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Himanshu Raj",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_phoenix-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/phoenix/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/phoenix.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "pine",
+      "model": "Redmi 7A",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200723-1418",
+      "maintainer": "AOiSPdev",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_pine-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/pine/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/pine.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "platina",
+      "model": "MI 8 Lite",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190513-0023",
+      "maintainer": "Reza Adi Pangestu",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_platina-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/platina/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/platina.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "Pong",
+      "model": "Nothing Phone (2)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PhatWalrus",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_nothing_Pong-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/Pong/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/nothing/Pong.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "r5x",
+      "model": "Realme 5/5s/5i/5NFC",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Amritorock",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_r5x-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/r5x/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/r5x.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "r9q",
+      "model": "Samsung Galaxy S21 (5G) Snapdragon",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "edward0181",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_r9q-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/r9q/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/r9q.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "rain",
+      "model": "Xiaomi Redmi 10C",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Romeo13card",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_fog-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/rain/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/rain.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "raphael",
+      "model": "Redmi K20 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200606-0847-OFFICIAL",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_raphael-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/raphael/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/raphael.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "riva",
+      "model": "Redmi 5A",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200606-1358",
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_riva-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/riva/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/riva.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1801",
+      "model": "Realme 2 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Sree Govind S A",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1801-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1801/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1801.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1811",
+      "model": "C1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200206-1752",
+      "maintainer": "Nova Customizer",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1811-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1811/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1811.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1821",
+      "model": "3",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190715-1330",
+      "maintainer": "Siddk",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1821-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1821/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1821.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1831",
+      "model": "Realme U1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aryan Sinha",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1831-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1831/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1831.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1851",
+      "model": "3 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200714-1010",
+      "maintainer": "Ahmed Moselhi",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1851-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1851/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1851.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1901",
+      "model": "Realme X",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200625-0822",
+      "maintainer": "SathamHussainM",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1901-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1901/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1901.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1921",
+      "model": "XT",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200610-1320",
+      "maintainer": "Advaith Bhat",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1921-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1921/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1921.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX1941",
+      "model": "Realme C2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Siddk",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX1941-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX1941/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX1941.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX2001",
+      "model": "Realme 6/6i(Indian)/6s",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Ansh & Firdaus Hakimi",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX2001-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX2001/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX2001.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "rmx2020",
+      "model": "Realme C3/Narzo 10A",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_rmx2020-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/rmx2020/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/rmx2020.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX2050",
+      "model": "Realme Narzo 20A",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Siddk",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX2050-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX2050/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX2050.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX2103",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/device_realme_RMX2103-pbrp",
+      "tree_last_pushed_at": "2021-08-10T04:06:42Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/device_realme_RMX2103-pbrp"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX2121",
+      "model": "Realme X7 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX2121-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX2121/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX2121.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX2151",
+      "model": "Realme 7/Narzo 20 Pro/Narzo 30 (4G)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Ansh & Firdaus Hakimi",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX2151-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX2151/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX2151.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX2193",
+      "model": "Realme Narzo 20/Realme 7i (EU)",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX2193-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX2193/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX2193.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX3081",
+      "model": "Realme 8 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Shibu Shaji",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX3081-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX3081/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX3081.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX3092",
+      "model": "Realme X7",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX3092-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX3092/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX3092.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "RMX3191",
+      "model": "Realme C25",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_RMX3191-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/RMX3191/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/RMX3191.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "rolex",
+      "model": "Redmi 4a",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200614-0632",
+      "maintainer": "Mohd Faraz",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_rolex-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/rolex/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/rolex.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "rosy",
+      "model": "Redmi 5",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190219-0813",
+      "maintainer": "ElytrA8",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_rosy-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/rosy/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/rosy.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "sanders",
+      "model": "Moto G (5S) Plus",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SathamHussainM",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_motorola_sanders-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/sanders/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/motorola/sanders.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "santoni",
+      "model": "Redmi 4X",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200609-0147",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_santoni-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/santoni/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/santoni.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "selene",
+      "model": "Xiaomi Redmi 10",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Hasan6034",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_selene-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/selene/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/selene.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "sirius",
+      "model": "Xiaomi Mi 8 SE",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Qisthi Iskandar Haqiki",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_sirius-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/sirius/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/sirius.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "spes",
+      "model": "Xiaomi Redmi Note 11",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Agatha",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_spes-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/spes/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/spes.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "surya",
+      "model": "Xiaomi Poco X3 NFC",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_surya-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/surya/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/surya.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "sweet",
+      "model": "Xiaomi Redmi Note 10 Pro / Pro Max",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "itsshashanksp",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_sweet-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/sweet/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/sweet.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "taoyao",
+      "model": "Xiaomi Mi 12 Lite",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_taoyao-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/taoyao/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/taoyao.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "tiare",
+      "model": "Redmi Go",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Aryan Sinha",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_tiare-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/tiare/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/tiare.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "tulip",
+      "model": "Redmi Note 6 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190729-1626",
+      "maintainer": "IceBreaker2451",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_tulip-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/tulip/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/tulip.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "vayu",
+      "model": "Xiaomi Poco X3 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_vayu-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/vayu/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/vayu.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "vince",
+      "model": "Redmi 5 Plus",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20181220-0719",
+      "maintainer": "r_k87 & Kry9toN",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_vince-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/vince/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/vince.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "violet",
+      "model": "Redmi Note 7 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200609-1007",
+      "maintainer": "Nipin NA (Joker-V2)",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_violet-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/violet/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/violet.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "wayne",
+      "model": "Mi 6X",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190205-0214",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_wayne-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/wayne/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/wayne.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "whyred",
+      "model": "Redmi Note 5",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200409-0643",
+      "maintainer": "Reza Adi Pangestu",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_whyred-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/whyred/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/whyred.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "wind",
+      "model": "Xiaomi Redmi 10C",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Romeo13card",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_fog-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/wind/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/wind.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X00P",
+      "model": "ZenFone Max M1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200715-1222",
+      "maintainer": "MD Raza (raza231198)",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_ASUS_X00P-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X00P/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/asus/X00P.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X00T",
+      "model": "ZenFone Max Pro M1",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200627-1717",
+      "maintainer": "Himanshu Raj",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_asus_X00T-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X00T/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/asus/X00T.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X01AD",
+      "model": "ZenFone Max M2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190605-1123",
+      "maintainer": "Arka",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_asus_X01AD-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X01AD/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/asus/X01AD.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X01BD",
+      "model": "ZenFone Max Pro M2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200421-0621",
+      "maintainer": "legancy",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_asus_X01BD-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X01BD/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/asus/X01BD.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "x2",
+      "model": "X2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200714-1040",
+      "maintainer": "Jubayer Ahmad Shvon",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_x2-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/x2/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/x2.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X6531",
+      "model": "Infinix Hot 50I",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "nazephyrus",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X6531-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X6531/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X6531.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X6532",
+      "model": "Infinix Smart 9",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "nazephyrus",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X6532-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X6532/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X6532.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X663",
+      "model": "Infinix NOTE 11",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "ALBINsRAJ2025",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X663-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X663/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X663.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X6739",
+      "model": "Infinix GT 10 Pro",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "xoo2001",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X6739-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X6739/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X6739.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X682B",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_infinix_X682B-pbrp",
+      "tree_last_pushed_at": "2021-05-21T05:26:36Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_infinix_X682B-pbrp"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X687",
+      "model": "Infinix Zero 8",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "HemanthJabalpuri",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X687-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X687/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X687.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X6880",
+      "model": "Infinix HOT 50 PRO PLUS",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Andreii_0514",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X6880-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X6880/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X6880.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X6881",
+      "model": "Infinix HOT 50 PRO",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Andreii_0514",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X6881-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X6881/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X6881.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "X6882",
+      "model": "Infinix HOT 50",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Andreii_0514",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_infinix_X6882-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/X6882/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/infinix/X6882.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "xandxt",
+      "model": "Realme X/XT",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "SathamHussainM",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_realme_xandxt-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/xandxt/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/realme/xandxt.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "xun",
+      "model": "Xiaomi Redmi Pad SE",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Romeo13card",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_xun-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/xun/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/xun.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "ysl",
+      "model": "Redmi S2",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20200707-0610",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_xiaomi_ysl-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/ysl/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/xiaomi/ysl.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "Z00L",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "tree_repo": "https://github.com/PitchBlackRecoveryDevices/android_device_asus_Z00L",
+      "tree_last_pushed_at": "2021-06-06T04:16:09Z",
+      "sources": [
+        "https://github.com/PitchBlackRecoveryDevices/android_device_asus_Z00L"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "Z010D",
+      "model": "ZenFone Max",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190501-0739",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_asus_Z010D-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/Z010D/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/asus/Z010D.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "z3s",
+      "model": "Samsung Galaxy S20 Ultra",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": null,
+      "maintainer": "Nico1704",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_samsung_z3s-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/z3s/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/samsung/z3s.md"
+      ]
+    },
+    {
+      "project": "PBRP",
+      "codename": "zx55q05",
+      "model": "Water 7",
+      "official_status": "Current",
+      "last_build_date": null,
+      "upstream_release": "20190705-0502",
+      "maintainer": "PBRP Team",
+      "device_tree": "https://github.com/PitchBlackRecoveryProject/android_device_lyf_zx55q05-pbrp",
+      "sources": [
+        "https://pitchblackrecoverydevices.github.io/zx55q05/",
+        "https://raw.githubusercontent.com/PitchBlackRecoveryDevices/PitchBlackRecoveryDevices.github.io/pb/_oem/lyf/zx55q05.md"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a10",
+      "model": "Samsung A10",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "101105042021",
+      "maintainer": "Gabriel260",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/a10/SHRP_v3.1_stable-Official_a10-101105042021.zip/download",
+      "checksum_md5": "9c756890375ab06f406571f0d99a3889",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a20s",
+      "model": "Samsung A20s",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "101105042021",
+      "maintainer": "dotA",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/a20s/SHRP_v3.1_stable-Official_a20s-1634527453.zip/download",
+      "checksum_md5": "6fab429f0fecfe11732cf851cdb8f3a1",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a50",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a52q",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a5y17lte",
+      "model": "Samsung A5 - 2017",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/a5y17lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a70q",
+      "model": "Samsung A70",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "1628909156",
+      "maintainer": "dotA",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/a70q/SHRP_v3.1_stable-Official_a70q-1628909156.zip/download",
+      "checksum_md5": "79349f54ff447be460cc3d0262642f49",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "a7y17lte",
+      "model": "Samsung A7 - 2017",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/a7y17lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "aio_otfp",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "alioth",
+      "model": "Poco F3/Redmi K40/Mi 11 X",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Unmaintained",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/alioth/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "avicii",
+      "model": "Oneplus Nord",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Sreeshankar.K",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/avicii/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "beryllium",
+      "model": "Poco F1",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "164610012021",
+      "maintainer": "Reignz",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Beryllium/SHRP_v3.0_stable-Official_beryllium-164610012021.zip/download",
+      "checksum_md5": "0363255c5c6de079bc6bbd1a41047d1f",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "beyond0lte",
+      "model": "Samsung Galaxy S10e",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/beyond0lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "beyond1lte",
+      "model": "Samsung Galaxy S10",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/beyond1lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "beyond2lte",
+      "model": "Samsung Galaxy S10+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/beyond2lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "beyondx",
+      "model": "Samsung Galaxy S10 5G",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/beyondx/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "c103",
+      "model": "Coolpad Cool 1 Dual",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "105909042021",
+      "maintainer": "epicX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Cool%201%20Dual/Eui/SHRP_v3.1_stable-Official_c103-105909042021.zip/download",
+      "checksum_md5": "80f52e85ae42c8598f3dd15dcb371caa",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "c1s",
+      "model": "Samsung Galaxy Note 20",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/c1s/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "c2s",
+      "model": "Samsung Galaxy Note 20 Ultra",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/c2s/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "cactus",
+      "model": "Redmi 6A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "yarpopkov",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/cactus/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "CD6",
+      "model": "TECNO Camon 15 Air",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "2021-08-22",
+      "maintainer": "Mikesew1320",
+      "latest_build": "https://sourceforge.net/projects/SHRP/files/TECNO-CD6-SHRP/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "cepheus",
+      "model": "Xiaomi Mi 9",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Giovix92",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/cepheus/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "cereus",
+      "model": "Redmi 6",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "yarpopkov",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/cereus/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "Cloud_Q11",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "CPH1861",
+      "model": "Realme 1",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Pro Noob",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/CPH1861/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "crownlte",
+      "model": "Samsung Galaxy Note 9",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/crownlte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ],
+      "device_key": "deviceData:crownlte:https://sourceforge.net/projects/shrp/files/crownlte/"
+    },
+    {
+      "project": "SHRP",
+      "codename": "crownlte",
+      "model": "Samsung Galaxy Note 10+ 5G",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/d2x/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ],
+      "device_key": "deviceData:crownlte:https://sourceforge.net/projects/shrp/files/d2x/"
+    },
+    {
+      "project": "SHRP",
+      "codename": "d1",
+      "model": "Samsung Galaxy Note 10",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/d1/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "d1x",
+      "model": "Samsung Galaxy Note 10 5G",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/d1x/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "d2s",
+      "model": "Samsung Galaxy Note 10+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/d2s/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "d2x",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "daisy",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "davinci",
+      "model": "Xiaomi Mi 9T",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "061206042021",
+      "maintainer": "GeopJr",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/davinci/SHRP_v3.1_stable-Official_davinci-061206042021.zip/download",
+      "checksum_md5": "f702f27dd3dd50ba44a20c5ebb086220",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "dipper",
+      "model": "Xiaomi Mi 8",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.1",
+      "build_number": null,
+      "maintainer": "DarkAngelGR",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Dipper/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "dream2lte",
+      "model": "Samsung Galaxy S8+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/dream2lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "dreamlte",
+      "model": "Samsung Galaxy S8",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/dreamlte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "ef56",
+      "model": "Vega LTE-A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": null,
+      "maintainer": "hiru",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/ef56/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "ef71",
+      "model": "SKY IM-100",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": null,
+      "maintainer": "hiru",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/ef71/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "enchilada",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "fajita",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "g4",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "gauguin",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "Gauguin",
+      "model": "Mi 10i / 10T lite/ Redmi Note 9 Pro 5G",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Droneship",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/gauguin/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "ginkgo",
+      "model": "Xiaomi Redmi Note 8/8T",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "1628599363",
+      "maintainer": "rxuglr",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/ginkgo_willow/SHRP_v2.3.2_ginkgo-140921072020.zip/download",
+      "checksum_md5": "9d062f057a9d3252e33c93eed4486af6",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "gracelte",
+      "model": "Samsung Note 7 / FE",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Morogoku",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/gracelte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "greatlte",
+      "model": "Samsung Galaxy Note 8",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/greatlte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "grus",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "gtexslte",
+      "model": "Samsung SM-T285",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "steadfasterX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/gtexslte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "gts4lvwifi",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "gts6l",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "gts6lwifi",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "hero2lte",
+      "model": "Samsung Galaxy S7 Edge",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "142921072020",
+      "maintainer": "Morogoku",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/hero2lte/SHRP_v2.3.2_hero2lte-142921072020.zip/download",
+      "checksum_md5": "d1f7e930742962f07d9e9a6f4ca29525",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "herolte",
+      "model": "Samsung Galaxy S7",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "143321072020",
+      "maintainer": "Morogoku",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/herolte/SHRP_v3.1_stable-Official_herolte-182505042021.zip/download",
+      "checksum_md5": "0d7edad60741b4bda3107b5c597a40a0",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "holland1",
+      "model": "10.or E",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": null,
+      "maintainer": "jay",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/holland1/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "hotdog",
+      "model": "Oneplus 7T pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "steadfasterX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/hotdog/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "I001D",
+      "model": "Asus ROG Phone 2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "080805042021",
+      "maintainer": "Divkix",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/I001D/SHRP_v3.1_stable-Official_I001D-080805042021.zip/download",
+      "checksum_md5": "b7680855d9521298f30f3be0f4f4e2d0",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "j4corelte",
+      "model": "Samsung J4 Core",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "143721072020",
+      "maintainer": "SebaUbuntu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/j4corelte/SHRP_v2.3.2_j4corelte-143721072020.zip/download",
+      "checksum_md5": "63746d6bb3dd185e9ccda63fd98c0dad",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "j4lte",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "j4primelte",
+      "model": "Samsung J4+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "143921072020",
+      "maintainer": "SebaUbuntu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/jxprimelte/SHRP_v2.3.2_j4primelte-143921072020.zip/download",
+      "checksum_md5": "dc5f216bc1373e180138cdf393cc7ab1",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "j5y17lte",
+      "model": "Samsung J5 - 2017",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "steadfasterX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/j5y17lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "j6primelte",
+      "model": "Samsung J6+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "144621072020",
+      "maintainer": "SebaUbuntu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/jxprimelte/SHRP_v2.3.2_j6primelte-144621072020.zip/download",
+      "checksum_md5": "80800b04362d7848a5b91b6075294919",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "jasmine_sprout",
+      "model": "Xiaomi Mi A2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": null,
+      "maintainer": "XRedCubeX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/jasmine_sprout/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "jd2019",
+      "model": "Lenovo Z5s",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "2021-08-19",
+      "maintainer": "CakesTwix",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/jd2019/SHRP_v3.1_stable-Official_jd2019-1629404610.zip/download",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "juice",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "kenzo",
+      "model": "Xiaomi Redmi Note 3 Pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "kaushalsitapara",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Kenzo/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "lancelot",
+      "model": "Redmi 9/ 9 Prime",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Box_Boi",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/lancelot/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "land",
+      "model": "Xiaomi Redmi 3S Prime",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "MarvelMathesh",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Land/SHRP_v3.1_stable-Official_land-075906042021.zip/download",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "laurel_sprout",
+      "model": "Xiaomi Mi A3",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "073305042021",
+      "maintainer": "HemantSachdeva",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/laurel_sprout/SHRP_v3.1_stable-Official_laurel_sprout-073305042021.zip/download",
+      "checksum_md5": "8cfa43ac3badbded689bce7a6597ff6c",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "lavender",
+      "model": "Xiaomi Redmi Note 7",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.1",
+      "build_number": null,
+      "maintainer": "Giovix92",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Lavender/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "lg_g4",
+      "model": "LG G4",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "steadfasterX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/lg_g4/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "m2",
+      "model": "Meizu M2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "mtpiplod",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/m2/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "m21nsxx",
+      "model": "Samsung Galaxy M21",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "soulr344",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/m21nsxx/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "m31nsxx",
+      "model": "Samsung Galaxy M31",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "soulr344",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/m31nsxx/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "markw",
+      "model": "Xiaomi Redmi 4 Prime",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Tostisto",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Markw/SHRP_v3.1_stable-Official_markw-1627368182.zip/download",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "mblu2",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "merlin",
+      "model": "Redmi Note 9",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Box_Boi",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/merlin/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "mi439",
+      "model": "Redmi 7A / Redmi 8 / 8A / 8A Dual",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "rxuglr",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/mi439/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "miatoll",
+      "model": "Redmi Note 9S / 9 Pro / 9 Pro Max, Poco M2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "dereference",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/miatoll/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "olive",
+      "model": "Xiaomi Redmi 8",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "deadlylxrd",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/olive/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "olivelite",
+      "model": "Xiaomi Redmi 8A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "091405042021",
+      "maintainer": "TechyMinati",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/olivelite/SHRP_v3.0_stable-Official_olivelite-154311012021.zip/download",
+      "checksum_md5": "b0c6626e27b863bbb20a10e86d17ab15",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "olivewood",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "on7xelte",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "onc",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "onclite",
+      "model": "Xiaomi Redmi 7/Y3",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "155021072020",
+      "maintainer": "TheSync",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/onclite/SHRP_v2.3.2_onclite-155021072020.zip/download",
+      "checksum_md5": "0283c040c9e552ad576691d335e4bf6d",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "oneplus3",
+      "model": "Oneplus 3",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "1619443170",
+      "maintainer": "TarD3X",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/OnePlus3-3T/SHRP_v2.3.2_oneplus3-155421072020.zip/download",
+      "checksum_md5": "aafd62425f5052c876dc2b08326cb9ad",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "OP6xT",
+      "model": "Oneplus 6 & 6T",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "SIDDK",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/OP6xT/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "PCCM00",
+      "model": "Oppo Reno 10x",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "LeChenOS",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/PCCM00/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "phoenix",
+      "model": "Poco X2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "16199456139",
+      "maintainer": "Hraj9258",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/phoenix/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "polaris",
+      "model": "Xiaomi Mi Mix 2S",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "xK4m3l",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Polaris/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "pyxis",
+      "model": "Xiaomi Mi 9 Lite",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "DarkAngelGR",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/pyxis/",
+      "checksum_md5": "78004b1f0345655608c460f7b0264bac",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "r1q",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "raphael",
+      "model": "Redmi K20 Pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Pallavjparikh",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/raphael/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "realme_x2",
+      "model": "Realme X2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "m-sameer",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/realme_x2/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "riva",
+      "model": "Xiaomi Redmi 5A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": null,
+      "maintainer": "Agus",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/riva/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX1801",
+      "model": "Realme 2 Pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "091505042021",
+      "maintainer": "ad1tyas1ngh",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX1801/SHRP_v3.1_stable-Official_RMX1801-091505042021.zip/download",
+      "checksum_md5": "a6ab590d33016be1847166947540ee76",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX1831",
+      "model": "Realme U1",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "TheDeepakSabharwal",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX1831/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX1851",
+      "model": "Realme 3 Pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "Kanged99",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX1851/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX1901",
+      "model": "Realme X",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "HaSSaN",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX1901/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX1911",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX1941",
+      "model": "Realme C2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "SIDDK",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX1941/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX2001",
+      "model": "Realme 6",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Alex9329",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX2001/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX2020",
+      "model": "Realme C3/Narzo 10A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "sarthakroy2002",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX2020/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX2030",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX2050",
+      "model": "Realme Narzo 20A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "SIDDK",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX2050/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "RMX2185",
+      "model": "Realme C11",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "techyminati",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/RMX2185/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "rolex",
+      "model": "Xiaomi Redmi 4A",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "Aarish",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Rolex/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "rosy",
+      "model": "Xiaomi Redmi 5",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "ElytrA8",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Rosy/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "s5neolte",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "santoni",
+      "model": "Xiaomi Redmi 4X",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "pranaya2005",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Santoni/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "shiva",
+      "model": "Poco M2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "zubairk22",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/shiva/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "star2lte",
+      "model": "Samsung Galaxy S9+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/star2lte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "starlte",
+      "model": "Samsung Galaxy S9",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/starlte/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "surya",
+      "model": "Poco X3",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "rxuglr",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/surya/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "tiare",
+      "model": "Xiaomi Redmi Go",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "minatiscape",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/tiare/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "tissot",
+      "model": "Xiaomi Mi A1",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Giovix92",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Tissot/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "tulip",
+      "model": "Redmi Note 6 Pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Divkix",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/tulip/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "ugglite",
+      "model": "Xiaomi Redmi Note 5A/Y1 Lite",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "162721072020",
+      "maintainer": "frelein29",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/ugglite/SHRP_v2.3.2_ugglite-162721072020.zip/download",
+      "checksum_md5": "a621af855326ee513b7727823d62df35",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "victoria",
+      "model": null,
+      "official_status": "device tree only",
+      "last_build_date": null,
+      "sources": [
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/devices.raw",
+        "https://github.com/SHRP-Devices"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "vince",
+      "model": "Xiaomi Redmi 5 Plus",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "163021072020",
+      "maintainer": "ender1324",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/vince/SHRP_v2.3.2_vince-163021072020.zip/download",
+      "checksum_md5": "691d43b288babeec7f013d5d28acb1db",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "violet",
+      "model": "Xiaomi Redmi Note 7 Pro",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "1623526613",
+      "maintainer": "karthik558",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/violet/",
+      "checksum_md5": "fe27e1294354e1bd4681f879de27d65b",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "wayne",
+      "model": "Xiaomi Mi 6X",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.1",
+      "build_number": null,
+      "maintainer": "DarkAmy",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/wayne/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "whyred",
+      "model": "Xiaomi Redmi Note 5",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.3.2",
+      "build_number": "163921072020",
+      "maintainer": "SebaUbuntu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Whyred/SHRP_v2.3.2_whyred-163921072020.zip/download",
+      "checksum_md5": "f9ddc8850edd88f5db4e2a5fad39192c",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "X00QD",
+      "model": "Asus ZenFone 5 (2018)",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "121405042021",
+      "maintainer": "Edward Wu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/X00QD/SHRP_v3.1_stable-Official_X00QD-121405042021.zip/download",
+      "checksum_md5": "5a1197ff3e1b1beee8b8e0612d8205a8",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "X00T",
+      "model": "Asus Zenfone Max Pro M1",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "092112042021",
+      "maintainer": "epicX",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/X00T/SHRP_v3.1_stable-Official_X00T-092112042021.zip/download",
+      "checksum_md5": "8d0cce2d6d511f1451fbc932d3f11b4c",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "X01AD",
+      "model": "Asus Zenfone Max M2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "134605042021",
+      "maintainer": "SP-XD",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/X01AD/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "x1s",
+      "model": "Samsung Galaxy S20",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/x1s/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "x2",
+      "model": "LeEco Le Max 2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "2.2",
+      "build_number": null,
+      "maintainer": "Pallavjparikh",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/x2/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "xmsirius",
+      "model": "Xiaomi Mi 8 SE",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Uixdess",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/xmsirius/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "y2s",
+      "model": "Samsung Galaxy S20+",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/y2s/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "ysl",
+      "model": "Xiaomi Redmi S2",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": "004306042021",
+      "maintainer": "MiDoNaSR",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/ysl/SHRP_v3.1_stable-Official_ysl-004306042021.zip/download",
+      "checksum_md5": "04b8bda2e1ac767a56f0e7e611603f39",
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "Z01RD",
+      "model": "Asus ZenFone 5Z",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "Aryan Arora",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/Z01RD/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    },
+    {
+      "project": "SHRP",
+      "codename": "z3s",
+      "model": "Samsung Galaxy S20 Ultra",
+      "official_status": "official website device feed",
+      "last_build_date": null,
+      "upstream_release": "3.1",
+      "build_number": null,
+      "maintainer": "corsicanu",
+      "latest_build": "https://sourceforge.net/projects/shrp/files/z3s/",
+      "checksum_md5": null,
+      "sources": [
+        "https://skyhawkrecovery.github.io/Devices.html",
+        "https://raw.githubusercontent.com/SHRP-Devices/device_data/master/deviceData.json"
+      ]
+    }
+  ]
+}

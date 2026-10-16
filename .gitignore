@@ -9,3 +9,8 @@ dist/
 __pycache__/
 *.pyc
 .codegraph/
+# raw third-party page snapshots the research scripts cache (kept locally, not republished)
+romsources/research/**/*.html
+romsources/research/**/evidence/*.bin
+romsources/research/grapheneos/manifest-source.xml
+romsources/research/grapheneos/sources/

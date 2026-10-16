@@ -1,0 +1,7 @@
+Devices: 1973; releases: 318; CSV parity: checked
+Cache manifest: 66 requests; 58 existing entries verified; 8 missing entries (reported separately)
+Duplicate requests: 4 extra entries across 1 URLs
+  duplicate: https://api.orangefox.download/robots.txt
+Origins: andi34.github.io=2, api.github.com=18, api.orangefox.download=9, codeload.github.com=2, dl.twrp.me=14, download.lineageos.org=3, eu.dl.twrp.me=6, mirrorbits.lineageos.org=2, raw.githubusercontent.com=8, twrp.me=2
+Missing cache entries: 8817074196278dc61671.bin, a2219bd97915634795ce.bin, 85f789457b2ae45002d5.bin, c3942e7a0c057ce866ac.bin, a37290ebac5eaa80082a.bin, b69102cdb8537801d77c.bin, 407fc3c30d0f8fab6212.bin, 6c57cf8d1472ef1120bc.bin
+Snapshot checks: passed (missing cache entries are not treated as errors)

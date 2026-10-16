@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/LineageOS/lineage_wiki",
+  "branch": "main",
+  "commit": "55880f7966ae7e7108c1a3dadfeb4c051426b139",
+  "archive_url": "https://codeload.github.com/LineageOS/lineage_wiki/tar.gz/55880f7966ae7e7108c1a3dadfeb4c051426b139",
+  "archive_sha256": "951f8377f0a1addfc2986464654d270a86ef7a5c59312acb21eafe34ba835010",
+  "captured_utc": "2026-10-15T23:33:02.828658+00:00",
+  "device_files": 764,
+  "unique_codenames": 631,
+  "active_api_models": 345,
+  "api": "https://download.lineageos.org/api/v2/oems and /devices/{model}/builds"
+}

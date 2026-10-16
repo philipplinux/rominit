@@ -1,0 +1,30 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"results\":[{\"description\":\"Improve your Samsung Galaxy S7 Edge's battery life, performance, and look by rooting it and installing a custom ROM, kernel, and more.LineageOS 21.0 (Android 14) [Signature Spoofing][OTA updates] for S7 Edge Exynos.\",\"title\":\"Samsung Galaxy S7 Edge (Exynos) ROMs, Kernels, Rec | XDA Forums\",\"url\":\"https://xdaforums.com/f/samsung-galaxy-s7-edge-exynos-roms-kernels-rec.5186/\"},{\"description\":\"Doručení zboží domů, na jednu z 37 poboček nebo do jednoho z našich 3416 AlzaBoxů.\",\"title\":\"Samsung Galaxy S7 edge modrý - Zboží již není skladem\",\"url\":\"https://www.alza.cz/samsung-galaxy-s7-edge-modry-d4641504.htm\"},{\"description\":\"LineageOS 16.0 for S7 Edge, ROM for the Samsung Galaxy S7 Edge - Updated vendor security patch to match (Latest at the moment samsung decided to drop support for monthly patches on s7 so they update it every 3 months now …\",\"title\":\"LineageOS 16.0 for S7 Edge build 30\",\"url\":\"https://xdaforums.com/t/lineageos-16-0-for-s7-edge-build-30.3842464/\"}]}"
+      }
+    ],
+    "structuredContent": {
+      "results": [
+        {
+          "description": "Improve your Samsung Galaxy S7 Edge's battery life, performance, and look by rooting it and installing a custom ROM, kernel, and more.LineageOS 21.0 (Android 14) [Signature Spoofing][OTA updates] for S7 Edge Exynos.",
+          "title": "Samsung Galaxy S7 Edge (Exynos) ROMs, Kernels, Rec | XDA Forums",
+          "url": "https://xdaforums.com/f/samsung-galaxy-s7-edge-exynos-roms-kernels-rec.5186/"
+        },
+        {
+          "description": "Doručení zboží domů, na jednu z 37 poboček nebo do jednoho z našich 3416 AlzaBoxů.",
+          "title": "Samsung Galaxy S7 edge modrý - Zboží již není skladem",
+          "url": "https://www.alza.cz/samsung-galaxy-s7-edge-modry-d4641504.htm"
+        },
+        {
+          "description": "LineageOS 16.0 for S7 Edge, ROM for the Samsung Galaxy S7 Edge - Updated vendor security patch to match (Latest at the moment samsung decided to drop support for monthly patches on s7 so they update it every 3 months now …",
+          "title": "LineageOS 16.0 for S7 Edge build 30",
+          "url": "https://xdaforums.com/t/lineageos-16-0-for-s7-edge-build-30.3842464/"
+        }
+      ]
+    }
+  }
+}

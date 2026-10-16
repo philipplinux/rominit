@@ -1,0 +1,32 @@
+[
+  {
+    "project": "TWRP",
+    "codename": "hero2lte",
+    "source": "https://dl.twrp.me/hero2lte/twrp-3.7.0_9-1-hero2lte.img.html",
+    "error": "Downloaded response was a small HTML page, not recovery image bytes; no binary/hash verification",
+    "original_error": "not an Android boot image",
+    "observed_response_bytes": 6851,
+    "observed_response_sha256": "eacdbf9565fa92404580c4e6ae8070e8eba3edf685eb26797e0a06e43b4fdcf0",
+    "hash_matches": false
+  },
+  {
+    "project": "TWRP",
+    "codename": "starlte",
+    "source": "https://dl.twrp.me/starlte/twrp-3.7.0_9-0-starlte.img.html",
+    "error": "Downloaded response was a small HTML page, not recovery image bytes; no binary/hash verification",
+    "original_error": "not an Android boot image",
+    "observed_response_bytes": 6834,
+    "observed_response_sha256": "193a8aa2cc9559ab2574bbda407547c349962f588224d3b70fad696af8eb1fbc",
+    "hash_matches": false
+  },
+  {
+    "project": "TWRP",
+    "codename": "star2lte",
+    "source": "https://dl.twrp.me/star2lte/twrp-3.7.0_9-0-star2lte.img.html",
+    "error": "Downloaded response was a small HTML page, not recovery image bytes; no binary/hash verification",
+    "original_error": "not an Android boot image",
+    "observed_response_bytes": 6851,
+    "observed_response_sha256": "1cb5601b89694f21e7e40791e9d04d1df5c1335bb7d87cc5230bc75194a73756",
+    "hash_matches": false
+  }
+]

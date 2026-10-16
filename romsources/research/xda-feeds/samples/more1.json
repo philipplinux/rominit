@@ -1,0 +1,12 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[upstream] search failed: exa: rate limited (without an API key)"
+      }
+    ],
+    "isError": true
+  }
+}

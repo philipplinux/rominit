@@ -1,0 +1,30 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"results\":[{\"description\":\"Unlocking bootloader on a locked device I wanna know if it's possible to unlock a device that isn't eligible by the motorola website.\",\"title\":\"custom rom\",\"url\":\"https://xdaforums.com/tags/custom-rom/\"},{\"description\":\"Improve your Samsung Galaxy S9 's battery life, performance, and look by rooting it and installing a custom ROM, kernel, and more.Samsung Galaxy Tab S7 / S7 Plus ROMs, Kernels, Rec. XDA Developers was founded by developers, for developers.\",\"title\":\"Samsung Galaxy S9 ROMs, Kernels, Recoveries, \\u0026 Ot | XDA Forums\",\"url\":\"https://xdaforums.com/f/samsung-galaxy-s9-roms-kernels-recoveries-ot.7412/\"},{\"description\":\"Samsung Galaxy S9 levně a bez starostí. Objevte široký sortiment Allegro.\",\"title\":\"Samsung Galaxy S9 - Akční ceny a rychlé doručení\",\"url\":\"https://allegro.cz/kategorie/samsung-galaxy-s9-257671\"}]}"
+      }
+    ],
+    "structuredContent": {
+      "results": [
+        {
+          "description": "Unlocking bootloader on a locked device I wanna know if it's possible to unlock a device that isn't eligible by the motorola website.",
+          "title": "custom rom",
+          "url": "https://xdaforums.com/tags/custom-rom/"
+        },
+        {
+          "description": "Improve your Samsung Galaxy S9 's battery life, performance, and look by rooting it and installing a custom ROM, kernel, and more.Samsung Galaxy Tab S7 / S7 Plus ROMs, Kernels, Rec. XDA Developers was founded by developers, for developers.",
+          "title": "Samsung Galaxy S9 ROMs, Kernels, Recoveries, & Ot | XDA Forums",
+          "url": "https://xdaforums.com/f/samsung-galaxy-s9-roms-kernels-recoveries-ot.7412/"
+        },
+        {
+          "description": "Samsung Galaxy S9 levně a bez starostí. Objevte široký sortiment Allegro.",
+          "title": "Samsung Galaxy S9 - Akční ceny a rychlé doručení",
+          "url": "https://allegro.cz/kategorie/samsung-galaxy-s9-257671"
+        }
+      ]
+    }
+  }
+}

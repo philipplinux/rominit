@@ -1,0 +1,22 @@
+{
+  "url": "https://github.com/robots.txt",
+  "final_url": "https://github.com/robots.txt",
+  "status": 200,
+  "headers": {
+    "Date": "Thu, 15 Oct 2026 23:33:09 GMT",
+    "Content-Type": "text/plain",
+    "Last-Modified": "Thu, 15 Oct 2026 23:18:58 GMT",
+    "ETag": "W/\"6ad15f62-4163\"",
+    "Vary": "Accept-Encoding, Accept, X-Requested-With",
+    "Server": "github.com",
+    "X-Frame-Options": "DENY",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    "Accept-Ranges": "bytes",
+    "Set-Cookie": "_gh_sess=0Okj3%2BXrl%2Bd189xEbwk9qT8ZrYF5c66W2BcE0kkWZbPxWT8Dmd1WPKHHTdK8E5%2FezF%2F7p%2BaCpCb11Rrxvw45KOy3aGavwXvhAKWhuLF2VFFmoEb9j0bU1XRXGR3HUcNZKFZfyb1W3FFUHKxoM7Eao4xQY%2F%2FmVhCHHl0QZCwXAus%2Bih6onIkGX4Kvn5hpCf0Y4Ou2H6C0qGpc8DUj6tR%2BFRfaC4fUZrECiLbDwYFjh1AwR%2B3h2ST9IRs2AZDw9fCpvh2rBhH8QSsTwfy10aqIaw%3D%3D--SaL%2BkgLXbbOJ5Dz0--Qs9shJk4OOCxtgyA79ge1Q%3D%3D; path=/; HttpOnly; secure; SameSite=Lax",
+    "Content-Length": "16739",
+    "X-GitHub-Request-Id": "A8D4:2F798:2975DA:4F78A2:6AD162B5",
+    "x-github-edge-region": "northeurope",
+    "connection": "close"
+  },
+  "captured_at": "2026-10-15T23:33:09.703858+00:00"
+}
