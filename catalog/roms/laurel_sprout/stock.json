@@ -2,7 +2,7 @@
   "device": "laurel_sprout",
   "roms": [
     {
-      "id": "stock",
+      "id": "xiaomi-stock",
       "os": "Android",
       "name": "Stock Android One (global)",
       "version": "V12.0.23.0.RFQMIXM",

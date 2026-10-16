@@ -2,8 +2,8 @@
   "device": "hero2lte",
   "roms": [
     {
-      "id": "lineage-21.0",
-      "supersedes": "lineage-20.0",
+      "id": "ivanmeler-lineage-21",
+      "supersedes": "ivanmeler-lineage-20",
       "os": "LineageOS",
       "name": "LineageOS (ivanmeler build)",
       "version": "21.0 (2024-06-20)",
@@ -135,7 +135,7 @@
       ]
     },
     {
-      "id": "lineage-20.0",
+      "id": "ivanmeler-lineage-20",
       "os": "LineageOS",
       "name": "LineageOS (ivanmeler build)",
       "version": "20.0 (2025-06-28)",

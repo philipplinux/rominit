@@ -72,6 +72,9 @@ export function problems(device, romFile) {
     need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
     // The id names a ROM line and stays put across small updates (ratings, comments and tests hang off it); a big jump is a new entry that supersedes the old one from the same publisher file.
+    // <publisher>-<line>: the same line from two builders stays two entries (philipplinux-pmos-server vs official-pmos-mainline).
+    const publisher = rom.origin === 'official' ? 'official' : rom.origin === 'stock' ? device.vendor : rom.maintainer?.name;
+    need(publisher && rom.id?.startsWith(`${String(publisher).toLowerCase().replace(/[^a-z0-9]+/g, '-')}-`), `${at}: id must start with its publisher (official-, the vendor for stock, else the maintainer name)`);
     need(!rom.version || !rom.id.includes(rom.version), `${at}: id must not contain the version (keep it stable across updates)`);
     need(rom.supersedes === undefined || (rom.supersedes !== rom.id && romFile.roms.some((/** @type {any} */ r) => r.id === rom.supersedes)), `${at}: supersedes must name another ROM in the same file`);
     const features = rom.rating?.features ?? {};

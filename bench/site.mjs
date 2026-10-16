@@ -147,7 +147,7 @@ test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
   await page.locator('.version-chip').nth(1).waitFor();
   assert.deepEqual(await page.locator('.version-chip').allInnerTexts(), ['ODIN', 'TWRP-SIDELOAD']);
-  assert.match(await page.locator('select').inputValue(), /^lineage-21/);
+  assert.match(await page.locator('select').inputValue(), /-lineage-21$/);
 });
 
 test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM, recover', async () => {
