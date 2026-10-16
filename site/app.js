@@ -824,7 +824,7 @@ async function inboxView(index) {
         h('details', {}, h('summary', { textContent: 'debug log' }), h('pre', { className: 'bench-output', textContent: x.log })));
       return li.append(fileAs('failures', String(x.id), li)), li;
     }))]),
-    folder('Agent reports', `runs reported through the MCP · ${agents.success.length} success · ${agents.partial.length} partial · ${agents.failed.length} failed · ${agents.abandoned.length} abandoned`, Object.values(agents).flat().length,
+    folder('MCP agent reports', `runs reported through the MCP · ${agents.success.length} success · ${agents.partial.length} partial · ${agents.failed.length} failed · ${agents.abandoned.length} abandoned`, Object.values(agents).flat().length,
       [['success', 'Success'], ['partial', 'Partial'], ['failed', 'Failed'], ['abandoned', 'Abandoned']].map(([outcome, title]) => h('details', { className: 'inbox-sub', open: agents[outcome].length > 0 },
         h('summary', { className: 'field-label', textContent: `${title} · ${agents[outcome].length}` }),
         h('ol', { className: 'comments' }, ...agents[outcome].map((/** @type {any} */ x) => {

@@ -1,7 +1,7 @@
 // POST /mcp: public, read-only MCP server over the published catalog (Streamable HTTP, stateless, plain JSON replies).
 // Any agent can read devices, ROMs and their flash recipes without a login. ROMvault and user data are not exposed.
 // Agents with a personal API token (Authorization: Bearer, made at /?view=agents) also report runs: device and procedure facts
-// only, free text checked for personal data. Finished runs land in the admin inbox (folder "Agent reports").
+// only, free text checked for personal data. Finished runs land in the admin inbox (folder "MCP agent reports").
 import { tokenUser } from './_lib/auth.js';
 import { voterOf } from './_lib/api.js';
 // ponytail: hand-rolled JSON-RPC (initialize, ping, tools/list, tools/call) instead of the MCP SDK; switch when we need sessions, streaming or OAuth.
