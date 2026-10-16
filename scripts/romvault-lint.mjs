@@ -69,6 +69,7 @@ export function lint() {
     for (const target of links(file)) if (!existsSync(target)) say(file, `broken link ${relative(dirname(file), target)}`);
     if (rel !== 'README.md' && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');
+    if (['device', 'vendor', 'project'].includes(fm.type) && !/\]\(https?:/.test(text.split('\n## Sources\n')[1]?.split('\n## ')[0] ?? '')) say(file, 'no "## Sources" resource map with links (AGENTS.md › Writing rules 7)');
   }
 
   // The net: ROM ↔ device ↔ series ↔ vendor, both directions; every catalog device has a page.
