@@ -78,6 +78,8 @@ kbd {
   font-size: .82rem;
 }
 .wordmark-divider { color: var(--faint); }
+.wordmark-text { display: grid; gap: .25rem; }
+.wordmark-text .topbar-note { color: var(--muted); font-size: .6rem; font-weight: 400; letter-spacing: .12em; }
 .topbar-note { display: flex; align-items: center; gap: .55rem; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px rgb(230 195 154 / 45%); }
 
