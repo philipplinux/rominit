@@ -10,7 +10,7 @@ const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const CODENAME = /^[A-Za-z0-9_-]{1,64}$/;
 const RUN = /^[A-Za-z0-9_-]{20,64}$/;
 const RUNS_PER_DAY = 20, STEPS_PER_RUN = 200;
-const PER_HOUR = { anon: 2, token: 100 }; // tool calls; per salted IP without a token, per token with one
+const PER_HOUR = { anon: 10, token: 100 }; // tool calls; per salted IP without a token, per token with one
 
 /** Counts one tool call; returns the message to send back when over the hourly limit. @param {any} env @param {Request} request */
 async function overLimit(env, request) {
