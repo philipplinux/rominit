@@ -512,11 +512,12 @@ function stageCard(device, stage, n, count, key) {
       await navigator.clipboard?.writeText(debugText.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } }));
 
   // What this computer needs before the browser can reach the phone in this stage's mode; follows the header's host choice.
-  const prereqs = h('div', { className: 'field-help prereqs' });
+  const prereqs = h('details', { className: 'field-help prereqs' });
   const renderPrereqs = () => {
     const problem = browserProblem({ usb: navigator.usb, secure: window.isSecureContext, host });
     const items = prereqsFor(host, protocol);
-    prereqs.replaceChildren(h('strong', { textContent: `Before you connect (${HOSTS[host]}; change it in the header):` }),
+    prereqs.open = Boolean(problem); // collapsed hints; open when this browser can't reach the phone at all
+    prereqs.replaceChildren(h('summary', {}, h('strong', { textContent: `Before you connect · ${items.length} hint${items.length === 1 ? '' : 's'}` }), ` (${HOSTS[host]}; change it in the header)`),
       problem && h('p', { className: 'status', textContent: `✗ ${problem}` }),
       h('ul', {}, ...items.map(p => h('li', {}, p.text, p.url && ' ', p.url && link(p.url, new URL(p.url).hostname),
         p.command && h('div', { className: 'command-row' }, h('pre', { className: 'debug-log', textContent: p.command }),

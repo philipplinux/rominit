@@ -483,6 +483,8 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .flash-warn { color: var(--amber); }
 .host-pick { display: flex; align-items: center; gap: .4rem; }
 .host-pick select { font: inherit; background: transparent; color: inherit; border: 1px solid var(--line); padding: .1rem .3rem; }
+.prereqs { border: 1px solid var(--amber); border-left-width: 3px; padding: .5rem .7rem; background: rgba(230, 195, 154, .06); color: #e4c99f; }
+.prereqs summary { cursor: pointer; color: var(--amber); }
 .prereqs ul { margin: .4rem 0 0; padding-left: 1.1rem; }
 .prereqs li { margin-bottom: .4rem; }
 .prereqs pre { margin: .3rem 0; }
