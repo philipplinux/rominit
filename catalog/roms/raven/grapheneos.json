@@ -8,7 +8,7 @@
       "version": "2026100600",
       "origin": "official",
       "status": "stable",
-      "vetting": "scraped",
+      "vetting": "curated",
       "rating": {
         "checked": "2026-10-16",
         "features": {
@@ -67,6 +67,16 @@
       "notes": "Hardened Android from the GrapheneOS project. Flashed with their own web installer; banking apps vary, see their usage guide.",
       "source": "https://github.com/GrapheneOS",
       "maintainer": null,
+      "screenshots": [
+        {
+          "src": "./shots/grapheneos/home.png",
+          "caption": "Home screen, Android 17 (GrapheneOS developers, MIT, via Wikimedia Commons)"
+        },
+        {
+          "src": "./shots/grapheneos/apps.png",
+          "caption": "The GrapheneOS Apps store (Midtsveen, CC0, via Wikimedia Commons)"
+        }
+      ],
       "homepage": "https://grapheneos.org/",
       "external": {
         "url": "https://grapheneos.org/install/web",

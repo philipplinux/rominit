@@ -64,6 +64,7 @@ When in doubt pick the more cautious value (lower status, `untested`).
 ## 6. Hand off
 
 0. Add or update `catalog/notes/<codename>/<rom-id>.md` (format in `catalog/notes/README.md`): pitfalls you found, and one diary line for this run. Read it first if it exists.
-1. `npm test && npm run build` (the build fails on any catalog problem); fix until green.
-2. One commit per device: `catalog: <codename> <os> <version> (scraped)`.
-3. Report: a table of what was added (device, ROM, status, support), plus open questions (missing source repo, unclear prerequisites, conflicting reports). Deploying is the owner's call; scraped entries go live labelled "scraped · unverified".
+1. Always add the OS logo (`site/logos/<os lowercase>.svg`) if missing, and 1–3 `screenshots` (`site/shots/<os or codename>/`). Only freely licensed images (Wikimedia Commons CC0/MIT/CC BY, the project's own MIT/Apache assets); credit author and license in the caption. No CC BY-SA or unlicensed pictures.
+2. `npm test && npm run build` (the build fails on any catalog problem); fix until green.
+3. One commit per device: `catalog: <codename> <os> <version> (scraped)`.
+4. Report: a table of what was added (device, ROM, status, support), plus open questions (missing source repo, unclear prerequisites, conflicting reports). Deploying is the owner's call; scraped entries go live labelled "scraped · unverified".
