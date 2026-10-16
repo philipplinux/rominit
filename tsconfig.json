@@ -9,5 +9,5 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true
   },
-  "include": ["site/*.js", "src/**/*.js"]
+  "include": ["site/*.js", "src/**/*.js", "functions/**/*.js"]
 }
