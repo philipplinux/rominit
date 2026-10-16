@@ -55,7 +55,7 @@ function fastboot(vars = {}) {
 test('Mi A3 runs the catalog sequence', async () => {
   const dev = device('laurel_sprout'), stage = dev.roms[0].stages[0], fb = fastboot(), reports = [];
   await recipes.fastboot.run(fb, { device: dev, files: fakeFiles(stage), steps: stepsFor(stage) }, text => reports.push(text), noop);
-  assert.deepEqual(fb.log, ['flash:vbmeta_b:vbmeta.img', 'erase:dtbo_b', 'flash:userdata:rootfs.img', 'flash:boot_b:boot.img', 'set_active:b', 'reboot']);
+  assert.deepEqual(fb.log, ['flash:vbmeta_b:vbmeta.img', 'erase:dtbo_b', 'flash:boot_b:boot.img', 'flash:userdata:rootfs.img', 'set_active:b', 'reboot']);
   assert.equal(reports.at(-1), 'Step 12/12: Done.');
 });
 
@@ -82,6 +82,16 @@ test('fastboot getvar: trims, FAIL means missing, times out instead of hanging',
   assert.equal(await patientGetvar(async () => ({ text: ' b \n' }))('current-slot'), 'b');
   assert.equal(await patientGetvar(async () => { throw Object.assign(Error('x'), { status: 'FAIL' }); })('nope'), null);
   await assert.rejects(patientGetvar(() => new Promise(() => {}), 20)('slow'), /Timeout of 20 ms exceeded/);
+  // After a timeout the next getvar waits for the owed answer instead of sending a second command.
+  const sent = [];
+  let answer;
+  const slow = patientGetvar(command => { sent.push(command); return sent.length === 1 ? new Promise(r => { answer = r; }) : Promise.resolve({ text: 'yes' }); }, 20);
+  await assert.rejects(slow('has-slot:boot'), /Timeout/);
+  await assert.rejects(slow('has-slot:boot'), /Timeout/);
+  assert.deepEqual(sent, ['getvar:has-slot:boot']);
+  answer({ text: 'no' });
+  assert.equal(await slow('has-slot:boot'), 'yes');
+  assert.deepEqual(sent, ['getvar:has-slot:boot', 'getvar:has-slot:boot']);
 });
 
 test('Mi A3 fails closed before writing', async () => {

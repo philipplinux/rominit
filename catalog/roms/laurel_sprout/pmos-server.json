@@ -116,13 +116,13 @@
             ],
             [
               "flash",
-              "userdata",
-              "rootfs.img"
+              "boot_b",
+              "boot.img"
             ],
             [
               "flash",
-              "boot_b",
-              "boot.img"
+              "userdata",
+              "rootfs.img"
             ],
             [
               "set_active",

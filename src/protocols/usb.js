@@ -126,22 +126,31 @@ let fastboot;
 
 /**
  * getvar with a 15 s timeout instead of the library's fixed 10 s: right after a 1.4 GB userdata write the Mi A3
- * bootloader answers slowly (the standalone flasher stopped there twice). The fastboot recipe retries a timed-out
- * step twice (45 s in all). A real unplug still fails at once. Same FAIL → null and trim as the library.
+ * bootloader answers slowly. The fastboot recipe retries a timed-out step twice. A retry never sends a new command
+ * while the phone still owes the old answer: the abandoned USB read would take the next reply and every later command
+ * would wait for nothing. It waits for that answer first (another 15 s each try). Same FAIL → null and trim as the library.
  * @param {(command:string)=>Promise<{text:string}>} run @param {number} ms
  */
 export function patientGetvar(run, ms = 15000) {
-  return async (/** @type {string} */ name) => {
+  /** @type {Promise<unknown>|null} */
+  let owed = null;
+  const within = (/** @type {Promise<any>} */ promise) => {
     /** @type {ReturnType<typeof setTimeout>|undefined} */
     let timer;
     const timeout = new Promise((_, reject) => { timer = setTimeout(() => reject(Error(`Timeout of ${ms} ms exceeded`)), ms); });
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+  };
+  return async (/** @type {string} */ name) => {
+    if (owed) { await within(owed); owed = null; }
+    const call = run(`getvar:${name}`);
     try {
-      const { text } = await Promise.race([run(`getvar:${name}`), timeout]);
+      const { text } = await within(call);
       return text?.trim() || null;
     } catch (error) {
       if (/** @type {any} */ (error)?.status === 'FAIL') return null;
+      if (/^Timeout of/.test(/** @type {any} */ (error)?.message)) owed = call.then(() => {}, () => {});
       throw error;
-    } finally { clearTimeout(timer); }
+    }
   };
 }
 
