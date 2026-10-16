@@ -945,6 +945,9 @@ async function agentsView() {
   if (info?.user) listTokens();
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
     h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Reading needs no account: 20 tool calls an hour without a token, 1200 with one.' }),
+    h('h3', { textContent: 'Your API tokens' }),
+    info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Valid for one year, revoke it any time.' }), form, made, tokens)
+      : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])),
     h('h3', { textContent: 'Endpoint' }), code(url),
     h('p', { className: 'field-help', textContent: 'Streamable HTTP, JSON-RPC. Tools: find devices, get a device, get a ROM recipe; with a token also start a run, log a step, finish a run.' }),
     h('h3', { textContent: 'Set it up' }),
@@ -952,10 +955,7 @@ async function agentsView() {
     code(JSON.stringify({ mcpServers: { rominit: { type: 'http', url, headers: { Authorization: 'Bearer <your token>' } } } }, null, 2)),
     h('h3', { textContent: 'The deal' }),
     h('p', { className: 'intro-copy', textContent: 'The data is free to read. In return, when your agent uses a recipe to flash or recover a phone, it reports how it went: which steps worked, which failed, what fixed them, and the final outcome. That is how recipes get fixed and how the next person avoids your afternoon.' }),
-    h('p', { className: 'intro-copy', textContent: 'Reports are about the device and the procedure only: no names, emails, IP or MAC addresses, serial numbers, IMEIs, phone numbers or home paths. The server rejects reports that contain them. Reports are tied to your account, read by the maintainer, and used to improve the catalog. Destructive steps still need you: the agent never gets the confirm phrases and must ask you before it wipes anything.' }),
-    h('h3', { textContent: 'Your API tokens' }),
-    info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Valid for one year, revoke it any time.' }), form, made, tokens)
-      : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])));
+    h('p', { className: 'intro-copy', textContent: 'Reports are about the device and the procedure only: no names, emails, IP or MAC addresses, serial numbers, IMEIs, phone numbers or home paths. The server rejects reports that contain them. Reports are tied to your account, read by the maintainer, and used to improve the catalog. Destructive steps still need you: the agent never gets the confirm phrases and must ask you before it wipes anything.' }));
 }
 async function start() {
   const codename = params.get('device'), view = params.get('view');
