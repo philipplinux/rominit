@@ -500,3 +500,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .prereqs li { margin-bottom: .4rem; }
 .prereqs pre { margin: .3rem 0; }
 .host-pick option, .host-confirm-select option { background: var(--bg); color: #e6dfd1; }
+.selected-files.files-ok { border: 1px solid var(--teal); border-left-width: 3px; padding: .5rem .7rem; background: rgba(168, 197, 160, .08); color: var(--teal); }
+.selected-files.files-bad { border: 1px solid #e2a3a0; border-left-width: 3px; padding: .5rem .7rem; background: rgba(226, 163, 160, .08); color: #e2a3a0; }
+.selected-files .files-head { font-weight: 700; }
+.fetch-all { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }

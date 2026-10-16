@@ -1,9 +1,12 @@
 import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
+import { fetchPinned } from '../src/download.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
+// ROMinit's own builds: this host lets the page download them itself (CORS), so a stage can attach them in one click.
+const SELF_HOSTED = 'https://huggingface.co/PhilippLinux/';
 const supported = 'usb' in navigator && window.isSecureContext;
 const params = new URLSearchParams(location.search);
 // The computer doing the flashing: auto-detected, changeable in the header, remembered per browser.
@@ -558,11 +561,14 @@ function stageCard(device, stage, n, count, key) {
     try {
       st.files = selectFiles(stage, files, unverified.checked);
       dbg(`Files: ${st.files.map(f => `${f.name} = ${f.file.name} ${f.file.size} B${f.sha256 ? '' : ' UNVERIFIED'}`).join(', ')}`);
-      selected.replaceChildren(...st.files.map(f => h('li', { textContent: `${f.file.name} (${size(f.size)})${f.sha256 ? '' : ' · UNVERIFIED'}` })));
+      selected.className = 'selected-files files-ok';
+      selected.replaceChildren(h('li', { className: 'files-head', textContent: `✓ ${st.files.length === 1 ? 'File' : `All ${st.files.length} files`} attached${st.files.every(f => f.sha256) ? ' · SHA-256 is checked when you run' : ' · UNVERIFIED'}` }),
+        ...st.files.map(f => h('li', { textContent: `✓ ${f.file.name} (${size(f.size)})${f.sha256 ? '' : ' · UNVERIFIED'}` })));
     } catch (error) {
       st.files = null;
       dbg(`Files rejected: ${files.map(f => `${f.name} ${f.size} B`).join(', ')}: ${message(error)}`);
-      selected.replaceChildren(h('li', { textContent: message(error) }));
+      selected.className = 'selected-files files-bad';
+      selected.replaceChildren(h('li', { className: 'files-head', textContent: '✗ Not attached' }), h('li', { textContent: message(error) }));
     }
     update();
   };
@@ -592,6 +598,26 @@ function stageCard(device, stage, n, count, key) {
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
+  const total = stage.files.reduce((/** @type {number} */ n, /** @type {any} */ f) => n + f.size, 0);
+  const fetchAll = stage.files.every((/** @type {any} */ f) => f.url?.startsWith(SELF_HOSTED)) && h('button', { type: 'button', className: 'button button-primary', textContent: `⬇ Download & attach all (${size(total)})`, async onclick() {
+    this.disabled = true;
+    const files = [];
+    try {
+      let done = 0;
+      for (const pin of stage.files) {
+        files.push(await fetchPinned(pin, f => { this.textContent = `Downloading ${pin.name} · ${Math.floor(100 * (done + f * pin.size) / total)}%`; }));
+        done += pin.size;
+      }
+      dbg(`Downloaded in the page: ${files.map(f => `${f.name} ${f.size} B`).join(', ')}`);
+      pick(files);
+      this.textContent = '✓ Downloaded and attached';
+    } catch (error) {
+      dbg(`Download failed: ${message(error)}`);
+      selected.className = 'selected-files files-bad';
+      selected.replaceChildren(h('li', { className: 'files-head', textContent: '✗ Download failed' }), h('li', { textContent: message(error) }));
+      this.textContent = '⬇ Try the download again'; this.disabled = false;
+    }
+  } });
   flash.addEventListener('click', async () => {
     if (flash.disabled || !st.files) return;
     st.busy = true; update();
@@ -642,6 +668,7 @@ function stageCard(device, stage, n, count, key) {
     h('ul', { className: 'selected-files file-links' }, ...stage.files.map(f => h('li', {}, `${f.name} (${size(f.size)}) · `,
       f.url && h('a', { href: f.url, rel: 'noopener noreferrer', textContent: 'download' }), f.url && ' · ',
       h('a', { href: f.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'source page' })))),
+    fetchAll && h('p', { className: 'field-help fetch-all' }, fetchAll, ' ROMinit downloads the files in this tab and attaches them; nothing is saved to your Downloads folder.'),
     h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
       h('span', {}, h('strong', { textContent: `Choose ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
     selected,

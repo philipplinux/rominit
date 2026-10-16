@@ -77,6 +77,19 @@ test('fastboot: a timed-out write is retried twice, then stops; other errors sto
   assert.equal(bad.calls(), 1);
 });
 
+test('in-page download: streams the pinned file, checks its size', async () => {
+  const { fetchPinned } = await import('../src/download.js');
+  const get = async (/** @type {string} */ url) => new Response(url.endsWith('404') ? null : 'abcdef', { status: url.endsWith('404') ? 404 : 200 });
+  const seen = [];
+  const file = await fetchPinned({ name: 'boot.img', size: 6, url: 'https://x/boot.img' }, f => seen.push(f), get);
+  assert.equal(await file.text(), 'abcdef');
+  assert.equal(file.name, 'boot.img');
+  assert.equal(seen.at(-1), 1);
+  await assert.rejects(fetchPinned({ name: 'a', size: 5, url: 'https://x/a' }, undefined, get), /larger than/);
+  await assert.rejects(fetchPinned({ name: 'a', size: 7, url: 'https://x/a' }, undefined, get), /6 bytes, the catalog pins 7/);
+  await assert.rejects(fetchPinned({ name: 'a', size: 6, url: 'https://x/404' }, undefined, get), /HTTP 404/);
+});
+
 test('failure logs lose device serial numbers', async () => {
   const { redact } = await import('../src/debug.js');
   const log = redact('USB device: Google Android (18d1:d00d) serial c179ce7a1e3a\nUSB disconnect event (Android serial c179ce7a1e3a)\n← fastboot.getVariable("serialno") = "c179ce7a1e3a" (2 ms)');
