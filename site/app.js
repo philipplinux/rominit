@@ -764,13 +764,13 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: four folders, always shown with their counts: page reports (by section), phone tests, flash failures, device searches. */
+/** Admin inbox: five folders, always shown with their counts: page reports (by section), phone tests, flash failures, agent reports (by outcome), device searches. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, failures = [], labels } = await r.json();
+  const { reports, benchmarks, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -824,6 +824,18 @@ async function inboxView(index) {
         h('details', {}, h('summary', { textContent: 'debug log' }), h('pre', { className: 'bench-output', textContent: x.log })));
       return li.append(fileAs('failures', String(x.id), li)), li;
     }))]),
+    folder('Agent reports', `runs reported through the MCP · ${agents.success.length} success · ${agents.partial.length} partial · ${agents.failed.length} failed · ${agents.abandoned.length} abandoned`, Object.values(agents).flat().length,
+      [['success', 'Success'], ['partial', 'Partial'], ['failed', 'Failed'], ['abandoned', 'Abandoned']].map(([outcome, title]) => h('details', { className: 'inbox-sub', open: agents[outcome].length > 0 },
+        h('summary', { className: 'field-label', textContent: `${title} · ${agents[outcome].length}` }),
+        h('ol', { className: 'comments' }, ...agents[outcome].map((/** @type {any} */ x) => {
+          const [codename, id] = String(x.rom).split('/');
+          const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`, textContent: x.rom })),
+            h('small', { textContent: ` ${x.at} UTC · ${x.user} · ${[x.host, x.tools, x.version].filter(Boolean).join(' · ')}` }),
+            h('p', { textContent: x.resolution }),
+            h('details', {}, h('summary', { textContent: `${x.steps.length} logged step${x.steps.length === 1 ? '' : 's'}` }),
+              h('pre', { className: 'bench-output', textContent: x.steps.map((/** @type {any} */ s) => `stage ${s.stage}${s.step ? ` step ${s.step}` : ''} · ${s.outcome}${s.detail ? ` · ${s.detail}` : ''}`).join('\n') })));
+          return li.append(fileAs('agents', x.id, li)), li;
+        }))))),
     folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
   return card;
@@ -898,10 +910,52 @@ function sourcesView() {
 function aboutView() {
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'About ROMinit' }),
     h('p', { className: 'intro-copy', textContent: 'ROMinit flashes phones from the browser over WebUSB: pick your phone, pick a ROM, plug in, and the page runs the same steps you would type into fastboot, adb or Odin. Every file is checked against a pinned size and SHA-256 before it is written, and every destructive step asks you to type a confirm phrase first.' }),
-    h('p', { className: 'intro-copy', textContent: 'It runs in this browser. Files you choose stay on your computer. ROMinit hosts only selected files (its own builds, on Hugging Face); everything else links to its publisher. What reaches the server: anonymous view and flash counts, ratings, comments and tickets you send, and, if a flash stage fails, its debug log with serial numbers removed, so the recipe can be fixed. Votes and counts use a salted hash of your IP address, not the address itself.' }),
+    h('p', { className: 'intro-copy', textContent: 'It runs in this browser. Files you choose stay on your computer. ROMinit hosts only selected files (its own builds, on Hugging Face); everything else links to its publisher. What reaches the server: anonymous view and flash counts, ratings, comments and tickets you send, and, if a flash stage fails, its debug log with serial numbers removed, so the recipe can be fixed. If you connect an AI agent through the MCP, its flash reports (steps and outcome, no personal data) are stored with your account. Votes and counts use a salted hash of your IP address, not the address itself.' }),
     h('p', { className: 'intro-copy' }, 'Made by Philipp Baumann. Free software under the MIT license; ', link('https://github.com/philipplinux/rominit', 'source on GitHub'), '. Questions or problems: the ticket box at the bottom of each page, or a GitHub issue. If it saved you an afternoon, ', link(DONATE, 'buy me a coffee'), '.'),
     h('p', { className: 'field-help', textContent: 'Flashing can brick a phone and voids warranties; ROMinit comes with no warranty. Android is a trademark of Google LLC. Phone, vendor and OS names belong to their owners; ROMinit is not affiliated with or endorsed by any of them.' }),
     h('p', {}, h('a', { href: './?view=sources', textContent: 'Sources & licenses' })));
+}
+/** AI agents & MCP: endpoint, setup, the deal (read our data, report how the flash went), and your API tokens. */
+async function agentsView() {
+  const url = `${location.origin}/mcp`, info = await me;
+  const code = (/** @type {string} */ text) => h('pre', { className: 'bench-output', textContent: text });
+  const tokens = h('div', {});
+  async function listTokens() {
+    const r = await fetch('./api/tokens', { cache: 'no-store' });
+    if (!r.ok) return;
+    const { tokens: list } = await r.json();
+    tokens.replaceChildren(list.length ? h('table', { className: 'license-table' }, h('tr', {}, ...['Name', 'Created', 'Expires', 'Last used', ''].map(t => h('th', { textContent: t }))),
+      ...list.map((/** @type {any} */ t) => h('tr', {}, h('td', { textContent: t.name }), h('td', { textContent: t.created.slice(0, 10) }), h('td', { textContent: t.expires.slice(0, 10) }), h('td', { textContent: t.last_used?.slice(0, 16) ?? 'never' }),
+        h('td', {}, h('button', { type: 'button', className: 'link-button', textContent: 'REVOKE', async onclick() {
+          if (!confirm(`Revoke "${t.name}"? Agents using it stop working.`)) return;
+          await fetch('./api/tokens', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revoke: t.id }) });
+          listTokens();
+        } })))))
+      : h('p', { className: 'field-help', textContent: 'No tokens yet.' }));
+  }
+  const name = h('input', { placeholder: 'e.g. laptop claude', maxLength: 40, required: true }), made = h('div', {});
+  const form = h('form', { className: 'token-form', async onsubmit(/** @type {Event} */ e) {
+    e.preventDefault();
+    const r = await fetch('./api/tokens', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name.value }) });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) { made.replaceChildren(h('p', { className: 'status', textContent: body.error ?? 'could not create the token' })); return; }
+    made.replaceChildren(h('p', { className: 'field-help', textContent: 'Copy it now; it is shown only once and stored only as a hash.' }), code(body.token));
+    name.value = ''; listTokens();
+  } }, name, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
+  if (info?.user) listTokens();
+  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
+    h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Reading needs no account.' }),
+    h('h3', { textContent: 'Endpoint' }), code(url),
+    h('p', { className: 'field-help', textContent: 'Streamable HTTP, JSON-RPC. Tools: find devices, get a device, get a ROM recipe; with a token also start a run, log a step, finish a run.' }),
+    h('h3', { textContent: 'Set it up' }),
+    code(`claude mcp add --transport http rominit ${url} --header "Authorization: Bearer <your token>"`),
+    code(JSON.stringify({ mcpServers: { rominit: { type: 'http', url, headers: { Authorization: 'Bearer <your token>' } } } }, null, 2)),
+    h('h3', { textContent: 'The deal' }),
+    h('p', { className: 'intro-copy', textContent: 'The data is free to read. In return, when your agent uses a recipe to flash or recover a phone, it reports how it went: which steps worked, which failed, what fixed them, and the final outcome. That is how recipes get fixed and how the next person avoids your afternoon.' }),
+    h('p', { className: 'intro-copy', textContent: 'Reports are about the device and the procedure only: no names, emails, IP or MAC addresses, serial numbers, IMEIs, phone numbers or home paths. The server rejects reports that contain them. Reports are tied to your account, read by the maintainer, and used to improve the catalog. Destructive steps still need you: the agent never gets the confirm phrases and must ask you before it wipes anything.' }),
+    h('h3', { textContent: 'Your API tokens' }),
+    info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Valid for one year, revoke it any time.' }), form, made, tokens)
+      : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])));
 }
 async function start() {
   const codename = params.get('device'), view = params.get('view');
@@ -918,6 +972,7 @@ async function start() {
     const index = await (await fetch('./catalog/index.json')).json();
     for (const a of document.querySelectorAll('.site-menu a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
     if (view === 'sources' || view === 'about') { main.append(view === 'sources' ? sourcesView() : aboutView()); return; }
+    if (view === 'agents') { main.append(await agentsView()); return; }
     main.append(view === 'brands' ? tilesView(index, 'Brands', d => [d.vendor], () => true) : view === 'projects' ? tilesView(index, 'Projects', d => d.roms.map((/** @type {any} */ r) => r.os), (r, k) => r.os === k) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
     return;
   }

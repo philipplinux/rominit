@@ -53,3 +53,15 @@ export async function romInfo(env, request, rom) {
 export const covers = (scope, rom) => scope === '*' || [`os:${rom.os}`, `vendor:${rom.vendor}`, `device:${rom.codename}`, `rom:${rom.key}`].includes(scope);
 /** Strongest role a user holds over this ROM: admin > owner > moderator, or null. @param {{role:string, scope:string}[]} roles @param {any} rom */
 export const roleOver = (roles, rom) => ['admin', 'owner', 'moderator'].find(role => roles.some(r => r.role === role && covers(r.scope, rom))) ?? null;
+
+/** Owner of a valid personal API token (`Authorization: Bearer <token>`), or null. Tokens only report agent runs:
+ * never use this where userOf() guards account, comment or admin actions. @param {any} env @param {Request} request */
+export async function tokenUser(env, request) {
+  const token = /^Bearer (\S{20,200})$/.exec(request.headers.get('authorization') ?? '')?.[1];
+  if (!token) return null;
+  const hash = await sha256hex(token);
+  const row = await env.DB.prepare("SELECT t.id AS token_id, u.id, u.name FROM api_tokens t JOIN users u ON u.id = t.user_id WHERE t.hash = ?1 AND t.revoked IS NULL AND t.expires > datetime('now')")
+    .bind(hash).first();
+  if (row) await env.DB.prepare("UPDATE api_tokens SET last_used = datetime('now') WHERE id = ?1").bind(row.token_id).run();
+  return row;
+}

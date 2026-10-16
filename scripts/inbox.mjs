@@ -1,12 +1,13 @@
 // Inboxes for an LLM (or a person) to sort: `benchmarks` (submitted phone tests), `reports` (page reports) and
-// `failures` (debug logs of stages that stopped: recipe-fix when the catalog steps need a change, user-side for cable/driver/mode).
+// `failures` (debug logs of stages that stopped: recipe-fix when the catalog steps need a change, user-side for cable/driver/mode)
+// and `agents` (finished runs AI agents reported through the MCP: outcome, steps, resolution).
 //   npm run inbox -- [--local] <inbox>                              unsorted items, one JSON object per line
 //   npm run inbox -- [--local] sort <inbox> <ref> <label> <summary>   file one (labels: see LABELS)
 // Benchmark bodies carry the script output: "inconclusive" lines are script fixes, "@pkgs" shows what the ROM ships,
 // and differences between the card and the catalog rating are catalog updates.
 import { execFileSync } from 'node:child_process';
 
-const INBOXES = ['benchmarks', 'reports', 'failures'];
+const INBOXES = ['benchmarks', 'reports', 'failures', 'agents'];
 const LABELS = ['script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other'];
 const args = process.argv.slice(2), where = args[0] === '--local' ? (args.shift(), '--local') : '--remote';
 const quote = (/** @type {string} */ s) => `'${s.replaceAll("'", "''")}'`;

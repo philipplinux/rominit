@@ -551,6 +551,9 @@ p.rate-label { margin: .3rem 0 .5rem; }
 /* Zoomed in, the 1160px page would fill the window: keep an 80px gutter for the rail instead. */
 @media (min-width: 821px) { .title-row .start-over { display: none; } body:has(.progress-rail) .page-shell { width: min(1160px, 100% - 160px); } }
 .info-page h3 { margin: 1.4rem 0 .5rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); }
+.token-form { display: flex; gap: .5rem; flex-wrap: wrap; margin: .5rem 0; }
+.token-form input { flex: 1 1 12rem; }
+.info-page pre { white-space: pre-wrap; word-break: break-all; }
 .license-table { width: 100%; border-collapse: collapse; font-size: .75rem; }
 .license-table th, .license-table td { padding: .4rem .6rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .license-table th { color: var(--muted); font-weight: 400; letter-spacing: .08em; text-transform: uppercase; font-size: .62rem; }

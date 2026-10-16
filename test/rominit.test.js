@@ -318,14 +318,16 @@ test('ratings API validates votes and stores only a hashed address', async () =>
 test('MCP: initialize, tools, search, recipe without confirm phrases, actionable errors', async () => {
   const { onRequestPost } = await import('../functions/mcp.js');
   const files = { index: devices.map(d => ({ ...d, roms: d.roms.filter(r => r.origin !== 'stock') })), ...Object.fromEntries(devices.map(d => [d.codename, d])) };
-  const env = { ASSETS: { fetch: async url => { const f = files[new URL(url).pathname.slice(9, -5)]; return f ? Response.json(f) : new Response('', { status: 404 }); } } };
+  let hits = 0;
+  const env = { SALT: 't', DB: { prepare: () => ({ bind: () => ({ first: async () => ({ n: ++hits }), run: async () => ({}) }) }) },
+    ASSETS: { fetch: async url => { const f = files[new URL(url).pathname.slice(9, -5)]; return f ? Response.json(f) : new Response('', { status: 404 }); } } };
   let id = 0;
   const rpc = async (method, params) => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method, params }) }) })).json());
   const call = async (name, args) => (await rpc('tools/call', { name, arguments: args })).result;
   const init = (await rpc('initialize', { protocolVersion: '2025-06-18' })).result;
   assert.equal(init.protocolVersion, '2025-06-18');
-  assert.match(init.instructions, /https:\/\/x\/\?device=<codename>/);
-  assert.equal((await rpc('tools/list')).result.tools.length, 3);
+  assert.match(init.instructions, /https:\/\/x\/\?view=agents/);
+  assert.equal((await rpc('tools/list')).result.tools.length, 6);
   assert.equal((await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) }) })).status, 202);
   const found = (await call('rominit_find_devices', { query: 'mi a3' })).structuredContent;
   assert.ok(found.devices.some(d => d.codename === 'laurel_sprout'));
@@ -335,6 +337,52 @@ test('MCP: initialize, tools, search, recipe without confirm phrases, actionable
   assert.ok(recipe.stages.every(s => s.confirm === undefined && s.destructive === true));
   assert.match((await call('rominit_get_device', { codename: '../x' })).content[0].text, /rominit_find_devices/);
   assert.match((await call('rominit_get_rom', { codename: 'laurel_sprout', rom_id: 'nope' })).content[0].text, new RegExp(rom.id));
+  hits = 120; // the hourly limit without a token
+  assert.match((await call('rominit_find_devices', { query: 'mi a3' })).content[0].text, /Rate limit: 120 .*view=agents/);
+});
+
+test('agent API: token from the site, MCP report with it, admin inbox by outcome', async () => {
+  const { DatabaseSync } = await import('node:sqlite');
+  const db = new DatabaseSync(':memory:');
+  db.exec((await import('node:fs')).readFileSync(new URL('../schema.sql', import.meta.url), 'utf8'));
+  // D1 over node:sqlite: prepare(sql).bind(...).first/all/run
+  const stmt = (sql, args = []) => ({ bind: (...a) => stmt(sql, a), first: async () => db.prepare(sql).get(...args) ?? null,
+    all: async () => ({ results: db.prepare(sql).all(...args) }), run: async () => ({ meta: { changes: Number(db.prepare(sql).run(...args).changes) } }) });
+  const files = Object.fromEntries(devices.map(d => [d.codename, d]));
+  const env = { ADMINS: 'admin@example.org', DB: { prepare: sql => stmt(sql) },
+    ASSETS: { fetch: async url => { const f = files[new URL(url).pathname.slice(9, -5)]; return f ? Response.json(f) : new Response('', { status: 404 }); } } };
+  db.exec(`INSERT INTO users (id, provider, subject, name, email) VALUES (1, 'github', 'a', 'Ada', 'admin@example.org'), (2, 'github', 'b', 'Bob', 'bob@example.org');
+    INSERT INTO sessions VALUES ('${sha('ada')}', 1, datetime('now', '+1 day')), ('${sha('bob')}', 2, datetime('now', '+1 day'))`);
+  const tokens = await import('../functions/api/tokens.js');
+  const site = (fn, sid, body) => fn({ env, request: new Request('https://x/api', { method: body ? 'POST' : 'GET', body: body && JSON.stringify(body), headers: { cookie: `sid=${sid}` } }) });
+  assert.equal((await site(tokens.onRequestPost, 'nobody', { name: 'x' })).status, 401);
+  const { token } = await (await site(tokens.onRequestPost, 'bob', { name: 'laptop claude' })).json();
+  assert.match(token, /^rmi_/);
+  assert.equal(db.prepare('SELECT hash FROM api_tokens').get().hash, sha(token)); // only the hash is stored
+  const { onRequestPost } = await import('../functions/mcp.js');
+  let id = 0;
+  const call = async (name, args, auth = token) => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', headers: auth ? { authorization: `Bearer ${auth}` } : {},
+    body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method: 'tools/call', params: { name, arguments: args } }) }) })).json()).result;
+  const rom = device('laurel_sprout').roms[0];
+  assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id }, null)).content[0].text, /\?view=agents/);
+  assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id, colour: 'red' })).content[0].text, /colour/);
+  const { run_id } = (await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id, host: 'linux', tools: 'fastboot 35' })).structuredContent;
+  assert.match((await call('rominit_log_step', { run_id, stage: 1, outcome: 'ok', detail: 'device 1a2b3c4d\tfastboot' })).content[0].text, /serial/i);
+  assert.match((await call('rominit_log_step', { run_id, stage: 1, outcome: 'ok', detail: 'see /home/ada/x.img' })).isError ? 'rejected' : '', /rejected/);
+  assert.equal((await call('rominit_log_step', { run_id, stage: 1, outcome: 'workaround', detail: 'needed a USB 2 port' })).structuredContent.logged, 1);
+  assert.ok((await call('rominit_finish_run', { run_id, outcome: 'success', resolution: 'Use a USB 2 port for stage 1.' })).structuredContent.ok);
+  assert.match((await call('rominit_log_step', { run_id, stage: 2, outcome: 'ok' })).content[0].text, /finished/);
+  const inbox = await import('../functions/api/inbox.js');
+  assert.equal((await site(inbox.onRequestGet, 'bob')).status, 403);
+  const { agents } = await (await site(inbox.onRequestGet, 'ada')).json();
+  assert.deepEqual([agents.success.length, agents.failed.length], [1, 0]);
+  assert.deepEqual(agents.success[0].steps, [{ stage: 1, step: null, outcome: 'workaround', detail: 'needed a USB 2 port' }]);
+  assert.equal(db.prepare('SELECT n FROM mcp_hits WHERE who LIKE ?').get('token:%').n, 7); // every tool call of this token counted
+  // a revoked token stops reporting
+  const [{ id: tokenId }] = await (await site(tokens.onRequestGet, 'bob')).json();
+  assert.equal((await site(tokens.onRequestPost, 'ada', { revoke: tokenId })).status, 404); // not Ada's token
+  assert.equal((await site(tokens.onRequestPost, 'bob', { revoke: tokenId })).status, 200);
+  assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id })).content[0].text, /view=agents/);
 });
 
 test('comments API needs an account, checks length, ROM and rate limit', async () => {
