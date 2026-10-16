@@ -447,7 +447,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
   }
   return box;
 }
-const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP ADB SIDELOAD' };
+const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP' };
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
 /** One readable line per step for the card. @param {any[]} step */
 const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → ${a}`, erase: `erase ${a}`, set_active: `switch to slot ${a}`,
@@ -459,7 +459,7 @@ function stageCard(device, stage, n, count, key) {
   const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false,
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
-  const status = h('p', { className: 'status', role: 'status', textContent: `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
+  const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'sideload' ? 'Boot TWRP, then connect: ROMinit starts ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
   const selected = h('ul', { className: 'selected-files' }, h('li', { className: 'empty-files', textContent: 'No files selected' }));
