@@ -308,6 +308,28 @@ test('ratings API validates votes and stores only a hashed address', async () =>
   assert.deepEqual(runs.map(([r, voter, stars]) => [r, /^[0-9a-f]{64}$/.test(voter), stars]), [[rom, true, 4]]);
 });
 
+test('MCP: initialize, tools, search, recipe without confirm phrases, actionable errors', async () => {
+  const { onRequestPost } = await import('../functions/mcp.js');
+  const files = { index: devices.map(d => ({ ...d, roms: d.roms.filter(r => r.origin !== 'stock') })), ...Object.fromEntries(devices.map(d => [d.codename, d])) };
+  const env = { ASSETS: { fetch: async url => { const f = files[new URL(url).pathname.slice(9, -5)]; return f ? Response.json(f) : new Response('', { status: 404 }); } } };
+  let id = 0;
+  const rpc = async (method, params) => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method, params }) }) })).json());
+  const call = async (name, args) => (await rpc('tools/call', { name, arguments: args })).result;
+  const init = (await rpc('initialize', { protocolVersion: '2025-06-18' })).result;
+  assert.equal(init.protocolVersion, '2025-06-18');
+  assert.match(init.instructions, /https:\/\/x\/\?device=<codename>/);
+  assert.equal((await rpc('tools/list')).result.tools.length, 3);
+  assert.equal((await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) }) })).status, 202);
+  const found = (await call('rominit_find_devices', { query: 'mi a3' })).structuredContent;
+  assert.ok(found.devices.some(d => d.codename === 'laurel_sprout'));
+  const rom = device('laurel_sprout').roms[0];
+  const recipe = (await call('rominit_get_rom', { codename: 'laurel_sprout', rom_id: rom.id })).structuredContent;
+  assert.equal(recipe.stages.length, rom.stages.length);
+  assert.ok(recipe.stages.every(s => s.confirm === undefined && s.destructive === true));
+  assert.match((await call('rominit_get_device', { codename: '../x' })).content[0].text, /rominit_find_devices/);
+  assert.match((await call('rominit_get_rom', { codename: 'laurel_sprout', rom_id: 'nope' })).content[0].text, new RegExp(rom.id));
+});
+
 test('comments API needs an account, checks length, ROM and rate limit', async () => {
   const { onRequestPost } = await import('../functions/api/comments.js');
   let recent = null; const inserts = [];

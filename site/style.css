@@ -506,7 +506,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .fetch-all { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
 /* Progress rail: a fixed scrollbar in the left gutter with section milestones. The gutter is (100vw - 1160px) / 2;
  * the rail sits mid-gutter but leaves 30px before the cards; labels and +/- only where the gutter is wide enough. */
-.progress-rail { --dot: 26px; --gutter: max(80px, (100vw - 1160px) / 2); position: fixed; top: 170px; bottom: 50px; left: max(40px, min(var(--gutter) - 170px, var(--gutter) / 2 - 40px)); z-index: 5; width: var(--dot); margin-left: calc(var(--dot) / -2); }
+.progress-rail { --dot: 26px; --gutter: max(80px, (100vw - 1160px) / 2); position: fixed; top: 78px; bottom: 40px; left: max(40px, min(var(--gutter) - 170px, var(--gutter) / 2 - 40px)); z-index: 5; width: var(--dot); margin-left: calc(var(--dot) / -2); }
 /* The rail box is one dot wide and everything centres on it with 50% / translate, so zoom rounding can't push dots off the line. */
 .progress-rail::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: var(--line); }
 .rail-fill { position: absolute; top: 0; left: 50%; width: 2px; transform: translateX(-50%); background: var(--teal); }
@@ -528,9 +528,11 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .rail-mark[data-num="T"] a { color: #f0a29b; }
 .rail-mark[data-num="T"] b { border-color: #e8706a; background: rgb(226 90 80 / 15%); color: #f0a29b; }
 .rail-mark a:hover b { border-color: #ece4d4; }
-@media (max-width: 1600px) { .progress-rail { left: calc(var(--gutter) / 2); } .rail-mark small, .rail-fold { display: none; } .progress-rail > .start-over { padding: .4rem; } .progress-rail > .start-over small { display: none; } }
+@media (max-width: 1600px) { .progress-rail { left: calc(var(--gutter) / 2); } .rail-mark small, .rail-fold { display: none; } .progress-rail > .start-over { padding: .3rem; } .progress-rail > .start-over small { display: none; } }
 @media (max-width: 820px) { .progress-rail { display: none; } }
-.progress-rail > .start-over { position: absolute; top: -84px; left: 50%; transform: translateX(-50%); border: 2px solid var(--amber); border-radius: 8px; background: rgb(230 195 154 / 10%); color: var(--amber); font-weight: 700; }
+.progress-rail > .start-over { position: absolute; top: -62px; left: 50%; transform: translateX(-50%); padding: .3rem .45rem; border: 1px solid var(--amber); border-radius: 6px; background: rgb(230 195 154 / 10%); color: var(--amber); font-weight: 700; }
+.progress-rail > .start-over svg { width: 16px; height: 16px; }
+.progress-rail > .start-over small { font-size: .5rem; }
 .progress-rail > .start-over:hover { background: var(--amber); color: var(--bg); }
 /* Zoomed in, the 1160px page would fill the window: keep an 80px gutter for the rail instead. */
 @media (min-width: 821px) { .title-row .start-over { display: none; } body:has(.progress-rail) .page-shell { width: min(1160px, 100% - 160px); } }
