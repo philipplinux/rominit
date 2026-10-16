@@ -379,7 +379,9 @@ test('agent API: token from the site, MCP report with it, admin inbox by outcome
   assert.deepEqual(agents.success[0].steps, [{ stage: 1, step: null, outcome: 'workaround', detail: 'needed a USB 2 port' }]);
   assert.equal(db.prepare('SELECT n FROM mcp_hits WHERE who LIKE ?').get('token:%').n, 7); // every tool call of this token counted
   // a revoked token stops reporting
-  const [{ id: tokenId }] = await (await site(tokens.onRequestGet, 'bob')).json();
+  const listed = await (await site(tokens.onRequestGet, 'bob')).json(); // a plain array, as site/app.js reads it
+  assert.deepEqual(listed.map(t => t.name), ['laptop claude']);
+  const [{ id: tokenId }] = listed;
   assert.equal((await site(tokens.onRequestPost, 'ada', { revoke: tokenId })).status, 404); // not Ada's token
   assert.equal((await site(tokens.onRequestPost, 'bob', { revoke: tokenId })).status, 200);
   assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id })).content[0].text, /view=agents/);

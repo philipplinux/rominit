@@ -923,7 +923,7 @@ async function agentsView() {
   async function listTokens() {
     const r = await fetch('./api/tokens', { cache: 'no-store' });
     if (!r.ok) return;
-    const { tokens: list } = await r.json();
+    const list = await r.json();
     tokens.replaceChildren(list.length ? h('table', { className: 'license-table' }, h('tr', {}, ...['Name', 'Created', 'Expires', 'Last used', ''].map(t => h('th', { textContent: t }))),
       ...list.map((/** @type {any} */ t) => h('tr', {}, h('td', { textContent: t.name }), h('td', { textContent: t.created.slice(0, 10) }), h('td', { textContent: t.expires.slice(0, 10) }), h('td', { textContent: t.last_used?.slice(0, 16) ?? 'never' }),
         h('td', {}, h('button', { type: 'button', className: 'link-button', textContent: 'REVOKE', async onclick() {
