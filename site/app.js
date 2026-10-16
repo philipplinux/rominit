@@ -957,7 +957,7 @@ async function agentsView() {
   } }, name, days, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
   if (info?.user) listTokens();
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
-    h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Reading needs no account: 20 tool calls an hour without a token, 1200 with one.' }),
+    h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Without a token: 2 tool calls an hour, enough for a look. With a free token: 100 an hour.' }),
     h('div', { className: 'deal' }, h('strong', { textContent: 'The deal' }),
       h('ul', {}, ...['Data is free to read.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Deletion requires your approval: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
     h('h3', { textContent: 'Your API tokens' }),

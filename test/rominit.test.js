@@ -319,7 +319,7 @@ test('MCP: initialize, tools, search, recipe without confirm phrases, actionable
   const { onRequestPost } = await import('../functions/mcp.js');
   const files = { index: devices.map(d => ({ ...d, roms: d.roms.filter(r => r.origin !== 'stock') })), ...Object.fromEntries(devices.map(d => [d.codename, d])) };
   let hits = 0;
-  const env = { SALT: 't', DB: { prepare: () => ({ bind: () => ({ first: async () => ({ n: ++hits }), run: async () => ({}) }) }) },
+  const env = { SALT: 't', DB: { prepare: () => ({ bind: () => ({ first: async () => ({ n: hits ? ++hits : 1 }), run: async () => ({}) }) }) },
     ASSETS: { fetch: async url => { const f = files[new URL(url).pathname.slice(9, -5)]; return f ? Response.json(f) : new Response('', { status: 404 }); } } };
   let id = 0;
   const rpc = async (method, params) => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method, params }) }) })).json());
@@ -337,8 +337,8 @@ test('MCP: initialize, tools, search, recipe without confirm phrases, actionable
   assert.ok(recipe.stages.every(s => s.confirm === undefined && s.destructive === true));
   assert.match((await call('rominit_get_device', { codename: '../x' })).content[0].text, /rominit_find_devices/);
   assert.match((await call('rominit_get_rom', { codename: 'laurel_sprout', rom_id: 'nope' })).content[0].text, new RegExp(rom.id));
-  hits = 20; // the hourly limit without a token
-  assert.match((await call('rominit_find_devices', { query: 'mi a3' })).content[0].text, /Rate limit: 20 .*1200 .*sign in at https:\/\/x\/\?view=agents/);
+  hits = 2; // count from here: the next call is the 3rd this hour, over the limit without a token
+  assert.match((await call('rominit_find_devices', { query: 'mi a3' })).content[0].text, /Rate limit: 2 .*100 .*sign in at https:\/\/x\/\?view=agents/);
 });
 
 test('agent API: token from the site, MCP report with it, admin inbox by outcome', async () => {
