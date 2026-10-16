@@ -1035,29 +1035,33 @@ async function start() {
         ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
       otherRecoveries]));
 }
-/** Left rail like a scrollbar: milestones 0–4, R, T sit where their section is on the page, a marker follows the scroll,
- * the line fills up to where you are; a milestone goes green when its section is done, amber ring on the next one to do. @param {HTMLDetailsElement[]} sections */
+/** Left rail like a scrollbar: the rail is the whole page, milestones 0–4, R, T sit at their section's place (so long sections
+ * get long stretches), the thumb is what the window shows. Green when a section is done, amber ring on the next one to do,
+ * +/- opens or closes the section. @param {HTMLDetailsElement[]} sections */
 function progressRail(sections) {
-  const dots = sections.map(sec => {
+  const marks = sections.map(sec => {
     const [num, label] = (sec.querySelector(':scope > summary > span')?.textContent ?? '').split(' · ');
-    return h('a', { href: '#', title: label, onclick(/** @type {Event} */ e) { e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
-      h('b', { textContent: num }), h('small', { textContent: label }));
+    const fold = h('button', { type: 'button', className: 'rail-fold', onclick() { sec.open = !sec.open; } });
+    const sync = () => { fold.textContent = sec.open ? '−' : '+'; fold.title = `${sec.open ? 'Close' : 'Open'} ${label}`; };
+    sec.addEventListener('toggle', sync); sync();
+    return h('div', { className: 'rail-mark' }, fold, h('a', { href: '#', title: label, onclick(/** @type {Event} */ e) {
+      e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, h('b', { textContent: num }), h('small', { textContent: label })));
   });
   const fill = h('i', { className: 'rail-fill' }), thumb = h('i', { className: 'rail-thumb' });
-  const at = (/** @type {number} */ y) => Math.min(1, Math.max(0, y / Math.max(1, document.documentElement.scrollHeight - innerHeight)));
   const place = () => {
-    // Sections near the end all map to the bottom; keep milestones a two-line label apart, pushed up from the bottom.
+    const page = Math.max(1, document.documentElement.scrollHeight);
+    // Two sections closer than a two-line label still get that much room; pushed up from the bottom if needed.
     const gap = 44 / Math.max(1, rail.clientHeight);
-    const tops = sections.map(sec => at(sec.getBoundingClientRect().top + scrollY - 80));
+    const tops = sections.map(sec => (sec.getBoundingClientRect().top + scrollY) / page);
     for (let i = 1; i < tops.length; i++) tops[i] = Math.max(tops[i], tops[i - 1] + gap);
-    for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], (i === tops.length - 1 ? 1 : tops[i + 1] - gap));
-    tops.forEach((top, i) => { dots[i].style.top = `${100 * top}%`; });
-    const f = `${100 * at(scrollY)}%`;
-    fill.style.height = f; thumb.style.top = f;
+    for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], i === tops.length - 1 ? 1 : tops[i + 1] - gap);
+    tops.forEach((top, i) => { marks[i].style.top = `${100 * top}%`; });
+    fill.style.height = thumb.style.top = `${100 * scrollY / page}%`;
+    thumb.style.height = `${100 * innerHeight / page}%`;
   };
   const paint = () => {
     const next = sections.findIndex(sec => !sec.classList.contains('done') && sec.classList.contains('required'));
-    dots.forEach((dot, i) => { dot.className = sections[i].classList.contains('done') ? 'done' : i === next ? 'next' : ''; });
+    marks.forEach((mark, i) => { mark.className = `rail-mark${sections[i].classList.contains('done') ? ' done' : i === next ? ' next' : ''}`; });
   };
   // Sections flip their own done / required classes; opening or closing one moves the rest, so re-place on resize too.
   const watch = new MutationObserver(paint);
@@ -1066,7 +1070,7 @@ function progressRail(sections) {
   const soon = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(place); };
   addEventListener('scroll', soon, { passive: true });
   new ResizeObserver(soon).observe(document.body);
-  const rail = h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...dots);
+  const rail = h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...marks);
   paint(); soon();
   return rail;
 }
