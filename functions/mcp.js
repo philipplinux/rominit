@@ -1,5 +1,5 @@
 // POST /mcp: MCP server over the published catalog (Streamable HTTP, stateless, plain JSON replies).
-// Every tool call needs a free personal API token (Authorization: Bearer, made at /?view=agents), 100 calls an hour.
+// Every request needs a free personal API token (Authorization: Bearer, made at /?view=agents); 100 tool calls an hour.
 // Agents read devices, ROMs and their flash recipes and report runs: device and procedure facts only, free text checked
 // for personal data. ROMvault and user data are not exposed. Finished runs land in the admin inbox (folder "MCP agent reports").
 import { tokenUser } from './_lib/auth.js';
@@ -9,12 +9,13 @@ const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const CODENAME = /^[A-Za-z0-9_-]{1,64}$/;
 const RUN = /^[A-Za-z0-9_-]{20,64}$/;
 const RUNS_PER_DAY = 20, STEPS_PER_RUN = 200;
-const PER_HOUR = 100; // tool calls per API token; without one, tools/call is refused (initialize and tools/list stay open)
+const PER_HOUR = 100; // tool calls per API token; without a token every request is refused
 
-/** Every tool call needs a personal API token, counted per hour; returns the message to send back when refused. @param {any} env @param {Request} request */
-async function refused(env, request) {
-  const who = await tokenUser(env, request);
-  if (!who) return `ROMinit's MCP needs a free personal API token. Ask the human to sign in at ${new URL('/?view=agents', request.url).href}, create a token there and add it to this MCP connection as the header "Authorization: Bearer <token>". Then retry.`;
+/** Without a valid token: what to tell the agent. @param {Request} request */
+const needsToken = request => `ROMinit's MCP needs a free personal API token. Ask the human to sign in at ${new URL('/?view=agents', request.url).href}, create a token there and add it to this MCP connection as the header "Authorization: Bearer <token>". Then reconnect.`;
+
+/** Counts one tool call for this token; returns the message to send back when over the hourly limit. @param {any} env @param {{token_id:number}} who */
+async function overLimit(env, who) {
   const hour = new Date().toISOString().slice(0, 13);
   const row = await env.DB.prepare('INSERT INTO mcp_hits (who, hour, n) VALUES (?1, ?2, 1) ON CONFLICT (who, hour) DO UPDATE SET n = n + 1 RETURNING n')
     .bind(`token:${who.token_id}`, hour).first();
@@ -176,6 +177,8 @@ export async function callTool(env, request, name, args = {}) {
 export async function handle(env, request, msg) {
   if (msg?.jsonrpc !== '2.0' || typeof msg.method !== 'string') return { jsonrpc: '2.0', id: msg?.id ?? null, error: { code: -32600, message: 'Invalid request' } };
   if (msg.id === undefined) return null; // notifications (initialized, cancelled) need no reply
+  const who = await tokenUser(env, request);
+  if (!who) return { jsonrpc: '2.0', id: msg.id, error: { code: -32001, message: needsToken(request) } };
   const ok = (/** @type {any} */ result) => ({ jsonrpc: '2.0', id: msg.id, result });
   switch (msg.method) {
     case 'initialize': {
@@ -187,7 +190,7 @@ export async function handle(env, request, msg) {
     case 'ping': return ok({});
     case 'tools/list': return ok({ tools: TOOLS });
     case 'tools/call': {
-      const no = await refused(env, request);
+      const no = await overLimit(env, who);
       if (no) return ok({ content: [{ type: 'text', text: no }], isError: true });
       try {
         const data = await callTool(env, request, msg.params?.name, msg.params?.arguments);

@@ -324,8 +324,7 @@ test('MCP: initialize, tools, search, recipe without confirm phrases, actionable
   let id = 0;
   const rpc = async (method, params, key = 'rmi_test-key-0123456789') => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', headers: key ? { authorization: `Bearer ${key}` } : {}, body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method, params }) }) })).json());
   const call = async (name, args, key) => (await rpc('tools/call', { name, arguments: args }, key)).result;
-  assert.equal((await rpc('tools/list', undefined, null)).result.tools.length, 6); // discovery needs no token
-  assert.match((await call('rominit_find_devices', { query: 'mi a3' }, null)).content[0].text, /needs a free personal API token.*https:\/\/x\/\?view=agents/);
+  for (const method of ['initialize', 'tools/list', 'tools/call']) assert.match((await rpc(method, {}, null)).error.message, /needs a free personal API token.*https:\/\/x\/\?view=agents/);
   const init = (await rpc('initialize', { protocolVersion: '2025-06-18' })).result;
   assert.equal(init.protocolVersion, '2025-06-18');
   assert.match(init.instructions, /https:\/\/x\/\?view=agents/);
@@ -365,8 +364,9 @@ test('agent API: token from the site, MCP report with it, admin inbox by outcome
   assert.equal(db.prepare('SELECT hash FROM api_tokens').get().hash, sha(token)); // only the hash is stored
   const { onRequestPost } = await import('../functions/mcp.js');
   let id = 0;
-  const call = async (name, args, auth = token) => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', headers: auth ? { authorization: `Bearer ${auth}` } : {},
-    body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method: 'tools/call', params: { name, arguments: args } }) }) })).json()).result;
+  const toolResult = reply => reply.result ?? { content: [{ text: reply.error.message }], isError: true };
+  const call = async (name, args, auth = token) => toolResult(await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', headers: auth ? { authorization: `Bearer ${auth}` } : {},
+    body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method: 'tools/call', params: { name, arguments: args } }) }) })).json()); // a refused request comes back as a JSON-RPC error
   const rom = device('laurel_sprout').roms[0];
   assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id }, null)).content[0].text, /\?view=agents/);
   assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id, colour: 'red' })).content[0].text, /colour/);
