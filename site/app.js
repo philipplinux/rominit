@@ -919,6 +919,16 @@ function aboutView() {
 async function agentsView() {
   const url = `${location.origin}/mcp`, info = await me;
   const code = (/** @type {string} */ text) => h('pre', { className: 'bench-output', textContent: text });
+  /** A code block with a Copy button that copies what it shows at click time. @param {HTMLElement} pre */
+  const copyable = pre => h('div', { className: 'bench-run' }, pre, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
+    await navigator.clipboard?.writeText(pre.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } }));
+  // Set it up: filled with the token just created (this page only, never stored), else a placeholder.
+  const cli = code(''), config = code('');
+  const fillSetup = (/** @type {string} */ token) => {
+    cli.textContent = `claude mcp add --transport http rominit ${url} --header "Authorization: Bearer ${token}"`;
+    config.textContent = JSON.stringify({ mcpServers: { rominit: { type: 'http', url, headers: { Authorization: `Bearer ${token}` } } } }, null, 2);
+  };
+  fillSetup('<your token>');
   const tokens = h('div', {});
   async function listTokens() {
     const r = await fetch('./api/tokens', { cache: 'no-store' });
@@ -940,7 +950,9 @@ async function agentsView() {
     const r = await fetch('./api/tokens', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name.value, days: Number(days.value) }) });
     const body = await r.json().catch(() => ({}));
     if (!r.ok) { made.replaceChildren(h('p', { className: 'status', textContent: body.error ?? 'could not create the token' })); return; }
-    made.replaceChildren(h('p', { className: 'field-help', textContent: 'Copy it now; it is shown only once and stored only as a hash.' }), code(body.token));
+    made.replaceChildren(h('div', { className: 'token-new' }, h('strong', { textContent: `New token "${body.name}": copy it now` }),
+      copyable(code(body.token)), h('small', { textContent: 'Shown only once; ROMinit stores only a hash. The setup commands below now contain it.' })));
+    fillSetup(body.token);
     name.value = ''; listTokens();
   } }, name, days, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
   if (info?.user) listTokens();
@@ -949,11 +961,11 @@ async function agentsView() {
     h('h3', { textContent: 'Your API tokens' }),
     info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Pick how long it lasts (up to a year); revoke it any time.' }), form, made, tokens)
       : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])),
-    h('h3', { textContent: 'Endpoint' }), code(url),
+    h('h3', { textContent: 'Endpoint' }), copyable(code(url)),
     h('p', { className: 'field-help', textContent: 'Streamable HTTP, JSON-RPC. Tools: find devices, get a device, get a ROM recipe; with a token also start a run, log a step, finish a run.' }),
     h('h3', { textContent: 'Set it up' }),
-    code(`claude mcp add --transport http rominit ${url} --header "Authorization: Bearer <your token>"`),
-    code(JSON.stringify({ mcpServers: { rominit: { type: 'http', url, headers: { Authorization: 'Bearer <your token>' } } } }, null, 2)),
+    h('p', { className: 'field-help', textContent: 'Claude Code:' }), copyable(cli),
+    h('p', { className: 'field-help', textContent: 'Other MCP clients (JSON config):' }), copyable(config),
     h('h3', { textContent: 'The deal' }),
     h('p', { className: 'intro-copy', textContent: 'The data is free to read. In return, when your agent uses a recipe to flash or recover a phone, it reports how it went: which steps worked, which failed, what fixed them, and the final outcome. That is how recipes get fixed and how the next person avoids your afternoon.' }),
     h('p', { className: 'intro-copy', textContent: 'Reports are about the device and the procedure only: no names, emails, IP or MAC addresses, serial numbers, IMEIs, phone numbers or home paths. The server rejects reports that contain them. Reports are tied to your account, read by the maintainer, and used to improve the catalog. Destructive steps still need you: the agent never gets the confirm phrases and must ask you before it wipes anything.' }));

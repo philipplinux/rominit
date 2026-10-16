@@ -554,6 +554,9 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .token-form { display: flex; gap: .5rem; flex-wrap: wrap; margin: .5rem 0; }
 .token-form input { flex: 1 1 12rem; }
 .info-page pre { white-space: pre-wrap; word-break: break-all; }
+.token-new { border: 2px solid var(--teal); border-radius: 8px; padding: .8rem; margin: .6rem 0; display: grid; gap: .5rem; }
+.token-new pre { font-size: 1rem; font-weight: 700; }
+.info-page .bench-run pre { flex: 1; margin: 0; }
 .license-table { width: 100%; border-collapse: collapse; font-size: .75rem; }
 .license-table th, .license-table td { padding: .4rem .6rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .license-table th { color: var(--muted); font-weight: 400; letter-spacing: .08em; text-transform: uppercase; font-size: .62rem; }
