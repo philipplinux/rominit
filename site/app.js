@@ -959,7 +959,7 @@ async function agentsView() {
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
     h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Reading needs no account: 20 tool calls an hour without a token, 1200 with one.' }),
     h('div', { className: 'deal' }, h('strong', { textContent: 'The deal' }),
-      h('ul', {}, ...['Data is free to read.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Wipes stay yours: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
+      h('ul', {}, ...['Data is free to read.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Deletion requires your approval: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
     h('h3', { textContent: 'Your API tokens' }),
     info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Pick how long it lasts (up to a year); revoke it any time.' }), form, made, tokens)
       : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])),
