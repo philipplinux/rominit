@@ -16,3 +16,8 @@ romsources/research/grapheneos/manifest-source.xml
 romsources/research/grapheneos/sources/
 # ROMvault is maintained as a separate private repository
 romvault/
+# skill symlinks into the private ROMvault (create locally: ln -s ../../romvault/skills/<skill> .agents/skills/ and .claude/skills/)
+.agents/skills/rom-scraper
+.claude/skills/rom-scraper
+.agents/skills/romvault-maintenance
+.claude/skills/romvault-maintenance

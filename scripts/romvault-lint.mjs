@@ -1,4 +1,4 @@
-// ROMvault lint: enforces romvault/AGENTS.md (frontmatter, tags, signposts, links, index, one device page per catalog codename).
+// ROMvault lint: enforces romvault/AGENTS.md (frontmatter, tags, signposts, links, index, dated claims, log format, a page per catalog device and ROM).
 // `npm run lint` prints problems; test/rominit.test.js fails on any.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -57,6 +57,8 @@ export function lint() {
     const folder = rel.split('/')[0];
     if (FOLDER_TYPE[folder] && fm.type !== FOLDER_TYPE[folder]) say(file, `frontmatter: type should be ${FOLDER_TYPE[folder]} in ${folder}/`);
     for (const key of ['date', 'updated']) if (fm[key] && !/^\d{4}-\d{2}-\d{2}$/.test(fm[key])) say(file, `frontmatter: ${key} is not YYYY-MM-DD`);
+    if (fm.updated < fm.date) say(file, 'frontmatter: updated is before date');
+    if (['rom', 'project'].includes(fm.type) && !/\b(as of|checked|fetched) \d{4}-\d{2}/i.test(text)) say(file, 'no dated claim: add "(as of YYYY-MM)", "checked" or "fetched YYYY-MM-DD" to versions and support status');
     for (const tag of fm.tags ?? []) {
       const nested = tag.match(/^(device|series)\/(.+)$/);
       if (nested ? !exists(`${nested[1] === 'device' ? 'devices' : 'series'}/${nested[2]}.md`) : !tags.has(tag)) say(file, `tag "${tag}" not in the AGENTS.md list (or its page is missing)`);
@@ -80,6 +82,13 @@ export function lint() {
     for (const s of parents) if (!linksTo(page, s)) say(page, `does not link up to ${relative(VAULT, s)}`);
     if (!(fm.tags ?? []).includes(`device/${d.codename}`)) say(page, `tag device/${d.codename} missing`);
   }
+  for (const f of readdirSync(join(ROOT, 'catalog/roms'), { recursive: true }).filter(f => String(f).endsWith('.json'))) {
+    const entry = JSON.parse(readFileSync(join(ROOT, 'catalog/roms', String(f)), 'utf8'));
+    for (const rom of entry.roms) if (!pages.has(join(VAULT, 'roms', entry.device, `${rom.id}.md`))) problems.push(`romvault/roms/${entry.device}/${rom.id}.md: missing (catalog has ${rom.name})`);
+  }
+  const log = pages.get(join(VAULT, 'log.md')) ?? '';
+  for (const line of log.split('\n').filter(l => l.startsWith('## ') && !l.startsWith('## For future agent')))
+    if (!/^## \[\d{4}-\d{2}-\d{2}\] (create|update|move|delete) \| .+ \(.+\)$/.test(line)) problems.push(`romvault/log.md: malformed entry "${line.slice(0, 60)}"`);
   for (const [file, text] of pages) {
     const rel = relative(VAULT, file);
     const fm = frontmatter(text) ?? {};
