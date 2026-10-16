@@ -21,3 +21,6 @@ romvault/
 .claude/skills/rom-scraper
 .agents/skills/romvault-maintenance
 .claude/skills/romvault-maintenance
+# mcp-builder: local symlink to the parked Anthropic skill (~/.agents/skill-library/anthropic/mcp-builder)
+.agents/skills/mcp-builder
+.claude/skills/mcp-builder
