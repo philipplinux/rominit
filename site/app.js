@@ -494,6 +494,7 @@ function stageCard(device, stage, n, count, key) {
   const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false, failed: false,
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
+  const selfHosted = stage.files.length > 0 && stage.files.every((/** @type {any} */ f) => f.url?.startsWith(SELF_HOSTED));
   const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
@@ -542,7 +543,9 @@ function stageCard(device, stage, n, count, key) {
     const state = st.lost ? 'retry' : st.session ? 'connected' : st.failed ? 'failed' : '';
     connectButton.className = `button button-secondary${state && ` connect-${state}`}`;
     connectButton.textContent = { connected: 'Connected', failed: 'Failed · retry connect', retry: 'Retry connect', '': CONNECT[protocol] }[state];
-    flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !st.files || !risk.checked || confirm.value !== stage.confirm;
+    const oneShot = selfHosted && !unverified.checked; // own builds: the run downloads and attaches them first
+    flash.disabled = !supported || !st.session || st.lost || st.busy || st.finished || !(st.files || oneShot) || !risk.checked || confirm.value !== stage.confirm;
+    if (!st.busy) flash.textContent = st.files || !oneShot ? `Run stage ${n}` : `⬇ Download, check & run stage ${n}`;
   };
   const report = (/** @type {string} */ text, fraction = 0) => {
     status.textContent = text;
@@ -610,29 +613,37 @@ function stageCard(device, stage, n, count, key) {
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
   const total = stage.files.reduce((/** @type {number} */ n, /** @type {any} */ f) => n + f.size, 0);
-  const fetchAll = stage.files.every((/** @type {any} */ f) => f.url?.startsWith(SELF_HOSTED)) && h('button', { type: 'button', className: 'button button-primary', textContent: `⬇ Download & attach all (${size(total)})`, async onclick() {
-    this.disabled = true;
+  /** Downloads every pinned file in this tab and attaches it; progress goes to `show`. @param {(text:string)=>void} show */
+  const download = async show => {
     const files = [];
     try {
       let done = 0;
       for (const pin of stage.files) {
-        files.push(await fetchPinned(pin, f => { this.textContent = `Downloading ${pin.name} · ${Math.floor(100 * (done + f * pin.size) / total)}%`; }));
+        files.push(await fetchPinned(pin, f => show(`Downloading ${pin.name} · ${Math.floor(100 * (done + f * pin.size) / total)}%`)));
         done += pin.size;
       }
       dbg(`Downloaded in the page: ${files.map(f => `${f.name} ${f.size} B`).join(', ')}`);
       pick(files);
-      this.textContent = '✓ Downloaded and attached';
+      return true;
     } catch (error) {
       dbg(`Download failed: ${message(error)}`);
       selected.className = 'selected-files files-bad';
       selected.replaceChildren(h('li', { className: 'files-head', textContent: '✗ Download failed' }), h('li', { textContent: message(error) }));
-      this.textContent = '⬇ Try the download again'; this.disabled = false;
+      return false;
     }
+  };
+  const fetchAll = selfHosted && h('button', { type: 'button', className: 'button button-secondary', textContent: `⬇ Download & attach all (${size(total)})`, async onclick() {
+    this.disabled = true;
+    const ok = await download(text => { this.textContent = text; });
+    this.textContent = ok ? '✓ Downloaded and attached' : '⬇ Try the download again'; this.disabled = ok;
   } });
   flash.addEventListener('click', async () => {
-    if (flash.disabled || !st.files) return;
+    if (flash.disabled) return;
     st.busy = true; update();
     outcome.hidden = true;
+    // One click for own builds: connect first (the browser's device picker needs the click), then download, check and run.
+    if (!st.files && !(await download(text => { flash.textContent = text; report(text); }))) { st.busy = false; update(); return; }
+    if (!st.files) { st.busy = false; update(); return; }
     try {
       assertConsent(stage, { consent: risk.checked, confirmation: confirm.value });
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
@@ -663,7 +674,7 @@ function stageCard(device, stage, n, count, key) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [device.modes[stage.mode], protocol !== 'adb' && protocol !== 'sideload' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
+  const guide = [device.modes[stage.mode], protocol !== 'adb' && protocol !== 'sideload' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', selfHosted ? 'Connect, tick the warning, type the confirm phrase, then press Run: ROMinit downloads the files in this tab, checks their SHA-256 and flashes in one go.' : 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },
