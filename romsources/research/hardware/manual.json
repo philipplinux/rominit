@@ -1,0 +1,110 @@
+{
+ "pine64-pinephone": {
+  "no_gsmarena": true,
+  "name": "PINE64 PinePhone",
+  "launch_os": "none preinstalled (community OS images)",
+  "soc": "allwinner-a64",
+  "chipset": "Allwinner A64",
+  "cpu": "Quad-core 1.2 GHz Cortex-A53",
+  "gpu": "Mali-400 MP2",
+  "ram": "2/3 GB",
+  "storage": "16/32 GB eMMC",
+  "card_slot": "microSD",
+  "display": {
+   "size_in": 5.95,
+   "resolution": "720x1440",
+   "type": "IPS LCD"
+  },
+  "battery_mah": 2800,
+  "nfc": "no",
+  "usb": "USB Type-C",
+  "soc_source": "nura (ROMvault page); other fields vendor spec (not re-fetched this run; flagged unverified)",
+  "conflicts": [],
+  "checked": "2026-10-16"
+ },
+ "pine64-pinephonepro": {
+  "no_gsmarena": true,
+  "name": "PINE64 PinePhone Pro",
+  "launch_os": "none preinstalled (community OS images)",
+  "soc": "rk3399s",
+  "chipset": "Rockchip RK3399S",
+  "cpu": "Hexa-core (2x Cortex-A72 + 4x Cortex-A53)",
+  "gpu": "Mali-T860 MP4",
+  "ram": "4 GB",
+  "storage": "128 GB eMMC",
+  "card_slot": "microSD",
+  "display": {
+   "size_in": 6.0,
+   "resolution": "720x1440",
+   "type": "IPS LCD"
+  },
+  "battery_mah": 3000,
+  "nfc": "no",
+  "usb": "USB Type-C",
+  "soc_source": "vendor spec (Pine64 says RK3399S); Nura says RK3399",
+  "conflicts": [
+   "Nura/ROMvault: Rockchip RK3399; Pine64 vendor spec: RK3399S (binned low-power variant of the same platform; same kernel/recipe family)"
+  ],
+  "checked": "2026-10-16"
+ },
+ "purism-librem5": {
+  "no_gsmarena": true,
+  "name": "Purism Librem 5",
+  "launch_os": "PureOS",
+  "soc": "imx8mq",
+  "chipset": "NXP i.MX 8M Quad",
+  "cpu": "Quad-core 1.5 GHz Cortex-A53",
+  "gpu": "Vivante GC7000Lite",
+  "ram": "3 GB",
+  "storage": "32 GB eMMC",
+  "card_slot": "microSD",
+  "display": {
+   "size_in": 5.7,
+   "resolution": "720x1440",
+   "type": "IPS LCD"
+  },
+  "battery_mah": 3500,
+  "nfc": "no",
+  "usb": "USB Type-C",
+  "soc_source": "nura (ROMvault page): chip, CPU, GPU, RAM, storage, resolution; size/battery from vendor spec vendor spec (not re-fetched this run; flagged unverified)",
+  "conflicts": [],
+  "checked": "2026-10-16"
+ },
+ "shift-axolotl": {
+  "no_gsmarena": true,
+  "name": "SHIFT SHIFT6mq",
+  "soc": "sdm845",
+  "chipset": "Qualcomm SDM845 Snapdragon 845",
+  "ram": "8 GB",
+  "storage": "128 GB UFS 2.1",
+  "display": {
+   "size_in": "",
+   "resolution": "1080x2160",
+   "type": "AMOLED"
+  },
+  "announced": "2020",
+  "soc_source": "nura (ROMvault page); not on GSMArena brand list",
+  "conflicts": [],
+  "checked": "2026-10-16"
+ },
+ "samsung-coreprimevelte": {
+  "no_gsmarena": true,
+  "name": "Samsung Galaxy Core Prime VE LTE (SM-G361F)",
+  "soc": "pxa1908",
+  "chipset": "Marvell PXA1908",
+  "cpu": "Quad-core Cortex-A53",
+  "ram": "1 GB",
+  "storage": "8 GB",
+  "display": {
+   "size_in": "",
+   "resolution": "480x800",
+   "type": ""
+  },
+  "models": [
+   "SM-G361F"
+  ],
+  "soc_source": "nura (ROMvault page); GSMArena has no Core Prime VE LTE page",
+  "conflicts": [],
+  "checked": "2026-10-16"
+ }
+}

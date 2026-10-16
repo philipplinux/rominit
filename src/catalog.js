@@ -114,6 +114,9 @@ export function problems(device, romFile) {
   need(unlock === undefined || (unlock.text && unlock.steps?.length && [...unlock.steps, ...unlock.hints ?? []].every(step => typeof step === 'string')
     && (unlock.pivots ?? []).every(p => p.problem && p.fix && (p.url === undefined || p.url.startsWith('https://')))),
   `${device?.codename}: unlock needs text and steps (hints are strings); each pivot needs problem, fix and an https url if any`);
+  const hw = device?.hardware; // one site line: RAM · CPU · GPU · resolution · tags
+  need(hw === undefined || (['ram', 'cpu', 'gpu', 'display'].every(k => typeof hw[k] === 'string' && hw[k]) && (hw.tags ?? []).every((/** @type {unknown} */ t) => typeof t === 'string')),
+    `${device?.codename}: hardware needs ram, cpu, gpu and display strings (tags are strings)`);
   need(romFile?.device === device?.codename, `rom file device "${romFile?.device}" ≠ ${device?.codename}`);
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;

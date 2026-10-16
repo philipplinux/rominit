@@ -41,5 +41,18 @@
   "recovery": {
     "text": "Quick way: slot a still holds stock Android: `fastboot set_active a`, then `fastboot -w`. Full restore: the stock package below.",
     "url": "https://wiki.lineageos.org/devices/laurel_sprout/install/"
+  },
+  "hardware": {
+    "soc": "sdm665",
+    "ram": "4/6 GB RAM",
+    "cpu": "Snapdragon 665, 8-core 2 GHz",
+    "gpu": "Adreno 610",
+    "display": "6.09\" 720×1560",
+    "tags": [
+      "2019",
+      "stock Android 9–11",
+      "community Android 17",
+      "microSD"
+    ]
   }
 }

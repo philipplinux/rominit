@@ -944,7 +944,8 @@ async function start() {
           if (!confirm(`Start over on this ${device.name}? This forgets the locked-in ROM and every ticked step in this browser.`)) return;
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
           Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
-      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` })),
+      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
+      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display, ...device.hardware.tags ?? []].join(' · ') })),
     infoSection,
     unlockSection,
     twrpSection,

@@ -31,5 +31,18 @@
   "recovery": {
     "text": "Restore official Fairphone OS using the current factory ZIP and Fairphone's extracted flash_fp4 script. This fastboot restore erases personal data.",
     "url": "https://support.fairphone.com/hc/en-us/articles/18896094650513-How-to-manually-install-Android-on-your-Fairphone"
+  },
+  "hardware": {
+    "soc": "sm7225",
+    "ram": "6/8 GB RAM",
+    "cpu": "Snapdragon 750G, 8-core 2.2 GHz",
+    "gpu": "Adreno 619",
+    "display": "6.3\" 1080×2340",
+    "tags": [
+      "2021",
+      "stock Android 11–15",
+      "community Android 17",
+      "microSD"
+    ]
   }
 }

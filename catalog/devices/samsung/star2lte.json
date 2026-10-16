@@ -65,5 +65,18 @@
   "recovery": {
     "text": "Download Mode still works after a bootloop: SamFW has the stock firmware and an Odin-style tool to go back to Android.",
     "url": "https://samfw.com/"
+  },
+  "hardware": {
+    "soc": "exynos9810",
+    "ram": "4/6 GB RAM",
+    "cpu": "Exynos 9810, 8-core 2.7 GHz",
+    "gpu": "Mali-G72 MP18",
+    "display": "6.2\" 1440×2960",
+    "tags": [
+      "2018",
+      "stock Android 8–10",
+      "community Android 15",
+      "microSD"
+    ]
   }
 }

@@ -35,5 +35,17 @@
   "recovery": {
     "text": "Back to stock: Google's flasher at flash.android.com. Before it, with the bootloader unlocked, run `fastboot erase avb_custom_key` so the GrapheneOS key is no longer trusted.",
     "url": "https://grapheneos.org/install/web#replacing-grapheneos-with-the-stock-os"
+  },
+  "hardware": {
+    "soc": "tensor-g2",
+    "ram": "12 GB RAM",
+    "cpu": "Google Tensor G2, 8-core 2.85 GHz",
+    "gpu": "Mali-G710 MP7",
+    "display": "7.6\" 1840×2208",
+    "tags": [
+      "2023",
+      "stock Android 13–15",
+      "community Android 17"
+    ]
   }
 }
