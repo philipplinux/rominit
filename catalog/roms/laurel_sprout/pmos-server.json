@@ -2,7 +2,7 @@
   "device": "laurel_sprout",
   "roms": [
     {
-      "id": "pmos-server-v2026.10.13",
+      "id": "pmos-server",
       "os": "postmarketOS",
       "name": "postmarketOS server (generic build)",
       "version": "v2026.10.13",

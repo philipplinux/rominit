@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS roles (
 CREATE TABLE IF NOT EXISTS bench_runs (
   code TEXT PRIMARY KEY,   -- random, valid for an hour until submitted
   rom TEXT NOT NULL,
+  version TEXT,            -- the ROM's catalog version when the test started (ROM ids stay stable across updates)
   voter TEXT NOT NULL,
   user_id INTEGER,
   created TEXT NOT NULL DEFAULT (datetime('now')),

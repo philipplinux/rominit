@@ -71,6 +71,9 @@ export function problems(device, romFile) {
     // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.
     need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);
     need(rom.os && rom.version && rom.stages?.length, `${at}: os, version and stages are required`);
+    // The id names a ROM line and stays put across small updates (ratings, comments and tests hang off it); a big jump is a new entry that supersedes the old one from the same publisher file.
+    need(!rom.version || !rom.id.includes(rom.version), `${at}: id must not contain the version (keep it stable across updates)`);
+    need(rom.supersedes === undefined || (rom.supersedes !== rom.id && romFile.roms.some((/** @type {any} */ r) => r.id === rom.supersedes)), `${at}: supersedes must name another ROM in the same file`);
     const features = rom.rating?.features ?? {};
     need(/^\d{4}-\d{2}-\d{2}$/.test(rom.rating?.checked ?? '') && FEATURES.every(f => STATES.includes(features[f])) && Object.keys(features).length === FEATURES.length,
       `${at}: rating needs a checked date and exactly these features (${STATES.join('/')}): ${FEATURES.join(', ')}`);

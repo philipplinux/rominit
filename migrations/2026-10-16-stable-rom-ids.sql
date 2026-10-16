@@ -1,0 +1,31 @@
+-- ROM ids are stable per ROM line now (no version inside); move every row to the new key.
+-- bench_runs.version keeps the version each test ran against; old runs get the version their old id carried.
+ALTER TABLE bench_runs ADD COLUMN version TEXT;
+UPDATE bench_runs SET version = 'v2026.10.13' WHERE rom = 'laurel_sprout/pmos-server-v2026.10.13';
+UPDATE ratings SET rom = 'laurel_sprout/pmos-server' WHERE rom = 'laurel_sprout/pmos-server-v2026.10.13';
+UPDATE comments SET rom = 'laurel_sprout/pmos-server' WHERE rom = 'laurel_sprout/pmos-server-v2026.10.13';
+UPDATE counts SET rom = 'laurel_sprout/pmos-server' WHERE rom = 'laurel_sprout/pmos-server-v2026.10.13';
+UPDATE bench_runs SET rom = 'laurel_sprout/pmos-server' WHERE rom = 'laurel_sprout/pmos-server-v2026.10.13';
+UPDATE favorites SET rom = 'laurel_sprout/pmos-server' WHERE rom = 'laurel_sprout/pmos-server-v2026.10.13';
+UPDATE roles SET scope = 'rom:laurel_sprout/pmos-server' WHERE scope = 'rom:laurel_sprout/pmos-server-v2026.10.13';
+UPDATE bench_runs SET version = 'V12.0.23.0.RFQMIXM' WHERE rom = 'laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE ratings SET rom = 'laurel_sprout/stock' WHERE rom = 'laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE comments SET rom = 'laurel_sprout/stock' WHERE rom = 'laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE counts SET rom = 'laurel_sprout/stock' WHERE rom = 'laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE bench_runs SET rom = 'laurel_sprout/stock' WHERE rom = 'laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE favorites SET rom = 'laurel_sprout/stock' WHERE rom = 'laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE roles SET scope = 'rom:laurel_sprout/stock' WHERE scope = 'rom:laurel_sprout/stock-V12.0.23.0.RFQMIXM';
+UPDATE bench_runs SET version = 'v2026.10.15-s9' WHERE rom = 'starlte/pmos-server-v2026.10.15-s9';
+UPDATE ratings SET rom = 'starlte/pmos-server' WHERE rom = 'starlte/pmos-server-v2026.10.15-s9';
+UPDATE comments SET rom = 'starlte/pmos-server' WHERE rom = 'starlte/pmos-server-v2026.10.15-s9';
+UPDATE counts SET rom = 'starlte/pmos-server' WHERE rom = 'starlte/pmos-server-v2026.10.15-s9';
+UPDATE bench_runs SET rom = 'starlte/pmos-server' WHERE rom = 'starlte/pmos-server-v2026.10.15-s9';
+UPDATE favorites SET rom = 'starlte/pmos-server' WHERE rom = 'starlte/pmos-server-v2026.10.15-s9';
+UPDATE roles SET scope = 'rom:starlte/pmos-server' WHERE scope = 'rom:starlte/pmos-server-v2026.10.15-s9';
+UPDATE bench_runs SET version = 'v2026.10.15-s9plus' WHERE rom = 'star2lte/pmos-server-v2026.10.15-s9plus';
+UPDATE ratings SET rom = 'star2lte/pmos-server' WHERE rom = 'star2lte/pmos-server-v2026.10.15-s9plus';
+UPDATE comments SET rom = 'star2lte/pmos-server' WHERE rom = 'star2lte/pmos-server-v2026.10.15-s9plus';
+UPDATE counts SET rom = 'star2lte/pmos-server' WHERE rom = 'star2lte/pmos-server-v2026.10.15-s9plus';
+UPDATE bench_runs SET rom = 'star2lte/pmos-server' WHERE rom = 'star2lte/pmos-server-v2026.10.15-s9plus';
+UPDATE favorites SET rom = 'star2lte/pmos-server' WHERE rom = 'star2lte/pmos-server-v2026.10.15-s9plus';
+UPDATE roles SET scope = 'rom:star2lte/pmos-server' WHERE scope = 'rom:star2lte/pmos-server-v2026.10.15-s9plus';

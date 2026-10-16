@@ -741,13 +741,15 @@ async function start() {
     for (const [f, tier] of Object.entries(run.final)) if (TIER_STATE[tier] && f in r.rating.features) r.rating.features[f] = TIER_STATE[tier];
     r.rating.tested = run.accepted.slice(0, 10);
   }
-  const rank = (/** @type {any} */ r) => Object.keys(ORIGINS).indexOf(r.origin) * 20 + (r.vetting === 'curated' ? 0 : 10) + Object.keys(STATUSES).indexOf(r.status);
+  // A superseded ROM sits right after the one that replaced it, so it is never the default pick.
+  const parent = (/** @type {any} */ r) => device.roms.find((/** @type {any} */ p) => p.supersedes === r.id);
+  const rank = (/** @type {any} */ r) => parent(r) ? rank(parent(r)) + 0.5 : Object.keys(ORIGINS).indexOf(r.origin) * 20 + (r.vetting === 'curated' ? 0 : 10) + Object.keys(STATUSES).indexOf(r.status);
   const roms = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').sort((/** @type {any} */ a, /** @type {any} */ b) => rank(a) - rank(b));
   const stock = device.roms.filter((/** @type {any} */ r) => r.origin === 'stock');
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
   document.title = `${device.vendor} ${device.name} · ROMinit`;
   const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
-    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${r.name} ${r.version} (${r.status}, ${r.vetting === 'scraped' ? 'scraped placeholder' : r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
+    ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${parent(r) ? '↳ ' : ''}${r.name} ${r.version} (${parent(r) ? 'superseded, ' : ''}${r.status}, ${r.vetting === 'scraped' ? 'scraped placeholder' : r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
   const flashable = (/** @type {any} */ r) => r.status !== 'broken';
   romSelect.addEventListener('change', () => go({ device: codename, rom: romSelect.value }));
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */

@@ -3,6 +3,7 @@
   "roms": [
     {
       "id": "lineage-21.0",
+      "supersedes": "lineage-20.0",
       "os": "LineageOS",
       "name": "LineageOS (ivanmeler build)",
       "version": "21.0 (2024-06-20)",

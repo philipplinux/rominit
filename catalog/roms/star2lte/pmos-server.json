@@ -2,7 +2,7 @@
   "device": "star2lte",
   "roms": [
     {
-      "id": "pmos-server-v2026.10.15-s9plus",
+      "id": "pmos-server",
       "os": "postmarketOS",
       "name": "postmarketOS server",
       "version": "v2026.10.15-s9plus",

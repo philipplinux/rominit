@@ -45,7 +45,7 @@ export async function userOf(env, request) {
 export async function romInfo(env, request, rom) {
   if (typeof rom !== 'string') return null;
   const index = await (await env.ASSETS.fetch(new URL('/catalog/index.json', request.url))).json();
-  for (const d of index) for (const r of d.roms) if (`${d.codename}/${r.id}` === rom) return { key: rom, codename: d.codename, vendor: d.vendor, os: r.os };
+  for (const d of index) for (const r of d.roms) if (`${d.codename}/${r.id}` === rom) return { key: rom, codename: d.codename, vendor: d.vendor, os: r.os, version: r.version };
   return null;
 }
 

@@ -32,11 +32,12 @@ export async function onRequestPost({ request, env }) {
   const body = await request.json().catch(() => ({}));
   const voter = await voterOf(env, request);
   if (body.code === undefined) {
-    if (!await romInfo(env, request, body.rom)) return json({ error: 'unknown rom' }, 404);
+    const rom = await romInfo(env, request, body.rom);
+    if (!rom) return json({ error: 'unknown rom' }, 404);
     const recent = await env.DB.prepare("SELECT count(*) AS n FROM bench_runs WHERE voter = ?1 AND created > datetime('now', '-1 hour')").bind(voter).first();
     if (recent.n >= 20) return json({ error: 'too many tests this hour' }, 429);
     const run = { code: code() };
-    await env.DB.prepare('INSERT INTO bench_runs (code, rom, voter, user_id) VALUES (?1, ?2, ?3, ?4)').bind(run.code, body.rom, voter, (await userOf(env, request))?.id ?? null).run();
+    await env.DB.prepare('INSERT INTO bench_runs (code, rom, version, voter, user_id) VALUES (?1, ?2, ?3, ?4, ?5)').bind(run.code, body.rom, rom.version ?? null, voter, (await userOf(env, request))?.id ?? null).run();
     return json(run);
   }
   const { final, note, flash = null } = body;

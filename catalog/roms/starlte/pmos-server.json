@@ -2,7 +2,7 @@
   "device": "starlte",
   "roms": [
     {
-      "id": "pmos-server-v2026.10.15-s9",
+      "id": "pmos-server",
       "os": "postmarketOS",
       "name": "postmarketOS server",
       "version": "v2026.10.15-s9",
