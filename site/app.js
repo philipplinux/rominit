@@ -1033,10 +1033,9 @@ async function start() {
       device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
       ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
         ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
-      otherRecoveries]),
-    progressRail([infoSection, unlockSection, twrpSection, romSection, testSection].filter(Boolean)));
+      otherRecoveries]));
 }
-/** Left rail like a scrollbar: milestones 0–4 sit where their section is on the page, a marker follows the scroll,
+/** Left rail like a scrollbar: milestones 0–4, R, T sit where their section is on the page, a marker follows the scroll,
  * the line fills up to where you are; a milestone goes green when its section is done, amber ring on the next one to do. @param {HTMLDetailsElement[]} sections */
 function progressRail(sections) {
   const dots = sections.map(sec => {
@@ -1069,4 +1068,9 @@ function progressRail(sections) {
   paint(); soon();
   return h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...dots);
 }
-start().then(() => main.append(reportBox()), error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
+start().then(() => {
+  main.append(reportBox());
+  // Device pages: one milestone per section, R and T included (T is the ticket box added just above).
+  const sections = /** @type {HTMLDetailsElement[]} */ ([...main.querySelectorAll(':scope > details.page-section')]);
+  if (sections.length > 1) main.append(progressRail(sections));
+}, error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
