@@ -359,14 +359,14 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
       h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
       h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
-      h('p', { className: 'field-help', textContent: linux ? `Paste it into a terminal on your computer. When asked, type the password ${loginPassword || 'from above'}. Test code ${code}, valid for an hour.`
+      h('p', { className: 'field-help', textContent: linux ? `Paste it into a terminal on your computer. When asked, type the password ${loginPassword || 'from above'}. Test code ${code}, valid for an hour. Reflashed the phone and SSH says REMOTE HOST IDENTIFICATION HAS CHANGED? The new install has a new key: run ssh-keygen -R 172.16.42.1 (on Wi-Fi: the phone IP), then the command again.`
         : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.` }),
       waiting);
     const started = Date.now();
     const poll = async () => {
       if (!box.isConnected || Date.now() - started > 3600_000) return;
       const run = await fetch(`./api/bench?code=${code}`, { cache: 'no-store' }).then(r => r.json()).catch(() => null);
-      if (run?.output?.startsWith('@ failed')) waiting.lastChild.textContent = 'Nothing came from the phone last time: check the cable or IP, then run the command again. Still listening…';
+      if (run?.output?.startsWith('@ failed')) waiting.lastChild.textContent = `Nothing came from the phone last time: check the cable or IP${linux ? ' (SSH host key changed after a reflash? ssh-keygen -R 172.16.42.1)' : ''}, then run the command again. Still listening…`;
       if (run?.output && !run.output.startsWith('@ failed')) card(code, run.output); else setTimeout(poll, 3000);
     };
     poll();
