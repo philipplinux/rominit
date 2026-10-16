@@ -1,5 +1,6 @@
 import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
+import { summarize, traced } from '../src/debug.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
 const supported = 'usb' in navigator && window.isSecureContext;
@@ -471,6 +472,15 @@ function stageCard(device, stage, n, count, key) {
   const progress = h('progress', { max: 100, value: 0 });
   const percent = h('span', { textContent: '0%' });
   const log = h('ol');
+  // Debug log: timestamped steps, every USB call with result and timing, the full error. Copied into bug reports.
+  const debugText = h('pre', { className: 'debug-log' });
+  const started = Date.now();
+  const dbg = (/** @type {string} */ line) => { debugText.textContent += `+${((Date.now() - started) / 1000).toFixed(3)}s ${line}\n`; };
+  dbg(`ROMinit ${location.origin} · ${navigator.userAgent}`);
+  dbg(`${device.codename} · ${key} · stage ${n}/${count} "${stage.title}" · recipe ${stage.recipe} · mode ${stage.mode}`);
+  const debugBox = h('details', { className: 'field-help debug-box' }, h('summary', { textContent: 'Debug log (copy it into a report if something fails)' }), debugText,
+    h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy debug log', async onclick() {
+      await navigator.clipboard?.writeText(debugText.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } }));
 
   const update = () => {
     connectButton.disabled = !supported || st.busy || st.session !== null || st.lost;
@@ -480,7 +490,10 @@ function stageCard(device, stage, n, count, key) {
     status.textContent = text;
     progress.value = Math.round(Math.max(0, Math.min(1, fraction)) * 100);
     percent.textContent = `${progress.value}%`;
-    if (log.lastElementChild?.textContent !== text) log.append(h('li', { textContent: text }));
+    if (log.lastElementChild?.textContent !== text) { log.append(h('li', { textContent: text })); dbg(`[status] ${text}`); }
+  };
+  const dbgError = (/** @type {any} */ error) => {
+    for (let e = error; e; e = e.cause) dbg(`ERROR ${e?.name ?? ''}: ${e?.message ?? e}\n${e?.stack ?? ''}`);
   };
   const assertSession = () => {
     if (st.lost || !st.session) throw Error('USB session lost. Reload the page before reconnecting; no automatic retry.');
@@ -490,9 +503,11 @@ function stageCard(device, stage, n, count, key) {
     if (!files.length) return;
     try {
       st.files = selectFiles(stage, files, unverified.checked);
+      dbg(`Files: ${st.files.map(f => `${f.name} = ${f.file.name} ${f.file.size} B${f.sha256 ? '' : ' UNVERIFIED'}`).join(', ')}`);
       selected.replaceChildren(...st.files.map(f => h('li', { textContent: `${f.file.name} (${size(f.size)})${f.sha256 ? '' : ' · UNVERIFIED'}` })));
     } catch (error) {
       st.files = null;
+      dbg(`Files rejected: ${files.map(f => `${f.name} ${f.size} B`).join(', ')}: ${message(error)}`);
       selected.replaceChildren(h('li', { textContent: message(error) }));
     }
     update();
@@ -501,6 +516,7 @@ function stageCard(device, stage, n, count, key) {
   if (supported) navigator.usb.addEventListener('disconnect', event => {
     if (st.usb && event.device === st.usb && !st.finished) {
       st.lost = true;
+      dbg(`USB disconnect event (${event.device.productName ?? '?'} serial ${event.device.serialNumber ?? '?'})`);
       report('USB disconnected. The flash may be incomplete; reload before reconnecting.');
       update();
     }
@@ -508,9 +524,12 @@ function stageCard(device, stage, n, count, key) {
   connectButton.addEventListener('click', async () => {
     st.busy = true; update();
     try {
-      Object.assign(st, await connect(protocol));
+      dbg(`Connecting (${protocol})`);
+      const found = await connect(protocol, dbg);
+      Object.assign(st, found, { session: traced(found.session, dbg, protocol) });
       report('Connected. Choose the files, confirm, and run.');
     } catch (error) {
+      dbgError(error);
       report(`${message(error)} Reload to try again.`);
     } finally { st.busy = false; update(); }
   });
@@ -521,13 +540,17 @@ function stageCard(device, stage, n, count, key) {
     try {
       assertConsent(stage, { consent: risk.checked, confirmation: confirm.value });
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
+      dbg(`Run · options ${summarize(enabled)} · steps ${summarize(stepsFor(stage, enabled))}`);
       await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
+      dbg('Stage finished');
       st.finished = true;
       status.dispatchEvent(new CustomEvent('stage-done', { bubbles: true, detail: { unmatched: unverified.checked } })); // turns a required page section green
       log.append(h('li', {}, ...rich(stage.done)));
       if (n === count) bump(key, 'flash');
     } catch (error) {
       st.lost = true;
+      dbgError(error);
+      debugBox.open = true;
       report(`STOPPED: ${message(error)} Do not retry blindly; reload the page first.`);
     } finally { st.busy = false; update(); }
   });
@@ -563,7 +586,7 @@ function stageCard(device, stage, n, count, key) {
       h('strong', { textContent: '⚠ Size and SHA-256 are then not checked: ' }), 'a wrong, corrupt or tampered file is written anyway and can brick the phone. The stored steps still run.')),
     h('div', { className: 'flash-actions' }, flash),
     h('div', { className: 'progress-row' }, progress, percent),
-    h('section', { className: 'activity' }, h('div', { className: 'activity-heading' }, h('h3', { textContent: 'Activity' }), h('span', { className: 'activity-label', textContent: 'LOCAL SESSION' })), log));
+    h('section', { className: 'activity' }, h('div', { className: 'activity-heading' }, h('h3', { textContent: 'Activity' }), h('span', { className: 'activity-label', textContent: 'LOCAL SESSION' })), log, debugBox));
 }
 
 /** @param {any[]} index */

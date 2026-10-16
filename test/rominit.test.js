@@ -267,3 +267,15 @@ test('counter counts views and flashes once per window', async () => {
   assert.deepEqual(await (await post({ rom, kind: 'view' })).json(), { ok: true, counted: false });
   assert.equal(inserts.length, 1);
 });
+
+test('debug trace logs calls, results and errors without changing them', async () => {
+  const { traced } = await import('../src/debug.js');
+  const lines = /** @type {string[]} */ ([]);
+  const fb = traced({ banner: { state: 'sideload' }, async getVariable(/** @type {string} */ k) { return k === 'product' ? 'laurel_sprout' : null; },
+    async flash() { throw Error('boom'); } }, line => lines.push(line), 'fastboot');
+  assert.equal(fb.banner.state, 'sideload');
+  assert.equal(await fb.getVariable('product'), 'laurel_sprout');
+  await assert.rejects(fb.flash('boot', new Blob(['xy'])), /boom/);
+  assert.match(lines.join('\n'), /← fastboot\.getVariable\("product"\) = "laurel_sprout"/);
+  assert.match(lines.join('\n'), /✗ fastboot\.flash\("boot", Blob\(2 B\)\) threw Error: boom/);
+});

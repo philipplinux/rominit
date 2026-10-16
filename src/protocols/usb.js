@@ -30,11 +30,13 @@ async function openAdb(device) {
 
 /** TWRP ADB sideload. Connecting in TWRP's normal ADB works too: it sends `twrp sideload` and reconnects
  * once the phone is back in sideload mode (same browser permission, no second picker). */
-async function connectSideload() {
+async function connectSideload(log = (/** @type {string} */ _) => {}) {
   const state = (/** @type {Adb} */ adb) => /** @type {string|undefined} */ (adb.banner.state); // raw banner word; the lib's type lists fewer
   const first = await connectAdb();
+  log(`ADB banner: ${JSON.stringify(first.adb.banner)}`);
   if (state(first.adb) === 'sideload') return first;
   if (state(first.adb) !== 'recovery') throw Error(`Phone is in ${state(first.adb) ?? 'an unknown'} mode. Boot TWRP first.`);
+  log('Sending "twrp sideload" to start ADB Sideload');
   const socket = await first.adb.createSocket('shell:twrp sideload');
   const reader = socket.readable.getReader(); // let TWRP take the command before the link drops
   await Promise.race([(async () => { while (!(await reader.read()).done); })().catch(() => {}), new Promise(r => setTimeout(r, 3000))]);
@@ -44,7 +46,8 @@ async function connectSideload() {
     await new Promise(r => setTimeout(r, 1000));
     const device = (await manager.getDevices()).find(d => d.serial === first.usb.serialNumber);
     if (!device) continue;
-    const next = await openAdb(device).catch(() => null);
+    const next = await openAdb(device).catch(e => (log(`Reconnect failed: ${e?.message ?? e}`), null));
+    log(`Phone back, state ${next && state(next.adb)}`);
     if (next && state(next.adb) === 'sideload') return next;
     await next?.adb.close().catch(() => {});
   }
@@ -92,8 +95,17 @@ export function adbShell(adb) {
 }
 
 /** One USB connection per catalog protocol. `usb` is the raw device, watched for disconnects.
- * @param {string} protocol @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
-export async function connect(protocol) {
+ * @param {string} protocol @param {(line:string)=>void} [log] connect steps and the phone's identity, for the debug log
+ * @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
+export async function connect(protocol, log = () => {}) {
+  const found = await open(protocol, log);
+  const u = found.usb;
+  log(`USB device: ${u?.manufacturerName ?? '?'} ${u?.productName ?? '?'} (${u?.vendorId?.toString(16).padStart(4, '0')}:${u?.productId?.toString(16).padStart(4, '0')}) serial ${u?.serialNumber ?? '?'}`);
+  return found;
+}
+
+/** @param {string} protocol @param {(line:string)=>void} log @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
+async function open(protocol, log) {
   if (protocol === 'fastboot') {
     const fb = new FastbootDevice();
     await fb.connect();
@@ -103,9 +115,10 @@ export async function connect(protocol) {
     const odin = await connectOdin();
     return { session: odin, usb: odin.usbDevice };
   }
-  if (protocol === 'sideload') return connectSideload().then(({ adb, usb }) => ({ session: adb, usb }));
+  if (protocol === 'sideload') return connectSideload(log).then(({ adb, usb }) => ({ session: adb, usb }));
   if (protocol === 'adb') {
     const { adb, usb } = await connectAdb();
+    log(`ADB banner: ${JSON.stringify(adb.banner)}`);
     return { session: adbShell(adb), usb };
   }
   throw Error(`Unknown USB protocol ${protocol}.`);
