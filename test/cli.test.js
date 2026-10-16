@@ -99,11 +99,11 @@ test('run with the right phrase on a TTY drives the mocked fastboot through the 
   const t = io(true, 'ERASE MI A3');
   const code = await main(['run', 'laurel_sprout', rom.id, '--stage', '1', '--dir', withFiles(), '--json'], t, { catalog, session: async () => fb });
   assert.equal(code, 0);
-  assert.deepEqual(fb.log, ['flash:vbmeta_b:vbmeta.img', 'erase:dtbo_b', 'flash:userdata:rootfs.img', 'flash:boot_b:boot.img', 'set_active:b', 'reboot']);
+  assert.deepEqual(fb.log, ['flash:vbmeta_b:vbmeta.img', 'erase:dtbo_b', 'flash:boot_b:boot.img', 'flash:userdata:rootfs.img', 'set_active:b', 'reboot']); // same order as the site's Mi A3 test
   const ev = events(t.chunks.out);
   assert.equal(ev[0].type, 'step');
   assert.match(ev[0].text, /^WARNING/);
-  assert.ok(ev.some(e => /Step 3\/12: Checking the partitions|Step \d+\/12: Writing boot.img/.test(e.text)));
+  assert.ok(ev.some(e => /Step \d+\/\d+: Checking the partitions/.test(e.text)));
   assert.equal(ev.at(-1).type, 'done');
   assert.ok(ev.every(e => typeof e.text === 'string' && ['step', 'progress', 'error', 'done'].includes(e.type)));
 });

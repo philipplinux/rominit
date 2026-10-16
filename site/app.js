@@ -891,6 +891,7 @@ const SOFTWARE = [
     ['TypeScript', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/TypeScript', 'type checks (not shipped)'],
     ['wrangler', 'Cloudflare', 'MIT OR Apache-2.0', 'https://github.com/cloudflare/workers-sdk', 'deploys to Cloudflare Pages'],
     ['playwright-core', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/playwright', 'bench tests (not shipped)'],
+    ['usb (node-usb)', 'Rob Moran, Christopher Klein and contributors', 'MIT', 'https://github.com/node-usb/node-usb', 'USB access for the rominit command-line tool (not in the page)'],
   ]],
   ['Pictures', [
     ['postmarketOS logo', 'postmarketOS contributors', 'CC BY-SA 3.0', 'https://gitlab.postmarketos.org/postmarketOS/artwork', 'ROM logo'],
