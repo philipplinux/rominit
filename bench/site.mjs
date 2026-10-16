@@ -147,7 +147,7 @@ test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
   await page.locator('.version-chip').nth(1).waitFor();
   assert.deepEqual(await page.locator('.version-chip').allInnerTexts(), ['ODIN', 'TWRP-SIDELOAD']);
-  assert.match(await page.locator('select').inputValue(), /-lineage-21$/);
+  assert.match(await page.locator('#main select').first().inputValue(), /-lineage-21$/);
 });
 
 test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM, recover', async () => {
@@ -257,7 +257,7 @@ test('view and flash counters per ROM, once per window', async () => {
   await page.goto(`${BASE}/?device=laurel_sprout`);
   await page.getByText('1 view', { exact: true }).waitFor();
   await page.getByText('0 successful flashes').waitFor();
-  const rom = `laurel_sprout/${await page.locator('select').inputValue()}`;
+  const rom = `laurel_sprout/${await page.locator('#main select').first().inputValue()}`;
   const post = () => fetch(`${BASE}/api/counts`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom, kind: 'flash' }) }).then(r => r.json());
   assert.deepEqual([await post(), await post()], [{ ok: true, counted: true }, { ok: true, counted: false }]);
   await page.reload();
@@ -283,7 +283,7 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
   await box.getByText('Sign in to comment:').waitFor();
   assert.match(await box.getByRole('link', { name: 'GitHub' }).getAttribute('href') ?? '', /^\.\/auth\/github\/login\?return=%2F%3Fdevice%3Dstarlte/);
   assert.equal(await box.locator('textarea').isVisible(), false);
-  const rom = `starlte/${await page.locator('select').inputValue()}`;
+  const rom = `starlte/${await page.locator('#main select').first().inputValue()}`;
 
   await signIn('ada', 'owner', `rom:${rom}`);
   await page.reload();

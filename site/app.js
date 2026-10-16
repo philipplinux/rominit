@@ -1,10 +1,22 @@
 import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 import { summarize, traced } from '../src/debug.js';
+import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
 const supported = 'usb' in navigator && window.isSecureContext;
 const params = new URLSearchParams(location.search);
+// The computer doing the flashing: auto-detected, changeable in the header, remembered per browser.
+const stored = (() => { try { return localStorage.getItem('host'); } catch { return null; } })();
+let host = stored && stored in HOSTS ? stored : detectHost(/** @type {any} */ (navigator));
+const hostSelect = /** @type {HTMLSelectElement} */ (document.getElementById('host'));
+hostSelect.append(...Object.entries(HOSTS).map(([id, name]) => Object.assign(document.createElement('option'), { value: id, textContent: name })));
+hostSelect.value = host;
+hostSelect.addEventListener('change', () => {
+  host = hostSelect.value;
+  try { localStorage.setItem('host', host); } catch { /* private window */ }
+  document.dispatchEvent(new Event('host-change'));
+});
 
 /** Tiny DOM builder: catalog data only ever lands in text nodes, never in innerHTML.
  * @template {keyof HTMLElementTagNameMap} K
@@ -17,11 +29,7 @@ function h(tag, props = {}, ...children) {
 /** Catalog text with `code` spans. @param {string} text */
 const rich = (text = '') => text.split('`').map((part, i) => i % 2 ? h('code', {}, part) : part);
 /** @param {unknown} error */
-const message = error => {
-  const text = error instanceof Error ? error.message : String(error);
-  // Another program (usually the PC's own fastboot/adb) holds the USB interface.
-  return /in use|claim|access denied/i.test(text) ? `${text} Close other USB tools (adb kill-server, no running fastboot). On Linux you may need the android-udev rules.` : text;
-};
+const message = error => error instanceof Error ? error.message : String(error);
 const main = /** @type {HTMLElement} */ (document.getElementById('main'));
 const go = (/** @type {Record<string,string>} */ query) => { location.search = `?${new URLSearchParams(query)}`; };
 
@@ -476,11 +484,28 @@ function stageCard(device, stage, n, count, key) {
   const debugText = h('pre', { className: 'debug-log' });
   const started = Date.now();
   const dbg = (/** @type {string} */ line) => { debugText.textContent += `+${((Date.now() - started) / 1000).toFixed(3)}s ${line}\n`; };
-  dbg(`ROMinit ${location.origin} · ${navigator.userAgent}`);
+  dbg(`ROMinit ${location.origin} · ${navigator.userAgent} · host ${host}${supported ? '' : ' · NO WEBUSB'}`);
   dbg(`${device.codename} · ${key} · stage ${n}/${count} "${stage.title}" · recipe ${stage.recipe} · mode ${stage.mode}`);
   const debugBox = h('details', { className: 'field-help debug-box' }, h('summary', { textContent: 'Debug log (copy it into a report if something fails)' }), debugText,
     h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy debug log', async onclick() {
       await navigator.clipboard?.writeText(debugText.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } }));
+
+  // What this computer needs before the browser can reach the phone in this stage's mode; follows the header's host choice.
+  const prereqs = h('div', { className: 'field-help prereqs' });
+  const renderPrereqs = () => {
+    const problem = browserProblem({ usb: navigator.usb, secure: window.isSecureContext, host });
+    const items = prereqsFor(host, protocol);
+    prereqs.replaceChildren(h('strong', { textContent: `Before you connect (${HOSTS[host]}; change it in the header):` }),
+      problem && h('p', { className: 'status', textContent: `✗ ${problem}` }),
+      h('ul', {}, ...items.map(p => h('li', {}, p.text, p.url && ' ', p.url && link(p.url, new URL(p.url).hostname),
+        p.command && h('pre', { className: 'debug-log', textContent: p.command }),
+        p.command && h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
+          await navigator.clipboard?.writeText(p.command ?? '').catch(() => {}); this.textContent = 'Copied'; } })))));
+  };
+  renderPrereqs();
+  document.addEventListener('host-change', renderPrereqs);
+  /** Error text plus the host-specific fix. @param {unknown} error */
+  const explain = error => [message(error), fixFor(message(error), host, protocol)].filter(Boolean).join(' ');
 
   const update = () => {
     connectButton.disabled = !supported || st.busy || st.session !== null || st.lost;
@@ -530,7 +555,7 @@ function stageCard(device, stage, n, count, key) {
       report('Connected. Choose the files, confirm, and run.');
     } catch (error) {
       dbgError(error);
-      report(`${message(error)} Reload to try again.`);
+      report(`${explain(error)} Reload to try again.`);
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
@@ -551,7 +576,7 @@ function stageCard(device, stage, n, count, key) {
       st.lost = true;
       dbgError(error);
       debugBox.open = true;
-      report(`STOPPED: ${message(error)} Do not retry blindly; reload the page first.`);
+      report(`STOPPED: ${explain(error)} Do not retry blindly; reload the page first.`);
     } finally { st.busy = false; update(); }
   });
   risk.addEventListener('change', update);
@@ -570,6 +595,7 @@ function stageCard(device, stage, n, count, key) {
       ? h('details', { className: 'field-help' }, h('summary', { textContent: `${stepsFor(stage).length} steps` }), stepsFor(stage).map(describe).join(' · '))
       : h('p', { className: 'field-help', textContent: `Steps: ${stepsFor(stage).map(describe).join(' · ')}.` }),
     h('ol', { className: 'guide-list stage-steps' }, ...guide),
+    prereqs,
     h('div', { className: 'connect-row' }, connectButton, status),
     h('ul', { className: 'selected-files file-links' }, ...stage.files.map(f => h('li', {}, `${f.name} (${size(f.size)}) · `,
       f.url && h('a', { href: f.url, rel: 'noopener noreferrer', textContent: 'download' }), f.url && ' · ',

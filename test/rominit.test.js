@@ -290,3 +290,18 @@ test('ADB phones are moved into the mode the recipe needs', async () => {
   assert.match(adbMove('sideload', 'recovery').error, /Cancel/);
   assert.match(adbMove('bootloader', 'sideload').error, /Boot TWRP/);
 });
+
+test('host OS: detected from the browser, setup lines per protocol, errors mapped to the fix', async () => {
+  const { detectHost, prereqsFor, fixFor, browserProblem } = await import('../src/hosts.js');
+  assert.equal(detectHost({ userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/140' }), 'windows');
+  assert.equal(detectHost({ userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Chrome/140' }), 'android');
+  assert.equal(detectHost({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)' }), 'mac');
+  assert.equal(detectHost({ userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', userAgentData: { platform: 'Linux' } }), 'linux');
+  assert.deepEqual(prereqsFor('windows', 'odin').map(p => p.id), ['zadig', 'samsung-driver', 'busy']);
+  assert.deepEqual(prereqsFor('mac', 'fastboot').map(p => p.id), ['busy']);
+  assert.match(fixFor('Unable to claim interface.', 'linux', 'fastboot') ?? '', /udev/);
+  assert.match(fixFor('No device selected.', 'windows', 'adb') ?? '', /Zadig/);
+  assert.equal(fixFor('Checksum mismatch', 'linux', 'fastboot'), null);
+  assert.equal(browserProblem({ usb: {}, secure: true, host: 'linux' }), null);
+  assert.match(browserProblem({ secure: true, host: 'windows' }) ?? '', /Edge/);
+});
