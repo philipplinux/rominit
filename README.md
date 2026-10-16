@@ -11,7 +11,7 @@ Status: experimental. 3 devices (Xiaomi Mi A3, Samsung Galaxy S9 / S9+) with pos
 - **Protocols** (`src/protocols/usb.js`): WebUSB connections for fastboot, Odin and ADB.
 - **Site** (`site/`): static page, generated from the catalog. `npm run build` writes `dist/`.
 
-Files: ROMinit never hosts, mirrors or downloads ROMs. Each file links to its publisher (self-hosted or login-protected hosts work too); you download it, then pick it, and ROMinit checks and flashes it.
+Files: ROMinit hosts only selected files: its own builds on Hugging Face (huggingface.co/PhilippLinux), which the page can download and attach in one click. Everything else, vendor firmware above all, links to its publisher (login-protected hosts work too); you download it, then pick it, and ROMinit checks and flashes it.
 
 Safety: every file is pinned by size and SHA-256, every step verb is whitelisted per recipe, device identity is checked before the first write, and any mismatch stops the run (fail closed). Catalog data is shown as text only.
 
