@@ -324,7 +324,8 @@ test('MCP: initialize, tools, search, recipe without confirm phrases, actionable
   let id = 0;
   const rpc = async (method, params, key = 'rmi_test-key-0123456789') => (await (await onRequestPost({ env, request: new Request('https://x/mcp', { method: 'POST', headers: key ? { authorization: `Bearer ${key}` } : {}, body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method, params }) }) })).json());
   const call = async (name, args, key) => (await rpc('tools/call', { name, arguments: args }, key)).result;
-  for (const method of ['initialize', 'tools/list', 'tools/call']) assert.match((await rpc(method, {}, null)).error.message, /needs a free personal API token.*https:\/\/x\/\?view=agents/);
+  assert.match((await rpc('initialize', {}, null)).result.instructions, /^No API token on this connection yet\..*view=agents/); // connect works, and says how to get a token
+  for (const method of ['tools/list', 'tools/call']) assert.match((await rpc(method, {}, null)).error.message, /needs a free personal API token.*https:\/\/x\/\?view=agents/);
   const init = (await rpc('initialize', { protocolVersion: '2025-06-18' })).result;
   assert.equal(init.protocolVersion, '2025-06-18');
   assert.match(init.instructions, /https:\/\/x\/\?view=agents/);

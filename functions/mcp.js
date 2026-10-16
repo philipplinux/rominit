@@ -1,5 +1,5 @@
 // POST /mcp: MCP server over the published catalog (Streamable HTTP, stateless, plain JSON replies).
-// Every request needs a free personal API token (Authorization: Bearer, made at /?view=agents); 100 tool calls an hour.
+// Everything but initialize needs a free personal API token (Authorization: Bearer, made at /?view=agents); 100 tool calls an hour.
 // Agents read devices, ROMs and their flash recipes and report runs: device and procedure facts only, free text checked
 // for personal data. ROMvault and user data are not exposed. Finished runs land in the admin inbox (folder "MCP agent reports").
 import { tokenUser } from './_lib/auth.js';
@@ -9,7 +9,7 @@ const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const CODENAME = /^[A-Za-z0-9_-]{1,64}$/;
 const RUN = /^[A-Za-z0-9_-]{20,64}$/;
 const RUNS_PER_DAY = 20, STEPS_PER_RUN = 200;
-const PER_HOUR = 100; // tool calls per API token; without a token every request is refused
+const PER_HOUR = 100; // tool calls per API token; without a token only initialize answers
 
 /** Without a valid token: what to tell the agent. @param {Request} request */
 const needsToken = request => `ROMinit's MCP needs a free personal API token. Ask the human to sign in at ${new URL('/?view=agents', request.url).href}, create a token there and add it to this MCP connection as the header "Authorization: Bearer <token>". Then reconnect.`;
@@ -178,14 +178,15 @@ export async function handle(env, request, msg) {
   if (msg?.jsonrpc !== '2.0' || typeof msg.method !== 'string') return { jsonrpc: '2.0', id: msg?.id ?? null, error: { code: -32600, message: 'Invalid request' } };
   if (msg.id === undefined) return null; // notifications (initialized, cancelled) need no reply
   const who = await tokenUser(env, request);
-  if (!who) return { jsonrpc: '2.0', id: msg.id, error: { code: -32001, message: needsToken(request) } };
+  // initialize stays open so a client can connect and the agent learns how to get a token; everything else needs one.
+  if (!who && msg.method !== 'initialize') return { jsonrpc: '2.0', id: msg.id, error: { code: -32001, message: needsToken(request) } };
   const ok = (/** @type {any} */ result) => ({ jsonrpc: '2.0', id: msg.id, result });
   switch (msg.method) {
     case 'initialize': {
       const asked = msg.params?.protocolVersion;
       return ok({ protocolVersion: VERSIONS.includes(asked) ? asked : VERSIONS[0], capabilities: { tools: {} },
         serverInfo: { name: 'rominit', title: 'ROMinit', version: '0.1.0' },
-        instructions: INSTRUCTIONS.replaceAll('{origin}', new URL(request.url).origin) });
+        instructions: (who ? '' : `No API token on this connection yet. ${needsToken(request)}\n\n`) + INSTRUCTIONS.replaceAll('{origin}', new URL(request.url).origin) });
     }
     case 'ping': return ok({});
     case 'tools/list': return ok({ tools: TOOLS });
