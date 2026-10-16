@@ -29,7 +29,7 @@
     ]
   },
   "recovery": {
-    "text": "Restore official Fairphone OS using the current factory ZIP and Fairphone's extracted flashfp4 script. This fastboot restore erases personal data.",
+    "text": "Restore official Fairphone OS using the current factory ZIP and Fairphone's extracted flash_fp4 script. This fastboot restore erases personal data.",
     "url": "https://support.fairphone.com/hc/en-us/articles/18896094650513-How-to-manually-install-Android-on-your-Fairphone"
   }
 }

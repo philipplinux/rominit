@@ -41,6 +41,26 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
     if (digest !== file.sha256) throw Error(`SHA-256 mismatch: ${file.name}. Nothing written.`);
   }
 
+  // Check every target before decoding or writing; decoded XZ output is capped at its target size.
+  next('Checking the partitions');
+  const limits = new Map();
+  const partitionSizes = new Map();
+  for (const [verb, partition, name] of steps) {
+    if (verb === 'set_active' && !['a', 'b'].includes(partition)) throw Error(`Invalid slot ${partition}. Nothing written.`);
+    if (verb !== 'flash' && verb !== 'erase') continue;
+    const size = parseInt(await fb.getVariable(`partition-size:${partition}`) ?? '', 16);
+    if (!(size > 0)) throw Error(`Phone has no ${partition} partition. Nothing written.`);
+    partitionSizes.set(partition, size);
+    // flashBlob() would resize a logical partition; logical (super) layouts need their own steps.
+    if (await fb.getVariable(`is-logical:${partition}`) === 'yes') throw Error(`${partition} is a logical partition. Nothing written.`);
+    if (verb === 'flash') {
+      if (name.endsWith('.img.xz')) limits.set(name, Math.max(limits.get(name) ?? 0, size));
+    }
+  }
+  for (const file of files.filter(f => f.name.endsWith('.img.xz'))) {
+    if (!limits.has(file.name)) throw Error(`${file.name} has no flash target. Nothing written.`);
+  }
+
   // Verify pins against the downloaded .xz bytes above; all later size checks and flashes use decoded bytes.
   const cleanups = [];
   try {
@@ -48,21 +68,13 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
       next(`Decoding ${file.name}`);
       try {
         const { decodeXzToOPFS } = await import('./fastboot-tgz.js');
-        const decoded = await decodeXzToOPFS(file.file);
+        const decoded = await decodeXzToOPFS(file.file, limits.get(file.name));
         byName[file.name] = { ...file, file: decoded.file };
         cleanups.push(decoded.cleanup);
       } catch (error) { throw Error(`Could not decode ${file.name}: ${error.message}. Nothing written.`); }
     }
-
-    next('Checking the partitions');
     for (const [verb, partition, name] of steps) {
-      if (verb === 'set_active' && !['a', 'b'].includes(partition)) throw Error(`Invalid slot ${partition}. Nothing written.`);
-      if (verb !== 'flash' && verb !== 'erase') continue;
-      const size = parseInt(await fb.getVariable(`partition-size:${partition}`) ?? '', 16);
-      if (!(size > 0)) throw Error(`Phone has no ${partition} partition. Nothing written.`);
-      // flashBlob() would resize a logical partition; logical (super) layouts need their own steps.
-      if (await fb.getVariable(`is-logical:${partition}`) === 'yes') throw Error(`${partition} is a logical partition. Nothing written.`);
-      if (verb === 'flash' && await expandedSize(byName[name].file) > size) throw Error(`${name} is larger than ${partition}. Nothing written.`);
+      if (verb === 'flash' && await expandedSize(byName[name].file) > partitionSizes.get(partition)) throw Error(`${name} is larger than ${partition}. Nothing written.`);
     }
 
     for (const [verb, arg, name] of steps) {

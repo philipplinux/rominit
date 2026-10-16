@@ -89,11 +89,49 @@ test('fastboot verifies compressed XZ bytes, sizes and flashes the decoded image
   assert.deepEqual(untouched.log, []);
 });
 
+test('XZ decoding stops at the target size and removes stale OPFS directories', async () => {
+  const { decodeXzToOPFS } = await import('../src/recipes/fastboot-tgz.js');
+  const bytes = Buffer.from('/Td6WFoAAAFpIt42BMAWEiEBFgAAAAAAAAAAAKdRd54BABFkZWNvZGVkIGJvb3QgaW1hZ2UAAAAuT/5iAAEuEk/NONiQQpkNAQAAAAABWVo=', 'base64');
+  await assert.rejects(decodeXzToOPFS(new Blob([bytes]), 17), /exceeds target partition size/);
+
+  const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  const removed = [];
+  const root = {
+    async *entries() {
+      yield [`rominit-xz-${Date.now() - 25 * 60 * 60 * 1000}-stale`, {}];
+      yield [`rominit-xz-${Date.now()}-active`, {}];
+      yield ['rominit-xz-legacy-random-id', {}];
+    },
+    getDirectoryHandle: async () => ({ getFileHandle: async () => {
+      const chunks = [];
+      return { createWritable: async () => new WritableStream({ write: chunk => chunks.push(chunk) }), getFile: async () => new Blob(chunks) };
+    } }),
+    removeEntry: async name => { removed.push(name); },
+  };
+  Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { storage: { getDirectory: async () => root } } });
+  Object.defineProperty(globalThis, 'window', { configurable: true, value: {} });
+  try {
+    const decoded = await decodeXzToOPFS(new Blob([bytes]), 18);
+    assert.equal(await decoded.file.text(), 'decoded boot image');
+    await decoded.cleanup();
+    assert.equal(removed.length, 2);
+    assert.match(removed[0], /^rominit-xz-\d+-stale$/);
+    assert.doesNotMatch(removed.join(' '), /active|legacy/);
+  } finally {
+    if (originalNavigator) Object.defineProperty(globalThis, 'navigator', originalNavigator);
+    else delete globalThis.navigator;
+    if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow);
+    else delete globalThis.window;
+  }
+});
+
 test('fastboot removes OPFS decoded images after a flash failure', async () => {
   const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
   const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
   const removed = [];
   const root = {
+    async *entries() {},
     getDirectoryHandle: async () => ({ getFileHandle: async () => {
       const chunks = [];
       return { createWritable: async () => new WritableStream({ write: chunk => chunks.push(chunk) }), getFile: async () => new Blob(chunks) };

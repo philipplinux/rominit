@@ -6,20 +6,32 @@ export const protocol = 'fastboot';
 export const verbs = fastboot.verbs;
 export const archive = true;
 const DIR = 'rominit-stock';
+const XZ_DIR_AGE = 24 * 60 * 60 * 1000;
 
 /** Streams XZ output to OPFS; Node tests use an in-memory Blob fallback. */
-export async function decodeXzToOPFS(file) {
+export async function decodeXzToOPFS(file, maxBytes) {
+  if (!(maxBytes > 0)) throw Error('A target partition size is required to bound XZ output.');
   if (typeof self === 'undefined') globalThis.self = /** @type {Window & typeof globalThis} */ (globalThis);
   const { default: xz } = await import('xzwasm');
   const decoded = new xz.XzReadableStream(file.stream());
-  if (typeof window === 'undefined') return { file: await new Response(decoded).blob(), cleanup: async () => {} };
+  let written = 0;
+  const bounded = decoded.pipeThrough(new TransformStream({ transform(chunk, controller) {
+    written += chunk.byteLength;
+    if (written > maxBytes) throw Error(`Decoded XZ image exceeds target partition size (${maxBytes} bytes).`);
+    controller.enqueue(chunk);
+  } }));
+  if (typeof window === 'undefined') return { file: await new Response(bounded).blob(), cleanup: async () => {} };
   if (!navigator.storage?.getDirectory) throw Error('This browser cannot store decoded images on disk.');
   const root = await navigator.storage.getDirectory();
-  const dirName = `rominit-xz-${crypto.randomUUID()}`;
+  for await (const [name] of /** @type {any} */ (root).entries()) {
+    const created = /^rominit-xz-(\d+)-/.exec(name);
+    if (created && Date.now() - Number(created[1]) > XZ_DIR_AGE) await root.removeEntry(name, { recursive: true }).catch(() => {});
+  }
+  const dirName = `rominit-xz-${Date.now()}-${crypto.randomUUID()}`;
   const dir = await root.getDirectoryHandle(dirName, { create: true });
   try {
     const handle = await dir.getFileHandle('image.img', { create: true });
-    await decoded.pipeTo(await handle.createWritable());
+    await bounded.pipeTo(await handle.createWritable());
     return { file: await handle.getFile(), cleanup: () => root.removeEntry(dirName, { recursive: true }).catch(() => {}) };
   } catch (error) {
     await root.removeEntry(dirName, { recursive: true }).catch(() => {});
