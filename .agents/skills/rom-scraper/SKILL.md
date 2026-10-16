@@ -44,7 +44,8 @@ Record the URL of every claim. No URL, no claim: leave it `untested` or out.
 |---|---|
 | `id` | `<publisher>-<line>` (`official-pmos-mainline`, `ivanmeler-lineage-21`, `xiaomi-stock`), never the version, so ratings survive updates. A small update edits the entry in place; a major jump (Android 14 → 15) is a new entry with `supersedes` naming the old one in the same file |
 | `vetting` | always `scraped`. `curated` is set by a person only (endorsed builds: GrapheneOS, mainline postmarketOS / Nura, our own) |
-| `origin` | `official`: on the OS project's own site/infra. `unofficial`: anyone else. `stock`: vendor firmware |
+| `origin` | `official`: on the OS project's own site/infra. `maintainer`: listed as the OS project's official build for this phone but hosted by its device maintainer (e.g. "official crDroid" on SourceForge). `unofficial`: anyone else. `stock`: vendor firmware |
+| `pick` | never set it: a person adds `{text, url}` for community picks (XDA top pick, years of releases). Mention candidates in the report instead |
 | `status` | `stable` official release channel · `beta` builder says mostly works · `nightly` automatic build · `experimental` early port · `legacy` superseded, no updates · `broken` reported not booting |
 | `rating.support` | last build ≤ 6 months: `active` · ≤ 18 months: `maintenance` · older: `abandoned` |
 | `rating.kernel.type` | `mainline` if upstream Linux (pmOS mainline, Nura), else `downstream`; version from the kernel repo or uname in screenshots |

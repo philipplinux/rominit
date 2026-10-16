@@ -20,7 +20,7 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Who built the ROM. `stock` ROMs are the way back; the page lists them under Recover / revert. */
-export const ORIGINS = { official: 'built and released by the OS project', unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
+export const ORIGINS = { official: 'built and released by the OS project', maintainer: "the OS project's official build for this phone, hosted by its device maintainer", unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
 /** How far ROMinit vouches for a ROM. Only a person sets `curated`; scrapers always write `scraped`. */
 export const VETTING = { curated: 'endorsed by its community or ROMinit (GrapheneOS, mainline postmarketOS / Nura, our own builds)',
   scraped: 'found by a scraper; subject to verification' };
@@ -70,6 +70,8 @@ export function problems(device, romFile) {
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);
     // slots: A/B phones install to one slot and keep the other; requirements: everything the install assumes, spelled out.
     need(['ab', 'single'].includes(rom.slots) && rom.requirements?.length && rom.requirements.every(r => typeof r === 'string'), `${at}: slots (ab/single) and a requirements list are required`);
+    // Community pick (XDA top pick, years of releases): set by a person only, like `curated`; scrapers never write it.
+    need(rom.pick === undefined || (rom.pick.text && rom.pick.url?.startsWith('https://')), `${at}: pick needs text and an https url`);
     need(rom.os && rom.version && (rom.stages?.length || rom.external), `${at}: os, version and stages are required`);
     // Link-only: the publisher's own installer does the flash (no pinned files yet). Kept as a marker to revisit with a real recipe.
     need(rom.external === undefined || (rom.external.url?.startsWith('https://') && rom.external.why && !rom.stages?.length), `${at}: external needs an https url and why, and no stages`);
