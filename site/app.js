@@ -957,14 +957,14 @@ async function agentsView() {
   } }, name, days, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
   if (info?.user) listTokens();
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
-    h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. Without a token: 10 tool calls an hour. With a free token: 100 an hour.' }),
+    h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. It needs a free API token (below): 100 tool calls an hour.' }),
     h('div', { className: 'deal' }, h('strong', { textContent: 'The deal' }),
-      h('ul', {}, ...['Data is free to read.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Deletion requires your approval: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
+      h('ul', {}, ...['Data is free to read with a free token.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Deletion requires your approval: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
     h('h3', { textContent: 'Your API tokens' }),
     info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Pick how long it lasts (up to a year); revoke it any time.' }), form, made, tokens)
       : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])),
     h('h3', { textContent: 'Endpoint' }), copyable(code(url)),
-    h('p', { className: 'field-help', textContent: 'Streamable HTTP, JSON-RPC. Tools: find devices, get a device, get a ROM recipe; with a token also start a run, log a step, finish a run.' }),
+    h('p', { className: 'field-help', textContent: 'Streamable HTTP, JSON-RPC. Tools: find devices, get a device, get a ROM recipe, start a run, log a step, finish a run.' }),
     h('h3', { textContent: 'Set it up' }),
     h('p', { className: 'field-help', textContent: 'Claude Code:' }), copyable(cli),
     h('p', { className: 'field-help', textContent: 'Other MCP clients (JSON config):' }), copyable(config));

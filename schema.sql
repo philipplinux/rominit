@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS api_tokens (
 -- Agent runs reported through the MCP (functions/mcp.js). One flash or recovery attempt an agent reports: started from a recipe, steps logged, finished with the resolution.
 -- MCP tool calls per hour, for the rate limit (functions/mcp.js); old hours are swept on the next hour's first call.
 CREATE TABLE IF NOT EXISTS mcp_hits (
-  who TEXT NOT NULL,       -- token:<api_tokens.id> or ip:<salted SHA-256 of the address>
+  who TEXT NOT NULL,       -- token:<api_tokens.id>
   hour TEXT NOT NULL,      -- UTC, e.g. 2026-10-17T14
   n INTEGER NOT NULL,
   PRIMARY KEY (who, hour)

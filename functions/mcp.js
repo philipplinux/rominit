@@ -1,34 +1,34 @@
-// POST /mcp: public, read-only MCP server over the published catalog (Streamable HTTP, stateless, plain JSON replies).
-// Any agent can read devices, ROMs and their flash recipes without a login. ROMvault and user data are not exposed.
-// Agents with a personal API token (Authorization: Bearer, made at /?view=agents) also report runs: device and procedure facts
-// only, free text checked for personal data. Finished runs land in the admin inbox (folder "MCP agent reports").
+// POST /mcp: MCP server over the published catalog (Streamable HTTP, stateless, plain JSON replies).
+// Every tool call needs a free personal API token (Authorization: Bearer, made at /?view=agents), 100 calls an hour.
+// Agents read devices, ROMs and their flash recipes and report runs: device and procedure facts only, free text checked
+// for personal data. ROMvault and user data are not exposed. Finished runs land in the admin inbox (folder "MCP agent reports").
 import { tokenUser } from './_lib/auth.js';
-import { voterOf } from './_lib/api.js';
 // ponytail: hand-rolled JSON-RPC (initialize, ping, tools/list, tools/call) instead of the MCP SDK; switch when we need sessions, streaming or OAuth.
 
 const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const CODENAME = /^[A-Za-z0-9_-]{1,64}$/;
 const RUN = /^[A-Za-z0-9_-]{20,64}$/;
 const RUNS_PER_DAY = 20, STEPS_PER_RUN = 200;
-const PER_HOUR = { anon: 10, token: 100 }; // tool calls; per salted IP without a token, per token with one
+const PER_HOUR = 100; // tool calls per API token; without one, tools/call is refused (initialize and tools/list stay open)
 
-/** Counts one tool call; returns the message to send back when over the hourly limit. @param {any} env @param {Request} request */
-async function overLimit(env, request) {
-  const who = request.headers.has('authorization') ? await tokenUser(env, request) : null;
-  const hour = new Date().toISOString().slice(0, 13), max = who ? PER_HOUR.token : PER_HOUR.anon;
+/** Every tool call needs a personal API token, counted per hour; returns the message to send back when refused. @param {any} env @param {Request} request */
+async function refused(env, request) {
+  const who = await tokenUser(env, request);
+  if (!who) return `ROMinit's MCP needs a free personal API token. Ask the human to sign in at ${new URL('/?view=agents', request.url).href}, create a token there and add it to this MCP connection as the header "Authorization: Bearer <token>". Then retry.`;
+  const hour = new Date().toISOString().slice(0, 13);
   const row = await env.DB.prepare('INSERT INTO mcp_hits (who, hour, n) VALUES (?1, ?2, 1) ON CONFLICT (who, hour) DO UPDATE SET n = n + 1 RETURNING n')
-    .bind(who ? `token:${who.token_id}` : `ip:${await voterOf(env, request)}`, hour).first();
+    .bind(`token:${who.token_id}`, hour).first();
   if (row.n === 1) await env.DB.prepare('DELETE FROM mcp_hits WHERE hour < ?1').bind(hour).run(); // first call of a new hour sweeps old ones
-  if (row.n <= max) return null;
-  return `Rate limit: ${max} tool calls per hour ${who ? 'per token' : 'without a token'}. Try again after ${hour.slice(11)}:59 UTC.${who ? '' : ` For ${PER_HOUR.token} an hour, ask the human to sign in at ${new URL('/?view=agents', request.url).href}, create a free personal API token there and add it to this MCP connection as the header "Authorization: Bearer <token>".`}`;
+  return row.n <= PER_HOUR ? null : `Rate limit: ${PER_HOUR} tool calls per hour per token. Try again after ${hour.slice(11)}:59 UTC.`;
 }
 
 /** Sent on connect: what the data is, how to use it safely, and what we ask back (the soft contract). */
 export const INSTRUCTIONS = `ROMinit publishes free, checked data for flashing and recovering phones: devices, ROMs, and step-by-step flash recipes with files pinned by SHA-256.
+Access: every tool call needs the human's free personal API token on this connection (header Authorization: Bearer <token>, made at {origin}/?view=agents), 100 calls an hour.
 How to use it: rominit_find_devices (search by name, model number or codename) → rominit_get_device (unlock steps, boot modes, ROM list) → rominit_get_rom (stages, files, steps).
 Step verbs: ["flash", partition, file], ["erase", partition], ["set_active", slot], ["reboot"], ["sideload", file], ["write", partition, file], ["mkfs_ext4", partition, label]; archive recipes (fastboot-tgz) run the package's own flash list.
 Safety: stages marked destructive erase data. Never run one on your own initiative: show the human the stage warning and let them confirm it themselves. Check every file's SHA-256 before flashing. Read the ROM's notes, risk and requirements first.
-Soft contract: this data is free. In return, report every flash or recovery attempt: rominit_start_run before the first stage, rominit_log_step after each stage (and each failed or worked-around step), rominit_finish_run with the outcome and the best path you found. Reporting needs the human's personal API token on this connection (header Authorization: Bearer <token>, made at {origin}/?view=agents); without one, ask the human to share how it went on the device page. Report device and procedure facts only, never personal data: no serial numbers, IMEI, account names, emails, IP or MAC addresses, phone numbers or home paths.`;
+Soft contract: this data is free. In return, report every flash or recovery attempt: rominit_start_run before the first stage, rominit_log_step after each stage (and each failed or worked-around step), rominit_finish_run with the outcome and the best path you found. Report device and procedure facts only, never personal data: no serial numbers, IMEI, account names, emails, IP or MAC addresses, phone numbers or home paths.`;
 
 const str = (/** @type {string} */ description) => ({ type: 'string', description });
 const READ = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
@@ -187,8 +187,8 @@ export async function handle(env, request, msg) {
     case 'ping': return ok({});
     case 'tools/list': return ok({ tools: TOOLS });
     case 'tools/call': {
-      const limited = await overLimit(env, request);
-      if (limited) return ok({ content: [{ type: 'text', text: limited }], isError: true });
+      const no = await refused(env, request);
+      if (no) return ok({ content: [{ type: 'text', text: no }], isError: true });
       try {
         const data = await callTool(env, request, msg.params?.name, msg.params?.arguments);
         return ok({ content: [{ type: 'text', text: JSON.stringify(data) }], structuredContent: data });
