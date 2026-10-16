@@ -110,7 +110,9 @@ export function lint() {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const problems = lint();
+  // Optional path prefixes (`node scripts/romvault-lint.mjs romvault/roms/starlte`): a team checks only its own pages.
+  const only = process.argv.slice(2);
+  const problems = lint().filter(p => !only.length || only.some(o => p.startsWith(o.replace(/\/$/, ''))));
   for (const p of problems) console.log(p);
   console.log(problems.length ? `✗ ${problems.length} problems` : '✓ ROMvault clean');
   process.exitCode = problems.length ? 1 : 0;
