@@ -460,7 +460,7 @@ function stageCard(device, stage, n, count, key) {
   const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false,
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
-  const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'sideload' ? 'Boot TWRP, then connect: ROMinit starts ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
+  const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
   const selected = h('ul', { className: 'selected-files' }, h('li', { className: 'empty-files', textContent: 'No files selected' }));

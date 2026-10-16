@@ -279,3 +279,14 @@ test('debug trace logs calls, results and errors without changing them', async (
   assert.match(lines.join('\n'), /← fastboot\.getVariable\("product"\) = "laurel_sprout"/);
   assert.match(lines.join('\n'), /✗ fastboot\.flash\("boot", Blob\(2 B\)\) threw Error: boom/);
 });
+
+test('ADB phones are moved into the mode the recipe needs', async () => {
+  const { adbMove } = await import('../src/protocols/usb.js');
+  assert.deepEqual(adbMove('sideload', 'sideload'), { done: true });
+  assert.equal(adbMove('device', 'sideload').send, 'reboot:recovery');
+  assert.equal(adbMove('device', 'recovery').wait, 'recovery');
+  assert.equal(adbMove('recovery', 'sideload').send, 'shell:twrp sideload');
+  assert.deepEqual(adbMove('recovery', 'recovery'), { done: true });
+  assert.match(adbMove('sideload', 'recovery').error, /Cancel/);
+  assert.match(adbMove('bootloader', 'sideload').error, /Boot TWRP/);
+});

@@ -25,7 +25,7 @@
   },
   "modes": {
     "download": "Power off. Hold Volume Down + Bixby, plug in USB, press Volume Up to enter Download Mode.",
-    "recovery": "Hold Volume Up + Bixby + Power until the TWRP screen appears. Do not mount system, vendor or data."
+    "recovery": "Hold Volume Up + Bixby + Power until the TWRP screen appears, or connect with Android running and USB debugging on: ROMinit reboots into TWRP itself. Do not mount system, vendor or data."
   },
   "unlock": {
     "text": "OEM unlocking must be on before anything can be flashed.",

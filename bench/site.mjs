@@ -140,7 +140,7 @@ test('ROM select groups by origin; stock ROMs only under Recover / revert', asyn
   const revert = page.locator('details.page-section', { hasText: 'R · Recover / revert' });
   await revert.locator(':scope > summary').click();
   assert.equal(await revert.locator('.stage-card').count(), 1);
-  assert.match(await revert.locator('.stage-card details summary').innerText(), /^\d+ steps$/, 'long step lists collapse');
+  assert.match(await revert.locator('.stage-card details:not(.debug-box) summary').innerText(), /^\d+ steps$/, 'long step lists collapse');
 });
 
 test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {

@@ -28,30 +28,50 @@ async function openAdb(device) {
   return { adb: new Adb(transport), usb: device.raw };
 }
 
-/** TWRP ADB sideload. Connecting in TWRP's normal ADB works too: it sends `twrp sideload` and reconnects
- * once the phone is back in sideload mode (same browser permission, no second picker). */
-async function connectSideload(log = (/** @type {string} */ _) => {}) {
+/**
+ * Next move to bring an ADB phone into the state a recipe needs: TWRP's normal ADB (`recovery`) or ADB sideload.
+ * @param {string|undefined} state banner state @param {'recovery'|'sideload'} want
+ * @returns {{done:true}|{send:string, wait:string, seconds:number, say:string}|{error:string}}
+ */
+export function adbMove(state, want) {
+  if (state === want) return { done: true };
+  if (state === 'device') return { send: 'reboot:recovery', wait: 'recovery', seconds: 120, say: 'Android: rebooting into TWRP' };
+  if (state === 'recovery' && want === 'sideload') return { send: 'shell:twrp sideload', wait: 'sideload', seconds: 45, say: 'TWRP: starting ADB Sideload' };
+  if (state === 'sideload') return { error: "Phone is in ADB sideload, but this step needs TWRP's normal ADB. Tap Cancel in TWRP, then reload and connect again." };
+  return { error: `Phone is in ${state ?? 'an unknown'} mode. Boot TWRP first.` };
+}
+
+/** Connects over ADB and moves the phone into `want` itself (Android → TWRP → sideload), reconnecting to the
+ * same serial each time (same browser permission, no second picker). @param {'recovery'|'sideload'} want @param {(line:string)=>void} log */
+async function connectAdbIn(want, log) {
   const state = (/** @type {Adb} */ adb) => /** @type {string|undefined} */ (adb.banner.state); // raw banner word; the lib's type lists fewer
-  const first = await connectAdb();
-  log(`ADB banner: ${JSON.stringify(first.adb.banner)}`);
-  if (state(first.adb) === 'sideload') return first;
-  if (state(first.adb) !== 'recovery') throw Error(`Phone is in ${state(first.adb) ?? 'an unknown'} mode. Boot TWRP first.`);
-  log('Sending "twrp sideload" to start ADB Sideload');
-  const socket = await first.adb.createSocket('shell:twrp sideload');
-  const reader = socket.readable.getReader(); // let TWRP take the command before the link drops
-  await Promise.race([(async () => { while (!(await reader.read()).done); })().catch(() => {}), new Promise(r => setTimeout(r, 3000))]);
-  await first.adb.close().catch(() => {});
   const manager = /** @type {NonNullable<typeof AdbDaemonWebUsbDeviceManager.BROWSER>} */ (AdbDaemonWebUsbDeviceManager.BROWSER);
-  for (let i = 0; i < 45; i++) { // adbd restarts as minadbd; the phone re-enumerates within a few seconds
-    await new Promise(r => setTimeout(r, 1000));
-    const device = (await manager.getDevices()).find(d => d.serial === first.usb.serialNumber);
-    if (!device) continue;
-    const next = await openAdb(device).catch(e => (log(`Reconnect failed: ${e?.message ?? e}`), null));
-    log(`Phone back, state ${next && state(next.adb)}`);
-    if (next && state(next.adb) === 'sideload') return next;
-    await next?.adb.close().catch(() => {});
+  let current = await connectAdb();
+  const serial = current.usb.serialNumber;
+  for (let moves = 0; ; moves++) {
+    log(`ADB banner: ${JSON.stringify(current.adb.banner)}`);
+    const move = adbMove(state(current.adb), want);
+    if ('done' in move) return current;
+    if ('error' in move) throw Error(move.error);
+    if (moves === 3) throw Error(`Phone did not reach ${want} mode. Boot TWRP by hand, then reload and connect again.`);
+    log(`${move.say} (${move.send})`);
+    const socket = await current.adb.createSocket(move.send);
+    const reader = socket.readable.getReader(); // let the phone take the command before the link drops
+    await Promise.race([(async () => { while (!(await reader.read()).done); })().catch(() => {}), new Promise(r => setTimeout(r, 3000))]);
+    await current.adb.close().catch(() => {});
+    let next = null;
+    for (let i = 0; i < move.seconds && !next; i++) { // the phone re-enumerates with the same serial once adbd is back
+      await new Promise(r => setTimeout(r, 1000));
+      const device = (await manager.getDevices()).find(d => d.serial === serial);
+      if (!device) continue;
+      next = await openAdb(device).catch(e => (log(`Reconnect failed: ${e?.message ?? e}`), null));
+      if (next && state(next.adb) !== move.wait) { log(`Phone back in ${state(next.adb)}, waiting for ${move.wait}`); await next.adb.close().catch(() => {}); next = null; }
+    }
+    if (!next) throw Error(want === 'sideload'
+      ? 'Phone did not come back in ADB sideload mode. In TWRP: Advanced › ADB Sideload, swipe, then reload and connect again.'
+      : 'Phone did not come back in TWRP. Boot TWRP by hand, then reload and connect again.');
+    current = next;
   }
-  throw Error('Phone did not come back in ADB sideload mode. In TWRP: Advanced › ADB Sideload, swipe, then reload and connect again.');
 }
 
 /**
@@ -115,10 +135,9 @@ async function open(protocol, log) {
     const odin = await connectOdin();
     return { session: odin, usb: odin.usbDevice };
   }
-  if (protocol === 'sideload') return connectSideload(log).then(({ adb, usb }) => ({ session: adb, usb }));
+  if (protocol === 'sideload') return connectAdbIn('sideload', log).then(({ adb, usb }) => ({ session: adb, usb }));
   if (protocol === 'adb') {
-    const { adb, usb } = await connectAdb();
-    log(`ADB banner: ${JSON.stringify(adb.banner)}`);
+    const { adb, usb } = await connectAdbIn('recovery', log);
     return { session: adbShell(adb), usb };
   }
   throw Error(`Unknown USB protocol ${protocol}.`);
