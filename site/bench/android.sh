@@ -49,8 +49,11 @@ p_wifi() {
   ip addr show wlan0 2>/dev/null | grep -q 'inet ' && echo "full wlan0 connected" || echo "partial Wi-Fi present, not connected"
 }
 p_bluetooth() { need_pm; feat bluetooth || { echo "broken no Bluetooth"; return; }; [ "$(settings get global bluetooth_on)" = 1 ] && echo "full on" || echo "partial present, switched off"; }
-p_gps() { need_pm; feat location.gps && echo "untested GPS declared; needs sky view" || echo "broken no GPS declared"; }
-p_nfc() { need_pm; feat nfc && echo "untested NFC declared" || echo "broken no NFC declared"; }
+p_gps() { need_pm; feat location.gps || { echo "broken no GPS declared"; return; }
+  dumpsys location 2>/dev/null | grep -qE 'last location=Location\[gps|gps: Location\[gps' && echo "full has a GPS fix" || echo "untested GPS declared; open a maps app outdoors, then run again"; }
+p_nfc() { need_pm; feat nfc || { echo "broken no NFC declared"; return; }
+  case "$(dumpsys nfc 2>/dev/null | grep -m1 -oE 'mState=[a-z_]+')" in mState=on) echo "full NFC controller on (tag reading not tested)";;
+    mState=off) echo "untested NFC is off: turn it on, then run again";; *) echo "untested NFC declared";; esac; }
 cellular() {
   need_pm; feat telephony || { echo "broken no telephony"; return; }
   case "$(getprop gsm.sim.state)" in
@@ -72,7 +75,9 @@ p_magnetometer() { sensor sensor.compass 'magnetic|magnetometer'; }
 p_light() { sensor sensor.light 'light'; }
 p_proximity() { sensor sensor.proximity 'proximity'; }
 p_barometer() { sensor sensor.barometer 'pressure|barometer'; }
-p_hall() { sensor none 'hall|cover'; }
+p_hall() { # often an input switch (SW_LID), not a sensor
+  printf '%s\n' "$SENSORS" | grep -qiE 'hall|cover' && { echo "full listed as sensor"; return; }
+  getevent -pl 2>/dev/null | grep -q SW_LID && echo "full cover switch (SW_LID)" || echo "untested no hall sensor or cover switch found"; }
 p_haptics() {
   dumpsys vibrator_manager 2>/dev/null | grep -qiE 'vibrator|hal' || dumpsys vibrator 2>/dev/null | grep -qi vibrat || { echo "broken no vibrator service"; return; }
   if [ "$ROMINIT_SOUND" = 1 ]; then cmd vibrator_manager synced oneshot 300 >/dev/null 2>&1 || cmd vibrator vibrate 300 >/dev/null 2>&1; echo "ask Did the phone just buzz?"; else echo "untested vibrator found"; fi
