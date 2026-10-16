@@ -1,0 +1,14 @@
+branch,android,branch_sha,crdroid_versions,device_count,active_6mo_count,active_6mo_devices
+17.0,17,2d8e17287b,13.0,41,41,a52q;a72q;a73xq;aston;astonc;audi;avalon;benz;caihong;caiman;comet;corvette;dodge;erhai;garnet;gemstone;giulia;giuliac;guacamole;haydn;hotdog;hummer;komodo;lemonade;lemonadep;lexus;onyx;pdx237;peridot;redwood;salami;stallion;sweet;sweet2;tegu;tokay;vayu;vili;waffle;xigua;xueying
+16.0,16,dfd0006003,12.12;12.11;12.10;12.9;12.8;12.7;12.5;12.1;12.0,123,115,a21s;a51;a52q;a52sxq;a71;a72q;a73xq;akita;alioth;aston;astonc;audi;avalon;barbet;benz;beyond0lte;beyond1lte;beyond2lte;beyondx;blazer;blossom;bramble;caihong;caiman;cepheus;cheetah;chime;chiron;clover;comet;corvette;d1;d1x;d2s;d2x;davinci;diting;dm1q;dm2q;dm3q;dodge;erhai;everpal;f41;f62;fire;frankel;garnet;gemstone;giulia;giuliac;guacamole;haydn;hotdog;hotdogb;husky;infiniti;instantnoodle;kebab;komodo;larry;lavender;lemonade;lemonadep;lexus;lmi;lynx;m21;m31;m31s;marble;miatoll;mondrian;munch;mustang;nabu;nemo;nuwa;onyx;oriole;panther;pdx237;peridot;pipa;Pong;psyche;r5x;rango;raphael;raven;redfin;redwood;RMX2020;rodin;rova;rtwo;rubyx;salami;shiba;spaced;Spacewar;spes;stone;surya;sweet;sweet2;tegu;tokay;troika;vayu;vili;waffle;x1s;xigua;xueying
+15.0,15,64cc1bd4ea,11.17;11.16;11.15;11.14;11.12;11.11;11.10;11.9;11.8;11.7;11.6;11.5;11.4;11.2;11.1;11.0,121,15,a70q;alioth;beryllium;blueline;bonito;chiron;crosshatch;dipper;miatoll;nx_tab;rova;sargo;taimen;vili;walleye
+14.0,14,438b327c9d,10.14;10.13;10.12;10.11;10.10;10.9;10.8;10.7;10.6;10.5;10.4;10.2;10.1;10.0,128,0,
+13.0,13,f7068c32ba,9.20;9.19;9.18;9.15;9.14;9.13;9.12;9.11;9.10;9.9;9.8;9.7;9.6;9.5;9.4;9.0,103,0,
+12.1,12L,5c5b514e47,8.20;8.19;8.18;8.16;8.14;8.13;8.12;8.11;8.10;8.9;8.8;8.7;8.6;8.5;8.4;8.2;8.0,86,0,
+12.0,12,02e0ad189a,8.4;8.3;8.2;8.1;8.0,48,0,
+11.0,11,00e00a4cf3,7.39;7.31;7.28;7.25;7.23;7.22;7.21;7.19;7.18;7.17;7.16;7.15;7.14;7.13;7.12;7.11;7.10;7.9;7.8;7.7;7.6;7.5;7.4;7.3;7.2;7.0,130,0,
+10.0,10,9580b1801f,6.27;6.26;6.25;6.21;6.20;6.19;6.18;6.17;6.16;6.15;6.14;6.13;6.12;6.11;6.10;6.9;6.8;6.7;6.6;6.5;6.4;6.3;6.1,94,0,
+9.0,Pie,baf5d5342d,500;5.12;5.11;5.10;5.9;5.8;5.7;5.6;5.5;5.4;5.3;5.2;5.1;5.0;4.6;4.5;4.4;4.3;4.2;4.1;4.0,123,0,
+8.1,Oreo,62e2b3e4d2,500;4.7.2;4.7.1;4.7;4.6.1;4.6;4.5;4.4;4.3;4.2;4.1;4.0,89,0,
+8.0,Oreo,bc927c7f10,500;4.0;3.7.1;3.7;3.6;3.5;3.4;3.3;3.0,78,0,
+7.1,Nougat,60e3a43392,500;3.8.8;3.8.6;3.8.5;3.8.4;3.8.3;3.8;3.7.1;3.7;3.6;3.5;3.4;3.3;3.0,86,0,
