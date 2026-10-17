@@ -2,6 +2,7 @@
   "codename": "raven",
   "vendor": "Google",
   "name": "Pixel 6 Pro",
+  "photo": {"src": "phones/raven.webp", "page": "https://commons.wikimedia.org/wiki/File:Rear_view_of_Google_Pixel_6_Pro.jpg", "license": "CC0", "artist": "Miyako Fujimiya"},
   "series": "Pixel",
   "family": "Pixel 6",
   "variant": "Pixel 6 Pro",

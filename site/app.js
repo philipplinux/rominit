@@ -1201,6 +1201,8 @@ async function start() {
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   main.append(
     h('section', { className: 'intro' },
+      device.photo && h('figure', { className: 'phone-photo' }, h('img', { src: `./${device.photo.src}`, alt: `${device.vendor} ${device.name}` }),
+        h('figcaption', {}, h('a', { href: device.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: `Photo: ${device.photo.artist}, ${device.photo.license}` }))),
       h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {
         if (document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } } }),
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),

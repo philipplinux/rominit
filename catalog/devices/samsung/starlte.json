@@ -2,6 +2,7 @@
   "codename": "starlte",
   "vendor": "Samsung",
   "name": "Galaxy S9",
+  "photo": {"src": "phones/starlte.webp", "page": "https://commons.wikimedia.org/wiki/File:Samsung_galaxy_s9.jpg", "license": "CC BY-SA 4.0", "artist": "Misaochan2"},
   "series": "Galaxy S",
   "family": "Galaxy S9",
   "variant": "S9 · Exynos",

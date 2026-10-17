@@ -2,6 +2,7 @@
   "codename": "samsung-m0",
   "vendor": "Samsung",
   "name": "Galaxy S III",
+  "photo": {"src": "phones/samsung-m0.webp", "page": "https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_S_III_(GT-I9300)-9392.jpg", "license": "CC BY-SA 4.0", "artist": "Raimond Spekking"},
   "series": "Galaxy",
   "family": "Galaxy S III",
   "variant": "Galaxy S III",

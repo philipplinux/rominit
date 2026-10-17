@@ -2,6 +2,7 @@
   "codename": "komodo",
   "vendor": "Google",
   "name": "Pixel 9 Pro XL",
+  "photo": {"src": "phones/komodo.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_9_Pro_XL_(front).jpg", "license": "CC BY-SA 4.0", "artist": "D.328"},
   "series": "Pixel",
   "family": "Pixel 9",
   "variant": "Pixel 9 Pro XL",

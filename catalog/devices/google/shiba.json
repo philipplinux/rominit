@@ -2,6 +2,7 @@
   "codename": "shiba",
   "vendor": "Google",
   "name": "Pixel 8",
+  "photo": {"src": "phones/shiba.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_8_Rose_front.jpg", "license": "CC BY-SA 4.0", "artist": "IXTA9839"},
   "series": "Pixel",
   "family": "Pixel 8",
   "variant": "Pixel 8",

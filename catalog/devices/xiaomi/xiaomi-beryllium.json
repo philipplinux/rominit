@@ -2,6 +2,7 @@
   "codename": "xiaomi-beryllium",
   "vendor": "Xiaomi",
   "name": "POCO F1",
+  "photo": {"src": "phones/xiaomi-beryllium.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Poco_F1_front_view.jpg", "license": "CC BY 4.0", "artist": "Petar Milošević"},
   "series": "POCO",
   "family": "POCO F1",
   "variant": "POCO F1",

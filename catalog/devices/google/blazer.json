@@ -2,6 +2,7 @@
   "codename": "blazer",
   "vendor": "Google",
   "name": "Pixel 10 Pro",
+  "photo": {"src": "phones/blazer.webp", "page": "https://commons.wikimedia.org/wiki/File:Avant_du_Google_Pixel_10_Pro_pierre_de_lune_de_256_Go.jpg", "license": "CC BY-SA 4.0", "artist": "Fabe56"},
   "series": "Pixel",
   "family": "Pixel 10",
   "variant": "Pixel 10 Pro",

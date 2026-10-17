@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -18,6 +19,7 @@ for (const device of devices) await writeFile(`dist/catalog/${device.codename}.j
 await cp('site/style.css', 'dist/style.css');
 await cp('site/logos', 'dist/logos', { recursive: true });
 await cp('site/shots', 'dist/shots', { recursive: true });
+await cp('site/phones', 'dist/phones', { recursive: true });
 await cp('site/avatars', 'dist/avatars', { recursive: true });
 await cp('site/bench', 'dist/bench', { recursive: true });
 await writeFile('dist/404.html', '<!doctype html><meta charset="utf-8"><title>Not found · ROMinit</title><p>Not found. <a href="/">ROMinit</a></p>\n'); // without it Pages answers every missing path with index.html
@@ -41,5 +43,9 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
   notices.push(`${path}\n${notice}`);
 }
 notices.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
+for (const { photo } of devices) if (photo) {
+  assert(existsSync(`site/${photo.src}`), `missing ${photo.src}`);
+  notices.push(`${photo.src}\nPhoto by ${photo.artist}, ${photo.page}, ${photo.license}; resized and converted to WebP${photo.license === 'CC0' ? '' : `, this copy under the same license`}.`);
+}
 await writeFile('dist/THIRD-PARTY-NOTICES.txt', notices.join('\n\n'));
 console.log(`built dist/: ${devices.length} devices, ${devices.reduce((n, d) => n + d.roms.length, 0)} ROMs`);

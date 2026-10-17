@@ -2,6 +2,7 @@
   "codename": "bluejay",
   "vendor": "Google",
   "name": "Pixel 6a",
+  "photo": {"src": "phones/bluejay.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_6a_front.jpg", "license": "CC BY-SA 4.0", "artist": "Nisiguti"},
   "series": "Pixel",
   "family": "Pixel 6",
   "variant": "Pixel 6a",

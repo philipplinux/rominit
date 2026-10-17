@@ -2,6 +2,7 @@
   "codename": "lynx",
   "vendor": "Google",
   "name": "Pixel 7a",
+  "photo": {"src": "phones/lynx.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_7A.jpg", "license": "CC BY 2.0", "artist": "Tatsuo Yamashita"},
   "series": "Pixel",
   "family": "Pixel 7",
   "variant": "Pixel 7a",

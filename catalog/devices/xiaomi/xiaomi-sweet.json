@@ -2,6 +2,7 @@
   "codename": "xiaomi-sweet",
   "vendor": "Xiaomi",
   "name": "Redmi Note 10 Pro",
+  "photo": {"src": "phones/xiaomi-sweet.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Redmi_Note_10_Pro_(Global)_front.jpg", "license": "CC BY-SA 4.0", "artist": "Petar Milošević"},
   "series": "Redmi",
   "family": "Redmi Note 10 Pro",
   "variant": "Redmi Note 10 Pro",

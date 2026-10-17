@@ -2,6 +2,7 @@
   "codename": "fairphone-fp4",
   "vendor": "Fairphone",
   "name": "Fairphone 4",
+  "photo": {"src": "phones/fairphone-fp4.webp", "page": "https://commons.wikimedia.org/wiki/File:Fairphone_vorderseite.jpg", "license": "CC0", "artist": "Mirko Grünenthal"},
   "series": "Fairphone",
   "family": "Fairphone 4",
   "variant": "Fairphone 4",

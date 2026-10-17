@@ -123,6 +123,9 @@ export function problems(device, romFile) {
   const hw = device?.hardware; // one site line: RAM · CPU · GPU · resolution · tags
   need(hw === undefined || (['ram', 'cpu', 'gpu', 'display'].every(k => typeof hw[k] === 'string' && hw[k]) && (hw.tags ?? []).every((/** @type {unknown} */ t) => typeof t === 'string')),
     `${device?.codename}: hardware needs ram, cpu, gpu and display strings (tags are strings)`);
+  const photo = device?.photo; // header picture, a free-licensed photo kept in site/phones with its credit
+  need(photo === undefined || (/^phones\/[\w-]+\.webp$/.test(photo.src) && photo.page?.startsWith('https://commons.wikimedia.org/') && /^(CC0|CC BY(-SA)? [\d.]+)$/.test(photo.license) && photo.artist),
+    `${device?.codename}: photo needs src phones/<name>.webp, a Wikimedia Commons page, license (CC0 / CC BY[-SA] x.y) and artist`);
   need(romFile?.device === device?.codename, `rom file device "${romFile?.device}" ≠ ${device?.codename}`);
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;
