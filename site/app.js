@@ -182,7 +182,7 @@ const PROVIDER_LOGOS = /** @type {Record<string, string>} */ ({
   google: '<svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>',
   github: '<svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>',
 });
-/** Header, under BUY ME A COFFEE: a SIGN IN button that opens the provider badges, or name + sign out. */
+/** Header, under BUY ME A COFFEE: a SIGN IN button that opens the provider badges, or the account menu. */
 me.then(info => {
   if (!info?.providers.length && !info?.user) return;
   const slot = h('span', { className: 'account' });
@@ -194,9 +194,16 @@ me.then(info => {
       const body = await r.json().catch(() => ({}));
       if (r.ok) location.reload(); else status.textContent = body.error ?? 'could not save';
     } }, h('strong', { textContent: 'Your username' }), input, h('button', { type: 'submit', className: 'button', textContent: 'Save' }), status);
-    const edit = h('button', { type: 'button', className: 'link-button', title: 'Change your username', textContent: `${info.user.name} ✎` });
+    const edit = h('button', { type: 'button', title: 'Change your username', textContent: `Username: ${info.user.name} ✎` });
     edit.popoverTargetElement = pop;
-    slot.append(edit, ' · ', h('a', { href: './?view=agents', title: 'Personal API tokens for your AI agent (MCP)', textContent: 'API TOKENS' }), ' · ', h('button', { type: 'button', className: 'link-button', textContent: 'SIGN OUT', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }), pop);
+    const here = (/** @type {string} */ view) => params.get('view') === view && !params.get('device') ? 'page' : null;
+    const item = (/** @type {string} */ view, /** @type {string} */ text) => { const a = h('a', { href: `./?view=${view}`, textContent: text }); if (here(view)) a.setAttribute('aria-current', 'page'); return a; };
+    // One button for everything about you: username, favorites, inbox (admins), API tokens, sign out.
+    slot.append(h('details', { className: 'site-menu user-menu' }, h('summary', { title: 'Your account', textContent: `👤 ${info.user.name} ▾` }),
+      h('nav', { ariaLabel: 'Account' }, edit, item('favorites', '♥ Favorites'),
+        info.user.roles.some((/** @type {any} */ r) => r.role === 'admin') && item('inbox', 'Inbox'),
+        item('agents', 'API tokens'),
+        h('button', { type: 'button', textContent: 'Sign out', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }))), pop);
   }
   else {
     const back = encodeURIComponent(location.pathname + location.search);
@@ -208,12 +215,13 @@ me.then(info => {
     slot.append(open, pop);
   }
   document.querySelector('.topbar-side')?.append(slot);
-  if (info.user?.roles.some((/** @type {any} */ r) => r.role === 'admin')) {
-    const link = h('a', { href: './?view=inbox', textContent: 'Inbox' });
-    if (!params.get('device') && params.get('view') === 'inbox') link.setAttribute('aria-current', 'page');
-    document.querySelector('.sitenav a[href="./?view=favorites"]')?.after(link);
-  }
 });
+/** Newest Linux kernel any non-stock ROM brings, as a hardware tag: "community Linux 7.2". @param {any} device */
+const communityKernel = device => {
+  const v = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock' && r.rating?.kernel).map((/** @type {any} */ r) => r.rating.kernel.version)
+    .sort((/** @type {string} */ a, /** @type {string} */ b) => b.localeCompare(a, undefined, { numeric: true }))[0];
+  return v && `community Linux ${v}`;
+};
 /** Arrow looping back counter-clockwise into a circle (start over). */
 const REWIND_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.64-6.36L3 8.25"/><path d="M3 3v5.25h5.25"/></svg>';
 const ROLE_LABEL = /** @type {Record<string, string>} */ ({ owner: 'maintainer', moderator: 'moderator', admin: 'admin' });
@@ -1203,7 +1211,7 @@ async function start() {
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
           Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
-      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display, ...device.hardware.tags ?? []].join(' · ') })),
+      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display, ...device.hardware.tags ?? [], communityKernel(device)].filter(Boolean).join(' · ') })),
     infoSection,
     unlockSection,
     twrpSection,

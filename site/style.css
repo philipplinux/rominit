@@ -87,6 +87,13 @@ kbd {
 .site-menu nav { position: absolute; top: calc(100% + 6px); left: 0; z-index: 20; display: grid; min-width: 200px; border: 1px solid var(--amber); background: var(--bg); }
 .site-menu nav a { padding: .55rem .8rem; color: #e6dfd1; text-decoration: none; letter-spacing: .08em; text-transform: uppercase; font-size: .68rem; }
 .site-menu nav a + a { border-top: 1px solid var(--line); }
+.site-menu nav button { padding: .55rem .8rem; border: 0; border-top: 1px solid var(--line); background: none; color: #e6dfd1; font: inherit; letter-spacing: .08em; text-transform: uppercase; font-size: .68rem; text-align: left; cursor: pointer; }
+.site-menu nav > :first-child { border-top: 0; }
+.site-menu nav button:hover { background: rgb(230 195 154 / 10%); color: var(--amber); }
+.user-menu { position: relative; }
+.user-menu summary { width: auto; padding: 0 .5rem; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; }
+.user-menu nav { left: auto; right: 0; }
+.site-menu nav a + button, .site-menu nav button + a { border-top: 1px solid var(--line); }
 .site-menu nav a:hover, .site-menu nav a[aria-current] { background: rgb(230 195 154 / 10%); color: var(--amber); }
 .top-links { display: flex; gap: .35rem; }
 .top-links a { display: grid; place-items: center; height: 22px; padding: 0 .5rem; border: 1px solid var(--line); color: var(--muted); font-size: .6rem; letter-spacing: .12em; text-decoration: none; }
