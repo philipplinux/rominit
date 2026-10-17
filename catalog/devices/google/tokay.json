@@ -2,6 +2,7 @@
   "codename": "tokay",
   "vendor": "Google",
   "name": "Pixel 9",
+  "photo": {"src":"phones/tokay.webp", "page":"https://web.archive.org/web/20241001104243/https://store.google.com/product/pixel_9?hl=en-US", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 9",
   "variant": "Pixel 9",
@@ -46,7 +47,8 @@
     "tags": [
       "2024",
       "stock Android 14–16",
-      "community Android 17"
+      "community Android 17",
+      "2 rear cameras"
     ]
   }
 }

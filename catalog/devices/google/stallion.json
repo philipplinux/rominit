@@ -2,6 +2,7 @@
   "codename": "stallion",
   "vendor": "Google",
   "name": "Pixel 10a",
+  "photo": {"src":"phones/stallion.webp", "page":"https://store.google.com/product/pixel_10a", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 10",
   "variant": "Pixel 10a",
@@ -46,7 +47,8 @@
     "tags": [
       "2026",
       "stock Android 16",
-      "community Android 17"
+      "community Android 17",
+      "2 rear cameras"
     ]
   }
 }

@@ -2,6 +2,7 @@
   "codename": "star2lte",
   "vendor": "Samsung",
   "name": "Galaxy S9+",
+  "photo": {"src":"phones/star2lte.webp", "page":"https://www.samsung.com/us/support/mobile/phones/?modelCode=SM-G965UZBAATT", "license":"press", "artist":"Samsung"},
   "series": "Galaxy S",
   "family": "Galaxy S9",
   "variant": "S9+ · Exynos",

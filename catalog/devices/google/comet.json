@@ -2,6 +2,7 @@
   "codename": "comet",
   "vendor": "Google",
   "name": "Pixel 9 Pro Fold",
+  "photo": {"src":"phones/comet.webp", "page":"https://web.archive.org/web/20241003070107/https://store.google.com/product/pixel_9_pro_fold?hl=en-US", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 9",
   "variant": "Pixel 9 Pro Fold",
@@ -45,7 +46,9 @@
     "tags": [
       "2024",
       "stock Android 14–16",
-      "community Android 17"
+      "community Android 17",
+      "3 rear cameras",
+      "5× telephoto"
     ]
   }
 }

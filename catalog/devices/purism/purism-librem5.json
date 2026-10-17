@@ -2,6 +2,7 @@
   "codename": "purism-librem5",
   "vendor": "Purism",
   "name": "Librem 5",
+  "photo": {"src":"phones/purism-librem5.webp", "page":"https://puri.sm/products/librem-5/", "license":"press", "artist":"Purism"},
   "series": "Librem",
   "family": "Librem 5",
   "variant": "Librem 5",

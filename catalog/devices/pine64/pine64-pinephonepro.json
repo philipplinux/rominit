@@ -2,6 +2,7 @@
   "codename": "pine64-pinephonepro",
   "vendor": "PINE64",
   "name": "PinePhone Pro",
+  "photo": {"src":"phones/pine64-pinephonepro.webp", "page":"https://pine64.org/devices/pinephone_pro/", "license":"press", "artist":"PINE64"},
   "series": "PinePhone",
   "family": "PinePhone Pro",
   "variant": "PinePhone Pro",

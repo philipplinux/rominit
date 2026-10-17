@@ -2,6 +2,7 @@
   "codename": "mustang",
   "vendor": "Google",
   "name": "Pixel 10 Pro XL",
+  "photo": {"src":"phones/mustang.webp", "page":"https://store.google.com/product/pixel_10_pro_xl", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 10",
   "variant": "Pixel 10 Pro XL",
@@ -46,7 +47,9 @@
     "tags": [
       "2025",
       "stock Android 16",
-      "community Android 17"
+      "community Android 17",
+      "3 rear cameras",
+      "5× telephoto"
     ]
   }
 }

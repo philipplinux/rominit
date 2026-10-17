@@ -2,6 +2,7 @@
   "codename": "xiaomi-tucana",
   "vendor": "Xiaomi",
   "name": "Mi Note 10 / Mi CC9 Pro",
+  "photo": {"src":"phones/xiaomi-tucana.webp", "page":"https://web.archive.org/web/20191211204142/https://www.mi.com/global/mi-note-10/specs", "license":"press", "artist":"Xiaomi"},
   "series": "Mi",
   "family": "Mi Note 10 / Mi CC9 Pro",
   "variant": "Mi Note 10 / Mi CC9 Pro",
