@@ -766,7 +766,7 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: seven folders, always shown with their counts: page reports (by section), phone tests (site; CLI flash + bench; CLI bench-only), flash failures, agent reports (by outcome), device searches. */
+/** Admin inbox: seven folders, always shown with their counts: page reports (by section), phone tests (site; CLI-Bench; Bench-only), flash failures, agent reports (by outcome), device searches. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
@@ -821,7 +821,7 @@ async function inboxView(index) {
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
     benchFolder('Benchmarks', 'phone tests from the site', benchmarks),
-    benchFolder('CLI', 'flashed with the rominit CLI, then benched', cli),
+    benchFolder('CLI-Bench', 'flashed with the rominit CLI, then benched', cli),
     benchFolder('Bench-only', 'rominit bench: benchmark only, flashed another way', benchOnly),
     folder('Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
       const [codename, id] = String(x.rom).split('/');

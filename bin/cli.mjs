@@ -232,7 +232,7 @@ const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new
 
 /** After a postmarketOS flash: wait for SSH over USB, run site/bench/linux.sh (read-only) on the phone, save and print its lines.
  * A fresh install has a fresh host key, so the key is not checked or kept for this USB-only address.
- * Then it is sent to ROMinit as a phone test (admin inbox folder "CLI", or "Bench-only" for the bench command), unreviewed: the CLI only takes the script's own verdicts.
+ * Then it is sent to ROMinit as a phone test (admin inbox folder "CLI-Bench", or "Bench-only" for the bench command), unreviewed: the CLI only takes the script's own verdicts.
  * @param {any} rom @param {string} key codename/rom-id @param {string} dir @param {ReturnType<typeof reporter>} out
  * @param {{host?:string, waitMs?:number, get?:typeof fetch, settleMs?:number, flashed?:boolean}} [opts] flashed: false = bench only, not flashed by this CLI */
 export async function bench(rom, key, dir, out, { host = PMOS_USB, waitMs = 600_000, get = fetch, settleMs = 45_000, flashed = true } = {}) {
@@ -266,7 +266,7 @@ export async function bench(rom, key, dir, out, { host = PMOS_USB, waitMs = 600_
       const lines = text.split('\n').filter(l => /^[a-z_]+ (full|partial|broken|blocked|untested|ask|inconclusive)\b/.test(l));
       out.step(`Benchmark: ${lines.length} features checked, output saved to ${file}\n${lines.map(l => '  ' + l).join('\n')}`);
       await submitBench(rom, key, text, lines, get, flashed);
-      out.done(`Benchmark sent to ${SITE} (inbox "${flashed ? 'CLI' : 'Bench-only'}", waiting for review)`, { file, lines });
+      out.done(`Benchmark sent to ${SITE} (inbox "${flashed ? 'CLI-Bench' : 'Bench-only'}", waiting for review)`, { file, lines });
       return;
     }
     // sshd can accept connections a moment before logins work; retry a few times before giving up
