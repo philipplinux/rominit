@@ -491,6 +491,8 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
   return box;
 }
 const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP' };
+/** Label for a stage's mode; devices may name their own modes (e.g. eos-sideload), shown from the key. @param {string} mode */
+const modeName = mode => MODE[/** @type {keyof typeof MODE} */ (mode)] ?? mode.replace(/-/g, ' ').toUpperCase();
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
 /** One readable line per step for the card. @param {any[]} step */
 const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → ${a}`, erase: `erase ${a}`, set_active: `switch to slot ${a}`,
@@ -503,7 +505,7 @@ function stageCard(device, stage, n, count, key) {
     files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
   const selfHosted = stage.files.length > 0 && stage.files.every((/** @type {any} */ f) => f.url?.startsWith(SELF_HOSTED));
-  const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${MODE[stage.mode].toLowerCase()}, then connect.` });
+  const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${modeName(stage.mode).toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
   const picker = h('input', { type: 'file', multiple: stage.files.length > 1 });
   const selected = h('ul', { className: 'selected-files' }, h('li', { className: 'empty-files', textContent: 'No files selected' }));
@@ -543,7 +545,7 @@ function stageCard(device, stage, n, count, key) {
   /** Error text plus the host-specific fix. @param {unknown} error */
   const explain = error => [message(error), fixFor(message(error), host, protocol)].filter(Boolean).join(' ');
 
-  const again = `put the phone back in ${MODE[stage.mode].toLowerCase()}, press Retry connect, then run the stage again from step 1.`;
+  const again = `put the phone back in ${modeName(stage.mode).toLowerCase()}, press Retry connect, then run the stage again from step 1.`;
   const update = () => {
     connectButton.disabled = !supported || st.busy || (st.session !== null && !st.lost);
     // green connected · red connect failed (click to retry) · yellow lost or stopped mid-session (click to reconnect)
@@ -615,7 +617,7 @@ function stageCard(device, stage, n, count, key) {
     } catch (error) {
       st.failed = true;
       dbgError(error);
-      report(`${explain(error)} Check the phone is in ${MODE[stage.mode].toLowerCase()}, then press Connect again.`);
+      report(`${explain(error)} Check the phone is in ${modeName(stage.mode).toLowerCase()}, then press Connect again.`);
     } finally { st.busy = false; update(); }
   });
   picker.addEventListener('change', () => pick([...picker.files ?? []]));
@@ -685,7 +687,7 @@ function stageCard(device, stage, n, count, key) {
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },
-      h('div', {}, h('p', { className: 'eyebrow', textContent: `STAGE ${n} OF ${count} · ${MODE[stage.mode]}` }), h('h2', { textContent: stage.title })),
+      h('div', {}, h('p', { className: 'eyebrow', textContent: `STAGE ${n} OF ${count} · ${modeName(stage.mode)}` }), h('h2', { textContent: stage.title })),
       h('span', { className: 'version-chip', textContent: stage.recipe.toUpperCase() })),
     stage.optional && h('p', { className: 'field-help', textContent: stage.optional }),
     stepsFor(stage).length > 8
@@ -1292,4 +1294,4 @@ start().then(() => {
   const restart = /** @type {HTMLButtonElement|null} */ (main.querySelector('.title-row .start-over'));
   if (restart) rail.prepend(Object.assign(/** @type {HTMLButtonElement} */ (restart.cloneNode(true)), { onclick: () => restart.click() }));
   main.append(rail);
-}, error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` })));
+}, error => main.append(h('p', { className: 'status', textContent: `Could not load the catalog: ${message(error)}` }), reportBox())); // a broken page is what tickets are for
