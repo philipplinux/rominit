@@ -72,6 +72,7 @@
         { "src": "./shots/starlte/phone-ui.gif", "caption": "the on-screen phone UI: status, then each tab" }
       ],
       "homepage": "https://github.com/philipplinux/s9-postmarketos/releases/tag/v2026.10.15-s9",
+      "discussion": "https://github.com/philipplinux/s9-postmarketos/issues",
       "login": "user / changeme",
       "stages": [
         {

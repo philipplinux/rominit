@@ -131,6 +131,7 @@ export function problems(device, romFile) {
     need(rom.origin in ORIGINS && rom.status in STATUSES, `${at}: origin (${Object.keys(ORIGINS).join('/')}) and status (${Object.keys(STATUSES).join('/')}) are required`);
     // Every ROM states these, null when there is none, so a new field shows up on every page instead of only some.
     need('source' in rom && (rom.source === null || rom.source.startsWith?.('https://')), `${at}: source must be an https URL or null (no source code published)`);
+    need(rom.discussion === undefined || rom.discussion.startsWith?.('https://'), `${at}: discussion (the ROM's support / discussion thread) must be an https URL`);
     need('maintainer' in rom && (rom.maintainer === null || (rom.maintainer.name && rom.maintainer.source?.startsWith('https://'))), `${at}: maintainer must be {name, source https, avatar?} or null`);
     need(rom.screenshots === undefined || rom.screenshots.every((/** @type {any} */ s) => s.src && s.caption), `${at}: screenshots need src and caption`);
     need(rom.login === undefined || /^\S+ \/ \S+$/.test(rom.login), `${at}: login must look like "user / password"`);

@@ -70,6 +70,7 @@
       },
       "notes": "Unofficial build by ivanmeler, the hero2lte TWRP maintainer. Security patch 2024-05-05. Needs Samsung's Android 8 firmware (bootloader) on the phone first. Feature ratings wait for a hardware run. Google apps: sideload MindTheGapps for Android 14 right after, before the first boot.",
       "homepage": "https://ivanmeler.github.io/devices/hero2lte.html",
+      "discussion": "https://xdaforums.com/t/lineageos-21-0-android-14-signature-spoofing-ota-updates-for-s7-edge-exynos.4655852/",
       "stages": [
         {
           "title": "Install TWRP",
@@ -203,6 +204,7 @@
       },
       "notes": "Unofficial build by ivanmeler, the hero2lte TWRP maintainer. Security patch 2025-06. Needs Samsung's Android 8 firmware (bootloader) on the phone first. Feature ratings wait for a hardware run. Google apps: sideload MindTheGapps for Android 13 right after, before the first boot.",
       "homepage": "https://ivanmeler.github.io/devices/hero2lte.html",
+      "discussion": "https://xdaforums.com/t/lineageos-20-0-android-13-signature-spoofing-ota-updates-for-s7-edge-exynos.4484511/",
       "stages": [
         {
           "title": "Install TWRP",

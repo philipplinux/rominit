@@ -72,6 +72,7 @@
         { "src": "./shots/laurel_sprout/demo.gif", "caption": "tty1 console, then the on-screen dashboard tabs" }
       ],
       "homepage": "https://github.com/philipplinux/mia3-postmarketos/releases/tag/v2026.10.17",
+      "discussion": "https://github.com/philipplinux/mia3-postmarketos/issues",
       "login": "user / changeme",
       "stages": [
         {

@@ -79,7 +79,7 @@ const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent
 const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
 /** Where the ROM comes from: release page and source code, first thing in section 0. @param {any} rom */
 const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key) => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
-  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }), favoriteButton(key));
+  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }), rom.discussion && link(rom.discussion, 'Discussion'), favoriteButton(key));
 /** "♥ Favorite 3", like a GitHub star; signed out it opens the sign-in popup. Hidden without the API. @param {string} key `<codename>/<rom id>` */
 function favoriteButton(key) {
   const button = h('button', { type: 'button', className: 'favorite', hidden: true });

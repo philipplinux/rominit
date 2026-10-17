@@ -79,6 +79,7 @@
         }
       ],
       "homepage": "https://grapheneos.org/",
+      "discussion": "https://discuss.grapheneos.org/",
       "external": {
         "url": "https://grapheneos.org/install/web",
         "why": "GrapheneOS publishes signed factory images without SHA-256 pins, so ROMinit cannot flash it yet. Use their official web installer (unlock, flash, relock)."
