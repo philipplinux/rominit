@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
@@ -730,20 +730,23 @@ function devicePicker(index) {
   const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
   const render = () => {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
-    const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
+    const text = (/** @type {any} */ d) => [CATEGORIES[d.category], d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
     const matches = index.filter(d => words.every(w => text(d).includes(w)));
     const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'untested');
     const hits = matches.filter(d => levels.indexOf(deviceLevel(d, tested)) <= upTo);
-    // All › vendor › series › family › variant
-    /** @type {Record<string, Record<string, Record<string, any[]>>>} */ const tree = {};
-    for (const d of hits) ((tree[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.vendor][d.series][d.family] ?? []), d];
+    // All › category › vendor › series › family › variant; every category shows, empty ones say so (only while not searching).
+    /** @type {Record<string, Record<string, Record<string, Record<string, any[]>>>>} */ const tree = {};
+    for (const d of hits) (((tree[d.category] ??= {})[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.category][d.vendor][d.series][d.family] ?? []), d];
     const sorted = (/** @type {object} */ o) => Object.entries(o).sort(([x], [y]) => x.localeCompare(y));
-    list.replaceChildren(...sorted(tree).map(([vendor, series]) => h('details', { open: true }, h('summary', { textContent: vendor }),
+    const vendors = (/** @type {any} */ byVendor) => sorted(byVendor).map(([vendor, series]) => h('details', { open: true }, h('summary', { textContent: vendor }),
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
-          h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems)))))))));
-    if (!hits.length && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No phone at this level. ${matches.length} match at a level further right.` }));
-    else if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the phones people look for get added first.' }));
+          h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems))))))));
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => tree[c] || !words.length).map(([c, label]) => tree[c]
+      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
+      : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
+    if (!hits.length && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);
@@ -751,7 +754,7 @@ function devicePicker(index) {
   let logTimer = 0; // logs the search once typing pauses, not every keystroke
   search.addEventListener('input', render);
   render();
-  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search,
+  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your device' }), search,
     level, list);
 }
 
@@ -1199,8 +1202,8 @@ async function start() {
   // Scraped ROM: its info and flash steps are placeholders until checked.
   if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark('untested placeholder'));
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
-  // Under the intro, two rows: hardware (year, microSD included), then the OS story (stock / community Android, community Linux).
-  const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux/i.test(t);
+  // Under the intro, three rows: specs, phone tags (year, microSD, cameras, telephoto, LiDAR), then the OS story (stock / community Android, community Linux).
+  const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux|jailbreak|os\b/i.test(t); // iOS, postmarketOS, Sailfish OS…
   const osLine = [...tags.filter(isOs), communityKernel(device)].filter(Boolean);
   main.append(
     h('section', { className: 'intro' },
@@ -1209,14 +1212,15 @@ async function start() {
       h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {
         if (document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } } }),
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),
-        ...[device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
+        ...[CATEGORIES[device.category], device.vendor, device.series, device.family].flatMap(crumb => [' / ', h('a', { href: `./?q=${encodeURIComponent(crumb)}`, textContent: crumb.toUpperCase() })]), ` / ${device.variant.toUpperCase()}`),
       h('div', { className: 'title-row' }, h('h1', {}, 'Flash your ', h('span', { textContent: `${device.name}.` })),
         h('button', { className: 'start-over', type: 'button', title: 'Forget progress on this phone and start from section 0', onclick() {
           if (!confirm(`Start over on this ${device.name}? This forgets the locked-in ROM and every ticked step in this browser.`)) return;
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
           Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
-      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display, ...tags.filter(t => !isOs(t))].join(' · ') }),
+      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display].join(' · ') }),
+      tags.some(t => !isOs(t)) && h('p', { className: 'hardware-line', textContent: tags.filter(t => !isOs(t)).join(' · ') }),
       osLine.length > 0 && h('p', { className: 'hardware-line', textContent: osLine.join(' · ') })),
     infoSection,
     unlockSection,

@@ -589,3 +589,6 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .license-table th, .license-table td { padding: .4rem .6rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .license-table th { color: var(--muted); font-weight: 400; letter-spacing: .08em; text-transform: uppercase; font-size: .62rem; }
 @media (max-width: 560px) { .license-table td:nth-child(4), .license-table th:nth-child(4) { display: none; } }
+.device-tree .category > summary { font-size: 1.05rem; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); }
+.device-tree .category.empty { margin: .9rem 0 0; color: var(--faint); }
+.device-tree .category.empty strong { letter-spacing: .08em; text-transform: uppercase; }
