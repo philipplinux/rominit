@@ -45,7 +45,8 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
 notices.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
 for (const { photo } of devices) if (photo) {
   assert(existsSync(`site/${photo.src}`), `missing ${photo.src}`);
-  notices.push(`${photo.src}\nPhoto by ${photo.artist}, ${photo.page}, ${photo.license}; resized and converted to WebP${photo.license === 'CC0' ? '' : `, this copy under the same license`}.`);
+  notices.push(photo.license === 'press' ? `${photo.src}\nPress image © ${photo.artist}, ${photo.page}; shown only to identify the device, not under this project's license.`
+    : `${photo.src}\nPhoto by ${photo.artist}, ${photo.page}, ${photo.license}; resized and converted to WebP${photo.license === 'CC0' ? '' : `, this copy under the same license`}.`);
 }
 await writeFile('dist/THIRD-PARTY-NOTICES.txt', notices.join('\n\n'));
 console.log(`built dist/: ${devices.length} devices, ${devices.reduce((n, d) => n + d.roms.length, 0)} ROMs`);

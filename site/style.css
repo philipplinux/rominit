@@ -116,6 +116,7 @@ h1 { margin-bottom: .7rem; font-size: clamp(2.3rem, 6vw, 4.5rem); line-height: 1
 h1 span { color: var(--teal); }
 @media (min-width: 700px) { h1 { white-space: nowrap; font-size: clamp(2rem, 4.6vw, 4.5rem); } }
 .intro-copy { max-width: 980px; margin-bottom: 1rem; color: #b3ab9d; font-size: .95rem; }
+.hardware-line + .hardware-line { margin-top: -.75rem; }
 .hardware-line { margin: -.5rem 0 1rem; color: #8f887c; font: .78rem/1.4 var(--mono, ui-monospace, monospace); letter-spacing: .02em; }
 .experimental-note { display: inline-block; margin: 0; border-left: 2px solid var(--amber); padding: .32rem .7rem; color: #c4bcae; font-size: .72rem; }
 .experimental-note strong { color: var(--amber); }

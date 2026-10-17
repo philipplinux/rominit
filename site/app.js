@@ -1199,10 +1199,13 @@ async function start() {
   // Scraped ROM: its info and flash steps are placeholders until checked.
   if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark('untested placeholder'));
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
+  // Under the intro, two rows: hardware (year, microSD included), then the OS story (stock / community Android, community Linux).
+  const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux/i.test(t);
+  const osLine = [...tags.filter(isOs), communityKernel(device)].filter(Boolean);
   main.append(
     h('section', { className: 'intro' },
       device.photo && h('figure', { className: 'phone-photo' }, h('img', { src: `./${device.photo.src}`, alt: `${device.vendor} ${device.name}` }),
-        h('figcaption', {}, h('a', { href: device.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: `Photo: ${device.photo.artist}, ${device.photo.license}` }))),
+        h('figcaption', {}, h('a', { href: device.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: device.photo.license === 'press' ? `Image © ${device.photo.artist}` : `Photo: ${device.photo.artist}, ${device.photo.license}` }))),
       h('a', { className: 'back-link', href: './', textContent: '← BACK', onclick(/** @type {MouseEvent} */ e) {
         if (document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } } }),
       h('p', { className: 'eyebrow' }, h('a', { href: './', textContent: 'ALL' }),
@@ -1213,7 +1216,8 @@ async function start() {
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
           Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
-      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display, ...device.hardware.tags ?? [], communityKernel(device)].filter(Boolean).join(' · ') })),
+      device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display, ...tags.filter(t => !isOs(t))].join(' · ') }),
+      osLine.length > 0 && h('p', { className: 'hardware-line', textContent: osLine.join(' · ') })),
     infoSection,
     unlockSection,
     twrpSection,
