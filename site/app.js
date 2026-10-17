@@ -709,17 +709,18 @@ function stageCard(device, stage, n, count, key) {
 /** @param {any[]} index */
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
+  const showSupportOnly = h('input', { type: 'checkbox' });
   const list = h('div', { className: 'device-tree' });
   const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating)})`).join(', ');
   const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), d.supportOnly
-    ? ` · ${d.codename} · support only · no ROMinit recipe yet`
+    ? ` · ${d.models.join(', ') || 'model number unknown'} · ${d.codename} · support only · no ROMinit recipe yet`
     : ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
   /** Variants we know but cannot flash, listed so owners see why. */
   const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
   const render = () => {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
-    const hits = preferFlashableDevices(index.filter(d => words.every(w => text(d).includes(w))));
+    const hits = preferFlashableDevices(index.filter(d => words.every(w => text(d).includes(w))), showSupportOnly.checked);
     // All › vendor › series › family › variant
     /** @type {Record<string, Record<string, Record<string, any[]>>>} */ const tree = {};
     for (const d of hits) ((tree[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.vendor][d.series][d.family] ?? []), d];
@@ -735,8 +736,10 @@ function devicePicker(index) {
   };
   let logTimer = 0; // logs the search once typing pauses, not every keystroke
   search.addEventListener('input', render);
+  showSupportOnly.addEventListener('change', render);
   render();
-  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search, list);
+  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search,
+    h('label', { className: 'field-help' }, showSupportOnly, ' Show support-only devices'), list);
 }
 
 /** One tile per group (phone brand or ROM project), linking to the device list filtered to it.
@@ -817,7 +820,7 @@ async function inboxView(index) {
   card.append(
     folder('Tickets', 'page tickets, by section', reports.length, Object.entries(by).sort(([a], [b]) => a.localeCompare(b)).map(([section, items]) =>
       h('div', { className: 'inbox-sub' }, h('p', { className: 'field-label', textContent: `${section} · ${items.length}` }), h('ol', { className: 'comments' }, ...items.map(x => {
-        const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }));
+        const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: /^\/(?![/\\])/.test(x.page) ? x.page : '#', textContent: x.page })), h('p', { textContent: x.text }));
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
     benchFolder('Benchmarks', 'phone tests from the site', benchmarks),

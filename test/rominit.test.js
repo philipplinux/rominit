@@ -30,6 +30,7 @@ test('support-only devices appear only when there is no flashable search match',
   const flashable = { codename: 'ready', supportOnly: false }, fallback = { codename: 'notes', supportOnly: true };
   assert.deepEqual(preferFlashableDevices([flashable, fallback]), [flashable]);
   assert.deepEqual(preferFlashableDevices([fallback]), [fallback]);
+  assert.deepEqual(preferFlashableDevices([flashable, fallback], true), [flashable, fallback]);
 });
 
 test('validator rejects bad entries', () => {
@@ -368,6 +369,10 @@ test('agent API: token from the site, MCP report with it, admin inbox by outcome
   const site = (fn, sid, body) => fn({ env, request: new Request('https://x/api', { method: body ? 'POST' : 'GET', body: body && JSON.stringify(body), headers: { cookie: `sid=${sid}` } }) });
   assert.equal((await site(tokens.onRequestPost, 'nobody', { name: 'x' })).status, 401);
   assert.equal((await site(tokens.onRequestPost, 'bob', { name: 'x', days: 9999 })).status, 400);
+  const reports = await import('../functions/api/reports.js'); // a report's page must be a same-site path: the admin inbox links it
+  const report = page => reports.onRequestPost({ env: { ...env, SALT: 't' }, request: new Request('https://x/api', { method: 'POST', body: JSON.stringify({ page, text: 'x' }) }) });
+  for (const page of ['javascript:alert(1)', '//evil.example', '/\\evil.example']) assert.equal((await report(page)).status, 400, page);
+  assert.equal((await report('/?device=x')).status, 200);
   const { token } = await (await site(tokens.onRequestPost, 'bob', { name: 'laptop claude', days: 30 })).json();
   assert.equal(db.prepare("SELECT date(expires) = date('now', '+30 days') AS ok FROM api_tokens").get().ok, 1);
   assert.match(token, /^rmi_/);
