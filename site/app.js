@@ -260,7 +260,7 @@ function commentsBox(key) {
 }
 /** "maintainer: name (all postmarketOS)"; verified owners, else the scraped placeholder. Hidden where there is no API. @param {string} key @param {{name:string, avatar?:string, source:string}} [hint] */
 /** Marks anything a scraper filled in. A scraped name is only text: never matched to an account with that username; owners come from roles an admin grants. */
-const placeholderMark = () => h('span', { className: 'placeholder-mark', title: 'Filled in by a scraper: not checked, and not linked to any ROMinit account with this name.', textContent: 'placeholder' });
+const placeholderMark = (text = 'placeholder') => h('span', { className: 'placeholder-mark', title: 'Filled in by a scraper: not checked, and not linked to any ROMinit account with this name.', textContent: text });
 function ownersRow(key, hint) {
   const row = h('p', { className: 'rating', hidden: true }, h('strong', { textContent: 'maintainer' }));
   // Scraped maintainer (catalog `maintainer`): a placeholder, always marked unverified until they claim the ROM.
@@ -1065,7 +1065,7 @@ async function start() {
   /** One of the collapsible page sections. @param {string} title @param {string} hint @param {boolean} open @param {any[]} body */
   // Not needed for this phone / ROM counts as done (green, dashed on the rail).
   const section = (title, hint, open, body, badge = '') => h('details', { className: `page-section${badge === 'NOT REQUIRED' ? ' skipped' : ''}`, open },
-    h('summary', {}, h('span', { textContent: title }), badge && h('b', { className: 'badge', textContent: badge }), h('small', { textContent: hint })), ...body);
+    h('summary', {}, badge && h('b', { className: 'badge', textContent: badge }), h('span', { textContent: title }), h('small', { textContent: hint })), ...body);
   /** Stage cards of one ROM, numbered across the whole ROM. @param {any} r @param {string} which */
   const cards = (r, which) => r.stages.flatMap((/** @type {any} */ stage, /** @type {number} */ i) =>
     stage.section === which ? [stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)] : []);
@@ -1190,7 +1190,7 @@ async function start() {
         e.preventDefault(); infoSection.open = true; const box = /** @type {HTMLTextAreaElement|null} */ (infoSection.querySelector('.comment-box textarea')); box?.scrollIntoView({ block: 'center' }); box?.focus(); } }),
       '.')));
   // Scraped ROM: its info and flash steps are placeholders until checked.
-  if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark());
+  if (rom?.vetting === 'scraped') for (const sec of [infoSection, romSection]) sec.querySelector(':scope > summary > span')?.after(placeholderMark('untested placeholder'));
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   main.append(
     h('section', { className: 'intro' },
