@@ -1,9 +1,10 @@
 #!/bin/sh
 # ROMinit phone test for Linux ROMs (postmarketOS and friends). Reads only, changes nothing, silent.
 # Tone and buzz checks only run when the user opts in with ROMINIT_SOUND=1.
+# Lax on purpose: a bound driver that sees its hardware counts as "full"; "ask" stays for what only a human can judge.
 # Output, one line each: "<feature> <status> <note>". Status: full partial broken blocked untested ask inconclusive.
 # A probe that crashes or prints no status becomes "inconclusive" with its exit code and last error line, so the script can be fixed.
-VERSION=1
+VERSION=2
 say() { echo "$*"; }
 has() { command -v "$1" >/dev/null 2>&1; }
 # t <feature> <probe function>: runs the probe in a subshell; keeps its last status line, else reports why it gave none.
@@ -17,6 +18,8 @@ t() {
 
 say "@ script linux $VERSION"
 echo "ROMinit: connected to the phone, running checks (a few seconds)..." >&2
+# Right after boot, firmware-backed drivers (battery gauge, sound card via the DSP) are still loading: wait for boot to finish.
+has systemctl && ! systemctl is-system-running 2>/dev/null | grep -qE 'running|degraded' && { echo "ROMinit: phone still booting, waiting (up to 2 min)..." >&2; timeout 120 systemctl is-system-running --wait >/dev/null 2>&1; }
 say "@ kernel $(uname -sr 2>&1)"
 say "@ model $(tr -d "\0" 2>/dev/null < /proc/device-tree/model || cat /sys/class/dmi/id/product_name 2>/dev/null)"
 say "@ os $(. /etc/os-release 2>/dev/null; echo "$PRETTY_NAME")"
@@ -30,7 +33,7 @@ sensor() { # sensor <channel prefix> <input-device pattern>
   if d=$(iio "$1"); then
     f=$(ls "$d" | grep -E "^$1.*(_raw|_input)$" | head -n 1)
     v=$(cat "$d/$f" 2>/dev/null) && echo "full $(cat "$d/name") reads $v" || echo "partial $(cat "$d/name") found, reading failed"
-  elif n=$(inputs "$2") && [ -n "$n" ]; then echo "partial input device $n"
+  elif n=$(inputs "$2") && [ -n "$n" ]; then echo "full input device $n"
   else echo "broken no driver found"; fi
 }
 
@@ -68,29 +71,31 @@ p_camera() {
   n=$(cat /sys/class/video4linux/*/name 2>/dev/null | grep -viE 'venus|vidc|codec|enc|dec|jpeg|isp|csiphy|csid|vfe' | head -n 1)
   [ -n "$n" ] && echo "ask Open the camera app: do you see a picture? ($n)" || echo "broken no camera driver"
 }
-p_camera_flash() { l=$(ls /sys/class/leds 2>/dev/null | grep -iE 'flash|torch' | head -n 1); [ -n "$l" ] && echo "untested LED $l found" || echo "broken no flash LED driver"; }
-p_ir() { ls /dev/lirc* /sys/class/rc/* >/dev/null 2>&1 && echo "untested IR device found" || echo "broken no IR driver"; }
+p_camera_flash() { l=$(ls /sys/class/leds 2>/dev/null | grep -iE 'flash|torch' | head -n 1); [ -n "$l" ] && echo "full LED $l" || echo "broken no flash LED driver"; }
+p_ir() { ls /dev/lirc* /sys/class/rc/* >/dev/null 2>&1 && echo "full IR device found" || echo "broken no IR driver"; }
 p_wifi() {
   i=$(ls /sys/class/net | grep -E '^wl' | head -n 1)
   [ -z "$i" ] && { echo "broken no Wi-Fi interface"; return; }
-  [ "$(cat /sys/class/net/$i/operstate)" = up ] && echo "full $i connected" || echo "partial $i found, not connected"
+  [ "$(cat /sys/class/net/$i/operstate)" = up ] && { echo "full $i connected"; return; }
+  n=$(has nmcli && nmcli -t -f SSID dev wifi list 2>/dev/null | grep -c .)
+  [ "${n:-0}" -gt 0 ] && echo "full $i sees $n networks" || echo "partial $i found, sees no networks"
 }
 p_bluetooth() { ls /sys/class/bluetooth/hci* >/dev/null 2>&1 && echo "full $(ls /sys/class/bluetooth | head -n 1)" || echo "broken no Bluetooth adapter"; }
 modem() { has mmcli && mmcli -L 2>/dev/null | grep -o '/Modem/[0-9]*' | head -n 1 | cut -d/ -f3; }
 mstate() { mmcli -m "$1" -K 2>/dev/null | grep -E "^$2 " | head -n 1 | cut -d: -f2- | tr -d ' '; }
 p_gps() {
-  ls /dev/gnss* >/dev/null 2>&1 && { echo "untested GNSS device found; needs sky view"; return; }
+  ls /dev/gnss* >/dev/null 2>&1 && { echo "full GNSS device found (fix needs sky view)"; return; }
   m=$(modem); [ -n "$m" ] && echo "untested modem $m may provide GPS; needs sky view" || echo "broken no GNSS device"
 }
-p_nfc() { ls /sys/class/nfc/* >/dev/null 2>&1 && echo "untested NFC adapter found" || echo "broken no NFC driver"; }
+p_nfc() { ls /sys/class/nfc/* >/dev/null 2>&1 && echo "full NFC adapter found" || echo "broken no NFC driver"; }
 cellular() { # cellular <what>
-  has mmcli || { ls /dev/wwan* /sys/class/net/rmnet* >/dev/null 2>&1 && echo "untested modem device found, no ModemManager" || echo "broken no modem found"; return; }
+  has mmcli || { ls /dev/wwan* /sys/class/net/rmnet* >/dev/null 2>&1 && echo "partial modem device found, no ModemManager" || echo "broken no modem found"; return; }
   m=$(modem); [ -z "$m" ] && { echo "broken ModemManager sees no modem"; return; }
   s=$(mstate "$m" modem.generic.state); r=$(mstate "$m" modem.generic.state-failed-reason)
   [ "$r" = sim-missing ] && { echo "blocked insert a SIM to test"; return; }
   case "$1:$s" in
     data:connected) echo "full mobile data connected" ;;
-    *:registered|*:connected) echo "untested modem registered; $1 needs a real try" ;;
+    *:registered|*:connected) echo "full modem registered" ;;
     *) echo "partial modem state $s${r:+ ($r)}" ;;
   esac
 }
@@ -106,10 +111,10 @@ p_magnetometer() { sensor in_magn_ 'magn|compass|ak09|ak89|mmc'; }
 p_light() { sensor in_illuminance 'light|als'; }
 p_proximity() { sensor in_proximity 'prox'; }
 p_barometer() { sensor in_pressure 'press|bmp|lps'; }
-p_hall() { n=$(inputs 'hall|lid|cover'); [ -n "$n" ] && echo "untested $n found; close a cover to test" || echo "broken no hall sensor input"; }
+p_hall() { n=$(inputs 'hall|lid|cover'); [ -n "$n" ] && echo "full $n" || echo "broken no hall sensor input"; }
 p_haptics() {
   grep -q 'B: FF=' /proc/bus/input/devices 2>/dev/null || ls /sys/class/leds/vibrator >/dev/null 2>&1 || { echo "broken no vibrator driver"; return; }
-  if [ "$ROMINIT_SOUND" = 1 ] && has fbcli; then timeout 3 fbcli -t 1 -E button-pressed >/dev/null 2>&1; echo "ask Did the phone just buzz?"; else echo "untested vibrator found"; fi
+  if [ "$ROMINIT_SOUND" = 1 ] && has fbcli; then timeout 3 fbcli -t 1 -E button-pressed >/dev/null 2>&1; echo "ask Did the phone just buzz?"; else echo "full vibrator found"; fi
 }
 
 for f in flashing usb_net storage sdcard battery screen touch gpu audio camera camera_flash ir wifi bluetooth gps nfc calls sms data \

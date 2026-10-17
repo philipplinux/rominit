@@ -8,7 +8,7 @@ export const archive = true;
 const DIR = 'rominit-stock';
 const XZ_DIR_AGE = 24 * 60 * 60 * 1000;
 
-/** Streams XZ output to OPFS; Node tests use an in-memory Blob fallback. */
+/** Streams XZ output to OPFS; without OPFS (Node) it falls back to an in-memory Blob. */
 export async function decodeXzToOPFS(file, maxBytes) {
   if (!(maxBytes > 0)) throw Error('A target partition size is required to bound XZ output.');
   if (typeof self === 'undefined') globalThis.self = /** @type {Window & typeof globalThis} */ (globalThis);
@@ -20,7 +20,7 @@ export async function decodeXzToOPFS(file, maxBytes) {
     if (written > maxBytes) throw Error(`Decoded XZ image exceeds target partition size (${maxBytes} bytes).`);
     controller.enqueue(chunk);
   } }));
-  if (typeof window === 'undefined') return { file: await new Response(bounded).blob(), cleanup: async () => {} };
+  if (typeof navigator === 'undefined' || !navigator.storage?.getDirectory) return { file: await new Response(bounded).blob(), cleanup: async () => {} };
   if (!navigator.storage?.getDirectory) throw Error('This browser cannot store decoded images on disk.');
   const root = await navigator.storage.getDirectory();
   for await (const [name] of /** @type {any} */ (root).entries()) {

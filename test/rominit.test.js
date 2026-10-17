@@ -381,17 +381,17 @@ test('agent API: token from the site, MCP report with it, admin inbox by outcome
   assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id }, null)).content[0].text, /\?view=agents/);
   assert.match((await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id, colour: 'red' })).content[0].text, /colour/);
   const { run_id } = (await call('rominit_start_run', { codename: 'laurel_sprout', rom_id: rom.id, host: 'linux', tools: 'fastboot 35' })).structuredContent;
-  assert.match((await call('rominit_log_step', { run_id, stage: 1, outcome: 'ok', detail: 'device 1a2b3c4d\tfastboot' })).content[0].text, /serial/i);
-  assert.match((await call('rominit_log_step', { run_id, stage: 1, outcome: 'ok', detail: 'see /home/ada/x.img' })).isError ? 'rejected' : '', /rejected/);
-  assert.equal((await call('rominit_log_step', { run_id, stage: 1, outcome: 'workaround', detail: 'needed a USB 2 port' })).structuredContent.logged, 1);
+  assert.equal((await call('rominit_log_step', { run_id, stage: 1, outcome: 'ok', detail: 'device 1a2b3c4d\tfastboot, ssh 172.16.42.1, see /home/ada/x.img' })).structuredContent.logged, 1); // personal data is stripped, not refused
+  assert.equal((await call('rominit_log_step', { run_id, stage: 1, outcome: 'workaround', detail: 'needed a USB 2 port' })).structuredContent.logged, 2);
   assert.ok((await call('rominit_finish_run', { run_id, outcome: 'success', resolution: 'Use a USB 2 port for stage 1.' })).structuredContent.ok);
   assert.match((await call('rominit_log_step', { run_id, stage: 2, outcome: 'ok' })).content[0].text, /finished/);
   const inbox = await import('../functions/api/inbox.js');
   assert.equal((await site(inbox.onRequestGet, 'bob')).status, 403);
   const { agents } = await (await site(inbox.onRequestGet, 'ada')).json();
   assert.deepEqual([agents.success.length, agents.failed.length], [1, 0]);
-  assert.deepEqual(agents.success[0].steps, [{ stage: 1, step: null, outcome: 'workaround', detail: 'needed a USB 2 port' }]);
-  assert.equal(db.prepare('SELECT n FROM mcp_hits WHERE who LIKE ?').get('token:%').n, 7); // every tool call of this token counted
+  assert.deepEqual(agents.success[0].steps, [{ stage: 1, step: null, outcome: 'ok', detail: 'device [a serial number removed], ssh [an IPv4 address removed], see [a home path removed]/x.img' },
+    { stage: 1, step: null, outcome: 'workaround', detail: 'needed a USB 2 port' }]);
+  assert.equal(db.prepare('SELECT n FROM mcp_hits WHERE who LIKE ?').get('token:%').n, 6); // every tool call of this token counted
   // a revoked token stops reporting
   const listed = await (await site(tokens.onRequestGet, 'bob')).json(); // a plain array, as site/app.js reads it
   assert.deepEqual(listed.map(t => t.name), ['laptop claude']);

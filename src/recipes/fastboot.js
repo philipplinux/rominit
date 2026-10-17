@@ -18,10 +18,12 @@ export async function expandedSize(file) {
  * Runs a stage's step list over fastboot. Every file is SHA-256-checked and every target partition
  * size-checked before the first write; any mismatch or unexpected reply stops it (fail closed).
  * @param {Fastboot} fb
- * @param {{device:any, files:{name:string,sha256:string,file:Blob}[], steps:any[][]}} job
+ * `job.progress.done` counts finished write steps; a retry with the same object re-checks everything, then skips those.
+ * `job.pauseMs` (default 1 s) lets the bootloader settle between write steps.
+ * @param {{device:any, files:{name:string,sha256:string,file:Blob}[], steps:any[][], progress?:{done:number}, pauseMs?:number}} job
  * @param {(message:string,fraction:number)=>void} report @param {()=>void} assertSession
  */
-export async function run(fb, { device, files, steps }, report, assertSession) {
+export async function run(fb, { device, files, steps, progress = { done: 0 }, pauseMs = 1000 }, report, assertSession) {
   const total = 4 + files.filter(f => f.name.endsWith('.img.xz')).length + steps.length;
   let step = 0;
   const say = (text, fraction = 0) => report(`Step ${step}/${total}: ${text}`, fraction);
@@ -86,7 +88,9 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
       if (verb === 'flash' && await expandedSize(byName[name].file) > partitionSizes.get(partition)) throw Error(`${name} is larger than ${partition}. Nothing written.`);
     }
 
-    for (const [verb, arg, name] of steps) {
+    for (const [index, [verb, arg, name]] of steps.entries()) {
+      if (index < progress.done) { step += 1; say(`already done, skipped`); continue; }
+      if (index > 0) await new Promise(ok => setTimeout(ok, pauseMs));
       if (verb === 'flash') {
         const text = `Writing ${name} → ${arg}`;
         next(text);
@@ -102,6 +106,7 @@ export async function run(fb, { device, files, steps }, report, assertSession) {
         // The phone may drop USB before it answers; everything is already written.
         await fb.runCommand('reboot').catch(() => {});
       }
+      progress.done = index + 1;
     }
     report(`Step ${total}/${total}: Done.`, 1);
   } finally {

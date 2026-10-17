@@ -766,13 +766,13 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: five folders, always shown with their counts: page reports (by section), phone tests, flash failures, agent reports (by outcome), device searches. */
+/** Admin inbox: seven folders, always shown with their counts: page reports (by section), phone tests (site; CLI flash + bench; CLI bench-only), flash failures, agent reports (by outcome), device searches. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, benchOnly = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -807,6 +807,11 @@ async function inboxView(index) {
       h('details', {}, h('summary', { textContent: 'card and script output' }), h('pre', { className: 'bench-output', textContent: `${JSON.stringify(final, null, 1)}\n\n${x.output ?? ''}` })));
     return li;
   };
+  /** Phone tests split into new / review / approved / rejected. @param {string} name @param {string} hint @param {Record<string, any[]>} b */
+  const benchFolder = (name, hint, b) => folder(name, `${hint} · ${b.new.length} new · ${b.review.length} in review · ${b.approved.length} approved · ${b.rejected.length} rejected`, b.new.length + b.review.length,
+    [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
+      h('summary', { className: 'field-label', textContent: `${title} · ${b[state].length}` }),
+      h('ol', { className: 'comments' }, ...b[state].map(benchItem)))), Object.values(b).flat().length);
   const by = /** @type {Record<string, any[]>} */ ({});
   for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
   card.append(
@@ -815,10 +820,9 @@ async function inboxView(index) {
         const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: x.page, textContent: x.page })), h('p', { textContent: x.text }));
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
-    folder('Benchmarks', `phone tests · ${benchmarks.new.length} new · ${benchmarks.review.length} in review · ${benchmarks.approved.length} approved · ${benchmarks.rejected.length} rejected`, benchmarks.new.length + benchmarks.review.length,
-      [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
-        h('summary', { className: 'field-label', textContent: `${title} · ${benchmarks[state].length}` }),
-        h('ol', { className: 'comments' }, ...benchmarks[state].map(benchItem)))), Object.values(benchmarks).flat().length),
+    benchFolder('Benchmarks', 'phone tests from the site', benchmarks),
+    benchFolder('CLI', 'flashed with the rominit CLI, then benched', cli),
+    benchFolder('Bench-only', 'rominit bench: benchmark only, flashed another way', benchOnly),
     folder('Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
       const [codename, id] = String(x.rom).split('/');
       const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`, textContent: `${x.rom} · stage ${x.stage}` })),

@@ -84,11 +84,10 @@ const PRIVATE = /** @type {[RegExp, string][]} */ ([
   [/serial(?:no| ?number)?\W{0,3}[A-Za-z0-9]{6,}/i, 'a serial number'],
   [/\b[A-Za-z0-9]{6,}\t(?:fastboot|device|recovery|sideload)\b/, 'a serial number (fastboot/adb devices output)'],
 ]);
-/** Throws the first kind of personal data found in a free-text field. @param {string} field @param {unknown} value */
-export function checkPrivate(field, value) {
-  if (value === undefined) return;
+/** Replaces personal data in a free-text field with a [removed] marker, so a report still lands. @param {string} field @param {unknown} value */
+export function stripPrivate(field, value) {
   if (typeof value !== 'string') throw Error(`${field} must be text.`);
-  for (const [pattern, what] of PRIVATE) if (pattern.test(value)) throw Error(`${field} contains ${what}. Remove it and send again: ROMinit takes device and procedure facts only.`);
+  return PRIVATE.reduce((text, [pattern, what]) => text.replace(new RegExp(pattern.source, pattern.flags + 'g'), `[${what.replace(/ \(.*\)$/, '')} removed]`), value);
 }
 
 /** A published catalog file, or null. @param {any} env @param {Request} request @param {string} name */
@@ -115,7 +114,7 @@ export async function callTool(env, request, name, args = {}) {
     if (v === undefined) { if (/** @type {string[]} */ (tool.inputSchema.required ?? []).includes(k)) throw Error(`${k} is required.`); continue; }
     if (p.enum && !p.enum.includes(v)) throw Error(`${k} must be one of ${p.enum.join(', ')}.`);
     if (p.type === 'integer' && (!Number.isInteger(v) || v < p.minimum || v > p.maximum)) throw Error(`${k} must be a whole number from ${p.minimum} to ${p.maximum}.`);
-    if (p.maxLength) { checkPrivate(k, v); if (v.length > p.maxLength) throw Error(`${k} is longer than ${p.maxLength} characters.`); }
+    if (p.maxLength) { args[k] = stripPrivate(k, v); if (args[k].length > p.maxLength) throw Error(`${k} is longer than ${p.maxLength} characters.`); }
   }
   const page = (/** @type {string} */ codename) => new URL(`/?device=${encodeURIComponent(codename)}`, request.url).href;
   const device = async () => {

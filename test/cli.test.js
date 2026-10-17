@@ -97,8 +97,10 @@ test('run refuses without a TTY and on a wrong phrase, before touching USB', asy
 test('run with the right phrase on a TTY drives the mocked fastboot through the catalog steps', async () => {
   const fb = fastboot();
   const t = io(true, 'ERASE MI A3');
-  const code = await main(['run', 'laurel_sprout', rom.id, '--stage', '1', '--dir', withFiles(), '--json'], t, { catalog, session: async () => fb });
+  let benched = 0;
+  const code = await main(['run', 'laurel_sprout', rom.id, '--stage', '1', '--dir', withFiles(), '--json'], t, { catalog, session: async () => fb, bench: async () => { benched += 1; } });
   assert.equal(code, 0);
+  assert.equal(benched, 1); // postmarketOS stage ending in reboot: wait for boot, then benchmark
   assert.deepEqual(fb.log, ['flash:vbmeta_b:vbmeta.img', 'erase:dtbo_b', 'flash:boot_b:boot.img', 'flash:userdata:rootfs.img', 'set_active:b', 'reboot']); // same order as the site's Mi A3 test
   const ev = events(t.chunks.out);
   assert.equal(ev[0].type, 'step');
@@ -108,10 +110,78 @@ test('run with the right phrase on a TTY drives the mocked fastboot through the 
   assert.ok(ev.every(e => typeof e.text === 'string' && ['step', 'progress', 'error', 'done'].includes(e.type)));
 });
 
+test('bench runs only the benchmark: no confirm, no USB, sent as flashed another way', async () => {
+  /** @type {any[]} */ const calls = [];
+  const t = io(false, '');
+  assert.equal(await main(['bench', 'laurel_sprout', rom.id, '--host', '10.0.0.9', '--json'], t, { catalog, session: async () => { throw Error('no USB'); }, bench: async (...a) => { calls.push(a); } }), 0);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0][1], `laurel_sprout/${rom.id}`);
+  assert.deepEqual({ host: calls[0][4].host, flashed: calls[0][4].flashed }, { host: '10.0.0.9', flashed: false });
+});
+
 test('run refuses non-fastboot recipes', async () => {
   const other = structuredClone(mia3);
   other.roms[0].stages[0].recipe = 'odin';
   const t = io(true, 'ERASE MI A3');
   assert.equal(await main(['run', 'laurel_sprout', rom.id, '--stage', '1'], t, { catalog: { devices: [other] } }), 1);
   assert.match(t.chunks.out, /not supported by the CLI yet/);
+});
+
+test('submitBench opens a code, uploads the output and sends the script verdicts as the card', async () => {
+  const { submitBench } = await import('../bin/cli.mjs');
+  const calls = [];
+  const get = async (url, init) => (calls.push([url.replace(/^https?:\/\/[^/]+/, ''), init.body]), Response.json({ code: 'abcd2345' }));
+  const rom = { rating: { features: { nfc: 'n/a' } } };
+  assert.equal(await submitBench(rom, 'laurel_sprout/x', '@ script linux 1\nwifi full wlan0\nnfc broken none\ngps ask Does GPS work?', ['wifi full wlan0', 'nfc broken none', 'gps ask Does GPS work?'], get), 'abcd2345');
+  assert.deepEqual(calls.map(c => c[0]), ['/api/bench', '/b/abcd2345', '/api/bench']);
+  assert.deepEqual(JSON.parse(calls[0][1]), { rom: 'laurel_sprout/x', via: 'cli' });
+  const card = JSON.parse(calls[2][1]);
+  assert.deepEqual([card.code, card.flash, card.final], ['abcd2345', 'verified', { wifi: 'full', nfc: 'n/a', gps: 'untested' }]);
+});
+
+test('android-fastboot really flashes under Node once the browser shims are in (fake USB endpoint)', async () => {
+  const { installBrowserShims } = await import('../bin/node-env.mjs');
+  const { FastbootDevice } = await import('android-fastboot');
+  installBrowserShims();
+  const sent = [], replies = [];
+  const fb = new FastbootDevice();
+  fb.epIn = 1; fb.epOut = 1;
+  fb.device = /** @type {any} */ ({ opened: true,
+    transferOut: async (_, data) => {
+      const bytes = new Uint8Array(data.buffer ?? data, data.byteOffset ?? 0, data.byteLength);
+      const text = bytes.length < 64 ? new TextDecoder().decode(bytes) : `<${bytes.length} bytes>`;
+      sent.push(text);
+      replies.push(text === 'getvar:max-download-size' ? 'OKAY0x10000000' : text.startsWith('download:') ? `DATA${text.slice(9)}` : 'OKAY');
+      return { status: 'ok', bytesWritten: bytes.length };
+    },
+    transferIn: async () => ({ status: 'ok', data: new DataView(new TextEncoder().encode(replies.shift() ?? 'OKAY').buffer) }) });
+  await fb.flashBlob('vbmeta_b', new Blob([new Uint8Array(4096)]), () => {});
+  assert.deepEqual(sent.slice(-3), ['download:00001000', '<4096 bytes>', 'flash:vbmeta_b']);
+});
+
+test('recover asks on a terminal and retries; without one it fails straight', async () => {
+  const { recover, reporter } = await import('../bin/cli.mjs');
+  let tries = 0;
+  const flaky = async () => { if (++tries < 2) throw Error('Timeout of 5000 ms exceeded'); return 'ok'; };
+  const t = io(true, 'r');
+  assert.equal(await recover('Stage 1', flaky, t, reporter(false, t)), 'ok');
+  assert.match(t.chunks.out, /Stage 1 stopped: Timeout.*\n.*Retrying: Stage 1/s);
+  tries = 0;
+  await assert.rejects(recover('Stage 1', flaky, io(false, ''), reporter(false, io(false, ''))), /Timeout/);
+  const s = io(true, 's');
+  assert.equal(await recover('Benchmark', async () => { throw Error('ssh exit 255'); }, s, reporter(false, s), true), undefined);
+});
+
+test('recover waits out a phone that dropped off USB without asking; the fastboot recipe resumes at the failed step', async () => {
+  const { recover, reporter, USB_GONE } = await import('../bin/cli.mjs');
+  const { run } = await import('../src/recipes/fastboot.js');
+  const commands = [];
+  let drops = 2;
+  const fb = { getVariable: async (/** @type {string} */ v) => ({ product: 'p', unlocked: 'yes' })[v] ?? (v.startsWith('partition-size') ? '1000' : 'no'),
+    runCommand: async (/** @type {string} */ c) => { if (c === 'erase:b' && drops-- > 0) throw Error(drops ? 'Cancelled' : 'No phone in fastboot mode found.'); commands.push(c); } };
+  const job = { device: { detect: { fastboot: { product: 'p' } } }, files: [], steps: [['erase', 'a'], ['erase', 'b'], ['set_active', 'b']], progress: { done: 0 }, pauseMs: 0 };
+  const t = io(false, ''); // no terminal: it must not need one for this
+  await recover('Stage 1', () => run(/** @type {any} */ (fb), job, () => {}, () => {}), t, reporter(false, t), false, { match: USB_GONE, ms: 1000, every: 1 });
+  assert.deepEqual(commands, ['erase:a', 'erase:b', 'set_active:b']);
+  assert.match(t.chunks.out, /Stage 1: Cancelled; waiting for the phone to come back/);
 });

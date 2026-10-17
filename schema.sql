@@ -79,7 +79,8 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   submitted TEXT,
   accepted TEXT,          -- set by an admin: the card's results now show on the ROM page
   review TEXT,            -- set when an admin moves it from New to Review
-  flash TEXT              -- how the ROM got on the phone: verified | unmatched (skip verification) | elsewhere | NULL unknown
+  flash TEXT,             -- how the ROM got on the phone: verified | unmatched (skip verification) | elsewhere | NULL unknown
+  via TEXT                -- 'cli': sent by the rominit CLI (inbox folders CLI / Bench-only); NULL: the site
 );
 
 -- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports), `failures` (stopped flash stages), `agents` (runs reported through the MCP). Add one by adding a UNION arm.
