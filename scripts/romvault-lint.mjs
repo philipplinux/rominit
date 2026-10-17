@@ -6,9 +6,10 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const VAULT = join(ROOT, 'romvault');
-const TYPES = ['vendor', 'project', 'series', 'device', 'rom', 'scraping', 'skill', 'index', 'log'];
-const FOLDER_TYPE = { vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', roms: 'rom', scraping: 'scraping' };
+const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'rom', 'scraping', 'skill', 'index', 'log'];
+const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
+const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
 
 /** @param {string} dir @returns {string[]} */
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => e.name.startsWith('.') ? [] : e.isDirectory() ? walk(join(dir, e.name)) : e.name.endsWith('.md') ? [join(dir, e.name)] : []);
@@ -72,7 +73,7 @@ export function lint() {
     if (['device', 'vendor', 'project'].includes(fm.type) && !/\]\(https?:/.test(text.split('\n## Sources\n')[1]?.split('\n## ')[0] ?? '')) say(file, 'no "## Sources" resource map with links (AGENTS.md › Writing rules 7)');
   }
 
-  // The net: ROM ↔ device ↔ series ↔ vendor, both directions; every catalog device has a page.
+  // The net: ROM ↔ device ↔ series ↔ line ↔ vendor ↔ category, both directions; every catalog device has a page.
   const catalogDevices = readdirSync(join(ROOT, 'catalog/devices')).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', v)).map(f => JSON.parse(readFileSync(join(ROOT, 'catalog/devices', v, f), 'utf8'))));
   for (const d of catalogDevices) {
     const page = join(VAULT, 'devices', `${d.codename}.md`);
@@ -101,10 +102,11 @@ export function lint() {
       if (!(fm.tags ?? []).includes(`device/${codename}`)) say(file, `tag device/${codename} missing`);
       if (!links(file).some(f => f.includes('/catalog/roms/'))) say(file, 'no link to its catalog JSON');
     }
-    if (fm.type === 'series') {
-      const vendors = [...pages.keys()].filter(f => relative(VAULT, f).startsWith('vendors/') && linksTo(file, f));
-      if (!vendors.length) say(file, 'does not link up to a vendor page');
-      for (const v of vendors) if (!linksTo(v, file)) say(v, `does not list ${rel}`);
+    const up = UP[fm.type];
+    if (up) {
+      const parents = [...pages.keys()].filter(f => relative(VAULT, f).startsWith(`${up}/`) && linksTo(file, f));
+      if (!parents.length) say(file, `does not link up to a ${up}/ page`);
+      for (const v of parents) if (!linksTo(v, file)) say(v, `does not list ${rel}`);
     }
   }
   return problems;
