@@ -1,0 +1,15 @@
+{
+  "codename": "xiaomi-tissot",
+  "vendor": "Xiaomi",
+  "name": "Mi A1",
+  "series": "Mi",
+  "family": "Mi A1",
+  "variant": "Mi A1",
+  "models": [
+    "MDG2",
+    "MDI2"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_A1_(xiaomi-tissot)"
+}

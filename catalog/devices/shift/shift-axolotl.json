@@ -1,0 +1,12 @@
+{
+  "codename": "shift-axolotl",
+  "vendor": "SHIFT",
+  "name": "SHIFT6mq",
+  "series": "SHIFT",
+  "family": "SHIFT6mq",
+  "variant": "SHIFT6mq",
+  "models": [],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/SHIFT_SHIFT6mq_(shift-axolotl)"
+}

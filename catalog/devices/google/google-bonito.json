@@ -1,0 +1,19 @@
+{
+  "codename": "google-bonito",
+  "vendor": "Google",
+  "name": "Pixel 3a XL",
+  "series": "Pixel",
+  "family": "Pixel 3a XL",
+  "variant": "Pixel 3a XL",
+  "models": [
+    "G020C",
+    "G020G",
+    "G020F",
+    "G020A",
+    "G020B",
+    "G020D"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Google_Pixel_3a_XL_(google-bonito)"
+}

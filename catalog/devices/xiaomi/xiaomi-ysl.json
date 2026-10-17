@@ -1,0 +1,16 @@
+{
+  "codename": "xiaomi-ysl",
+  "vendor": "Xiaomi",
+  "name": "Redmi S2 / Redmi Y2",
+  "series": "Redmi",
+  "family": "Redmi S2 / Redmi Y2",
+  "variant": "Redmi S2 / Redmi Y2",
+  "models": [
+    "M1803E6G",
+    "M1803E6H",
+    "M1803E6I"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_S2_%2F_Redmi_Y2_(xiaomi-ysl)"
+}

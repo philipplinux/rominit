@@ -19,6 +19,8 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
+/** Keep support-only phones as last-resort search results, after every flashable match. @param {any[]} matches */
+export const preferFlashableDevices = matches => matches.some(d => !d.supportOnly) ? matches.filter(d => !d.supportOnly) : matches;
 /** Who built the ROM. `stock` ROMs are the way back; the page lists them under Recover / revert. */
 export const ORIGINS = { official: 'built and released by the OS project', maintainer: "the OS project's official build for this phone, hosted by its device maintainer", unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
 /** How far ROMinit vouches for a ROM. Only a person sets `curated`; scrapers always write `scraped`. */

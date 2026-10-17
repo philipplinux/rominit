@@ -1,0 +1,14 @@
+{
+  "codename": "xiaomi-tucana",
+  "vendor": "Xiaomi",
+  "name": "Mi Note 10 / Mi CC9 Pro",
+  "series": "Mi",
+  "family": "Mi Note 10 / Mi CC9 Pro",
+  "variant": "Mi Note 10 / Mi CC9 Pro",
+  "models": [
+    "M1910F4G"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_Note_10_%2F_Mi_CC9_Pro_(xiaomi-tucana)"
+}

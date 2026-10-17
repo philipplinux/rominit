@@ -1,0 +1,15 @@
+{
+  "codename": "xiaomi-toco",
+  "vendor": "Xiaomi",
+  "name": "Mi Note 10 Lite",
+  "series": "Mi",
+  "family": "Mi Note 10 Lite",
+  "variant": "Mi Note 10 Lite",
+  "models": [
+    "M2002F4LG",
+    "M1910F4G"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_Note_10_Lite_(xiaomi-toco)"
+}

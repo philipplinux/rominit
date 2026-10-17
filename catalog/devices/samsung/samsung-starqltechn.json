@@ -1,0 +1,14 @@
+{
+  "codename": "samsung-starqltechn",
+  "vendor": "Samsung",
+  "name": "Galaxy S9 Snapdragon China",
+  "series": "Galaxy",
+  "family": "Galaxy S9 Snapdragon China",
+  "variant": "Galaxy S9 Snapdragon China",
+  "models": [
+    "SM-G9600"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Samsung_Galaxy_S9_(samsung-starqltechn)"
+}

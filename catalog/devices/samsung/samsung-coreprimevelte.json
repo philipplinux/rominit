@@ -1,0 +1,14 @@
+{
+  "codename": "samsung-coreprimevelte",
+  "vendor": "Samsung",
+  "name": "Galaxy Core Prime VE LTE",
+  "series": "Galaxy",
+  "family": "Galaxy Core Prime VE LTE",
+  "variant": "Galaxy Core Prime VE LTE",
+  "models": [
+    "SM-G361F"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Samsung_Galaxy_Core_Prime_VE_LTE_(samsung-coreprimevelte)"
+}

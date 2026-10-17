@@ -1,0 +1,15 @@
+{
+  "codename": "oneplus-enchilada",
+  "vendor": "OnePlus",
+  "name": "6",
+  "series": "OnePlus",
+  "family": "6",
+  "variant": "6",
+  "models": [
+    "A6000",
+    "A6003"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/OnePlus_6_(oneplus-enchilada)"
+}

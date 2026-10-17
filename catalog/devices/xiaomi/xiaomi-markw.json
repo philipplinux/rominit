@@ -1,0 +1,12 @@
+{
+  "codename": "xiaomi-markw",
+  "vendor": "Xiaomi",
+  "name": "Redmi 4 Prime",
+  "series": "Redmi",
+  "family": "Redmi 4 Prime",
+  "variant": "Redmi 4 Prime",
+  "models": [],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_4_Prime_(xiaomi-markw)"
+}

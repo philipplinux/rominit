@@ -1,0 +1,12 @@
+{
+  "codename": "pine64-pinephone",
+  "vendor": "PINE64",
+  "name": "PinePhone",
+  "series": "PinePhone",
+  "family": "PinePhone",
+  "variant": "PinePhone",
+  "models": [],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/PINE64_PinePhone_(pine64-pinephone)"
+}

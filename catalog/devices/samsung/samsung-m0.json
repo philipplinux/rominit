@@ -1,0 +1,17 @@
+{
+  "codename": "samsung-m0",
+  "vendor": "Samsung",
+  "name": "Galaxy S III",
+  "series": "Galaxy",
+  "family": "Galaxy S III",
+  "variant": "Galaxy S III",
+  "models": [
+    "GT-I9300",
+    "GT-I9300I",
+    "SHV-E210S",
+    "SHW-M440S"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Samsung_Galaxy_S_III_(samsung-m0)"
+}

@@ -29,6 +29,7 @@ export async function loadCatalog() {
         recoveries.push(recoveryFile.recovery);
       }
       if (new Set(recoveries.map(r => r.id)).size !== recoveries.length) errors.push(`${device.codename}: duplicate recovery ids`);
+      if (device.supportOnly && (!device.supportUrl?.startsWith('https://') || roms.length)) errors.push(`${device.codename}: support-only needs an https supportUrl and no ROMs`);
       devices.push({ ...device, roms, recoveries });
     }
   }

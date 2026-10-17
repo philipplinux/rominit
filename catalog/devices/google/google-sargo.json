@@ -1,0 +1,18 @@
+{
+  "codename": "google-sargo",
+  "vendor": "Google",
+  "name": "Pixel 3a",
+  "series": "Pixel",
+  "family": "Pixel 3a",
+  "variant": "Pixel 3a",
+  "models": [
+    "G020A",
+    "G020E",
+    "G020B",
+    "G020G",
+    "G020H"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Google_Pixel_3a_(google-sargo)"
+}

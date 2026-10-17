@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, preferFlashableDevices, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
@@ -711,13 +711,15 @@ function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
   const list = h('div', { className: 'device-tree' });
   const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating)})`).join(', ');
-  const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
+  const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), d.supportOnly
+    ? ` · ${d.codename} · support only · no ROMinit recipe yet`
+    : ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
   /** Variants we know but cannot flash, listed so owners see why. */
   const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
   const render = () => {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
-    const hits = index.filter(d => words.every(w => text(d).includes(w)));
+    const hits = preferFlashableDevices(index.filter(d => words.every(w => text(d).includes(w))));
     // All › vendor › series › family › variant
     /** @type {Record<string, Record<string, Record<string, any[]>>>} */ const tree = {};
     for (const d of hits) ((tree[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.vendor][d.series][d.family] ?? []), d];
@@ -992,6 +994,18 @@ async function start() {
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
   if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
+  if (device.supportOnly) {
+    document.title = `${device.vendor} ${device.name} · ROMinit`;
+    main.append(h('section', { className: 'intro' },
+      h('a', { className: 'back-link', href: './', textContent: '← BACK' }),
+      h('p', { className: 'eyebrow', textContent: `${device.vendor} / ${device.series} / SUPPORT ONLY` }),
+      h('h1', {}, h('span', { textContent: `${device.name}.` })),
+      h('p', { className: 'feature untested', textContent: 'No ROMinit flash recipe is catalogued for this phone yet.' }),
+      h('p', { className: 'intro-copy', textContent: `Nura lists this phone in its Community device catalog. That does not mean ROMinit has a verified image, install recipe, or recovery path. This support-only page is shown when your search has no flashable match.` }),
+      h('p', { className: 'intro-copy' }, link(device.supportUrl, 'Nura device page'), ` · codename ${device.codename}`),
+      h('p', { className: 'field-help', textContent: 'Useful next details to gather: exact model number, device-specific install steps, and a safe recovery or stock restore path.' })));
+    return;
+  }
   // Accepted phone tests override the catalog's feature states; blocked / untested / inconclusive keep the catalog value.
   const tested = await fetch(`./api/bench?device=${encodeURIComponent(codename)}`).then(r => r.ok ? r.json() : {}).catch(() => ({}));
   for (const r of device.roms) {

@@ -1,0 +1,14 @@
+{
+  "codename": "xiaomi-daisy",
+  "vendor": "Xiaomi",
+  "name": "Mi A2 Lite",
+  "series": "Mi",
+  "family": "Mi A2 Lite",
+  "variant": "Mi A2 Lite",
+  "models": [
+    "M1805D1SG"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_A2_Lite_(xiaomi-daisy)"
+}

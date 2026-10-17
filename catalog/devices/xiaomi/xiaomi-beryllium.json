@@ -1,0 +1,15 @@
+{
+  "codename": "xiaomi-beryllium",
+  "vendor": "Xiaomi",
+  "name": "POCO F1",
+  "series": "POCO",
+  "family": "POCO F1",
+  "variant": "POCO F1",
+  "models": [
+    "M1805E10A",
+    "POCO F1"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_POCO_F1_(xiaomi-beryllium)"
+}

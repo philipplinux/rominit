@@ -1,0 +1,12 @@
+{
+  "codename": "purism-librem5",
+  "vendor": "Purism",
+  "name": "Librem 5",
+  "series": "Librem",
+  "family": "Librem 5",
+  "variant": "Librem 5",
+  "models": [],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Purism_Librem5_(purism-librem5)"
+}

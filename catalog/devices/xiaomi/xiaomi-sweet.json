@@ -1,0 +1,15 @@
+{
+  "codename": "xiaomi-sweet",
+  "vendor": "Xiaomi",
+  "name": "Redmi Note 10 Pro",
+  "series": "Redmi",
+  "family": "Redmi Note 10 Pro",
+  "variant": "Redmi Note 10 Pro",
+  "models": [
+    "M2101K6G",
+    "M2101K6R"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_Note_10_Pro_(xiaomi-sweet)"
+}

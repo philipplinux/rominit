@@ -1,0 +1,12 @@
+{
+  "codename": "nokia-n900",
+  "vendor": "Nokia",
+  "name": "N900",
+  "series": "N900",
+  "family": "N900",
+  "variant": "N900",
+  "models": [],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Nokia_N900_(nokia-n900)"
+}

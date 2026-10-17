@@ -1,0 +1,15 @@
+{
+  "codename": "oneplus-fajita",
+  "vendor": "OnePlus",
+  "name": "6T",
+  "series": "OnePlus",
+  "family": "6T",
+  "variant": "6T",
+  "models": [
+    "A6010",
+    "A6013"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/OnePlus_6T_(oneplus-fajita)"
+}

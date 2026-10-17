@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { FEATURES, USES, assertConsent, completeness, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, USES, assertConsent, completeness, preferFlashableDevices, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { checksum, verifyPins } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -17,10 +17,19 @@ const noop = () => {};
 test('real catalog validates', () => {
   assert.deepEqual(errors, []);
   for (const codename of ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte', 'oriole']) assert.ok(devices.some(d => d.codename === codename), codename);
+  const supportOnly = devices.filter(d => d.supportOnly);
+  assert.equal(supportOnly.length, 24);
+  assert.ok(supportOnly.every(d => !d.roms.length && d.supportUrl.startsWith('https://')));
   // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
   const external = device('oriole');
   assert.ok(external.roms[0].external && !external.roms[0].stages.length);
   assert.match(problems(external, { device: 'oriole', roms: [{ ...external.roms[0], stages: device('laurel_sprout').roms[0].stages }] }).join('\n'), /external needs/);
+});
+
+test('support-only devices appear only when there is no flashable search match', () => {
+  const flashable = { codename: 'ready', supportOnly: false }, fallback = { codename: 'notes', supportOnly: true };
+  assert.deepEqual(preferFlashableDevices([flashable, fallback]), [flashable]);
+  assert.deepEqual(preferFlashableDevices([fallback]), [fallback]);
 });
 
 test('validator rejects bad entries', () => {

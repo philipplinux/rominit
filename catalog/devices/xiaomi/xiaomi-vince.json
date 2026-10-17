@@ -1,0 +1,15 @@
+{
+  "codename": "xiaomi-vince",
+  "vendor": "Xiaomi",
+  "name": "Redmi 5 Plus",
+  "series": "Redmi",
+  "family": "Redmi 5 Plus",
+  "variant": "Redmi 5 Plus",
+  "models": [
+    "MEG7",
+    "MEI7"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_5_Plus_(xiaomi-vince)"
+}

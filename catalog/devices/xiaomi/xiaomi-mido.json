@@ -1,0 +1,14 @@
+{
+  "codename": "xiaomi-mido",
+  "vendor": "Xiaomi",
+  "name": "Redmi Note 4",
+  "series": "Redmi",
+  "family": "Redmi Note 4",
+  "variant": "Redmi Note 4",
+  "models": [
+    "2016100"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_Note_4_(xiaomi-mido)"
+}

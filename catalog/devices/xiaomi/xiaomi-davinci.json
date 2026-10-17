@@ -1,0 +1,14 @@
+{
+  "codename": "xiaomi-davinci",
+  "vendor": "Xiaomi",
+  "name": "Mi 9T / Redmi K20",
+  "series": "Mi",
+  "family": "Mi 9T / Redmi K20",
+  "variant": "Mi 9T / Redmi K20",
+  "models": [
+    "M1903F10G"
+  ],
+  "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_9T_%2F_Redmi_K20_(xiaomi-davinci)"
+}
