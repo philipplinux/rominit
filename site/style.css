@@ -88,6 +88,10 @@ kbd {
 .site-menu nav a { padding: .55rem .8rem; color: #e6dfd1; text-decoration: none; letter-spacing: .08em; text-transform: uppercase; font-size: .68rem; }
 .site-menu nav a + a { border-top: 1px solid var(--line); }
 .site-menu nav a:hover, .site-menu nav a[aria-current] { background: rgb(230 195 154 / 10%); color: var(--amber); }
+.top-links { display: flex; gap: .35rem; }
+.top-links a { display: grid; place-items: center; height: 22px; padding: 0 .5rem; border: 1px solid var(--line); color: var(--muted); font-size: .6rem; letter-spacing: .12em; text-decoration: none; }
+.top-links a:hover, .top-links a[aria-current] { border-color: var(--amber); color: var(--amber); }
+.topbar-side .experimental { color: var(--muted); font-size: .6rem; letter-spacing: .12em; }
 .search-col { display: grid; justify-items: start; gap: .35rem; flex: 0 1 16rem; }
 .search-col form { width: 100%; }
 .topbar-note { display: flex; align-items: center; gap: .55rem; }

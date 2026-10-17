@@ -931,7 +931,27 @@ function aboutView() {
     h('p', { className: 'field-help', textContent: 'Flashing can brick a phone and voids warranties; ROMinit comes with no warranty. Android is a trademark of Google LLC. Phone, vendor and OS names belong to their owners; ROMinit is not affiliated with or endorsed by any of them.' }),
     h('p', {}, h('a', { href: './?view=sources', textContent: 'Sources & licenses' })));
 }
-/** AI agents & MCP: endpoint, setup, the deal (read our data, report how the flash went), and your API tokens. */
+/** CLI tool: the same catalog recipes from a terminal, for people and for agents running on their machine. */
+function cliView() {
+  const code = (/** @type {string} */ text) => h('pre', { className: 'bench-output', textContent: text });
+  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'CLI tool' }),
+    h('p', { className: 'intro-copy', textContent: 'rominit is a command-line tool that runs the same recipes as this page from a terminal: same catalog, same SHA-256 checks, same confirm phrases. Use it where the browser cannot help (no WebUSB, scripts, an AI agent on your own computer). Experimental: tested on Linux so far.' }),
+    h('h3', { textContent: 'Install' }),
+    h('p', { className: 'field-help', textContent: 'Needs Node.js and git:' }),
+    code('git clone https://github.com/philipplinux/rominit\ncd rominit\nnpm ci --omit=dev\nalias rominit="node $PWD/bin/rominit.mjs"\nrominit devices'),
+    h('p', { className: 'field-help', textContent: 'On Linux, if the phone shows in lsusb but not in "rominit devices", this user lacks USB access: install udev rules (e.g. android-udev-rules).' }),
+    h('h3', { textContent: 'Commands' }),
+    code(['# phones in fastboot or ADB mode', 'rominit devices',
+      "# a phone's ROMs, then one ROM's stages, files and steps", 'rominit plan <codename> [rom-id]',
+      '# download the files and check their SHA-256', 'rominit fetch <codename> <rom-id>',
+      '# flash one stage', 'rominit run <codename> <rom-id> --stage N',
+      '# read-only phone test over SSH (postmarketOS)', 'rominit bench <codename> <rom-id>',
+      '', '# any command: --json = one JSON event per line (scripts, agents)', "# --local = read a checkout's catalog/ instead of this site"].join('\n')),
+    h('h3', { textContent: 'Safety' }),
+    h('ul', {}, ...['It reads phone and ROM data from this site (catalog/<codename>.json), no account needed.', 'A destructive stage asks you to type its confirm phrase in the terminal. Without a terminal it stops; an agent cannot type it for you.', 'Every file is checked against its pinned size and SHA-256 before it is written.'].map(t => h('li', { textContent: t }))),
+    h('p', { className: 'intro-copy' }, 'Want your AI agent to look things up without installing anything? Use the ', h('a', { href: './?view=agents', textContent: 'Hosted MCP' }), '.'));
+}
+/** Hosted MCP: endpoint, setup, the deal (read our data, report how the flash went), and your API tokens. */
 async function agentsView() {
   const url = `${location.origin}/mcp`, info = await me;
   const code = (/** @type {string} */ text) => h('pre', { className: 'bench-output', textContent: text });
@@ -972,7 +992,7 @@ async function agentsView() {
     name.value = ''; listTokens();
   } }, name, days, h('button', { type: 'submit', className: 'button', textContent: 'Create token' }));
   if (info?.user) listTokens();
-  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'AI agents & MCP' }),
+  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'Hosted MCP' }),
     h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. It needs a free API token (below): 100 tool calls an hour.' }),
     h('div', { className: 'deal' }, h('strong', { textContent: 'The deal' }),
       h('ul', {}, ...['Data is free to read with a free token.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Deletion requires your approval: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
@@ -998,9 +1018,10 @@ async function start() {
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
-    for (const a of document.querySelectorAll('.site-menu a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
+    for (const a of document.querySelectorAll('.site-menu a, .top-links a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
     if (view === 'sources' || view === 'about') { main.append(view === 'sources' ? sourcesView() : aboutView()); return; }
     if (view === 'agents') { main.append(await agentsView()); return; }
+    if (view === 'cli') { main.append(cliView()); return; }
     main.append(view === 'brands' ? tilesView(index, 'Brands', d => [d.vendor], () => true) : view === 'projects' ? tilesView(index, 'Projects', d => d.roms.map((/** @type {any} */ r) => r.os), (r, k) => r.os === k) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
     return;
   }
