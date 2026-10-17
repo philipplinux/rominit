@@ -1,8 +1,8 @@
 // ROMvault net: `tree` prints category › vendor › line › series › device › ROM from the pages' own links;
-// `fix` hangs every catalog device into that tree, creating missing pages as stubs and adding the missing
+// `fix` hangs every catalog device into that tree (and every device page with `soc:` onto its socs/ page), creating missing pages as stubs and adding the missing
 // up/down links, README entries and log.md lines. Stubs stay lint-red (no sources yet) until someone researches them.
 // Usage: node scripts/romvault-net.mjs tree | fix [--agent "Claude Code"]
-import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { frontmatter } from './romvault-lint.mjs';
@@ -61,7 +61,7 @@ function open(vault) {
   };
   const index = (/** @type {string} */ rel, /** @type {string} */ section) => { if (!links('README.md').includes(rel)) addItem('README.md', section, `- [${title(rel)}](${rel})`); };
   const save = (/** @type {string} */ agent) => {
-    for (const rel of [...changed.create, ...changed.update]) writeFileSync(abs(rel), pages.get(rel) ?? '');
+    for (const rel of [...changed.create, ...changed.update]) { mkdirSync(dirname(abs(rel)), { recursive: true }); writeFileSync(abs(rel), pages.get(rel) ?? ''); }
     const log = Object.entries(changed).filter(([, s]) => s.size).map(([op, s]) => `\n## [${today}] ${op} | ${[...s].sort().join(', ')}: ${op === 'create' ? 'stubs' : 'net links'} from scripts/romvault-net.mjs (${agent})\n`).join('');
     if (log) writeFileSync(abs('log.md'), readFileSync(abs('log.md'), 'utf8').trimEnd() + '\n' + log);
     return changed;
@@ -95,6 +95,16 @@ export function fix(vault, agent = 'script') {
     v.join(series, line, 'Line', 'Series');
     v.join(device, series, 'Series', 'Devices');
     v.index(vendor, 'Vendors'); v.index(line, 'Lines'); v.index(series, 'Series'); v.index(device, 'Devices');
+  }
+  // Sideways: every device page with `soc:` (catalog or not) ↔ socs/<soc>.md.
+  for (const device of v.folder('devices')) {
+    const fm = frontmatter(v.text(device)) ?? {}, soc = `socs/${fm.soc}.md`;
+    if (!fm.soc) continue;
+    const cls = (fm.tags ?? []).find((/** @type {string} */ t) => t in CATEGORY_FILE) ?? 'phone';
+    if (!v.has(soc)) v.create(soc, page({ type: 'soc', title: fm.soc, catalog: fm.soc, date: D, updated: D, tags: `[${cls}, soc]` },
+      `Devices built on the ${fm.soc} chip. They often share kernels, mainline ports, recoveries and flashing quirks, so a fix found for one is worth trying on the others. Built from the device pages' \`soc:\` by scripts/romvault-net.mjs on ${D}.`, ['Devices', 'Links']));
+    v.join(device, soc, 'SoC', 'Devices');
+    v.index(soc, 'SoCs');
   }
   return v.save(agent);
 }

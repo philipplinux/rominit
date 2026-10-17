@@ -6,8 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const VAULT = join(ROOT, 'romvault');
-const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'rom', 'scraping', 'skill', 'index', 'log'];
-const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', roms: 'rom', scraping: 'scraping' };
+const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'soc', 'rom', 'scraping', 'skill', 'index', 'log'];
+const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', socs: 'soc', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
 const CLASSES = ['phone', 'tablet', 'console', 'pc']; // catalog device.category values
 const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
@@ -69,10 +69,15 @@ export function lint(vault = VAULT) {
     if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')}): tag everything about phones "phone"`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
-    if (text.split('\n').length > MAX_LINES) say(file, `over ${MAX_LINES} lines: split it`);
+    if (rel !== 'README.md' && text.split('\n').length > MAX_LINES) say(file, `over ${MAX_LINES} lines: split it`);
     for (const target of links(file)) if (!existsSync(target)) say(file, `broken link ${relative(dirname(file), target)}`);
     if (rel !== 'README.md' && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');
+    if (fm.type === 'device' && fm.soc) { // sideways: device ↔ socs/<soc>.md, so devices sharing a chip find each other
+      const soc = join(vault, 'socs', `${fm.soc}.md`);
+      if (!pages.has(soc)) say(file, `soc: ${fm.soc} has no socs/${fm.soc}.md (run scripts/romvault-net.mjs fix)`);
+      else { if (!linksTo(file, soc)) say(file, `does not link socs/${fm.soc}.md`); if (!linksTo(soc, file)) say(soc, `does not list ${rel}`); }
+    }
     if (['device', 'vendor', 'project'].includes(fm.type) && !/\]\(https?:/.test(text.split('\n## Sources\n')[1]?.split('\n## ')[0] ?? '')) say(file, 'no "## Sources" resource map with links (AGENTS.md › Writing rules 7)');
   }
 
