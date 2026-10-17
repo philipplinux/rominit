@@ -182,6 +182,12 @@ a.button-primary, a.button-primary:visited { color: #141311; } /* a:visited woul
 .risk-step { padding-bottom: 14px; }
 .risk-check { display: flex; align-items: flex-start; gap: .7rem; color: #e8d7bd; font-size: .7rem; line-height: 1.6; cursor: pointer; }
 .risk-check input { width: 17px; height: 17px; flex: 0 0 auto; margin: .05rem 0 0; accent-color: var(--teal); }
+.level-toggle { display: flex; flex-wrap: wrap; margin: .7rem 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.level-toggle label { flex: 1 1 auto; cursor: pointer; }
+.level-toggle input { position: absolute; opacity: 0; }
+.level-toggle span { display: block; padding: .45rem .7rem; text-align: center; font-size: .67rem; color: var(--muted); border-right: 1px solid var(--line); }
+.level-toggle input:checked + span { background: var(--teal-dim); color: var(--teal); }
+.level-toggle input:focus-visible + span { outline: 2px solid var(--teal); outline-offset: -2px; }
 .connect-row { margin-bottom: 20px; }
 .flash-actions { border-top: 1px solid var(--line); padding-top: 20px; }
 .status { min-height: 1.3rem; margin: .7rem 0 0; color: var(--muted); font-size: .65rem; }

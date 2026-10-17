@@ -1,4 +1,4 @@
-// Phone test runs. GET ?device= lists accepted results. POST {rom, via?: 'cli'} starts one ({code}; via 'cli' = the rominit CLI, inbox folder CLI-Bench); GET ?code= polls for the script output, and once sent returns the card and its review state; POST {code, final, note} submits the corrected card.
+// Phone test runs. GET ?device= lists accepted results, GET ?tested lists codenames that have one. POST {rom, via?: 'cli'} starts one ({code}; via 'cli' = the rominit CLI, inbox folder CLI-Bench); GET ?code= polls for the script output, and once sent returns the card and its review state; POST {code, final, note} submits the corrected card.
 import { json, voterOf } from '../_lib/api.js';
 import { romInfo, userOf } from '../_lib/auth.js';
 
@@ -13,6 +13,10 @@ export async function onRequestGet({ request, env }) {
     if (!user) return json({ codes: null });
     const { results } = await env.DB.prepare('SELECT code FROM bench_runs WHERE user_id = ?1 AND rom = ?2 AND submitted IS NOT NULL ORDER BY submitted DESC LIMIT 20').bind(user.id, mine).all();
     return json({ codes: results.map((/** @type {any} */ r) => r.code) });
+  }
+  if (new URL(request.url).searchParams.has('tested')) { // codenames with an accepted result (search level "Tested")
+    const { results } = await env.DB.prepare("SELECT DISTINCT substr(rom, 1, instr(rom, '/') - 1) AS codename FROM bench_runs WHERE accepted IS NOT NULL").all();
+    return Response.json(results.map((/** @type {any} */ r) => r.codename), { headers: { 'cache-control': 'public, max-age=60' } });
   }
   if (device) { // accepted results per ROM of this device, newest wins: { "<codename>/<rom id>": { final, accepted } }
     const { results } = await env.DB.prepare("SELECT rom, final, accepted FROM bench_runs WHERE accepted IS NOT NULL AND rom LIKE ?1 || '/%' ORDER BY accepted").bind(device).all();

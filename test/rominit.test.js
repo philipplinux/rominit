@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { FEATURES, USES, assertConsent, completeness, preferFlashableDevices, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, USES, assertConsent, completeness, deviceLevel, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { checksum, verifyPins } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -26,11 +26,13 @@ test('real catalog validates', () => {
   assert.match(problems(external, { device: 'oriole', roms: [{ ...external.roms[0], stages: device('laurel_sprout').roms[0].stages }] }).join('\n'), /external needs/);
 });
 
-test('support-only devices appear only when there is no flashable search match', () => {
-  const flashable = { codename: 'ready', supportOnly: false }, fallback = { codename: 'notes', supportOnly: true };
-  assert.deepEqual(preferFlashableDevices([flashable, fallback]), [flashable]);
-  assert.deepEqual(preferFlashableDevices([fallback]), [fallback]);
-  assert.deepEqual(preferFlashableDevices([flashable, fallback], true), [flashable, fallback]);
+test('search level: approved phone test, then curated, scraped with recipe, support-only, link-only', () => {
+  const rom = (/** @type {any} */ r) => ({ codename: 'x', supportOnly: false, roms: [r] }), tested = new Set(['t']);
+  assert.equal(deviceLevel({ ...rom({ vetting: 'scraped' }), codename: 't' }, tested), 'tested');
+  assert.equal(deviceLevel(rom({ vetting: 'curated', external: false }), tested), 'approved');
+  assert.equal(deviceLevel(rom({ vetting: 'scraped', external: false }), tested), 'untested');
+  assert.equal(deviceLevel({ codename: 's', supportOnly: true, roms: [] }, tested), 'supported');
+  assert.equal(deviceLevel(rom({ vetting: 'scraped', external: true }), tested), 'placeholder');
 });
 
 test('validator rejects bad entries', () => {

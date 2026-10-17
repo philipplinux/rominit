@@ -19,8 +19,11 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
-/** Keep support-only phones as last-resort search results, after every flashable match. @param {any[]} matches */
-export const preferFlashableDevices = matches => matches.some(d => !d.supportOnly) ? matches.filter(d => !d.supportOnly) : matches;
+/** Search levels, best first: an approved ROMinit phone test, a curated ROM, a scraped ROM with a recipe, support-only (no recipe), only link-only ROMs. */
+export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder' };
+/** A phone's best level. @param {any} d index entry @param {Set<string>} tested codenames with an approved phone test @returns {keyof LEVELS} */
+export const deviceLevel = (d, tested) => tested.has(d.codename) ? 'tested' : d.supportOnly ? 'supported'
+  : d.roms.some((/** @type {any} */ r) => r.vetting === 'curated') ? 'approved' : d.roms.some((/** @type {any} */ r) => !r.external) ? 'untested' : 'placeholder';
 /** Who built the ROM. `stock` ROMs are the way back; the page lists them under Recover / revert. */
 export const ORIGINS = { official: 'built and released by the OS project', maintainer: "the OS project's official build for this phone, hosted by its device maintainer", unofficial: 'community or personal port', stock: "the phone maker's own firmware" };
 /** How far ROMinit vouches for a ROM. Only a person sets `curated`; scrapers always write `scraped`. */

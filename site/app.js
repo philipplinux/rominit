@@ -1,4 +1,4 @@
-import { FEATURES, FEATURE_GROUPS, INCLUDES, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, preferFlashableDevices, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
@@ -709,7 +709,11 @@ function stageCard(device, stage, n, count, key) {
 /** @param {any[]} index */
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
-  const showSupportOnly = h('input', { type: 'checkbox' });
+  // Five levels, best first; the pick shows that level and every better one. Default hides support-only and placeholder phones.
+  const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
+    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'untested', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
+  let tested = new Set();
+  fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
   const list = h('div', { className: 'device-tree' });
   const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating)})`).join(', ');
   const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), d.supportOnly
@@ -720,7 +724,9 @@ function devicePicker(index) {
   const render = () => {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const text = (/** @type {any} */ d) => [d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
-    const hits = preferFlashableDevices(index.filter(d => words.every(w => text(d).includes(w))), showSupportOnly.checked);
+    const matches = index.filter(d => words.every(w => text(d).includes(w)));
+    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'untested');
+    const hits = matches.filter(d => levels.indexOf(deviceLevel(d, tested)) <= upTo);
     // All › vendor › series › family › variant
     /** @type {Record<string, Record<string, Record<string, any[]>>>} */ const tree = {};
     for (const d of hits) ((tree[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.vendor][d.series][d.family] ?? []), d];
@@ -729,17 +735,17 @@ function devicePicker(index) {
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems)))))))));
-    if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the phones people look for get added first.' }));
+    if (!hits.length && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No phone at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the phones people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);
   };
   let logTimer = 0; // logs the search once typing pauses, not every keystroke
   search.addEventListener('input', render);
-  showSupportOnly.addEventListener('change', render);
   render();
   return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your phone' }), search,
-    h('label', { className: 'field-help' }, showSupportOnly, ' Show support-only devices'), list);
+    level, list);
 }
 
 /** One tile per group (phone brand or ROM project), linking to the device list filtered to it.
