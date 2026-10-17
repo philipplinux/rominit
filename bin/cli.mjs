@@ -21,7 +21,8 @@ rominit run <codename> <rom-id> --stage N [--dir DIR] [--no-bench]
   (postmarketOS: after the reboot, waits for SSH over USB and runs the read-only phone benchmark)
 rominit bench <codename> <rom-id> [--host ADDR] [--dir DIR]
   (no flash: runs the read-only benchmark over SSH on a phone already running that ROM, sends it to ROMinit)
-All commands take --json (one JSON event per line: step|progress|error|done).`;
+All commands take --json (one JSON event per line: step|progress|error|done).
+plan/fetch/run/bench read the catalog from the site (ROMINIT_URL); --local reads this checkout's catalog/ instead.`;
 
 const BANNER = String.raw`
  ____   ___  __  __ _       _ _
@@ -77,13 +78,14 @@ export function reporter(json, io) {
 
 /** @param {string[]} args */
 function parse(args) {
-  const flags = { json: false, dir: '', stage: 0, bench: true };
+  const flags = { json: false, dir: '', stage: 0, bench: true, local: false };
   const rest = [];
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--json') flags.json = true;
     else if (args[i] === '--dir') flags.dir = args[++i] ?? '';
     else if (args[i] === '--stage') flags.stage = Number(args[++i]);
     else if (args[i] === '--no-bench') flags.bench = false;
+    else if (args[i] === '--local') flags.local = true;
     else if (args[i] === '--host') flags.host = args[++i] ?? '';
     else if (args[i].startsWith('--')) throw Error(`Unknown flag ${args[i]}.`);
     else rest.push(args[i]);
@@ -292,6 +294,21 @@ export async function submitBench(rom, key, output, lines, get = fetch, flashed 
   return code;
 }
 
+/** The device's published catalog entry (the file the page loads), or every device from this checkout's catalog/ with --local.
+ * @param {string} codename @param {boolean} local @param {typeof fetch} get */
+export async function loadDevices(codename, local, get = fetch) {
+  if (local) {
+    const { devices, errors } = await loadCatalog();
+    if (errors.length) throw Error(`Catalog invalid: ${errors[0]}`);
+    return devices;
+  }
+  const url = `${SITE}/catalog/${encodeURIComponent(codename)}.json`;
+  const res = await get(url).catch((/** @type {Error} */ e) => { throw Error(`Cannot reach ${SITE} (${e.message}); --local reads this checkout's catalog/.`); });
+  if (res.status === 404) throw Error(`Unknown device "${codename}".`);
+  if (!res.ok) throw Error(`${url} answered ${res.status}.`);
+  return [await res.json()];
+}
+
 /** @param {string[]} argv @param {{stdin:any, stdout:any, stderr:any}} io
  * @param {{session?:()=>Promise<any>, get?:typeof fetch, catalog?:{devices:any[]}, bench?:typeof bench}} [deps] test seams @returns {Promise<number>} exit code */
 export async function main(argv, io, deps = {}) {
@@ -306,9 +323,8 @@ export async function main(argv, io, deps = {}) {
       return 0;
     }
     if (!['plan', 'fetch', 'run', 'bench'].includes(cmd)) { io.stderr.write(USAGE + '\n'); return cmd ? 2 : 0; }
-    const { devices, errors } = deps.catalog ? { ...deps.catalog, errors: [] } : await loadCatalog();
-    if (errors.length) throw Error(`Catalog invalid: ${errors[0]}`);
     if (!codename) throw Error('Missing <codename>.');
+    const devices = deps.catalog?.devices ?? await loadDevices(codename, flags.local, deps.get);
     const { device, rom } = find(devices, codename, romId);
     if (cmd === 'plan' && !rom) {
       out.done(device.roms.map((/** @type {any} */ r) => `${r.id}  ${r.os} ${r.version}  ${r.status}  ${r.stages?.length ?? 0} stage(s)`).join('\n'), device.roms.map((/** @type {any} */ r) => r.id));

@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PassThrough } from 'node:stream';
 import test from 'node:test';
-import { main } from '../bin/cli.mjs';
+import { loadDevices, main } from '../bin/cli.mjs';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 
 const { devices } = await loadCatalog();
@@ -184,4 +184,17 @@ test('recover waits out a phone that dropped off USB without asking; the fastboo
   await recover('Stage 1', () => run(/** @type {any} */ (fb), job, () => {}, () => {}), t, reporter(false, t), false, { match: USB_GONE, ms: 1000, every: 1 });
   assert.deepEqual(commands, ['erase:a', 'erase:b', 'set_active:b']);
   assert.match(t.chunks.out, /Stage 1: Cancelled; waiting for the phone to come back/);
+});
+
+test('catalog comes from the site per device, 404 = unknown, --local reads catalog/', async () => {
+  const asked = [];
+  const get = async (/** @type {string} */ url) => { asked.push(url); return url.endsWith('/laurel_sprout.json') ? Response.json(mia3) : new Response('', { status: 404 }); };
+  assert.equal((await loadDevices('laurel_sprout', false, get))[0].codename, 'laurel_sprout');
+  assert.match(asked[0], /\/catalog\/laurel_sprout\.json$/);
+  await assert.rejects(loadDevices('nope', false, get), /Unknown device "nope"/);
+  await assert.rejects(loadDevices('x', false, async () => { throw Error('offline'); }), /--local/);
+  assert.ok((await loadDevices('ignored', true)).some(d => d.codename === 'laurel_sprout'));
+  const t = io(false);
+  assert.equal(await main(['plan', 'laurel_sprout', rom.id], t, { get }), 0);
+  assert.match(t.chunks.out, /confirm: ERASE MI A3/);
 });
