@@ -132,7 +132,7 @@
               "reboot"
             ]
           ],
-          "done": "First boot takes about a minute, then `ssh user@172.16.42.1` over USB."
+          "done": "First boot takes about 3 minutes: USB networking answers after ~35 s, SSH a few minutes later (retry, the boot is fine). Then `ssh user@172.16.42.1` over USB."
         }
       ],
       "slots": "ab",
