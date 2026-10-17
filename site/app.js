@@ -810,11 +810,18 @@ async function inboxView(index) {
       h('details', {}, h('summary', { textContent: 'card and script output' }), h('pre', { className: 'bench-output', textContent: `${JSON.stringify(final, null, 1)}\n\n${x.output ?? ''}` })));
     return li;
   };
-  /** Phone tests split into new / review / approved / rejected. @param {string} name @param {string} hint @param {Record<string, any[]>} b */
-  const benchFolder = (name, hint, b) => folder(name, `${hint} · ${b.new.length} new · ${b.review.length} in review · ${b.approved.length} approved · ${b.rejected.length} rejected`, b.new.length + b.review.length,
-    [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
-      h('summary', { className: 'field-label', textContent: `${title} · ${b[state].length}` }),
-      h('ol', { className: 'comments' }, ...b[state].map(benchItem)))), Object.values(b).flat().length);
+  /** Phone tests split into new / review / approved / rejected. @param {Record<string, any[]>} b */
+  const byState = b => [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
+    h('summary', { className: 'field-label', textContent: `${title} · ${b[state].length}` }),
+    h('ol', { className: 'comments' }, ...b[state].map(benchItem))));
+  /** @param {string} name @param {string} hint @param {Record<string, any[]>} b @param {any[]} [body] */
+  const benchFolder = (name, hint, b, body = byState(b)) => folder(name, `${hint} · ${b.new.length} new · ${b.review.length} in review · ${b.approved.length} approved · ${b.rejected.length} rejected`, b.new.length + b.review.length,
+    body, Object.values(b).flat().length);
+  /** CLI tests in two sub-categories: after a CLI flash (run + bench), or `rominit bench` alone (flashed another way). */
+  const cliKinds = [['Run + bench', (/** @type {any} */ x) => x.flash !== 'elsewhere'], ['Bench only', (/** @type {any} */ x) => x.flash === 'elsewhere']].map(([title, keep]) => {
+    const part = Object.fromEntries(Object.entries(cli).map(([state, xs]) => [state, xs.filter(keep)])), n = Object.values(part).flat().length;
+    return h('details', { className: 'inbox-sub', open: part.new.length + part.review.length > 0 }, h('summary', { className: 'field-label', textContent: `${title} · ${n}` }), ...byState(part));
+  });
   const by = /** @type {Record<string, any[]>} */ ({});
   for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
   card.append(
@@ -824,7 +831,7 @@ async function inboxView(index) {
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
     benchFolder('Benchmarks', 'phone tests from the site', benchmarks),
-    benchFolder('CLI-Bench', 'phone tests sent by the rominit CLI (after a flash, or bench only)', cli),
+    benchFolder('CLI-Bench', 'phone tests sent by the rominit CLI', cli, cliKinds),
     folder('Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
       const [codename, id] = String(x.rom).split('/');
       const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`, textContent: `${x.rom} · stage ${x.stage}` })),
