@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS agent_steps (
 );
 CREATE INDEX IF NOT EXISTS agent_steps_run ON agent_steps (run_id, at);
 CREATE VIEW IF NOT EXISTS inbox AS
-  SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
+  SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'flash', flash, 'via', via, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
   UNION ALL
   SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports
   UNION ALL

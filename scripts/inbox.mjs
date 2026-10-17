@@ -2,7 +2,7 @@
 // `failures` (debug logs of stages that stopped: recipe-fix when the catalog steps need a change, user-side for cable/driver/mode)
 // and `agents` (finished runs AI agents reported through the MCP: outcome, steps, resolution).
 //   npm run inbox -- [--local] <inbox>                              unsorted items, one JSON object per line
-//   npm run inbox -- [--local] sort <inbox> <ref> <label> <summary>   file one (labels: see LABELS)
+//   npm run inbox -- [--local] sort <inbox> <ref> <label> <summary>   file one (labels: see LABELS); not benchmarks, a person approves those on the site
 // Benchmark bodies carry the script output: "inconclusive" lines are script fixes, "@pkgs" shows what the ROM ships,
 // and differences between the card and the catalog rating are catalog updates.
 import { execFileSync } from 'node:child_process';
@@ -17,6 +17,8 @@ const sql = (/** @type {string} */ command) => JSON.parse(execFileSync('npx', ['
 if (args[0] === 'sort') {
   const [, inbox, ref, label, ...summary] = args;
   if (!INBOXES.includes(inbox) || !ref || !LABELS.includes(label) || !summary.length) throw Error(`usage: sort <${INBOXES.join('|')}> <ref> <${LABELS.join('|')}> <summary>`);
+  // a triage row on a phone test means "rejected" on the site; approving puts results on the ROM page, so a person decides there
+  if (inbox === 'benchmarks') throw Error('Phone tests are approved or rejected by a person on /?view=inbox, not sorted here. Tell the owner what you found (ref + suggested approve/reject).');
   sql(`INSERT OR REPLACE INTO triage (inbox, ref, label, summary) VALUES (${quote(inbox)}, ${quote(ref)}, ${quote(label)}, ${quote(summary.join(' '))})`);
   console.log(`filed ${inbox} ${ref} as ${label}`);
 } else {
