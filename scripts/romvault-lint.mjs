@@ -9,6 +9,7 @@ const VAULT = join(ROOT, 'romvault');
 const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'rom', 'scraping', 'skill', 'index', 'log'];
 const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
+const CLASSES = ['phone', 'tablet', 'console', 'pc']; // catalog device.category values
 const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
 
 /** @param {string} dir @returns {string[]} */
@@ -65,6 +66,7 @@ export function lint(vault = VAULT) {
       const nested = tag.match(/^(device|series)\/(.+)$/);
       if (nested ? !exists(`${nested[1] === 'device' ? 'devices' : 'series'}/${nested[2]}.md`) : !tags.has(tag)) say(file, `tag "${tag}" not in the AGENTS.md list (or its page is missing)`);
     }
+    if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')}): tag everything about phones "phone"`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
     if (text.split('\n').length > MAX_LINES) say(file, `over ${MAX_LINES} lines: split it`);
@@ -76,6 +78,7 @@ export function lint(vault = VAULT) {
 
   // The net: ROM ↔ device ↔ series ↔ line ↔ vendor ↔ category, both directions; every catalog device has a page.
   const catalogDevices = readdirSync(join(ROOT, 'catalog/devices')).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', v)).map(f => JSON.parse(readFileSync(join(ROOT, 'catalog/devices', v, f), 'utf8'))));
+  const families = /** @type {Map<string, Set<string>>} */ (new Map());
   for (const d of catalogDevices) {
     const page = join(vault, 'devices', `${d.codename}.md`);
     if (!pages.has(page)) { problems.push(`romvault/devices/${d.codename}.md: missing (catalog has ${d.vendor} ${d.name})`); continue; }
@@ -84,6 +87,14 @@ export function lint(vault = VAULT) {
     if (!parents.length) problems.push(`romvault/devices/${d.codename}.md: no series page lists it`);
     for (const s of parents) if (!linksTo(page, s)) say(page, `does not link up to ${relative(vault, s)}`);
     if (!(fm.tags ?? []).includes(`device/${d.codename}`)) say(page, `tag device/${d.codename} missing`);
+    if (!(fm.tags ?? []).includes(d.category ?? 'phone')) say(page, `tag ${d.category ?? 'phone'} missing (catalog category)`);
+    for (const s of parents) families.set(s, (families.get(s) ?? new Set()).add(d.family));
+  }
+  // A series page is one catalog family (Pixel 7, Galaxy S9), not a brand line: lines/ holds those.
+  for (const [s, fams] of families) {
+    const catalog = frontmatter(pages.get(s) ?? '')?.catalog;
+    if (fams.size > 1) say(s, `mixes catalog families ${[...fams].join(', ')}: one series page per family`);
+    else if (catalog && !fams.has(catalog)) say(s, `catalog: "${catalog}" but its devices are family "${[...fams][0]}"`);
   }
   for (const f of readdirSync(join(ROOT, 'catalog/roms'), { recursive: true }).filter(f => String(f).endsWith('.json'))) {
     const entry = JSON.parse(readFileSync(join(ROOT, 'catalog/roms', String(f)), 'utf8'));

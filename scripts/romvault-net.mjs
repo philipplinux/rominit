@@ -86,7 +86,8 @@ export function fix(vault, agent = 'script') {
     if (!v.has(category)) throw new Error(`${category} missing: create the category page first`);
     if (!v.has(vendor)) v.create(vendor, page({ type: 'vendor', title: d.vendor, catalog: d.dir, date: D, updated: D, tags: `[${cat}, ${d.dir}]` }, stub, ['Lines', 'Sources', 'Links']));
     if (!v.has(line)) v.create(line, page({ type: 'line', title: `${d.vendor} ${d.series}`, catalog: d.series, date: D, updated: D, tags: `[${cat}, ${d.dir}]` }, stub, ['Series', 'Links']));
-    if (!v.has(series)) v.create(series, page({ type: 'series', title: `${d.vendor} ${d.family}`, aliases: `[${d.vendor} ${d.family} series]`, catalog: d.family, date: D, updated: D, tags: `[${cat}, ${d.dir}, ${series.slice(0, -3)}]` }, stub, ['Devices', 'Links']));
+    if (!v.has(series)) v.create(series, page({ type: 'series', title: `${d.vendor} ${d.family}`, aliases: `[${d.vendor} ${d.family} series]`, catalog: d.family, date: D, updated: D, tags: `[${cat}, ${d.dir}, ${series.slice(0, -3)}]` },
+      `The ${d.vendor} ${d.family} family (${d.vendor} ${d.series} line): the devices in it and what they share. Built from the ROMinit catalog as of ${D} by scripts/romvault-net.mjs; per-device steps are on the device pages.`, ['Devices', 'Links']));
     if (!v.has(device)) v.create(device, page({ type: 'device', title: `"${d.vendor} ${d.name} (${d.codename})"`, aliases: `[${d.vendor} ${d.name}]`, catalog: d.codename, date: D, updated: D, tags: `[${cat}, ${d.dir}, device/${d.codename}, ${series.slice(0, -3)}]` },
       `${stub} Catalog: [${d.file}](../../catalog/devices/${d.dir}/${d.file}).`, ['ROMs', 'Sources', 'Links']));
     v.join(vendor, category, 'Category', 'Vendors');

@@ -3,8 +3,8 @@
   "vendor": "Samsung",
   "name": "Galaxy S9 Snapdragon China",
   "photo": {"src":"phones/samsung-starqltechn.webp", "page":"https://www.samsung.com/us/support/mobile/phones/?modelCode=SM-G960UZBAATT", "license":"press", "artist":"Samsung"},
-  "series": "Galaxy",
-  "family": "Galaxy S9 Snapdragon China",
+  "series": "Galaxy S",
+  "family": "Galaxy S9",
   "variant": "Galaxy S9 Snapdragon China",
   "models": [
     "SM-G9600"

@@ -3,7 +3,7 @@
   "vendor": "Samsung",
   "name": "Galaxy Core Prime VE LTE",
   "photo": {"src":"phones/samsung-coreprimevelte.webp", "page":"https://www.samsung.com/ie/support/model/SM-G361FHAAANP/", "license":"press", "artist":"Samsung"},
-  "series": "Galaxy",
+  "series": "Galaxy Core",
   "family": "Galaxy Core Prime VE LTE",
   "variant": "Galaxy Core Prime VE LTE",
   "models": [

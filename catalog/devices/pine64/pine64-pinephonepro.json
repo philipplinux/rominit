@@ -4,7 +4,7 @@
   "name": "PinePhone Pro",
   "photo": {"src":"phones/pine64-pinephonepro.webp", "page":"https://pine64.org/devices/pinephone_pro/", "license":"press", "artist":"PINE64"},
   "series": "PinePhone",
-  "family": "PinePhone Pro",
+  "family": "PinePhone",
   "variant": "PinePhone Pro",
   "models": [],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
