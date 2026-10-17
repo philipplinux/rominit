@@ -523,9 +523,8 @@ function stageCard(device, stage, n, count, key) {
   const renderPrereqs = () => {
     const problem = browserProblem({ usb: navigator.usb, secure: window.isSecureContext, host });
     const items = prereqsFor(host, protocol);
-    prereqs.open = Boolean(problem); // collapsed hints; open when this browser can't reach the phone at all
-    prereqs.replaceChildren(h('summary', {}, h('strong', { textContent: `Before you connect · ${items.length} hint${items.length === 1 ? '' : 's'}` }), ` (${HOSTS[host]}; change it in the header)`),
-      problem && h('p', { className: 'status', textContent: `✗ ${problem}` }),
+    prereqs.replaceChildren(h('summary', {}, h('strong', { textContent: `Before you connect · ${items.length} hint${items.length === 1 ? '' : 's'}` }), ` (${HOSTS[host]}; change it in the header)`,
+        problem && h('p', { className: 'status', textContent: `✗ ${problem}` })), // hints start collapsed; a blocker stays visible in the summary
       h('ul', {}, ...items.map(p => h('li', {}, p.text, p.url && ' ', p.url && link(p.url, new URL(p.url).hostname),
         p.command && h('div', { className: 'command-row' }, h('pre', { className: 'debug-log', textContent: p.command }),
           h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
@@ -1126,7 +1125,7 @@ async function start() {
   const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: progress.steps?.includes(i) ?? false }));
   const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
     h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this phone'),
-    unlock.hints?.length && h('div', { className: 'hints' }, h('strong', { textContent: 'Good to know' }), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
+    unlock.hints?.length && h('details', { className: 'hints' }, h('summary', {}, h('strong', { textContent: `Good to know · ${unlock.hints.length} hint${unlock.hints.length === 1 ? '' : 's'}` })), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
     h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
