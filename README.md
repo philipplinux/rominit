@@ -74,7 +74,7 @@ npx wrangler pages secret put SALT      # any long random string
 
 Existing database: apply new files in `migrations/` in date order, e.g. `npx wrangler d1 execute rominit --remote --file migrations/2026-10-17-agent-api.sql` (`schema.sql` already includes them).
 
-AI agents: the MCP endpoint is `/mcp`; everything but `initialize` needs a personal API token made on `/?view=agents` (100 tool calls an hour). Agent reports land in the admin inbox under "MCP agent reports", by outcome; `node scripts/inbox.mjs` lists them as `agents`.
+AI agents: the MCP endpoint is `/mcp`; everything but `initialize` needs a personal API token made on `/?view=agents` (100 tool calls an hour). Agent reports land in the admin inbox under "04 Agent reports", by outcome; `node scripts/inbox.mjs` lists them as `agents`.
 
 Reports from "Something wrong on this page?": `npx wrangler d1 execute rominit --remote --command "SELECT id, page, text, at FROM reports ORDER BY id DESC LIMIT 50"`.
 Comment screenshots stay hidden until approved. Pending: `npx wrangler d1 execute rominit --remote --command "SELECT comment_id FROM comment_images WHERE approved = 0"`. Approve: `... --command "UPDATE comment_images SET approved = 1 WHERE comment_id = <id>"`. Delete a comment: `... --command "DELETE FROM comment_images WHERE comment_id = <id>; DELETE FROM comments WHERE id = <id>"`.

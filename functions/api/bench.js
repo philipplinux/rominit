@@ -1,4 +1,4 @@
-// Phone test runs. GET ?device= lists accepted results, GET ?tested lists codenames that have one. POST {rom, via?: 'cli'} starts one ({code}; via 'cli' = the rominit CLI, inbox folder CLI-Bench); GET ?code= polls for the script output, and once sent returns the card and its review state; POST {code, final, note} submits the corrected card.
+// Phone test runs. GET ?device= lists accepted results, GET ?tested lists codenames that have one. POST {rom, via?: 'cli'} starts one ({code}; via 'cli' = the rominit CLI, inbox 03b / 03c); GET ?code= polls for the script output, and once sent returns the card and its review state; POST {code, final, note} submits the corrected card.
 import { json, voterOf } from '../_lib/api.js';
 import { romInfo, userOf } from '../_lib/auth.js';
 

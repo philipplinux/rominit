@@ -1,7 +1,7 @@
 // POST /mcp: MCP server over the published catalog (Streamable HTTP, stateless, plain JSON replies).
 // Everything but initialize needs a free personal API token (Authorization: Bearer, made at /?view=agents); 100 tool calls an hour.
 // Agents read devices, ROMs and their flash recipes and report runs: device and procedure facts only, free text checked
-// for personal data. ROMvault and user data are not exposed. Finished runs land in the admin inbox (folder "MCP agent reports").
+// for personal data. ROMvault and user data are not exposed. Finished runs land in the admin inbox (folder "04 Agent reports"; `npm run inbox -- agents`).
 import { tokenUser } from './_lib/auth.js';
 // ponytail: hand-rolled JSON-RPC (initialize, ping, tools/list, tools/call) instead of the MCP SDK; switch when we need sessions, streaming or OAuth.
 

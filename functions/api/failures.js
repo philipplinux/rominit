@@ -1,5 +1,5 @@
 // Debug logs of flash stages that stopped, sent by the flasher on its own. They land in the admin inbox
-// ("Flash failures"; `npm run inbox -- failures` from the CLI) so recipes can be fixed.
+// ("02 Flash failures"; `npm run inbox -- failures` from the CLI) so recipes can be fixed.
 import { json, knownRom, voterOf } from '../_lib/api.js';
 
 /** One log per address per minute, 30 a day. @param {{request:Request, env:any}} context */
