@@ -562,6 +562,30 @@ test('ROMvault lint: frontmatter, tags, links, index and the full net are clean'
   assert.deepEqual(lint(), []);
 });
 
+test('ROMvault net fix: rebuilds a deleted series page and its links, lint-clean', { skip: !existsSync(new URL('../romvault/AGENTS.md', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
+  const { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { lint } = await import('../scripts/romvault-lint.mjs');
+  const { fix, tree } = await import('../scripts/romvault-net.mjs');
+  const dir = mkdtempSync(join(tmpdir(), 'romvault-')), vault = join(dir, 'romvault');
+  try {
+    const root = new URL('..', import.meta.url).pathname; // pages link ../../catalog/ and ../../romsources/: mirror the repo around the copy
+    for (const e of readdirSync(root)) if (e !== 'romvault') symlinkSync(join(root, e), join(dir, e));
+    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, filter: src => !src.includes('/.git') });
+    rmSync(join(vault, 'series/google-pixel-7.md'));
+    for (const f of ['README.md', 'lines/google-pixel.md']) {
+      const p = join(vault, f);
+      writeFileSync(p, readFileSync(p, 'utf8').split('\n').filter(l => !l.includes('series/google-pixel-7.md')).join('\n'));
+    }
+    assert.notDeepEqual(lint(vault), []);
+    assert.deepEqual([...fix(vault, 'test').create], ['series/google-pixel-7.md']);
+    assert.deepEqual(lint(vault), []);
+    assert.match(tree(vault), /Google Pixel 7 {2}\(series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\)/);
+    assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('sources page lists every dependency', async () => {
   const { readFile } = await import('node:fs/promises');
   const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));

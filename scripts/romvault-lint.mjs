@@ -31,26 +31,27 @@ export function frontmatter(text) {
 }
 
 /** Controlled tags from the `## Tags` section of AGENTS.md. */
-const allowedTags = () => {
-  const section = readFileSync(join(VAULT, 'AGENTS.md'), 'utf8').split('\n## Tags')[1].split('\n## ')[0];
+const allowedTags = (/** @type {string} */ vault) => {
+  const section = readFileSync(join(vault, 'AGENTS.md'), 'utf8').split('\n## Tags')[1].split('\n## ')[0];
   return new Set([...section.matchAll(/^- \*\*[^*]+:\*\* (.+)$/gm)].flatMap(m => [...m[1].matchAll(/`([a-z0-9-]+)`/g)].map(t => t[1])));
 };
 
-/** @returns {string[]} problems, empty when the vault is clean */
-export function lint() {
+/** @returns {string[]} problems, empty when the vault is clean
+ * @param {string} [vault] the ROMvault folder (tests pass a copy) */
+export function lint(vault = VAULT) {
   const problems = /** @type {string[]} */ ([]);
   const say = (/** @type {string} */ file, /** @type {string} */ text) => problems.push(`${relative(ROOT, file)}: ${text}`);
-  const tags = allowedTags();
-  const files = walk(VAULT).filter(f => !relative(VAULT, f).startsWith('skills/') && relative(VAULT, f) !== 'AGENTS.md'); // rules file and skills keep harness format
+  const tags = allowedTags(vault);
+  const files = walk(vault).filter(f => !relative(vault, f).startsWith('skills/') && relative(vault, f) !== 'AGENTS.md'); // rules file and skills keep harness format
   const pages = new Map(files.map(f => [f, readFileSync(f, 'utf8')]));
-  const readme = pages.get(join(VAULT, 'README.md')) ?? '';
-  const exists = (/** @type {string} */ rel) => existsSync(join(VAULT, rel));
+  const readme = pages.get(join(vault, 'README.md')) ?? '';
+  const exists = (/** @type {string} */ rel) => existsSync(join(vault, rel));
   /** Resolved local link targets of a page. @param {string} file */
   const links = file => [...(pages.get(file) ?? '').matchAll(/\]\(([^)#\s]+)(#[^)]*)?\)/g)].map(m => m[1]).filter(h => !/^[a-z]+:/.test(h)).map(h => resolve(dirname(file), decodeURI(h)));
   const linksTo = (/** @type {string} */ from, /** @type {string} */ to) => links(from).includes(to);
 
   for (const [file, text] of pages) {
-    const rel = relative(VAULT, file);
+    const rel = relative(vault, file);
     const fm = frontmatter(text);
     if (!fm) { say(file, 'no frontmatter'); continue; }
     for (const key of ['type', 'title', 'date', 'updated']) if (!fm[key]) say(file, `frontmatter: missing ${key}`);
@@ -76,27 +77,27 @@ export function lint() {
   // The net: ROM ↔ device ↔ series ↔ line ↔ vendor ↔ category, both directions; every catalog device has a page.
   const catalogDevices = readdirSync(join(ROOT, 'catalog/devices')).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', v)).map(f => JSON.parse(readFileSync(join(ROOT, 'catalog/devices', v, f), 'utf8'))));
   for (const d of catalogDevices) {
-    const page = join(VAULT, 'devices', `${d.codename}.md`);
+    const page = join(vault, 'devices', `${d.codename}.md`);
     if (!pages.has(page)) { problems.push(`romvault/devices/${d.codename}.md: missing (catalog has ${d.vendor} ${d.name})`); continue; }
     const fm = frontmatter(pages.get(page) ?? '') ?? {};
-    const parents = [...pages.keys()].filter(f => relative(VAULT, f).startsWith('series/') && linksTo(f, page));
+    const parents = [...pages.keys()].filter(f => relative(vault, f).startsWith('series/') && linksTo(f, page));
     if (!parents.length) problems.push(`romvault/devices/${d.codename}.md: no series page lists it`);
-    for (const s of parents) if (!linksTo(page, s)) say(page, `does not link up to ${relative(VAULT, s)}`);
+    for (const s of parents) if (!linksTo(page, s)) say(page, `does not link up to ${relative(vault, s)}`);
     if (!(fm.tags ?? []).includes(`device/${d.codename}`)) say(page, `tag device/${d.codename} missing`);
   }
   for (const f of readdirSync(join(ROOT, 'catalog/roms'), { recursive: true }).filter(f => String(f).endsWith('.json'))) {
     const entry = JSON.parse(readFileSync(join(ROOT, 'catalog/roms', String(f)), 'utf8'));
-    for (const rom of entry.roms) if (!pages.has(join(VAULT, 'roms', entry.device, `${rom.id}.md`))) problems.push(`romvault/roms/${entry.device}/${rom.id}.md: missing (catalog has ${rom.name})`);
+    for (const rom of entry.roms) if (!pages.has(join(vault, 'roms', entry.device, `${rom.id}.md`))) problems.push(`romvault/roms/${entry.device}/${rom.id}.md: missing (catalog has ${rom.name})`);
   }
-  const log = pages.get(join(VAULT, 'log.md')) ?? '';
+  const log = pages.get(join(vault, 'log.md')) ?? '';
   for (const line of log.split('\n').filter(l => l.startsWith('## ') && !l.startsWith('## For future agent')))
     if (!/^## \[\d{4}-\d{2}-\d{2}\] (create|update|move|delete) \| .+ \(.+\)$/.test(line)) problems.push(`romvault/log.md: malformed entry "${line.slice(0, 60)}"`);
   for (const [file, text] of pages) {
-    const rel = relative(VAULT, file);
+    const rel = relative(vault, file);
     const fm = frontmatter(text) ?? {};
     if (fm.type === 'rom') {
       const codename = rel.split('/')[1];
-      const device = join(VAULT, 'devices', `${codename}.md`);
+      const device = join(vault, 'devices', `${codename}.md`);
       if (!linksTo(file, device)) say(file, `does not link up to devices/${codename}.md`);
       if (pages.has(device) && !linksTo(device, file)) say(device, `does not list ${rel}`);
       if (!(fm.tags ?? []).includes(`device/${codename}`)) say(file, `tag device/${codename} missing`);
@@ -104,7 +105,7 @@ export function lint() {
     }
     const up = UP[fm.type];
     if (up) {
-      const parents = [...pages.keys()].filter(f => relative(VAULT, f).startsWith(`${up}/`) && linksTo(file, f));
+      const parents = [...pages.keys()].filter(f => relative(vault, f).startsWith(`${up}/`) && linksTo(file, f));
       if (!parents.length) say(file, `does not link up to a ${up}/ page`);
       for (const v of parents) if (!linksTo(v, file)) say(v, `does not list ${rel}`);
     }
