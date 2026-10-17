@@ -769,7 +769,7 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: six folders, always shown with their counts: page reports (by section), phone tests (site, and CLI-Bench from the CLI), flash failures, agent reports (by outcome), device searches. */
+/** Admin inbox: five numbered folders, always shown with their counts: 01 page tickets (by section), 02 flash failures, 03 phone tests (03a site, 03b CLI run + bench, 03c CLI bench only), 04 agent reports (by outcome), 05 device searches. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
@@ -814,32 +814,29 @@ async function inboxView(index) {
   const byState = b => [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
     h('summary', { className: 'field-label', textContent: `${title} · ${b[state].length}` }),
     h('ol', { className: 'comments' }, ...b[state].map(benchItem))));
-  /** @param {string} name @param {string} hint @param {Record<string, any[]>} b @param {any[]} [body] */
-  const benchFolder = (name, hint, b, body = byState(b)) => folder(name, `${hint} · ${b.new.length} new · ${b.review.length} in review · ${b.approved.length} approved · ${b.rejected.length} rejected`, b.new.length + b.review.length,
-    body, Object.values(b).flat().length);
-  /** CLI tests in two sub-categories: after a CLI flash (run + bench), or `rominit bench` alone (flashed another way). */
-  const cliKinds = [['Run + bench', (/** @type {any} */ x) => x.flash !== 'elsewhere'], ['Bench only', (/** @type {any} */ x) => x.flash === 'elsewhere']].map(([title, keep]) => {
-    const part = Object.fromEntries(Object.entries(cli).map(([state, xs]) => [state, xs.filter(keep)])), n = Object.values(part).flat().length;
-    return h('details', { className: 'inbox-sub', open: part.new.length + part.review.length > 0 }, h('summary', { className: 'field-label', textContent: `${title} · ${n}` }), ...byState(part));
-  });
+  /** Phone tests by source, each split by state: 03a the site, 03b a rominit CLI flash + bench, 03c `rominit bench` alone (flashed another way). */
+  const keep = (/** @type {(x: any) => boolean} */ f) => Object.fromEntries(Object.entries(cli).map(([state, xs]) => [state, xs.filter(f)]));
+  const benchParts = [['03a Site', benchmarks], ['03b CLI run + bench', keep(x => x.flash !== 'elsewhere')], ['03c CLI bench only', keep(x => x.flash === 'elsewhere')]];
+  const benchAll = /** @type {Record<string, any[]>} */ (Object.fromEntries(['new', 'review', 'approved', 'rejected'].map(s => [s, benchParts.flatMap(([, b]) => b[s])])));
   const by = /** @type {Record<string, any[]>} */ ({});
   for (const x of reports) (by[x.section || 'Whole page'] ??= []).push(x);
   card.append(
-    folder('Tickets', 'page tickets, by section', reports.length, Object.entries(by).sort(([a], [b]) => a.localeCompare(b)).map(([section, items]) =>
+    folder('01 Tickets', 'page tickets, by section', reports.length, Object.entries(by).sort(([a], [b]) => a.localeCompare(b)).map(([section, items]) =>
       h('div', { className: 'inbox-sub' }, h('p', { className: 'field-label', textContent: `${section} · ${items.length}` }), h('ol', { className: 'comments' }, ...items.map(x => {
         const li = h('li', {}, h('small', {}, `${x.at} UTC · `, h('a', { href: /^\/(?![/\\])/.test(x.page) ? x.page : '#', textContent: x.page })), h('p', { textContent: x.text }));
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
-    benchFolder('Benchmarks', 'phone tests from the site', benchmarks),
-    benchFolder('CLI-Bench', 'phone tests sent by the rominit CLI', cli, cliKinds),
-    folder('Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
+    folder('02 Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
       const [codename, id] = String(x.rom).split('/');
       const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`, textContent: `${x.rom} · stage ${x.stage}` })),
         h('small', { textContent: ` ${x.at} UTC` }), h('p', { className: 'field-help flash-warn', textContent: x.error }),
         h('details', {}, h('summary', { textContent: 'debug log' }), h('pre', { className: 'bench-output', textContent: x.log })));
       return li.append(fileAs('failures', String(x.id), li)), li;
     }))]),
-    folder('MCP agent reports', `runs reported through the MCP · ${agents.success.length} success · ${agents.partial.length} partial · ${agents.failed.length} failed · ${agents.abandoned.length} abandoned`, Object.values(agents).flat().length,
+    folder('03 Benchmarks', `phone tests · ${benchAll.new.length} new · ${benchAll.review.length} in review · ${benchAll.approved.length} approved · ${benchAll.rejected.length} rejected`, benchAll.new.length + benchAll.review.length,
+      benchParts.map(([title, b]) => h('details', { className: 'inbox-sub', open: b.new.length + b.review.length > 0 },
+        h('summary', { className: 'field-label', textContent: `${title} · ${Object.values(b).flat().length}` }), ...byState(b))), Object.values(benchAll).flat().length),
+    folder('04 Agent reports', `runs reported through the MCP · ${agents.success.length} success · ${agents.partial.length} partial · ${agents.failed.length} failed · ${agents.abandoned.length} abandoned`, Object.values(agents).flat().length,
       [['success', 'Success'], ['partial', 'Partial'], ['failed', 'Failed'], ['abandoned', 'Abandoned']].map(([outcome, title]) => h('details', { className: 'inbox-sub', open: agents[outcome].length > 0 },
         h('summary', { className: 'field-label', textContent: `${title} · ${agents[outcome].length}` }),
         h('ol', { className: 'comments' }, ...agents[outcome].map((/** @type {any} */ x) => {
@@ -851,7 +848,7 @@ async function inboxView(index) {
               h('pre', { className: 'bench-output', textContent: x.steps.map((/** @type {any} */ s) => `stage ${s.stage}${s.step ? ` step ${s.step}` : ''} · ${s.outcome}${s.detail ? ` · ${s.detail}` : ''}`).join('\n') })));
           return li.append(fileAs('agents', x.id, li)), li;
         }))))),
-    folder('Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
+    folder('05 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
   return card;
 }
