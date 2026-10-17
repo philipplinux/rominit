@@ -719,6 +719,11 @@ function devicePicker(index) {
   // Five levels, best first; the pick shows that level and every better one. Default hides support-only and placeholder phones.
   const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
     h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'untested', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
+  // One box per branch of the tree above the search; click toggles it on/off, all on by default.
+  const branches = h('div', { className: 'branch-boxes', role: 'group', ariaLabel: 'Device types' }, ...Object.entries(CATEGORIES).map(([c, label]) => {
+    const n = index.filter(d => d.category === c).length;
+    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'checkbox', value: c, checked: true, onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
+  }));
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
   const list = h('div', { className: 'device-tree' });
@@ -733,7 +738,8 @@ function devicePicker(index) {
     const text = (/** @type {any} */ d) => [CATEGORIES[d.category], d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
     const matches = index.filter(d => words.every(w => text(d).includes(w)));
     const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'untested');
-    const hits = matches.filter(d => levels.indexOf(deviceLevel(d, tested)) <= upTo);
+    const on = new Set([...branches.querySelectorAll('input:checked')].map(i => /** @type {HTMLInputElement} */ (i).value));
+    const hits = matches.filter(d => on.has(d.category) && levels.indexOf(deviceLevel(d, tested)) <= upTo);
     // All › category › vendor › series › family › variant; every category shows, empty ones say so (only while not searching).
     /** @type {Record<string, Record<string, Record<string, Record<string, any[]>>>>} */ const tree = {};
     for (const d of hits) (((tree[d.category] ??= {})[d.vendor] ??= {})[d.series] ??= {})[d.family] = [...(tree[d.category][d.vendor][d.series][d.family] ?? []), d];
@@ -742,7 +748,7 @@ function devicePicker(index) {
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems))))))));
-    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => tree[c] || !words.length).map(([c, label]) => tree[c]
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length)).map(([c, label]) => tree[c]
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
       : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
     if (!hits.length && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
@@ -754,7 +760,7 @@ function devicePicker(index) {
   let logTimer = 0; // logs the search once typing pauses, not every keystroke
   search.addEventListener('input', render);
   render();
-  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your device' }), search,
+  return h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Find your device' }), branches, search,
     level, list);
 }
 

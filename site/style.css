@@ -592,3 +592,12 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .device-tree .category > summary { font-size: 1.05rem; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); }
 .device-tree .category.empty { margin: .9rem 0 0; color: var(--faint); }
 .device-tree .category.empty strong { letter-spacing: .08em; text-transform: uppercase; }
+.branch-boxes { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .5rem; margin: .7rem 0; }
+.branch-boxes label { cursor: pointer; }
+.branch-boxes input { position: absolute; opacity: 0; }
+.branch-boxes span { display: grid; gap: .2rem; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); }
+.branch-boxes strong { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+.branch-boxes small { font-size: .62rem; color: var(--faint); }
+.branch-boxes input:checked + span { border-color: var(--teal); background: var(--teal-dim); color: var(--teal); }
+.branch-boxes input:focus-visible + span { outline: 2px solid var(--teal); outline-offset: 2px; }
+.branch-boxes .none span { opacity: .6; }
