@@ -769,13 +769,13 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: seven folders, always shown with their counts: page reports (by section), phone tests (site; CLI-Bench; Bench-only), flash failures, agent reports (by outcome), device searches. */
+/** Admin inbox: six folders, always shown with their counts: page reports (by section), phone tests (site, and CLI-Bench from the CLI), flash failures, agent reports (by outcome), device searches. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, benchOnly = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -824,8 +824,7 @@ async function inboxView(index) {
         return li.append(fileAs('reports', String(x.id), li)), li;
       }))))),
     benchFolder('Benchmarks', 'phone tests from the site', benchmarks),
-    benchFolder('CLI-Bench', 'flashed with the rominit CLI, then benched', cli),
-    benchFolder('Bench-only', 'rominit bench: benchmark only, flashed another way', benchOnly),
+    benchFolder('CLI-Bench', 'phone tests sent by the rominit CLI (after a flash, or bench only)', cli),
     folder('Flash failures', 'stages that stopped, newest first: file as recipe-fix or user-side', failures.length, [h('ol', { className: 'comments' }, ...failures.map((/** @type {any} */ x) => {
       const [codename, id] = String(x.rom).split('/');
       const li = h('li', {}, h('strong', { className: 'inbox-rom' }, h('a', { href: `./?device=${encodeURIComponent(codename)}&rom=${encodeURIComponent(id)}`, textContent: `${x.rom} · stage ${x.stage}` })),

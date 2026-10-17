@@ -16,9 +16,9 @@ export async function onRequestGet({ request, env }) {
   const runs = await env.DB.prepare(`SELECT b.code AS ref, b.submitted AS at, b.rom, b.note, b.final, b.output, b.accepted, b.flash, b.via,
       CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' WHEN b.review IS NOT NULL THEN 'review' ELSE 'new' END AS state
     FROM bench_runs b LEFT JOIN triage t ON t.inbox = 'benchmarks' AND t.ref = b.code WHERE b.submitted IS NOT NULL ORDER BY b.submitted DESC LIMIT 300`).all();
-  // site tests in benchmarks; rominit CLI tests in cli (flashed, then benched) or benchOnly (bench command, no flash)
-  const states = () => ({ new: [], review: [], approved: [], rejected: [] }), benchmarks = states(), cli = states(), benchOnly = states();
-  for (const run of runs.results) { const to = run.via !== 'cli' ? benchmarks : run.flash === 'elsewhere' ? benchOnly : cli; if (['new', 'review'].includes(run.state) || to[run.state].length < 50) to[run.state].push(run); }
+  // site tests in benchmarks, rominit CLI tests (run + bench, or bench only) in cli
+  const states = () => ({ new: [], review: [], approved: [], rejected: [] }), benchmarks = states(), cli = states();
+  for (const run of runs.results) { const to = run.via === 'cli' ? cli : benchmarks; if (['new', 'review'].includes(run.state) || to[run.state].length < 50) to[run.state].push(run); }
   const failures = await env.DB.prepare("SELECT f.id, f.rom, f.stage, f.error, f.log, f.at FROM flash_failures f LEFT JOIN triage t ON t.inbox = 'failures' AND t.ref = CAST(f.id AS TEXT) WHERE t.ref IS NULL ORDER BY f.at DESC LIMIT 200").all();
   const runs2 = await env.DB.prepare(`SELECT r.id, r.rom, r.version, r.host, r.tools, r.outcome, r.resolution, r.finished AS at, u.name AS user,
       (SELECT json_group_array(json_object('stage', s.stage, 'step', s.step, 'outcome', s.outcome, 'detail', s.detail)) FROM agent_steps s WHERE s.run_id = r.id) AS steps
@@ -26,7 +26,7 @@ export async function onRequestGet({ request, env }) {
     WHERE r.finished IS NOT NULL AND t.ref IS NULL ORDER BY r.finished DESC LIMIT 400`).all();
   const agents = { success: [], partial: [], failed: [], abandoned: [] };
   for (const run of runs2.results) agents[run.outcome]?.push({ ...run, steps: JSON.parse(run.steps) });
-  return json({ reports: reports.results, benchmarks, cli, benchOnly, failures: failures.results, agents, labels: LABELS });
+  return json({ reports: reports.results, benchmarks, cli, failures: failures.results, agents, labels: LABELS });
 }
 
 /** @param {{request:Request, env:any}} context */
