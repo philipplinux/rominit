@@ -34,7 +34,9 @@ python3 collect.py --targets other.csv  # any list with the same columns
 python3 collect.py --offline            # parse the cache only
 ```
 
-On HTTP 429/403 or a Turnstile page the run stops, writes what it has and lists `not reached`; rerun later and it resumes from `raw/`. Brand listing pages (about 1 request per 50 phones) are cached too, so a large run costs listing pages plus one request per phone.
+On HTTP 429/403 or a Turnstile page the run stops fetching and finishes from `raw/`, so `devices.*` always cover every target (unfetched rows say `page not cached`); rerun later and it continues where it stopped. Brand listing pages (about 1 request per 50 phones) are cached too, so a large run costs listing pages plus one request per phone. Delay is 20 s between requests.
+
+State 2026-10-17 (`targets-all.csv`, 811 targets): 374 rows with SoC; 204 rows have a GSMArena URL but no cached page; 174 `none` (62 need uncached brand listings, ~40 need model numbers); GSMArena blocked this IP (429, then 403) for over a day. To pick up: `python3 -I collect.py --targets targets-all.csv` from another IP or after a long pause; `raw/` (25 MB, git-ignored) is the only copy of the fetched pages, backed up in `~/Backups/rominit-gsmarena-raw-2026-10-17.tar.gz`.
 
 ## Gaps and caveats
 
