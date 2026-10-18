@@ -1,0 +1,174 @@
+{
+  "device": "jfltexx",
+  "roms": [
+    {
+      "id": "philipplinux-pmos-server",
+      "os": "postmarketOS",
+      "name": "postmarketOS server",
+      "version": "local-2026-10-18-jflte-v3",
+      "origin": "unofficial",
+      "status": "experimental",
+      "vetting": "curated",
+      "risk": {
+        "level": "mid",
+        "why": "unofficial postmarketOS testing-port build; GT-I9505 v3 CLI acceptance pending"
+      },
+      "notes": "Headless server image: SSH over USB (172.16.42.1), NetworkManager for Wi-Fi. Shared v3 build hosted on Hugging Face; use the exact pinned files. Booted on a GT-I9505: USB networking, Wi-Fi and Bluetooth work. Other Wi-Fi module revisions: nvram files in /usr/share/firmware-samsung-jflte/wifi/, copy yours to /usr/lib/firmware/brcm/brcmfmac4335-sdio.samsung,jflte.txt if Wi-Fi is weak.",
+      "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/master/device/testing/device-samsung-jflte",
+      "maintainer": {
+        "name": "philipplinux",
+        "avatar": "./avatars/philipplinux.png",
+        "source": "https://github.com/philipplinux"
+      },
+      "homepage": "https://wiki.postmarketos.org/wiki/Samsung_Galaxy_S4_(samsung-jflte)",
+      "slots": "single",
+      "requirements": [
+        "Samsung GT-I9505 (jfltexx) only.",
+        "TWRP from step 1; boot straight into it after flashing.",
+        "Overwrites BOOT (lk2nd) and USERDATA (postmarketOS): Android and its data are gone until stock is flashed again. Back up EFS first."
+      ],
+      "rating": {
+        "checked": "2026-10-18",
+        "kernel": {
+          "version": "7.2",
+          "type": "mainline"
+        },
+        "base": "postmarketOS edge",
+        "released": "2026-10-18",
+        "support": "active",
+        "features": {
+          "flashing": "untested",
+          "usb_net": "untested",
+          "storage": "untested",
+          "sdcard": "untested",
+          "battery": "untested",
+          "screen": "untested",
+          "touch": "untested",
+          "gpu": "untested",
+          "audio": "untested",
+          "camera": "untested",
+          "camera_flash": "untested",
+          "ir": "untested",
+          "wifi": "untested",
+          "bluetooth": "untested",
+          "gps": "untested",
+          "nfc": "untested",
+          "calls": "untested",
+          "sms": "untested",
+          "data": "untested",
+          "fde": "untested",
+          "otg": "untested",
+          "hdmi": "untested",
+          "fingerprint": "untested",
+          "accelerometer": "untested",
+          "magnetometer": "untested",
+          "light": "untested",
+          "proximity": "untested",
+          "hall": "untested",
+          "haptics": "untested",
+          "barometer": "untested"
+        },
+        "includes": {
+          "google_play": "no",
+          "microg": "no",
+          "android_apps": "no",
+          "phone_ui": "no",
+          "root": "yes",
+          "updates": "yes",
+          "encryption": "no",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "yes",
+          "docker": "no"
+        }
+      },
+      "login": "user / 147147",
+      "stages": [
+        {
+          "title": "Install TWRP 3.6.1",
+          "section": "tools",
+          "optional": "Skip if TWRP is already installed.",
+          "recipe": "odin",
+          "mode": "download",
+          "confirm": "FLASH TWRP",
+          "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot can restore the stock recovery.",
+          "require_pit": [
+            "BOOT",
+            "RECOVERY"
+          ],
+          "files": [
+            {
+              "name": "twrp-3.6.1_9-0-jflte.img",
+              "size": 10248208,
+              "sha256": "bc0b4041cc77819397fef68ce911bcc4c12f94cffc50eadd7be1f76629c32bda",
+              "source": "https://dl.twrp.me/jflte/twrp-3.6.1_9-0-jflte.img.html"
+            }
+          ],
+          "steps": [
+            [
+              "flash",
+              "RECOVERY",
+              "twrp-3.6.1_9-0-jflte.img"
+            ]
+          ],
+          "done": "TWRP written. Do not boot Android: pull the battery, put it back, then hold Volume Up + Home + Power until TWRP appears."
+        },
+        {
+          "title": "Flash lk2nd and the postmarketOS server image",
+          "section": "rom",
+          "recipe": "twrp-dd",
+          "mode": "recovery",
+          "confirm": "ERASE S4",
+          "warning": "Overwrites BOOT with lk2nd and USERDATA with postmarketOS. Android's apps and data are erased.",
+          "by_name": "/dev/block/platform/msm_sdcc.1/by-name",
+          "files": [
+            {
+              "name": "lk2nd.img",
+              "size": 249872,
+              "sha256": "b2096fbf2985ea5321d9ec85dfb94f3249dd727416e1398e10b2e50e56933f1e",
+              "source": "https://github.com/msm8916-mainline/lk2nd",
+              "url": "https://huggingface.co/PhilippLinux/s4-postmarketos/resolve/4e460d73057ab13204545b190adec4c130206208/v2026.10.18-v3/lk2nd.img"
+            },
+            {
+              "name": "samsung-jflte-v3.img",
+              "size": 757071872,
+              "sha256": "2a8932bca3eb2a22b51f4267504f27560c55208360fc4045ef18e7a9669ffd75",
+              "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/master/device/testing/device-samsung-jflte",
+              "url": "https://huggingface.co/PhilippLinux/s4-postmarketos/resolve/4e460d73057ab13204545b190adec4c130206208/v2026.10.18-v3/samsung-jflte-v3.img"
+            }
+          ],
+          "steps": [
+            [
+              "write",
+              "boot",
+              "lk2nd.img"
+            ],
+            [
+              "unmount",
+              "userdata"
+            ],
+            [
+              "write",
+              "userdata",
+              "samsung-jflte-v3.img"
+            ]
+          ],
+          "options": [
+            {
+              "id": "reboot",
+              "label": "Reboot when done.",
+              "default": true,
+              "steps": [
+                [
+                  "reboot"
+                ]
+              ]
+            }
+          ],
+          "done": "lk2nd and postmarketOS written and verified on the phone. First boot takes a minute or two; then ssh as user to 172.16.42.1 over USB (password 147147). Change the password. Disconnect other postmarketOS USB phones using the same IP."
+        }
+      ]
+    }
+  ],
+  "imported": "2026-10-18"
+}

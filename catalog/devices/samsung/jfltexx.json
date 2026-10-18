@@ -8,7 +8,7 @@
   "models": [
     "GT-I9505"
   ],
-  "notes": "GT-I9505 only. Other Galaxy S4 variants (GT-I9500 Exynos, SGH-I337, SGH-M919, SCH-I545) need their own files. No ROM catalogued yet; the TWRP tool stages work on their own.",
+  "notes": "GT-I9505 only. Other Galaxy S4 variants (GT-I9500 Exynos, SGH-I337, SGH-M919, SCH-I545) need their own files. Experimental postmarketOS server v3 is catalogued; TWRP is also available separately.",
   "detect": {
     "adb": {
       "device": "jflte"

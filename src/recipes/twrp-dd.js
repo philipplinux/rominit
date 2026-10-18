@@ -1,7 +1,7 @@
 import { verifyPins } from '../hash.js';
 
 export const protocol = 'adb';
-export const verbs = { write: 2, mkfs_ext4: 2, reboot: 0 };
+export const verbs = { unmount: 1, write: 2, mkfs_ext4: 2, reboot: 0 };
 export const fileArg = { write: 1 };
 const MiB = 1024 * 1024;
 
@@ -36,9 +36,16 @@ async function blockSize(shell, path) {
 /** Mount points of a block device. @param {string} mounts @param {string} device */
 const mountsOf = (mounts, device) => mounts.split('\n').map(line => line.split(' ')).filter(f => f[0] === device).map(f => f[1]);
 
+/** Unmounts every mount point of a partition, innermost first. @param {Shell} shell @param {string} path @param {string} partition */
+async function unmountAll(shell, path, partition) {
+  const real = await ok(shell, `readlink -f ${path}`);
+  for (const mount of mountsOf(await ok(shell, 'cat /proc/mounts'), real).reverse()) await shell.run(`umount ${safePath(mount)}`);
+  if (mountsOf(await ok(shell, 'cat /proc/mounts'), real).length) throw Error(`${partition} (${real}) is still mounted; unmount it in TWRP and retry.`);
+}
+
 /**
  * Checks the phone is the catalog device in TWRP and every target is an unmounted block device.
- * Targets that only get formatted may be mounted (TWRP auto-mounts /data); they are unmounted at that step.
+ * Targets that only get formatted, or that an earlier `unmount` step covers, may be mounted (TWRP auto-mounts /data).
  * @param {Shell} shell @param {{device:any, stage:any, steps:any[][]}} job
  */
 export async function inspect(shell, { device, stage, steps }) {
@@ -48,12 +55,14 @@ export async function inspect(shell, { device, stage, steps }) {
   if (!await ok(shell, 'getprop ro.twrp.version')) throw Error('Phone does not report TWRP (ro.twrp.version). Boot into TWRP first.');
   const mounts = await ok(shell, 'cat /proc/mounts');
   /** @type {Record<string, number>} */ const sizes = {};
+  const unmounted = new Set();
   for (const [verb, partition] of steps) {
     if (verb === 'reboot') continue;
     const path = `${stage.by_name}/${partition}`;
     if ((await shell.run(`test -b ${safePath(path)}`)).code !== 0) throw Error(`${path} is not a block device.`);
     const real = await ok(shell, `readlink -f ${path}`);
-    if (verb === 'write' && mountsOf(mounts, real).length) throw Error(`${partition} (${real}) is mounted in TWRP. Unmount it first.`);
+    if (verb === 'unmount') unmounted.add(partition);
+    if (verb === 'write' && !unmounted.has(partition) && mountsOf(mounts, real).length) throw Error(`${partition} (${real}) is mounted in TWRP. Unmount it first.`);
     sizes[partition] = await blockSize(shell, path);
   }
   if (steps.some(([verb]) => verb === 'mkfs_ext4') && (await shell.run('command -v mke2fs')).code !== 0) throw Error('TWRP has no mke2fs; cannot format.');
@@ -79,7 +88,10 @@ export async function run(shell, job, report, assertSession) {
   for (const [verb, arg, extra] of steps) {
     assertSession();
     const path = verb === 'reboot' ? '' : safePath(`${stage.by_name}/${arg}`);
-    if (verb === 'write') {
+    if (verb === 'unmount') {
+      report(`Unmounting ${arg}`, 0);
+      await unmountAll(shell, path, arg);
+    } else if (verb === 'write') {
       const image = byName[extra];
       const label = `Writing ${image.name} → ${arg}`;
       report(label, 0);
@@ -93,9 +105,7 @@ export async function run(shell, job, report, assertSession) {
       report(`${arg} verified`, 1);
     } else if (verb === 'mkfs_ext4') {
       report(`Formatting ${arg} as ext4 (${extra})`, 0);
-      const real = await ok(shell, `readlink -f ${path}`);
-      for (const mount of mountsOf(await ok(shell, 'cat /proc/mounts'), real).reverse()) await shell.run(`umount ${safePath(mount)}`);
-      if (mountsOf(await ok(shell, 'cat /proc/mounts'), real).length) throw Error(`${arg} (${real}) is still mounted; unmount it in TWRP and retry.`);
+      await unmountAll(shell, path, arg);
       await ok(shell, `mke2fs -F -t ext4 -L ${extra} ${path}`);
     } else if (verb === 'reboot') {
       report('Requesting reboot', 0);

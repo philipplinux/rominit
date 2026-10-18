@@ -9,15 +9,15 @@ import { Writable } from 'node:stream';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { assertConsent, recipes, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
-import { installBrowserShims } from './node-env.mjs';
+import { ephemeralAdbCredentials, installBrowserShims } from './node-env.mjs';
 
-/** Recipes the CLI has run on a real phone. Another one joins once its protocol library works under Node (see node-env.mjs). */
-const CLI_RECIPES = ['fastboot'];
+/** Recipes supported by the CLI. */
+const CLI_RECIPES = ['fastboot', 'twrp-dd'];
 
 const USAGE = `rominit devices
 rominit plan <codename> [rom-id]
 rominit fetch <codename> <rom-id> [--dir DIR]
-rominit run <codename> <rom-id> --stage N [--dir DIR] [--no-bench]
+rominit run <codename> <rom-id> --stage N [--dir DIR] [--no-bench] [--host ADDR]
   (postmarketOS: after the reboot, waits for SSH over USB and runs the read-only phone benchmark)
 rominit bench <codename> <rom-id> [--host ADDR] [--dir DIR]
   (no flash: runs the read-only benchmark over SSH on a phone already running that ROM, sends it to ROMinit)
@@ -194,31 +194,54 @@ export async function listPhones(usb) {
   return phones;
 }
 
-/** Node-side USB: WebUSB from the `usb` package. android-fastboot's connect() asks navigator.usb,
- * so point that at the one fastboot phone (getDevices() would otherwise list every USB device). */
-async function nodeUsb() {
+/** Keep Node WebUSB's authorization picker on the phone already enumerated by the CLI. */
+export function pinUsbRequestDevice(usb, device) {
+  Object.defineProperty(usb, 'requestDevice', { configurable: true, value: async () => device });
+  return usb;
+}
+
+/** Read native USB descriptor getters before ADB starts an asynchronous transfer. */
+export function cacheUsbDescriptors(device) {
+  for (const name of ['serialNumber', 'manufacturerName', 'productName', 'vendorId', 'productId']) {
+    let value;
+    try { value = device[name]; } catch { value = undefined; }
+    Object.defineProperty(device, name, { configurable: true, enumerable: true, value });
+  }
+  return device;
+}
+
+/** Node-side USB: the CLI selects exactly one phone in the mode required by the recipe. */
+let nodeWebUsb, selectedNodePhone;
+async function nodeUsb(protocol) {
   installBrowserShims();
-  const { WebUSB } = await import('usb');
-  const webusb = new WebUSB({ allowAllDevices: true });
-  const fast = (await listPhones(webusb)).filter(p => p.mode === 'fastboot');
-  if (fast.length !== 1) throw Error(fast.length ? 'More than one phone in fastboot mode; unplug the others.' : 'No phone in fastboot mode found. If lsusb lists it, this user may lack USB access (udev rules, e.g. android-udev-rules).');
-  const chosen = fast[0].raw;
-  // On the prototype so a device android-fastboot re-claims after a replug gets the same treatment.
+  if (!nodeWebUsb) {
+    const { WebUSB } = await import('usb');
+    nodeWebUsb = new WebUSB({ allowAllDevices: true, devicesFound: devices => {
+      const matches = devices.filter(d => d.serialNumber === selectedNodePhone?.serialNumber && d.vendorId === selectedNodePhone?.vendorId && d.productId === selectedNodePhone?.productId);
+      return matches.length === 1 ? matches[0] : undefined;
+    } });
+  }
+  const mode = protocol === 'adb' ? 'adb' : 'fastboot';
+  const phones = (await listPhones(nodeWebUsb)).filter(p => p.mode === mode);
+  if (phones.length !== 1) throw Error(phones.length ? `More than one phone in ${mode} mode; unplug the others.` : `No phone in ${mode} mode found. If lsusb lists it, this user may lack USB access (udev rules, e.g. android-udev-rules).`);
+  selectedNodePhone = phones[0].raw;
+  const chosen = cacheUsbDescriptors(selectedNodePhone);
+  pinUsbRequestDevice(nodeWebUsb, chosen);
+  // On the prototype so reconnects get the same transfer timeout.
   const proto = Object.getPrototypeOf(chosen);
   if (!proto.rominitPatched) {
-    // `usb` gives every bulk transfer a 1 s timeout (0 = none at all) and reports it as "Cancelled"; browser WebUSB waits
-    // forever. The Mi A3 takes far longer than 1 s to answer flash:userdata, so allow 5 min.
+    // `usb` gives bulk transfers a 1 s timeout; a long flash or idle ADB shell can take longer, so allow 5 min.
     const { transferIn, transferOut } = proto;
     proto.transferIn = function (/** @type {number} */ ep, /** @type {number} */ length) { return transferIn.call(this, ep, length, 300_000); };
     proto.transferOut = function (/** @type {number} */ ep, /** @type {any} */ data) { return transferOut.call(this, ep, data, 300_000); };
-    // android-fastboot resets on every (re)connect "to fix some platforms". Linux doesn't need it, and a reset while the
-    // bootloader still waits for the rest of a download wedges it (no descriptors until the human re-enters fastboot).
-    proto.reset = async () => {};
     proto.rominitPatched = true;
   }
-  // No hotplug events: android-fastboot's connect listener claims whatever attaches next and throws outside any caller
-  // (it killed the CLI when the booted phone's USB network appeared). recover() reconnects through here instead.
-  Object.defineProperty(globalThis.navigator, 'usb', { configurable: true, value: {
+  if (mode === 'fastboot') {
+    // android-fastboot resets on re-connect; on Linux that can wedge a download until the human re-enters fastboot.
+    proto.reset = async () => {};
+  }
+  // android-fastboot listens for every USB hotplug; keep it on the chosen device only. ADB needs a real EventTarget.
+  Object.defineProperty(globalThis.navigator, 'usb', { configurable: true, value: mode === 'adb' ? nodeWebUsb : {
     getDevices: async () => [chosen], requestDevice: async () => chosen, addEventListener: () => {} } });
 }
 
@@ -232,6 +255,12 @@ const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new
   s.on('error', () => ok(false)).on('timeout', () => { s.destroy(); ok(false); });
 });
 
+/** Password logins skip private-key auth so sshpass cannot answer an unrelated key-passphrase prompt. */
+export function sshArgs(user, password, host) {
+  return [...(password ? ['-o', 'PreferredAuthentications=password', '-o', 'PubkeyAuthentication=no'] : []),
+    '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', `${user}@${host}`, 'sh'];
+}
+
 /** After a postmarketOS flash: wait for SSH over USB, run site/bench/linux.sh (read-only) on the phone, save and print its lines.
  * A fresh install has a fresh host key, so the key is not checked or kept for this USB-only address.
  * Then it is sent to ROMinit as a phone test (admin inbox 03 Benchmarks: 03b CLI run + bench, or 03c CLI bench only), unreviewed: the CLI only takes the script's own verdicts.
@@ -240,7 +269,7 @@ const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new
 export async function bench(rom, key, dir, out, { host = PMOS_USB, waitMs = 600_000, get = fetch, settleMs = 45_000, flashed = true } = {}) {
   out.step(`Waiting for the phone to boot (SSH on ${host}, up to ${waitMs / 60_000} min)`);
   const [user, password] = (rom.login ?? 'user / ').split(' / ');
-  const ssh = ['-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', `${user}@${host}`, 'sh'];
+  const ssh = sshArgs(user, password, host);
   const pass = !!password && !spawnSync('sshpass', ['-V']).error; // without sshpass, ssh asks the human for the password
   const script = await readFile(new URL('../site/bench/linux.sh', import.meta.url));
   const started = Date.now();
@@ -370,23 +399,25 @@ export async function main(argv, io, deps = {}) {
     if (benchAfter && spawnSync('ssh', ['-V']).error) throw Error('The benchmark after the flash needs ssh: install openssh, or pass --no-bench. Nothing written.');
     out.step(`WARNING: ${stage.warning}`);
     await confirmFromTty(stage, io); // before any USB access
+    if (recipe.protocol === 'adb') out.step('ADB authentication key stays in memory for this CLI run; approve ROMinit on the phone if prompted.');
     // Each attempt reconnects (or keeps a session that is still claimed), re-checks, then resumes
     // at the failed step; repeating that step is safe (it rewrites a whole partition, erases, or sets a slot).
     const progress = { done: 0 };
+    const credentialStore = recipe.protocol === 'adb' ? ephemeralAdbCredentials() : undefined;
     /** @type {any} */ let session;
     await recover(`Stage ${flags.stage}`, async () => {
       if (deps.session) session = await deps.session();
       else if (!session?.isConnected) {
-        await nodeUsb();
+        await nodeUsb(recipe.protocol);
         const { connect } = await import('../src/protocols/usb.js');
-        session = (await connect(recipe.protocol, t => out.step(t))).session;
+        session = (await connect(recipe.protocol, t => out.step(t), credentialStore)).session;
       }
-      await recipe.run(session, { device, files, steps: stepsFor(stage), progress },
+      await recipe.run(session, { device, stage, files, steps: stepsFor(stage), progress },
         (/** @type {string} */ text, /** @type {number} */ fraction) => (fraction > 0 && fraction < 1 ? out.progress(text, fraction) : out.step(text)), () => {});
     }, io, out, false, { match: USB_GONE, ms: 120_000, every: 15_000 });
     out.done(stage.done ?? 'Stage finished.');
     if (benchAfter)
-      await recover('Benchmark', () => (deps.bench ?? bench)(rom, `${device.codename}/${rom.id}`, dir, out), io, out, true);
+      await recover('Benchmark', () => (deps.bench ?? bench)(rom, `${device.codename}/${rom.id}`, dir, out, { host: flags.host || PMOS_USB }), io, out, true);
     return 0;
   } catch (error) {
     out.error(/** @type {Error} */ (error).message);
