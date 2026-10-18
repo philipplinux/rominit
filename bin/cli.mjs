@@ -10,11 +10,16 @@ import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { assertConsent, recipes, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
 import { ephemeralAdbCredentials, installBrowserShims } from './node-env.mjs';
+import { deleteCredential, loadCredential, saveCredential } from './credentials.mjs';
+import { identifyCredential, siteOrigin, startHelper } from './helper.mjs';
 
 /** Recipes supported by the CLI. */
 const CLI_RECIPES = ['fastboot', 'twrp-dd'];
 
 const USAGE = `rominit devices
+rominit auth [--api-key] [--json]
+rominit serve [--json]
+rominit logout [--json]
 rominit plan <codename> [rom-id]
 rominit fetch <codename> <rom-id> [--dir DIR]
 rominit run <codename> <rom-id> --stage N [--dir DIR] [--no-bench] [--host ADDR]
@@ -78,10 +83,11 @@ export function reporter(json, io) {
 
 /** @param {string[]} args */
 function parse(args) {
-  const flags = { json: false, dir: '', stage: 0, bench: true, local: false };
+  const flags = { json: false, dir: '', stage: 0, bench: true, local: false, apiKey: false };
   const rest = [];
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--json') flags.json = true;
+    else if (args[i] === '--api-key') flags.apiKey = true;
     else if (args[i] === '--dir') flags.dir = args[++i] ?? '';
     else if (args[i] === '--stage') flags.stage = Number(args[++i]);
     else if (args[i] === '--no-bench') flags.bench = false;
@@ -338,12 +344,107 @@ export async function loadDevices(codename, local, get = fetch) {
   return [await res.json()];
 }
 
+async function promptApiKey(io) {
+  const input = io.stdin;
+  if (!input.isTTY || typeof input.setRawMode !== 'function')
+    throw Error('API key entry requires an interactive terminal; no key was read.');
+  return new Promise((resolve, reject) => {
+    const oldRaw = !!input.isRaw;
+    let value = '';
+    const cleanup = () => {
+      input.removeListener('data', typed);
+      try { input.setRawMode(oldRaw); } catch { /* The terminal may have closed. */ }
+      input.pause();
+      io.stderr.write('\n');
+    };
+    const finish = (error) => { cleanup(); error ? reject(error) : resolve(value.trim()); };
+    const typed = chunk => {
+      for (const byte of Buffer.from(chunk)) {
+        if (byte === 3 || byte === 4) return finish(Error('API key entry cancelled.'));
+        if (byte === 10 || byte === 13) return finish();
+        if (byte === 8 || byte === 127) value = value.slice(0, -1);
+        else if (byte >= 32 && byte <= 126) value += String.fromCharCode(byte);
+      }
+    };
+    try {
+      input.setRawMode(true);
+      input.resume();
+      input.on('data', typed);
+      io.stderr.write('ROMinit API key (input hidden): ');
+    } catch { finish(Error('Could not read an API key from this terminal.')); }
+  });
+}
+
+function helperArgs(argv) {
+  return argv.some(a => ['--dir', '--stage', '--no-bench', '--local', '--host'].includes(a));
+}
+
+async function runHelper(helper, out, account = null) {
+  const name = account ? account.name.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ') : null;
+  const text = account
+    ? `Local helper ready for ${name} on http://127.0.0.1:${helper.port}\nPair with: ${helper.pairingUrl}`
+    : `Local helper awaiting account approval on http://127.0.0.1:${helper.port}\nPair with: ${helper.pairingUrl}`;
+  out.emit('ready', text, undefined, { host: helper.host, port: helper.port, pairingUrl: helper.pairingUrl, ...(account ? { name } : {}) });
+  const stop = () => { void helper.close(); };
+  process.on('SIGINT', stop);
+  process.on('SIGTERM', stop);
+  try { await helper.closed; }
+  finally { process.off('SIGINT', stop); process.off('SIGTERM', stop); await helper.close(); }
+}
+
 /** @param {string[]} argv @param {{stdin:any, stdout:any, stderr:any}} io
- * @param {{session?:()=>Promise<any>, get?:typeof fetch, catalog?:{devices:any[]}, bench?:typeof bench}} [deps] test seams @returns {Promise<number>} exit code */
+ * @param {{session?:()=>Promise<any>, get?:typeof fetch, catalog?:{devices:any[]}, bench?:typeof bench, site?:string, startHelper?:typeof startHelper,
+ * loadCredential?:typeof loadCredential, saveCredential?:typeof saveCredential, deleteCredential?:typeof deleteCredential,
+ * identifyCredential?:typeof identifyCredential, readApiKey?:(io:any)=>Promise<string>, now?:()=>number}} [deps] test seams @returns {Promise<number>} exit code */
 export async function main(argv, io, deps = {}) {
   let out = reporter(argv.includes('--json'), io);
   try {
-    const { flags, rest: [cmd, codename, romId] } = parse(argv);
+    const { flags, rest } = parse(argv);
+    const [cmd, codename, romId] = rest;
+    if (cmd === 'auth') {
+      if (rest.length !== 1 || helperArgs(argv)) throw Error('auth takes no device arguments or flash flags.');
+      const site = siteOrigin(deps.site ?? SITE);
+      if (flags.apiKey) {
+        const key = await (deps.readApiKey ?? promptApiKey)(io);
+        const account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now);
+        await (deps.saveCredential ?? saveCredential)(site, key);
+        const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, credential: key, identity: account,
+          saveCredential: saved => (deps.saveCredential ?? saveCredential)(site, saved),
+          onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".') });
+        await runHelper(helper, out, account.user);
+        return 0;
+      }
+      const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now,
+        saveCredential: key => (deps.saveCredential ?? saveCredential)(site, key),
+        onPair: user => {
+          const name = user.name.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ');
+          out.emit('paired', `Authenticated as ${name}`, undefined, { name });
+        },
+        onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".'),
+        onStorageError: () => out.error('The OS credential store could not save the API key. Unlock it, then run "rominit auth" again.') });
+      await runHelper(helper, out);
+      return 0;
+    }
+    if (cmd === 'serve') {
+      if (rest.length !== 1 || flags.apiKey || helperArgs(argv))
+        throw Error('serve takes no device arguments or flash flags.');
+      const site = siteOrigin(deps.site ?? SITE);
+      const key = await (deps.loadCredential ?? loadCredential)(site);
+      if (!key) throw Error('No saved ROMinit API key. Run "rominit auth" first.');
+      const account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now);
+      const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, credential: key, identity: account,
+        saveCredential: saved => (deps.saveCredential ?? saveCredential)(site, saved),
+        onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".') });
+      await runHelper(helper, out, account.user);
+      return 0;
+    }
+    if (cmd === 'logout') {
+      if (rest.length !== 1 || flags.apiKey || helperArgs(argv)) throw Error('logout takes no device arguments or other flags.');
+      const site = siteOrigin(deps.site ?? SITE);
+      await (deps.deleteCredential ?? deleteCredential)(site);
+      out.done(`Saved ROMinit API key removed for ${site}. Close any running helper to clear its in-memory credential; this does not revoke the key.`);
+      return 0;
+    }
     if (cmd === 'devices') {
       const { WebUSB } = await import('usb');
       const phones = await listPhones(new WebUSB({ allowAllDevices: true }));

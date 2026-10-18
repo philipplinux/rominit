@@ -31,6 +31,16 @@ CREATE TABLE IF NOT EXISTS reports (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   section TEXT -- which page section it is about ("2 · Custom recovery"), or NULL for the whole page
 );
+CREATE TABLE IF NOT EXISTS requests (
+  id INTEGER PRIMARY KEY,
+  kind TEXT NOT NULL CHECK (kind IN ('new', 'update', 'mirror')),
+  page TEXT NOT NULL,
+  rom TEXT,
+  url TEXT,
+  voter TEXT NOT NULL,
+  text TEXT NOT NULL,
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS counts (
   rom TEXT NOT NULL,   -- <codename>/<rom id>
@@ -83,11 +93,11 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   via TEXT                -- 'cli': sent by the rominit CLI (inbox 03b / 03c); NULL: the site
 );
 
--- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports), `failures` (stopped flash stages), `agents` (runs reported through the MCP). Add one by adding a UNION arm.
+-- Inboxes, one per kind of incoming item. Add one by adding a UNION arm.
 -- An LLM (or a person) sorts each item with scripts/inbox.mjs; sorted items leave the inbox.
 CREATE TABLE IF NOT EXISTS triage (
   inbox TEXT NOT NULL,
-  ref TEXT NOT NULL,       -- bench_runs.code, reports.id, flash_failures.id or agent_runs.id
+  ref TEXT NOT NULL,       -- source row key
   label TEXT NOT NULL CHECK (label IN ('script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other')),
   summary TEXT NOT NULL,
   at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -149,6 +159,8 @@ CREATE VIEW IF NOT EXISTS inbox AS
   UNION ALL
   SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports
   UNION ALL
+  SELECT 'requests-' || kind, CAST(id AS TEXT), at, page, json_object('kind', kind, 'rom', rom, 'url', url, 'text', text) FROM requests
+  UNION ALL
   SELECT 'failures', CAST(id AS TEXT), at, rom, json_object('stage', stage, 'error', error, 'log', log) FROM flash_failures
   UNION ALL
   SELECT 'agents', r.id, r.finished, r.rom, json_object('outcome', r.outcome, 'resolution', r.resolution, 'host', r.host, 'tools', r.tools, 'version', r.version,
@@ -167,3 +179,13 @@ CREATE TABLE IF NOT EXISTS searches (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS searches_q ON searches (q, voter, at);
+
+-- One-use browser approval for the local CLI. Stores no grant code or CLI verifier.
+CREATE TABLE IF NOT EXISTS helper_grants (
+  code_hash TEXT PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  challenge TEXT NOT NULL,
+  expires TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS helper_grants_user_expiry ON helper_grants (user_id, expires);
+CREATE INDEX IF NOT EXISTS helper_grants_expiry ON helper_grants (expires);

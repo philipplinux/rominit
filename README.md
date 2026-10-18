@@ -23,6 +23,21 @@ Safety: every file is pinned by size and SHA-256, every step verb is whitelisted
 
 Copy an existing device as a template.
 
+## Local CLI helper
+
+Choose either authentication method once:
+
+- `rominit auth`: open the printed link, sign in on the website and approve the CLI.
+- `rominit auth --api-key`: [create an API key on the website](https://rominit.pages.dev/?view=agents), then paste it into the hidden terminal prompt.
+
+Both save the credential in the OS credential store (macOS Keychain, Windows Credential Manager, or Linux Secret Service). Linux needs an available, unlocked Secret Service; there is no plaintext fallback. Browser login creates a revocable **ROMinit CLI** API key valid for one year. A manually created key uses the expiry you selected. Later, run `rominit serve` to reuse the saved login. Run `rominit logout` to remove it locally; revoke it on the website to invalidate it remotely. Close existing helpers after logout.
+
+The helper listens only on `127.0.0.1` at a random port. Open its printed pairing link and click **Approve and connect helper**; the browser may ask for local network access. Approval uses a 60-second, one-use grant tied to a secret held by the CLI. Your persistent credential never enters the page. The separate browser connection lasts up to one hour and its token stays in this tab's session storage. Web sign-out or disconnect clears that tab connection while preserving the saved CLI login. Close the CLI with Ctrl+C to stop it. An initial login link expires after ten minutes; restart the command if needed.
+
+For a postmarketOS phone test, click **Run with CLI** on the website after pairing. The helper runs the bundled quiet benchmark over SSH and returns its output to the same report card for review. It needs an SSH client on the computer and sshpass to use the phone password without a terminal prompt. The phone needs SSH service enabled; its own SSH client is not required for this path. The helper cannot run supplied shell commands or write USB media.
+
+For local development, set `ROMINIT_URL` to the site's HTTP loopback origin before starting the CLI, for example `ROMINIT_URL=http://127.0.0.1:8788 node bin/rominit.mjs serve`. Otherwise the helper trusts only `https://rominit.pages.dev`. Apply `migrations/2026-10-17-helper-grants.sql` to an existing database before deploying this authentication flow; a fresh database uses `schema.sql`. No browser extension or extra service is needed beyond keeping rominit serve running. The downloaded CLI source archive includes site/bench, which the benchmark runner reads locally.
+
 ## Recovery catalog
 
 Standalone recovery installers live in `catalog/recoveries/<codename>/<id>.json`. Each file has `device` and one `recovery` object with `id`, `name`, `version`, `project`, `source`, `vetting`, `requirements`, `imported` (date), `imported_from` (seed provenance) and `stages`. Recovery stages use the same validated recipe verbs and pinned files as ROM stages and have `section: "tools"`.

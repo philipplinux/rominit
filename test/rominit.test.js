@@ -632,3 +632,16 @@ test('sources page lists every dependency', async () => {
     assert.ok(listed.includes(dep) || listed.toLowerCase().includes(short.toLowerCase()), `${dep} missing from SOFTWARE in site/app.js`);
   }
 });
+
+test('requests API validates request kind, URLs, paths and ROMs', async () => {
+  const { onRequestPost } = await import('../functions/api/requests.js');
+  const saved = [];
+  const env = { SALT: 'test', ASSETS: { fetch: async () => Response.json([{ codename: 'x', roms: [{ id: 'lineage' }] }]) },
+    DB: { prepare: sql => ({ bind: (...args) => ({ first: async () => null, run: async () => (saved.push([sql, args]), { meta: { changes: 1 } }) }) }) } };
+  const post = body => onRequestPost({ env, request: new Request('https://x/api/requests', { method: 'POST', body: JSON.stringify(body) }) });
+  const common = { kind: 'update', page: '/?device=x', rom: 'x/lineage', url: 'https://example.org/rom', text: 'Please update this listing' };
+  for (const body of [{ ...common, url: 'javascript:alert(1)' }, { ...common, page: '//evil.test' }, { ...common, rom: 'x/missing' }]) assert.equal((await post(body)).status, 400);
+  assert.equal((await post({ ...common, kind: 'mirror', url: undefined })).status, 200);
+  assert.equal((await post(common)).status, 200);
+  assert.deepEqual(saved.map(([, args]) => args[0]), ['mirror', 'update']);
+});

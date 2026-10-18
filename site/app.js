@@ -3,6 +3,7 @@ import { connect } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
+import { disconnectHelper, helperRequest, helperSession, pairHelper } from './helper.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
 // ROMinit's own builds: this host lets the page download them itself (CORS), so a stage can attach them in one click.
@@ -184,8 +185,12 @@ const PROVIDER_LOGOS = /** @type {Record<string, string>} */ ({
 });
 /** Header, under BUY ME A COFFEE: a SIGN IN button that opens the provider badges, or the account menu. */
 me.then(info => {
-  if (!info?.providers.length && !info?.user) return;
-  const slot = h('span', { className: 'account' });
+  const paired = helperSession();
+  if (paired && paired.user.id !== info?.user?.id) disconnectHelper().catch(() => {});
+  const slot = /** @type {HTMLElement} */ (document.querySelector('.topbar-side .account'));
+  slot.replaceChildren();
+  const unavailable = info ? 'Sign-in is not configured here yet.' : 'Could not load sign-in options. Reload the page to try again.';
+  info ??= { user: null, providers: [] };
   if (info.user) {
     const input = h('input', { value: info.user.name, maxLength: 30, required: true }), status = h('small', { textContent: 'Shown on your comments. Your email is never shown.' });
     const pop = h('form', { id: 'username', popover: 'auto', className: 'signin-pop', async onsubmit(/** @type {Event} */ e) {
@@ -202,19 +207,18 @@ me.then(info => {
     slot.append(h('details', { className: 'site-menu user-menu' }, h('summary', { title: 'Your account', textContent: `👤 ${info.user.name} ▾` }),
       h('nav', { ariaLabel: 'Account' }, edit, item('favorites', '♥ Favorites'),
         info.user.roles.some((/** @type {any} */ r) => r.role === 'admin') && item('inbox', 'Inbox'),
-        item('agents', 'API tokens'),
-        h('button', { type: 'button', textContent: 'Sign out', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }))), pop);
+        item('agents', 'API tokens'), item('helper', 'Local helper'),
+        h('button', { type: 'button', textContent: 'Sign out', async onclick() { await disconnectHelper().catch(() => {}); await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }))), pop);
   }
   else {
     const back = encodeURIComponent(location.pathname + location.search);
     const pop = h('div', { id: 'signin', popover: 'auto', className: 'signin-pop' }, h('strong', { textContent: 'Sign in to ROMinit' }),
       ...info.providers.map(p => { const a = h('a', { className: `signin-badge ${p}`, href: `./auth/${p}/login?return=${back}` }); a.innerHTML = `${PROVIDER_LOGOS[p] ?? ''}<span>Continue with ${PROVIDER_NAMES[p] ?? p}</span>`; return a; }),
-      h('small', { textContent: 'Only your name and email are used: for comments and ratings. No tracking.' }));
-    const open = h('button', { type: 'button', className: 'link-button', textContent: 'SIGN IN' });
+      h('small', { textContent: info.providers.length ? 'Only your name and email are used: for comments and ratings. No tracking.' : unavailable }));
+    const open = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Sign in' });
     open.popoverTargetElement = pop;
     slot.append(open, pop);
   }
-  document.querySelector('.topbar-side')?.append(slot);
 });
 /** Newest Linux kernel any non-stock ROM brings, as a hardware tag: "community Linux 7.2". @param {any} device */
 const communityKernel = device => {
@@ -330,13 +334,27 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
   let sshHost = `${loginUser}@<phone address>`; // last USB / Wi-Fi target, reused in the password hint
   const box = h('div', { className: 'bench' });
   const start = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Start a phone test' });
-  box.append(h('p', { className: 'intro-copy', textContent: 'One command checks every feature on the phone in a few seconds. It only reads, changes nothing and stays silent. Then you fix anything it got wrong with a tap.' }), start);
+  let pairedHelper = false;
+  const connectHelper = h('p', { className: 'field-help' }, 'For one-click testing, ', h('a', { href: './?view=helper', textContent: 'Connect CLI', onclick() {
+    try { sessionStorage.setItem('rominit.helper.return', location.pathname + location.search); } catch { /* private window */ }
+  } }), ' on this computer, install it, run ', h('code', { textContent: 'rominit serve' }), ' and approve the pairing request in this same browser tab.');
+  box.append(h('p', { className: 'intro-copy', textContent: 'One command checks every feature on the phone in a few seconds. It only reads, changes nothing and stays silent. Then you fix anything it got wrong with a tap.' }), start, linux ? connectHelper : '');
+  me.then(info => {
+    const session = helperSession();
+    pairedHelper = linux && !!session && session.user.id === info?.user?.id;
+    start.textContent = pairedHelper ? 'Run with CLI' : 'Start a phone test';
+    connectHelper.hidden = !linux || pairedHelper;
+  });
   start.addEventListener('click', async () => {
     start.disabled = true;
+    const session = linux ? helperSession() : null;
+    const info = session ? await me : null;
+    const autoRun = !!session && session.user.id === info?.user?.id;
+    start.textContent = autoRun ? 'Starting with CLI…' : 'Starting phone test…';
     const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key }) }).catch(() => null);
     const reply = await r?.json().catch(() => ({}));
-    if (!r?.ok) { start.disabled = false; box.append(h('p', { className: 'status', textContent: `Could not start: ${reply?.error ?? 'network error'}.` })); return; }
-    waitFor(reply.code);
+    if (!r?.ok) { start.disabled = false; start.textContent = pairedHelper ? 'Run with CLI' : 'Start a phone test'; box.append(h('p', { className: 'status', textContent: `Could not start: ${reply?.error ?? 'network error'}.` })); return; }
+    waitFor(reply.code, autoRun);
   });
   // Your sent cards and where review stands: from your account when signed in, else the codes this browser kept, else none.
   fetch(`./api/bench?mine=${encodeURIComponent(key)}`).then(r => r.json()).catch(() => ({})).then(({ codes }) => (codes = codes ?? [...sent].reverse()) &&
@@ -354,14 +372,17 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
     return row;
   }))));
   /** @param {string} code */
-  function waitFor(code) {
+  function waitFor(code, autoRun = false) {
     const url = `${location.origin}/b/${code}`;
+    const localHelper = helperSession();
+    let helperReady = false;
     const sound = h('input', { type: 'checkbox' });
     // Browsers cannot open SSH themselves, so the page builds the one command: USB uses postmarketOS' fixed USB-network address.
     const ssh = 'ssh -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new ';
     const ways = linux ? [['USB cable', 'usb'], ['Wi-Fi', 'wifi'], ['Terminal on the phone', '']]
       : [['ADB from a computer', 'adb shell '], ['On the phone (terminal app)', '']];
-    let way = ways[0][1];
+    const savedWay = (() => { try { const value = localStorage.getItem('rominit.benchTransport'); return value === 'wifi' || value === 'usb' ? value : 'usb'; } catch { return 'usb'; } })();
+    let way = linux ? savedWay : ways[0][1];
     const ip = h('input', { type: 'text', className: 'bench-target', inputMode: 'decimal', spellcheck: false, placeholder: '192.168.1.50',
       value: (() => { try { return localStorage.getItem('rominit.phoneIp') ?? ''; } catch { return ''; } })() });
     const ipRow = h('label', { className: 'field-help', hidden: true }, 'Phone IP address (Settings → Wi-Fi, or `ip a` on the phone): ', ip);
@@ -372,6 +393,9 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
       h('small', { textContent: ' default from the ROM; change it if you set your own' }));
     const hint = h('p', { className: 'field-help' });
     const command = h('code', { className: 'bench-command' });
+    const helperRun = h('button', { type: 'button', className: 'button button-primary', textContent: 'Run with CLI', hidden: true });
+    const helperStatus = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+    const helperNote = h('p', { className: 'field-help', textContent: 'The CLI run stays silent. To check speaker and vibration, use the terminal command above with sound enabled.', hidden: true });
     const render = () => {
       loginUser = userBox.value.trim() || defaultUser; loginPassword = passBox.value;
       loginRow.hidden = !(way === 'usb' || way === 'wifi');
@@ -379,13 +403,57 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
       if (way === 'usb' || way === 'wifi') sshHost = `${loginUser}@${way === 'usb' ? '172.16.42.1' : ip.value.trim() || '<phone IP>'}`;
       const prefix = way === 'usb' || way === 'wifi' ? `${ssh}${sshHost} ` : way;
       ipRow.hidden = way !== 'wifi';
-      hint.textContent = linux ? `Paste it into a terminal on your computer. ${way ? `When asked, type the password ${loginPassword || 'you set'}. ` : ''}Test code ${code}, valid for an hour. Reflashed the phone and SSH says REMOTE HOST IDENTIFICATION HAS CHANGED? The new install has a new key: run ssh-keygen -R 172.16.42.1 (on Wi-Fi: the phone IP), then the command again.`
+      hint.textContent = linux ? `Paste it into a terminal on ${way ? 'your computer' : 'the phone'}. ${way ? `When asked, type the password ${loginPassword || 'you set'}. ` : ''}Test code ${code}, valid for an hour. Reflashed the phone and SSH says REMOTE HOST IDENTIFICATION HAS CHANGED? The new install has a new key: run ssh-keygen -R 172.16.42.1 (on Wi-Fi: the phone IP), then the command again.`
         : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.`;
       command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -sS --data-binary @- ${url}`;
+      const canUseHelper = linux && helperReady && (way === 'usb' || way === 'wifi');
+      helperRun.hidden = !canUseHelper;
+      helperRun.disabled = way === 'wifi' && !ip.value.trim();
+      connectHelper.hidden = !linux || helperReady;
+      helperNote.hidden = !canUseHelper || !sound.checked;
     };
+    const runWithHelper = async () => {
+      const session = helperSession();
+      if (!session || !helperReady || !(way === 'usb' || way === 'wifi')) {
+        helperStatus.textContent = 'The CLI connection is not available in this tab. Connect the CLI or use the terminal command below.';
+        return;
+      }
+      if (way === 'wifi' && !ip.value.trim()) {
+        helperStatus.textContent = 'Enter the phone Wi-Fi IP address to run with the CLI.';
+        ip.focus();
+        return;
+      }
+      helperRun.disabled = true;
+      helperStatus.textContent = 'Running the read-only benchmark on your phone…';
+      try {
+        const ready = await helperRequest(session, '/status');
+        if (ready.user?.id !== session.user.id) throw Error('The helper is connected to a different account. Reconnect it first.');
+        if (!ready.capabilities?.includes('bench')) {
+          helperStatus.replaceChildren('This CLI needs an update before it can run browser benchmarks. ', h('a', { href: '/rominit-cli.tar.gz', textContent: 'Download updated CLI' }), ' and restart rominit serve.');
+          helperRun.disabled = false;
+          return;
+        }
+        await helperRequest(session, '/bench', { code, rom: key, host: way === 'usb' ? '172.16.42.1' : ip.value.trim(), user: loginUser, password: loginPassword });
+        helperRun.textContent = 'CLI run complete';
+        helperStatus.textContent = 'The test finished. Review the report card below before sending it.';
+      } catch (error) {
+        helperStatus.textContent = `Could not run the benchmark: ${message(error)} Keep the CLI open and check the phone address and SSH login.`;
+        helperRun.disabled = false;
+      }
+    };
+    helperRun.addEventListener('click', runWithHelper);
+    me.then(info => {
+      helperReady = !!localHelper && localHelper.user.id === info?.user?.id;
+      render();
+      if (autoRun) void runWithHelper();
+    });
     ip.addEventListener('input', () => { try { localStorage.setItem('rominit.phoneIp', ip.value.trim()); } catch { /* private window */ } render(); });
-    const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
-      onclick(/** @type {Event} */ e) { way = prefix; for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render(); } })));
+    const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix]) => h('button', { type: 'button', role: 'tab', ariaSelected: String(way === prefix), textContent: label,
+      onclick(/** @type {Event} */ e) {
+        way = prefix;
+        if (linux && (way === 'usb' || way === 'wifi')) try { localStorage.setItem('rominit.benchTransport', way); } catch { /* private window */ }
+        for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render();
+      } })));
     for (const el of [sound, userBox, passBox]) el.addEventListener('input', render);
     sound.addEventListener('change', render); render();
     const waiting = h('div', { className: 'bench-wait' }, h('span', { className: 'breath', ariaHidden: 'true' }), h('span', { textContent: 'Waiting for your phone… breathe in, breathe out.' }));
@@ -393,6 +461,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
       h('p', { className: 'field-label', textContent: linux ? 'How is the phone connected?' : 'Run this, wherever your phone has a shell' }), tabs, ipRow, linux ? loginRow : '',
       h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
+      linux ? connectHelper : '', helperRun, helperStatus, helperNote,
       h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
       hint,
       waiting);
@@ -720,13 +789,13 @@ function stageCard(device, stage, n, count, key) {
 /** @param {any[]} index */
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
-  // Five levels, best first; the pick shows that level and every better one. Default hides support-only and placeholder phones.
+  // Five levels, best first; the pick shows that level and every better one. Default includes every level for now.
   const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
-    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'untested', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
-  // One box per branch of the tree above the search; click toggles it on/off, all on by default.
-  const branches = h('div', { className: 'branch-boxes', role: 'group', ariaLabel: 'Device types' }, ...Object.entries(CATEGORIES).map(([c, label]) => {
-    const n = index.filter(d => d.category === c).length;
-    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'checkbox', value: c, checked: true, onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
+    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'placeholder', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
+  // Pick one device category or all categories.
+  const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
+    const n = c === 'all' ? index.length : index.filter(d => d.category === c).length;
+    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === 'all', onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
@@ -741,8 +810,9 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const text = (/** @type {any} */ d) => [CATEGORIES[d.category], d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
     const matches = index.filter(d => words.every(w => text(d).includes(w)));
-    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'untested');
-    const on = new Set([...branches.querySelectorAll('input:checked')].map(i => /** @type {HTMLInputElement} */ (i).value));
+    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'placeholder');
+    const category = /** @type {HTMLInputElement} */ (branches.querySelector('input:checked'))?.value ?? 'all';
+    const on = new Set(category === 'all' ? Object.keys(CATEGORIES) : [category]);
     const hits = matches.filter(d => on.has(d.category) && levels.indexOf(deviceLevel(d, tested)) <= upTo);
     // All › category › vendor › series › family › variant; every category shows, empty ones say so (only while not searching).
     /** @type {Record<string, Record<string, Record<string, Record<string, any[]>>>>} */ const tree = {};
@@ -801,7 +871,7 @@ async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -876,6 +946,14 @@ async function inboxView(index) {
         }))))),
     folder('05 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
+  card.append(folder('06 Requests', 'new ROMs / devices, updates and mirrors', Object.values(requests).flat().length,
+    [['new', 'New ROM / device'], ['update', 'ROM updates'], ['mirror', 'ROM mirrors']].map(([kind, title]) => h('details', { className: 'inbox-sub', open: requests[kind].length > 0 },
+      h('summary', { className: 'field-label', textContent: `${title} · ${requests[kind].length}` }),
+      h('ol', { className: 'comments' }, ...requests[kind].map((/** @type {any} */ x) => {
+        const li = h('li', {}, h('small', { textContent: `${x.at} UTC${x.rom ? ` · ${x.rom}` : ''}` }),
+          h('p', { textContent: x.text }), x.url && /^https?:\/\//i.test(x.url) && link(x.url, 'Source'));
+        return li.append(fileAs(`requests-${kind}`, String(x.id), li)), li;
+      }))))));
   return card;
 }
 
@@ -892,6 +970,30 @@ async function popularView(index) {
   return card;
 }
 
+/** @param {string} kind @param {string} title @param {string} rom */
+function requestButton(kind, title, rom = '') {
+  const button = h('button', { type: 'button', className: 'button button-secondary', textContent: title, onclick() {
+    const text = h('textarea', { className: 'confirmation-input', required: true, maxLength: 2000, rows: 4,
+      placeholder: kind === 'update' ? 'New version and current version (for example: 2.5 replaces 2.3).' : kind === 'mirror' ? 'Which files should we mirror, and why?' : 'ROM name and/or device model, and what you would like added.' });
+    const url = h('input', { className: 'confirmation-input', type: 'url', required: kind !== 'mirror', maxLength: 2000, placeholder: 'https://…' });
+    const status = h('p', { role: 'status', className: 'field-help' });
+    const send = h('button', { type: 'submit', className: 'button button-primary', textContent: 'Send request' });
+    const dialog = h('dialog', { className: 'host-confirm', ariaLabel: title }, h('form', { async onsubmit(event) {
+      event.preventDefault(); send.disabled = true; status.textContent = 'Sending…';
+      const response = await fetch('./api/requests', { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ kind, rom: rom || null, page: location.pathname + location.search, text: text.value, url: url.value || null }) }).catch(() => null);
+      const reply = await response?.json().catch(() => ({}));
+      status.textContent = response?.ok ? 'Thanks, request sent for review.' : `Could not send: ${reply?.error ?? 'network error'}.`;
+      send.disabled = !!response?.ok;
+    } }, h('h2', { textContent: title }), rom && h('p', { textContent: rom }),
+      h('label', { className: 'field-help' }, 'Details', text), h('label', { className: 'field-help' }, kind === 'mirror' ? 'Source URL (optional)' : 'ROM or device source URL', url),
+      send, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Close', onclick: () => dialog.close() }), status));
+    dialog.addEventListener('close', () => { dialog.remove(); button.focus(); });
+    document.body.append(dialog); dialog.showModal();
+  } });
+  return button;
+}
+
 /** "Something wrong on this page?" form; falls back to a GitHub issue link. */
 function reportBox() {
   const page = location.pathname + location.search;
@@ -906,11 +1008,12 @@ function reportBox() {
     status.textContent = response?.ok ? 'Thanks, ticket sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
-  const box = h('details', { className: 'page-section report', ontoggle() {
+  const box = h('details', { id: 'submit-request', className: 'page-section report', ontoggle() {
     if (where.isConnected) return; // built on first open, from this page's own sections
     for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
     text.before(h('label', { className: 'field-help' }, 'About: ', where));
-  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket' }), h('small', { textContent: 'something wrong on this page?' })),
+  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket / Request' }), h('small', { textContent: 'report a problem or request a new ROM / device' })),
+    h('p', {}, requestButton('new', 'Request new ROM / device')),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
   return box;
 }
@@ -929,6 +1032,7 @@ const SOFTWARE = [
     ['TypeScript', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/TypeScript', 'type checks (not shipped)'],
     ['wrangler', 'Cloudflare', 'MIT OR Apache-2.0', 'https://github.com/cloudflare/workers-sdk', 'deploys to Cloudflare Pages'],
     ['playwright-core', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/playwright', 'bench tests (not shipped)'],
+    ['@napi-rs/keyring', 'N-API for Rust contributors', 'MIT', 'https://github.com/Brooooooklyn/keyring-node', 'OS credential storage for the CLI (not in the page)'],
     ['usb (node-usb)', 'Rob Moran, Christopher Klein and contributors', 'MIT', 'https://github.com/node-usb/node-usb', 'USB access for the rominit command-line tool (not in the page)'],
   ]],
   ['Pictures', [
@@ -960,11 +1064,12 @@ function cliView() {
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'CLI tool' }),
     h('p', { className: 'intro-copy', textContent: 'rominit is a command-line tool that runs the same recipes as this page from a terminal: same catalog, same SHA-256 checks, same confirm phrases. Use it where the browser cannot help (no WebUSB, scripts, an AI agent on your own computer). Experimental: tested on Linux so far.' }),
     h('h3', { textContent: 'Install' }),
-    h('p', { className: 'field-help', textContent: 'Needs Node.js and git:' }),
-    code('git clone https://github.com/philipplinux/rominit\ncd rominit\nnpm ci --omit=dev\nalias rominit="node $PWD/bin/rominit.mjs"\nrominit devices'),
+    h('p', { className: 'field-help', textContent: 'Install the current CLI from this site (needs Node.js):' }),
+    code(`curl -fLO ${location.origin}/rominit-cli.tar.gz\ntar -xzf rominit-cli.tar.gz\ncd rominit-cli\nnpm ci --omit=dev\nalias rominit="node $PWD/bin/rominit.mjs"\nrominit auth`),
     h('p', { className: 'field-help', textContent: 'On Linux, if the phone shows in lsusb but not in "rominit devices", this user lacks USB access: install udev rules (e.g. android-udev-rules).' }),
     h('h3', { textContent: 'Commands' }),
-    code(['# phones in fastboot or ADB mode', 'rominit devices',
+    code(['# sign in once, then keep the website helper running', 'rominit auth', 'rominit serve',
+      '# phones in fastboot or ADB mode', 'rominit devices',
       "# a phone's ROMs, then one ROM's stages, files and steps", 'rominit plan <codename> [rom-id]',
       '# download the files and check their SHA-256', 'rominit fetch <codename> <rom-id>',
       '# flash one stage', 'rominit run <codename> <rom-id> --stage N',
@@ -1028,6 +1133,76 @@ async function agentsView() {
     h('p', { className: 'field-help', textContent: 'Claude Code:' }), copyable(cli),
     h('p', { className: 'field-help', textContent: 'Other MCP clients (JSON config):' }), copyable(config));
 }
+/** Pair the CLI so this tab can run read-only postmarketOS benchmarks over SSH. */
+async function helperView() {
+  const info = await me;
+  const status = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+  const controls = h('div', {});
+  const box = h('section', { className: 'flash-card info-page' }, h('h1', { textContent: 'Local helper' }),
+    h('p', { className: 'intro-copy', textContent: 'Install the ROMinit CLI, sign in once, then keep its local helper running while you test. The helper can run quiet, read-only postmarketOS benchmarks over SSH; it cannot flash a phone or write a drive.' }),
+    h('p', {}, h('a', { href: '/rominit-cli.tar.gz', textContent: 'Download the latest CLI' }), ' · ', h('a', { href: './?view=cli', textContent: 'Setup instructions' }), '.'),
+    h('p', { className: 'field-help', textContent: 'One-click benchmarks are Linux-tested. The computer running the CLI needs an OpenSSH client and sshpass; the phone must be booted into postmarketOS with its SSH server enabled and a working username and password. Windows and macOS setup is not verified.' }),
+    h('p', {}, 'Browser login: ', h('code', { textContent: 'rominit auth' })),
+    h('p', {}, h('a', { href: './?view=agents', textContent: 'Create an API key' }), ', then run ', h('code', { textContent: 'rominit auth --api-key' }), ' and paste it at the prompt.'),
+    h('p', {}, 'Keep the latest CLI helper running with ', h('code', { textContent: 'rominit serve' }), '. Use ', h('code', { textContent: 'rominit logout' }), ' to remove the saved CLI login.'),
+    h('p', { className: 'field-help', textContent: 'Open the pairing link printed by the CLI in this same browser tab, sign in and approve it. Only approve a helper you started on this computer. Your browser may ask to allow local network access.' }),
+    controls, status,
+    h('p', { className: 'field-help', textContent: 'A one-click benchmark sends the phone SSH login only to this paired local helper; ROMinit receives the read-only report. The browser connection lasts up to one hour. Disconnecting it does not erase your saved CLI login.' }));
+  if (!info?.user) {
+    controls.append(h('p', { className: 'intro-copy' }, 'Sign in to approve the helper: ', ...signInLinks(info?.providers ?? [])));
+    return box;
+  }
+  const user = info.user;
+  const returnToPhone = (() => {
+    try { const path = sessionStorage.getItem('rominit.helper.return'); return path && /^\/(?![/\\])/.test(path) ? path : './'; }
+    catch { return './'; }
+  })();
+  controls.append(h('p', { textContent: `Account: ${user.name}` }));
+  /** @param {any} session */
+  const connected = session => {
+    controls.replaceChildren(h('p', { textContent: `Connected as ${session.user.name} · expires ${new Date(session.expiresAt).toLocaleTimeString()}` }),
+      h('button', { type: 'button', className: 'button button-secondary', textContent: 'Check connection', async onclick() {
+        this.disabled = true;
+        try {
+          const result = await helperRequest(session, '/status');
+          if (result.user?.id !== user.id) throw Error('The helper is connected to a different account. Disconnect and pair again.');
+          if (!result.capabilities?.includes('bench')) {
+            status.replaceChildren('This CLI needs an update before it can run browser benchmarks. ', h('a', { href: '/rominit-cli.tar.gz', textContent: 'Download updated CLI' }), ' and restart rominit serve.');
+            return;
+          }
+          status.textContent = `Helper ready as ${result.user.name}.`;
+        } catch (error) { status.textContent = `${message(error)} Keep the CLI running and allow local network access when asked.`; }
+        finally { this.disabled = false; }
+      } }),
+      h('button', { type: 'button', className: 'button button-secondary', textContent: 'Disconnect helper', async onclick() {
+        this.disabled = true;
+        try { await disconnectHelper(); status.textContent = 'Disconnected. Run rominit serve again to reconnect.'; }
+        catch { status.textContent = 'Connection forgotten in this tab. Close the CLI to stop the unreachable helper.'; }
+        controls.replaceChildren(h('p', { textContent: 'No helper connected.' }));
+      } }),
+      h('p', {}, h('a', { href: returnToPhone, textContent: returnToPhone === './' ? 'Back to ROMinit' : 'Back to phone test' })));
+  };
+  const port = params.get('port') ?? '', state = params.get('state') ?? '', challenge = params.get('challenge') ?? '';
+  const saved = helperSession();
+  if (saved?.user.id === user.id && (!port || saved.url === `http://127.0.0.1:${port}`)) { connected(saved); return box; }
+  if (!/^[1-9]\d{0,4}$/.test(port) || Number(port) > 65535 || !/^[A-Za-z0-9_-]{43}$/.test(state) || !/^[a-f0-9]{64}$/.test(challenge)) {
+    status.textContent = 'No pairing link loaded. Run rominit auth for your first login, or rominit serve to reuse your saved login, then open the link it prints.';
+    return box;
+  }
+  controls.append(h('p', { textContent: `Connect the helper on this computer (port ${port}) as ${user.name}?` }),
+    h('button', { type: 'button', className: 'button button-primary', textContent: 'Approve and connect helper', async onclick() {
+      this.disabled = true; status.textContent = 'Connecting to your local helper…';
+      try {
+        const session = await pairHelper(params, user.id);
+        history.replaceState(null, '', './?view=helper');
+        connected(session); status.textContent = 'Helper connected.';
+      } catch (error) {
+        status.textContent = `${message(error)} Keep the CLI running; allow local network access when asked, then retry using its pairing link.`;
+        this.disabled = false;
+      }
+    } }));
+  return box;
+}
 async function start() {
   const codename = params.get('device'), view = params.get('view');
   // Disclaimer × hides it; remembered per browser.
@@ -1039,6 +1214,7 @@ async function start() {
   if (navSearch) navSearch.value = params.get('q') ?? '';
   if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
+  if (!codename && view === 'helper') { main.append(await helperView()); return; }
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
     for (const a of document.querySelectorAll('.site-menu a, .top-links a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
@@ -1126,6 +1302,7 @@ async function start() {
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
       rom && sourceRow(rom, `${device.codename}/${rom.id}`),
+      rom && h('p', { className: 'inbox-actions' }, requestButton('update', 'Request ROM update', `${device.codename}/${rom.id}`), requestButton('mirror', 'Request ROM mirror', `${device.codename}/${rom.id}`)),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
@@ -1286,6 +1463,11 @@ function progressRail(sections) {
   paint(); soon();
   return rail;
 }
+for (const a of document.querySelectorAll('a[href="#submit-request"]')) a.addEventListener('click', () => {
+  const box = /** @type {HTMLDetailsElement|null} */ (document.getElementById('submit-request'));
+  if (box) box.open = true;
+  a.closest('details')?.removeAttribute('open');
+});
 start().then(() => {
   main.append(reportBox());
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).

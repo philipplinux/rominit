@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -10,6 +11,8 @@ assert(!errors.length, `Catalog problems:\n${errors.join('\n')}`);
 
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist/catalog', { recursive: true });
+// Ship only runtime source and metadata; credentials stay in the OS store.
+execFileSync('tar', ['-czf', 'dist/rominit-cli.tar.gz', '--transform=s,^,rominit-cli/,', 'bin', 'src', 'scripts', 'catalog', 'site/bench', 'package.json', 'package-lock.json', 'README.md', 'LICENSE']);
 // The page loads the small index first, then one file per picked device.
 const index = devices.map(({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl, roms }) => ({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl,
   roms: roms.filter(r => r.origin !== 'stock').map(({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external }) => ({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external: !!external })) }));
@@ -33,7 +36,7 @@ assert(html.includes('app.js?v=') && html.includes('style.css?v='), 'asset links
 await writeFile('dist/index.html', html);
 
 const notices = [];
-for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash-wasm/LICENSE', 'hash-wasm/src/sha256.c',
+for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash-wasm/LICENSE', 'hash-wasm/src/sha256.c', '@napi-rs/keyring/LICENSE',
   '@lineageos-infra/libmjolnir/LICENSE', '@yume-chan/adb/LICENSE', '@yume-chan/adb-daemon-webusb/LICENSE',
   '@yume-chan/adb-credential-web/LICENSE', '@yume-chan/stream-extra/LICENSE', '@yume-chan/struct/LICENSE',
   '@yume-chan/async/LICENSE', '@yume-chan/event/LICENSE', '@yume-chan/no-data-view/LICENSE']) {
