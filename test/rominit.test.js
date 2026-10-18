@@ -596,7 +596,7 @@ test('ROMvault lint: frontmatter, tags, links, index and the full net are clean'
 });
 
 test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their links, lint-clean', { skip: !existsSync(new URL('../romvault/AGENTS.md', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
-  const { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
+  const { cpSync, lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
   const { tmpdir } = await import('node:os');
   const { join } = await import('node:path');
   const { lint } = await import('../scripts/romvault-lint.mjs');
@@ -605,7 +605,8 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
   try {
     const root = new URL('..', import.meta.url).pathname; // pages link ../../catalog/ and ../../romsources/: mirror the repo around the copy
     for (const e of readdirSync(root)) if (e !== 'romvault') symlinkSync(join(root, e), join(dir, e));
-    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, filter: src => !src.includes('/.git') });
+    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, dereference: true, filter: src => !src.includes('/.git') });
+    assert.equal(lstatSync(vault).isSymbolicLink(), false, 'test fixture must never link to the real ROMvault');
     rmSync(join(vault, 'series/google-pixel-7.md'));
     rmSync(join(vault, 'socs/sdm670.md'));
     for (const f of ['README.md', 'lines/google-pixel.md', 'devices/google-sargo.md', 'devices/google-bonito.md']) {
