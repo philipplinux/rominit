@@ -600,6 +600,8 @@ function stageCard(device, stage, n, count, key) {
     if (st.usb && event.device === st.usb && !st.finished) {
       st.lost = true;
       dbg(`USB disconnect event (${event.device.productName ?? '?'} serial ${event.device.serialNumber ?? '?'})`);
+      // A reboot step is always last and drops USB by design; everything before it is written and verified.
+      if (/^(Requesting reboot|Rebooting)/.test(status.textContent ?? '')) { report('Phone is rebooting.', 1); return; }
       report(`USB disconnected. The flash may be incomplete: ${again}`);
       update();
     }
@@ -683,7 +685,7 @@ function stageCard(device, stage, n, count, key) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [device.modes[stage.mode], protocol !== 'adb' && protocol !== 'sideload' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', selfHosted ? 'Connect, tick the warning, type the confirm phrase, then press Run: ROMinit downloads the files in this tab, checks their SHA-256 and flashes in one go.' : 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
+  const guide = [protocol !== 'adb' && protocol !== 'sideload' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', device.modes[stage.mode], selfHosted ? 'Connect, tick the warning, type the confirm phrase, then press Run: ROMinit downloads the files in this tab, checks their SHA-256 and flashes in one go.' : 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },

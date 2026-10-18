@@ -1,0 +1,50 @@
+{
+  "codename": "jfltexx",
+  "vendor": "Samsung",
+  "name": "Galaxy S4",
+  "series": "Galaxy S",
+  "family": "Galaxy S4",
+  "variant": "S4 LTE · Snapdragon 600 (GT-I9505)",
+  "models": [
+    "GT-I9505"
+  ],
+  "notes": "GT-I9505 only. Other Galaxy S4 variants (GT-I9500 Exynos, SGH-I337, SGH-M919, SCH-I545) need their own files. No ROM catalogued yet; the TWRP tool stages work on their own.",
+  "detect": {
+    "adb": {
+      "device": "jfltexx"
+    }
+  },
+  "modes": {
+    "download": "Power off (pull the battery if it hangs). Hold Volume Down + Home + Power until the warning screen, then press Volume Up for Download Mode.",
+    "recovery": "Power off. Hold Volume Up + Home + Power; let go of Power when it vibrates, keep the other two held until TWRP appears."
+  },
+  "unlock": {
+    "text": "The GT-I9505 bootloader is not locked and has no OEM unlocking switch: Download Mode takes a custom recovery as it is.",
+    "steps": [
+      "Back up everything you want to keep.",
+      "Remove your Google account (Settings › Accounts) so the phone does not ask for it after a later wipe.",
+      "Charge to at least 50 % and use a data USB cable."
+    ],
+    "hints": [
+      "Do not follow newer Galaxy guides: there is no OEM unlocking toggle and no 7-day wait on this phone.",
+      "Flashing a custom recovery on a 4.3 or newer bootloader trips the KNOX warranty flag for good. The phone keeps working."
+    ]
+  },
+  "recovery": {
+    "text": "Download Mode still works after a bad flash. Stock firmware for your exact model and CSC is on SamFW.",
+    "url": "https://samfw.com/"
+  },
+  "hardware": {
+    "soc": "apq8064t",
+    "ram": "2 GB RAM",
+    "cpu": "Snapdragon 600, 4-core Krait 300 1.9 GHz",
+    "gpu": "Adreno 320",
+    "display": "5\" 1080×1920",
+    "tags": [
+      "2013",
+      "community Android 11",
+      "removable battery",
+      "microSD"
+    ]
+  }
+}
