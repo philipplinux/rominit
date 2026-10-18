@@ -295,3 +295,12 @@ test('selected Node USB descriptors are cached before ADB transfers can hold nat
     ['cached-serialNumber', 'cached-manufacturerName', 'cached-productName', 'cached-vendorId', 'cached-productId']);
   assert.equal(reads, 5);
 });
+
+test('expected ADB disconnect rejection is consumed without hiding active operation errors', async () => {
+  const { handleAdbDisconnect } = await import('../src/protocols/usb.js');
+  const disconnect = Promise.reject(new Error('transferIn error: Disconnected'));
+  const adb = handleAdbDisconnect({ disconnected: disconnect, run: async () => { throw Error('active shell failure'); } });
+
+  await assert.rejects(adb.run(), /active shell failure/);
+  await new Promise(resolve => setImmediate(resolve));
+});

@@ -11,9 +11,9 @@
       "vetting": "curated",
       "risk": {
         "level": "mid",
-        "why": "unofficial postmarketOS testing-port build; GT-I9505 v3 CLI acceptance pending"
+        "why": "unofficial postmarketOS testing-port build; CLI flash and USB SSH verified, many phone features unavailable"
       },
-      "notes": "Headless server image: SSH over USB (172.16.42.1), NetworkManager for Wi-Fi. Shared v3 build hosted on Hugging Face; use the exact pinned files. Booted on a GT-I9505: USB networking, Wi-Fi and Bluetooth work. Other Wi-Fi module revisions: nvram files in /usr/share/firmware-samsung-jflte/wifi/, copy yours to /usr/lib/firmware/brcm/brcmfmac4335-sdio.samsung,jflte.txt if Wi-Fi is weak.",
+      "notes": "Experimental headless server image, CLI-flashed and booted on GT-I9505 on 2026-10-18. USB SSH and expanded root storage verified. Shared v3 files are hosted on Hugging Face. The benchmark found Bluetooth and charging; Wi-Fi has wlan0 but saw no networks. Audio, camera and cellular are unavailable in this run. Wi-Fi module variants are in /usr/share/firmware-samsung-jflte/wifi/; the active file is /usr/lib/firmware/brcm/brcmfmac4335-sdio.samsung,jflte.txt. Login user / 147147: change the shared password.",
       "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/master/device/testing/device-samsung-jflte",
       "maintainer": {
         "name": "philipplinux",

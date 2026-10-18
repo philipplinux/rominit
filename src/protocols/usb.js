@@ -27,7 +27,15 @@ async function openAdb(device, credentialStore = new AdbWebCredentialStore('ROMi
   const connection = await device.connect();
   const transport = await AdbDaemonTransport.authenticate({
     serial: device.serial, connection, credentialStore });
-  return { adb: new Adb(transport), usb: device.raw };
+  const adb = handleAdbDisconnect(new Adb(transport));
+  return { adb, usb: device.raw };
+}
+
+/** Consume the transport monitor rejection so a normal reboot disconnect cannot crash Node after a successful command.
+ * Awaited shell and pipe operations still report their own transfer failures to the recipe. @param {Adb} adb */
+export function handleAdbDisconnect(adb) {
+  void adb.disconnected.catch(() => {});
+  return adb;
 }
 
 /**
