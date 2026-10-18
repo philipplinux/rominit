@@ -9,14 +9,13 @@
     "vetting": "curated",
     "requirements": [
       "Samsung GT-I9505 (jfltexx) only.",
-      "Step 1 writes TWRP 3.0.2 (2016, the last jfltexx build Odin takes as one image); step 2 replaces it from inside TWRP with the current 3.6.1 (unified jflte build).",
-      "Boot straight into TWRP after step 1: a normal boot can restore the stock recovery."
+      "Boot straight into TWRP after the flash: a normal boot can restore the stock recovery."
     ],
     "imported": "2026-10-17",
     "imported_from": "https://dl.twrp.me/jfltexx/ and https://dl.twrp.me/jflte/ (sha256 checked against TeamWin's .sha256 files)",
     "stages": [
       {
-        "title": "Install TWRP 3.0.2",
+        "title": "Install TWRP 3.6.1",
         "section": "tools",
         "optional": "Skip if TWRP is already installed.",
         "recipe": "odin",
@@ -29,32 +28,6 @@
         ],
         "files": [
           {
-            "name": "twrp-3.0.2-0-jfltexx.img",
-            "size": 10061824,
-            "sha256": "b372745e20a5d00ff04143f43f93ea2b933c874b2f1c142c1d1abc64f1ef35ef",
-            "source": "https://dl.twrp.me/jfltexx/twrp-3.0.2-0-jfltexx.img.html"
-          }
-        ],
-        "steps": [
-          [
-            "flash",
-            "RECOVERY",
-            "twrp-3.0.2-0-jfltexx.img"
-          ]
-        ],
-        "done": "TWRP written. Pull the battery, put it back, then hold Volume Up + Home + Power until TWRP appears."
-      },
-      {
-        "title": "Update TWRP to 3.6.1 from inside TWRP",
-        "section": "tools",
-        "optional": "Skip if TWRP 3.6 or newer is already installed.",
-        "recipe": "twrp-dd",
-        "mode": "recovery",
-        "confirm": "UPDATE TWRP",
-        "warning": "Overwrites the recovery partition while TWRP runs from memory. If the write fails, Download Mode still works: run step 1 again.",
-        "by_name": "/dev/block/platform/msm_sdcc.1/by-name",
-        "files": [
-          {
             "name": "twrp-3.6.1_9-0-jflte.img",
             "size": 10248208,
             "sha256": "bc0b4041cc77819397fef68ce911bcc4c12f94cffc50eadd7be1f76629c32bda",
@@ -63,12 +36,12 @@
         ],
         "steps": [
           [
-            "write",
-            "recovery",
+            "flash",
+            "RECOVERY",
             "twrp-3.6.1_9-0-jflte.img"
           ]
         ],
-        "done": "TWRP 3.6.1 written and verified on the phone. In TWRP: Reboot › Recovery to start it (a plain reboot starts Android)."
+        "done": "TWRP written. Do not boot Android: pull the battery, put it back, then hold Volume Up + Home + Power until TWRP appears."
       }
     ]
   }
