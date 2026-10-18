@@ -32,5 +32,5 @@ export async function run(odin, { device, stage, files, steps }, report, assertS
     report(`Writing ${name} → ${partition}`, 0);
     await odin.flashPartition(partition, byName[name].file);
   }
-  report('Written. Do not reboot normally; follow the next step.', 1);
+  report('Written. Do not boot Android yet; follow the steps below.', 1);
 }
