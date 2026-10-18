@@ -541,6 +541,26 @@ test('ADB phones are moved into the mode the recipe needs', async () => {
   assert.match(adbMove('bootloader', 'sideload').error, /Boot TWRP/);
 });
 
+test('old TWRP without shell v2: images go over sync in chunks, dd writes each at its offset', async () => {
+  const { adbShell } = await import('../src/protocols/usb.js');
+  const commands = [], pushed = [];
+  const adb = {
+    subprocess: { shellProtocol: undefined, noneProtocol: { spawnWaitText: async command => {
+      commands.push(command);
+      return command.startsWith('false') ? 'boom\r\nROMINIT_RC=1\r\n' : 'ok\r\nROMINIT_RC=0\r\n';
+    } } },
+    sync: async () => ({ write: async ({ file }) => pushed.push(await new Response(file).text()), dispose: async () => {} })
+  };
+  assert.deepEqual(await adbShell(/** @type {any} */ (adb)).run('getprop x'), { code: 0, out: 'ok\n' });
+  assert.equal((await adbShell(/** @type {any} */ (adb)).run('false')).code, 1);
+  commands.length = 0;
+  const { legacyShell } = await import('../src/protocols/usb.js');
+  const result = await legacyShell(/** @type {any} */ (adb), 1024 * 1024).pipe('dd of=/dev/block/X bs=1048576', new Blob(['a'.repeat(2.5 * 1024 * 1024)]), noop);
+  assert.equal(result.code, 0);
+  assert.deepEqual(pushed.map(p => p.length), [1048576, 1048576, 524288]);
+  assert.deepEqual(commands.map(c => c.match(/seek=(\d+)/)?.[1] ?? c.split(';')[0]), ['0', '1', '2', 'rm -f /tmp/rominit.chunk']);
+});
+
 test('host OS: detected from the browser, setup lines per protocol, errors mapped to the fix', async () => {
   const { detectHost, prereqsFor, fixFor, browserProblem } = await import('../src/hosts.js');
   assert.equal(detectHost({ userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/140' }), 'windows');

@@ -75,13 +75,44 @@ async function connectAdbIn(want, log) {
 }
 
 /**
- * Shell runner for the twrp-dd recipe. Needs the shell v2 protocol: the legacy shell may
- * mangle binary stdin, which would silently corrupt the written partition.
+ * Shell runner for old TWRP without shell protocol v2. The legacy shell may mangle binary stdin and has no exit
+ * code, so images go over sync (adb push) in chunks to /tmp (tmpfs, RAM-bound) and `dd` writes each at its offset;
+ * exit codes come from an echoed marker. `pipe` commands must be a `dd of=… bs=1MiB` that reads stdin.
+ * @param {Adb} adb @param {number} [chunk] @returns {import('../recipes/twrp-dd.js').Shell}
+ */
+export function legacyShell(adb, chunk = 64 * 1024 * 1024) {
+  const tmp = '/tmp/rominit.chunk';
+  const run = async (/** @type {string} */ command) => {
+    const out = (await adb.subprocess.noneProtocol.spawnWaitText(`${command}; echo ROMINIT_RC=$?`)).replace(/\r/g, '');
+    const rc = out.match(/ROMINIT_RC=(\d+)\s*$/);
+    return { code: rc ? Number(rc[1]) : -1, out: out.replace(/ROMINIT_RC=\d+\s*$/, '') };
+  };
+  return {
+    run,
+    async pipe(command, file, progress) {
+      for (let offset = 0; offset < file.size; offset += chunk) {
+        const sync = await adb.sync();
+        try {
+          await sync.write({ filename: tmp, file: /** @type {any} */ (file.slice(offset, offset + chunk).stream()) });
+        } finally { await sync.dispose(); }
+        const result = await run(`${command} if=${tmp} seek=${offset / (1024 * 1024)} conv=notrunc`);
+        if (result.code !== 0) { await run(`rm -f ${tmp}`); return result; }
+        progress(Math.min(1, (offset + chunk) / file.size));
+      }
+      await run(`rm -f ${tmp}`);
+      return { code: 0, out: '' };
+    }
+  };
+}
+
+/**
+ * Shell runner for the twrp-dd recipe. Prefers shell protocol v2 (binary-safe stdin, real exit codes);
+ * falls back to legacyShell on old TWRP.
  * @param {Adb} adb @returns {import('../recipes/twrp-dd.js').Shell}
  */
 export function adbShell(adb) {
   const shell = adb.subprocess.shellProtocol;
-  if (!shell) throw Error('Phone ADB lacks shell protocol v2; refusing binary writes.');
+  if (!shell) return legacyShell(adb);
   /** @param {{getReader():{read():Promise<{done:boolean,value?:Uint8Array}>}}} stream */
   async function text(stream) {
     const chunks = [];
