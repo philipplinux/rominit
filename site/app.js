@@ -184,8 +184,10 @@ const PROVIDER_LOGOS = /** @type {Record<string, string>} */ ({
 });
 /** Header, under BUY ME A COFFEE: a SIGN IN button that opens the provider badges, or the account menu. */
 me.then(info => {
-  if (!info?.providers.length && !info?.user) return;
-  const slot = h('span', { className: 'account' });
+  const slot = /** @type {HTMLElement} */ (document.querySelector('.topbar-side .account'));
+  slot.replaceChildren();
+  const unavailable = info ? 'Sign-in is not configured here yet.' : 'Could not load sign-in options. Reload the page to try again.';
+  info ??= { user: null, providers: [] };
   if (info.user) {
     const input = h('input', { value: info.user.name, maxLength: 30, required: true }), status = h('small', { textContent: 'Shown on your comments. Your email is never shown.' });
     const pop = h('form', { id: 'username', popover: 'auto', className: 'signin-pop', async onsubmit(/** @type {Event} */ e) {
@@ -209,12 +211,11 @@ me.then(info => {
     const back = encodeURIComponent(location.pathname + location.search);
     const pop = h('div', { id: 'signin', popover: 'auto', className: 'signin-pop' }, h('strong', { textContent: 'Sign in to ROMinit' }),
       ...info.providers.map(p => { const a = h('a', { className: `signin-badge ${p}`, href: `./auth/${p}/login?return=${back}` }); a.innerHTML = `${PROVIDER_LOGOS[p] ?? ''}<span>Continue with ${PROVIDER_NAMES[p] ?? p}</span>`; return a; }),
-      h('small', { textContent: 'Only your name and email are used: for comments and ratings. No tracking.' }));
-    const open = h('button', { type: 'button', className: 'link-button', textContent: 'SIGN IN' });
+      h('small', { textContent: info.providers.length ? 'Only your name and email are used: for comments and ratings. No tracking.' : unavailable }));
+    const open = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Sign in' });
     open.popoverTargetElement = pop;
     slot.append(open, pop);
   }
-  document.querySelector('.topbar-side')?.append(slot);
 });
 /** Arrow looping back counter-clockwise into a circle (start over). */
 const REWIND_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.64-6.36L3 8.25"/><path d="M3 3v5.25h5.25"/></svg>';
@@ -712,13 +713,13 @@ function stageCard(device, stage, n, count, key) {
 /** @param {any[]} index */
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
-  // Five levels, best first; the pick shows that level and every better one. Default hides support-only and placeholder phones.
+  // Five levels, best first; the pick shows that level and every better one. Default includes every level for now.
   const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
-    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'untested', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
-  // One box per branch of the tree above the search; click toggles it on/off, all on by default.
-  const branches = h('div', { className: 'branch-boxes', role: 'group', ariaLabel: 'Device types' }, ...Object.entries(CATEGORIES).map(([c, label]) => {
-    const n = index.filter(d => d.category === c).length;
-    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'checkbox', value: c, checked: true, onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
+    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'placeholder', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
+  // Pick one device category or all categories.
+  const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
+    const n = c === 'all' ? index.length : index.filter(d => d.category === c).length;
+    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === 'all', onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
@@ -733,8 +734,9 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const text = (/** @type {any} */ d) => [CATEGORIES[d.category], d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
     const matches = index.filter(d => words.every(w => text(d).includes(w)));
-    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'untested');
-    const on = new Set([...branches.querySelectorAll('input:checked')].map(i => /** @type {HTMLInputElement} */ (i).value));
+    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'placeholder');
+    const category = /** @type {HTMLInputElement} */ (branches.querySelector('input:checked'))?.value ?? 'all';
+    const on = new Set(category === 'all' ? Object.keys(CATEGORIES) : [category]);
     const hits = matches.filter(d => on.has(d.category) && levels.indexOf(deviceLevel(d, tested)) <= upTo);
     // All › category › vendor › series › family › variant; every category shows, empty ones say so (only while not searching).
     /** @type {Record<string, Record<string, Record<string, Record<string, any[]>>>>} */ const tree = {};
@@ -793,7 +795,7 @@ async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -868,6 +870,14 @@ async function inboxView(index) {
         }))))),
     folder('05 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
+  card.append(folder('06 Requests', 'new ROMs / devices, updates and mirrors', Object.values(requests).flat().length,
+    [['new', 'New ROM / device'], ['update', 'ROM updates'], ['mirror', 'ROM mirrors']].map(([kind, title]) => h('details', { className: 'inbox-sub', open: requests[kind].length > 0 },
+      h('summary', { className: 'field-label', textContent: `${title} · ${requests[kind].length}` }),
+      h('ol', { className: 'comments' }, ...requests[kind].map((/** @type {any} */ x) => {
+        const li = h('li', {}, h('small', { textContent: `${x.at} UTC${x.rom ? ` · ${x.rom}` : ''}` }),
+          h('p', { textContent: x.text }), x.url && /^https?:\/\//i.test(x.url) && link(x.url, 'Source'));
+        return li.append(fileAs(`requests-${kind}`, String(x.id), li)), li;
+      }))))));
   return card;
 }
 
@@ -884,6 +894,30 @@ async function popularView(index) {
   return card;
 }
 
+/** @param {string} kind @param {string} title @param {string} rom */
+function requestButton(kind, title, rom = '') {
+  const button = h('button', { type: 'button', className: 'button button-secondary', textContent: title, onclick() {
+    const text = h('textarea', { className: 'confirmation-input', required: true, maxLength: 2000, rows: 4,
+      placeholder: kind === 'update' ? 'New version and current version (for example: 2.5 replaces 2.3).' : kind === 'mirror' ? 'Which files should we mirror, and why?' : 'ROM name and/or device model, and what you would like added.' });
+    const url = h('input', { className: 'confirmation-input', type: 'url', required: kind !== 'mirror', maxLength: 2000, placeholder: 'https://…' });
+    const status = h('p', { role: 'status', className: 'field-help' });
+    const send = h('button', { type: 'submit', className: 'button button-primary', textContent: 'Send request' });
+    const dialog = h('dialog', { className: 'host-confirm', ariaLabel: title }, h('form', { async onsubmit(event) {
+      event.preventDefault(); send.disabled = true; status.textContent = 'Sending…';
+      const response = await fetch('./api/requests', { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ kind, rom: rom || null, page: location.pathname + location.search, text: text.value, url: url.value || null }) }).catch(() => null);
+      const reply = await response?.json().catch(() => ({}));
+      status.textContent = response?.ok ? 'Thanks, request sent for review.' : `Could not send: ${reply?.error ?? 'network error'}.`;
+      send.disabled = !!response?.ok;
+    } }, h('h2', { textContent: title }), rom && h('p', { textContent: rom }),
+      h('label', { className: 'field-help' }, 'Details', text), h('label', { className: 'field-help' }, kind === 'mirror' ? 'Source URL (optional)' : 'ROM or device source URL', url),
+      send, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Close', onclick: () => dialog.close() }), status));
+    dialog.addEventListener('close', () => { dialog.remove(); button.focus(); });
+    document.body.append(dialog); dialog.showModal();
+  } });
+  return button;
+}
+
 /** "Something wrong on this page?" form; falls back to a GitHub issue link. */
 function reportBox() {
   const page = location.pathname + location.search;
@@ -898,11 +932,12 @@ function reportBox() {
     status.textContent = response?.ok ? 'Thanks, ticket sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
-  const box = h('details', { className: 'page-section report', ontoggle() {
+  const box = h('details', { id: 'submit-request', className: 'page-section report', ontoggle() {
     if (where.isConnected) return; // built on first open, from this page's own sections
     for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
     text.before(h('label', { className: 'field-help' }, 'About: ', where));
-  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket' }), h('small', { textContent: 'something wrong on this page?' })),
+  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket / Request' }), h('small', { textContent: 'report a problem or request a new ROM / device' })),
+    h('p', {}, requestButton('new', 'Request new ROM / device')),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
   return box;
 }
@@ -1020,6 +1055,27 @@ async function agentsView() {
     h('p', { className: 'field-help', textContent: 'Claude Code:' }), copyable(cli),
     h('p', { className: 'field-help', textContent: 'Other MCP clients (JSON config):' }), copyable(config));
 }
+const badge = (/** @type {string} */ logo, /** @type {string} */ label, /** @type {string} */ value, /** @type {Record<string, any>} */ attrs) => h('a', { className: 'badge-pill', ...attrs },
+  h('span', { className: 'badge-label' }, h('img', { src: `./logos/${logo}.svg`, alt: '', onerror() { this.remove(); } }), label), h('span', { className: 'badge-value', textContent: value }));
+/**
+ * Badges above section 0: one per ROM project, the newest stock Android, and the recovery project. A project with several builds says
+ * "multiple available" and jumps to section 0. Drawn in CSS around small local logos, so there are no badge images to fetch or cache.
+ * @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {HTMLDetailsElement} infoSection
+ */
+function badgeRow(device, roms, stock, infoSection) {
+  // postmarketOS releases are rolling, so its number is the Linux kernel; others show the release number, or the Android base when the version is only a date/build.
+  const shown = (/** @type {any} */ r) => r.os === 'postmarketOS' ? `Linux ${r.rating.kernel.version}`
+    : r.version.match(/^v?\d{1,3}\.\d+(?: A\d+)?/)?.[0] ?? r.rating.base.replace(`${r.os} `, '');
+  const byOs = new Map();
+  for (const r of roms) if (r.status !== 'broken') byOs.set(r.os, [...(byOs.get(r.os) ?? []), r]);
+  const romBadges = [...byOs].map(([os, list]) => list.length === 1
+    ? badge(os.toLowerCase(), os, shown(list[0]), { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
+    : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick(/** @type {Event} */ e) { e.preventDefault(); infoSection.open = true; infoSection.scrollIntoView({ behavior: 'smooth' }); } }));
+  const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
+  const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: latest.homepage, target: '_blank', rel: 'noopener noreferrer', title: `${latest.name} ${latest.version}: stock firmware, also in section R` });
+  const recoveryBadges = (device.recoveries ?? []).map((/** @type {any} */ r) => badge(r.id, r.name, r.version, { href: r.project, target: '_blank', rel: 'noopener noreferrer', title: `${r.name} recovery project` }));
+  return h('p', { className: 'badge-row' }, ...romBadges, stockBadge, ...recoveryBadges);
+}
 async function start() {
   const codename = params.get('device'), view = params.get('view');
   // Disclaimer × hides it; remembered per browser.
@@ -1055,27 +1111,6 @@ async function start() {
       h('p', { className: 'field-help', textContent: 'Useful next details to gather: exact model number, device-specific install steps, and a safe recovery or stock restore path.' })));
     return;
   }
-const badge = (/** @type {string} */ logo, /** @type {string} */ label, /** @type {string} */ value, /** @type {Record<string, any>} */ attrs) => h('a', { className: 'badge-pill', ...attrs },
-  h('span', { className: 'badge-label' }, h('img', { src: `./logos/${logo}.svg`, alt: '', onerror() { this.remove(); } }), label), h('span', { className: 'badge-value', textContent: value }));
-/**
- * Badges above section 0: one per ROM project, the newest stock Android, and the recovery project. A project with several builds says
- * "multiple available" and jumps to section 0. Drawn in CSS around small local logos, so there are no badge images to fetch or cache.
- * @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {HTMLDetailsElement} infoSection
- */
-function badgeRow(device, roms, stock, infoSection) {
-  // postmarketOS releases are rolling, so its number is the Linux kernel; others show the release number, or the Android base when the version is only a date/build.
-  const shown = (/** @type {any} */ r) => r.os === 'postmarketOS' ? `Linux ${r.rating.kernel.version}`
-    : r.version.match(/^v?\d{1,3}\.\d+(?: A\d+)?/)?.[0] ?? r.rating.base.replace(`${r.os} `, '');
-  const byOs = new Map();
-  for (const r of roms) if (r.status !== 'broken') byOs.set(r.os, [...(byOs.get(r.os) ?? []), r]);
-  const romBadges = [...byOs].map(([os, list]) => list.length === 1
-    ? badge(os.toLowerCase(), os, shown(list[0]), { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
-    : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick(/** @type {Event} */ e) { e.preventDefault(); infoSection.open = true; infoSection.scrollIntoView({ behavior: 'smooth' }); } }));
-  const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
-  const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: latest.homepage, target: '_blank', rel: 'noopener noreferrer', title: `${latest.name} ${latest.version}: stock firmware, also in section R` });
-  const recoveryBadges = (device.recoveries ?? []).map((/** @type {any} */ r) => badge(r.id, r.name, r.version, { href: r.project, target: '_blank', rel: 'noopener noreferrer', title: `${r.name} recovery project` }));
-  return h('p', { className: 'badge-row' }, ...romBadges, stockBadge, ...recoveryBadges);
-}
   // Accepted phone tests override the catalog's feature states; blocked / untested / inconclusive keep the catalog value.
   const tested = await fetch(`./api/bench?device=${encodeURIComponent(codename)}`).then(r => r.ok ? r.json() : {}).catch(() => ({}));
   for (const r of device.roms) {
@@ -1299,6 +1334,11 @@ function progressRail(sections) {
   paint(); soon();
   return rail;
 }
+for (const a of document.querySelectorAll('a[href="#submit-request"]')) a.addEventListener('click', () => {
+  const box = /** @type {HTMLDetailsElement|null} */ (document.getElementById('submit-request'));
+  if (box) box.open = true;
+  a.closest('details')?.removeAttribute('open');
+});
 start().then(() => {
   main.append(reportBox());
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).

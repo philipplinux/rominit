@@ -31,6 +31,16 @@ CREATE TABLE IF NOT EXISTS reports (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   section TEXT -- which page section it is about ("2 · Custom recovery"), or NULL for the whole page
 );
+CREATE TABLE IF NOT EXISTS requests (
+  id INTEGER PRIMARY KEY,
+  kind TEXT NOT NULL CHECK (kind IN ('new', 'update', 'mirror')),
+  page TEXT NOT NULL,
+  rom TEXT,
+  url TEXT,
+  voter TEXT NOT NULL,
+  text TEXT NOT NULL,
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS counts (
   rom TEXT NOT NULL,   -- <codename>/<rom id>
@@ -83,11 +93,11 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   via TEXT                -- 'cli': sent by the rominit CLI (inbox 03b / 03c); NULL: the site
 );
 
--- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports), `failures` (stopped flash stages), `agents` (runs reported through the MCP). Add one by adding a UNION arm.
+-- Inboxes, one per kind of incoming item. Add one by adding a UNION arm.
 -- An LLM (or a person) sorts each item with scripts/inbox.mjs; sorted items leave the inbox.
 CREATE TABLE IF NOT EXISTS triage (
   inbox TEXT NOT NULL,
-  ref TEXT NOT NULL,       -- bench_runs.code, reports.id, flash_failures.id or agent_runs.id
+  ref TEXT NOT NULL,       -- source row key
   label TEXT NOT NULL CHECK (label IN ('script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other')),
   summary TEXT NOT NULL,
   at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -148,6 +158,8 @@ CREATE VIEW IF NOT EXISTS inbox AS
   SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'flash', flash, 'via', via, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
   UNION ALL
   SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports
+  UNION ALL
+  SELECT 'requests-' || kind, CAST(id AS TEXT), at, page, json_object('kind', kind, 'rom', rom, 'url', url, 'text', text) FROM requests
   UNION ALL
   SELECT 'failures', CAST(id AS TEXT), at, rom, json_object('stage', stage, 'error', error, 'log', log) FROM flash_failures
   UNION ALL
