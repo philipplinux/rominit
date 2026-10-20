@@ -187,7 +187,7 @@ export const ALPINE = {
       "id": "rpi",
       "name": "Raspberry Pi",
       "description": "Board-specific media for Raspberry Pi computers.",
-      "usbNote": "Use the Pi installation guide. These archives and compressed disk images need a board-specific media workflow.",
+      "usbNote": "Pi images (.img.gz) write straight to an SD card in a USB card reader; the whole card is erased. The tar.gz archives are for manual setup.",
       "images": [
         {
           "id": "alpine-rpi-aarch64-img",

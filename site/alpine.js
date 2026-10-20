@@ -39,7 +39,7 @@ function updateUrl(imageId = '') {
 async function chooseImage(imageId) {
   if (busy()) { status.textContent = 'Wait for the current USB operation to finish before changing the image.'; return; }
   const image = alpineImage(imageId);
-  if (image?.format !== 'iso') return;
+  if (!['iso', 'img.gz'].includes(image?.format)) return;
   updateUrl(imageId);
   connecting = true;
   showDrivePrompt('Connect the CLI to list USB drives', image);
@@ -75,7 +75,7 @@ function render() {
   document.getElementById('alpine-edition-note').textContent = selectedEdition.usbNote;
   images.replaceChildren(...selectedEdition.images.map(image => h('article', { className: 'alpine-image', id: image.id },
     h('div', { className: 'alpine-image-title' }, h('strong', { textContent: image.arch }), h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), ...(image.usb === true ? [h('span', { className: 'architecture-tag ventoy-supported', textContent: 'Ventoy supported' })] : []), h('span', { className: 'field-help', textContent: `${image.format} · ${sizes(image.size)}` })),
-    h('div', { className: 'alpine-image-actions' }, image.format === 'iso'
+    h('div', { className: 'alpine-image-actions' }, ['iso', 'img.gz'].includes(image.format)
       ? h('button', { type: 'button', className: 'button button-primary', textContent: 'Prepare USB', ariaLabel: `Prepare ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
       : h('span', { className: 'field-help', textContent: 'Download · platform-specific setup' }),
       h('a', { href: image.url, textContent: 'Download' }),
@@ -90,4 +90,4 @@ editionSelect.addEventListener('change', () => {
 
 render();
 const initialImage = alpineImage(params.get('image') ?? '');
-if (initialImage?.format === 'iso' && selectedEdition.images.includes(initialImage)) void chooseImage(initialImage.id);
+if (['iso', 'img.gz'].includes(initialImage?.format) && selectedEdition.images.includes(initialImage)) void chooseImage(initialImage.id);

@@ -22,7 +22,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const catalogImage = imageId ? alpineImage(imageId) : null;
   const catalogEdition = catalogImage && ALPINE.editions.find(edition => edition.images.some(image => image.id === catalogImage.id));
   let panelCapabilities = Array.isArray(capabilities) ? capabilities : null;
-  const directEligible = !catalogImage || catalogImage.format === 'iso';
+  const directEligible = !catalogImage || ['iso', 'img.gz'].includes(catalogImage.format);
   let directAvailable = directEligible && !!panelCapabilities?.includes('usb-direct');
   const driveSelect = /** @type {HTMLSelectElement} */ (h('select', { id: 'usb-media-drive', disabled: true }));
   const directOption = directEligible ? h('option', { value: 'direct', disabled: !directAvailable, textContent: directAvailable ? 'Direct image (erases USB)' : 'Direct image (update CLI required)' }) : null;

@@ -18,7 +18,7 @@ const VENTOY_OVERHEAD = 64 * 1024 * 1024;
 const LSBLK_TIMEOUT = 10_000;
 const COMMAND_TIMEOUT = 30_000;
 const INSTALL_TIMEOUT = 15 * 60_000;
-const DIRECT_MIN_TIMEOUT = 5 * 60_000;
+const DIRECT_MIN_TIMEOUT = 15 * 60_000; // room for the writer's stepped-up retries
 const DIRECT_MAX_TIMEOUT = 2.5 * 60 * 60_000;
 const DIRECT_BYTES_PER_MS = 1024;
 const LOG_LINES = 100;
@@ -31,9 +31,10 @@ const IMAGE_CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), '.cac
 const BIN = { lsblk: '/usr/bin/lsblk', sudo: '/usr/bin/sudo', sh: '/usr/bin/sh', python: '/usr/bin/python3', udisksctl: '/usr/bin/udisksctl' };
 const LSBLK_FIELDS = 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,FSTYPE,LABEL,MOUNTPOINTS,PKNAME';
 const DIRECT_WRITER = String.raw`
-import fcntl, hashlib, json, os, stat, struct, sys, time
+import fcntl, hashlib, json, os, stat, struct, sys, time, zlib
 
-source_path, device_id, expected_size, expected_sha, expected_major, expected_minor, expected_capacity = sys.argv[1:]
+source_path, device_id, expected_size, expected_sha, expected_major, expected_minor, expected_capacity, gz_flag = sys.argv[1:]
+gz = gz_flag == '1'
 expected_size, expected_major, expected_minor, expected_capacity = map(int, (expected_size, expected_major, expected_minor, expected_capacity))
 source_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW
 device_flags = os.O_RDWR | os.O_EXCL | os.O_CLOEXEC
@@ -43,10 +44,11 @@ def fail(message):
     sys.exit(1)
 
 progress_state = {'bytes': 0, 'time': time.monotonic()}
-def report_progress(phase, completed_bytes, force=False):
+def report_progress(phase, completed_bytes, force=False, total=None):
+    total = expected_size if total is None else total
     now = time.monotonic()
-    if force or completed_bytes == expected_size or completed_bytes - progress_state['bytes'] >= 8 * 1024 * 1024 or now - progress_state['time'] >= 1:
-        value = {'phase': phase, 'completedBytes': completed_bytes, 'totalBytes': expected_size}
+    if force or completed_bytes == total or completed_bytes - progress_state['bytes'] >= 8 * 1024 * 1024 or now - progress_state['time'] >= 1:
+        value = {'phase': phase, 'completedBytes': completed_bytes, 'totalBytes': total}
         print('ROMINIT_USB_PROGRESS ' + json.dumps(value, separators=(',', ':')), flush=True)
         progress_state['bytes'] = completed_bytes
         progress_state['time'] = now
@@ -77,42 +79,102 @@ try:
     if capacity != expected_capacity or expected_size > capacity:
         fail('The selected USB disk capacity changed or is too small; no write was started.')
 
-    written_hash = hashlib.sha256()
-    written = 0
-    while written < expected_size:
-        chunk = os.read(source_fd, min(4 * 1024 * 1024, expected_size - written))
-        if not chunk:
-            fail('The ISO ended early during writing; the USB may be incomplete.')
-        written_hash.update(chunk)
-        offset = 0
-        while offset < len(chunk):
-            count = os.write(device_fd, chunk[offset:])
-            if count <= 0:
-                fail('The USB write stopped early; the USB may be incomplete.')
-            offset += count
-        written += len(chunk)
-        report_progress('writing', written)
-    if written_hash.hexdigest() != expected_sha:
-        fail('The ISO changed during writing; the USB may be incomplete.')
+    # Slow cards behind USB readers stall past the SCSI timeout and reset the reader. After an I/O error the whole write restarts
+    # with a longer timeout and smaller transfers: (SCSI timeout s, max_sectors_kb). Needs root, which the writer has.
+    PROFILES = [(None, None), (120, 64), (300, 32)]
+    def tune(timeout, sectors):
+        for name, value in (('device/timeout', timeout), ('queue/max_sectors_kb', sectors)):
+            if value is None:
+                continue
+            try:
+                with open('/sys/dev/block/%d:%d/%s' % (expected_major, expected_minor, name), 'w') as knob:
+                    knob.write(str(value))
+            except OSError:
+                pass
+    def reopen():
+        for _ in range(30):
+            time.sleep(2)
+            try:
+                fd = os.open(device_id, device_flags)
+                info = os.fstat(fd)
+                if stat.S_ISBLK(info.st_mode) and os.major(info.st_rdev) == expected_major and os.minor(info.st_rdev) == expected_minor and \
+                        struct.unpack('Q', fcntl.ioctl(fd, 0x80081272, struct.pack('Q', 0)))[0] == expected_capacity:
+                    return fd
+                os.close(fd)
+            except OSError:
+                pass
+        fail('The USB disk did not come back after an I/O error; the USB may be incomplete.')
+    def attempt():
+        os.lseek(source_fd, 0, os.SEEK_SET)
+        progress_state['bytes'] = 0
+        # A .gz source is inflated while writing; its pinned hash covers the file, the readback covers the inflated bytes.
+        inflater = zlib.decompressobj(31) if gz else None
+        source_hash = hashlib.sha256()
+        out_hash = hashlib.sha256()
+        out_size = 0
+        consumed = 0
+        def emit(data):
+            nonlocal out_size
+            if out_size + len(data) > capacity:
+                fail('The decompressed image is larger than the USB disk; the USB may be incomplete.')
+            out_hash.update(data)
+            offset = 0
+            while offset < len(data):
+                count = os.write(device_fd, data[offset:])
+                if count <= 0:
+                    fail('The USB write stopped early; the USB may be incomplete.')
+                offset += count
+            out_size += len(data)
+        while consumed < expected_size:
+            chunk = os.read(source_fd, min(4 * 1024 * 1024, expected_size - consumed))
+            if not chunk:
+                fail('The image ended early during writing; the USB may be incomplete.')
+            source_hash.update(chunk)
+            consumed += len(chunk)
+            try:
+                emit(inflater.decompress(chunk) if gz else chunk)
+            except zlib.error:
+                fail('The compressed image is corrupt; the USB may be incomplete.')
+            report_progress('writing', consumed)
+        if gz:
+            try:
+                emit(inflater.flush())
+            except zlib.error:
+                fail('The compressed image is corrupt; the USB may be incomplete.')
+            if not inflater.eof:
+                fail('The compressed image ended early; the USB may be incomplete.')
+        if source_hash.hexdigest() != expected_sha:
+            fail('The image changed during writing; the USB may be incomplete.')
 
-    print('ROMINIT_USB_PHASE syncing', flush=True)
-    os.fsync(device_fd)
-    fcntl.ioctl(device_fd, 0x1261)
-    print('ROMINIT_USB_PHASE verifying', flush=True)
-    progress_state['bytes'] = 0
-    progress_state['time'] = time.monotonic()
-    report_progress('verifying', 0, True)
-    os.lseek(device_fd, 0, os.SEEK_SET)
-    read_hash = hashlib.sha256()
-    read_size = 0
-    while read_size < expected_size:
-        chunk = os.read(device_fd, min(4 * 1024 * 1024, expected_size - read_size))
-        if not chunk:
-            fail('The USB readback ended early.')
-        read_size += len(chunk)
-        read_hash.update(chunk)
-        report_progress('verifying', read_size)
-    result = {'size': read_size, 'sha256': read_hash.hexdigest(), 'matched': read_size == expected_size and read_hash.hexdigest() == expected_sha}
+        print('ROMINIT_USB_PHASE syncing', flush=True)
+        os.fsync(device_fd)
+        fcntl.ioctl(device_fd, 0x1261)
+        print('ROMINIT_USB_PHASE verifying', flush=True)
+        progress_state['bytes'] = 0
+        progress_state['time'] = time.monotonic()
+        report_progress('verifying', 0, True, out_size)
+        os.lseek(device_fd, 0, os.SEEK_SET)
+        read_hash = hashlib.sha256()
+        read_size = 0
+        while read_size < out_size:
+            chunk = os.read(device_fd, min(4 * 1024 * 1024, out_size - read_size))
+            if not chunk:
+                fail('The USB readback ended early.')
+            read_size += len(chunk)
+            read_hash.update(chunk)
+            report_progress('verifying', read_size, False, out_size)
+        return {'size': read_size, 'sha256': read_hash.hexdigest(), 'matched': read_size == out_size and read_hash.hexdigest() == out_hash.hexdigest()}
+    for number in range(len(PROFILES)):
+        tune(*PROFILES[number])
+        try:
+            result = attempt()
+            break
+        except OSError:
+            if number == len(PROFILES) - 1:
+                fail('The USB reported I/O errors even with slower settings; the USB may be incomplete.')
+            print('ROMINIT_USB_RETRY %d' % (number + 2), flush=True)
+            os.close(device_fd)
+            device_fd = reopen()
     print('ROMINIT_USB_RESULT ' + json.dumps(result, separators=(',', ':')), flush=True)
 except SystemExit:
     raise
@@ -401,15 +463,15 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
 
   function alpinePin(id, method) {
     const image = typeof id === 'string' && getAlpineImage(id);
-    if (!image || image.id !== id || method === 'ventoy' && image.usb !== true || typeof image.format !== 'string' || image.format.toLowerCase() !== 'iso' ||
+    if (!image || image.id !== id || method === 'ventoy' && image.usb !== true || !['iso', 'img.gz'].includes(String(image.format).toLowerCase()) || method === 'ventoy' && image.format !== 'iso' ||
         typeof image.arch !== 'string' || !image.arch || !Number.isSafeInteger(image.size) || image.size <= 0 || image.size > MAX_IMAGE_BYTES ||
         typeof image.sha256 !== 'string' || !/^[\da-f]{64}$/i.test(image.sha256))
-      throw fail(400, method === 'direct' ? 'Choose a bundled Alpine image in ISO format for direct USB writing.' : 'Choose a bundled Alpine ISO that supports Ventoy USB booting.');
+      throw fail(400, method === 'direct' ? 'Choose a bundled Alpine image in ISO or img.gz format for direct USB writing.' : 'Choose a bundled Alpine ISO that supports Ventoy USB booting.');
     let url;
     try { url = new URL(image.url); } catch { throw fail(503, 'The bundled Alpine image URL is invalid.'); }
     const name = basename(url.pathname);
-    if (url.protocol !== 'https:' || url.username || url.password || !/^[\w.+-]+\.iso$/i.test(name))
-      throw fail(503, 'The bundled Alpine image is not a downloadable ISO.');
+    if (url.protocol !== 'https:' || url.username || url.password || !/^[\w.+-]+\.(iso|img\.gz)$/i.test(name))
+      throw fail(503, 'The bundled Alpine image is not a downloadable ISO or img.gz.');
     return { id: image.id, arch: image.arch, format: image.format, name, url: url.href,
       sha256: image.sha256.toLowerCase(), size: image.size };
   }
@@ -648,7 +710,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
     if (!plan.drive.id.startsWith(`${byIdDir.replace(/\/$/, '')}/usb-`))
       throw fail(409, 'The selected USB disk has no trusted stable ID. Create a new plan.');
     const args = ['-n', BIN.python, '-c', DIRECT_WRITER, image.sourcePath, plan.drive.id,
-      String(image.size), image.sha256, match[1], match[2], String(plan.identity.size)];
+      String(image.size), image.sha256, match[1], match[2], String(plan.identity.size), /\.gz$/i.test(image.name) ? '1' : '0'];
     jobState.phase = 'writing';
     delete jobState.progress;
     jobState.deadlineAt = new Date(now() + timeoutMs).toISOString();
@@ -699,10 +761,11 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
         catch { return; }
         if (!progress || !['writing', 'verifying'].includes(progress.phase) || progress.phase !== protocolPhase ||
           !Number.isSafeInteger(progress.completedBytes) || !Number.isSafeInteger(progress.totalBytes) ||
-          progress.totalBytes !== image.size || progress.completedBytes < 0 || progress.completedBytes > image.size) return;
+          progress.completedBytes < 0 || progress.completedBytes > progress.totalBytes ||
+          (progress.phase === 'writing' || !/\.gz$/i.test(image.name)) && progress.totalBytes !== image.size) return;
         const previous = jobState.progress?.phase === progress.phase ? jobState.progress.completedBytes : -1;
         if (progress.completedBytes < previous) return;
-        jobState.progress = { phase: progress.phase, completedBytes: progress.completedBytes, totalBytes: image.size };
+        jobState.progress = { phase: progress.phase, completedBytes: progress.completedBytes, totalBytes: progress.totalBytes };
       };
       lines(child.stdout, line => {
         const value = safeText(line, 2048);
@@ -716,6 +779,11 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
           jobState.phase = 'verifying';
           jobState.progress = { phase: 'verifying', completedBytes: 0, totalBytes: image.size };
           append(jobState, 'Write finished and synced. Checking the USB readback SHA-256.');
+        } else if (value.startsWith('ROMINIT_USB_RETRY ')) {
+          protocolPhase = 'writing';
+          jobState.phase = 'writing';
+          delete jobState.progress;
+          append(jobState, 'The USB reader reported errors. Restarting the write with a longer timeout and smaller transfers (a slow card is likely).');
         } else if (value.startsWith('ROMINIT_USB_PROGRESS ')) {
           acceptProgress(value);
         } else if (value.startsWith('ROMINIT_USB_RESULT ')) {
@@ -775,7 +843,9 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
       },
       verify: async () => {
         const actual = plan.imageActual;
-        if (!job.readback?.matched || job.readback.size !== actual.size || job.readback.sha256 !== actual.sha256)
+        // A .gz image is inflated by the writer; its readback hash is of the inflated bytes, checked there against what was written.
+        const inflated = /\.gz$/i.test(plan.image.name);
+        if (!job.readback?.matched || !inflated && (job.readback.size !== actual.size || job.readback.sha256 !== actual.sha256))
           throw fail(500, 'The USB readback size or SHA-256 does not match the reviewed download.');
         const afterWrite = (await inventory()).find(value => value.public.id === plan.drive.id);
         if (!afterWrite || !sameIdentity(afterWrite.internal, plan.identity))
