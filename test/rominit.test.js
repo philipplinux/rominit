@@ -265,6 +265,19 @@ test('S9 ROM stage writes, verifies, formats after unmounting, reboots', async (
     `dd of=${stage.by_name}/SYSTEM`, `dd of=${stage.by_name}/VENDOR`, `dd of=${stage.by_name}/BOOT`, 'umount /sdcard', 'umount /data', 'mke2fs -F', 'reboot']);
 });
 
+test('S4 ROM stage unmounts USERDATA before writing it; without the unmount step it fails closed', async () => {
+  const dev = device('jfltexx'), stage = dev.roms.find(r => r.id === 'philipplinux-pmos-server').stages[1];
+  const mounted = ['/dev/block/userdata /data ext4', '/dev/block/userdata /sdcard ext4'];
+  const shell = twrp({ product: 'jflte', mounted });
+  await recipes['twrp-dd'].run(shell, { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) }, noop, noop);
+  assert.deepEqual(shell.log.filter(c => /^(dd|umount|reboot)/.test(c)).map(c => c.split(' ').slice(0, 2).join(' ')), [
+    `dd of=${stage.by_name}/boot`, 'umount /sdcard', 'umount /data', `dd of=${stage.by_name}/userdata`, 'reboot']);
+  const noUnmount = twrp({ product: 'jflte', mounted });
+  const steps = stepsFor(stage).filter(([verb]) => verb !== 'unmount');
+  await assert.rejects(recipes['twrp-dd'].run(noUnmount, { device: dev, stage, files: fakeFiles(stage), steps }, noop, noop), /userdata .* is mounted/);
+  assert.ok(!noUnmount.log.some(c => c.startsWith('dd ')));
+});
+
 test('S9 ROM stage fails closed', async () => {
   const dev = device('starlte'), stage = s9().stages[1];
   const job = { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) };

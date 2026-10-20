@@ -496,7 +496,7 @@ const modeName = mode => MODE[/** @type {keyof typeof MODE} */ (mode)] ?? mode.r
 const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
 /** One readable line per step for the card. @param {any[]} step */
 const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → ${a}`, erase: `erase ${a}`, set_active: `switch to slot ${a}`,
-  reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
+  unmount: `unmount ${a}`, reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
 
 /** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count @param {string} key `<codename>/<rom id>` */
 function stageCard(device, stage, n, count, key) {
