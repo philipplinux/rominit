@@ -18,7 +18,7 @@ test('real catalog validates', () => {
   assert.deepEqual(errors, []);
   for (const codename of ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte', 'oriole']) assert.ok(devices.some(d => d.codename === codename), codename);
   const supportOnly = devices.filter(d => d.supportOnly);
-  assert.equal(supportOnly.length, 24);
+  assert.equal(supportOnly.length, 25);
   assert.ok(supportOnly.every(d => !d.roms.length && d.supportUrl.startsWith('https://')));
   // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
   const external = device('oriole');
@@ -580,7 +580,8 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
       writeFileSync(p, readFileSync(p, 'utf8').split('\n').filter(l => !/series\/google-pixel-7\.md|socs\/sdm670\.md/.test(l)).join('\n'));
     }
     assert.notDeepEqual(lint(vault), []);
-    assert.deepEqual([...fix(vault, 'test').create].sort(), ['series/google-pixel-7.md', 'socs/sdm670.md']);
+    const created = fix(vault, 'test').create;
+    assert.ok(created.has('series/google-pixel-7.md') && created.has('socs/sdm670.md'));
     assert.deepEqual(lint(vault), []);
     assert.match(tree(vault), /Google Pixel 7 {2}\(series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\)/);
     assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');

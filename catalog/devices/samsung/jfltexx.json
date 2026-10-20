@@ -1,0 +1,19 @@
+{
+  "codename": "jfltexx",
+  "vendor": "Samsung",
+  "name": "Galaxy S4 GT-I9505",
+  "series": "Galaxy S",
+  "family": "Galaxy S4",
+  "variant": "Galaxy S4 Snapdragon LTE",
+  "models": ["GT-I9505"],
+  "hardware": {
+    "ram": "2 GB",
+    "cpu": "Quad-core Krait 300, 1.9 GHz",
+    "gpu": "Adreno 320",
+    "display": "5 in, 1920 × 1080",
+    "tags": ["Snapdragon 600", "microSD", "LTE"]
+  },
+  "notes": "Support-only seed. The LineageOS jfltexx page lists former official support through 18.1; no currently available ROM build, checksum or ROMinit flash recipe is verified. Do not infer compatibility with other Galaxy S4 variants.",
+  "supportOnly": true,
+  "supportUrl": "https://wiki.lineageos.org/devices/jfltexx/"
+}
