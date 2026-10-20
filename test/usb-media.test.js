@@ -819,3 +819,13 @@ test('direct plan accepts a pinned img.gz (Raspberry Pi) but Ventoy still refuse
   assert.equal(plan.image.name, 'alpine-rpi.img.gz');
   await assert.rejects(fx.backend.plan({ driveId: '/dev/disk/by-id/usb-fixture-disk', method: 'ventoy', imageId: alpineImage.id }), error => error.status === 400);
 });
+
+test('an SD card in a built-in reader (removable mmcblk) is listed; a non-removable mmcblk (internal eMMC) is not', async () => {
+  const disk = (name, rm) => ({ name, path: `/dev/${name}`, type: 'disk', rm, ro: 0, size: 32_000_000_000, model: 'SD', tran: null, 'maj:min': '179:0', children: [] });
+  const backend = createUsbMedia({
+    runCommand: async () => ({ stdout: JSON.stringify({ blockdevices: [disk('mmcblk0', 1), disk('mmcblk1', 0)] }) }),
+    listDir: async () => ['mmc-SD_0x1234'], resolvePath: async path => path.endsWith('mmc-SD_0x1234') ? '/dev/mmcblk0' : path,
+    readText: async () => '' });
+  const drives = await backend.listDrives();
+  assert.deepEqual(drives.map(d => [d.path, d.available]), [['/dev/mmcblk0', true]]);
+});

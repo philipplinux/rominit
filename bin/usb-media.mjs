@@ -285,6 +285,12 @@ function descendants(root, childrenOf) {
   return result;
 }
 
+// A removable USB disk, or an SD card in a built-in reader (mmcblk, removable; internal eMMC is not).
+function isRemovableMedia(root) {
+  const tran = String(field(root, 'TRAN') ?? '').toLowerCase();
+  return flag(field(root, 'RM')) && (tran === 'usb' || !tran && /^\/dev\/mmcblk\d+$/.test(devicePath(root) ?? ''));
+}
+
 function snapshotDrive(root, childrenOf, idsByPath, activeSwaps, mediaMountRoots) {
   const path = devicePath(root);
   const nodes = [root, ...descendants(root, childrenOf)];
@@ -302,7 +308,7 @@ function snapshotDrive(root, childrenOf, idsByPath, activeSwaps, mediaMountRoots
   let reason = null;
   if (type !== 'disk') reason = 'This is not a whole disk.';
   else if (!path) reason = 'The device path is unavailable.';
-  else if (!flag(field(root, 'RM')) || String(field(root, 'TRAN') ?? '').toLowerCase() !== 'usb') reason = 'This is not a removable USB disk.';
+  else if (!isRemovableMedia(root)) reason = 'This is not a removable USB disk or SD card.';
   else if (flag(field(root, 'RO'))) reason = 'The disk is read-only.';
   else if (size === null) reason = 'The disk capacity is unavailable.';
   else if (size < MIN_BYTES) reason = 'The disk is smaller than 128 MiB.';
@@ -373,7 +379,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
     try { names = await listDir(byIdDir); }
     catch (error) { if (error?.code !== 'ENOENT') throw fail(503, `Cannot read stable USB disk IDs: ${errorText(error)}`); }
     const idsByPath = new Map();
-    await Promise.all(names.filter(name => name.startsWith('usb-')).map(async name => {
+    await Promise.all(names.filter(name => /^(usb|mmc)-/.test(name)).map(async name => {
       const id = `${byIdDir.replace(/\/$/, '')}/${name}`;
       try {
         const target = await resolvePath(id);
@@ -399,7 +405,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
     const records = flatNodes(roots);
     const childrenOf = makeTree(records);
     return roots.filter(root => String(field(root, 'TYPE') ?? '').toLowerCase() === 'disk' &&
-      flag(field(root, 'RM')) && String(field(root, 'TRAN') ?? '').toLowerCase() === 'usb')
+      isRemovableMedia(root))
       .map(root => snapshotDrive(root, childrenOf, idsByPath, activeSwaps, mediaMountRoots));
   }
 
@@ -707,7 +713,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
   async function runDirectWriter(plan, image, jobState, timeoutMs) {
     const match = /^(\d+):(\d+)$/.exec(plan.identity.majorMinor);
     if (!match) throw fail(409, 'The selected USB disk has no stable kernel identity. Create a new plan.');
-    if (!plan.drive.id.startsWith(`${byIdDir.replace(/\/$/, '')}/usb-`))
+    if (!new RegExp(`^${byIdDir.replace(/\/$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/(usb|mmc)-`).test(plan.drive.id))
       throw fail(409, 'The selected USB disk has no trusted stable ID. Create a new plan.');
     const args = ['-n', BIN.python, '-c', DIRECT_WRITER, image.sourcePath, plan.drive.id,
       String(image.size), image.sha256, match[1], match[2], String(plan.identity.size), /\.gz$/i.test(image.name) ? '1' : '0'];
