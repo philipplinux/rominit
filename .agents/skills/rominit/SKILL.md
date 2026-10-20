@@ -56,7 +56,7 @@ Every host: phone really in the mode the stage names (`rominit_get_device` boot 
 | signature / anti-rollback error | firmware too old or too new for this ROM | stop; check the ROM's `requirements`, never force |
 | boots back to bootloader or loops | wrong slot or missing firmware stage | check that every stage ran in order; report it, ask the human |
 
-Unclear cause → log the exact error line with `rominit_log_step` and ask the human. Deeper debugging tools come later and are opt-in only.
+Unclear cause → log the exact error line with `rominit_log_step` and ask the human. Deeper read-only diagnosis, opt-in only (after such a logged failure or a recipe pointer, and the human agrees): `rominit-debug-android`, `rominit-debug-linux`, `rominit-debug-ios` (recovery only).
 
 ## 4. Report (MCP, every attempt)
 The data is free; the price is a report, success or not.
