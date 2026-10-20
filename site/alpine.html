@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="Alpine Linux is a compact, script-driven Linux distribution. Review the official x86_64 image, fit, tradeoffs, and USB test status.">
+    <title>Alpine Linux · OS · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home">
+          <span class="wordmark-mark" aria-hidden="true">R</span>
+          <span>ROMINIT <span class="wordmark-divider">/</span> PC OS</span>
+        </a>
+        <nav class="sitenav" aria-label="Page"><a href="./">Back to devices</a></nav>
+        <span class="feature partial">USB TEST PENDING</span>
+      </header>
+
+      <main id="main" class="omarchy-page">
+        <section class="intro">
+          <p class="eyebrow">PC OPERATING SYSTEM / INDEPENDENT LINUX</p>
+          <div class="omarchy-heading">
+            <div>
+              <h1>Alpine Linux<span>.</span></h1>
+              <p class="intro-copy">A compact Linux distribution built around musl libc and BusyBox. Its small base and script-driven setup make it a hands-on starting point for a system you configure yourself.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="omarchy-features" aria-labelledby="features-title">
+          <h2 id="features-title">A small, configurable base</h2>
+          <ul>
+            <li>Lightweight base with a focused package set.</li>
+            <li>apk manages packages; OpenRC manages services.</li>
+            <li>Diskless, data, and sys modes offer different persistence and installation choices.</li>
+          </ul>
+        </section>
+
+        <section class="omarchy-grid" aria-label="Alpine Linux image and practical notes">
+          <article class="omarchy-card">
+            <p class="eyebrow">01 / SELECTED IMAGE</p>
+            <h2>Alpine Linux 3.24.2 Standard</h2>
+            <dl class="omarchy-facts">
+              <div><dt>Release</dt><dd>Stable · 2026-09-17</dd></div>
+              <div><dt>Edition</dt><dd>Standard x86_64 ISO · network required for package setup</dd></div>
+              <div><dt>Size</dt><dd>370,147,328 bytes · 353 MiB</dd></div>
+              <div><dt>Integrity files</dt><dd><a href="https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-standard-3.24.2-x86_64.iso.sha256">SHA-256 file</a> · <a href="https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-standard-3.24.2-x86_64.iso.asc">signature</a></dd></div>
+            </dl>
+            <p class="checksum-note">SHA-256: <code>20c026e3a788bfb75fc8b50a54bcc12aee85e3c75909740bba6a6f4563d63296</code></p>
+            <a class="button button-secondary" href="https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-standard-3.24.2-x86_64.iso">Download official ISO</a>
+            <a class="button button-secondary omarchy-guide" href="https://docs.alpinelinux.org/user-handbook/0.1a/Installing/setup_alpine.html">Official setup guide</a>
+            <a class="button button-primary" href="./?view=helper">Prepare USB with local helper</a>
+            <p class="omarchy-status" role="status">Ventoy is the primary USB path under test. Direct image writing is the planned fallback and is not implemented yet; neither path has passed a hardware write and boot test. Preparing a USB erases that stick. Installing Alpine is a separate step and can erase or repartition the computer's target disk.</p>
+          </article>
+
+          <aside class="omarchy-card omarchy-cautions" aria-labelledby="fit-title">
+            <p class="eyebrow">02 / FIT AND TRADEOFFS</p>
+            <h2 id="fit-title">Good for small systems and hands-on setup</h2>
+            <ul>
+              <li>A good fit for small utility machines, lightweight servers, and learning a minimal Linux base when explicit setup is welcome.</li>
+              <li>The Standard image expects network access. Wired DHCP is the simplest setup; Wi-Fi needs extra manual steps.</li>
+              <li>musl libc and BusyBox differ from common GNU/glibc environments. Check the apps and third-party installers you need before choosing Alpine.</li>
+              <li>Choose the installation mode and target disk carefully. Persistence and disk changes depend on those choices; back up data first.</li>
+              <li>Secure Boot support depends on the image and firmware and is not guaranteed.</li>
+            </ul>
+            <p class="field-help">This page summarizes the OS and selected download. It is not a tested installation recipe.</p>
+          </aside>
+        </section>
+
+        <footer class="omarchy-footer">
+          <a href="https://alpinelinux.org/about/">About Alpine Linux</a>
+          <a href="https://alpinelinux.org/downloads/">Official downloads</a>
+          <a href="https://docs.alpinelinux.org/user-handbook/0.1a/Installing/setup_alpine.html">User handbook · setup-alpine</a>
+          <span>Sources checked 2026-10-20</span>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

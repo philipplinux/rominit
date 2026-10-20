@@ -1,0 +1,31 @@
+ROMinit image credits
+====================
+Image attribution is separate from software license notices.
+
+Omarchy logo
+By the Omarchy project / contributors.
+Source: https://github.com/omacom/omarchy/blob/quattro/logo.svg
+Image: https://raw.githubusercontent.com/omacom/omarchy/quattro/logo.svg
+Shown remotely, unmodified. Asset-specific reuse permission has not been established.
+
+Omarchy installer configuration screenshot
+By the Omarchy project / contributors; official manual.
+Source: https://omarchy.org/manual/getting-started/
+Image: https://raw.githubusercontent.com/omacom/omarchy/quattro/manual/images/install-config.webp
+Shown remotely, unmodified. Asset-specific reuse permission has not been established.
+
+Omarchy tiled desktop screenshot
+By the Omarchy project / contributors; official manual.
+Source: https://github.com/omacom/omarchy/blob/quattro/manual/images/navigation-dwindle-layout.webp
+Image: https://raw.githubusercontent.com/omacom/omarchy/quattro/manual/images/navigation-dwindle-layout.webp
+Shown remotely, unmodified. Asset-specific reuse permission has not been established.
+
+GrapheneOS logo and screenshots
+By GrapheneOS developers, via Wikimedia Commons.
+Source: https://commons.wikimedia.org/wiki/Category:GrapheneOS
+License: see each image caption for its specific source and terms.
+
+Mi A3 and Galaxy S9 postmarketOS screenshots
+By ROMinit; taken on our own phones.
+Source: https://github.com/philipplinux/rominit
+License: MIT.

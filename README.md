@@ -23,6 +23,23 @@ Safety: every file is pinned by size and SHA-256, every step verb is whitelisted
 
 Copy an existing device as a template.
 
+## Local CLI helper
+
+Choose either authentication method once:
+
+- `rominit auth`: open the printed link, sign in on the website and approve the CLI.
+- `rominit auth --api-key`: [create an API key on the website](https://rominit.pages.dev/?view=agents), then paste it into the hidden terminal prompt.
+
+Both save the credential in the OS credential store (macOS Keychain, Windows Credential Manager, or Linux Secret Service). Linux needs an available, unlocked Secret Service; there is no plaintext fallback. Browser login creates a revocable **ROMinit CLI** API key valid for one year. A manually created key uses the expiry you selected. Later, run `rominit serve` to reuse the saved login. Run `rominit logout` to remove it locally; revoke it on the website to invalidate it remotely. Close existing helpers after logout.
+
+The helper listens only on `127.0.0.1` at a random port. Open its printed pairing link and click **Approve and connect helper**; the browser may ask for local network access. Approval uses a 60-second, one-use grant tied to a secret held by the CLI. Your persistent credential never enters the page. The separate browser connection lasts up to one hour and its token stays in this tab's session storage. Web sign-out or disconnect clears that tab connection while preserving the saved CLI login. Close the CLI with Ctrl+C to stop it. An initial login link expires after ten minutes; restart the command if needed.
+
+By default the helper supports authenticated connection status and disconnect. An opt-in **Linux Ventoy USB test** adds removable USB-drive discovery, a five-minute installation plan, typed erase confirmation, installation and layout verification. It can copy one locally configured, SHA-256-pinned ISO after installation and verify the copied file. It does not download an OS ISO or verify that a computer boots it. Direct-image writing is not available in this test; it must be a separately selected method, never an automatic destructive retry.
+
+Download the official [Ventoy Linux release](https://github.com/ventoy/Ventoy/releases), check its published SHA-256, and extract it yourself. Start the helper with `ROMINIT_VENTOY_DIR=/absolute/path/to/ventoy-version rominit serve`, then open its pairing link and the **Ventoy USB test** panel. Installation needs noninteractive `sudo` access, `lsblk`, and `udisksctl`. Install the reviewed Ventoy tree under a root-owned directory (for example `/var/lib/rominit/ventoy/1.1.18/ventoy-1.1.18`); all ancestors and contents must be root-owned, not writable by group/others, and contain no symlinks. A user-writable download directory is rejected before unmounting. To include an OS image, also set `ROMINIT_ISO_PATH=/absolute/path/to/image.iso` and `ROMINIT_ISO_SHA256=<publisher-sha256>` before starting the helper. The plan shows the filename, size and pin; copying never overwrites an existing file. Only a whole, removable, writable USB disk with a stable USB identity is eligible. Review its model, capacity, path and mounted partitions; the exact phrase is deliberately never filled in for you. Installation erases the selected USB. The helper uses Ventoy's ordinary install mode and does not force-reinstall an existing Ventoy drive. A failed installation may leave the USB partially prepared; retry only after reviewing it again.
+
+For local development, set `ROMINIT_URL` to the site's HTTP loopback origin before starting the CLI, for example `ROMINIT_URL=http://127.0.0.1:8788 node bin/rominit.mjs serve`. Otherwise the helper trusts only `https://rominit.pages.dev`. Apply `migrations/2026-10-17-helper-grants.sql` to an existing database before deploying this authentication flow; a fresh database uses `schema.sql`. No extra daemon, browser extension or OAuth client configuration is needed beyond the existing CLI and website login setup.
+
 ## Recovery catalog
 
 Standalone recovery installers live in `catalog/recoveries/<codename>/<id>.json`. Each file has `device` and one `recovery` object with `id`, `name`, `version`, `project`, `source`, `vetting`, `requirements`, `imported` (date), `imported_from` (seed provenance) and `stages`. Recovery stages use the same validated recipe verbs and pinned files as ROM stages and have `section: "tools"`.

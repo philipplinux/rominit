@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -10,6 +11,8 @@ assert(!errors.length, `Catalog problems:\n${errors.join('\n')}`);
 
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist/catalog', { recursive: true });
+// Fixed source allowlist: never package local settings, credentials or the private ROMvault.
+execFileSync('tar', ['-czf', 'dist/rominit-cli.tar.gz', '--transform=s,^,rominit-cli/,', 'bin', 'src', 'scripts', 'catalog', 'package.json', 'package-lock.json', 'README.md', 'LICENSE']);
 // The page loads the small index first, then one file per picked device.
 const index = devices.map(({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl, roms }) => ({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl,
   roms: roms.filter(r => r.origin !== 'stock').map(({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external }) => ({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external: !!external })) }));
@@ -17,6 +20,8 @@ await writeFile('dist/catalog/index.json', JSON.stringify(index));
 for (const device of devices) await writeFile(`dist/catalog/${device.codename}.json`, JSON.stringify(device));
 
 await cp('site/style.css', 'dist/style.css');
+await cp('site/omarchy.html', 'dist/omarchy.html');
+await cp('site/alpine.html', 'dist/alpine.html');
 await cp('site/logos', 'dist/logos', { recursive: true });
 await cp('site/shots', 'dist/shots', { recursive: true });
 await cp('site/phones', 'dist/phones', { recursive: true });
@@ -33,7 +38,7 @@ assert(html.includes('app.js?v=') && html.includes('style.css?v='), 'asset links
 await writeFile('dist/index.html', html);
 
 const notices = [];
-for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash-wasm/LICENSE', 'hash-wasm/src/sha256.c',
+for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash-wasm/LICENSE', 'hash-wasm/src/sha256.c', '@napi-rs/keyring/LICENSE',
   '@lineageos-infra/libmjolnir/LICENSE', '@yume-chan/adb/LICENSE', '@yume-chan/adb-daemon-webusb/LICENSE',
   '@yume-chan/adb-credential-web/LICENSE', '@yume-chan/stream-extra/LICENSE', '@yume-chan/struct/LICENSE',
   '@yume-chan/async/LICENSE', '@yume-chan/event/LICENSE', '@yume-chan/no-data-view/LICENSE']) {
@@ -42,11 +47,13 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
   assert(notice && /[Cc]opyright/.test(notice), `Missing third-party notice: ${path}`);
   notices.push(`${path}\n${notice}`);
 }
-notices.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
+const imageCredits = [await readFile('site/IMAGE-CREDITS.txt', 'utf8')];
+imageCredits.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
 for (const { photo } of devices) if (photo) {
   assert(existsSync(`site/${photo.src}`), `missing ${photo.src}`);
-  notices.push(photo.license === 'press' ? `${photo.src}\nPress image © ${photo.artist}, ${photo.page}; shown only to identify the device, not under this project's license.`
+  imageCredits.push(photo.license === 'press' ? `${photo.src}\nPress image © ${photo.artist}, ${photo.page}; shown only to identify the device, not under this project's license.`
     : `${photo.src}\nPhoto by ${photo.artist}, ${photo.page}, ${photo.license}; resized and converted to WebP${photo.license === 'CC0' ? '' : `, this copy under the same license`}.`);
 }
 await writeFile('dist/THIRD-PARTY-NOTICES.txt', notices.join('\n\n'));
+await writeFile('dist/IMAGE-CREDITS.txt', imageCredits.join('\n\n'));
 console.log(`built dist/: ${devices.length} devices, ${devices.reduce((n, d) => n + d.roms.length, 0)} ROMs`);

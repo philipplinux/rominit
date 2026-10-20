@@ -12,6 +12,8 @@ const isAdmin = async (env, request) => (await userOf(env, request))?.roles.some
 export async function onRequestGet({ request, env }) {
   if (!await isAdmin(env, request)) return json({ error: 'admins only' }, 403);
   const reports = await env.DB.prepare("SELECT r.id, r.page, r.section, r.text, r.at FROM reports r LEFT JOIN triage t ON t.inbox = 'reports' AND t.ref = CAST(r.id AS TEXT) WHERE t.ref IS NULL ORDER BY r.at DESC LIMIT 500").all();
+  const requests = { new: [], update: [], mirror: [] };
+  for (const kind of Object.keys(requests)) requests[kind] = (await env.DB.prepare("SELECT r.id, r.kind, r.page, r.rom, r.url, r.text, r.at FROM requests r LEFT JOIN triage t ON t.inbox = 'requests-' || r.kind AND t.ref = CAST(r.id AS TEXT) WHERE r.kind = ?1 AND t.ref IS NULL LIMIT 500").bind(kind).all()).results;
   // new: untouched · review: review set · approved: accepted · rejected: triaged without being accepted. Decided ones: newest 50 each.
   const runs = await env.DB.prepare(`SELECT b.code AS ref, b.submitted AS at, b.rom, b.note, b.final, b.output, b.accepted, b.flash, b.via,
       CASE WHEN b.accepted IS NOT NULL THEN 'approved' WHEN t.ref IS NOT NULL THEN 'rejected' WHEN b.review IS NOT NULL THEN 'review' ELSE 'new' END AS state
@@ -26,7 +28,7 @@ export async function onRequestGet({ request, env }) {
     WHERE r.finished IS NOT NULL AND t.ref IS NULL ORDER BY r.finished DESC LIMIT 400`).all();
   const agents = { success: [], partial: [], failed: [], abandoned: [] };
   for (const run of runs2.results) agents[run.outcome]?.push({ ...run, steps: JSON.parse(run.steps) });
-  return json({ reports: reports.results, benchmarks, cli, failures: failures.results, agents, labels: LABELS });
+  return json({ reports: reports.results, requests, benchmarks, cli, failures: failures.results, agents, labels: LABELS });
 }
 
 /** @param {{request:Request, env:any}} context */
@@ -42,7 +44,7 @@ export async function onRequestPost({ request, env }) {
       .bind(ref, ...{ approve: ['catalog-update', 'approved: shown on the ROM page'], reject: ['other', 'rejected on the site'] }[action]).run();
     return json({ ok: true });
   }
-  if (!['reports', 'failures', 'agents'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
+  if (!['reports', 'failures', 'agents', 'requests-new', 'requests-update', 'requests-mirror'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
   await env.DB.prepare("INSERT OR REPLACE INTO triage (inbox, ref, label, summary) VALUES (?1, ?2, ?3, 'filed on the site')").bind(inbox, ref, label).run();
   return json({ ok: true });
 }

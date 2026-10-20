@@ -460,6 +460,33 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .sitenav input { width: 100%; padding: .35rem .6rem; border: 1px solid var(--line); background: var(--panel); color: inherit; font: inherit; font-size: .75rem; }
 .sitenav a { color: var(--muted); text-decoration: none; letter-spacing: .08em; text-transform: uppercase; font-size: .7rem; }
 .sitenav a:hover, .sitenav a[aria-current] { color: var(--amber); }
+
+.omarchy-page { padding-bottom: 3rem; }
+.omarchy-heading { display: flex; align-items: center; gap: 1rem; }
+.omarchy-heading img { flex: 0 0 auto; object-fit: contain; border-radius: 3px; background: #ece4d4; padding: .45rem; }
+.omarchy-heading h1 { margin: 0; }
+.omarchy-heading .intro-copy { margin: .45rem 0 0; }
+.omarchy-features { margin: 0 0 1.5rem; border-left: 2px solid var(--teal); padding: .2rem 0 .2rem 1rem; }
+.omarchy-features h2 { margin: 0 0 .5rem; font-size: .9rem; }
+.omarchy-features ul { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin: 0; padding-left: 1rem; color: #c9c1b3; font-size: .72rem; }
+.omarchy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.omarchy-card { border: 1px solid var(--line); background: var(--panel); padding: 1.25rem; }
+.omarchy-card h2 { margin: 0 0 1rem; font-size: 1.05rem; }
+.omarchy-facts { margin: 0 0 1rem; }
+.omarchy-facts > div { display: grid; grid-template-columns: minmax(7rem, .65fr) 1fr; gap: .6rem; border-top: 1px solid var(--line); padding: .55rem 0; font-size: .72rem; }
+.omarchy-facts dt { color: var(--muted); }
+.omarchy-facts dd { margin: 0; }
+.omarchy-card .button { width: 100%; margin-top: .65rem; text-decoration: none; }
+.omarchy-guide { display: flex; }
+.omarchy-status { border-left: 2px solid var(--teal); padding-left: .75rem; color: var(--muted); font-size: .72rem; }
+.omarchy-cautions ul { margin: 0; padding-left: 1.2rem; color: #c9c1b3; font-size: .78rem; }
+.omarchy-cautions li + li { margin-top: .7rem; }
+.omarchy-visuals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0; }
+.omarchy-visuals figure { min-width: 0; margin: 0; border: 1px solid var(--line); background: var(--panel); }
+.omarchy-visuals img { display: block; width: 100%; height: auto; }
+.omarchy-visuals figcaption { padding: .65rem .8rem; color: var(--muted); font-size: .65rem; }
+.omarchy-footer { display: flex; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--line); padding-top: 1rem; font-size: .7rem; }
+@media (max-width: 700px) { .omarchy-grid, .omarchy-visuals { grid-template-columns: 1fr; } }
 .brand-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: .6rem; margin-top: .6rem; }
 .brand-tile { display: grid; gap: .2rem; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: 10px; color: inherit; text-decoration: none; }
 .brand-tile:hover { border-color: var(--amber); }

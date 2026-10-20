@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="Draft Omarchy install-media page. Select the current official ISO and follow Omarchy's USB instructions.">
+    <title>Omarchy · OS draft · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home">
+          <span class="wordmark-mark" aria-hidden="true">R</span>
+          <span>ROMINIT <span class="wordmark-divider">/</span> OS DRAFT</span>
+        </a>
+        <nav class="sitenav" aria-label="Page"><a href="./">Back to devices</a></nav>
+        <span class="feature partial">DRAFT</span>
+      </header>
+
+      <main id="main" class="omarchy-page">
+        <section class="intro">
+          <p class="eyebrow">PC OPERATING SYSTEM / ARCH-BASED</p>
+          <div class="omarchy-heading">
+            <img src="https://raw.githubusercontent.com/omacom/omarchy/quattro/logo.svg" alt="Omarchy logo" width="72" height="72">
+            <div>
+              <h1>Omarchy<span>.</span></h1>
+              <p class="intro-copy">A keyboard-focused Linux desktop based on Arch. This draft prepares one current install image for one USB write.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="omarchy-features" aria-labelledby="features-title">
+          <h2 id="features-title">A ready-to-work desktop</h2>
+          <ul>
+            <li>Keyboard-first tiling desktop built around Hyprland and Quickshell.</li>
+            <li>System-wide themes change the terminal, bar, notifications, and wallpaper together.</li>
+            <li>Developer editors and language stacks are available through Omarchy's setup menus.</li>
+          </ul>
+        </section>
+
+        <section class="omarchy-grid" aria-label="Omarchy install media">
+          <article class="omarchy-card">
+            <p class="eyebrow">01 / SELECTED IMAGE</p>
+            <h2>Omarchy Quattro 4.0.4</h2>
+            <dl class="omarchy-facts">
+              <div><dt>Release</dt><dd>Quattro · 4.0.4</dd></div>
+              <div><dt>Edition</dt><dd>Single official install ISO</dd></div>
+              <div><dt>Architecture</dt><dd>PC ISO · architecture verification pending</dd></div>
+              <div><dt>Integrity</dt><dd><a href="https://iso.omarchy.org/omarchy-4.0.4.iso.sha256">SHA-256</a> · <a href="https://iso.omarchy.org/omarchy-4.0.4.iso.sig">signature</a></dd></div>
+            </dl>
+            <p class="field-help">The publisher’s current download page does not name the ISO architecture. Confirm the target hardware is supported before writing it.</p>
+            <a class="button button-primary" href="https://iso.omarchy.org/omarchy-4.0.4.iso">Download official ISO</a>
+            <a class="button button-secondary omarchy-guide" href="https://omarchy.org/manual/getting-started/">Official USB and install instructions</a>
+            <p class="omarchy-status" role="status">Selected image: one ISO for one USB write. ROMinit does not write the USB on this draft page.</p>
+            <a href="./?view=helper">Connect the local CLI helper</a>
+          </article>
+
+          <aside class="omarchy-card omarchy-cautions" aria-labelledby="before-title">
+            <p class="eyebrow">02 / BEFORE YOU INSTALL</p>
+            <h2 id="before-title">Check the machine first</h2>
+            <ul>
+              <li>The current Omarchy manual says to disable Secure Boot and/or TPM in firmware to install.</li>
+              <li>Installation defaults to encryption. Full-disk installation erases the selected drive; free-space installation uses unallocated space.</li>
+              <li>Use a wired or 2.4 GHz keyboard for startup disk encryption; Bluetooth keyboards cannot enter that passphrase at boot.</li>
+              <li>USB writers erase the selected USB. Verify the drive and back up its contents before using the publisher’s instructions.</li>
+            </ul>
+            <p class="field-help">The current manual documents full-disk and free-space install choices. Older manuals may describe different dual-boot limits.</p>
+          </aside>
+        </section>
+
+        <section class="omarchy-visuals" aria-label="Omarchy screenshots">
+          <figure><img src="https://raw.githubusercontent.com/omacom/omarchy/quattro/manual/images/install-config.webp" alt="Omarchy installer configuration screen"><figcaption>Installer configuration · official manual</figcaption></figure>
+          <figure><img src="https://raw.githubusercontent.com/omacom/omarchy/quattro/manual/images/navigation-dwindle-layout.webp" alt="Omarchy tiled desktop layout"><figcaption>Desktop layout · official manual</figcaption></figure>
+        </section>
+
+        <footer class="omarchy-footer">
+          <a href="./IMAGE-CREDITS.txt">Image credits</a>
+          <a href="https://omarchy.org/">Project site</a>
+          <a href="https://github.com/omacom/omarchy/releases/tag/v4.0.4">Release notes and published checksum</a>
+          <a href="https://omarchy.org/manual/dual-boot-install/">Current dual-boot guide</a>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

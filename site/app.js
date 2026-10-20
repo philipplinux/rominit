@@ -3,6 +3,8 @@ import { connect } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
+import { disconnectHelper, helperRequest, helperSession, pairHelper } from './helper.js';
+import { usbMediaPanel } from './usb-media.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
 // ROMinit's own builds: this host lets the page download them itself (CORS), so a stage can attach them in one click.
@@ -184,6 +186,8 @@ const PROVIDER_LOGOS = /** @type {Record<string, string>} */ ({
 });
 /** Header, under BUY ME A COFFEE: a SIGN IN button that opens the provider badges, or the account menu. */
 me.then(info => {
+  const paired = helperSession();
+  if (paired && paired.user.id !== info?.user?.id) disconnectHelper().catch(() => {});
   if (!info?.providers.length && !info?.user) return;
   const slot = h('span', { className: 'account' });
   if (info.user) {
@@ -202,8 +206,8 @@ me.then(info => {
     slot.append(h('details', { className: 'site-menu user-menu' }, h('summary', { title: 'Your account', textContent: `👤 ${info.user.name} ▾` }),
       h('nav', { ariaLabel: 'Account' }, edit, item('favorites', '♥ Favorites'),
         info.user.roles.some((/** @type {any} */ r) => r.role === 'admin') && item('inbox', 'Inbox'),
-        item('agents', 'API tokens'),
-        h('button', { type: 'button', textContent: 'Sign out', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }))), pop);
+        item('agents', 'API tokens'), item('helper', 'Local helper'),
+        h('button', { type: 'button', textContent: 'Sign out', async onclick() { await disconnectHelper().catch(() => {}); await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }))), pop);
   }
   else {
     const back = encodeURIComponent(location.pathname + location.search);
@@ -799,7 +803,7 @@ async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -874,6 +878,14 @@ async function inboxView(index) {
         }))))),
     folder('05 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
+  card.append(folder('06 Requests', 'new ROMs / devices, updates and mirrors', Object.values(requests).flat().length,
+    [['new', 'New ROM / device'], ['update', 'ROM updates'], ['mirror', 'ROM mirrors']].map(([kind, title]) => h('details', { className: 'inbox-sub', open: requests[kind].length > 0 },
+      h('summary', { className: 'field-label', textContent: `${title} · ${requests[kind].length}` }),
+      h('ol', { className: 'comments' }, ...requests[kind].map((/** @type {any} */ x) => {
+        const li = h('li', {}, h('small', { textContent: `${x.at} UTC${x.rom ? ` · ${x.rom}` : ''}` }),
+          h('p', { textContent: x.text }), x.url && /^https?:\/\//i.test(x.url) && link(x.url, 'Source'));
+        return li.append(fileAs(`requests-${kind}`, String(x.id), li)), li;
+      }))))));
   return card;
 }
 
@@ -890,6 +902,30 @@ async function popularView(index) {
   return card;
 }
 
+/** @param {string} kind @param {string} title @param {string} rom */
+function requestButton(kind, title, rom = '') {
+  const button = h('button', { type: 'button', className: 'button button-secondary', textContent: title, onclick() {
+    const text = h('textarea', { className: 'confirmation-input', required: true, maxLength: 2000, rows: 4,
+      placeholder: kind === 'update' ? 'New version and current version (for example: 2.5 replaces 2.3).' : kind === 'mirror' ? 'Which files should we mirror, and why?' : 'ROM name and/or device model, and what you would like added.' });
+    const url = h('input', { className: 'confirmation-input', type: 'url', required: kind !== 'mirror', maxLength: 2000, placeholder: 'https://…' });
+    const status = h('p', { role: 'status', className: 'field-help' });
+    const send = h('button', { type: 'submit', className: 'button button-primary', textContent: 'Send request' });
+    const dialog = h('dialog', { className: 'host-confirm', ariaLabel: title }, h('form', { async onsubmit(event) {
+      event.preventDefault(); send.disabled = true; status.textContent = 'Sending…';
+      const response = await fetch('./api/requests', { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ kind, rom: rom || null, page: location.pathname + location.search, text: text.value, url: url.value || null }) }).catch(() => null);
+      const reply = await response?.json().catch(() => ({}));
+      status.textContent = response?.ok ? 'Thanks, request sent for review.' : `Could not send: ${reply?.error ?? 'network error'}.`;
+      send.disabled = !!response?.ok;
+    } }, h('h2', { textContent: title }), rom && h('p', { textContent: rom }),
+      h('label', { className: 'field-help' }, 'Details', text), h('label', { className: 'field-help' }, kind === 'mirror' ? 'Source URL (optional)' : 'ROM or device source URL', url),
+      send, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Close', onclick: () => dialog.close() }), status));
+    dialog.addEventListener('close', () => { dialog.remove(); button.focus(); });
+    document.body.append(dialog); dialog.showModal();
+  } });
+  return button;
+}
+
 /** "Something wrong on this page?" form; falls back to a GitHub issue link. */
 function reportBox() {
   const page = location.pathname + location.search;
@@ -904,11 +940,12 @@ function reportBox() {
     status.textContent = response?.ok ? 'Thanks, ticket sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
-  const box = h('details', { className: 'page-section report', ontoggle() {
+  const box = h('details', { id: 'submit-request', className: 'page-section report', ontoggle() {
     if (where.isConnected) return; // built on first open, from this page's own sections
     for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
     text.before(h('label', { className: 'field-help' }, 'About: ', where));
-  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket' }), h('small', { textContent: 'something wrong on this page?' })),
+  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket / Request' }), h('small', { textContent: 'report a problem or request a new ROM / device' })),
+    h('p', {}, requestButton('new', 'Request new ROM / device')),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
   return box;
 }
@@ -928,16 +965,12 @@ const SOFTWARE = [
     ['wrangler', 'Cloudflare', 'MIT OR Apache-2.0', 'https://github.com/cloudflare/workers-sdk', 'deploys to Cloudflare Pages'],
     ['playwright-core', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/playwright', 'bench tests (not shipped)'],
     ['usb (node-usb)', 'Rob Moran, Christopher Klein and contributors', 'MIT', 'https://github.com/node-usb/node-usb', 'USB access for the rominit command-line tool (not in the page)'],
-  ]],
-  ['Pictures', [
-    ['postmarketOS logo', 'postmarketOS contributors', 'CC BY-SA 3.0', 'https://gitlab.postmarketos.org/postmarketOS/artwork', 'ROM logo'],
-    ['GrapheneOS logo and screenshots', 'GrapheneOS developers, via Wikimedia Commons', 'see each caption', 'https://commons.wikimedia.org/wiki/Category:GrapheneOS', 'ROM logo and pictures'],
-    ['Mi A3 and Galaxy S9 postmarketOS screenshots', 'ROMinit', 'MIT', 'https://github.com/philipplinux/rominit', 'taken on our own phones'],
+    ['@napi-rs/keyring', 'N-API for Rust contributors', 'MIT', 'https://github.com/Brooooooklyn/keyring-node', 'OS credential storage for the CLI (not in the page)'],
   ]],
 ];
 function sourcesView() {
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'Sources & licenses' }),
-    h('p', { className: 'intro-copy' }, 'ROMinit is free software under the MIT license, © 2026 Philipp Baumann. ', link('https://github.com/philipplinux/rominit', 'Source on GitHub'), ' · ', link('./THIRD-PARTY-NOTICES.txt', 'Full license texts')),
+    h('p', { className: 'intro-copy' }, 'ROMinit is free software under the MIT license, © 2026 Philipp Baumann. ', link('https://github.com/philipplinux/rominit', 'Source on GitHub'), ' · ', link('./THIRD-PARTY-NOTICES.txt', 'Full software license texts'), ' · ', link('./IMAGE-CREDITS.txt', 'Image credits')),
     ...SOFTWARE.flatMap(([group, rows]) => [h('h3', { textContent: /** @type {string} */ (group) }),
       h('table', { className: 'license-table' }, h('tr', {}, ...['Name', 'By', 'License', 'Used for'].map(t => h('th', { textContent: t }))),
         .../** @type {string[][]} */ (rows).map(([name, by, license, url, use]) => h('tr', {}, h('td', {}, link(url, name)), h('td', { textContent: by }), h('td', { textContent: license }), h('td', { textContent: use }))))]),
@@ -958,8 +991,9 @@ function cliView() {
   return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'CLI tool' }),
     h('p', { className: 'intro-copy', textContent: 'rominit is a command-line tool that runs the same recipes as this page from a terminal: same catalog, same SHA-256 checks, same confirm phrases. Use it where the browser cannot help (no WebUSB, scripts, an AI agent on your own computer). Experimental: tested on Linux so far.' }),
     h('h3', { textContent: 'Install' }),
-    h('p', { className: 'field-help', textContent: 'Needs Node.js and git:' }),
-    code('git clone https://github.com/philipplinux/rominit\ncd rominit\nnpm ci --omit=dev\nalias rominit="node $PWD/bin/rominit.mjs"\nrominit devices'),
+    h('p', {}, h('a', { href: './rominit-cli.tar.gz', download: '', textContent: 'Download the CLI source archive' }), '. Requires Node.js. Extract it, open a terminal in rominit-cli and run:'),
+    code('npm ci --omit=dev\nnode bin/rominit.mjs auth'),
+    h('p', { className: 'field-help', textContent: 'The commands below use rominit as shorthand for node bin/rominit.mjs. Linux login storage needs an unlocked Secret Service.' }),
     h('p', { className: 'field-help', textContent: 'On Linux, if the phone shows in lsusb but not in "rominit devices", this user lacks USB access: install udev rules (e.g. android-udev-rules).' }),
     h('h3', { textContent: 'Commands' }),
     code(['# phones in fastboot or ADB mode', 'rominit devices',
@@ -970,6 +1004,9 @@ function cliView() {
       '', '# any command: --json = one JSON event per line (scripts, agents)', "# --local = read a checkout's catalog/ instead of this site"].join('\n')),
     h('h3', { textContent: 'Safety' }),
     h('ul', {}, ...['It reads phone and ROM data from this site (catalog/<codename>.json), no account needed.', 'A destructive stage asks you to type its confirm phrase in the terminal. Without a terminal it stops; an agent cannot type it for you.', 'Every file is checked against its pinned size and SHA-256 before it is written.'].map(t => h('li', { textContent: t }))),
+    h('h3', { textContent: 'Connect this website to your CLI' }),
+    h('pre', { className: 'bench-output', textContent: '# sign in once in your browser\nrominit auth\n# or paste a website-created API key\nrominit auth --api-key\n# later runs reuse your saved login\nrominit serve' }),
+    h('p', { className: 'intro-copy' }, 'Open the pairing link printed by the CLI, sign in and approve the connection. ', h('a', { href: './?view=helper', textContent: 'Local helper' }), ' shows the connection and lets you disconnect. The Linux-only Ventoy USB test copies and verifies an ISO when the helper has one configured. Direct image writing is unavailable.'),
     h('p', { className: 'intro-copy' }, 'Want your AI agent to look things up without installing anything? Use the ', h('a', { href: './?view=agents', textContent: 'Hosted MCP' }), '.'));
 }
 /** Hosted MCP: endpoint, setup, the deal (read our data, report how the flash went), and your API tokens. */
@@ -1017,7 +1054,8 @@ async function agentsView() {
     h('p', { className: 'intro-copy', textContent: 'Let your own AI agent (Claude, ChatGPT, Cursor, anything that speaks MCP) look up phones and ROM recipes here and walk you through a flash. It needs a free API token (below): 100 tool calls an hour.' }),
     h('div', { className: 'deal' }, h('strong', { textContent: 'The deal' }),
       h('ul', {}, ...['Data is free to read with a free token.', 'In return your agent reports how a flash went: steps, fixes, outcome.', 'Device and procedure only. No personal data; the server rejects it.', 'Deletion requires your approval: the agent must ask you first.'].map(t => h('li', { textContent: t })))),
-    h('h3', { textContent: 'Your API tokens' }),
+    h('h3', { textContent: 'Your API keys' }),
+    h('p', { className: 'field-help' }, 'For the CLI, create a key below and run ', h('code', { textContent: 'rominit auth --api-key' }), ' to paste it securely. Or use ', h('code', { textContent: 'rominit auth' }), ' to sign in through your browser.'),
     info?.user ? h('div', {}, h('p', { className: 'field-help', textContent: 'A token lets an agent send reports in your name. Pick how long it lasts (up to a year); revoke it any time.' }), form, made, tokens)
       : h('p', { className: 'intro-copy' }, 'Sign in to create a token: ', ...signInLinks(info?.providers ?? [])),
     h('h3', { textContent: 'Endpoint' }), copyable(code(url)),
@@ -1026,10 +1064,94 @@ async function agentsView() {
     h('p', { className: 'field-help', textContent: 'Claude Code:' }), copyable(cli),
     h('p', { className: 'field-help', textContent: 'Other MCP clients (JSON config):' }), copyable(config));
 }
+/** Approve the CLI in the browser; passwords and account cookies never leave this site. */
+async function helperView() {
+  const info = await me;
+  const status = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+  const controls = h('div', {});
+  const box = h('section', { className: 'flash-card info-page' }, h('h1', { textContent: 'Local helper' }),
+    h('p', { className: 'intro-copy', textContent: 'Choose how to sign in to the CLI once. Your credential is saved in your OS credential store and reused until it expires or is revoked. Closing the CLI stops the helper.' }),
+    h('p', {}, h('a', { href: './?view=cli', textContent: 'Download and set up the CLI' }), '.'),
+    h('p', {}, 'Browser login: ', h('code', { textContent: 'rominit auth' })),
+    h('p', {}, h('a', { href: './?view=agents', textContent: 'Create an API key' }), ', then run ', h('code', { textContent: 'rominit auth --api-key' }), ' and paste it at the prompt.'),
+    h('p', {}, 'After signing in, start the helper with ', h('code', { textContent: 'rominit serve' }), '. Use ', h('code', { textContent: 'rominit logout' }), ' to remove the saved credential.'),
+    h('p', { className: 'field-help', textContent: 'Open the pairing link printed in your terminal. Only approve a helper you started yourself on this computer. Your browser may ask to allow local network access.' }),
+    controls, status,
+    h('p', { className: 'field-help', textContent: 'The browser connection lasts up to one hour; disconnecting it does not erase your saved CLI login. The first USB test runs on Linux, installs the Ventoy bootloader, and copies and verifies a configured ISO. Booting has not been tested; direct image writing is unavailable.' }));
+  if (!info?.user) {
+    controls.append(h('p', { className: 'intro-copy' }, 'Sign in to approve the helper: ', ...signInLinks(info?.providers ?? [])));
+    return box;
+  }
+  const user = info.user;
+  let activeSession = null;
+  /** @param {any} session @param {any} result */
+  const showCapabilities = (session, result) => {
+    if (activeSession !== session) return;
+    if (!result.capabilities?.includes('usb-media')) {
+      status.textContent = 'Connected, but this helper does not advertise USB media support. Update the CLI helper and pair again.';
+      return;
+    }
+    if (!controls.querySelector('#usb-media-panel')) controls.append(usbMediaPanel(session, h));
+    status.textContent = `Helper ready as ${result.user.name}.`;
+  };
+  controls.append(h('p', { textContent: `Account: ${user.name}` }));
+  /** @param {any} session */
+  const connected = async session => {
+    activeSession = session;
+    controls.replaceChildren(h('p', { textContent: `Connected as ${session.user.name} · expires ${new Date(session.expiresAt).toLocaleTimeString()}` }),
+      h('button', { type: 'button', className: 'button button-secondary', textContent: 'Check connection', async onclick() {
+        this.disabled = true;
+        try {
+          const result = await helperRequest(session, '/status');
+          if (result.user?.id !== user.id) throw Error('The helper is connected to a different account. Disconnect and pair again.');
+          showCapabilities(session, result);
+        } catch (error) { status.textContent = `${message(error)} Keep the CLI running and allow local network access when asked.`; }
+        finally { this.disabled = false; }
+      } }),
+      h('button', { type: 'button', className: 'button button-secondary', textContent: 'Disconnect helper', async onclick() {
+        this.disabled = true;
+        activeSession = null;
+        try { await disconnectHelper(); status.textContent = 'Disconnected. Run rominit serve again to reconnect.'; }
+        catch { status.textContent = 'Connection forgotten in this tab. Close the CLI to stop the unreachable helper.'; }
+        controls.replaceChildren(h('p', { textContent: 'No helper connected.' }));
+      } }),
+      h('p', {}, h('a', { href: './alpine.html', textContent: 'Back to the Alpine guide' })));
+    status.textContent = 'Checking helper capabilities…';
+    try {
+      const result = await helperRequest(session, '/status');
+      if (result.user?.id !== user.id) throw Error('The helper is connected to a different account. Disconnect and pair again.');
+      showCapabilities(session, result);
+    } catch (error) {
+      if (activeSession === session) status.textContent = `${message(error)} Keep the CLI running and allow local network access when asked.`;
+    }
+  };
+  const port = params.get('port') ?? '', state = params.get('state') ?? '', challenge = params.get('challenge') ?? '';
+  const saved = helperSession();
+  if (saved?.user.id === user.id && (!port || saved.url === `http://127.0.0.1:${port}`)) { await connected(saved); return box; }
+  if (!/^[1-9]\d{0,4}$/.test(port) || Number(port) > 65535 || !/^[A-Za-z0-9_-]{43}$/.test(state) || !/^[a-f0-9]{64}$/.test(challenge)) {
+    status.textContent = 'No pairing link loaded. Run rominit auth for your first login, or rominit serve to reuse your saved login, then open the link it prints.';
+    return box;
+  }
+  controls.append(h('p', { textContent: `Connect the helper on this computer (port ${port}) as ${user.name}?` }),
+    h('button', { type: 'button', className: 'button button-primary', textContent: 'Approve and connect helper', async onclick() {
+      this.disabled = true; status.textContent = 'Connecting to your local helper…';
+      try {
+        const session = await pairHelper(params, user.id);
+        history.replaceState(null, '', './?view=helper');
+        await connected(session);
+      } catch (error) {
+        status.textContent = `${message(error)} Keep the CLI running; allow local network access when asked, then retry using its pairing link.`;
+        this.disabled = false;
+      }
+    } }));
+  return box;
+}
+
 async function start() {
   const codename = params.get('device'), view = params.get('view');
   // Disclaimer × hides it; remembered per browser.
   const notice = document.querySelector('.disclaimer');
+  if (!codename && view === 'helper') notice?.remove();
   try { if (localStorage.getItem('rominit.noticeHidden')) notice?.remove(); } catch {}
   notice?.querySelector('button')?.addEventListener('click', () => { notice.remove(); try { localStorage.setItem('rominit.noticeHidden', '1'); } catch {} });
   // Header nav: mark where we are and keep the search text.
@@ -1037,6 +1159,7 @@ async function start() {
   if (navSearch) navSearch.value = params.get('q') ?? '';
   if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
   for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
+  if (!codename && view === 'helper') { main.append(await helperView()); return; }
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
     for (const a of document.querySelectorAll('.site-menu a, .top-links a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
@@ -1124,6 +1247,7 @@ async function start() {
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
       rom && sourceRow(rom, `${device.codename}/${rom.id}`),
+      rom && h('p', { className: 'inbox-actions' }, requestButton('update', 'Request ROM update', `${device.codename}/${rom.id}`), requestButton('mirror', 'Request ROM mirror', `${device.codename}/${rom.id}`)),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
@@ -1284,6 +1408,11 @@ function progressRail(sections) {
   paint(); soon();
   return rail;
 }
+for (const a of document.querySelectorAll('a[href="#submit-request"]')) a.addEventListener('click', () => {
+  const box = /** @type {HTMLDetailsElement|null} */ (document.getElementById('submit-request'));
+  if (box) box.open = true;
+  a.closest('details')?.removeAttribute('open');
+});
 start().then(() => {
   main.append(reportBox());
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).
