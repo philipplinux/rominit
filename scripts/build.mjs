@@ -20,6 +20,7 @@ await writeFile('dist/catalog/index.json', JSON.stringify(index));
 for (const device of devices) await writeFile(`dist/catalog/${device.codename}.json`, JSON.stringify(device));
 
 await cp('site/style.css', 'dist/style.css');
+
 await cp('site/logos', 'dist/logos', { recursive: true });
 await cp('site/shots', 'dist/shots', { recursive: true });
 await cp('site/phones', 'dist/phones', { recursive: true });
@@ -28,6 +29,7 @@ await cp('site/bench', 'dist/bench', { recursive: true });
 await writeFile('dist/404.html', '<!doctype html><meta charset="utf-8"><title>Not found · ROMinit</title><p>Not found. <a href="/">ROMinit</a></p>\n'); // without it Pages answers every missing path with index.html
 await build({ entryPoints: ['site/app.js'], outfile: 'dist/app.js', bundle: true,
   format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
+await build({ entryPoints: ['site/alpine.js'], outfile: 'dist/alpine.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 // ?v=<content hash> so a redeploy is picked up despite the host's cache
 const version = async file => createHash('sha256').update(await readFile(`dist/${file}`)).digest('hex').slice(0, 10);
 let html = await readFile('site/index.html', 'utf8');
@@ -35,7 +37,11 @@ for (const file of ['app.js', 'style.css']) html = html.replace(`"./${file}"`, `
 assert(html.includes('app.js?v=') && html.includes('style.css?v='), 'asset links not versioned');
 await writeFile('dist/index.html', html);
 
-const notices = [];
+let alpineHtml = await readFile('site/alpine.html', 'utf8');
+for (const file of ['alpine.js', 'style.css']) alpineHtml = alpineHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
+await writeFile('dist/alpine.html', alpineHtml);
+
+const notices = ['logos/alpine.svg\nAlpine Linux project logo, from https://alpinelinux.org/alpinelinux-logo.svg, shown to identify Alpine Linux. Alpine Linux names and marks belong to their owners; no endorsement implied.', 'shots/alpine-operation.gif and shots/alpine-operation.png\nROMinit recording of Alpine Linux 3.24.2 Standard x86_64 in QEMU, 2026-10-20. No host disk or network attached.'];
 for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash-wasm/LICENSE', 'hash-wasm/src/sha256.c', '@napi-rs/keyring/LICENSE',
   '@lineageos-infra/libmjolnir/LICENSE', '@yume-chan/adb/LICENSE', '@yume-chan/adb-daemon-webusb/LICENSE',
   '@yume-chan/adb-credential-web/LICENSE', '@yume-chan/stream-extra/LICENSE', '@yume-chan/struct/LICENSE',

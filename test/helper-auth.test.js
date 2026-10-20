@@ -189,3 +189,25 @@ test('concurrent redemptions of the same helper grant succeed exactly once', asy
   assert.equal(db.prepare('SELECT COUNT(*) AS n FROM api_tokens').get().n, 1);
   assert.equal(db.prepare('SELECT COUNT(*) AS n FROM helper_grants').get().n, 0);
 });
+
+
+test('automatic connection grants require the existing matching CLI key and never mint a key', async () => {
+  const { db, send } = await setup();
+  const verifier = 'v'.repeat(43), credential = `rmi_${'k'.repeat(43)}`;
+  addToken(db, 1, credential);
+  assert.equal((await send({ action: 'approve-existing', challenge: sha(verifier) })).status, 401);
+  const { code } = await (await send({ action: 'approve-existing', challenge: sha(verifier) }, { sid: 'ada-session' })).json();
+  assert.equal((await send({ action: 'redeem', code, verifier }, { originHeader: null })).status, 401);
+  assert.equal(db.prepare('SELECT COUNT(*) AS n FROM api_tokens').get().n, 1);
+  db.prepare('INSERT INTO users (id, provider, subject, name) VALUES (?, ?, ?, ?)').run(2, 'github', 'bob', 'Bob');
+  const wrongCredential = `rmi_${'w'.repeat(43)}`;
+  addToken(db, 2, wrongCredential);
+  assert.equal((await send({ action: 'redeem', code, verifier }, { originHeader: null, authorization: `Bearer ${wrongCredential}` })).status, 403);
+  const result = await send({ action: 'redeem', code, verifier }, { originHeader: null, authorization: `Bearer ${credential}` });
+  assert.equal(result.status, 200);
+  const data = await result.json();
+  assert.equal(data.user.id, 1);
+  assert.equal(data.credential, undefined);
+  assert.equal(db.prepare('SELECT COUNT(*) AS n FROM helper_grants').get().n, 0);
+  assert.equal(db.prepare('SELECT COUNT(*) AS n FROM api_tokens').get().n, 2);
+});

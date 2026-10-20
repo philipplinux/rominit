@@ -6,22 +6,27 @@
 VERSION=1
 say() { echo "$*"; }
 has() { command -v "$1" >/dev/null 2>&1; }
+if ! has getprop || [ -z "$(getprop ro.build.version.sdk 2>/dev/null)" ]; then
+  say "@ failed os-mismatch: This test is for Android, but this phone is running Linux. Select the installed postmarketOS ROM and start a new test."
+  exit 1
+fi
 t() {
   printf '\rROMinit: checking %-16s' "$1" >&2 # progress on the terminal; results go to stdout
   out=$( ( "$2" ) 2>&1 ); rc=$?
-  line=$(printf '%s\n' "$out" | grep -E '^(full|partial|broken|blocked|untested|ask) ' | tail -n 1)
+  line=$(printf '%s\n' "$out" | grep -E '^(full|partial|broken|blocked|untested|ask|inconclusive) ' | tail -n 1)
   if [ -n "$line" ]; then say "$1 $line"
   else say "$1 inconclusive probe $2 exit $rc: $(printf '%s' "$out" | tail -n 1 | tr -d '\r' | cut -c1-160)"; fi
 }
 
+say "@ script android $VERSION"
 FEATURES_LIST=$(pm list features 2>/dev/null)
 SENSORS=$(dumpsys sensorservice 2>/dev/null | sed -n '1,/^$/p;/Sensor List/,/^$/p')
-say "@ script android $VERSION"
 echo "ROMinit: connected to the phone, running checks (a few seconds)..." >&2
 say "@ kernel $(uname -sr 2>&1)"
 say "@ model $(getprop ro.product.manufacturer) $(getprop ro.product.model) ($(getprop ro.product.device))"
 say "@ os $(getprop ro.build.display.id) Android $(getprop ro.build.version.release)"
-say "@debug user $(id -un 2>&1) sdk $(getprop ro.build.version.sdk) features $(printf '%s\n' "$FEATURES_LIST" | grep -c feature:) sensors-lines $(printf '%s\n' "$SENSORS" | wc -l)"
+say "@ device $(getprop ro.product.device)"
+say "@debug uid $(id -u 2>&1) sdk $(getprop ro.build.version.sdk) features $(printf '%s\n' "$FEATURES_LIST" | grep -c feature:) sensors-lines $(printf '%s\n' "$SENSORS" | wc -l)"
 say "@debug tools $(for c in pm dumpsys cmd settings getprop sm df ip; do has $c && printf '%s ' $c; done)"
 
 feat() { printf '%s\n' "$FEATURES_LIST" | grep -q "^feature:android.hardware.$1\$"; }
@@ -34,7 +39,10 @@ sensor() { # sensor <hardware feature> <sensor list pattern>
 
 p_flashing() { echo "full booted this ROM"; }
 p_usb_net() { echo "untested USB tethering: turn it on to test"; }
-p_storage() { s=$(df -h /data | tail -n 1 | awk '{print $2" total, "$4" free"}'); [ -n "$s" ] && echo "full $s"; }
+p_storage() {
+  s=$(df -Pk /data 2>/dev/null | awk 'NR==2 && $2 ~ /^[0-9]+$/ && $4 ~ /^[0-9]+$/ {print $2" KiB total, "$4" KiB free"; exit}')
+  [ -n "$s" ] && echo "full $s" || echo "inconclusive storage capacity unavailable"
+}
 p_sdcard() { v=$(sm list-volumes public 2>/dev/null | grep -m1 mounted); [ -n "$v" ] && echo "full $v" || echo "blocked no SD card found; insert one to test"; }
 p_battery() { l=$(dumpsys battery | grep -m1 ' level:' | tr -dc 0-9); [ -n "$l" ] && echo "full $l%" || echo "broken no battery level"; }
 p_screen() { echo "ask Does the picture look right (colours, brightness, no flicker)?"; }

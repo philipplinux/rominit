@@ -1,6 +1,7 @@
 import { spawn as spawnProcess } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { isIP } from 'node:net';
+import { benchmarkScript } from '../src/bench.js';
 
 const CODE = /^[a-z2-9]{8}$/;
 const CODENAME = /^[a-z0-9][a-z0-9_-]{0,63}$/;
@@ -28,8 +29,10 @@ function validHost(host) {
 export function validatePhoneBench(value) {
   const fields = ['code', 'rom', 'host', 'user', 'password'];
   if (!value || typeof value !== 'object' || Array.isArray(value) ||
-      Object.keys(value).length !== fields.length || fields.some(key => !Object.hasOwn(value, key)))
+      fields.some(key => !Object.hasOwn(value, key)) || Object.keys(value).some(key => ![...fields, 'sound'].includes(key)))
     throw Error('Expected code, ROM, host, username, and password.');
+  const sound = Object.hasOwn(value, 'sound') ? value.sound : false;
+  if (typeof sound !== 'boolean') throw Error('Sound must be a boolean.');
   if (typeof value.code !== 'string' || !CODE.test(value.code)) throw Error('Invalid benchmark code.');
   if (typeof value.rom !== 'string') throw Error('Invalid ROM selection.');
   const [codename, id, ...extra] = value.rom.split('/');
@@ -38,7 +41,7 @@ export function validatePhoneBench(value) {
   if (typeof value.user !== 'string' || !USER.test(value.user)) throw Error('Invalid SSH username.');
   if (typeof value.password !== 'string' || !value.password || value.password.includes('\0') || Buffer.byteLength(value.password) > PASSWORD_BYTES)
     throw Error('Password must be 1 to 256 bytes.');
-  return { code: value.code, rom: value.rom, host: value.host, user: value.user, password: value.password };
+  return { code: value.code, rom: value.rom, host: value.host, user: value.user, password: value.password, sound };
 }
 
 async function boundedText(response, limit) {
@@ -90,24 +93,29 @@ function normalizedModel(value) {
     .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 }
 
-function benchmarkRows(output, version) {
+function benchmarkRows(output, version, family) {
   const lines = output.trimEnd().split(/\r?\n/);
-  if (lines[0] !== `@ script linux ${version}` || lines.at(-1) !== '@ done')
+  if (/^@ script (linux|android) /.test(lines[0]) && !lines[0].startsWith(`@ script ${family} `))
+    throw new PhoneBenchError('Detected phone OS differs from the selected ROM. Select the installed ROM and start a new test; results were not sent.');
+  if (lines[0] !== `@ script ${family} ${version}` || lines.at(-1) !== '@ done')
     throw new PhoneBenchError('The phone returned invalid benchmark output.');
   const rows = lines.filter(line => /^[a-z_]+ (?:full|partial|broken|blocked|untested|ask|inconclusive)(?: |$)/.test(line));
   const modelLines = lines.filter(line => line.startsWith('@ model '));
   if (!rows.length || modelLines.length !== 1 || !modelLines[0].slice(8).trim())
     throw new PhoneBenchError('The phone returned invalid benchmark output or no model name.');
-  return { rows, model: modelLines[0].slice(8).trim() };
+  const deviceLines = lines.filter(line => line.startsWith('@ device '));
+  if (deviceLines.length > 1) throw new PhoneBenchError('The phone returned conflicting device identities.');
+  return { rows, model: modelLines[0].slice(8).trim(), codename: deviceLines[0]?.slice(9).trim() };
 }
 
-function sshOutput({ spawn, input, host, user, password, signal, timeoutMs, maxOutputBytes }) {
+function sshOutput({ spawn, input, host, user, password, sound = false, signal, timeoutMs, maxOutputBytes }) {
   return new Promise((resolve, reject) => {
     let child;
     try {
+      const remoteCommand = sound ? 'env ROMINIT_SOUND=1 sh -s' : 'env ROMINIT_SOUND=0 sh -s';
       const args = ['-F', '/dev/null', '-T', '-o', 'ConnectTimeout=8', '-o', 'ConnectionAttempts=1', '-o', 'NumberOfPasswordPrompts=1',
         '-o', 'PreferredAuthentications=password,keyboard-interactive', '-o', 'PubkeyAuthentication=no', '-o', 'IdentityAgent=none',
-        '-o', 'StrictHostKeyChecking=accept-new', '-o', 'LogLevel=ERROR', `${user}@${host}`, 'sh', '-s'];
+        '-o', 'StrictHostKeyChecking=accept-new', '-o', 'LogLevel=ERROR', `${user}@${host}`, remoteCommand];
       child = spawn('sshpass', ['-e', 'ssh', ...args], { env: { PATH: process.env.PATH ?? '', SSHPASS: password },
         stdio: ['pipe', 'pipe', 'ignore'], detached: process.platform !== 'win32' });
     } catch {
@@ -160,17 +168,20 @@ function sshOutput({ spawn, input, host, user, password, signal, timeoutMs, maxO
     child.once('close', code => {
       if (settled) return;
       if (failure) return finish(failure);
+      const output = Buffer.concat(chunks, size).toString('utf8');
+      if (/^@ failed os-mismatch:/.test(output))
+        return finish(new PhoneBenchError('Detected phone OS differs from the selected ROM. Select the installed ROM and start a new test; results were not sent.'));
       if (code !== 0) return finish(new PhoneBenchError('SSH benchmark failed. Check the address, credentials, and saved host key.'));
-      finish(null, Buffer.concat(chunks, size).toString('utf8'));
+      finish(null, output);
     });
     child.stdin.end(input);
   });
 }
 
-/** Run only the bundled Linux probe, then store its raw output for browser review. */
-export async function runPhoneBench({ origin, code, rom, host, user, password, fetch: get = globalThis.fetch,
+/** Detect the OS and run only its bundled probe, then store its raw output for browser review. */
+export async function runPhoneBench({ origin, code, rom, host, user, password, sound = false, fetch: get = globalThis.fetch,
   spawn = spawnProcess, signal, authorize = async () => {}, timeoutMs = RUN_MS, maxOutputBytes = OUTPUT_BYTES } = {}) {
-  const input = validatePhoneBench({ code, rom, host, user, password });
+  const input = validatePhoneBench({ code, rom, host, user, password, sound });
   let site;
   try { site = new URL(origin); } catch { throw Error('Invalid ROMinit origin or fetch implementation.'); }
   const loopback = ['localhost', '127.0.0.1', '[::1]', '::1'].includes(site.hostname);
@@ -182,23 +193,28 @@ export async function runPhoneBench({ origin, code, rom, host, user, password, f
   let device;
   try { device = JSON.parse(await boundedText(catalogResponse, REMOTE_BODY_BYTES)); }
   catch (error) { if (error instanceof PhoneBenchError) throw error; throw new PhoneBenchError('Could not verify the selected ROM on ROMinit.'); }
-  if (device?.codename !== codename || typeof device.vendor !== 'string' || typeof device.name !== 'string' ||
-      !Array.isArray(device.roms) || !device.roms.some(item => item?.id === id && item?.os === 'postmarketOS'))
-    throw new PhoneBenchError('The selected ROM is not a postmarketOS ROM in the ROMinit catalog.');
+  if (device?.codename !== codename || typeof device.vendor !== 'string' || typeof device.name !== 'string' || !Array.isArray(device.roms))
+    throw new PhoneBenchError('The selected ROM is not in the ROMinit catalog.');
+  const selectedRom = device.roms.find(item => item?.id === id);
+  const family = selectedRom?.os === 'postmarketOS' ? 'linux' : ['Android', 'GrapheneOS', 'LineageOS', 'eOS'].includes(selectedRom?.os) ? 'android' : null;
+  if (!family) throw new PhoneBenchError('The selected ROM is not a supported Android or postmarketOS ROM.');
 
   const codeResponse = await siteRequest(get, `${origin}/b/${input.code}`, {}, signal);
   const remoteScript = await boundedText(codeResponse, REMOTE_BODY_BYTES);
   const remoteVersion = /^VERSION=(\d+)$/m.exec(remoteScript)?.[1];
-  if (!remoteVersion || !remoteScript.includes('say "@ script linux $VERSION"') || !remoteScript.includes('say "@ done"'))
-    throw new PhoneBenchError('This browser test is not an active Linux benchmark. Start a new test on the ROM page.');
+  if (!remoteVersion || !remoteScript.includes(`say "@ script ${family} $VERSION"`) || !remoteScript.includes('say "@ done"'))
+    throw new PhoneBenchError(`This browser test is not an active ${family} benchmark. Start a new test on the ROM page.`);
 
-  const script = await readFile(new URL('../site/bench/linux.sh', import.meta.url));
+  const [linux, android] = await Promise.all(['linux', 'android'].map(name => readFile(new URL(`../site/bench/${name}.sh`, import.meta.url), 'utf8')));
+  const script = benchmarkScript(linux, android, family);
   const localVersion = /^VERSION=(\d+)$/m.exec(script.toString('utf8'))?.[1];
   if (remoteVersion !== localVersion) throw new PhoneBenchError('Update ROMinit CLI before running this benchmark.');
-  const output = await sshOutput({ spawn, input: script, host: input.host, user: input.user, password: input.password,
+  const output = await sshOutput({ spawn, input: script, host: input.host, user: input.user, password: input.password, sound: input.sound,
     signal, timeoutMs, maxOutputBytes });
-  const { rows, model } = benchmarkRows(output, localVersion);
-  if (normalizedModel(model) !== normalizedModel(`${device.vendor} ${device.name}`))
+  const { rows, model, codename: detected } = benchmarkRows(output, localVersion, family);
+  const codenames = [device.codename, `${device.vendor.toLowerCase()}-${device.codename}`, device.detect?.adb?.device];
+  const models = [`${device.vendor} ${device.name}`, ...(device.models ?? []).flatMap(name => [name, `${device.vendor} ${name}`])];
+  if (detected ? !codenames.includes(detected) : !models.some(name => normalizedModel(model) === normalizedModel(name)))
     throw new PhoneBenchError('The connected phone does not match the selected ROM device; results were not sent.');
 
   await authorize();

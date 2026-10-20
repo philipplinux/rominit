@@ -1,0 +1,441 @@
+// Official Alpine release metadata checked 2026-10-20; pins are reviewed data, not a live download-page scrape.
+export const ALPINE = {
+  "id": "alpine",
+  "name": "Alpine Linux",
+  "version": "3.24.2",
+  "releaseDate": "2026-09-17",
+  "source": "https://alpinelinux.org/downloads/",
+  "editions": [
+    {
+      "id": "standard",
+      "name": "Standard",
+      "description": "A lean live installer for general use. Internet access is needed to add packages.",
+      "usbNote": "Choose the target computer\u2019s architecture; firmware support varies.",
+      "images": [
+        {
+          "id": "alpine-standard-x86",
+          "arch": "x86",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86/alpine-standard-3.24.2-x86.iso",
+          "sha256": "deb7d2fbd0749c7ff1bdfeb9d2541da6d611a902869ea1d16881a7acd5f85eee",
+          "size": 290455552,
+          "usb": true
+        },
+        {
+          "id": "alpine-standard-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-standard-3.24.2-x86_64.iso",
+          "sha256": "20c026e3a788bfb75fc8b50a54bcc12aee85e3c75909740bba6a6f4563d63296",
+          "size": 370147328,
+          "usb": true
+        },
+        {
+          "id": "alpine-standard-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-standard-3.24.2-aarch64.iso",
+          "sha256": "e078b567b4b283b629f4b8659bccc477a060a5521c4d933ecf9591a1df8ba48f",
+          "size": 394276864,
+          "usb": true
+        },
+        {
+          "id": "alpine-standard-armv7",
+          "arch": "armv7",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-standard-3.24.2-armv7.iso",
+          "sha256": "ad86b6b35aed7d4b1776ab4633d18403de0d19f92e5a5f009a0e1c7e62be25e8",
+          "size": 119373824,
+          "usb": false
+        },
+        {
+          "id": "alpine-standard-loongarch64",
+          "arch": "loongarch64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/loongarch64/alpine-standard-3.24.2-loongarch64.iso",
+          "sha256": "f47ca731ffd54d58bcac5cd8758dc78bd6e5af160159089c2c1f081cd07fd379",
+          "size": 128104448,
+          "usb": false
+        },
+        {
+          "id": "alpine-standard-ppc64le",
+          "arch": "ppc64le",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/ppc64le/alpine-standard-3.24.2-ppc64le.iso",
+          "sha256": "467102bdea60df8fea5093e56651be69cf830e45a71677047c12de2695649723",
+          "size": 253980672,
+          "usb": false
+        },
+        {
+          "id": "alpine-standard-riscv64",
+          "arch": "riscv64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/riscv64/alpine-standard-3.24.2-riscv64.iso",
+          "sha256": "3c305023617bc89888c35a9d0008749b9e141a38c47c67f33e067099e344cc06",
+          "size": 51402752,
+          "usb": false
+        },
+        {
+          "id": "alpine-standard-s390x",
+          "arch": "s390x",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/s390x/alpine-standard-3.24.2-s390x.iso",
+          "sha256": "88c5098f3af044ecf6ddee110c2770e6e643e827b49f47386afd4ad16c8f128d",
+          "size": 92053504,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "extended",
+      "name": "Extended",
+      "description": "More packages on the image for a server, router or setup with limited connectivity.",
+      "usbNote": "x86 installation media with a larger package set.",
+      "images": [
+        {
+          "id": "alpine-extended-x86",
+          "arch": "x86",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86/alpine-extended-3.24.2-x86.iso",
+          "sha256": "2c769b4f23020b1ba40a97deb8eb420f974963954afdb15b25e054aa0536526a",
+          "size": 1297121280,
+          "usb": true
+        },
+        {
+          "id": "alpine-extended-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-extended-3.24.2-x86_64.iso",
+          "sha256": "a22115a46a1bcd876234a6cd43797fe19f4acfc4512fb41ea64e16cc2ffb4d90",
+          "size": 1456766976,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "netboot",
+      "name": "Netboot",
+      "description": "Kernel, initial RAM filesystem and modules for network booting.",
+      "usbNote": "Network boot bundle; not an ISO or a directly bootable USB image.",
+      "images": [
+        {
+          "id": "alpine-netboot-x86",
+          "arch": "x86",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86/alpine-netboot-3.24.2-x86.tar.gz",
+          "sha256": "b8aa4249d2b83c22554e5fcecb6f196260b392f258a72942f5ed79e8447b96ad",
+          "size": 272093864,
+          "usb": false
+        },
+        {
+          "id": "alpine-netboot-x86_64",
+          "arch": "x86_64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-netboot-3.24.2-x86_64.tar.gz",
+          "sha256": "bbdd643360fac384a7933d8bebc7132eb720002e58d1321edcde4a5a3c3b83c6",
+          "size": 392497909,
+          "usb": false
+        },
+        {
+          "id": "alpine-netboot-aarch64",
+          "arch": "aarch64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-netboot-3.24.2-aarch64.tar.gz",
+          "sha256": "124087f5df9ac698bb4e942d603eaae96721e451cdc4706c71a5e42ff863b589",
+          "size": 432082685,
+          "usb": false
+        },
+        {
+          "id": "alpine-netboot-armv7",
+          "arch": "armv7",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-netboot-3.24.2-armv7.tar.gz",
+          "sha256": "deedb52179c73f7f66bf6f99f91d05defd3a7912c22737ff4870723014e659ad",
+          "size": 126518009,
+          "usb": false
+        },
+        {
+          "id": "alpine-netboot-armhf",
+          "arch": "armhf",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armhf/alpine-netboot-3.24.2-armhf.tar.gz",
+          "sha256": "ca43db95f45f59cfb57e405bfde484581b2a3b2a35ceb94f342091c88e2605c7",
+          "size": 51443374,
+          "usb": false
+        },
+        {
+          "id": "alpine-netboot-ppc64le",
+          "arch": "ppc64le",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/ppc64le/alpine-netboot-3.24.2-ppc64le.tar.gz",
+          "sha256": "63de7da8055e60da580f8109c0dc3544b15e821594b83e38cd69a9353e05ff17",
+          "size": 199893648,
+          "usb": false
+        },
+        {
+          "id": "alpine-netboot-s390x",
+          "arch": "s390x",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/s390x/alpine-netboot-3.24.2-s390x.tar.gz",
+          "sha256": "75ca2d688b934f999a4f788f6103ac71c8d6c3b0e9bf674f21aad9a7f78da40f",
+          "size": 37148821,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "rpi",
+      "name": "Raspberry Pi",
+      "description": "Board-specific media for Raspberry Pi computers.",
+      "usbNote": "Use the Pi installation guide. These archives and compressed disk images need a board-specific media workflow.",
+      "images": [
+        {
+          "id": "alpine-rpi-aarch64-img",
+          "arch": "aarch64",
+          "format": "img.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-rpi-3.24.2-aarch64.img.gz",
+          "sha256": "9f1e91a0856a9399d5f936b8e4de2b2512d0c0903ef3a22a3d176409d9e82b09",
+          "size": 87470439,
+          "usb": false
+        },
+        {
+          "id": "alpine-rpi-aarch64",
+          "arch": "aarch64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-rpi-3.24.2-aarch64.tar.gz",
+          "sha256": "60e6b9f49ec3d2c9660f2ef775f5af3a98cfd2f939c8f55b6f215d00e5ffcb87",
+          "size": 87368401,
+          "usb": false
+        },
+        {
+          "id": "alpine-rpi-armv7-img",
+          "arch": "armv7",
+          "format": "img.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-rpi-3.24.2-armv7.img.gz",
+          "sha256": "bc6359c68ed0b39616fb0282614d271f420ec8eb223c2dd60f707c9696db6b2d",
+          "size": 69101799,
+          "usb": false
+        },
+        {
+          "id": "alpine-rpi-armv7",
+          "arch": "armv7",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-rpi-3.24.2-armv7.tar.gz",
+          "sha256": "5ab0713a7b0c4a3f7fadab2b2c7687f63025e9849cd2900841e078d1f64ebb45",
+          "size": 68969709,
+          "usb": false
+        },
+        {
+          "id": "alpine-rpi-armhf-img",
+          "arch": "armhf",
+          "format": "img.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armhf/alpine-rpi-3.24.2-armhf.img.gz",
+          "sha256": "04750787418fc80dd7f21c1bb4867a3a284f13944cc28be01666158a835eea40",
+          "size": 69485329,
+          "usb": false
+        },
+        {
+          "id": "alpine-rpi-armhf",
+          "arch": "armhf",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armhf/alpine-rpi-3.24.2-armhf.tar.gz",
+          "sha256": "f9a32d33f4c6677d7e3b417336b7c245bd594bf67d23de2c4faff697690bad3f",
+          "size": 69348275,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "minirootfs",
+      "name": "Mini root filesystem",
+      "description": "A small root filesystem for containers and chroot environments.",
+      "usbNote": "No bootloader or installer; this is not bootable USB media.",
+      "images": [
+        {
+          "id": "alpine-minirootfs-x86",
+          "arch": "x86",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86/alpine-minirootfs-3.24.2-x86.tar.gz",
+          "sha256": "757f07c5a3476ba3947cfbea2323b7f02fb6fb2fba8a3a3c2b9d17f0a54c9226",
+          "size": 3543444,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-x86_64",
+          "arch": "x86_64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-minirootfs-3.24.2-x86_64.tar.gz",
+          "sha256": "c5ca053cfe1d85c5b96dff8b9bc57045f7f184a30ffb6b65776409ca90388677",
+          "size": 3701382,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-aarch64",
+          "arch": "aarch64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-minirootfs-3.24.2-aarch64.tar.gz",
+          "sha256": "9bf70a7f18ea44094cbb5f70c58f9af129c8214745743db0e68e5502cc2ce773",
+          "size": 4028030,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-armv7",
+          "arch": "armv7",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-minirootfs-3.24.2-armv7.tar.gz",
+          "sha256": "5552f1ef2398cee46ef2cf733f8f1258f39a77ad065dfd47282fc0df9fe1976c",
+          "size": 3180242,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-armhf",
+          "arch": "armhf",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armhf/alpine-minirootfs-3.24.2-armhf.tar.gz",
+          "sha256": "d86af88b58954d8a90c211004f1e61f208a62d1bb5a2f525f0c1cc26408ab92b",
+          "size": 3435575,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-loongarch64",
+          "arch": "loongarch64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/loongarch64/alpine-minirootfs-3.24.2-loongarch64.tar.gz",
+          "sha256": "6ce402ec4dfac1a139a1e62bef5b473b1eb966d956747c7e9cd977d36efe618d",
+          "size": 3394244,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-ppc64le",
+          "arch": "ppc64le",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/ppc64le/alpine-minirootfs-3.24.2-ppc64le.tar.gz",
+          "sha256": "8bb871f6292f8e5686cf9362270a8e97c2ecea30f0f9f5281e6562ec4d5bc6ca",
+          "size": 3677673,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-riscv64",
+          "arch": "riscv64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/riscv64/alpine-minirootfs-3.24.2-riscv64.tar.gz",
+          "sha256": "57132e6e4f3a4ba9ffdf24e485513ce507e45471e7fd565aeed91c055cd63f7b",
+          "size": 3446562,
+          "usb": false
+        },
+        {
+          "id": "alpine-minirootfs-s390x",
+          "arch": "s390x",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/s390x/alpine-minirootfs-3.24.2-s390x.tar.gz",
+          "sha256": "cf7f8ce8325fc3a7a5d3d54b2029e5329c12607f5392f02e1b2951273eecb8b8",
+          "size": 3611716,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "virt",
+      "name": "Virtual",
+      "description": "A smaller kernel and installer intended for virtual machines.",
+      "usbNote": "ISO media intended for VMs; drivers for physical machines may be missing.",
+      "images": [
+        {
+          "id": "alpine-virt-x86",
+          "arch": "x86",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86/alpine-virt-3.24.2-x86.iso",
+          "sha256": "62e752e0f674b1537a7fc38d9c3e6eab9644ae93e8610efb64756a00e7592a10",
+          "size": 51380224,
+          "usb": true
+        },
+        {
+          "id": "alpine-virt-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-virt-3.24.2-x86_64.iso",
+          "sha256": "3ab424762af704b2c2a9e57df1dc37f982af260071504d977f2fb96822e7130b",
+          "size": 69206016,
+          "usb": true
+        },
+        {
+          "id": "alpine-virt-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-virt-3.24.2-aarch64.iso",
+          "sha256": "a57ba668b5f6b17a670fcf8e799d5d7fe43766ed086d6ce2927b0625bf43dbf6",
+          "size": 93304832,
+          "usb": true
+        },
+        {
+          "id": "alpine-virt-armv7",
+          "arch": "armv7",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-virt-3.24.2-armv7.iso",
+          "sha256": "5a914b6744f2aead91dba3f52840194de8f5abfb1ed24f51ddb5100c9b057fd4",
+          "size": 47998976,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "uboot",
+      "name": "Generic U-Boot",
+      "description": "Boot files for supported machines that use U-Boot.",
+      "usbNote": "Requires machine-specific U-Boot setup; do not write this archive as an ISO.",
+      "images": [
+        {
+          "id": "alpine-uboot-aarch64",
+          "arch": "aarch64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/aarch64/alpine-uboot-3.24.2-aarch64.tar.gz",
+          "sha256": "61bcb473996506ce533155126f293cc53e90e8b4e99d0cba0ddc97a20862f8d4",
+          "size": 487101592,
+          "usb": false
+        },
+        {
+          "id": "alpine-uboot-armv7",
+          "arch": "armv7",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/armv7/alpine-uboot-3.24.2-armv7.tar.gz",
+          "sha256": "5459cd68be6654420592ad4ac3d6d0ed430a39c7e938d7011a488c7c444a2afe",
+          "size": 103345739,
+          "usb": false
+        },
+        {
+          "id": "alpine-uboot-riscv64",
+          "arch": "riscv64",
+          "format": "tar.gz",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/riscv64/alpine-uboot-3.24.2-riscv64.tar.gz",
+          "sha256": "036e2694fa4f90d94dbe1a74ef1420be163eff6f3c72d194eb8b14f9dac932d6",
+          "size": 48467184,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "xen",
+      "name": "Xen",
+      "description": "A starting point for a Xen host and its management domain.",
+      "usbNote": "Xen Dom0 image for compatible x86_64 hardware.",
+      "images": [
+        {
+          "id": "alpine-xen-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-xen-3.24.2-x86_64.iso",
+          "sha256": "f3c8afed17e50017e2919e3995a8ef42dcead5c7bad6889f0a4ef41bd6251dba",
+          "size": 1528430592,
+          "usb": true
+        }
+      ]
+    }
+  ]
+};
+
+/** Resolve only a bundled Alpine artifact, never a caller-supplied URL. @param {string} id */
+export const alpineImage = id => ALPINE.editions.flatMap(edition => edition.images).find(image => image.id === id);
+
+/** CPU families represented in official Alpine media. */
+export const ALPINE_ARCHITECTURES = [...new Set(ALPINE.editions.flatMap(edition => edition.images.map(image => image.arch)))];
+export const ARCH_FAMILY = { x86: "x86", x86_64: "x86", aarch64: "ARM", armv7: "ARM", armhf: "ARM", loongarch64: "LoongArch", ppc64le: "PowerPC", riscv64: "RISC-V", s390x: "IBM Z" };

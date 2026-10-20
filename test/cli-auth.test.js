@@ -3,6 +3,7 @@ import { PassThrough } from 'node:stream';
 import test from 'node:test';
 import { main } from '../bin/cli.mjs';
 import { identifyCredential } from '../bin/helper.mjs';
+import { credentialFingerprint } from '../bin/credentials.mjs';
 
 const SITE = 'https://rominit.test';
 const API_KEY = `rmi_${'m'.repeat(43)}`;
@@ -18,10 +19,10 @@ function streams() {
   return { io: { stdin, stdout, stderr }, text: () => output };
 }
 
-function liveHelper() {
+function liveHelper(port = 18787) {
   let finish;
   const closed = new Promise(resolve => { finish = resolve; });
-  return { host: '127.0.0.1', port: 43129, pairingUrl: `${SITE}/?view=helper&port=43129&state=${'s'.repeat(43)}&challenge=${'a'.repeat(64)}`,
+  return { host: '127.0.0.1', port, pairingUrl: `${SITE}/?view=helper&port=${port}&state=${'s'.repeat(43)}&challenge=${'a'.repeat(64)}`,
     closed, close: async () => finish() };
 }
 
@@ -48,6 +49,7 @@ async function untilReady(args, io, deps) {
 
 test('manual auth stores the key before readiness; serve reloads and revalidates it; logout clears keyring', async () => {
   const stored = new Map();
+  const browserSessions = new Map();
   const order = [];
   const { io, text } = streams();
   const authDeps = {
@@ -55,32 +57,42 @@ test('manual auth stores the key before readiness; serve reloads and revalidates
     readApiKey: async () => API_KEY,
     identifyCredential: async (site, key) => { order.push('identity'); assert.equal(site, SITE); assert.equal(key, API_KEY); return identity; },
     saveCredential: async (site, key) => { order.push('save'); stored.set(site, key); },
+    loadBrowserSession: async (site, key) => { order.push('load-session'); assert.equal(key, API_KEY); return browserSessions.get(site) ?? null; },
     startHelper: async options => {
       order.push('start');
       assert.equal(options.credential, API_KEY);
       assert.deepEqual(options.identity, identity);
+      assert.equal(options.port, 18787);
+      assert.equal(options.browserSession, null);
       return liveHelper();
     },
   };
   const auth = await untilReady(['auth', '--api-key', '--json'], io, authDeps);
   try {
-    assert.deepEqual(order, ['identity', 'save', 'start']);
+    assert.deepEqual(order, ['identity', 'save', 'load-session', 'start']);
     assert.equal(auth.event.data.name, 'Philipp [31m');
     assert.doesNotMatch(text(), /\u001b|\r/);
     assert.equal(text().includes(API_KEY), false);
     assert.equal(stored.get(SITE), API_KEY);
   } finally { assert.equal(await auth.stop(), 0); }
 
+  const persisted = { version: 1, token: 'b'.repeat(43), port: 18787, user: identity.user,
+    expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60_000).toISOString(), credentialFingerprint: credentialFingerprint(API_KEY) };
+  browserSessions.set(SITE, persisted);
   const serveOrder = [];
   const { io: serveIo, text: serveText } = streams();
   const serve = await untilReady(['serve', '--json'], serveIo, {
     site: SITE,
     loadCredential: async site => { serveOrder.push('load'); return stored.get(site); },
     identifyCredential: async (site, key) => { serveOrder.push('identity'); assert.equal(key, API_KEY); return identity; },
-    startHelper: async options => { serveOrder.push('start'); assert.equal(options.credential, API_KEY); return liveHelper(); },
+    loadBrowserSession: async (site, key) => { serveOrder.push('load-session'); assert.equal(key, API_KEY); return browserSessions.get(site) ?? null; },
+    startHelper: async options => {
+      serveOrder.push('start'); assert.equal(options.credential, API_KEY); assert.equal(options.port, 18787);
+      assert.deepEqual(options.browserSession, persisted); return liveHelper(options.port);
+    },
   });
   try {
-    assert.deepEqual(serveOrder, ['load', 'identity', 'start']);
+    assert.deepEqual(serveOrder, ['load', 'identity', 'load-session', 'start']);
     assert.equal(serve.event.data.name, 'Philipp [31m');
     assert.equal(serveText().includes(API_KEY), false);
   } finally { assert.equal(await serve.stop(), 0); }
@@ -88,12 +100,41 @@ test('manual auth stores the key before readiness; serve reloads and revalidates
   const { io: logoutIo, text: logoutText } = streams();
   const loggedOut = await main(['logout', '--json'], logoutIo, {
     site: SITE,
+    deleteBrowserSession: async site => { assert.equal(site, SITE); browserSessions.delete(site); },
     deleteCredential: async site => { assert.equal(site, SITE); stored.delete(site); },
   });
   assert.equal(loggedOut, 0);
   assert.equal(stored.has(SITE), false);
+  assert.equal(browserSessions.has(SITE), false);
   assert.match(logoutText(), /Close any running helper/);
   assert.match(logoutText(), /does not revoke the key/);
+});
+
+test('serve preserves remembered browser pairing on temporary site failure and clears it only on an actual rejected key', async () => {
+  const browserSessions = new Map([[SITE, { version: 1, token: 'b'.repeat(43), port: 18787, user: identity.user,
+    expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60_000).toISOString(), credentialFingerprint: credentialFingerprint(API_KEY) }]]);
+  let deleted = 0, started = 0;
+  const deps = { site: SITE, loadCredential: async () => API_KEY,
+    loadBrowserSession: async site => browserSessions.get(site) ?? null,
+    deleteBrowserSession: async site => { deleted++; browserSessions.delete(site); },
+    startHelper: async () => { started++; return liveHelper(); } };
+  const { io: networkIo, text: networkText } = streams();
+  const unavailable = await main(['serve', '--json'], networkIo, { ...deps,
+    identifyCredential: async () => { throw Object.assign(Error('ROMinit is temporarily unavailable. Keep the CLI open and retry.'), { code: 'ROMINIT_TRANSIENT' }); } });
+  assert.equal(unavailable, 1);
+  assert.match(networkText(), /temporarily unavailable/);
+  assert.equal(deleted, 0);
+  assert.equal(browserSessions.has(SITE), true);
+  assert.equal(started, 0);
+
+  const { io: revokedIo, text: revokedText } = streams();
+  const revoked = await main(['serve', '--json'], revokedIo, { ...deps,
+    identifyCredential: async () => { throw Object.assign(Error('ROMinit API key was rejected or expired. Run "rominit auth".'), { code: 'ROMINIT_AUTH_REJECTED' }); } });
+  assert.equal(revoked, 1);
+  assert.match(revokedText(), /API key was rejected or expired/);
+  assert.equal(deleted, 1);
+  assert.equal(browserSessions.has(SITE), false);
+  assert.equal(started, 0);
 });
 
 test('web auth persists the first redeemed credential through its callback without logging it', async () => {

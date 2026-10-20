@@ -10,8 +10,9 @@ import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { assertConsent, recipes, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
 import { ephemeralAdbCredentials, installBrowserShims } from './node-env.mjs';
-import { deleteCredential, loadCredential, saveCredential } from './credentials.mjs';
+import { deleteBrowserSession, deleteCredential, loadBrowserSession, loadCredential, saveBrowserSession, saveCredential } from './credentials.mjs';
 import { identifyCredential, siteOrigin, startHelper } from './helper.mjs';
+import { createUsbMedia } from './usb-media.mjs';
 
 /** Recipes supported by the CLI. */
 const CLI_RECIPES = ['fastboot', 'twrp-dd'];
@@ -255,6 +256,7 @@ async function nodeUsb(protocol) {
 export const USB_GONE = /cancel|timeout of|no phone in|libusb|disconnect|stall|NotFound|NetworkError|transfer error|getString|hardware fault|protocol violation/i;
 
 const SITE = process.env.ROMINIT_URL ?? 'https://rominit.pages.dev';
+const HELPER_PORT = 18787;
 const PMOS_USB = '172.16.42.1'; // postmarketOS' fixed USB-network address, as on the site's test box
 const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new Promise(ok => {
   const s = tcp({ host, port, timeout: 3000 }, () => { s.destroy(); ok(true); });
@@ -382,9 +384,9 @@ function helperArgs(argv) {
 async function runHelper(helper, out, account = null) {
   const name = account ? account.name.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ') : null;
   const text = account
-    ? `Local helper ready for ${name} on http://127.0.0.1:${helper.port}\nPair with: ${helper.pairingUrl}`
+    ? `Local helper ready for ${name} on http://127.0.0.1:${helper.port}`
     : `Local helper awaiting account approval on http://127.0.0.1:${helper.port}\nPair with: ${helper.pairingUrl}`;
-  out.emit('ready', text, undefined, { host: helper.host, port: helper.port, pairingUrl: helper.pairingUrl, ...(account ? { name } : {}) });
+  out.emit('ready', text, undefined, { host: helper.host, port: helper.port, ...(account ? { name } : { pairingUrl: helper.pairingUrl }) });
   const stop = () => { void helper.close(); };
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
@@ -395,12 +397,18 @@ async function runHelper(helper, out, account = null) {
 /** @param {string[]} argv @param {{stdin:any, stdout:any, stderr:any}} io
  * @param {{session?:()=>Promise<any>, get?:typeof fetch, catalog?:{devices:any[]}, bench?:typeof bench, site?:string, startHelper?:typeof startHelper,
  * loadCredential?:typeof loadCredential, saveCredential?:typeof saveCredential, deleteCredential?:typeof deleteCredential,
+ * loadBrowserSession?:typeof loadBrowserSession, saveBrowserSession?:typeof saveBrowserSession, deleteBrowserSession?:typeof deleteBrowserSession,
  * identifyCredential?:typeof identifyCredential, readApiKey?:(io:any)=>Promise<string>, now?:()=>number}} [deps] test seams @returns {Promise<number>} exit code */
 export async function main(argv, io, deps = {}) {
   let out = reporter(argv.includes('--json'), io);
+  const mockedCredentialStore = ['loadCredential', 'saveCredential', 'deleteCredential', 'startHelper'].some(key => Object.hasOwn(deps, key));
+  const loadSavedBrowserSession = deps.loadBrowserSession ?? (mockedCredentialStore ? async () => null : loadBrowserSession);
+  const saveSavedBrowserSession = deps.saveBrowserSession ?? (mockedCredentialStore ? async () => {} : saveBrowserSession);
+  const deleteSavedBrowserSession = deps.deleteBrowserSession ?? (mockedCredentialStore ? async () => {} : deleteBrowserSession);
   try {
     const { flags, rest } = parse(argv);
     const [cmd, codename, romId] = rest;
+    const usbMedia = ['auth', 'serve'].includes(cmd) && process.platform === 'linux' ? createUsbMedia() : undefined;
     if (cmd === 'auth') {
       if (rest.length !== 1 || helperArgs(argv)) throw Error('auth takes no device arguments or flash flags.');
       const site = siteOrigin(deps.site ?? SITE);
@@ -408,14 +416,20 @@ export async function main(argv, io, deps = {}) {
         const key = await (deps.readApiKey ?? promptApiKey)(io);
         const account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now);
         await (deps.saveCredential ?? saveCredential)(site, key);
-        const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, credential: key, identity: account,
+        const browserSession = await loadSavedBrowserSession(site, key, undefined, deps.now);
+        const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, usbMedia, port: browserSession?.port ?? HELPER_PORT,
+          browserSession, credential: key, identity: account,
           saveCredential: saved => (deps.saveCredential ?? saveCredential)(site, saved),
+          saveSession: (session, credential) => saveSavedBrowserSession(site, credential, session),
+          deleteSession: () => deleteSavedBrowserSession(site),
           onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".') });
         await runHelper(helper, out, account.user);
         return 0;
       }
-      const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now,
+      const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, usbMedia, port: HELPER_PORT,
         saveCredential: key => (deps.saveCredential ?? saveCredential)(site, key),
+        saveSession: (session, credential) => saveSavedBrowserSession(site, credential, session),
+        deleteSession: () => deleteSavedBrowserSession(site),
         onPair: user => {
           const name = user.name.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ');
           out.emit('paired', `Authenticated as ${name}`, undefined, { name });
@@ -431,9 +445,18 @@ export async function main(argv, io, deps = {}) {
       const site = siteOrigin(deps.site ?? SITE);
       const key = await (deps.loadCredential ?? loadCredential)(site);
       if (!key) throw Error('No saved ROMinit API key. Run "rominit auth" first.');
-      const account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now);
-      const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, credential: key, identity: account,
+      let account;
+      try { account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now); }
+      catch (error) {
+        if (error?.code === 'ROMINIT_AUTH_REJECTED') await deleteSavedBrowserSession(site);
+        throw error;
+      }
+      const browserSession = await loadSavedBrowserSession(site, key, undefined, deps.now);
+      const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, usbMedia, port: browserSession?.port ?? HELPER_PORT,
+        browserSession, credential: key, identity: account,
         saveCredential: saved => (deps.saveCredential ?? saveCredential)(site, saved),
+        saveSession: (session, credential) => saveSavedBrowserSession(site, credential, session),
+        deleteSession: () => deleteSavedBrowserSession(site),
         onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".') });
       await runHelper(helper, out, account.user);
       return 0;
@@ -441,6 +464,7 @@ export async function main(argv, io, deps = {}) {
     if (cmd === 'logout') {
       if (rest.length !== 1 || flags.apiKey || helperArgs(argv)) throw Error('logout takes no device arguments or other flags.');
       const site = siteOrigin(deps.site ?? SITE);
+      await deleteSavedBrowserSession(site);
       await (deps.deleteCredential ?? deleteCredential)(site);
       out.done(`Saved ROMinit API key removed for ${site}. Close any running helper to clear its in-memory credential; this does not revoke the key.`);
       return 0;

@@ -74,17 +74,17 @@ CREATE TABLE IF NOT EXISTS roles (
   PRIMARY KEY (user_id, role, scope)
 );
 
--- Phone tests: the page starts a run, the phone's script fetches and posts back through the run's code, the user corrects and submits.
+-- Phone tests: the script posts raw results; the page autosubmits and saves corrections until review starts.
 -- Script fixes: SELECT rom, output FROM bench_runs WHERE output LIKE '% inconclusive %' (each line names the probe, exit code and error).
 CREATE TABLE IF NOT EXISTS bench_runs (
-  code TEXT PRIMARY KEY,   -- random, valid for an hour until submitted
+  code TEXT PRIMARY KEY,   -- probe code, valid for an hour until first report save
   rom TEXT NOT NULL,
   version TEXT,            -- the ROM's catalog version when the test started (ROM ids stay stable across updates)
   voter TEXT NOT NULL,
   user_id INTEGER,
   created TEXT NOT NULL DEFAULT (datetime('now')),
   output TEXT,             -- what the script printed, up to 128 KB, package list included
-  final TEXT,              -- JSON {feature: status} after the user's corrections
+  final TEXT,              -- JSON {feature: status}, updated by autosaved corrections
   note TEXT,
   submitted TEXT,
   accepted TEXT,          -- set by an admin: the card's results now show on the ROM page

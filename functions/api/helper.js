@@ -55,7 +55,7 @@ export async function onRequest({ request, env }) {
     return row ? json({ user: { id: token.id, name: token.name }, expiresAt: isoUtc(row.expires) }) : json({ error: 'valid API token required' }, 401);
   }
 
-  if (body.action === 'approve') {
+  if (body.action === 'approve' || body.action === 'approve-existing') {
     if (!sameOrigin(request)) return json({ error: 'same-origin request required' }, 403);
     const user = await userOf(env, request);
     if (!user) return json({ error: 'sign in first' }, 401);
@@ -65,7 +65,7 @@ export async function onRequest({ request, env }) {
     const { meta } = await env.DB.prepare(`INSERT INTO helper_grants (code_hash, user_id, challenge, expires)
       SELECT ?1, ?2, ?3, datetime('now', '+60 seconds')
       WHERE (SELECT COUNT(*) FROM helper_grants WHERE user_id = ?2 AND expires > datetime('now')) < ?4`)
-      .bind(await sha256hex(code), user.id, body.challenge, MAX_ACTIVE).run();
+      .bind(await sha256hex(code), user.id, body.action === 'approve-existing' ? `existing:${body.challenge}` : body.challenge, MAX_ACTIVE).run();
     if (!meta.changes) return json({ error: 'too many active helper grants' }, 409);
     return json({ code, expiresIn: 60 });
   }
@@ -84,7 +84,10 @@ export async function onRequest({ request, env }) {
       await env.DB.prepare("DELETE FROM helper_grants WHERE code_hash = ?1 AND expires <= datetime('now')").bind(codeHash).run();
       return json({ error: 'grant expired or already used' }, 410);
     }
-    if (grant.challenge !== challenge) return json({ error: 'verifier does not match' }, 403);
+    const existingOnly = grant.challenge.startsWith('existing:');
+    const storedChallenge = existingOnly ? `existing:${challenge}` : challenge;
+    if (grant.challenge !== storedChallenge) return json({ error: 'verifier does not match' }, 403);
+    if (existingOnly && !token) return json({ error: 'existing CLI credential required' }, 401);
     if (token) {
       if (token.id !== grant.user_id) return json({ error: 'grant belongs to a different user' }, 403);
       const expiry = await activeToken(env, token.token_id);
@@ -92,7 +95,7 @@ export async function onRequest({ request, env }) {
       const { meta } = await env.DB.prepare(`DELETE FROM helper_grants
         WHERE code_hash = ?1 AND challenge = ?2 AND user_id = ?3 AND expires > datetime('now')
         AND EXISTS (SELECT 1 FROM api_tokens WHERE id = ?4 AND user_id = ?3 AND revoked IS NULL AND expires > datetime('now'))`)
-        .bind(codeHash, challenge, token.id, token.token_id).run();
+        .bind(codeHash, storedChallenge, token.id, token.token_id).run();
       if (!meta.changes) {
         if (!await activeToken(env, token.token_id)) return json({ error: 'valid API token required' }, 401);
         return json({ error: 'grant expired or already used' }, 410);
@@ -124,5 +127,5 @@ export async function onRequest({ request, env }) {
     return json({ user: { id: grant.id, name: grant.name }, credential, expiresAt: isoUtc(expiry.expires) });
   }
 
-  return json({ error: 'action must be identity, approve or redeem' }, 400);
+  return json({ error: 'action must be identity, approve, approve-existing or redeem' }, 400);
 }

@@ -9,7 +9,7 @@ export const recipes = { fastboot, odin, 'twrp-dd': twrpDd, 'fastboot-tgz': fast
 
 /** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
 /** Feature table of the postmarketOS/Nura device wiki, grouped like its sections. */
-export const FEATURE_GROUPS = {'basics':  ['flashing',  'usb_net',  'storage',  'sdcard',  'battery',  'screen',  'touch'],  'multimedia':  ['gpu',  'audio',  'camera',  'camera_flash',  'ir'],  'connectivity':  ['wifi',  'bluetooth',  'gps',  'nfc'],  'modem':  ['calls',  'sms',  'data'],  'misc':  ['fde',  'otg',  'hdmi',  'fingerprint'],  'sensors':  ['accelerometer',  'magnetometer',  'light',  'proximity',  'hall',  'haptics',  'barometer']};
+export const FEATURE_GROUPS = {'basics':  ['flashing',  'usb_net',  'storage',  'sdcard',  'battery',  'screen',  'touch'],  'multimedia':  ['gpu',  'audio',  'camera',  'camera_flash'],  'connectivity':  ['wifi',  'bluetooth',  'gps',  'nfc'],  'modem':  ['calls',  'sms',  'data'],  'misc':  ['ir', 'fde',  'otg',  'hdmi',  'fingerprint'],  'sensors':  ['accelerometer',  'magnetometer',  'light',  'proximity',  'hall',  'haptics',  'barometer']};
 export const FEATURES = Object.values(FEATURE_GROUPS).flat();
 /** n/a = the phone has no such hardware; left out of completeness. */
 export const STATES = ['works', 'partial', 'broken', 'untested', 'n/a'];
@@ -19,7 +19,7 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 /** Top of the device tree; a device without `category` is a phone. Pi, routers, ARM boards etc. come later. */
-export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', console: 'Consoles', pc: 'x86 PCs' };
+export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', console: 'Consoles', pc: 'OS' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Search levels, best first: an approved ROMinit phone test, a curated ROM, a scraped ROM with a recipe, support-only (no recipe), only link-only ROMs. */
 export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder' };
