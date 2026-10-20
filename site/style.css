@@ -601,3 +601,16 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .branch-boxes input:checked + span { border-color: var(--teal); background: var(--teal-dim); color: var(--teal); }
 .branch-boxes input:focus-visible + span { outline: 2px solid var(--teal); outline-offset: 2px; }
 .branch-boxes .none span { opacity: .6; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1.1rem; }
+.badge-pill { display: inline-flex; font: .8rem/1.9 var(--mono, ui-monospace, monospace); text-decoration: none; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.badge-label { display: inline-flex; align-items: center; gap: .35rem; padding: 0 .55rem; background: #2b2a27; color: #e8e2d6; }
+.badge-label img { height: 1.1em; width: 1.1em; }
+.badge-value { padding: 0 .55rem; background: var(--teal-dim, #1f6f66); color: #fff; }
+.badge-pill:hover .badge-value { filter: brightness(1.2); }
+/* XDA badge inside the source row: same size and box as the links next to it */
+.source-row strong { min-width: 0; }
+.source-row .badge-pill { padding: 0; border-color: var(--line); color: inherit; font: inherit; line-height: normal; display: inline-flex; align-items: stretch; }
+.source-row .badge-pill:hover { background: none; }
+.source-row .badge-label, .source-row .badge-value { padding: .3rem .55rem; }
+.source-row .badge-label img { height: 1em; width: 1em; }

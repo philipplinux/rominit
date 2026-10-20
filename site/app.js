@@ -78,8 +78,8 @@ const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent
   h('small', { textContent: `${ORIGINS[rom.origin]}; ${STATUSES[rom.status]}; ${VETTING[rom.vetting]}` }));
 const link = (/** @type {string} */ href, /** @type {string} */ text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer', textContent: text });
 /** Where the ROM comes from: release page and source code, first thing in section 0. @param {any} rom */
-const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key) => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
-  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }), rom.discussion && link(rom.discussion, 'Discussion'), favoriteButton(key));
+const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key, /** @type {any} */ device) => h('p', { className: 'rating source-row' }, h('strong', { textContent: 'source' }),
+  link(rom.homepage, 'ROM source'), rom.source ? link(rom.source, 'Source code') : h('span', { className: 'feature untested', textContent: 'no source code published' }), rom.discussion && link(rom.discussion, 'Discussion'), badge('xda', 'XDA', device.xda ? 'forum' : 'search', { href: device.xda ?? `https://xdaforums.com/search/?q=${encodeURIComponent(`${device.vendor} ${device.name}`)}`, target: '_blank', rel: 'noopener noreferrer', title: 'Discussion on XDA Forums' }), favoriteButton(key));
 /** "♥ Favorite 3", like a GitHub star; signed out it opens the sign-in popup. Hidden without the API. @param {string} key `<codename>/<rom id>` */
 function favoriteButton(key) {
   const button = h('button', { type: 'button', className: 'favorite', hidden: true });
@@ -216,12 +216,6 @@ me.then(info => {
   }
   document.querySelector('.topbar-side')?.append(slot);
 });
-/** Newest Linux kernel any non-stock ROM brings, as a hardware tag: "community Linux 7.2". @param {any} device */
-const communityKernel = device => {
-  const v = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock' && r.rating?.kernel).map((/** @type {any} */ r) => r.rating.kernel.version)
-    .sort((/** @type {string} */ a, /** @type {string} */ b) => b.localeCompare(a, undefined, { numeric: true }))[0];
-  return v && `community Linux ${v}`;
-};
 /** Arrow looping back counter-clockwise into a circle (start over). */
 const REWIND_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.64-6.36L3 8.25"/><path d="M3 3v5.25h5.25"/></svg>';
 const ROLE_LABEL = /** @type {Record<string, string>} */ ({ owner: 'maintainer', moderator: 'moderator', admin: 'admin' });
@@ -1061,6 +1055,27 @@ async function start() {
       h('p', { className: 'field-help', textContent: 'Useful next details to gather: exact model number, device-specific install steps, and a safe recovery or stock restore path.' })));
     return;
   }
+const badge = (/** @type {string} */ logo, /** @type {string} */ label, /** @type {string} */ value, /** @type {Record<string, any>} */ attrs) => h('a', { className: 'badge-pill', ...attrs },
+  h('span', { className: 'badge-label' }, h('img', { src: `./logos/${logo}.svg`, alt: '', onerror() { this.remove(); } }), label), h('span', { className: 'badge-value', textContent: value }));
+/**
+ * Badges above section 0: one per ROM project, the newest stock Android, and the recovery project. A project with several builds says
+ * "multiple available" and jumps to section 0. Drawn in CSS around small local logos, so there are no badge images to fetch or cache.
+ * @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {HTMLDetailsElement} infoSection
+ */
+function badgeRow(device, roms, stock, infoSection) {
+  // postmarketOS releases are rolling, so its number is the Linux kernel; others show the release number, or the Android base when the version is only a date/build.
+  const shown = (/** @type {any} */ r) => r.os === 'postmarketOS' ? `Linux ${r.rating.kernel.version}`
+    : r.version.match(/^v?\d{1,3}\.\d+(?: A\d+)?/)?.[0] ?? r.rating.base.replace(`${r.os} `, '');
+  const byOs = new Map();
+  for (const r of roms) if (r.status !== 'broken') byOs.set(r.os, [...(byOs.get(r.os) ?? []), r]);
+  const romBadges = [...byOs].map(([os, list]) => list.length === 1
+    ? badge(os.toLowerCase(), os, shown(list[0]), { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
+    : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick(/** @type {Event} */ e) { e.preventDefault(); infoSection.open = true; infoSection.scrollIntoView({ behavior: 'smooth' }); } }));
+  const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
+  const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: latest.homepage, target: '_blank', rel: 'noopener noreferrer', title: `${latest.name} ${latest.version}: stock firmware, also in section R` });
+  const recoveryBadges = (device.recoveries ?? []).map((/** @type {any} */ r) => badge(r.id, r.name, r.version, { href: r.project, target: '_blank', rel: 'noopener noreferrer', title: `${r.name} recovery project` }));
+  return h('p', { className: 'badge-row' }, ...romBadges, stockBadge, ...recoveryBadges);
+}
   // Accepted phone tests override the catalog's feature states; blocked / untested / inconclusive keep the catalog value.
   const tested = await fetch(`./api/bench?device=${encodeURIComponent(codename)}`).then(r => r.ok ? r.json() : {}).catch(() => ({}));
   for (const r of device.roms) {
@@ -1123,7 +1138,8 @@ async function start() {
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
-      rom && sourceRow(rom, `${device.codename}/${rom.id}`),
+      rom && sourceRow(rom, `${device.codename}/${rom.id}`, device),
+      rom && h('p', { className: 'inbox-actions' }, requestButton('update', 'Request ROM update', `${device.codename}/${rom.id}`), requestButton('mirror', 'Request ROM mirror', `${device.codename}/${rom.id}`)),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
@@ -1212,7 +1228,6 @@ async function start() {
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   // Under the intro, three rows: specs, phone tags (year, microSD, cameras, telephoto, LiDAR), then the OS story (stock / community Android, community Linux).
   const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux|jailbreak|os\b/i.test(t); // iOS, postmarketOS, Sailfish OS…
-  const osLine = [...tags.filter(isOs), communityKernel(device)].filter(Boolean);
   main.append(
     h('section', { className: 'intro' },
       device.photo && h('figure', { className: 'phone-photo' }, h('img', { src: `./${device.photo.src}`, alt: `${device.vendor} ${device.name}` }),
@@ -1229,7 +1244,7 @@ async function start() {
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
       device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display].join(' · ') }),
       tags.some(t => !isOs(t)) && h('p', { className: 'hardware-line', textContent: tags.filter(t => !isOs(t)).join(' · ') }),
-      osLine.length > 0 && h('p', { className: 'hardware-line', textContent: osLine.join(' · ') })),
+      badgeRow(device, roms, stock, infoSection)),
     infoSection,
     unlockSection,
     twrpSection,
