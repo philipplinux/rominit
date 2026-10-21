@@ -129,6 +129,7 @@ h1 span { color: var(--teal); }
 .field-label { display: block; margin-bottom: .55rem; font-size: .75rem; font-weight: 700; }
 .rom-label { display: flex; align-items: center; gap: .6rem; font-size: 1rem; }
 .os-logo { width: 32px; height: 32px; }
+img[src$="/grapheneos.svg"] { filter: brightness(0) invert(.9); }
 .device-row { display: flex; gap: 9px; }
 select {
   min-width: 0;
@@ -386,6 +387,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .hints .bench-command { display: inline-block; margin: .25rem 0; }
 .hints ul, .requirements ul { margin: .3rem 0 0; padding-left: 1.1rem; }
 .requirements { font-size: .75rem; }
+.requirements code { overflow-wrap: anywhere; }
 .lock-in { margin-top: .5rem; max-width: calc(100% - 2 * clamp(16px, 3vw, 28px)); white-space: normal; text-align: left; }
 .done .lock-in { border-color: var(--teal); color: var(--teal); }
 .rom-pick { display: flex; flex-wrap: wrap; gap: .6rem; align-items: stretch; }

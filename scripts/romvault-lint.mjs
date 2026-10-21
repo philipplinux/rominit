@@ -3,6 +3,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CATEGORY_DIRS } from '../src/catalog.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const VAULT = join(ROOT, 'romvault');
@@ -82,7 +83,7 @@ export function lint(vault = VAULT) {
   }
 
   // The net: ROM ↔ device ↔ series ↔ line ↔ vendor ↔ category, both directions; every catalog device has a page.
-  const catalogDevices = readdirSync(join(ROOT, 'catalog/devices'), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(c => readdirSync(join(ROOT, 'catalog/devices', c.name), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', c.name, v.name)).filter(f => f.endsWith('.json')).map(f => JSON.parse(readFileSync(join(ROOT, 'catalog/devices', c.name, v.name, f), 'utf8')))));
+  const catalogDevices = readdirSync(join(ROOT, 'catalog/devices'), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(c => readdirSync(join(ROOT, 'catalog/devices', c.name), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', c.name, v.name)).filter(f => f.endsWith('.json')).map(f => ({ ...JSON.parse(readFileSync(join(ROOT, 'catalog/devices', c.name, v.name, f), 'utf8')), category: CATEGORY_DIRS[c.name] }))));
   const families = /** @type {Map<string, Set<string>>} */ (new Map());
   for (const d of catalogDevices) {
     const page = join(vault, 'devices', `${d.codename}.md`);
@@ -92,7 +93,7 @@ export function lint(vault = VAULT) {
     if (!parents.length) problems.push(`romvault/devices/${d.codename}.md: no series page lists it`);
     for (const s of parents) if (!linksTo(page, s)) say(page, `does not link up to ${relative(vault, s)}`);
     if (!(fm.tags ?? []).includes(`device/${d.codename}`)) say(page, `tag device/${d.codename} missing`);
-    if (!(fm.tags ?? []).includes(d.category ?? 'phone')) say(page, `tag ${d.category ?? 'phone'} missing (catalog category)`);
+    if (!(fm.tags ?? []).includes(d.category)) say(page, `tag ${d.category} missing (catalog category)`);
     for (const s of parents) families.set(s, (families.get(s) ?? new Set()).add(d.family));
   }
   // A series page is one catalog family (Pixel 7, Galaxy S9), not a brand line: lines/ holds those.

@@ -1,0 +1,119 @@
+{
+  "device": "tangorpro",
+  "roms": [
+    {
+      "id": "official-grapheneos",
+      "os": "GrapheneOS",
+      "name": "GrapheneOS",
+      "version": "2026101600",
+      "origin": "official",
+      "status": "stable",
+      "vetting": "curated",
+      "risk": {
+        "level": "low",
+        "why": "Official GrapheneOS project build with public source, signed updates and verified boot. Device support and feature states are documented upstream; ROMinit has not hardware-tested this tablet."
+      },
+      "rating": {
+        "checked": "2026-10-21",
+        "features": {
+          "flashing": "works",
+          "usb_net": "works",
+          "storage": "works",
+          "sdcard": "n/a",
+          "battery": "works",
+          "screen": "works",
+          "touch": "works",
+          "gpu": "works",
+          "audio": "works",
+          "camera": "works",
+          "camera_flash": "n/a",
+          "ir": "n/a",
+          "wifi": "works",
+          "bluetooth": "works",
+          "gps": "works",
+          "nfc": "n/a",
+          "calls": "n/a",
+          "sms": "n/a",
+          "data": "n/a",
+          "fde": "works",
+          "otg": "works",
+          "hdmi": "works",
+          "fingerprint": "works",
+          "accelerometer": "works",
+          "magnetometer": "works",
+          "light": "works",
+          "proximity": "n/a",
+          "hall": "works",
+          "haptics": "n/a",
+          "barometer": "n/a"
+        },
+        "includes": {
+          "google_play": "optional",
+          "microg": "no",
+          "android_apps": "yes",
+          "phone_ui": "yes",
+          "root": "no",
+          "updates": "yes",
+          "encryption": "yes",
+          "relock": "yes",
+          "banking_apps": "optional",
+          "ssh": "no",
+          "docker": "no"
+        },
+        "kernel": {
+          "version": "6.1",
+          "type": "downstream"
+        },
+        "base": "Android 17",
+        "released": "2026-10-17",
+        "support": "active",
+        "sources": [
+          {
+            "label": "GrapheneOS device support",
+            "url": "https://grapheneos.org/faq#supported-devices"
+          },
+          {
+            "label": "GrapheneOS support standard",
+            "url": "https://grapheneos.org/faq#future-devices"
+          },
+          {
+            "label": "Google hardware specifications",
+            "url": "https://support.google.com/googlepixeltablet/answer/13555146?hl=en"
+          },
+          {
+            "label": "GrapheneOS usage guide",
+            "url": "https://grapheneos.org/usage"
+          }
+        ],
+        "note": "Upstream-documented support, checked 21 October 2026; not hardware-tested by ROMinit. USB networking, USB OTG, wired video output and GPS are marked working at the owner’s direction; these four have not been independently verified by ROMinit. SD card, NFC, cellular service, camera flash, IR, proximity sensor, vibration motor and barometer are absent. Banking-app compatibility varies; optional sandboxed Google Play may be needed."
+      },
+      "notes": "Full graphical Android 17 interface with a home screen, touch navigation, Android apps, camera and Vanadium browser. Sandboxed Google Play is optional. Official Pixel Tablet release; hardware support below follows upstream documentation, not a ROMinit hardware test.",
+      "source": "https://github.com/GrapheneOS/platform_manifest",
+      "maintainer": {
+        "name": "GrapheneOS project",
+        "source": "https://grapheneos.org/"
+      },
+      "screenshots": [
+        {
+          "src": "./shots/grapheneos/android17-ui.gif",
+          "caption": "GrapheneOS Android 17 UI: home screen and default apps (zoom). Illustrative phone screenshot; tablet layout differs and exact build 2026101600 is not verified. GrapheneOS developers, MIT."
+        }
+      ],
+      "homepage": "https://grapheneos.org/",
+      "discussion": "https://discuss.grapheneos.org/",
+      "external": {
+        "url": "https://grapheneos.org/install/web",
+        "why": "ROMinit has no pinned GrapheneOS image files or flash stages; use the project's official WebUSB installer."
+      },
+      "stages": [],
+      "slots": "ab",
+      "requirements": [
+        "OEM unlocking must be available and enabled in the stock OS; carrier restrictions can prevent bootloader unlocking.",
+        "Back up data first: unlocking, installing GrapheneOS and relocking the bootloader each erase user data.",
+        "Follow the installer through bootloader relocking, then verify the Pixel Tablet boot key hash: `94df136e6c6aa08dc26580af46f36419b5f9baf46039db076f5295b91aaff230`.",
+        "Use GrapheneOS's supported WebUSB browser and operating system with a direct USB connection; avoid hubs and virtual machines.",
+        "Disconnect the Pixel Tablet from its Charging Speaker Dock before USB flashing."
+      ]
+    }
+  ]
+}

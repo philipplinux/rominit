@@ -98,6 +98,13 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
   notices.push(`${path}\n${notice}`);
 }
 notices.push('logos/{android,eos,lineageos,xda}.svg\nSimple Icons (CC0), https://simpleicons.org; the marks belong to Google, the /e/ Foundation, the LineageOS project and XDA, shown only to name them. logos/twrp.svg is our own monogram.');
+notices.push(`shots/grapheneos/android17-ui.gif
+GrapheneOS Android 17 UI preview, assembled from the home screenshot and an enlarged detail of its default apps. Phone screenshot; not an exact-build or tablet capture.
+Source: https://commons.wikimedia.org/wiki/File:GrapheneOS_home_screen_Android_17.png
+Copyright (c) GrapheneOS developers. MIT License.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.`);
 notices.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
 for (const { photo } of devices) if (photo) {
   assert(existsSync(`site/${photo.src}`), `missing ${photo.src}`);

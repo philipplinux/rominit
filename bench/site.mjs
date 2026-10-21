@@ -47,6 +47,38 @@ after(async () => {
 
 const text = (/** @type {string} */ selector) => page.locator(selector).first().evaluate(el => el.textContent ?? '');
 
+test('Pixel Tablet lives in the tablet tree and uses the phone install flow', async () => {
+  await page.goto(`${BASE}/?category=tablet`);
+  await page.locator('a[href="?device=tangorpro"]').click();
+  await page.getByRole('heading', { name: 'Flash your Pixel Tablet.' }).waitFor();
+  assert.match(await text('.eyebrow'), /TABLETS/);
+  assert.equal(await page.locator('a[href="https://grapheneos.org/install/web"]').count() > 0, true);
+  assert.match(await text('#main'), /Link-only/);
+  const unlock = page.locator('.page-section').filter({ has: page.locator(':scope > summary', { hasText: '1 · Unlock bootloader' }) });
+  await unlock.locator('.external-unlock a').waitFor();
+  assert.equal(await unlock.locator('.rominit-unlock').evaluate(el => el.open), false);
+  await unlock.locator('.rominit-unlock > summary').click();
+  assert.ok(await unlock.getByPlaceholder('UNLOCK AND WIPE').isVisible(), 'local unlock keeps typed consent');
+  await unlock.locator('.rominit-unlock > summary').click();
+  const stock = page.locator('.badge-row a').filter({ hasText: 'Stock Android' });
+  assert.match(await stock.innerText(), /17/);
+  await stock.click();
+  assert.ok(await page.locator('.page-section').filter({ hasText: 'R · Recover / revert' }).evaluate(el => el.open));
+  const shots = page.locator('.slideshow img');
+  assert.equal(await shots.count(), 1);
+  assert.match(await shots.first().getAttribute('src'), /android17-ui\.gif$/);
+  assert.match(await text('#main'), /Full graphical Android 17 interface/);
+  assert.match(await text('#main'), /Wi-Fi ✓/);
+  assert.match(await text('#main'), /Upstream documentation/);
+  assert.doesNotMatch(await text('#main'), /untested placeholder|scraped · unverified/);
+  assert.ok(await shots.first().evaluate(img => img.complete && img.naturalWidth > 0));
+  assert.match(await page.locator('.badge-row img[src$="grapheneos.svg"]').evaluate(img => getComputedStyle(img).filter), /brightness/);
+  await page.getByText('R · Recover / revert', { exact: false }).first().waitFor();
+  await page.setViewportSize({ width: 390, height: 900 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'boot key wraps on mobile');
+  await page.setViewportSize({ width: 1280, height: 720 });
+});
+
 test('coffee link in header and footer', async () => {
   await page.goto(BASE);
   assert.equal(await page.locator(`.topbar a[href="${DONATE}"]`).count(), 1);

@@ -130,6 +130,7 @@ export function problems(device, romFile) {
   need(SAFE.test(device?.codename ?? ''), 'device.codename missing or unsafe');
   need(device?.vendor && device?.name, `${device?.codename}: vendor and name are required`);
   need(device?.series && device?.family && device?.variant, `${device?.codename}: series, family and variant are required (All › vendor › series › family › variant)`);
+  need(device?.recovery?.stockAndroid === undefined || (/^\d+$/.test(device.recovery.stockAndroid) && device.recovery.url?.startsWith('https://')), `${device?.codename}: recovery.stockAndroid needs an Android version and an https recovery url`);
   need((device?.unsupported ?? []).every(u => u.name && u.models?.length && u.why), `${device?.codename}: unsupported variants need name, models and why`);
   const unlock = device?.unlock;
   need(unlock === undefined || (unlock.text && unlock.steps?.length && [...unlock.steps, ...unlock.hints ?? []].every(step => typeof step === 'string')
@@ -179,6 +180,8 @@ export function problems(device, romFile) {
     need(/^\d{4}-\d{2}-\d{2}$/.test(rom.rating?.checked ?? '') && FEATURES.every(f => STATES.includes(features[f])) && Object.keys(features).length === FEATURES.length,
       `${at}: rating needs a checked date and exactly these features (${STATES.join('/')}): ${FEATURES.join(', ')}`);
     const rating = rom.rating ?? {};
+    need(rating.sources === undefined || (Array.isArray(rating.sources) && rating.sources.every(s => s && typeof s.label === 'string' && s.label && typeof s.url === 'string' && s.url.startsWith('https://'))), `${at}: rating.sources needs labelled https URLs`);
+    need(rating.note === undefined || typeof rating.note === 'string', `${at}: rating.note must be text`);
     need(/^\d+\.\d+(\.\d+)?$/.test(rating.kernel?.version ?? '') && KERNELS.includes(rating.kernel?.type), `${at}: rating.kernel needs version and type (${KERNELS.join('/')})`);
     need(rating.base && /^\d{4}-\d{2}-\d{2}$/.test(rating.released ?? '') && SUPPORT.includes(rating.support),
       `${at}: rating needs base, released date and support (${SUPPORT.join('/')})`);

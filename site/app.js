@@ -57,7 +57,7 @@ const size = (/** @type {number} */ bytes) => bytes < 1024 * 1024 ? `${(bytes / 
 const MARK = { works: '✓', partial: '~', broken: '✗', untested: '?' };
 const LABEL = { usb_net: 'USB networking', wifi: 'Wi-Fi', gpu: '3D acceleration', camera_flash: 'camera flash', ir: 'IR blaster', gps: 'GPS', nfc: 'NFC',
   data: 'mobile data', fde: 'disk encryption', otg: 'USB OTG', hdmi: 'HDMI/DP', light: 'ambient light', hall: 'hall sensor', sdcard: 'SD card', google_play: 'Google Play', microg: 'microG', android_apps: 'Android apps',
-  phone_ui: 'phone UI', updates: 'updates', encryption: 'encryption', relock: 'bootloader relock', banking_apps: 'banking apps', ssh: 'SSH', docker: 'Docker' };
+  phone_ui: 'touch UI', updates: 'updates', encryption: 'encryption', relock: 'bootloader relock', banking_apps: 'banking apps', ssh: 'SSH', docker: 'Docker' };
 /** Includes / lacks rows; optional items are listed as add-ons. @param {any} rating */
 const includesRows = rating => ['yes', 'optional', 'no'].map(value => {
   const items = INCLUDES.filter(i => rating.includes[i] === value);
@@ -106,7 +106,8 @@ function badgeRow(device, roms, stock, rom, infoSection, recoverSection) {
       : { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}#rom`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
     : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick: jump(infoSection) }));
   const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
-  const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: '#', title: `${latest.name} ${latest.version}: restore it in section R`, onclick: jump(recoverSection) });
+  const stockAndroid = latest?.rating.base.replace('Android ', '') ?? device.recovery?.stockAndroid;
+  const stockBadge = stockAndroid && badge('android', 'Stock Android', stockAndroid, { href: '#', title: 'Stock Android: restore it in section R', onclick: jump(recoverSection) });
   const recoveryBadges = (device.recoveries ?? []).map((/** @type {any} */ r) => badge(r.id, r.name, r.version, { href: r.project, target: '_blank', rel: 'noopener noreferrer', title: `${r.name} recovery project` }));
   return h('p', { className: 'badge-row' }, ...romBadges, stockBadge, ...recoveryBadges);
 }
@@ -123,7 +124,7 @@ function favoriteButton(key) {
   };
   return button;
 }
-const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: vendor fork, no upstream fixes' };
+const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: device/vendor kernel' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
   `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), complete(rating, 'phone', true)].map(text => h('span', { className: 'feature', textContent: text })));
@@ -134,7 +135,9 @@ const loginRow = login => { const [user, password] = login.split(' / ');
 /** Feature row: ✓ works, ~ partial, ✗ broken, ? untested. @param {any} rating */
 const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map(([group, features]) => h('p', { className: 'rating' }, h('strong', { textContent: group }),
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
-    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked}${rating.tested ? ` · phone test accepted ${rating.tested}` : ''}` }));
+    textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `${rating.sources?.length ? 'Upstream documentation · checked' : 'Feature list follows the postmarketOS wiki · curated'} ${rating.checked}${rating.tested ? ` · phone test accepted ${rating.tested}` : ''}` }),
+  rating.note && h('p', { className: 'field-help', textContent: rating.note }),
+  rating.sources?.length && h('p', { className: 'rating source-row' }, h('strong', { textContent: 'evidence' }), ...rating.sources.map(source => link(source.url, source.label))));
 /** Count one view or flash of a ROM; failures are ignored. @param {string} rom @param {'view'|'flash'} kind */
 // Opt-in: in-page downloads kept in Cache Storage by SHA-256, so a retry skips the download; the recipe still checks the hash.
 const KEPT = 'rominit-downloads';
@@ -1540,6 +1543,7 @@ async function start() {
     return button;
   };
   const infoSection = section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
+      rom?.notes && h('p', { className: 'intro-copy' }, ...rich(rom.notes)),
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
@@ -1554,7 +1558,6 @@ async function start() {
       ...(rom ? includesRows(rom.rating) : []),
       rom && requirementsRow(rom)) : '',
       rom && h('div', { className: 'lock-end' }, rom.login && loginRow(rom.login), lockButton()),
-      rom && h('p', { className: 'intro-copy' }, ...rich(`${rom.notes ?? ''} `)),
       rom && commentsBox(`${device.codename}/${rom.id}`)], rom ? 'REQUIRED' : '');
   if (rom) required(infoSection, () => {
     for (const b of lockButtons) b.textContent = progress.rom === rom.id ? '✓ Locked in · change' : `Lock in ${rom.name} ${rom.version}`;
@@ -1565,11 +1568,14 @@ async function start() {
   const alreadyUnlocked = h('input', { type: 'checkbox', checked: !!progress.unlocked });
   const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: progress.steps?.includes(i) ?? false }));
   const manual = unlock && h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step)))));
-  const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
-    h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this phone'),
+  const localUnlock = oneClick && h('div', { className: 'stages' }, h('p', { className: 'field-help' }, h('strong', { textContent: 'One click: ' }),
+    'turn on OEM unlocking in Developer options, put the device in fastboot mode, then this sends the unlock command from the browser instead of a computer terminal.'), oneClick);
+  const unlockSection = section('1 · Unlock bootloader', unlock ? rom?.external ? 'use the official installer; ROMinit is optional' : 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
+    rom?.external && h('p', { className: 'external-unlock intro-copy' }, link(rom.external.url, `Unlock with the ${rom.os} installer (recommended)`),
+      ' — use the same installer to unlock, flash and relock. Follow its preparation steps and confirm on the device. Unlocking erases your data.'),
+    h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this device'),
     unlock.hints?.length && h('details', { className: 'hints' }, h('summary', {}, h('strong', { textContent: `Good to know · ${unlock.hints.length} hint${unlock.hints.length === 1 ? '' : 's'}` })), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
-    oneClick && h('div', { className: 'stages' }, h('p', { className: 'field-help' }, h('strong', { textContent: 'One click: ' }),
-      'turn on OEM unlocking in Developer options, put the phone in fastboot mode, then this sends the unlock command from the browser instead of a computer terminal.'), oneClick),
+    rom?.external && localUnlock ? h('details', { className: 'alt-path rominit-unlock' }, h('summary', { textContent: 'Optional: unlock with ROMinit instead' }), localUnlock) : localUnlock,
     oneClick ? h('details', { className: 'alt-path' }, h('summary', { textContent: 'Alternative path: unlock by hand' }), manual) : manual,
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
@@ -1653,7 +1659,7 @@ async function start() {
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   // Under the intro, three rows: specs, phone tags (year, microSD, cameras, telephoto, LiDAR), then badges for the ROM projects, stock Android and recoveries.
   const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux|jailbreak|os\b/i.test(t); // iOS, postmarketOS, Sailfish OS…
-  const recoverSection = section('R · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
+  const recoverSection = section('R · Recover / revert', stock.length || device.recovery?.stockAndroid ? 'back to stock' : 'manual for now', false, [
     device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
     ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
       ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),

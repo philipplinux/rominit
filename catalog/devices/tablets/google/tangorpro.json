@@ -1,0 +1,55 @@
+{
+  "codename": "tangorpro",
+  "vendor": "Google",
+  "name": "Pixel Tablet",
+  "photo": {"src": "phones/tangorpro.webp", "page": "https://support.google.com/googlepixeltablet/answer/13555435?hl=en", "license": "press", "artist": "Google"},
+  "series": "Pixel",
+  "family": "Pixel Tablet",
+  "variant": "Pixel Tablet",
+  "models": [
+    "Pixel Tablet (Wi-Fi, 128 GB)",
+    "Pixel Tablet (Wi-Fi, 256 GB)"
+  ],
+  "notes": "Disconnect the tablet from its Charging Speaker Dock before flashing. Back up data before changing the bootloader.",
+  "detect": {
+    "fastboot": {
+      "product": "tangorpro"
+    }
+  },
+  "modes": {
+    "fastboot": "Power off. Hold Volume Down and press Power until Fastboot Mode appears. Leave it there; do not press Start."
+  },
+  "unlock": {
+    "fastboot": "flashing",
+    "text": "Enable OEM unlocking first. Unlocking the bootloader erases the tablet; confirm on the tablet with the volume keys and Power.",
+    "url": "https://grapheneos.org/install/web#enabling-oem-unlocking",
+    "steps": [
+      "Back up everything. Unlocking erases the tablet.",
+      "Settings › About tablet: tap Build number until Developer options turn on.",
+      "Settings › System › Developer options: enable OEM unlocking; an internet connection may be required once.",
+      "The installer unlocks the bootloader; confirm on the tablet with the volume keys and Power."
+    ],
+    "hints": [
+      "Update the stock OS first so the firmware is current.",
+      "Disconnect the Charging Speaker Dock before using USB; the tablet cannot use the dock and USB port at the same time.",
+      "Use a good cable and connect directly without a USB hub."
+    ]
+  },
+  "recovery": {
+    "stockAndroid": "17",
+    "text": "Back to stock: use Google's Android Flash Tool at flash.android.com. With the bootloader unlocked, first erase the GrapheneOS verified-boot key with `fastboot erase avb_custom_key`; see https://grapheneos.org/install/web#replacing-grapheneos-with-the-stock-os.",
+    "url": "https://flash.android.com"
+  },
+  "hardware": {
+    "soc": "tensor-g2",
+    "ram": "8 GB RAM",
+    "cpu": "Google Tensor G2",
+    "gpu": "Integrated graphics",
+    "display": "10.95\" 2560×1600 LCD",
+    "tags": [
+      "128/256 GB storage",
+      "8 MP front and rear cameras",
+      "Charging Speaker Dock"
+    ]
+  }
+}

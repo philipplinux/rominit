@@ -23,6 +23,19 @@ test('real catalog validates', () => {
   // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
   const external = device('oriole');
   assert.ok(external.roms[0].external && !external.roms[0].stages.length);
+  const tablet = device('tangorpro');
+  assert.equal(tablet.category, 'tablet');
+  assert.equal(tablet.detect.fastboot.product, 'tangorpro');
+  assert.equal(tablet.recovery.stockAndroid, '17');
+  const tabletRom = tablet.roms[0];
+  assert.equal(tabletRom.origin, 'official');
+  assert.equal(tabletRom.vetting, 'curated');
+  assert.equal(tabletRom.rating.features.wifi, 'works');
+  assert.match(problems(tablet, { device: tablet.codename, roms: [{ ...tabletRom, rating: { ...tabletRom.rating, sources: [null] } }] }).join('\n'), /labelled https/);
+  for (const feature of ['usb_net', 'otg', 'hdmi', 'gps']) assert.equal(tabletRom.rating.features[feature], 'works');
+  assert.match(problems(tablet, { device: tablet.codename, roms: [{ ...tabletRom, rating: { ...tabletRom.rating, sources: [{ label: 'unsafe', url: 'javascript:alert(1)' }] } }] }).join('\n'), /labelled https/);
+  assert.match(problems({ ...tablet, recovery: { stockAndroid: '17', url: 'http://example.com' } }, { device: tablet.codename, roms: tablet.roms }).join('\n'), /recovery.stockAndroid/);
+  assert.ok(tablet.roms.every(r => r.external && !r.stages.length));
   assert.match(problems(external, { device: 'oriole', roms: [{ ...external.roms[0], stages: device('laurel_sprout').roms[0].stages }] }).join('\n'), /external needs/);
 });
 
@@ -617,6 +630,11 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
     const created = fix(vault, 'test').create;
     assert.ok(created.has('series/google-pixel-7.md') && created.has('socs/sdm670.md'));
     assert.deepEqual(lint(vault), []);
+    const tabletPage = join(vault, 'devices/tangorpro.md');
+    const tabletText = readFileSync(tabletPage, 'utf8');
+    writeFileSync(tabletPage, tabletText.replace('tags: [tablet,', 'tags: [phone,'));
+    assert.ok(lint(vault).some(p => p.includes('tag tablet missing (catalog category)')));
+    writeFileSync(tabletPage, tabletText);
     assert.match(tree(vault), /Google Pixel 7 {2}\(series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\)/);
     assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');
   } finally { rmSync(dir, { recursive: true, force: true }); }
