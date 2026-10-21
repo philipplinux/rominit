@@ -17,7 +17,7 @@
     "description": "Omarchy editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / ARCH-BASED DESKTOP",
     "intro": "An Arch-based desktop built around Hyprland and Quickshell, made to be changed. Pick an edition, then the architecture of the machine that will run it.",
-    "logo": { "src": "logos/omarchy.svg", "alt": "Omarchy logo", "width": 180, "height": 42 },
+    "logo": { "src": "logos/omarchy.svg", "alt": "Omarchy wordmark", "width": 180, "height": 41 },
     "pros": [
       "A finished desktop in minutes: one ISO, five questions, then it installs itself.",
       "Arch-based, so the package manager is current and there is no release train to wait for.",
@@ -35,14 +35,19 @@
       { "label": "Getting started", "href": "https://omarchy.org/manual/getting-started/" },
       { "label": "Themes", "href": "https://omarchy.org/manual/themes/" }
     ],
-    "previewNote": "The screenshot is the project's own desktop layout from the manual. It is not a ROMinit recording: no image was written to a USB stick and no machine was booted from one.",
+    "previewNote": "A stock photo of an Arch Linux laptop. Omarchy is Arch-based, but this is not Omarchy and not a ROMinit recording: no image was written to a USB stick and no machine was booted from one.",
     "shot": {
       "src": "shots/omarchy-desktop.webp",
-      "alt": "Omarchy desktop with a dwindle window layout",
+      "alt": "An Acer laptop running a pacman update on Arch Linux",
       "width": 1600,
-      "height": 900,
+      "height": 1200,
       "bar": "omarchy-4.0.6.iso · 4.0.6",
-      "caption": "Omarchy desktop layout from the project manual · no USB written, no boot tested."
+      "caption": "Stock photo of Arch Linux on a laptop · not Omarchy, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Arch_Linux_system_update_via_pacman_on_an_Acer_laptop.jpg",
+        "license": "CC BY-SA 4.0",
+        "artist": "Solijon Solayev"
+      }
     },
     "status": "One path to get Omarchy onto a USB stick: its official ISO. The image is 6.0 GiB, so use an 8 GB stick or larger. Writing erases it.",
     "footer": [
@@ -53,8 +58,8 @@
     ],
     "checked": "2026-10-21",
     "credits": [
-      "logos/omarchy.svg\nOmarchy logo, from https://github.com/omacom/omarchy/blob/quattro/logo.svg, recoloured for this dark page. Omarchy names and marks belong to their owners; no endorsement implied.",
-      "shots/omarchy-desktop.webp\nOmarchy desktop layout screenshot from the project manual, https://github.com/omacom/omarchy/blob/quattro/manual/images/navigation-dwindle-layout.webp. Shown to identify the project; reuse rights are not established by this catalog."
+      "logos/omarchy.svg\nOmarchy wordmark, from the project's official brand assets at https://omarchy.org/brand/. Omarchy is a pending trademark of its owners; used to identify the project, no endorsement implied.",
+      "shots/omarchy-desktop.webp\nArch Linux running pacman on an Acer laptop, photo by Solijon Solayev, https://commons.wikimedia.org/wiki/File:Arch_Linux_system_update_via_pacman_on_an_Acer_laptop.jpg, CC BY-SA 4.0. Resized and converted to WebP; this copy under the same licence. A generic Arch Linux photo, not Omarchy."
     ]
   },
   "editions": [

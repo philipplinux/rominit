@@ -36,7 +36,9 @@ byId('os-cons').replaceChildren(...page.cons.map(text => h('li', { textContent: 
 byId('os-links').replaceChildren(...links(page.links));
 byId('os-preview-note').textContent = page.previewNote;
 byId('os-shot-bar').textContent = page.shot.bar;
-byId('os-shot-caption').textContent = page.shot.caption;
+// A stock photo carries its attribution in the caption, as device photos do.
+byId('os-shot-caption').replaceChildren(page.shot.caption,
+  ...(page.shot.photo ? [' · ', h('a', { href: page.shot.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: `Photo: ${page.shot.photo.artist}, ${page.shot.photo.license}` })] : []));
 Object.assign(byId('alpine-operation'), { src: `./${page.shot.src}`, alt: page.shot.alt, width: page.shot.width, height: page.shot.height });
 byId('downloads-title').textContent = `Choose your ${OS.name}`;
 byId('os-status').textContent = page.status;

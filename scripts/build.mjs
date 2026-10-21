@@ -47,6 +47,10 @@ for (const os of OSES) {
   for (const file of ['os.js', 'style.css']) osHtml = osHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
   // A missing logo or shot would ship a broken page, so the build stops instead.
   for (const asset of [os.page.logo.src, os.page.shot.src]) assert(existsSync(`site/${asset}`), `${os.id}: missing site/${asset}`);
+  // A stock photo must say who took it, where it came from and under which licence.
+  const photo = os.page.shot.photo;
+  if (photo) assert(/^https:\/\/commons\.wikimedia\.org\//.test(photo.page) && /^(CC0|CC BY(-SA)? [\d.]+)$/.test(photo.license) && photo.artist,
+    `${os.id}: shot photo needs a Wikimedia Commons page, artist and a CC0 / CC BY[-SA] licence`);
   const stamp = { ID: os.id, NAME: os.name, DESCRIPTION: os.page.description, SOURCE: os.source };
   await writeFile(`dist/${os.id}.html`, osHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
 }

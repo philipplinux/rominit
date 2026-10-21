@@ -992,7 +992,12 @@ test('the OS template serves Omarchy from its own data, not from Alpine', async 
   assert.equal(await page.locator('.ventoy-supported').count(), 1, 'the Omarchy ISO is marked Ventoy supported');
   assert.match(await page.locator('.alpine-image').innerText(), /6149\.8 MiB/, 'the 6.0 GiB ISO is shown at its real size');
   assert.equal(await page.locator('#omarchy-installer-x86_64 a', { hasText: 'Download' }).getAttribute('href'), 'https://iso.omarchy.org/omarchy-4.0.6.iso');
-  assert.ok(await page.getByAltText('Omarchy logo').evaluate(img => img.naturalWidth > 0), 'the Omarchy logo loads');
+  assert.ok(await page.getByAltText('Omarchy wordmark').evaluate(img => img.naturalWidth > 0), 'the Omarchy wordmark loads');
+  const shot = page.locator('#alpine-operation');
+  assert.match(await shot.getAttribute('src'), /omarchy-desktop\.webp$/);
+  assert.ok(await shot.evaluate(img => img.naturalWidth > 0), 'the stock photo loads');
+  assert.equal(await page.locator('#os-shot-caption a').getAttribute('href'), 'https://commons.wikimedia.org/wiki/File:Arch_Linux_system_update_via_pacman_on_an_Acer_laptop.jpg', 'the photo links its Commons page');
+  assert.match(await page.locator('#os-shot-caption').innerText(), /Solijon Solayev, CC BY-SA 4\.0/, 'the photo is credited on the page');
   assert.equal(await page.locator('#os-reqs').innerText(), '2 GB RAM works · Secure Boot and TPM off');
   assert.match(await page.locator('#os-reqs a').getAttribute('title') ?? '', /Secure Boot/);
   assert.equal(await page.locator('#alpine-architectures .architecture-tag').innerText(), 'x86', 'x86_64 shows as the x86 family');
@@ -1036,6 +1041,18 @@ test('the OS nav link opens the PC category with every OS listed', async () => {
   assert.equal(await page.locator('.os-entry').count(), OSES.length, 'the OS list shows every OS');
   assert.equal(await page.locator('input[name="category"][value="pc"]').isChecked(), true, 'the PC category is preselected');
   assert.equal(await page.locator('.sitenav a[data-nav="os"]').getAttribute('aria-current'), 'page', 'the OS nav link marks the current page');
+});
+
+test('the nav marks exactly one link as the current page', async () => {
+  const current = async path => {
+    await page.goto(BASE + path);
+    return page.locator('.sitenav a[aria-current="page"]').evaluateAll(rows => rows.map(row => row.dataset.nav));
+  };
+  assert.deepEqual(await current('/'), ['devices'], 'the bare list marks Devices');
+  assert.deepEqual(await current('/?category=pc'), ['os'], 'the PC category marks OS, not Devices as well');
+  assert.deepEqual(await current('/?view=brands'), ['brands']);
+  assert.deepEqual(await current('/?view=projects'), ['projects']);
+  assert.deepEqual(await current('/?view=popular'), ['popular']);
 });
 
 test('Alpine warning is yellow and an authenticated CLI action auto-discovers without a saved browser session', async () => {

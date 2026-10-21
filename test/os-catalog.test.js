@@ -77,3 +77,15 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
     }
   }
 });
+
+test('a stock preview photo carries its author, source and licence', () => {
+  for (const os of OSES) {
+    const photo = os.page.shot.photo;
+    if (!photo) continue; // an OS may show its own recording instead
+    assert.ok(photo.artist, `${os.id}: the photo names its author`);
+    assert.match(photo.page, /^https:\/\/commons\.wikimedia\.org\//, `${os.id}: the photo links its Commons page`);
+    assert.match(photo.license, /^(CC0|CC BY(-SA)? [\d.]+)$/, `${os.id}: the photo states a Creative Commons licence`);
+    assert.ok(os.page.credits.some(credit => credit.includes(photo.artist) && credit.includes(photo.license)),
+      `${os.id}: the photo is credited in the notices`);
+  }
+});

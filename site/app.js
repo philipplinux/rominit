@@ -1479,12 +1479,14 @@ async function start() {
   const navSearch = /** @type {HTMLInputElement|null} */ (document.querySelector('.topbar input[type=search]'));
   if (navSearch) navSearch.value = params.get('q') ?? '';
   if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
-  // The OS link points at the PC category, so it matches on category as well as view.
+  // The OS link opens a category, Devices is the bare list, the rest are views.
   for (const a of document.querySelectorAll('.sitenav a')) {
     if (codename) break;
     const link = /** @type {HTMLAnchorElement} */ (a);
     const href = new URL(link.href);
-    const matches = link.dataset.nav === 'os' ? href.searchParams.get('category') === params.get('category') : href.searchParams.get('view') === view;
+    const matches = link.dataset.nav === 'os' ? href.searchParams.get('category') === params.get('category')
+      : link.dataset.nav === 'devices' ? !view && !params.get('category')
+        : href.searchParams.get('view') === view;
     if (matches) link.setAttribute('aria-current', 'page');
   }
   if (!codename) {
