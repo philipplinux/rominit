@@ -1,28 +1,50 @@
-import { ALPINE, ALPINE_ARCHITECTURES, ARCH_FAMILY, alpineImage } from '../src/alpine.js';
+import { OSES, ARCH_FAMILY, osArchitectures, osImage } from '../src/os/index.js';
 import { h } from './dom.js';
 import { ensureHelper, helperRequest, helperSession } from './helper.js';
 import { usbMediaPanel } from './usb-media.js';
 import { PROVIDER_NAMES, mountAccount } from './account.js';
 
+/** The build stamps the OS id on <html data-os>, so one template serves every OS page. */
+const OS = OSES.find(os => os.id === document.documentElement.dataset.os) ?? OSES[0];
+const { page } = OS;
+const byId = id => /** @type {HTMLElement} */ (document.getElementById(id));
+const links = list => list.flatMap((link, i) => [i ? ' ' : '', h('a', { href: link.href, rel: 'noopener noreferrer', target: '_blank', textContent: `${link.label} ↗` })]);
 const editionSelect = /** @type {HTMLSelectElement} */ (document.getElementById('alpine-edition'));
 const images = /** @type {HTMLElement} */ (document.getElementById('alpine-images'));
 const usb = /** @type {HTMLElement} */ (document.getElementById('alpine-usb-panel'));
 const status = /** @type {HTMLElement} */ (document.getElementById('alpine-usb-status'));
 const params = new URLSearchParams(location.search);
-let selectedEdition = ALPINE.editions.find(edition => edition.id === params.get('edition')) ?? ALPINE.editions.find(edition => edition.id === 'extended') ?? ALPINE.editions[0];
+let selectedEdition = OS.editions.find(edition => edition.id === params.get('edition')) ?? OS.editions.find(edition => edition.id === OS.defaultEdition) ?? OS.editions[0];
 let connecting = false, cliReady = false;
 const busy = () => connecting || usb.querySelector('#usb-media-panel')?.getAttribute('data-busy') === 'true';
 const sizes = bytes => `${(bytes / 1024 ** 2).toFixed(1)} MiB`;
 
-for (const name of [...new Set(ALPINE_ARCHITECTURES.map(arch => ARCH_FAMILY[arch]))])
+for (const name of [...new Set(osArchitectures(OS).map(arch => ARCH_FAMILY[arch]))])
   document.getElementById('alpine-architectures')?.append(h('span', { className: 'architecture-tag', textContent: name }));
-editionSelect.append(...ALPINE.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
-document.getElementById('alpine-version').textContent = `Version ${ALPINE.version} · Stable`;
-document.getElementById('alpine-release').replaceChildren(h('strong', { className: 'alpine-version-inline', textContent: `Version ${ALPINE.version}` }), ` · Stable · released ${ALPINE.releaseDate}`);
+editionSelect.append(...OS.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
+document.title = `${OS.name} · OS · ROMinit`;
+const logo = /** @type {HTMLImageElement} */ (byId('os-logo'));
+Object.assign(logo, { src: `./${page.logo.src}`, alt: page.logo.alt, width: page.logo.width, height: page.logo.height });
+byId('os-eyebrow').textContent = page.eyebrow;
+byId('os-name').replaceChildren(OS.name, h('span', { textContent: '.' }));
+byId('os-intro').textContent = page.intro;
+byId('preview-title').textContent = `${OS.name}, pros and cons`;
+byId('os-pros').replaceChildren(...page.pros.map(text => h('li', { textContent: text })));
+byId('os-cons').replaceChildren(...page.cons.map(text => h('li', { textContent: text })));
+byId('os-links').replaceChildren(...links(page.links));
+byId('os-preview-note').textContent = page.previewNote;
+byId('os-shot-bar').textContent = page.shot.bar;
+byId('os-shot-caption').textContent = page.shot.caption;
+Object.assign(byId('alpine-operation'), { src: `./${page.shot.src}`, alt: page.shot.alt, width: page.shot.width, height: page.shot.height });
+byId('downloads-title').textContent = `Choose your ${OS.name}`;
+byId('os-status').textContent = page.status;
+byId('os-footer').replaceChildren(...page.footer.map(link => h('a', { href: link.href, textContent: link.label })), h('span', { textContent: `Release metadata checked ${page.checked}` }));
+document.getElementById('alpine-version').textContent = `Version ${OS.version} · Stable`;
+document.getElementById('alpine-release').replaceChildren(h('strong', { className: 'alpine-version-inline', textContent: `Version ${OS.version}` }), ` · Stable · released ${OS.releaseDate}`);
 
 const signInHint = providers => providers?.length
   ? ['Sign in with ', ...providers.flatMap((p, i) => [i ? ' or ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: PROVIDER_NAMES[p] ?? p })]), ', then press Connect CLI again.']
-  : ['Sign-in is not set up at this address. Open ', h('a', { href: 'https://rominit.pages.dev/alpine', textContent: 'rominit.pages.dev' }), ' instead.'];
+  : ['Sign-in is not set up at this address. Open ', h('a', { href: `https://rominit.pages.dev/${OS.id}`, textContent: 'rominit.pages.dev' }), ' instead.'];
 const cliHint = () => ['Run ', h('code', { textContent: 'rominit auth' }), ' once, then ', h('code', { textContent: 'rominit serve' }), ' on this computer. ', h('a', { href: './?view=cli', textContent: 'CLI setup' }), '.'];
 
 /** Quiet check (no prompts) whether a saved CLI connection already works, so the buttons say Prepare USB instead of Connect CLI. */
@@ -38,7 +60,7 @@ async function probeCli() {
 
 function showDrivePrompt(text = 'Choose an ISO above', image = null) {
   usb.replaceChildren(
-    ...(image ? [h('p', { className: 'usb-selected-image', textContent: `${ALPINE.name} ${ALPINE.version} · ${selectedEdition.name} · ${image.arch} · ${image.url.split('/').pop()} · ${sizes(image.size)}` })] : []),
+    ...(image ? [h('p', { className: 'usb-selected-image', textContent: `${OS.name} ${OS.version} · ${selectedEdition.name} · ${image.arch} · ${image.url.split('/').pop()} · ${sizes(image.size)}` })] : []),
     h('label', { className: 'field-label', htmlFor: 'alpine-usb-method', textContent: 'USB install type' }),
     h('select', { id: 'alpine-usb-method', disabled: true }, h('option', { textContent: image ? 'Connecting to CLI…' : 'Choose an ISO first' })),
     h('label', { className: 'field-label', htmlFor: 'alpine-usb-drive', textContent: 'USB drive' }),
@@ -55,7 +77,7 @@ function updateUrl(imageId = '') {
 
 async function chooseImage(imageId) {
   if (busy()) { status.textContent = 'Wait for the current USB operation to finish before changing the image.'; return; }
-  const image = alpineImage(imageId);
+  const image = osImage(imageId);
   if (!['iso', 'img.gz'].includes(image?.format)) return;
   updateUrl(imageId);
   connecting = true;
@@ -80,7 +102,7 @@ async function chooseImage(imageId) {
       return;
     }
     cliReady = true; render();
-    status.textContent = `${ALPINE.name} ${ALPINE.version} · ${selectedEdition.name} · ${image.arch}. Choose Ventoy or Direct write, select the USB drive, then review.`;
+    status.textContent = `${OS.name} ${OS.version} · ${selectedEdition.name} · ${image.arch}. Choose Ventoy or Direct write, select the USB drive, then review.`;
     usb.replaceChildren(usbMediaPanel(session, h, image.id, ready.capabilities));
   } catch (error) {
     cliReady = false; render();
@@ -98,16 +120,16 @@ function render() {
       ? h('button', { type: 'button', className: 'button button-primary alpine-main-action', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
       : h('span', { className: 'field-help', textContent: 'Download · platform-specific setup' }),
       h('a', { className: 'button button-secondary', href: image.url, textContent: 'Download' }),
-      h('a', { className: 'button button-secondary', href: ALPINE.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' })))));
+      h('a', { className: 'button button-secondary', href: OS.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' })))));
 }
 editionSelect.addEventListener('change', () => {
   if (busy()) { editionSelect.value = selectedEdition.id; status.textContent = 'Wait for the current USB operation to finish before changing edition.'; return; }
-  selectedEdition = ALPINE.editions.find(edition => edition.id === editionSelect.value) ?? ALPINE.editions[0];
+  selectedEdition = OS.editions.find(edition => edition.id === editionSelect.value) ?? OS.editions[0];
   showDrivePrompt(); status.textContent = ''; updateUrl(); render();
 });
 
 render();
-const initialImage = alpineImage(params.get('image') ?? '');
+const initialImage = osImage(params.get('image') ?? '');
 if (['iso', 'img.gz'].includes(initialImage?.format) && selectedEdition.images.includes(initialImage)) void chooseImage(initialImage.id);
 void probeCli();
 void mountAccount();

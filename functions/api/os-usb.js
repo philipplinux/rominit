@@ -2,7 +2,7 @@
 // technical facts; API-token identity, paths, image hashes and free-form diagnostics are excluded.
 import { tokenUser } from '../_lib/auth.js';
 import { json } from '../_lib/api.js';
-import { ALPINE } from '../../src/alpine.js';
+import { OSES } from '../../src/os/index.js';
 import { validateUsbEnvironment } from '../../src/usb-environment.js';
 
 const MAX_BODY = 2048;
@@ -14,9 +14,9 @@ const OUTCOMES = ['success', 'failed'];
 const VERIFICATION = ['verified', 'mismatch-accepted', 'none'];
 const FAILURE_CODES = ['preflight', 'device_changed', 'unmount', 'write', 'timeout', 'readback', 'unknown'];
 
-const IMAGE_CATALOG = new Map(ALPINE.editions.flatMap(edition => edition.images
+const IMAGE_CATALOG = new Map(OSES.flatMap(os => os.editions.flatMap(edition => edition.images
   .filter(image => ['iso', 'img.gz'].includes(image.format.toLowerCase()))
-  .map(image => [image.id, { name: `${ALPINE.name} ${ALPINE.version} · ${edition.name} · ${image.arch}`, size: image.size, ventoy: image.usb === true }])));
+  .map(image => [image.id, { name: `${os.name} ${os.version} · ${edition.name} · ${image.arch}`, size: image.size, ventoy: image.usb === true }]))));
 
 function exactKeys(value, required, optional = []) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;

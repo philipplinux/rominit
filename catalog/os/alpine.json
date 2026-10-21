@@ -1,16 +1,85 @@
-// Official Alpine release metadata checked 2026-10-20; pins are reviewed data, not a live download-page scrape.
-export const ALPINE = {
+{
   "id": "alpine",
   "name": "Alpine Linux",
+  "shortName": "Alpine",
+  "defaultEdition": "extended",
   "version": "3.24.2",
   "releaseDate": "2026-09-17",
   "source": "https://alpinelinux.org/downloads/",
+  "page": {
+    "description": "Alpine Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT LINUX",
+    "intro": "A small Linux base built around musl and BusyBox. Pick an edition for your use, then the architecture of the machine that will run it.",
+    "logo": {
+      "src": "logos/alpine.svg",
+      "alt": "Alpine Linux logo",
+      "width": 180,
+      "height": 85
+    },
+    "pros": [
+      "Tiny and fast: a prompt in seconds, runs on old hardware.",
+      "apk packages and OpenRC keep it simple and hands-on.",
+      "Diskless, data and system modes give you a choice of persistence."
+    ],
+    "cons": [
+      "Terminal only: no desktop unless you add one.",
+      "musl and BusyBox differ from glibc/GNU, so some apps need checking.",
+      "Needs network to add packages; Wi-Fi can need extra setup."
+    ],
+    "links": [
+      {
+        "label": "Alpine website",
+        "href": "https://alpinelinux.org/"
+      },
+      {
+        "label": "Add a desktop",
+        "href": "https://wiki.alpinelinux.org/wiki/Desktop_environments_and_Window_managers"
+      },
+      {
+        "label": "YouTube demo",
+        "href": "https://www.youtube.com/watch?v=YNYtJ3jyMRs"
+      }
+    ],
+    "previewNote": "The recording shows three commands in a ROMinit test VM. The video is an older community walkthrough (Trafotin, 2023); follow the current official installation instructions.",
+    "shot": {
+      "src": "shots/alpine-operation.gif",
+      "alt": "Alpine Linux terminal showing release information, apk and setup-alpine help",
+      "width": 640,
+      "height": 352,
+      "bar": "alpine-standard-x86_64 · 3.24.2",
+      "caption": "ROMinit VM recording · no host disk attached."
+    },
+    "status": "We try to give you every available path to get Alpine onto a USB stick. Most are untested and unconfirmed, so use them at your own discretion. The only check so far: the Standard x86_64 ISO was copied and read-back verified on a test stick; booting it on a physical PC remains untested. Direct image writing erases the stick, and a matching read-back checksum verifies the write, not hardware boot compatibility. ARM64 ISO boot requires compatible UEFI hardware; Raspberry Pi media uses its own setup route.",
+    "footer": [
+      {
+        "label": "Official downloads & checksums",
+        "href": "https://alpinelinux.org/downloads/"
+      },
+      {
+        "label": "Alpine source",
+        "href": "https://gitlab.alpinelinux.org/alpine/aports"
+      },
+      {
+        "label": "Installation guide",
+        "href": "https://wiki.alpinelinux.org/wiki/Installation"
+      },
+      {
+        "label": "Ventoy firmware support",
+        "href": "https://www.ventoy.net/en/index.html"
+      }
+    ],
+    "checked": "2026-10-20",
+    "credits": [
+      "logos/alpine.svg\nAlpine Linux project logo, from https://alpinelinux.org/alpinelinux-logo.svg, shown to identify Alpine Linux. Alpine Linux names and marks belong to their owners; no endorsement implied.",
+      "shots/alpine-operation.gif and shots/alpine-operation.png\nROMinit recording of Alpine Linux 3.24.2 Standard x86_64 in QEMU, 2026-10-20. No host disk or network attached."
+    ]
+  },
   "editions": [
     {
       "id": "standard",
       "name": "Standard",
       "description": "A lean live installer for general use. Internet access is needed to add packages.",
-      "usbNote": "Choose the target computer\u2019s architecture; firmware support varies.",
+      "usbNote": "Choose the target computer’s architecture; firmware support varies.",
       "images": [
         {
           "id": "alpine-standard-x86",
@@ -431,11 +500,4 @@ export const ALPINE = {
       ]
     }
   ]
-};
-
-/** Resolve only a bundled Alpine artifact, never a caller-supplied URL. @param {string} id */
-export const alpineImage = id => ALPINE.editions.flatMap(edition => edition.images).find(image => image.id === id);
-
-/** CPU families represented in official Alpine media. */
-export const ALPINE_ARCHITECTURES = [...new Set(ALPINE.editions.flatMap(edition => edition.images.map(image => image.arch)))];
-export const ARCH_FAMILY = { x86: "x86", x86_64: "x86", aarch64: "ARM", armv7: "ARM", armhf: "ARM", loongarch64: "LoongArch", ppc64le: "PowerPC", riscv64: "RISC-V", s390x: "IBM Z" };
+}

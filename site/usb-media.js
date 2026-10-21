@@ -1,4 +1,4 @@
-import { ALPINE, alpineImage } from '../src/alpine.js';
+import { osImage, osImageEntry } from '../src/os/index.js';
 import { helperRequest } from './helper.js';
 import { collectUsbBrowserEnvironment } from './usb-environment.js';
 
@@ -20,8 +20,8 @@ function breakableText(value, every) {
 
 /** @param {any} session @param {any} h @param {string|null} [imageId] @param {string[]|null} [capabilities] */
 export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
-  const catalogImage = imageId ? alpineImage(imageId) : null;
-  const catalogEdition = catalogImage && ALPINE.editions.find(edition => edition.images.some(image => image.id === catalogImage.id));
+  const catalog = imageId ? osImageEntry(imageId) : null;
+  const catalogImage = catalog?.image, catalogEdition = catalog?.edition;
   let panelCapabilities = Array.isArray(capabilities) ? capabilities : null;
   // Only query browser diagnostics for helpers that explicitly accept the allowlisted fields.
   let browserEnvironment = panelCapabilities?.includes('usb-environment') ? collectUsbBrowserEnvironment().catch(() => null) : null;
@@ -67,7 +67,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     h('p', {}, 'Thanks for using ROMinit, and thanks to the ', h('a', { href: 'https://alpinelinux.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Alpine Linux project' }),
       ' and everyone who builds and maintains it. If this saved you time, a coffee keeps ROMinit going: ',
       h('a', { href: 'https://www.buymeacoffee.com/philipplinux', target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
-  const panelTitle = h('h2', { textContent: imageId ? 'Prepare Alpine USB' : 'Prepare USB' });
+  const panelTitle = h('h2', { textContent: imageId ? `Prepare ${catalog?.os.shortName} USB` : 'Prepare USB' });
   const refreshButton = /** @type {HTMLButtonElement} */ (h('button', { type: 'button', className: 'button button-secondary usb-refresh-button', textContent: 'Refresh drives', onclick: refresh }));
   const driveHeading = h('div', { className: 'usb-drive-heading' }, h('label', { className: 'field-label', htmlFor: driveSelect.id, textContent: 'USB drive' }), refreshButton);
   const panel = h('section', { id: 'usb-media-panel', className: 'page-section' },
@@ -91,7 +91,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   function imageSummaryLabel(image) {
     const name = imageFilename(image);
     return catalogImage
-      ? `${ALPINE.name} ${ALPINE.version} · ${catalogEdition?.name || 'Selected edition'} · ${image?.arch || catalogImage.arch} · ${name}`
+      ? `${catalog?.os.name} ${catalog?.os.version} · ${catalogEdition?.name || 'Selected edition'} · ${image?.arch || catalogImage.arch} · ${name}`
       : name;
   }
   function setImageSummary(image, bytes, unverified = false) {
@@ -270,7 +270,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     setBusy(true); status.textContent = 'Preparing an installation plan…';
     try {
       status.textContent = imageId
-        ? method === 'direct' ? 'Downloading and verifying the selected Alpine ISO, then preparing a direct-write review…' : 'Downloading and verifying the selected Alpine ISO, then preparing the Ventoy review…'
+        ? method === 'direct' ? `Downloading and verifying the selected ${catalog?.os.shortName} ISO, then preparing a direct-write review…` : `Downloading and verifying the selected ${catalog?.os.shortName} ISO, then preparing the Ventoy review…`
         : 'Preparing an installation plan…';
       const plan = await helperRequest(session, '/usb/plan', { driveId: drive.id, method, ...(imageId ? { imageId } : {}) });
       if (!panel.isConnected || driveSelect.value !== driveKey) return;
@@ -281,9 +281,9 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       if (plan.method !== method) throw Error('The helper returned a plan for a different USB install type.');
       if (plan.image && (typeof plan.image.name !== 'string' || !Number.isFinite(plan.image.size) || plan.image.size <= 0 || !/^[a-f\d]{64}$/i.test(plan.image.sha256)))
         throw Error('The helper returned invalid configured ISO details.');
-      const selectedImage = imageId ? alpineImage(imageId) : null;
+      const selectedImage = imageId ? osImage(imageId) : null;
       if (imageId && (!selectedImage || !plan.image || ['id', 'arch', 'format', 'size', 'sha256', 'url'].some(key => plan.image[key] !== selectedImage[key])))
-        throw Error('The CLI did not prepare the selected Alpine ISO. Update and reconnect the helper.');
+        throw Error(`The CLI did not prepare the selected ${catalog?.os.shortName} ISO. Update and reconnect the helper.`);
       if (method === 'direct' && !plan.image) throw Error('The CLI has no configured ISO to write directly. Configure an ISO and restart rominit serve.');
       if (method === 'direct' && (plan.action !== 'direct' || plan.confirm !== 'ERASE'))
         throw Error('This CLI returned an unsupported direct-write plan. Update and reconnect the helper.');
