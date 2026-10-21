@@ -9,7 +9,7 @@ const usb = /** @type {HTMLElement} */ (document.getElementById('alpine-usb-pane
 const status = /** @type {HTMLElement} */ (document.getElementById('alpine-usb-status'));
 const params = new URLSearchParams(location.search);
 let selectedEdition = ALPINE.editions.find(edition => edition.id === params.get('edition')) ?? ALPINE.editions.find(edition => edition.id === 'extended') ?? ALPINE.editions[0];
-let connecting = false;
+let connecting = false, cliReady = false;
 const busy = () => connecting || usb.querySelector('#usb-media-panel')?.getAttribute('data-busy') === 'true';
 const sizes = bytes => `${(bytes / 1024 ** 2).toFixed(1)} MiB`;
 
@@ -18,6 +18,23 @@ for (const name of [...new Set(ALPINE_ARCHITECTURES.map(arch => ARCH_FAMILY[arch
 editionSelect.append(...ALPINE.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
 document.getElementById('alpine-version').textContent = `Version ${ALPINE.version} · Stable`;
 document.getElementById('alpine-release').replaceChildren(h('strong', { className: 'alpine-version-inline', textContent: `Version ${ALPINE.version}` }), ` · Stable · released ${ALPINE.releaseDate}`);
+
+const providerName = p => p === 'github' ? 'GitHub' : p[0].toUpperCase() + p.slice(1);
+const signInHint = providers => providers?.length
+  ? ['Sign in with ', ...providers.flatMap((p, i) => [i ? ' or ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: providerName(p) })]), ', then press Connect CLI again.']
+  : ['Sign-in is not set up at this address. Open ', h('a', { href: 'https://rominit.pages.dev/alpine', textContent: 'rominit.pages.dev' }), ' instead.'];
+const cliHint = () => ['Run ', h('code', { textContent: 'rominit auth' }), ' once, then ', h('code', { textContent: 'rominit serve' }), ' on this computer. ', h('a', { href: './?view=cli', textContent: 'CLI setup' }), '.'];
+
+/** Quiet check (no prompts) whether a saved CLI connection already works, so the buttons say Prepare USB instead of Connect CLI. */
+async function probeCli() {
+  try {
+    const session = helperSession();
+    if (!session) return;
+    const ready = await helperRequest(session, '/status');
+    cliReady = !!ready.capabilities?.includes('usb-media');
+  } catch { cliReady = false; }
+  render();
+}
 
 function showDrivePrompt(text = 'Choose an ISO above', image = null) {
   usb.replaceChildren(
@@ -50,9 +67,9 @@ async function chooseImage(imageId) {
     if (!response) throw Error('Could not check your ROMinit account. Check your connection and retry.');
     if (!response.ok && response.status !== 401) throw Error('ROMinit account check is temporarily unavailable. Retry in a moment.');
     const account = await response.json().catch(() => null);
-    if (!account?.user?.id) throw Error('Sign in to ROMinit before preparing an Alpine USB.');
-    const session = await ensureHelper(account.user.id, helperSession());
-    const ready = await helperRequest(session, '/status');
+    if (!account?.user?.id) throw Object.assign(Error('Sign in to ROMinit to connect the CLI.'), { hint: signInHint(account?.providers) });
+    const session = await ensureHelper(account.user.id, helperSession()).catch(error => { throw Object.assign(error, { hint: cliHint() }); });
+    const ready = await helperRequest(session, '/status').catch(error => { throw Object.assign(error, { hint: cliHint() }); });
     if (ready.user?.id !== account.user.id) throw Error('The CLI belongs to a different account. Reconnect it.');
     if (!ready.capabilities?.includes('usb-media')) {
       status.replaceChildren('USB preparation is not enabled in this CLI. ', h('a', { href: './?view=cli#usb-setup', textContent: 'Set up the Ventoy USB support' }));
@@ -62,10 +79,12 @@ async function chooseImage(imageId) {
       status.replaceChildren('This CLI needs an update for image selection. ', h('a', { href: './rominit-cli.tar.gz', textContent: 'Download updated CLI' }), ' and restart rominit serve.');
       return;
     }
+    cliReady = true; render();
     status.textContent = `${ALPINE.name} ${ALPINE.version} · ${selectedEdition.name} · ${image.arch}. Choose Ventoy or Direct write, select the USB drive, then review.`;
     usb.replaceChildren(usbMediaPanel(session, h, image.id, ready.capabilities));
   } catch (error) {
-    status.textContent = error instanceof Error ? error.message : String(error);
+    cliReady = false; render();
+    status.replaceChildren(error instanceof Error ? error.message : String(error), ...(error?.hint ? [' ', ...error.hint] : []));
   } finally { connecting = false; }
 }
 
@@ -76,7 +95,7 @@ function render() {
   images.replaceChildren(...selectedEdition.images.map(image => h('article', { className: 'alpine-image', id: image.id },
     h('div', { className: 'alpine-image-title' }, h('strong', { textContent: image.arch }), h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), ...(image.usb === true ? [h('span', { className: 'architecture-tag ventoy-supported', textContent: 'Ventoy supported' })] : []), h('span', { className: 'field-help', textContent: `${image.format} · ${sizes(image.size)}` })),
     h('div', { className: 'alpine-image-actions' }, ['iso', 'img.gz'].includes(image.format)
-      ? h('button', { type: 'button', className: 'button button-primary', textContent: 'Prepare USB', ariaLabel: `Prepare ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
+      ? h('button', { type: 'button', className: 'button button-primary', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
       : h('span', { className: 'field-help', textContent: 'Download · platform-specific setup' }),
       h('a', { href: image.url, textContent: 'Download' }),
       h('a', { href: ALPINE.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' }),
@@ -91,3 +110,4 @@ editionSelect.addEventListener('change', () => {
 render();
 const initialImage = alpineImage(params.get('image') ?? '');
 if (['iso', 'img.gz'].includes(initialImage?.format) && selectedEdition.images.includes(initialImage)) void chooseImage(initialImage.id);
+void probeCli();
