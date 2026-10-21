@@ -31,7 +31,7 @@
     "pivots": [
       {
         "problem": "Bootloop after flashing",
-        "fix": "Fastboot mode (Power + Volume Down) still works. Step 4 restores Xiaomi stock."
+        "fix": "Fastboot mode (Power + Volume Down) still works. Section R (Recover / revert) restores Xiaomi stock."
       }
     ],
     "hints": [
