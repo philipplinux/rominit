@@ -20,13 +20,14 @@ Needs the human's free API token (made at `https://rominit.pages.dev/?view=agent
 2. `rominit_get_device` `{codename}`: unlock steps, boot modes (how to enter fastboot/recovery), ROM list.
 3. `rominit_get_rom` `{codename, rom_id}`: stages, files, steps, notes, risk, requirements.
 
-Step verbs: `flash`, `erase`, `set_active`, `reboot`, `sideload`, `write`, `mkfs_ext4`; `fastboot-tgz` stages run the archive's own flash list.
+Step verbs: `flash`, `erase`, `set_active`, `reboot`, `sideload`, `write`, `mkfs_ext4`, `unlock`/`lock` (`flashing` or `oem`; `lock` only as an opt-in option), `burn` (Amlogic); `fastboot-tgz` stages run the archive's own flash list.
 
 ## 2. Flash (CLI)
 From a ROMinit checkout (`npm install` once) or via `rominit` on PATH. Add `--json` for one event per line (`step|progress|error|done`); `--local` reads the checkout's `catalog/` instead of the site.
 
 ```bash
 rominit devices                                  # phones in fastboot right now
+rominit auth | serve | logout                    # API key login, local helper for the website, sign out
 rominit plan <codename> [rom-id]                 # ROM list, or stages + warning + confirm
 rominit fetch <codename> <rom-id> [--dir DIR]    # download + SHA-256 check, no USB
 rominit run <codename> <rom-id> --stage N [--dir DIR] [--no-bench]
@@ -34,7 +35,7 @@ rominit bench <codename> <rom-id> [--host ADDR]  # read-only benchmark over SSH,
 ```
 
 - Run stages in order, one `run` per stage. Between stages, put the phone in the mode the next stage names (`plan` shows `[recipe, mode]`; boot-mode keys come from `rominit_get_device`).
-- CLI runs only `fastboot` recipe stages and no `.img.xz` files yet. Anything else (adb sideload, odin, fastboot-tgz, …) → send the human to the device page (`page` from the MCP) and keep reporting.
+- CLI runs only `fastboot` and `twrp-dd` recipe stages and no `.img.xz` files yet. Anything else (adb sideload, odin, fastboot-tgz, …) → send the human to the device page (`page` from the MCP) and keep reporting.
 - postmarketOS: after a final reboot `run` waits for SSH over USB and runs the read-only benchmark; needs `ssh`, or pass `--no-bench`.
 - On a failure the CLI asks the human at the terminal (retry/abort). Without a TTY it exits with the error: relay it to the human, have them fix it (replug, right mode), then re-run that stage.
 
