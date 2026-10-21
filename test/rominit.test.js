@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { FEATURES, USES, assertConsent, completeness, deviceLevel, problems, recipes, selectFiles, stepsFor } from '../src/catalog.js';
+import { FEATURES, USES, assertConsent, completeness, deviceLevel, problems, recipes, selectFiles, stagesProblems, stepsFor, unlockStage } from '../src/catalog.js';
 import { checksum, verifyPins } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -61,7 +61,7 @@ test('validator rejects bad entries', () => {
 function fastboot(vars = {}) {
   const log = [];
   return { log, getVariable: async name => vars[name] ?? ({ product: 'laurel_sprout', unlocked: 'yes' })[name] ?? (name.startsWith('partition-size:') ? '0x10000000' : 'no'),
-    runCommand: async command => { log.push(command); }, flashBlob: async (partition, blob) => { log.push(`flash:${partition}:${await blob.text()}`); } };
+    runCommand: async command => { log.push(command); return { text: command === 'flashing get_unlock_ability' ? `get_unlock_ability: ${vars.unlock_ability ?? 1}\n` : '' }; }, flashBlob: async (partition, blob) => { log.push(`flash:${partition}:${await blob.text()}`); } };
 }
 
 test('Mi A3 runs the catalog sequence', async () => {
@@ -630,4 +630,35 @@ test('sources page lists every dependency', async () => {
     const short = dep.split('/').pop() ?? dep;
     assert.ok(listed.includes(dep) || listed.toLowerCase().includes(short.toLowerCase()), `${dep} missing from SOFTWARE in site/app.js`);
   }
+});
+
+test('one-click unlock: sends the command only on a locked phone; lock only as an opt-in option on a relockable ROM', async () => {
+  const dev = device('laurel_sprout'), stage = unlockStage(dev);
+  const locked = fastboot({ unlocked: 'no' });
+  await recipes.fastboot.run(locked, { device: dev, files: [], steps: stage.steps }, noop, noop);
+  assert.deepEqual(locked.log, ['flashing get_unlock_ability', 'flashing unlock']);
+  const off = fastboot({ unlocked: 'no', unlock_ability: 0 });
+  await assert.rejects(recipes.fastboot.run(off, { device: dev, files: [], steps: stage.steps }, noop, noop), /OEM unlocking is off/);
+  assert.deepEqual(off.log, ['flashing get_unlock_ability']);
+  const open = fastboot();
+  await recipes.fastboot.run(open, { device: dev, files: [], steps: stage.steps }, noop, noop);
+  assert.deepEqual(open.log, []);
+  await assert.rejects(recipes.fastboot.run(fastboot({ unlocked: 'no' }), { device: dev, files: [], steps: [['unlock', 'flashing'], ['reboot']] }, noop, noop), /alone/);
+  const stock = dev.roms.find(r => r.origin === 'stock'), restore = stock.stages[0];
+  assert.deepEqual(stepsFor(restore).slice(-1), [['reboot']]);
+  assert.deepEqual(stepsFor(restore, { lock: true }).slice(-2), [['lock', 'flashing'], ['reboot']]);
+  const lockOn = { ...restore, options: [{ id: 'lock', label: 'x', default: true, steps: [['lock', 'flashing']] }] };
+  assert.match(stagesProblems(dev, [lockOn], 'x', stock).join(), /default to off/);
+  assert.match(stagesProblems(dev, [restore], 'x', { rating: { includes: { relock: 'no' } } }).join(), /relock is yes/);
+  assert.match(stagesProblems(dev, [{ ...restore, steps: [...restore.steps, ['lock', 'flashing']] }], 'x', stock).join(), /only inside an option/);
+  assert.match(stagesProblems(dev, [{ ...dev.roms[0].stages[0], steps: [['unlock', 'flashing']] }], 'x').join(), /unlock only in the unlock stage|section/);
+  assert.deepEqual(stagesProblems(dev, [stage], 'x'), []);
+});
+
+test('amlogic stage: one burn step with a known wipe mode', () => {
+  const dev = { modes: { 'usb-burn': 'Hold the reset button while plugging in USB.' } };
+  const file = { name: 'aml_upgrade_package.img', size: 1, sha256: sha('x'), source: 'https://example.org/' };
+  const stage = (/** @type {any[]} */ ...steps) => ({ title: 'Burn', warning: 'w', confirm: 'BURN BOX', section: 'rom', recipe: 'amlogic', mode: 'usb-burn', files: [file], steps });
+  assert.deepEqual(stagesProblems(dev, [stage(['burn', file.name, 'keep_keys'])], 'x'), []);
+  assert.match(stagesProblems(dev, [stage(['burn', file.name, 'nuke'])], 'x').join(), /wipe/);
 });

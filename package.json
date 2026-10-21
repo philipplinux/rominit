@@ -2,7 +2,9 @@
   "name": "rominit",
   "private": true,
   "type": "module",
-  "bin": {"rominit": "bin/rominit.mjs"},
+  "bin": {
+    "rominit": "bin/rominit.mjs"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test",
@@ -12,6 +14,7 @@
     "lint": "node scripts/romvault-lint.mjs"
   },
   "dependencies": {
+    "@lineageos-infra/libamlburn": "0.1.1",
     "@lineageos-infra/libmjolnir": "0.7.4",
     "@yume-chan/adb": "2.6.4",
     "@yume-chan/adb-credential-web": "2.1.0",

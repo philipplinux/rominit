@@ -3,9 +3,10 @@ import * as odin from './recipes/odin.js';
 import * as twrpDd from './recipes/twrp-dd.js';
 import * as fastbootTgz from './recipes/fastboot-tgz.js';
 import * as twrpSideload from './recipes/twrp-sideload.js';
+import * as amlogic from './recipes/amlogic.js';
 
 /** Recipe id → engine. `protocol` picks the USB connection, `verbs` the allowed steps and their argument counts. */
-export const recipes = { fastboot, odin, 'twrp-dd': twrpDd, 'fastboot-tgz': fastbootTgz, 'twrp-sideload': twrpSideload };
+export const recipes = { fastboot, odin, 'twrp-dd': twrpDd, 'fastboot-tgz': fastbootTgz, 'twrp-sideload': twrpSideload, amlogic };
 
 /** Curated rating: every ROM states every feature, so ROMs compare side by side. User ratings come later. */
 /** Feature table of the postmarketOS/Nura device wiki, grouped like its sections. */
@@ -53,8 +54,9 @@ const SHA = /^[0-9a-f]{64}$/;
 const SAFE = /^[A-Za-z0-9_.-]+$/;
 const PATH = /^\/[A-Za-z0-9/._-]+$/;
 
-/** Shared checks for executable stages. @param {any} device @param {any[]} stages @param {string} at */
-export function stagesProblems(device, stages, at) {
+/** Shared checks for executable stages. `rom` is the ROM the stages install (none for recovery files): a `lock`
+ * step needs a ROM that supports a relocked bootloader. @param {any} device @param {any[]} stages @param {string} at @param {any} [rom] */
+export function stagesProblems(device, stages, at, rom) {
   const out = [];
   const need = (ok, text) => { if (!ok) out.push(text); };
   for (const [i, stage] of (stages ?? []).entries()) {
@@ -63,7 +65,14 @@ export function stagesProblems(device, stages, at) {
     need(recipe, `${where}: unknown recipe "${stage.recipe}"`);
     need(device.modes?.[stage.mode], `${where}: device has no instructions for mode "${stage.mode}"`);
     need(stage.title && stage.warning && /^[A-Z0-9 +]{4,}$/.test(stage.confirm ?? ''), `${where}: title, warning and an upper-case confirm phrase are required`);
-    need(['tools', 'rom'].includes(stage.section), `${where}: section must be tools or rom`);
+    // `unlock` is only the one-step stage unlockStage() builds; `lock` only in an option the user ticks (default off),
+    // on a ROM that boots with a locked bootloader: relocking anything else bricks the phone.
+    const unlockOnly = stage.steps?.length === 1 && stage.steps[0][0] === 'unlock' && !stage.files?.length && !stage.options?.length;
+    need(stage.section === 'unlock' ? unlockOnly : ['tools', 'rom'].includes(stage.section), `${where}: section must be tools or rom (unlock: one unlock step, no files or options)`);
+    need(!(stage.steps ?? []).some((/** @type {any[]} */ [verb]) => verb === 'lock'), `${where}: lock only inside an option`);
+    need((stage.options ?? []).every((/** @type {any} */ o) => !o.steps?.some((/** @type {any[]} */ [verb]) => verb === 'lock') || (o.default === false && rom?.rating?.includes?.relock === 'yes')),
+      `${where}: a lock option must default to off, on a ROM whose includes.relock is yes`);
+    if (stage.recipe === 'amlogic') need(stage.steps?.length === 1 && amlogic.WIPES.includes(stage.steps[0][2]), `${where}: an amlogic stage is one burn step with wipe ${amlogic.WIPES.join('/')}`);
     if (recipe?.archive) need(Number.isInteger(stage.anti) && stage.anti >= 0, `${where}: archive stages need the package's anti-rollback level (anti)`);
     if (stage.recipe === 'twrp-dd') need(PATH.test(stage.by_name ?? ''), `${where}: by_name must be an absolute path`);
     const names = new Set();
@@ -77,10 +86,12 @@ export function stagesProblems(device, stages, at) {
     const used = new Set();
     const steps = [...stage.steps ?? [], ...(stage.options ?? []).flatMap(option => option.steps ?? [])];
     need(stage.steps?.length, `${where}: no steps`);
+    need(stage.section === 'unlock' || !steps.some(([verb]) => verb === 'unlock'), `${where}: unlock only in the unlock stage`);
     for (const [verb, ...args] of steps) {
       const arity = recipe?.verbs[verb];
       need(arity !== undefined && args.length === arity, `${where}: step ${verb}(${args}) not allowed for ${stage.recipe}`);
       need(args.every(arg => SAFE.test(arg)), `${where}: step ${verb} has unsafe arguments`);
+      if (verb === 'unlock' || verb === 'lock') need(['flashing', 'oem'].includes(args[0]), `${where}: ${verb} takes flashing or oem`);
       if (recipe?.fileArg?.[verb] !== undefined) {
         const name = args[recipe.fileArg[verb]];
         need(names.has(name), `${where}: step ${verb} uses unknown file ${name}`);
@@ -122,6 +133,8 @@ export function problems(device, romFile) {
   need(unlock === undefined || (unlock.text && unlock.steps?.length && [...unlock.steps, ...unlock.hints ?? []].every(step => typeof step === 'string')
     && (unlock.pivots ?? []).every(p => p.problem && p.fix && (p.url === undefined || p.url.startsWith('https://')))),
   `${device?.codename}: unlock needs text and steps (hints are strings); each pivot needs problem, fix and an https url if any`);
+  need(unlock?.fastboot === undefined || ['flashing', 'oem'].includes(unlock.fastboot), `${device?.codename}: unlock.fastboot must be flashing or oem`);
+  if (unlock?.fastboot) out.push(...stagesProblems(device, [unlockStage(device)], `${device?.codename}/unlock`));
   const hw = device?.hardware; // one site line: RAM · CPU · GPU · resolution · tags
   need(hw === undefined || (['ram', 'cpu', 'gpu', 'display'].every(k => typeof hw[k] === 'string' && hw[k]) && (hw.tags ?? []).every((/** @type {unknown} */ t) => typeof t === 'string')),
     `${device?.codename}: hardware needs ram, cpu, gpu and display strings (tags are strings)`);
@@ -170,9 +183,18 @@ export function problems(device, romFile) {
     const includes = rom.rating?.includes ?? {};
     need(INCLUDES.every(i => OPTIONS.includes(includes[i])) && Object.keys(includes).length === INCLUDES.length,
       `${at}: rating.includes needs exactly these (${OPTIONS.join('/')}): ${INCLUDES.join(', ')}`);
-    out.push(...stagesProblems(device, rom.stages, at));
+    out.push(...stagesProblems(device, rom.stages, at, rom));
   }
   return out;
+}
+
+/** One-click unlock for phones whose bootloader unlocks with one fastboot command (`unlock.fastboot`: flashing / oem).
+ * Same consent as any destructive stage: the human types the confirm phrase. @param {any} device */
+export function unlockStage(device) {
+  const family = device?.unlock?.fastboot;
+  return family ? { title: 'Unlock the bootloader', section: 'unlock', recipe: 'fastboot', mode: 'fastboot', files: [], steps: [['unlock', family]],
+    confirm: 'UNLOCK AND WIPE', warning: `Sends \`fastboot ${family} unlock\`. The phone asks again on its screen; confirming there erases everything on it. OEM unlocking must be on in Developer options first.`,
+    done: 'Confirm on the phone (volume keys, then Power). It wipes itself; put it back in fastboot mode for the next section.' } : null;
 }
 
 /** Steps for this run: the stage's own, then each enabled option's, in catalog order.

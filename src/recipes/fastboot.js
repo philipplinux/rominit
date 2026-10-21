@@ -1,7 +1,8 @@
 import { verifyPins } from '../hash.js';
 
 export const protocol = 'fastboot';
-export const verbs = { flash: 2, erase: 1, set_active: 1, reboot: 0 };
+/** `unlock` / `lock` take the command family, `flashing` (newer bootloaders) or `oem` (older): `fastboot flashing unlock`. */
+export const verbs = { flash: 2, erase: 1, set_active: 1, reboot: 0, unlock: 1, lock: 1 };
 export const fileArg = { flash: 1 };
 
 /** Bytes the image takes on the partition: the sparse header's block count, else the file size. @param {Blob} file */
@@ -47,7 +48,18 @@ export async function run(fb, { device, files, steps, progress = { done: 0 }, pa
   const expected = device.detect?.fastboot?.product;
   if (!expected || product !== expected) throw Error(`Phone reports product "${product}", expected ${expected} (${device.name}). Nothing written.`);
   next('Checking the bootloader is unlocked');
-  if (await fb.getVariable('unlocked') !== 'yes') throw Error('Bootloader is locked. Nothing written.');
+  const unlocked = await fb.getVariable('unlocked') === 'yes';
+  // An unlock stage is that one step (the validator says so); every other stage needs an unlocked bootloader.
+  if (steps.some(([verb]) => verb === 'unlock')) {
+    if (steps.length !== 1) throw Error('An unlock stage is the unlock step alone. Nothing written.');
+    if (unlocked) { report(`Step ${total}/${total}: Bootloader is already unlocked. Nothing to do.`, 1); return; }
+    // `flashing get_unlock_ability` answers `get_unlock_ability: 0` while OEM unlocking is off in Developer options.
+    // Older bootloaders reject the command; then the phone itself is the check.
+    if (steps[0][1] === 'flashing') {
+      const ability = await fb.runCommand('flashing get_unlock_ability').then((/** @type {{text: string}} */ r) => /get_unlock_ability:\s*(\d)/.exec(r.text)?.[1], () => undefined);
+      if (ability === '0') throw Error('OEM unlocking is off. Turn it on in Android: Settings → Developer options → OEM unlocking, then try again. Nothing written.');
+    }
+  } else if (!unlocked) throw Error('Bootloader is locked. Nothing written.');
 
   next('Checking SHA-256');
   await verifyPins(files, say); // unpacked archive members carry no pin: the archive's hash covers them
@@ -58,6 +70,7 @@ export async function run(fb, { device, files, steps, progress = { done: 0 }, pa
   const partitionSizes = new Map();
   for (const [verb, partition, name] of steps) {
     if (verb === 'set_active' && !['a', 'b'].includes(partition)) throw Error(`Invalid slot ${partition}. Nothing written.`);
+    if ((verb === 'unlock' || verb === 'lock') && !['flashing', 'oem'].includes(partition)) throw Error(`Invalid ${verb} command ${partition}. Nothing written.`);
     if (verb !== 'flash' && verb !== 'erase') continue;
     const size = parseInt(await fb.getVariable(`partition-size:${partition}`) ?? '', 16);
     if (!(size > 0)) throw Error(`Phone has no ${partition} partition. Nothing written.`);
@@ -101,6 +114,10 @@ export async function run(fb, { device, files, steps, progress = { done: 0 }, pa
       } else if (verb === 'set_active') {
         next(`Switching to slot ${arg}`);
         await attempt(`Switching to slot ${arg}`, () => fb.runCommand(`set_active:${arg}`));
+      } else if (verb === 'unlock' || verb === 'lock') {
+        // The phone asks on its own screen; confirming there wipes it (and on most phones restarts it).
+        next(`${verb === 'unlock' ? 'Unlocking' : 'Locking'} the bootloader: confirm on the phone with the volume keys, then Power`);
+        await fb.runCommand(`${arg} ${verb}`);
       } else if (verb === 'reboot') {
         next('Rebooting');
         // The phone may drop USB before it answers; everything is already written.

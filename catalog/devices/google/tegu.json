@@ -21,6 +21,7 @@
     "fastboot": "Power off. Hold Volume Down and press Power until \"Fastboot Mode\" shows with a red triangle, then plug in USB. Do not press Start."
   },
   "unlock": {
+    "fastboot": "flashing",
     "text": "OEM unlocking must be on; the installer then unlocks over USB (wipes the phone).",
     "url": "https://grapheneos.org/install/web#enabling-oem-unlocking",
     "steps": [

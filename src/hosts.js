@@ -4,16 +4,18 @@
 /** Host machines the site gives instructions for. */
 export const HOSTS = { linux: 'Linux', windows: 'Windows', mac: 'macOS', android: 'Android', chromeos: 'ChromeOS' };
 
-/** Lets the logged-in user open phones over USB: ADB/fastboot interfaces of any brand, and Samsung's Download Mode. */
+/** Lets the logged-in user open phones over USB: ADB/fastboot interfaces of any brand, Samsung's Download Mode and Amlogic burn mode. */
 export const UDEV_RULE = `sudo tee /etc/udev/rules.d/51-rominit.rules >/dev/null <<'EOF'
 # ADB and fastboot on any phone
 SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{ID_USB_INTERFACES}=="*:ff420?:*", TAG+="uaccess"
 # Samsung (Download Mode)
 SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", TAG+="uaccess"
+# Amlogic (USB burn mode)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1b8e", TAG+="uaccess"
 EOF
 sudo udevadm control --reload-rules && sudo udevadm trigger`;
 
-const USB = ['fastboot', 'odin', 'adb', 'sideload'];
+const USB = ['fastboot', 'odin', 'adb', 'sideload', 'amlogic'];
 /** @typedef {{id:string, text:string, command?:string, url?:string, protocols:string[]}} Prereq */
 /** One-time setup per host. `protocols` limits a line to the stages that need it; `command` is copy-paste. @type {Record<string, Prereq[]>} */
 export const PREREQS = {

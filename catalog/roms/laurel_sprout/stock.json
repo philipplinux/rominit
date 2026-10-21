@@ -373,16 +373,36 @@
               "flash",
               "boot_b",
               "boot.img"
-            ],
-            [
-              "reboot"
             ]
+          ],
+          "options": [
+            {
+              "id": "lock",
+              "label": "Optional · relock the bootloader afterwards (fastboot flashing lock). Only with this untouched stock package on both slots: a relocked phone with anything else on it no longer boots. The phone asks on its screen and wipes itself again.",
+              "default": false,
+              "steps": [
+                [
+                  "lock",
+                  "flashing"
+                ]
+              ]
+            },
+            {
+              "id": "reboot",
+              "label": "Reboot when done",
+              "default": true,
+              "steps": [
+                [
+                  "reboot"
+                ]
+              ]
+            }
           ]
         }
       ],
       "slots": "ab",
       "requirements": [
-        "Unlocked bootloader; it stays unlocked afterwards.",
+        "Unlocked bootloader; it stays unlocked unless you tick the relock option.",
         "Writes both slots (a and b), like Xiaomi's flash_all.sh.",
         "Anti-rollback: the flasher refuses if the phone is newer than this package."
       ]

@@ -3,6 +3,7 @@ import libmjolnir from '@lineageos-infra/libmjolnir';
 import { Adb, AdbDaemonTransport } from '@yume-chan/adb';
 import { AdbDaemonWebUsbDeviceManager } from '@yume-chan/adb-daemon-webusb';
 import AdbWebCredentialStore from '@yume-chan/adb-credential-web';
+import { requestDevice as requestAmlogic } from '@lineageos-infra/libamlburn';
 
 /** Samsung Download Mode: pick the phone and do the Odin handshake. */
 export async function connectOdin() {
@@ -26,6 +27,24 @@ async function openAdb(device) {
   const transport = await AdbDaemonTransport.authenticate({
     serial: device.serial, connection, credentialStore: new AdbWebCredentialStore('ROMinit') });
   return { adb: new Adb(transport), usb: device.raw };
+}
+
+/** Sends one ADB service command (`reboot:recovery`), lets the phone take it before the link drops, then closes.
+ * @param {Adb} adb @param {string} command */
+async function sendAndClose(adb, command) {
+  const socket = await adb.createSocket(command);
+  const reader = socket.readable.getReader();
+  await Promise.race([(async () => { while (!(await reader.read()).done); })().catch(() => {}), new Promise(r => setTimeout(r, 3000))]);
+  await adb.close().catch(() => {});
+}
+
+/** Android (USB debugging on) or TWRP → fastboot (`bootloader`) or Samsung Download Mode (`download`), no button combo.
+ * The phone then comes back as another USB device: the stage's own Connect button picks it.
+ * @param {'bootloader'|'download'} target @param {(line:string)=>void} [log] */
+export async function rebootFromAndroid(target, log = () => {}) {
+  const { adb } = await connectAdb();
+  log(`ADB banner: ${JSON.stringify(adb.banner)} · reboot:${target}`);
+  await sendAndClose(adb, `reboot:${target}`);
 }
 
 /**
@@ -55,10 +74,7 @@ async function connectAdbIn(want, log) {
     if ('error' in move) throw Error(move.error);
     if (moves === 3) throw Error(`Phone did not reach ${want} mode. Boot TWRP by hand, then connect again.`);
     log(`${move.say} (${move.send})`);
-    const socket = await current.adb.createSocket(move.send);
-    const reader = socket.readable.getReader(); // let the phone take the command before the link drops
-    await Promise.race([(async () => { while (!(await reader.read()).done); })().catch(() => {}), new Promise(r => setTimeout(r, 3000))]);
-    await current.adb.close().catch(() => {});
+    await sendAndClose(current.adb, move.send);
     let next = null;
     for (let i = 0; i < move.seconds && !next; i++) { // the phone re-enumerates with the same serial once adbd is back
       await new Promise(r => setTimeout(r, 1000));
@@ -211,6 +227,12 @@ async function open(protocol, log) {
   if (protocol === 'odin') {
     const odin = await connectOdin();
     return { session: odin, usb: odin.usbDevice };
+  }
+  if (protocol === 'amlogic') {
+    const box = await requestAmlogic();
+    await box.initialize();
+    log(`Amlogic burn mode: ${(await box.identify()).toString()}`);
+    return { session: box, usb: box.usbDevice };
   }
   if (protocol === 'sideload') return connectAdbIn('sideload', log).then(({ adb, usb }) => ({ session: adb, usb }));
   if (protocol === 'adb') {

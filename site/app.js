@@ -1,5 +1,5 @@
-import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor } from '../src/catalog.js';
-import { connect } from '../src/protocols/usb.js';
+import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
+import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
@@ -106,6 +106,20 @@ const ratingRow = rating => h('div', {}, ...Object.entries(FEATURE_GROUPS).map((
   ...features.filter(f => rating.features[f] !== 'n/a').map(f => h('span', { className: `feature ${rating.features[f]}`, title: rating.features[f],
     textContent: `${LABEL[f] ?? f} ${MARK[rating.features[f]]}` })))), h('small', { className: 'field-help', textContent: `Feature list follows the postmarketOS wiki · curated ${rating.checked}${rating.tested ? ` · phone test accepted ${rating.tested}` : ''}` }));
 /** Count one view or flash of a ROM; failures are ignored. @param {string} rom @param {'view'|'flash'} kind */
+// Opt-in: in-page downloads kept in Cache Storage by SHA-256, so a retry skips the download; the recipe still checks the hash.
+const KEPT = 'rominit-downloads';
+/** Read or set the keep-downloads choice (this browser). @param {boolean} [on] */
+const keepDownloads = on => { try { if (on !== undefined) localStorage.setItem('keep-downloads', on ? '1' : ''); return !!localStorage.getItem('keep-downloads'); } catch { return false; } };
+const forgetKept = () => caches.delete(KEPT).catch(() => false);
+/** @param {any} pin @param {(fraction:number)=>void} progress @param {boolean} keep */
+async function fetchKept(pin, progress, keep) {
+  const cache = keep ? await caches.open(KEPT).catch(() => null) : null, key = `/kept/${pin.sha256}`;
+  const hit = await (await cache?.match(key))?.blob();
+  if (hit?.size === pin.size) return new File([hit], pin.name);
+  const file = await fetchPinned(pin, progress);
+  await cache?.put(key, new Response(file)).catch(() => {}); // full disk: keep going without
+  return file;
+}
 const bump = (rom, kind) => fetch('./api/counts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom, kind }) }).catch(() => {});
 /** "120 views · 12 successful flashes"; counts this view first. Hidden where there is no API. @param {string} key */
 function countsRow(key) {
@@ -490,20 +504,36 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
   }
   return box;
 }
-const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP' };
+const MODE = { fastboot: 'FASTBOOT', download: 'DOWNLOAD MODE', recovery: 'RECOVERY (TWRP)', sideload: 'TWRP', 'usb-burn': 'USB BURN MODE' };
 /** Label for a stage's mode; devices may name their own modes (e.g. eos-sideload), shown from the key. @param {string} mode */
 const modeName = mode => MODE[/** @type {keyof typeof MODE} */ (mode)] ?? mode.replace(/-/g, ' ').toUpperCase();
-const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload' };
+const CONNECT = { fastboot: 'Connect fastboot', odin: 'Connect Download Mode', adb: 'Connect ADB', sideload: 'Connect sideload', amlogic: 'Connect USB burn mode' };
+/** Where `adb reboot …` takes a booted phone for these protocols, so the stage needs no button combo. */
+const REBOOT_TO = /** @type {Record<string, 'bootloader'|'download'>} */ ({ fastboot: 'bootloader', odin: 'download' });
 /** One readable line per step for the card. @param {any[]} step */
 const describe = ([verb, a, b]) => ({ flash: `${b} → ${a}`, write: `${b} → ${a}`, erase: `erase ${a}`, set_active: `switch to slot ${a}`,
-  unmount: `unmount ${a}`, reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})` })[verb] ?? verb;
+  unmount: `unmount ${a}`, reboot: 'reboot', sideload: `install ${a}`, mkfs_ext4: `format ${a} as ext4 (${b})`,
+  unlock: `fastboot ${a} unlock`, lock: `fastboot ${a} lock`, burn: `burn ${a} (${b === 'keep' ? 'no wipe' : b === 'keep_keys' ? 'wipe, keep keys' : 'wipe all'})` })[verb] ?? verb;
 
 /** One stage card: connect, files, options, consent, flash. @param {any} device @param {any} stage @param {number} n @param {number} count @param {string} key `<codename>/<rom id>` */
 function stageCard(device, stage, n, count, key) {
   const { protocol } = recipes[stage.recipe];
   const st = { session: /** @type {any} */ (null), usb: /** @type {USBDevice|undefined} */ (undefined), lost: false, busy: false, finished: false, failed: false,
-    files: /** @type {ReturnType<typeof selectFiles>|null} */ (null) };
+    files: /** @type {ReturnType<typeof selectFiles>|null} */ (stage.files.length ? null : []) }; // no files (unlock): nothing to attach
   const connectButton = h('button', { className: 'button button-secondary', type: 'button', textContent: CONNECT[protocol] });
+  const rebootTo = REBOOT_TO[protocol];
+  // Phone still in Android: one click over USB debugging instead of the button combo, then the Connect button as usual.
+  const rebootButton = rebootTo && h('button', { className: 'button button-secondary', type: 'button', textContent: `Phone in Android? Reboot to ${modeName(stage.mode).toLowerCase()}`, async onclick() {
+    if (!supported) return;
+    this.disabled = true;
+    try {
+      await rebootFromAndroid(rebootTo, dbg);
+      report(`Phone is rebooting into ${modeName(stage.mode).toLowerCase()}. When its screen shows it, press ${CONNECT[protocol]}.`);
+    } catch (error) {
+      dbgError(error);
+      report(`${explain(error)} Needs USB debugging on (Settings › Developer options) and the "Allow USB debugging" prompt accepted. Or use the button combo above.`);
+    } finally { this.disabled = false; }
+  } });
   const selfHosted = stage.files.length > 0 && stage.files.every((/** @type {any} */ f) => f.url?.startsWith(SELF_HOSTED));
   const status = h('p', { className: 'status', role: 'status', textContent: protocol === 'adb' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit reboots into TWRP itself.' : protocol === 'sideload' ? 'Boot TWRP (or Android with USB debugging on), then connect: ROMinit switches to ADB Sideload itself.' : `Put the phone in ${modeName(stage.mode).toLowerCase()}, then connect.` });
   status.setAttribute('aria-live', 'polite');
@@ -630,7 +660,7 @@ function stageCard(device, stage, n, count, key) {
     try {
       let done = 0;
       for (const pin of stage.files) {
-        files.push(await fetchPinned(pin, f => show(`Downloading ${pin.name} · ${Math.floor(100 * (done + f * pin.size) / total)}%`)));
+        files.push(await fetchKept(pin, f => show(`Downloading ${pin.name} · ${Math.floor(100 * (done + f * pin.size) / total)}%`), keep.checked));
         done += pin.size;
       }
       dbg(`Downloaded in the page: ${files.map(f => `${f.name} ${f.size} B`).join(', ')}`);
@@ -643,6 +673,7 @@ function stageCard(device, stage, n, count, key) {
       return false;
     }
   };
+  const keep = h('input', { type: 'checkbox', checked: keepDownloads(), onchange() { keepDownloads(this.checked); } });
   const fetchAll = selfHosted && h('button', { type: 'button', className: 'button button-secondary', textContent: `⬇ Download & attach all (${size(total)})`, async onclick() {
     this.disabled = true;
     const ok = await download(text => { this.textContent = text; });
@@ -664,7 +695,7 @@ function stageCard(device, stage, n, count, key) {
       st.finished = true;
       status.dispatchEvent(new CustomEvent('stage-done', { bubbles: true, detail: { unmatched: unverified.checked } })); // turns a required page section green
       log.append(h('li', {}, ...rich(stage.done)));
-      if (n === count) bump(key, 'flash');
+      if (n === count && stage.section !== 'unlock') bump(key, 'flash');
       outcome.className = 'outcome outcome-done';
       outcome.replaceChildren(h('strong', { textContent: '✓ DONE' }), h('span', { textContent: n === count ? 'All stages finished. Give the first boot a few minutes.' : `Stage ${n} of ${count} finished. Go on with stage ${n + 1}.` }),
         n === count && h('span', {}, 'Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
@@ -685,7 +716,8 @@ function stageCard(device, stage, n, count, key) {
   confirm.addEventListener('input', update);
   update();
 
-  const guide = [protocol !== 'adb' && protocol !== 'sideload' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', device.modes[stage.mode], selfHosted ? 'Connect, tick the warning, type the confirm phrase, then press Run: ROMinit downloads the files in this tab, checks their SHA-256 and flashes in one go.' : 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
+  const guide = [protocol !== 'adb' && protocol !== 'sideload' && protocol !== 'amlogic' && stage.section !== 'unlock' && device.unlock && 'Bootloader unlocked? See 1 · Unlock bootloader.', device.modes[stage.mode],
+    !stage.files.length ? 'Connect, tick the warning, type the confirm phrase, then press Run.' : selfHosted ? 'Connect, tick the warning, type the confirm phrase, then press Run: ROMinit downloads the files in this tab, checks their SHA-256 and flashes in one go.' : 'Download the files below from their source, then connect and choose them. Connecting first tells you right away if the phone is busy.']
     .filter(Boolean).map((text, i) => h('li', {}, h('span', { textContent: String(i + 1).padStart(2, '0') }), h('p', {}, ...rich(text))));
   return h('section', { className: 'flash-card stage-card' },
     h('div', { className: 'card-heading' },
@@ -697,19 +729,22 @@ function stageCard(device, stage, n, count, key) {
       : h('p', { className: 'field-help', textContent: `Steps: ${stepsFor(stage).map(describe).join(' · ')}.` }),
     h('ol', { className: 'guide-list stage-steps' }, ...guide),
     prereqs,
-    h('div', { className: 'connect-row' }, connectButton, status),
-    h('ul', { className: 'selected-files file-links' }, ...stage.files.map(f => h('li', {}, `${f.name} (${size(f.size)}) · `,
+    h('div', { className: 'connect-row' }, connectButton, rebootButton, status),
+    stage.files.length > 0 && h('ul', { className: 'selected-files file-links' }, ...stage.files.map(f => h('li', {}, `${f.name} (${size(f.size)}) · `,
       f.url && h('a', { href: f.url, rel: 'noopener noreferrer', textContent: 'download' }), f.url && ' · ',
       h('a', { href: f.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'source page' })))),
     fetchAll && h('p', { className: 'field-help fetch-all' }, fetchAll, ' ROMinit downloads the files in this tab and attaches them; nothing is saved to your Downloads folder.'),
-    h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
+    fetchAll && h('label', { className: 'risk-check' }, keep, h('span', {}, h('strong', { textContent: 'Optional · keep downloads in this browser. ' }),
+      'A retry or a second phone then skips the download (SHA-256 is still checked). Uses disk space until you ',
+      h('a', { href: '#', textContent: 'forget kept downloads', async onclick(/** @type {Event} */ e) { e.preventDefault(); await forgetKept(); this.textContent = 'forgotten'; } }), '.')),
+    stage.files.length > 0 && h('label', { className: 'file-picker' }, h('span', { className: 'file-picker-icon', textContent: '＋' }),
       h('span', {}, h('strong', { textContent: `Choose ${stage.files.map(f => f.name).join(', ')}` }), h('small', { textContent: 'Size and SHA-256 are checked before writing' })), picker),
-    selected,
+    stage.files.length > 0 && selected,
     ...(stage.options ?? []).map((option, i) => h('label', { className: 'risk-check' }, options[i], h('span', { textContent: option.label }))),
     h('label', { className: 'risk-check' }, risk, h('span', {}, h('strong', { textContent: 'I understand: ' }), stage.warning)),
     h('label', { className: 'field-label confirmation-label' }, 'Type ', h('code', { textContent: stage.confirm }), ' to confirm'),
     confirm,
-    h('label', { className: 'risk-check skip-verify' }, unverified, h('span', {}, h('strong', { textContent: 'Optional · skip verification. ' }),
+    stage.files.length > 0 && h('label', { className: 'risk-check skip-verify' }, unverified, h('span', {}, h('strong', { textContent: 'Optional · skip verification. ' }),
       'Leave this off unless you need it. Tick it to flash a file that differs from the one listed (a newer build, your own build). ',
       h('strong', { textContent: '⚠ Size and SHA-256 are then not checked: ' }), 'a wrong, corrupt or tampered file is written anyway and can brick the phone. The stored steps still run.')),
     h('div', { className: 'flash-actions' }, flash),
@@ -920,6 +955,7 @@ const SOFTWARE = [
     ['android-fastboot', 'Danny Lin', 'MIT', 'https://github.com/kdrag0n/fastboot.js', 'fastboot over WebUSB'],
     ['@yume-chan/adb, adb-daemon-webusb, adb-credential-web, stream-extra (ya-webadb)', 'Simon Chan', 'MIT', 'https://github.com/yume-chan/ya-webadb', 'ADB and sideload over WebUSB'],
     ['@lineageos-infra/libmjolnir', 'Greg Willard (r3pwn)', 'MIT', 'https://github.com/lineageos-infra/libmjolnir', 'Samsung Odin protocol'],
+    ['@lineageos-infra/libamlburn', 'LineageOS (luk1337)', 'MIT', 'https://github.com/lineageos-infra/libamlburn', 'Amlogic USB burn mode'],
     ['@zip.js/zip.js', 'Gildas Lormeau', 'BSD-3-Clause', 'https://github.com/gildas-lormeau/zip.js', 'reads zip archives'],
     ['hash-wasm', 'Dani Biró', 'MIT', 'https://github.com/Daninet/hash-wasm', 'SHA-256 checks'],
     ['xzwasm', 'Steve Sanderson (with xz-embedded, public domain, and walloc, MIT)', 'MIT', 'https://github.com/SteveSanderson/xzwasm', 'unpacks .xz images'],
@@ -1142,11 +1178,14 @@ async function start() {
     return progress.rom === rom.id;
   });
   const unlock = device.unlock;
+  const oneClickStage = unlockStage(device), oneClick = oneClickStage && stageCard(device, oneClickStage, 1, 1, `${device.codename}/unlock`);
   const alreadyUnlocked = h('input', { type: 'checkbox', checked: !!progress.unlocked });
   const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: progress.steps?.includes(i) ?? false }));
   const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
     h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this phone'),
     unlock.hints?.length && h('details', { className: 'hints' }, h('summary', {}, h('strong', { textContent: `Good to know · ${unlock.hints.length} hint${unlock.hints.length === 1 ? '' : 's'}` })), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
+    oneClick && h('div', { className: 'stages' }, h('p', { className: 'field-help' }, h('strong', { textContent: 'One click: ' }),
+      'with OEM unlocking on (the steps below up to fastboot mode), this sends the unlock command from the browser instead of a computer terminal.'), oneClick),
     h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),

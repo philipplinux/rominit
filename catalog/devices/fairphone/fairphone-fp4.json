@@ -18,6 +18,7 @@
     "recovery": "Power off and unplug USB, then hold Power + Volume Up."
   },
   "unlock": {
+    "fastboot": "flashing",
     "text": "Enable OEM unlocking and unlock the bootloader using Fairphone's instructions. Unlocking erases personal data.",
     "url": "https://support.fairphone.com/hc/en-us/articles/10492476238865-How-to-unlock-and-re-lock-the-bootloader",
     "steps": [

@@ -7,8 +7,9 @@ Status: experimental. 3 devices (Xiaomi Mi A3, Samsung Galaxy S9 / S9+) with pos
 ## How it works
 
 - **Catalog** (`catalog/`): JSON in git, contributed through pull requests. One file per device, one file per ROM source.
-- **Recipes** (`src/recipes/`): engines that run a stage's step list. `fastboot`, `odin` (Samsung Download Mode), `twrp-dd` (writes from TWRP over ADB, reads every write back with SHA-256), `fastboot-tgz` (a vendor stock package: checks the archive SHA-256 and the anti-rollback level, unpacks the named images into browser storage (OPFS), then runs fastboot steps; used for `origin: "stock"` restores, never locks).
-- **Protocols** (`src/protocols/usb.js`): WebUSB connections for fastboot, Odin and ADB.
+- **Recipes** (`src/recipes/`): engines that run a stage's step list. `fastboot`, `odin` (Samsung Download Mode), `twrp-dd` (writes from TWRP over ADB, reads every write back with SHA-256), `fastboot-tgz` (a vendor stock package: checks the archive SHA-256 and the anti-rollback level, unpacks the named images into browser storage (OPFS), then runs fastboot steps; used for `origin: "stock"` restores; locks only when the user ticks an opt-in `lock` option), `amlogic` (USB burn mode for Amlogic TV boxes via libamlburn: one `["burn", file, keep|keep_keys|all]` step; ready, no catalog entries yet).
+- **Bootloader lock/unlock**: a device with `unlock.fastboot` (`flashing` or `oem`) gets a one-click unlock stage built in `src/catalog.js` (`unlockStage`), still behind the typed confirm `UNLOCK AND WIPE`. `["lock", family]` is only allowed inside a stage option with `default: false` on a ROM whose `includes.relock` is yes; never a default step.
+- **Protocols** (`src/protocols/usb.js`): WebUSB connections for fastboot, Odin, ADB and Amlogic burn mode; `rebootFromAndroid` sends `reboot:bootloader` / `reboot:download` over ADB (the site's "Phone in Android? Reboot to …" button).
 - **Site** (`site/`): static page, generated from the catalog. `npm run build` writes `dist/`.
 
 Files: ROMinit hosts only selected files: its own builds on Hugging Face (huggingface.co/PhilippLinux), which the page can download and attach in one click. Everything else, vendor firmware above all, links to its publisher (login-protected hosts work too); you download it, then pick it, and ROMinit checks and flashes it.

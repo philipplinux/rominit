@@ -18,6 +18,7 @@
     "fastboot": "Power off. Hold Volume Down + Power until the FASTBOOT screen shows, then plug in USB."
   },
   "unlock": {
+    "fastboot": "flashing",
     "text": "Unlocked bootloader needed: `fastboot flashing unlock` (wipes the phone).",
     "url": "https://wiki.lineageos.org/devices/laurel_sprout/install/",
     "steps": [
