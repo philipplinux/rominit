@@ -34,14 +34,14 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     ...(directOption ? [directOption] : [])));
   const methodButtons = h('div', { className: 'usb-method-buttons', role: 'group', ariaLabel: 'USB install type' },
     ...(directEligible ? [['direct', 'Direct write']] : []).concat([['ventoy', 'Multi-boot ISOs (Ventoy)']]).map(([value, label]) =>
-      h('button', { type: 'button', className: 'button button-secondary', dataset: { method: value }, textContent: label, onclick: () => setMethod(value) })));
+      h('button', { type: 'button', className: 'button button-secondary', value, textContent: label, onclick: () => setMethod(value) })));
   let methodChosen = false;
   const methodSupportedFor = value => value === 'direct' ? directAvailable : !catalogImage || catalogImage.usb === true;
   function syncMethodButtons() {
     for (const b of methodButtons.querySelectorAll('button')) {
-      const on = b.dataset.method === methodSelect.value;
+      const on = b.value === methodSelect.value;
       b.classList.toggle('selected', on); b.setAttribute('aria-pressed', String(on));
-      b.disabled = busy || !panelCapabilities || !methodSupportedFor(b.dataset.method);
+      b.disabled = busy || !panelCapabilities || !methodSupportedFor(b.value);
     }
   }
   function setMethod(value) {
