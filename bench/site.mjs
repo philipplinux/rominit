@@ -957,8 +957,9 @@ test('Alpine Linux parent defaults to Extended and shows architecture badges, do
   await page.locator('#alpine-edition').selectOption('extended');
   assert.equal(await page.locator('.alpine-image').count(), 2);
   assert.equal(await page.locator('#alpine-extended-x86_64 a', { hasText: 'Download' }).getAttribute('href'), 'https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-extended-3.24.2-x86_64.iso');
-  await page.getByRole('button', { name: 'Prepare Extended x86_64 USB' }).click();
-  await page.getByText('Sign in to ROMinit before preparing an Alpine USB.', { exact: true }).waitFor();
+  // No CLI is paired here, so the button offers to connect one rather than to prepare.
+  await page.getByRole('button', { name: 'Connect CLI for Extended x86_64 USB' }).click();
+  await page.getByText(/Sign in to ROMinit to connect the CLI\./).waitFor();
   assert.match(page.url(), /image=alpine-extended-x86_64/);
   await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'mobile page fits viewport');
