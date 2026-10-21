@@ -388,6 +388,8 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .congrats { border-left: 2px solid var(--teal); padding: .5rem .8rem; color: var(--teal); }
 
 .hints { font-size: .75rem; border-left: 2px solid var(--teal); padding: .3rem .7rem; }
+.alt-path { border-left: 2px solid var(--line, #444); padding: .3rem .7rem; }
+.alt-path summary { cursor: pointer; }
 .hints summary { cursor: pointer; }
 .hints .bench-command { display: inline-block; margin: .25rem 0; }
 .hints ul, .requirements ul { margin: .3rem 0 0; padding-left: 1.1rem; }

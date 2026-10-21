@@ -697,7 +697,7 @@ function stageCard(device, stage, n, count, key) {
       if (!result?.nothing) log.append(h('li', {}, ...rich(stage.done)));
       if (n === count && stage.section !== 'unlock') bump(key, 'flash');
       outcome.className = 'outcome outcome-done';
-      outcome.replaceChildren(h('strong', { textContent: '✓ DONE' }), h('span', { textContent: stage.section === 'unlock' ? 'Bootloader unlocked. Go on with the next section.' : n === count ? 'All stages finished. Give the first boot a few minutes.' : `Stage ${n} of ${count} finished. Go on with stage ${n + 1}.` }),
+      outcome.replaceChildren(h('strong', { textContent: '✓ DONE' }), stage.section !== 'unlock' && h('span', { textContent: n === count ? 'All stages finished. Give the first boot a few minutes.' : `Stage ${n} of ${count} finished. Go on with stage ${n + 1}.` }),
         n === count && stage.section !== 'unlock' && h('span', {}, 'Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
       outcome.hidden = false;
     } catch (error) {
@@ -1181,15 +1181,18 @@ async function start() {
   const oneClickStage = unlockStage(device), oneClick = oneClickStage && stageCard(device, oneClickStage, 1, 1, `${device.codename}/unlock`);
   const alreadyUnlocked = h('input', { type: 'checkbox', checked: !!progress.unlocked });
   const stepBoxes = (unlock?.steps ?? []).map((/** @type {any} */ _, /** @type {number} */ i) => h('input', { type: 'checkbox', checked: progress.steps?.includes(i) ?? false }));
+  const manual = unlock && h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step)))));
   const unlockSection = section('1 · Unlock bootloader', unlock ? 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
     h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this phone'),
     unlock.hints?.length && h('details', { className: 'hints' }, h('summary', {}, h('strong', { textContent: `Good to know · ${unlock.hints.length} hint${unlock.hints.length === 1 ? '' : 's'}` })), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
     oneClick && h('div', { className: 'stages' }, h('p', { className: 'field-help' }, h('strong', { textContent: 'One click: ' }),
-      'with OEM unlocking on (the steps below up to fastboot mode), this sends the unlock command from the browser instead of a computer terminal.'), oneClick),
-    h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step))))),
+      'turn on OEM unlocking in Developer options, put the phone in fastboot mode, then this sends the unlock command from the browser instead of a computer terminal.'), oneClick),
+    oneClick ? h('details', { className: 'alt-path' }, h('summary', { textContent: 'Alternative path: unlock by hand' }), manual) : manual,
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
     unlock.url && link(unlock.url, 'Full unlock guide')] : [h('p', { className: 'field-help', textContent: 'This phone needs no bootloader unlock.' })], unlock ? 'REQUIRED' : 'NOT REQUIRED');
+  // A one-click run (or its already-unlocked no-op) ticks the box itself.
+  unlockSection.addEventListener('stage-done', () => { alreadyUnlocked.checked = true; alreadyUnlocked.dispatchEvent(new Event('change', { bubbles: true })); });
   if (unlock) required(unlockSection, () => {
     progress.steps = stepBoxes.flatMap((box, i) => box.checked ? [i] : []); progress.unlocked = alreadyUnlocked.checked; save();
     return alreadyUnlocked.checked || stepBoxes.every(box => box.checked);
