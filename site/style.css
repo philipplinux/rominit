@@ -769,3 +769,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .usb-thanks { margin: .8rem 0; padding: .7rem .9rem; border: 1px solid var(--teal); background: rgb(0 0 0 / 22%); font-size: .75rem; }
 .usb-thanks strong { color: var(--teal); }
 .usb-thanks p { margin: .3rem 0 0; color: #c9c1b3; }
+
+.usb-method-buttons { display: flex; flex-wrap: wrap; gap: .4rem; margin: .3rem 0 .5rem; }
+.usb-method-buttons .button { width: auto; margin: 0; padding: .45rem .8rem; font-size: .72rem; }
+.usb-method-buttons .button.selected { border-color: var(--teal); color: var(--teal); background: rgb(127 168 121 / 14%); }

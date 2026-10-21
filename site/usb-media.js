@@ -29,9 +29,25 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   let directAvailable = directEligible && !!panelCapabilities?.includes('usb-direct');
   const driveSelect = /** @type {HTMLSelectElement} */ (h('select', { id: 'usb-media-drive', disabled: true }));
   const directOption = directEligible ? h('option', { value: 'direct', disabled: !directAvailable, textContent: directAvailable ? 'Direct image (erases USB)' : 'Direct image (update CLI required)' }) : null;
-  const methodSelect = /** @type {HTMLSelectElement} */ (h('select', { id: 'usb-media-method', disabled: true },
+  const methodSelect = /** @type {HTMLSelectElement} */ (h('select', { id: 'usb-media-method', disabled: true, hidden: true },
     h('option', { value: 'ventoy', disabled: !!catalogImage && catalogImage.usb !== true, textContent: catalogImage?.usb === false ? 'Ventoy (not supported for this image)' : 'Ventoy (multi-boot)' }),
     ...(directOption ? [directOption] : [])));
+  const methodButtons = h('div', { className: 'usb-method-buttons', role: 'group', ariaLabel: 'USB install type' },
+    ...(directEligible ? [['direct', 'Direct write']] : []).concat([['ventoy', 'Multi-boot ISOs (Ventoy)']]).map(([value, label]) =>
+      h('button', { type: 'button', className: 'button button-secondary', dataset: { method: value }, textContent: label, onclick: () => setMethod(value) })));
+  let methodChosen = false;
+  const methodSupportedFor = value => value === 'direct' ? directAvailable : !catalogImage || catalogImage.usb === true;
+  function syncMethodButtons() {
+    for (const b of methodButtons.querySelectorAll('button')) {
+      const on = b.dataset.method === methodSelect.value;
+      b.classList.toggle('selected', on); b.setAttribute('aria-pressed', String(on));
+      b.disabled = busy || !panelCapabilities || !methodSupportedFor(b.dataset.method);
+    }
+  }
+  function setMethod(value) {
+    if (busy || methodSelect.value === value) return;
+    methodChosen = true; methodSelect.value = value; methodSelect.dispatchEvent(new Event('change'));
+  }
   const methodHelp = h('p', { className: 'field-help', id: 'usb-media-method-help' });
   const selectedSummary = h('p', { id: 'usb-media-selected-image', className: 'usb-selected-image', hidden: !catalogImage });
   const driveInfo = h('div', { className: 'usb-drive-info' }), planBox = h('div', {}), status = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
@@ -61,9 +77,9 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       : 'Any data on the selected drive will be erased. Check the model, capacity and device path before continuing.' }),
     h('p', { className: 'field-help usb-environment-notice', textContent: 'When supported, the automatic USB report includes OS, browser and CLI technical versions only; it does not include personal details.' }),
     selectedSummary,
-    h('label', { className: 'field-label', htmlFor: methodSelect.id, textContent: 'USB install type' }), methodSelect, methodHelp,
+    h('p', { className: 'field-label', textContent: 'USB install type' }), methodButtons, methodSelect, methodHelp,
     driveHeading, driveSelect, driveInfo,
-    h('div', {}, h('button', { type: 'button', className: 'button button-primary', textContent: imageId ? 'Review USB preparation' : 'Review Ventoy installation', disabled: true, onclick: review })),
+    h('div', {}, h('button', { type: 'button', className: 'button button-primary usb-review', textContent: imageId ? 'Review USB preparation' : 'Review Ventoy installation', disabled: true, onclick: review })),
     planBox,
     status, reportNotice, progressBox, statusCheck, jobLog, thanks);
   let drives = [], currentPlan = null, confirmInput = null, installButton = null, busy = false, writeDeadline = 0, activeImageName = null, activeImageSize = null, activeAction = null, activeMethod = 'ventoy', activeUnverified = false, activeReadback = null;
@@ -81,13 +97,14 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     selectedSummary.hidden = false;
   }
   if (catalogImage) setImageSummary(catalogImage, catalogImage.size);
-  if (catalogImage && catalogImage.usb !== true && directAvailable) methodSelect.value = 'direct';
+  if (directAvailable && (!catalogImage || catalogImage.usb !== true)) methodSelect.value = 'direct';
 
   function methodSupported(method = methodSelect.value) {
     if (method === 'direct') return directAvailable;
     return method === 'ventoy' && (!catalogImage || catalogImage.usb === true);
   }
   function updateMethodHelp() {
+    syncMethodButtons();
     if (!panelCapabilities) {
       methodHelp.textContent = 'Checking CLI support for direct image writing…';
       return;
@@ -108,12 +125,12 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   }
   updateMethodHelp();
 
-  const reviewButton = /** @type {HTMLButtonElement} */ (panel.querySelectorAll('button')[1]);
+  const reviewButton = /** @type {HTMLButtonElement} */ (panel.querySelector('.usb-review'));
   const setBusy = value => {
     busy = value;
     panel.dataset.busy = String(value);
     refreshButton.disabled = value;
-    methodSelect.disabled = value || !panelCapabilities;
+    methodSelect.disabled = value || !panelCapabilities; syncMethodButtons();
     driveSelect.disabled = value || drives.length === 0;
     reviewButton.disabled = value || !methodSupported() || !drives.find(d => String(d.id) === driveSelect.value && d.available === true) || !!currentPlan;
   };
@@ -222,7 +239,8 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
           directOption.disabled = !directAvailable;
           directOption.textContent = directAvailable ? 'Direct image (erases USB)' : 'Direct image (update CLI required)';
         }
-        if (catalogImage && catalogImage.usb !== true && directAvailable) methodSelect.value = 'direct';
+        if (directAvailable && !methodChosen) methodSelect.value = 'direct';
+        if (!catalogImage) reviewButton.textContent = methodSelect.value === 'direct' ? 'Review direct image write' : 'Review Ventoy installation';
         updateMethodHelp();
       }
       const found = await helperRequest(session, '/usb/drives');
