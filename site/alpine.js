@@ -93,13 +93,12 @@ function render() {
   document.getElementById('alpine-edition-description').textContent = selectedEdition.description;
   document.getElementById('alpine-edition-note').textContent = selectedEdition.usbNote;
   images.replaceChildren(...selectedEdition.images.map(image => h('article', { className: 'alpine-image', id: image.id },
-    h('div', { className: 'alpine-image-title' }, h('strong', { textContent: image.arch }), h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), ...(image.usb === true ? [h('span', { className: 'architecture-tag ventoy-supported', textContent: 'Ventoy supported' })] : []), h('span', { className: 'field-help', textContent: `${image.format} · ${sizes(image.size)}` })),
+    h('div', { className: 'alpine-image-title' }, h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), h('strong', { textContent: image.arch }), h('span', { className: `architecture-tag${image.usb === true ? ' ventoy-supported' : ''}`, textContent: image.usb === true ? 'Ventoy supported' : 'No Ventoy' }), h('span', { className: 'alpine-image-size', textContent: `${image.format} · ${sizes(image.size)}` }), h('a', { href: `${image.url}.sha256`, target: '_blank', rel: 'noopener noreferrer', textContent: 'SHA-256' })),
     h('div', { className: 'alpine-image-actions' }, ['iso', 'img.gz'].includes(image.format)
       ? h('button', { type: 'button', className: 'button button-primary alpine-main-action', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
       : h('span', { className: 'field-help', textContent: 'Download · platform-specific setup' }),
       h('a', { className: 'button button-secondary', href: image.url, textContent: 'Download' }),
-      h('a', { className: 'button button-secondary', href: ALPINE.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' }),
-      h('a', { href: `${image.url}.sha256`, target: '_blank', rel: 'noopener noreferrer', textContent: 'SHA-256' })))));
+      h('a', { className: 'button button-secondary', href: ALPINE.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' })))));
 }
 editionSelect.addEventListener('change', () => {
   if (busy()) { editionSelect.value = selectedEdition.id; status.textContent = 'Wait for the current USB operation to finish before changing edition.'; return; }

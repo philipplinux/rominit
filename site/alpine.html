@@ -37,20 +37,18 @@
         </section>
         <section class="alpine-preview alpine-card" aria-labelledby="preview-title">
           <div class="alpine-preview-text">
-            <p class="eyebrow">SEE IT RUN</p>
-            <h2 id="preview-title">What boots from the Standard ISO</h2>
-            <p class="field-help">Alpine Linux 3.24.2 Standard starts in a plain terminal: no desktop, a few seconds to a prompt. The recording runs three commands in a ROMinit test VM.</p>
-            <ol class="alpine-cmds">
-              <li><code>cat /etc/alpine-release</code><span>release number</span></li>
-              <li><code>uname -rm</code><span>kernel and CPU</span></li>
-              <li><code>apk --version</code><span>package manager</span></li>
-            </ol>
+            <p class="eyebrow">IS IT FOR YOU?</p>
+            <h2 id="preview-title">Alpine Linux, pros and cons</h2>
+            <div class="alpine-procon">
+              <div><h3>Pros</h3><ul><li>Tiny and fast: a prompt in seconds, runs on old hardware.</li><li>apk packages and OpenRC keep it simple and hands-on.</li><li>Diskless, data and system modes give you a choice of persistence.</li></ul></div>
+              <div><h3>Cons</h3><ul><li>Terminal only: no desktop unless you add one.</li><li>musl and BusyBox differ from glibc/GNU, so some apps need checking.</li><li>Needs network to add packages; Wi-Fi can need extra setup.</li></ul></div>
+            </div>
             <p class="alpine-links">
               <a href="https://alpinelinux.org/" rel="noopener noreferrer" target="_blank">Alpine website ↗</a>
               <a href="https://wiki.alpinelinux.org/wiki/Desktop_environments_and_Window_managers" rel="noopener noreferrer" target="_blank">Add a desktop ↗</a>
               <a href="https://www.youtube.com/watch?v=YNYtJ3jyMRs" rel="noopener noreferrer" target="_blank">YouTube demo ↗</a>
             </p>
-            <p class="field-help">The video is an older community walkthrough (Trafotin, 2023); follow the current official installation instructions.</p>
+            <p class="field-help">The recording shows three commands in a ROMinit test VM. The video is an older community walkthrough (Trafotin, 2023); follow the current official installation instructions.</p>
           </div>
           <figure class="alpine-term">
             <div class="alpine-term-bar" aria-hidden="true"><i></i><i></i><i></i><span>alpine-standard-x86_64 · 3.24.2</span></div>
@@ -65,10 +63,6 @@
           <div id="alpine-images" class="alpine-images"></div>
           <noscript><p>Enable JavaScript to select editions, or use <a href="https://alpinelinux.org/downloads/">Alpine’s official downloads</a>.</p></noscript>
           <section id="alpine-usb" aria-label="Prepare the selected image on USB"><h3>Prepare a USB</h3><p id="alpine-usb-status" class="status" role="status" aria-live="polite"></p><div id="alpine-usb-panel"></div></section>
-        </section>
-        <section class="alpine-grid alpine-notes" aria-label="Benefits and tradeoffs">
-          <article class="alpine-card"><h2>Why Alpine Linux?</h2><ul><li>A compact base for utility machines, servers, containers and learning.</li><li>apk packages and OpenRC services keep configuration hands-on.</li><li>Diskless, data and system installation modes offer different persistence choices.</li></ul></article>
-          <article class="alpine-card alpine-cautions"><h2>Note this before installation</h2><ul><li>Standard needs network access to add packages; Wi-Fi can need extra setup.</li><li>musl and BusyBox differ from common glibc/GNU environments. Check your apps.</li><li>CPU architecture alone does not establish firmware or device compatibility.</li><li>Direct writing and fresh Ventoy installation erase the selected stick after typed confirmation; a verified existing Ventoy stick receives a copy-only plan. Installing Alpine onto a computer is a separate step.</li></ul></article>
         </section>
         <p class="alpine-status">Ventoy is the primary USB route. The Standard x86_64 ISO was copied and read-back verified on a test stick; booting that stick on a physical PC remains untested. Direct image writing is an explicit alternative that erases the stick; a matching read-back checksum verifies the write, not hardware boot compatibility. ARM64 ISO boot requires compatible UEFI hardware; Raspberry Pi media uses its own setup route.</p>
         <footer class="alpine-footer"><a href="https://alpinelinux.org/downloads/">Official downloads &amp; checksums</a><a href="https://gitlab.alpinelinux.org/alpine/aports">Alpine source</a><a href="https://wiki.alpinelinux.org/wiki/Installation">Installation guide</a><a href="https://www.ventoy.net/en/index.html">Ventoy firmware support</a><span>Release metadata checked 2026-10-20</span></footer>
