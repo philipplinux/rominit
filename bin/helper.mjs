@@ -326,7 +326,7 @@ export async function startHelper({ site = process.env.ROMINIT_URL ?? 'https://r
             : status === 400 ? 'USB request or confirmation is invalid.'
             : status === 409 ? 'USB plan is stale, another USB operation is in progress, or the existing Ventoy installation could not be verified.'
               : status === 502 ? 'Could not download and verify the selected Alpine ISO.'
-              : status === 503 ? 'USB media support is unavailable.' : 'USB operation failed.';
+              : status === 503 ? (/Ventoy directory is not configured/.test(error?.message) ? 'Ventoy is not set up for this CLI. Restart it with ROMINIT_VENTOY_DIR=/absolute/path/to/ventoy rominit serve, or use Direct write.' : 'USB media support is unavailable.') : 'USB operation failed.';
           return reject(status, cors, message);
         }
       })();

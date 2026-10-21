@@ -65,7 +65,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     driveHeading, driveSelect, driveInfo,
     h('div', {}, h('button', { type: 'button', className: 'button button-primary', textContent: imageId ? 'Review USB preparation' : 'Review Ventoy installation', disabled: true, onclick: review })),
     planBox,
-    status, thanks, reportNotice, progressBox, statusCheck, jobLog);
+    status, reportNotice, progressBox, statusCheck, jobLog, thanks);
   let drives = [], currentPlan = null, confirmInput = null, installButton = null, busy = false, writeDeadline = 0, activeImageName = null, activeImageSize = null, activeAction = null, activeMethod = 'ventoy', activeUnverified = false, activeReadback = null;
   let reportPollTimer = 0, reportPollGeneration = 0;
 
