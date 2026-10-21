@@ -5,6 +5,7 @@
   "defaultEdition": "extended",
   "version": "3.24.2",
   "releaseDate": "2026-09-17",
+  "kernel": { "version": "6.18.52", "line": "LTS", "updates": "6.18.57", "checked": "2026-10-21", "source": "https://pkgs.alpinelinux.org/packages?name=linux-lts&branch=v3.24&arch=x86_64" },
   "source": "https://alpinelinux.org/downloads/",
   "page": {
     "description": "Alpine Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",

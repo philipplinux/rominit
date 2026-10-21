@@ -39,8 +39,11 @@ Object.assign(byId('alpine-operation'), { src: `./${page.shot.src}`, alt: page.s
 byId('downloads-title').textContent = `Choose your ${OS.name}`;
 byId('os-status').textContent = page.status;
 byId('os-footer').replaceChildren(...page.footer.map(link => h('a', { href: link.href, textContent: link.label })), h('span', { textContent: `Release metadata checked ${page.checked}` }));
-document.getElementById('alpine-version').textContent = `Version ${OS.version} · Stable`;
-document.getElementById('alpine-release').replaceChildren(h('strong', { className: 'alpine-version-inline', textContent: `Version ${OS.version}` }), ` · Stable · released ${OS.releaseDate}`);
+// Kernel: what the release media boots; `updates` is what apk upgrade installs on that branch now.
+const kernel = OS.kernel && `Linux ${OS.kernel.version} ${OS.kernel.line}`;
+document.getElementById('alpine-version').textContent = `Version ${OS.version} · Stable${kernel ? ` · ${kernel}` : ''}`;
+document.getElementById('alpine-release').replaceChildren(h('strong', { className: 'alpine-version-inline', textContent: `Version ${OS.version}` }), ` · Stable · released ${OS.releaseDate}`,
+  ...(OS.kernel ? [' · kernel ', h('a', { href: OS.kernel.source, target: '_blank', rel: 'noopener noreferrer', textContent: kernel }), OS.kernel.updates ? ` on the image, ${OS.kernel.updates} after apk upgrade (checked ${OS.kernel.checked})` : ''] : []));
 
 const signInHint = providers => providers?.length
   ? ['Sign in with ', ...providers.flatMap((p, i) => [i ? ' or ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: PROVIDER_NAMES[p] ?? p })]), ', then press Connect CLI again.']
