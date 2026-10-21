@@ -15,7 +15,7 @@ const VERIFICATION = ['verified', 'mismatch-accepted', 'none'];
 const FAILURE_CODES = ['preflight', 'device_changed', 'unmount', 'write', 'timeout', 'readback', 'unknown'];
 
 const IMAGE_CATALOG = new Map(ALPINE.editions.flatMap(edition => edition.images
-  .filter(image => image.format.toLowerCase() === 'iso')
+  .filter(image => ['iso', 'img.gz'].includes(image.format.toLowerCase()))
   .map(image => [image.id, { name: `${ALPINE.name} ${ALPINE.version} · ${edition.name} · ${image.arch}`, size: image.size, ventoy: image.usb === true }])));
 
 function exactKeys(value, required, optional = []) {
@@ -55,7 +55,7 @@ function canonicalImageName(id) {
 }
 
 function validate(body) {
-  if (!exactKeys(body, ['jobId', 'method', 'action', 'outcome', 'image', 'drive', 'verification'], ['readback', 'failureCode', 'environment'])) return null;
+  if (!exactKeys(body, ['jobId', 'method', 'action', 'outcome', 'image', 'drive', 'verification'], ['readback', 'failureCode', 'retries', 'environment'])) return null;
   if (typeof body.jobId !== 'string' || !JOB_ID.test(body.jobId) || !METHODS.includes(body.method) ||
       !ACTIONS.includes(body.action) || !OUTCOMES.includes(body.outcome)) return null;
   if ((body.method === 'direct' && body.action !== 'direct') ||
@@ -76,6 +76,7 @@ function validate(body) {
   if (body.readback !== undefined && (!exactKeys(body.readback, ['size', 'matched']) ||
       !Number.isSafeInteger(body.readback.size) || body.readback.size < 0 || body.readback.size > MAX_DRIVE_BYTES ||
       typeof body.readback.matched !== 'boolean')) return null;
+  if (body.retries !== undefined && (!Number.isInteger(body.retries) || body.retries < 1 || body.retries > 10)) return null;
   if (body.failureCode !== undefined && !FAILURE_CODES.includes(body.failureCode)) return null;
   if (body.outcome === 'success') {
     if (body.failureCode !== undefined) return null;
@@ -100,13 +101,14 @@ function validate(body) {
     readbackSize: body.readback?.size ?? null,
     readbackMatched: body.readback === undefined ? null : Number(body.readback.matched),
     failureCode: body.failureCode ?? null,
+    retries: body.retries ?? null,
   };
 }
 
 const equalReport = (row, report) => row.method === report.method && row.action === report.action && row.outcome === report.outcome &&
   row.image_id === report.imageId && row.image_size === report.imageSize && row.source_verification === report.sourceVerification &&
   row.drive_capacity === report.driveCapacity && row.readback_size === report.readbackSize &&
-  row.readback_matched === report.readbackMatched && row.failure_code === report.failureCode && (row.environment ?? null) === report.environment;
+  row.readback_matched === report.readbackMatched && row.failure_code === report.failureCode && row.retries === report.retries && (row.environment ?? null) === report.environment;
 
 /** @param {{request:Request, env:any}} context */
 export async function onRequestPost({ request, env }) {
@@ -119,14 +121,14 @@ export async function onRequestPost({ request, env }) {
 
   const { meta } = await env.DB.prepare(`INSERT OR IGNORE INTO os_usb_runs
     (job_id, method, action, outcome, image_id, image_name, image_size, source_verification,
-     drive_capacity, readback_size, readback_matched, failure_code, environment)
-    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)`)
+     drive_capacity, readback_size, readback_matched, failure_code, environment, retries)
+    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`)
     .bind(report.jobId, report.method, report.action, report.outcome, report.imageId, report.imageName, report.imageSize,
-      report.sourceVerification, report.driveCapacity, report.readbackSize, report.readbackMatched, report.failureCode, report.environment).run();
+      report.sourceVerification, report.driveCapacity, report.readbackSize, report.readbackMatched, report.failureCode, report.environment, report.retries).run();
   if (meta.changes) return json({ ok: true, duplicate: false });
 
   const existing = await env.DB.prepare(`SELECT method, action, outcome, image_id, image_size, source_verification,
-    drive_capacity, readback_size, readback_matched, failure_code, environment FROM os_usb_runs WHERE job_id = ?1`).bind(report.jobId).first();
+    drive_capacity, readback_size, readback_matched, failure_code, environment, retries FROM os_usb_runs WHERE job_id = ?1`).bind(report.jobId).first();
   if (existing && equalReport(existing, report)) return json({ ok: true, duplicate: true });
   return json({ error: 'job ID already used' }, 409);
 }

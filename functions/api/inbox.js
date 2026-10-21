@@ -30,7 +30,7 @@ export async function onRequestGet({ request, env }) {
   const agents = { success: [], partial: [], failed: [], abandoned: [] };
   for (const run of runs2.results) agents[run.outcome]?.push({ ...run, steps: JSON.parse(run.steps) });
   const usbRuns = await env.DB.prepare(`SELECT r.job_id, r.method, r.action, r.outcome, r.image_id, r.image_name, r.image_size,
-      r.source_verification, r.drive_capacity, r.readback_size, r.readback_matched, r.failure_code, r.environment, r.at
+      r.source_verification, r.drive_capacity, r.readback_size, r.readback_matched, r.failure_code, r.environment, r.retries, r.at
     FROM os_usb_runs r LEFT JOIN triage t ON t.inbox = 'os-usb' AND t.ref = r.job_id
     WHERE t.ref IS NULL ORDER BY r.at DESC LIMIT 500`).all();
   const osUsb = { success: [], failed: [] };
@@ -46,6 +46,7 @@ export async function onRequestGet({ request, env }) {
       drive: { capacityBytes: row.drive_capacity }, at: row.at,
       ...(row.readback_size === null ? {} : { readback: { size: row.readback_size, matched: row.readback_matched === 1 } }),
       ...(row.failure_code === null ? {} : { failureCode: row.failure_code }),
+      ...(row.retries === null ? {} : { retries: row.retries }),
     };
     osUsb[row.outcome]?.push(item);
   }

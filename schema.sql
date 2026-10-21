@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS os_usb_runs (
   readback_matched INTEGER CHECK (readback_matched IN (0, 1)),
   failure_code TEXT CHECK (failure_code IN ('preflight', 'device_changed', 'unmount', 'write', 'timeout', 'readback', 'unknown')),
   environment TEXT CHECK (environment IS NULL OR json_valid(environment)),
+  retries INTEGER CHECK (retries IS NULL OR retries BETWEEN 1 AND 10),
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CHECK ((image_id = 'none' AND image_name = 'No ISO' AND image_size = 0 AND source_verification = 'none') OR
          (image_id <> 'none' AND image_name <> 'No ISO' AND image_size > 0 AND source_verification <> 'none')),
@@ -202,7 +203,7 @@ CREATE VIEW IF NOT EXISTS inbox AS
     'image', json_object('id', image_id, 'name', image_name, 'size', image_size),
     'verification', json_object('source', source_verification), 'drive', json_object('capacityBytes', drive_capacity),
     'readback', CASE WHEN readback_size IS NULL THEN NULL ELSE json_object('size', readback_size, 'matched', readback_matched = 1) END,
-    'failureCode', failure_code, 'environment', json(environment))
+    'failureCode', failure_code, 'retries', retries, 'environment', json(environment))
   FROM os_usb_runs;
 CREATE TABLE IF NOT EXISTS favorites (
   user_id INTEGER NOT NULL, -- users.id

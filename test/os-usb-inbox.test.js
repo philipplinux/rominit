@@ -20,6 +20,7 @@ test('OS USB reports require a CLI API token, validate the strict privacy contra
     VALUES (?, 'ventoy', 'install', 'failed', 'local-configured', 'Local ISO', 400, 'verified', ?, 'timeout')`)
     .run(jobId('L'), 2 * 1024 ** 3);
   db.exec(await readFile(new URL('../migrations/2026-10-21-os-usb-environment.sql', import.meta.url), 'utf8'));
+  db.exec(await readFile(new URL('../migrations/2026-10-21-os-usb-retries.sql', import.meta.url), 'utf8'));
   assert.equal(db.prepare('SELECT environment FROM os_usb_runs WHERE job_id = ?').get(jobId('L')).environment, null,
     'the additive migration preserves pre-existing rows without environment data');
   const stmt = (sql, args = []) => ({
@@ -55,6 +56,10 @@ test('OS USB reports require a CLI API token, validate the strict privacy contra
     browser: 'chrome', browserVersion: '140.0.7339.0', browserOs: 'linux', browserOsVersion: '6.12.4',
   };
 
+  const pi = { ...validSuccess, jobId: jobId('P'), image: { id: 'alpine-rpi-aarch64-img', size: 87470439 }, readback: { size: 87470439, matched: true }, retries: 2 };
+  assert.equal((await post(pi)).status, 200, 'a Raspberry Pi img.gz write with slow-card retries is accepted');
+  assert.equal((await post({ ...pi, jobId: jobId('Q'), method: 'ventoy', action: 'install' })).status, 400, 'Ventoy still refuses img.gz');
+  assert.equal((await post({ ...pi, jobId: jobId('R'), retries: 99 })).status, 400, 'retries stay bounded');
   assert.equal((await post(validSuccess, null)).status, 401);
   assert.equal((await post({ ...validSuccess, image: { ...validSuccess.image, sha256: 'a'.repeat(64) } })).status, 400,
     'source hashes are rejected rather than stored');
@@ -124,7 +129,7 @@ test('OS USB reports require a CLI API token, validate the strict privacy contra
   const response = await adminGet(new Request('https://rominit.test/api/inbox', { headers: { cookie: `sid=admin-cookie` } }));
   assert.equal(response.status, 200);
   const body = await response.json();
-  assert.equal(body.osUsb.success.length, 4);
+  assert.equal(body.osUsb.success.length, 5);
   assert.equal(body.osUsb.failed.length, 2);
   assert.deepEqual(body.osUsb.success.find(item => item.jobId === jobId('A')).image,
     { id: imageId, name: 'Alpine Linux 3.24.2 · Standard · x86_64', size: imageSize });

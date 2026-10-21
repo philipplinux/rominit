@@ -868,6 +868,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
         } else if (value.startsWith('ROMINIT_USB_RETRY ')) {
           protocolPhase = 'writing';
           jobState.phase = 'writing';
+          jobState.retries = (jobState.retries ?? 0) + 1;
           delete jobState.progress;
           append(jobState, 'The USB reader reported errors. Restarting the write with a longer timeout and smaller transfers (a slow card is likely).');
         } else if (value.startsWith('ROMINIT_USB_PROGRESS ')) {
@@ -1015,7 +1016,9 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
       image,
       drive: { capacityBytes: plan.drive.size },
       verification: { source: !hasImage ? 'none' : plan.verification?.status === 'mismatch' ? 'mismatch-accepted' : 'verified' },
-      ...(jobState.readback ? { readback: { size: jobState.readback.size, matched: jobState.readback.matched } } : {}),
+      // A .gz image reads back as inflated bytes; the report keeps the pinned (compressed) size, which the inbox checks against the catalog.
+      ...(jobState.readback ? { readback: { size: /\.gz$/i.test(plan.image?.name ?? '') ? image.size : jobState.readback.size, matched: jobState.readback.matched } } : {}),
+      ...(jobState.retries ? { retries: Math.min(jobState.retries, 10) } : {}),
       ...(jobState.reportEnvironment ? { environment: { ...jobState.reportEnvironment } } : {}),
     };
     if (jobState.state === 'failed') {
