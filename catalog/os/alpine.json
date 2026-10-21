@@ -6,8 +6,7 @@
   "version": "3.24.2",
   "releaseDate": "2026-09-17",
   "requirements": {
-    "minimum": ["128 MB RAM; 320 MB while installing from the ISO", "0 to 700 MB disk for sys or data mode; none needed in diskless mode", "Internet for a sys install, unless you boot the Extended image"],
-    "recommended": ["512 MB RAM or more for a graphical desktop", "Secure Boot off to boot the installer; it can go back on once Alpine is installed"],
+    "badges": ["128–512 MB RAM", "100–700 MB disk", "Internet"],
     "source": "https://wiki.alpinelinux.org/wiki/Installation",
     "checked": "2026-10-21"
   },

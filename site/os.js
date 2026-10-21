@@ -21,6 +21,8 @@ const sizes = bytes => `${(bytes / 1024 ** 2).toFixed(1)} MiB`;
 
 for (const name of [...new Set(osArchitectures(OS).map(arch => ARCH_FAMILY[arch]))])
   document.getElementById('alpine-architectures')?.append(h('span', { className: 'architecture-tag', textContent: name }));
+for (const text of OS.requirements?.badges ?? []) // system requirements, from the OS's own docs
+  document.getElementById('alpine-architectures')?.append(h('a', { className: 'architecture-tag', href: OS.requirements.source, target: '_blank', rel: 'noopener noreferrer', title: `System requirements, checked ${OS.requirements.checked}`, textContent: text }));
 editionSelect.append(...OS.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
 document.title = `${OS.name} · OS · ROMinit`;
 const logo = /** @type {HTMLImageElement} */ (byId('os-logo'));
@@ -32,12 +34,6 @@ byId('preview-title').textContent = `${OS.name}, pros and cons`;
 byId('os-pros').replaceChildren(...page.pros.map(text => h('li', { textContent: text })));
 byId('os-cons').replaceChildren(...page.cons.map(text => h('li', { textContent: text })));
 byId('os-links').replaceChildren(...links(page.links));
-if (OS.requirements) { // system requirements, from the OS's own docs
-  const req = OS.requirements, item = text => h('li', { textContent: text });
-  byId('os-min').replaceChildren(...req.minimum.map(item));
-  byId('os-rec').replaceChildren(...req.recommended.map(item), h('li', {}, h('a', { href: req.source, target: '_blank', rel: 'noopener noreferrer', textContent: `Source, checked ${req.checked}` })));
-  byId('os-reqs').hidden = false;
-}
 byId('os-preview-note').textContent = page.previewNote;
 byId('os-shot-bar').textContent = page.shot.bar;
 byId('os-shot-caption').textContent = page.shot.caption;

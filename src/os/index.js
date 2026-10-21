@@ -6,7 +6,7 @@ import alpineJson from '../../catalog/os/alpine.json' with { type: 'json' };
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */
 /** @typedef {{ label: string, href: string }} OsLink */
 /** @typedef {{ description: string, eyebrow: string, intro: string, logo: { src: string, alt: string, width: number, height: number }, pros: string[], cons: string[], links: OsLink[], previewNote: string, shot: { src: string, alt: string, width: number, height: number, bar: string, caption: string }, status: string, footer: OsLink[], checked: string, credits: string[] }} OsPage */
-/** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { minimum: string[], recommended: string[], source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, page: OsPage, editions: OsEdition[] }} Os */
+/** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { badges: string[], source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, page: OsPage, editions: OsEdition[] }} Os */
 
 /** Every OS page. @type {Os[]} */
 export const OSES = [/** @type {Os} */ (alpineJson)];

@@ -792,3 +792,4 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .source-row .badge-pill { font: inherit; line-height: normal; align-items: stretch; }
 .source-row .badge-label, .source-row .badge-value { padding: .3rem .55rem; }
 .source-row .badge-label img { height: 1em; width: 1em; }
+a.architecture-tag { text-decoration: none; }
