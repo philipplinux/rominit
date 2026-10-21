@@ -5,6 +5,12 @@
   "defaultEdition": "extended",
   "version": "3.24.2",
   "releaseDate": "2026-09-17",
+  "requirements": {
+    "minimum": ["128 MB RAM; 320 MB while installing from the ISO", "0 to 700 MB disk for sys or data mode; none needed in diskless mode", "Internet for a sys install, unless you boot the Extended image"],
+    "recommended": ["512 MB RAM or more for a graphical desktop", "Secure Boot off to boot the installer; it can go back on once Alpine is installed"],
+    "source": "https://wiki.alpinelinux.org/wiki/Installation",
+    "checked": "2026-10-21"
+  },
   "kernel": { "version": "6.18.52", "line": "LTS", "updates": "6.18.57", "checked": "2026-10-21", "source": "https://pkgs.alpinelinux.org/packages?name=linux-lts&branch=v3.24&arch=x86_64" },
   "source": "https://alpinelinux.org/downloads/",
   "page": {

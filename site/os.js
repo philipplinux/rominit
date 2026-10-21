@@ -32,6 +32,12 @@ byId('preview-title').textContent = `${OS.name}, pros and cons`;
 byId('os-pros').replaceChildren(...page.pros.map(text => h('li', { textContent: text })));
 byId('os-cons').replaceChildren(...page.cons.map(text => h('li', { textContent: text })));
 byId('os-links').replaceChildren(...links(page.links));
+if (OS.requirements) { // system requirements, from the OS's own docs
+  const req = OS.requirements, item = text => h('li', { textContent: text });
+  byId('os-min').replaceChildren(...req.minimum.map(item));
+  byId('os-rec').replaceChildren(...req.recommended.map(item), h('li', {}, h('a', { href: req.source, target: '_blank', rel: 'noopener noreferrer', textContent: `Source, checked ${req.checked}` })));
+  byId('os-reqs').hidden = false;
+}
 byId('os-preview-note').textContent = page.previewNote;
 byId('os-shot-bar').textContent = page.shot.bar;
 byId('os-shot-caption').textContent = page.shot.caption;
