@@ -86,19 +86,20 @@ const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key, /** @type 
   badge('xda', 'XDA', 'search', { href: `https://xdaforums.com/search/?q=${encodeURIComponent(`${device.vendor} ${device.name}`)}`, target: '_blank', rel: 'noopener noreferrer', title: 'Search XDA Forums for this phone' }), favoriteButton(key));
 /**
  * Badges under the model card: one per ROM project, the newest stock Android, and each recovery. A project with several builds says
- * "multiple available" and opens section 0. @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {HTMLDetailsElement} infoSection
+ * "multiple available" and opens section 0. @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {HTMLDetailsElement} infoSection @param {HTMLDetailsElement} recoverSection
  */
-function badgeRow(device, roms, stock, infoSection) {
+function badgeRow(device, roms, stock, infoSection, recoverSection) {
   // postmarketOS is rolling, so its number is the Linux kernel; others show the release number, or the base when the version is a date/build.
   const shown = (/** @type {any} */ r) => r.os === 'postmarketOS' ? `Linux ${r.rating.kernel.version}`
     : r.version.match(/^v?\d{1,3}\.\d+(?: A\d+)?/)?.[0] ?? r.rating.base.replace(`${r.os} `, '');
   const byOs = new Map();
   for (const r of roms) if (r.status !== 'broken') byOs.set(r.os, [...(byOs.get(r.os) ?? []), r]);
+  const jump = (/** @type {HTMLDetailsElement} */ sec) => (/** @type {Event} */ e) => { e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth' }); };
   const romBadges = [...byOs].map(([os, list]) => list.length === 1
     ? badge(os.toLowerCase(), os, shown(list[0]), { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
-    : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick(/** @type {Event} */ e) { e.preventDefault(); infoSection.open = true; infoSection.scrollIntoView({ behavior: 'smooth' }); } }));
+    : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick: jump(infoSection) }));
   const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
-  const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: latest.homepage, target: '_blank', rel: 'noopener noreferrer', title: `${latest.name} ${latest.version}: stock firmware, also in section R` });
+  const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: '#', title: `${latest.name} ${latest.version}: restore it in section R`, onclick: jump(recoverSection) });
   const recoveryBadges = (device.recoveries ?? []).map((/** @type {any} */ r) => badge(r.id, r.name, r.version, { href: r.project, target: '_blank', rel: 'noopener noreferrer', title: `${r.name} recovery project` }));
   return h('p', { className: 'badge-row' }, ...romBadges, stockBadge, ...recoveryBadges);
 }
@@ -1670,6 +1671,11 @@ async function start() {
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   // Under the intro, three rows: specs, phone tags (year, microSD, cameras, telephoto, LiDAR), then badges for the ROM projects, stock Android and recoveries.
   const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux|jailbreak|os\b/i.test(t); // iOS, postmarketOS, Sailfish OS…
+  const recoverSection = section('R · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
+    device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
+    ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
+      ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
+    otherRecoveries]);
   main.append(
     h('section', { className: 'intro' },
       device.photo && h('figure', { className: 'phone-photo' }, h('img', { src: `./${device.photo.src}`, alt: `${device.vendor} ${device.name}` }),
@@ -1686,7 +1692,7 @@ async function start() {
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
       device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display].join(' · ') }),
       tags.some(t => !isOs(t)) && h('p', { className: 'hardware-line', textContent: tags.filter(t => !isOs(t)).join(' · ') }),
-      badgeRow(device, roms, stock, infoSection)),
+      badgeRow(device, roms, stock, infoSection, recoverSection)),
     infoSection,
     unlockSection,
     twrpSection,
@@ -1694,11 +1700,7 @@ async function start() {
     testSection,
     // R and S sit apart from the numbered flow: a way back, and a way to tell us something is wrong.
     h('p', { className: 'side-divider', textContent: 'when things go wrong' }),
-    section('R · Recover / revert', stock.length ? 'back to stock' : 'manual for now', false, [
-      device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
-      ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
-        ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
-      otherRecoveries]));
+    recoverSection);
 }
 /** Left rail like a scrollbar: the rail is the whole page, milestones 0–4, R, T sit at their section's place (so long sections
  * get long stretches), the thumb is what the window shows. Green when a section is done, amber ring on the next one to do,
