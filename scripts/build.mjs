@@ -51,6 +51,7 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
   assert(notice && /[Cc]opyright/.test(notice), `Missing third-party notice: ${path}`);
   notices.push(`${path}\n${notice}`);
 }
+notices.push('logos/{android,eos,lineageos,xda}.svg\nSimple Icons (CC0), https://simpleicons.org; the marks belong to Google, the /e/ Foundation, the LineageOS project and XDA, shown only to name them. logos/twrp.svg is our own monogram.');
 notices.push('logos/postmarketos.svg\npostmarketOS logo, https://gitlab.postmarketos.org/postmarketOS/artwork, CC BY-SA 3.0, by the postmarketOS contributors.');
 for (const { photo } of devices) if (photo) {
   assert(existsSync(`site/${photo.src}`), `missing ${photo.src}`);
