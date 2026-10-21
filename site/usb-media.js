@@ -35,6 +35,8 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const methodButtons = h('div', { className: 'usb-method-buttons', role: 'group', ariaLabel: 'USB install type' },
     ...(directEligible ? [['direct', 'Direct write']] : []).concat([['ventoy', 'Multi-boot ISOs (Ventoy)']]).map(([value, label]) =>
       h('button', { type: 'button', className: 'button button-secondary', value, textContent: label, onclick: () => setMethod(value) })));
+  // Errors set errorNext just before writing status; the observer turns that into the red .error style and resets it for later messages.
+  let errorNext = false;
   let methodChosen = false;
   const methodSupportedFor = value => value === 'direct' ? directAvailable : !catalogImage || catalogImage.usb === true;
   function syncMethodButtons() {
@@ -51,6 +53,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const methodHelp = h('p', { className: 'field-help', id: 'usb-media-method-help' });
   const selectedSummary = h('p', { id: 'usb-media-selected-image', className: 'usb-selected-image', hidden: !catalogImage });
   const driveInfo = h('div', { className: 'usb-drive-info' }), planBox = h('div', {}), status = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+  new MutationObserver(() => { status.classList.toggle('error', errorNext); errorNext = false; }).observe(status, { childList: true });
   const reportNotice = h('p', { id: 'usb-media-report-status', className: 'field-help usb-report-status', role: 'status', ariaLive: 'polite', hidden: true });
   const progressLabel = h('label', { id: 'usb-media-progress-label', htmlFor: 'usb-media-progress', textContent: 'USB operation progress' });
   const progressBar = /** @type {HTMLProgressElement} */ (h('progress', { id: 'usb-media-progress', max: 100 }));
@@ -255,7 +258,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       showDrive();
       status.textContent = drives.length ? 'Drive list refreshed. Listing drives does not change them.' : 'No USB drives found.';
     } catch (error) {
-      if (panel.isConnected) status.textContent = error instanceof Error ? error.message : String(error);
+      if (panel.isConnected) { errorNext = true; status.textContent = error instanceof Error ? error.message : String(error); }
       drives = []; driveSelect.replaceChildren(h('option', { value: '', textContent: 'Choose a USB drive' })); setBusy(false);
     }
   }
@@ -360,7 +363,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     } catch (error) {
       if (catalogImage) setImageSummary(catalogImage, catalogImage.size);
       else setImageSummary(null);
-      if (panel.isConnected) status.textContent = error instanceof Error ? error.message : String(error);
+      if (panel.isConnected) { errorNext = true; status.textContent = error instanceof Error ? error.message : String(error); }
       setBusy(false);
     }
   }
@@ -398,7 +401,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       else { statusCheck.hidden = false; statusCheck.disabled = false; }
     } catch (error) {
       if (panel.isConnected) {
-        status.textContent = `${error instanceof Error ? error.message : String(error)} The write result is unknown; inspect the USB before trying again.`;
+        errorNext = true; status.textContent = `${error instanceof Error ? error.message : String(error)} The write result is unknown; inspect the USB before trying again.`;
         clearProgress();
         statusCheck.hidden = false; statusCheck.disabled = false;
       }
@@ -456,7 +459,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       clearProgress();
       reportDelivery(job);
       if (activeImageName && (!validImageMeasure(job.readback) || job.readback.matched !== true || job.readback.sha256 !== activeReadback?.sha256 || job.readback.size !== activeReadback?.size)) {
-        status.textContent = 'Operation finished, but the final USB checksum was not confirmed. Check the log before using the USB.';
+        errorNext = true; status.textContent = 'Operation finished, but the final USB checksum was not confirmed. Check the log before using the USB.';
         statusCheck.hidden = true; setBusy(false); activeImageName = null; activeImageSize = null; activeAction = null; activeMethod = 'ventoy'; activeUnverified = false; activeReadback = null; return true;
       }
       const mismatchAccepted = job?.verification?.status === 'mismatch' && job.verification.accepted === true;
@@ -479,13 +482,13 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     if (job?.state === 'failed') {
       clearProgress();
       reportDelivery(job);
-      status.textContent = `${job.error || (activeMethod === 'direct' ? 'Direct image write failed.' : 'Ventoy installation failed.')} Boot untested; review the log before trying again.`;
+      errorNext = true; status.textContent = `${job.error || (activeMethod === 'direct' ? 'Direct image write failed.' : 'Ventoy installation failed.')} Boot untested; review the log before trying again.`;
       statusCheck.hidden = true; setBusy(false); activeImageName = null; activeImageSize = null; activeAction = null; activeMethod = 'ventoy'; activeUnverified = false; activeReadback = null; return true;
     }
     if (job?.error) clearProgress();
     else if (activeJob(job)) showProgress(job);
     else clearProgress();
-    status.textContent = job?.error ? String(job.error) : job?.phase === 'verifying'
+    errorNext = !!job?.error; status.textContent = job?.error ? String(job.error) : job?.phase === 'verifying'
       ? activeMethod === 'direct' ? 'Write finished. Checking the USB contents’ SHA-256…' : 'Copy finished. Checking the USB file’s SHA-256…'
       : job?.phase === 'writing' ? `Writing ${activeImageName || 'the selected ISO'} directly to USB…`
         : job?.phase === 'copying' ? `Copying ${activeImageName || 'the selected ISO'} to USB…`
@@ -495,7 +498,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   async function poll() {
     if (!panel.isConnected) return;
     if (Date.now() >= writeDeadline) {
-      status.textContent = 'Status check timed out. The write may still be running; inspect the USB and helper before trying again.';
+      errorNext = true; status.textContent = 'Status check timed out. The write may still be running; inspect the USB and helper before trying again.';
       clearProgress();
       statusCheck.hidden = false; statusCheck.disabled = false; return;
     }
@@ -506,7 +509,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       else { statusCheck.hidden = false; statusCheck.disabled = false; }
     } catch (error) {
       if (panel.isConnected) {
-        status.textContent = `${error instanceof Error ? error.message : String(error)} The write result is unknown; inspect the USB before trying again.`;
+        errorNext = true; status.textContent = `${error instanceof Error ? error.message : String(error)} The write result is unknown; inspect the USB before trying again.`;
         clearProgress();
         statusCheck.hidden = false; statusCheck.disabled = false;
       }
@@ -521,7 +524,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       else { statusCheck.hidden = false; statusCheck.disabled = false; }
     } catch (error) {
       if (panel.isConnected) {
-        status.textContent = `${error instanceof Error ? error.message : String(error)} The write result is unknown; inspect the USB before trying again.`;
+        errorNext = true; status.textContent = `${error instanceof Error ? error.message : String(error)} The write result is unknown; inspect the USB before trying again.`;
         clearProgress();
         statusCheck.disabled = false;
       }
