@@ -52,7 +52,7 @@ export async function run(fb, { device, files, steps, progress = { done: 0 }, pa
   // An unlock stage is that one step (the validator says so); every other stage needs an unlocked bootloader.
   if (steps.some(([verb]) => verb === 'unlock')) {
     if (steps.length !== 1) throw Error('An unlock stage is the unlock step alone. Nothing written.');
-    if (unlocked) { report(`Step ${total}/${total}: Bootloader is already unlocked. Nothing to do.`, 1); return; }
+    if (unlocked) { report(`Step ${total}/${total}: Bootloader is already unlocked. Nothing to do.`, 1); return { nothing: true }; }
     // `flashing get_unlock_ability` answers `get_unlock_ability: 0` while OEM unlocking is off in Developer options.
     // Older bootloaders reject the command; then the phone itself is the check.
     if (steps[0][1] === 'flashing') {

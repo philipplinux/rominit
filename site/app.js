@@ -645,7 +645,7 @@ function stageCard(device, stage, n, count, key) {
       dbg(`Connecting (${protocol})`);
       const found = await connect(protocol, dbg);
       Object.assign(st, found, { session: traced(found.session, dbg, protocol) });
-      report('Connected. Choose the files, confirm, and run.');
+      report(stage.files.length ? 'Connected. Choose the files, confirm, and run.' : 'Connected. Confirm and run.');
     } catch (error) {
       st.failed = true;
       dbgError(error);
@@ -690,15 +690,15 @@ function stageCard(device, stage, n, count, key) {
       assertConsent(stage, { consent: risk.checked, confirmation: confirm.value });
       const enabled = Object.fromEntries(options.map((box, i) => [stage.options[i].id, box.checked]));
       dbg(`Run · options ${summarize(enabled)} · steps ${summarize(stepsFor(stage, enabled))}`);
-      await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
+      const result = await recipes[stage.recipe].run(st.session, { device, stage, files: st.files, steps: stepsFor(stage, enabled) }, report, assertSession);
       dbg('Stage finished');
       st.finished = true;
       status.dispatchEvent(new CustomEvent('stage-done', { bubbles: true, detail: { unmatched: unverified.checked } })); // turns a required page section green
-      log.append(h('li', {}, ...rich(stage.done)));
+      if (!result?.nothing) log.append(h('li', {}, ...rich(stage.done)));
       if (n === count && stage.section !== 'unlock') bump(key, 'flash');
       outcome.className = 'outcome outcome-done';
-      outcome.replaceChildren(h('strong', { textContent: '✓ DONE' }), h('span', { textContent: n === count ? 'All stages finished. Give the first boot a few minutes.' : `Stage ${n} of ${count} finished. Go on with stage ${n + 1}.` }),
-        n === count && h('span', {}, 'Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
+      outcome.replaceChildren(h('strong', { textContent: '✓ DONE' }), h('span', { textContent: stage.section === 'unlock' ? 'Bootloader unlocked. Go on with the next section.' : n === count ? 'All stages finished. Give the first boot a few minutes.' : `Stage ${n} of ${count} finished. Go on with stage ${n + 1}.` }),
+        n === count && stage.section !== 'unlock' && h('span', {}, 'Saved you an afternoon? ', h('a', { href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
       outcome.hidden = false;
     } catch (error) {
       st.lost = true;
