@@ -1,6 +1,7 @@
 // OS data lives in catalog/os/<id>.json: official release metadata, reviewed and pinned by hand (sha256/size/url), not a live download-page scrape.
-// Checked 2026-10-20 for Alpine. Add an OS: drop its JSON there and list it below; the build writes dist/<id>.html from site/os.html.
+// Add an OS: drop its JSON in catalog/os/ and it is picked up here; the build writes dist/<id>.html from site/os.html.
 import alpineJson from '../../catalog/os/alpine.json' with { type: 'json' };
+import omarchyJson from '../../catalog/os/omarchy.json' with { type: 'json' };
 
 /** @typedef {{ id: string, arch: string, format: string, url: string, sha256: string, size: number, usb: boolean }} OsImage */
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */
@@ -8,8 +9,8 @@ import alpineJson from '../../catalog/os/alpine.json' with { type: 'json' };
 /** @typedef {{ description: string, eyebrow: string, intro: string, logo: { src: string, alt: string, width: number, height: number }, pros: string[], cons: string[], links: OsLink[], previewNote: string, shot: { src: string, alt: string, width: number, height: number, bar: string, caption: string }, status: string, footer: OsLink[], checked: string, credits: string[] }} OsPage */
 /** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, page: OsPage, editions: OsEdition[] }} Os */
 
-/** Every OS page. @type {Os[]} */
-export const OSES = [/** @type {Os} */ (alpineJson)];
+/** Every OS page, in the order the site lists them. @type {Os[]} */
+export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson)];
 
 /** CPU architecture to family label. */
 export const ARCH_FAMILY = { x86: "x86", x86_64: "x86", aarch64: "ARM", armv7: "ARM", armhf: "ARM", loongarch64: "LoongArch", ppc64le: "PowerPC", riscv64: "RISC-V", s390x: "IBM Z" };

@@ -64,7 +64,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const statusCheck = /** @type {HTMLButtonElement} */ (h('button', { type: 'button', className: 'button button-secondary', textContent: 'Check installation status', hidden: true, onclick: checkStatus }));
   const thanks = h('div', { className: 'usb-thanks', hidden: true },
     h('strong', { textContent: 'Done. Thank you!' }),
-    h('p', {}, 'Thanks for using ROMinit, and thanks to the ', h('a', { href: 'https://alpinelinux.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Alpine Linux project' }),
+    h('p', {}, 'Thanks for using ROMinit, and thanks to the ', h('a', { href: catalog?.os.source ?? 'https://rominit.pages.dev/', target: '_blank', rel: 'noopener noreferrer', textContent: `${catalog?.os.name ?? 'OS'} project` }),
       ' and everyone who builds and maintains it. If this saved you time, a coffee keeps ROMinit going: ',
       h('a', { href: 'https://www.buymeacoffee.com/philipplinux', target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
   const panelTitle = h('h2', { textContent: imageId ? `Prepare ${catalog?.os.shortName} USB` : 'Prepare USB' });

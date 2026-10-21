@@ -8,7 +8,7 @@ import { arch as osArch, homedir, platform as osPlatform, release as osRelease }
 import { promisify } from 'node:util';
 import { run as runVentoy } from '../src/recipes/ventoy.js';
 import { run as runUsbImage } from '../src/recipes/usb-image.js';
-import { osImage } from '../src/os/index.js';
+import { osImageEntry } from '../src/os/index.js';
 import { validateUsbBrowser, validateUsbEnvironment } from '../src/usb-environment.js';
 
 const execFile = promisify(nodeExecFile);
@@ -28,7 +28,7 @@ const LOG_LINE_BYTES = 512;
 const MAX_PLANS = 64;
 const MAX_IMAGE_BYTES = 16 * 1024 ** 3; // full desktop ISOs (Omarchy is 6 GB+); Ventoy is exFAT and direct writes are raw, so no FAT32 4 GiB cap
 const IMAGE_DOWNLOAD_TIMEOUT = 15 * 60_000; // floor; big images get 1 ms per KiB (about 1 MB/s)
-const IMAGE_CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), '.cache'), 'rominit', 'alpine');
+const IMAGE_CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), '.cache'), 'rominit', 'images');
 const BIN = { lsblk: '/usr/bin/lsblk', sudo: '/usr/bin/sudo', sh: '/usr/bin/sh', python: '/usr/bin/python3', udisksctl: '/usr/bin/udisksctl' };
 const LSBLK_FIELDS = 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,FSTYPE,LABEL,MOUNTPOINTS,PKNAME';
 const USB_VERSION_SOURCES = [new URL('./cli.mjs', import.meta.url), new URL('./helper.mjs', import.meta.url), new URL(import.meta.url),
@@ -435,7 +435,7 @@ function findVentoyDir(home = VENTOY_HOME) {
 export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || findVentoyDir(), ventoyVersion = process.env.ROMINIT_VENTOY_VERSION,
   imagePath = process.env.ROMINIT_ISO_PATH, imageSha256 = process.env.ROMINIT_ISO_SHA256, byIdDir = '/dev/disk/by-id',
   runCommand = (file, args, options) => execFile(file, args, options), spawnProcess = nodeSpawn,
-  fetchImage = globalThis.fetch, imageCacheDir = IMAGE_CACHE_DIR, getAlpineImage = osImage,
+  fetchImage = globalThis.fetch, imageCacheDir = IMAGE_CACHE_DIR, getImageEntry = osImageEntry,
   hostEnvironment,
   readText = readFile, listDir = readdir, resolvePath = realpath, fileStat = stat, fileStatFs = statfs,
   trustStat = lstat, installerOwnerUid = 0,
@@ -556,27 +556,30 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
         expected: { size: info.size, sha256 }, actual: { ...actual } } };
   }
 
-  function alpinePin(id, method) {
-    const image = typeof id === 'string' && getAlpineImage(id);
+  function imagePin(id, method) {
+    const entry = typeof id === 'string' && getImageEntry(id);
+    const image = entry?.image;
+    const osName = entry?.os?.name ?? 'the operating system';
     if (!image || image.id !== id || method === 'ventoy' && image.usb !== true || !['iso', 'img.gz'].includes(String(image.format).toLowerCase()) || method === 'ventoy' && image.format !== 'iso' ||
         typeof image.arch !== 'string' || !image.arch || !Number.isSafeInteger(image.size) || image.size <= 0 || image.size > MAX_IMAGE_BYTES ||
         typeof image.sha256 !== 'string' || !/^[\da-f]{64}$/i.test(image.sha256))
-      throw fail(400, method === 'direct' ? 'Choose a bundled Alpine image in ISO or img.gz format for direct USB writing.' : 'Choose a bundled Alpine ISO that supports Ventoy USB booting.');
+      throw fail(400, method === 'direct' ? `Choose a bundled ${osName} image in ISO or img.gz format for direct USB writing.` : `Choose a bundled ${osName} ISO that supports Ventoy USB booting.`);
     let url;
-    try { url = new URL(image.url); } catch { throw fail(503, 'The bundled Alpine image URL is invalid.'); }
+    try { url = new URL(image.url); } catch { throw fail(503, `The bundled ${osName} image URL is invalid.`); }
     const name = basename(url.pathname);
     if (url.protocol !== 'https:' || url.username || url.password || !/^[\w.+-]+\.(iso|img\.gz)$/i.test(name))
-      throw fail(503, 'The bundled Alpine image is not a downloadable ISO or img.gz.');
+      throw fail(503, `The bundled ${osName} image is not a downloadable ISO or img.gz.`);
     return { id: image.id, arch: image.arch, format: image.format, name, url: url.href,
-      sha256: image.sha256.toLowerCase(), size: image.size };
+      sha256: image.sha256.toLowerCase(), size: image.size, osName: entry.os.name };
   }
 
-  async function fetchAlpineImage(pin) {
+  async function fetchCatalogImage(pin) {
     if (typeof fetchImage !== 'function') throw fail(503, 'Image downloads are unavailable in this CLI.');
+    const osName = pin.osName ?? 'the operating system';
     const cacheDir = resolveFilePath(imageCacheDir);
     const sourcePath = join(cacheDir, `${pin.sha256}-${pin.name}`);
     try { await mkdir(cacheDir, { recursive: true, mode: 0o700 }); }
-    catch (error) { throw fail(503, `Could not prepare the Alpine image cache: ${errorText(error)}`); }
+    catch (error) { throw fail(503, `Could not prepare the ${osName} image cache: ${errorText(error)}`); }
     try {
       const cached = await lstat(sourcePath);
       if (cached.isFile() && !cached.isSymbolicLink()) {
@@ -584,19 +587,19 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
         if (actual.size === pin.size && actual.sha256 === pin.sha256) return { ...pin, sourcePath, actual,
           verification: { status: 'verified', expected: { size: pin.size, sha256: pin.sha256 }, actual: { ...actual } } };
       }
-    } catch (error) { if (error?.code !== 'ENOENT') throw fail(503, `Could not inspect the Alpine image cache: ${errorText(error)}`); }
+    } catch (error) { if (error?.code !== 'ENOENT') throw fail(503, `Could not inspect the ${osName} image cache: ${errorText(error)}`); }
 
     let response;
     try {
       response = await fetchImage(pin.url, { redirect: 'error', signal: AbortSignal.timeout(Math.max(IMAGE_DOWNLOAD_TIMEOUT, Math.ceil(pin.size / DIRECT_BYTES_PER_MS))) });
-    } catch { throw fail(502, 'Could not download the selected Alpine ISO. Check the network and try again.'); }
-    if (!response?.ok || !response.body || response.redirected) throw fail(502, 'The selected Alpine ISO download failed or redirected.');
+    } catch { throw fail(502, `Could not download the selected ${osName} ISO. Check the network and try again.`); }
+    if (!response?.ok || !response.body || response.redirected) throw fail(502, `The selected ${osName} ISO download failed or redirected.`);
     const contentLengthHeader = response.headers?.get?.('content-length');
     const contentLength = contentLengthHeader === null || contentLengthHeader === undefined || contentLengthHeader === ''
       ? null : Number(contentLengthHeader);
     if (contentLength !== null && (!Number.isSafeInteger(contentLength) || contentLength < 0))
-      throw fail(502, 'The selected Alpine ISO has an invalid download length.');
-    if (contentLength !== null && contentLength > MAX_IMAGE_BYTES) throw fail(502, 'The Alpine ISO download exceeds the 16 GiB safety limit.');
+      throw fail(502, `The selected ${osName} ISO has an invalid download length.`);
+    if (contentLength !== null && contentLength > MAX_IMAGE_BYTES) throw fail(502, `The ${osName} ISO download exceeds the 16 GiB safety limit.`);
     const contentEncoding = String(response.headers?.get?.('content-encoding') ?? '').trim().toLowerCase();
     const expectedTransferLength = contentLength !== null && (!contentEncoding || contentEncoding === 'identity')
       ? contentLength : null;
@@ -610,17 +613,17 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       for await (const chunk of response.body) {
         const buffer = Buffer.from(chunk);
         size += buffer.length;
-        if (size > MAX_IMAGE_BYTES) throw Error('The Alpine ISO download exceeds the 16 GiB safety limit.');
+        if (size > MAX_IMAGE_BYTES) throw Error(`The ${osName} ISO download exceeds the 16 GiB safety limit.`);
         hash.update(buffer);
         let offset = 0;
         while (offset < buffer.length) {
           const { bytesWritten } = await file.write(buffer, offset, buffer.length - offset);
-          if (!bytesWritten) throw Error('Could not write the downloaded Alpine ISO.');
+          if (!bytesWritten) throw Error(`Could not write the downloaded ${osName} ISO.`);
           offset += bytesWritten;
         }
       }
-      if (size <= 0) throw Error('The Alpine ISO download is empty.');
-      if (expectedTransferLength !== null && size !== expectedTransferLength) throw Error('The Alpine ISO download ended before its advertised size.');
+      if (size <= 0) throw Error(`The ${osName} ISO download is empty.`);
+      if (expectedTransferLength !== null && size !== expectedTransferLength) throw Error(`The ${osName} ISO download ended before its advertised size.`);
       const actual = { size, sha256: hash.digest('hex') };
       await file.sync();
       await file.close(); file = null;
@@ -644,9 +647,9 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
     } catch (error) {
       await file?.close().catch(() => {});
       await unlink(partPath).catch(() => {});
-      throw fail(502, ['The Alpine ISO download exceeds the 16 GiB safety limit.', 'The Alpine ISO download is empty.',
-        'The Alpine ISO download ended before its advertised size.', 'The selected Alpine ISO has an invalid download length.'].includes(error?.message)
-        ? error.message : 'Could not download the selected Alpine ISO completely.');
+      throw fail(502, [`The ${osName} ISO download exceeds the 16 GiB safety limit.`, `The ${osName} ISO download is empty.`,
+        `The ${osName} ISO download ended before its advertised size.`, `The selected ${osName} ISO has an invalid download length.`].includes(error?.message)
+        ? error.message : `Could not download the selected ${osName} ISO completely.`);
     }
   }
 
@@ -1074,7 +1077,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
           throw fail(409, `The pinned ISO is stored on the USB disk being ${plan.action === 'copy' ? 'copied to' : 'erased'}.`);
       }
       if (plan.action === 'copy') {
-        if (!plan.image?.id) throw fail(409, 'The copy-only plan has no selected Alpine ISO. Create a new plan.');
+        if (!plan.image?.id) throw fail(409, 'The copy-only plan has no selected ISO. Create a new plan.');
         const current = await currentFor(plan, plan.identity.mounted);
         if (!existingVentoyLayout(current, 409)) throw fail(409, 'The existing Ventoy layout changed. Create a new plan.');
         await verifyVentoyVersion(target, current.public.path, 409);
@@ -1155,19 +1158,19 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       const target = method === 'ventoy' ? await ventoy() : null;
       let found = (await inventory()).find(value => value.public.id === driveId);
       if (!found || !found.public.available) throw fail(409, found?.public.reason ?? 'The USB disk is no longer available.');
-      const pin = imageId === undefined ? null : alpinePin(imageId, method);
+      const pin = imageId === undefined ? null : imagePin(imageId, method);
       let action = method === 'direct' ? 'direct' : 'install';
       if (pin && method === 'ventoy' && existingVentoyLayout(found)) {
         await verifyVentoyVersion(target, found.public.path, 409);
         action = 'copy';
       }
       let image = pin ? { ...pin } : await localImage();
-      if (method === 'direct' && !image) throw fail(400, 'Select a bundled Alpine ISO or configure a pinned local ISO before direct writing.');
+      if (method === 'direct' && !image) throw fail(400, 'Select a bundled ISO or configure a pinned local ISO before direct writing.');
       if (pin) {
         const cachePath = join(resolveFilePath(imageCacheDir), `${pin.sha256}-${pin.name}`);
         if (found.public.mounts.some(path => under(cachePath, path)))
-          throw fail(409, 'The Alpine image cache is on the USB disk being prepared.');
-        image = await fetchAlpineImage(pin);
+          throw fail(409, 'The image cache is on the USB disk being prepared.');
+        image = await fetchCatalogImage(pin);
       }
       const actualSize = image?.actual?.size ?? image?.size;
       if (method === 'direct' && image && actualSize > MAX_IMAGE_BYTES)
@@ -1223,7 +1226,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       if (job?.state === 'pending' || job?.state === 'running') throw fail(409, 'A USB operation is already in progress.');
       if (confirm !== plan.confirm) { plans.delete(planId); throw fail(400, `Confirmation must exactly match ${plan.confirm}.`); }
       if (plan.verification?.status === 'mismatch' && allowUnverified !== true)
-        throw fail(409, 'This Alpine ISO does not match the publisher size or SHA-256. Explicitly allow the checksum mismatch to continue.', 'USB_UNVERIFIED');
+        throw fail(409, 'This ISO does not match the publisher size or SHA-256. Explicitly allow the checksum mismatch to continue.', 'USB_UNVERIFIED');
       const reportEnvironment = validateUsbEnvironment({ ...(hostEnvironment ?? {}), ...(normalizedBrowser ?? {}) });
       const jobId = makeJobId();
       if (typeof jobId !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(jobId)) throw fail(503, 'Could not create the USB outcome report ID.');

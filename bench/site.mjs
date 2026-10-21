@@ -1,5 +1,5 @@
 import { OSES } from '../src/os/index.js';
-const [alpine] = OSES;
+const [alpine, omarchy] = OSES;
 import { osImage } from '../src/os/index.js';
 // Website bench: every agreed site feature, end to end in a real browser against `wrangler pages dev` with a fresh local D1.
 // Run: npm run build && npm run bench   (CHROMIUM=/path/to/chrome to override the browser)
@@ -922,7 +922,7 @@ test('Alpine Linux parent defaults to Extended and shows architecture badges, do
   assert.equal(await page.locator('#alpine-edition').inputValue(), 'extended', 'Extended is the default edition when no query selection exists');
   assert.equal(await page.locator('.alpine-image').count(), 2, 'the default Extended edition has two ISO choices');
   assert.equal(await page.locator('#alpine-edition option').count(), 8);
-  assert.equal(await page.locator('#alpine-version').innerText(), 'Version 3.24.2 · Stable');
+  assert.equal(await page.locator('#alpine-version').innerText(), 'Version 3.24.2 · Stable · Linux 6.18.52 LTS');
   assert.equal(await page.getByLabel('USB install type').isDisabled(), true, 'USB method placeholder is visible before image selection');
   assert.equal(await page.getByLabel('USB drive', { exact: true }).isDisabled(), true, 'USB selector remains visible before pairing');
   assert.equal(await page.locator('#alpine-usb-method').evaluate(node => !!(node.compareDocumentPosition(document.querySelector('#alpine-usb-drive')) & Node.DOCUMENT_POSITION_FOLLOWING)), true, 'method placeholder precedes the drive selector');
@@ -947,8 +947,9 @@ test('Alpine Linux parent defaults to Extended and shows architecture badges, do
   const preview = page.locator('#alpine-operation');
   assert.match(await preview.getAttribute('src'), /\.gif$/);
   assert.equal(await page.getByRole('button', { name: /operation GIF/i }).count(), 0, 'the looping recording has no play/pause control');
-  assert.equal(await page.getByRole('link', { name: /Official Alpine Linux website/ }).getAttribute('href'), 'https://alpinelinux.org/');
-  assert.equal(await page.getByRole('link', { name: /Watch a YouTube demo/ }).getAttribute('href'), 'https://www.youtube.com/watch?v=YNYtJ3jyMRs');
+  assert.equal(await page.getByRole('link', { name: /Alpine website/ }).getAttribute('href'), 'https://alpinelinux.org/');
+  assert.equal(await page.getByRole('link', { name: /Add a desktop/ }).getAttribute('href'), 'https://wiki.alpinelinux.org/wiki/Desktop_environments_and_Window_managers');
+  assert.equal(await page.getByRole('link', { name: /YouTube demo/ }).getAttribute('href'), 'https://www.youtube.com/watch?v=YNYtJ3jyMRs');
   await page.screenshot({ path: '/tmp/rominit-alpine-desktop.png', fullPage: true });
   await page.locator('#alpine-edition').selectOption('rpi');
   assert.equal(await page.locator('.alpine-image').count(), 6);
@@ -977,18 +978,63 @@ test('Alpine Linux parent defaults to Extended and shows architecture badges, do
   await page.setViewportSize({ width: 1280, height: 900 });
 });
 
-test('OS category shows Alpine Linux parent with architecture tags and search', async () => {
+test('the OS template serves Omarchy from its own data, not from Alpine', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${BASE}/omarchy.html`);
+  await page.getByRole('heading', { name: 'Omarchy.' }).waitFor();
+  assert.equal(await page.title(), 'Omarchy · OS · ROMinit');
+  assert.equal(await page.locator('#alpine-version').innerText(), 'Version 4.0.6 · Stable · Linux 7.2.8 omarchy');
+  assert.equal(await page.locator('#alpine-edition').inputValue(), 'installer', 'the catalog default edition is selected');
+  assert.equal(await page.locator('#alpine-edition option').count(), 1);
+  assert.equal(await page.locator('.alpine-image').count(), 1, 'the installer edition has one image');
+  assert.deepEqual(await page.locator('.alpine-image').evaluateAll(rows => rows.map(row => row.id)), ['omarchy-installer-x86_64']);
+  assert.equal(await page.locator('.ventoy-supported').count(), 1, 'the Omarchy ISO is marked Ventoy supported');
+  assert.match(await page.locator('.alpine-image').innerText(), /6149\.8 MiB/, 'the 6.0 GiB ISO is shown at its real size');
+  assert.equal(await page.locator('#omarchy-installer-x86_64 a', { hasText: 'Download' }).getAttribute('href'), 'https://iso.omarchy.org/omarchy-4.0.6.iso');
+  assert.ok(await page.getByAltText('Omarchy logo').evaluate(img => img.naturalWidth > 0), 'the Omarchy logo loads');
+  assert.equal(await page.locator('#os-reqs').innerText(), '2 GB RAM works · Secure Boot and TPM off');
+  assert.match(await page.locator('#os-reqs a').getAttribute('title') ?? '', /Secure Boot/);
+  assert.equal(await page.locator('#alpine-architectures .architecture-tag').innerText(), 'x86', 'x86_64 shows as the x86 family');
+  assert.equal(await page.getByRole('link', { name: /Omarchy website/ }).getAttribute('href'), 'https://omarchy.org/');
+  assert.equal(await page.getByRole('link', { name: /Getting started/ }).getAttribute('href'), 'https://omarchy.org/manual/getting-started/');
+  assert.equal(await page.locator('.sitenav a[data-nav="os"]').getAttribute('href'), './?category=pc', 'the nav no longer points at Alpine');
+  await page.screenshot({ path: '/tmp/rominit-omarchy-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'mobile page fits viewport');
+  await page.screenshot({ path: '/tmp/rominit-omarchy-mobile.png', fullPage: true });
+  await page.setViewportSize({ width: 1280, height: 900 });
+});
+
+test('OS category lists every OS with architecture tags and search', async () => {
   await page.goto(BASE);
   const hostDialog = page.locator('.host-confirm');
   if (await hostDialog.isVisible().catch(() => false)) await hostDialog.getByRole('button', { name: 'Confirm' }).click();
   await page.locator('input[name="category"][value="pc"]').check();
-  await page.locator('.os-entry').waitFor();
+  await page.locator('.os-entry').first().waitFor();
+  assert.equal(await page.locator('.os-entry').count(), OSES.length, 'every catalog OS has an entry');
   assert.equal(await page.locator('.os-entry .architecture-tag', { hasText: /^ARM$/ }).count(), 1);
-  assert.equal(await page.locator('.os-entry a').getAttribute('href'), './alpine.html');
+  assert.deepEqual(await page.locator('.os-entry a').evaluateAll(rows => rows.map(row => row.getAttribute('href'))), OSES.map(os => `./${os.id}`));
   assert.match(await page.locator('.category summary').first().innerText(), /^OS$/);
   await page.locator('#main input[type=search]').fill('alpine');
-  await page.locator('.os-entry').waitFor();
+  await page.locator('.os-entry').first().waitFor();
+  assert.equal(await page.locator('.os-entry').count(), 1, 'search narrows the OS list to the match');
   assert.equal(await page.locator('.empty-files').count(), 0);
+  await page.locator('#main input[type=search]').fill('omarchy');
+  await page.locator('.os-entry').first().waitFor();
+  assert.equal(await page.locator('.os-entry').count(), 1, 'the second OS is reachable by search too');
+  assert.equal(await page.locator('.os-entry a').getAttribute('href'), './omarchy');
+});
+
+test('the OS nav link opens the PC category with every OS listed', async () => {
+  await page.goto(BASE);
+  const hostDialog = page.locator('.host-confirm');
+  if (await hostDialog.isVisible().catch(() => false)) await hostDialog.getByRole('button', { name: 'Confirm' }).click();
+  await page.locator('.sitenav a[data-nav="os"]').click();
+  await page.waitForURL(/category=pc/);
+  await page.locator('.os-entry').first().waitFor();
+  assert.equal(await page.locator('.os-entry').count(), OSES.length, 'the OS list shows every OS');
+  assert.equal(await page.locator('input[name="category"][value="pc"]').isChecked(), true, 'the PC category is preselected');
+  assert.equal(await page.locator('.sitenav a[data-nav="os"]').getAttribute('aria-current'), 'page', 'the OS nav link marks the current page');
 });
 
 test('Alpine warning is yellow and an authenticated CLI action auto-discovers without a saved browser session', async () => {

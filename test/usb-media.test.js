@@ -216,7 +216,7 @@ async function fixture(options = {}) {
     runCommand, spawnProcess, resolvePath, fileStat, fileStatFs, mediaMountRoots: [mediaRoot],
     imageCacheDir: cacheDir, fetchImage: options.fetchImage,
     hostEnvironment: options.hostEnvironment ?? null,
-    ...(options.alpineImage ? { getAlpineImage: id => id === options.alpineImage.id ? options.alpineImage : undefined } : {}),
+    ...(options.alpineImage ? { getImageEntry: id => id === options.alpineImage.id ? { os: { name: options.alpineImage.osName ?? 'Alpine Linux' }, image: options.alpineImage } : undefined } : {}),
     trustStat,
     readText: async path => path === '/proc/swaps' ? 'Filename Type Size Used Priority\n' : readFile(path, 'utf8'),
     listDir: async path => path === idDir ? [idPath.split('/').at(-1)] : [],

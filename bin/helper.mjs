@@ -322,10 +322,10 @@ export async function startHelper({ site = process.env.ROMINIT_URL ?? 'https://r
           return reply(path === '/usb/write' ? 202 : 200, result);
         } catch (error) {
           const status = [400, 409, 502, 503].includes(error?.status) ? error.status : 500;
-          const message = error?.code === 'USB_UNVERIFIED' ? 'The selected Alpine ISO does not match the publisher size or SHA-256. Explicitly allow the checksum mismatch to continue.'
+          const message = error?.code === 'USB_UNVERIFIED' ? 'The selected ISO does not match the publisher size or SHA-256. Explicitly allow the checksum mismatch to continue.'
             : status === 400 ? 'USB request or confirmation is invalid.'
             : status === 409 ? 'USB plan is stale, another USB operation is in progress, or the existing Ventoy installation could not be verified.'
-              : status === 502 ? 'Could not download and verify the selected Alpine ISO.'
+              : status === 502 ? 'Could not download and verify the selected ISO.'
               : status === 503 ? (/Ventoy directory is not configured/.test(error?.message) ? 'Ventoy was not found. Install it under /var/lib/rominit/ventoy/<version>/ventoy-<version> (root-owned) or start with ROMINIT_VENTOY_DIR, or use Direct write.' : 'USB media support is unavailable.') : 'USB operation failed.';
           return reject(status, cors, message);
         }

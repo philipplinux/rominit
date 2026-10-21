@@ -45,6 +45,8 @@ for (const file of ['os.js', 'style.css']) assert(osTemplate.includes(`"./${file
 for (const os of OSES) {
   let osHtml = osTemplate;
   for (const file of ['os.js', 'style.css']) osHtml = osHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
+  // A missing logo or shot would ship a broken page, so the build stops instead.
+  for (const asset of [os.page.logo.src, os.page.shot.src]) assert(existsSync(`site/${asset}`), `${os.id}: missing site/${asset}`);
   const stamp = { ID: os.id, NAME: os.name, DESCRIPTION: os.page.description, SOURCE: os.source };
   await writeFile(`dist/${os.id}.html`, osHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
 }

@@ -941,9 +941,10 @@ function devicePicker(index) {
   const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
     h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'placeholder', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
   // Pick one device category or all categories.
+  const requestedCategory = params.get('category');
   const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
-    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' || c === 'pc' ? 1 : 0);
-    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === 'all', onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
+    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' || c === 'pc' ? OSES.length : 0);
+    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === (requestedCategory && requestedCategory in CATEGORIES ? requestedCategory : 'all'), onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
@@ -1105,7 +1106,7 @@ async function inboxView(index) {
   const osUsbItem = (x, outcome, items) => {
     const image = x?.image && typeof x.image === 'object' ? x.image : {};
     const rawImageName = typeof image.name === 'string' ? image.name : '';
-    const safeCatalogName = /^Alpine Linux [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+$/.test(rawImageName);
+    const safeCatalogName = /^[0-9A-Za-zÀ-ſ ._+-]{1,80} [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+$/.test(rawImageName);
     const safeIsoName = /^[\p{L}\p{N}][\p{L}\p{N} ._+()-]{0,150}\.iso$/iu.test(rawImageName);
     const imageName = rawImageName === 'Local ISO' || rawImageName === 'No ISO' || safeCatalogName || safeIsoName ? rawImageName : 'Selected image';
     const imageId = typeof image.id === 'string' && /^[A-Za-z0-9_.+-]{1,80}$/.test(image.id) ? image.id : 'unknown';
@@ -1478,7 +1479,14 @@ async function start() {
   const navSearch = /** @type {HTMLInputElement|null} */ (document.querySelector('.topbar input[type=search]'));
   if (navSearch) navSearch.value = params.get('q') ?? '';
   if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
-  for (const a of document.querySelectorAll('.sitenav a:not([href$="alpine"])')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
+  // The OS link points at the PC category, so it matches on category as well as view.
+  for (const a of document.querySelectorAll('.sitenav a')) {
+    if (codename) break;
+    const link = /** @type {HTMLAnchorElement} */ (a);
+    const href = new URL(link.href);
+    const matches = link.dataset.nav === 'os' ? href.searchParams.get('category') === params.get('category') : href.searchParams.get('view') === view;
+    if (matches) link.setAttribute('aria-current', 'page');
+  }
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
     for (const a of document.querySelectorAll('.site-menu a, .top-links a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
