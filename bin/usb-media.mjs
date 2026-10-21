@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { execFile as nodeExecFile, spawn as nodeSpawn } from 'node:child_process';
-import { createReadStream } from 'node:fs';
+import { createReadStream, readdirSync } from 'node:fs';
 import { constants as fsConstants } from 'node:fs';
 import { copyFile, lstat, mkdir, open, readFile, readdir, realpath, rename, stat, statfs, unlink } from 'node:fs/promises';
 import { basename, isAbsolute, join, resolve as resolveFilePath } from 'node:path';
@@ -423,7 +423,16 @@ function snapshotJob(job) {
 }
 
 /** Native Linux USB-media access. `runCommand` and `spawnProcess` are injection seams for tests. */
-export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ventoyVersion = process.env.ROMINIT_VENTOY_VERSION,
+// Standard root-owned install spot, newest version wins; ROMINIT_VENTOY_DIR overrides. The trust checks in ventoy() still apply.
+const VENTOY_HOME = '/var/lib/rominit/ventoy';
+function findVentoyDir(home = VENTOY_HOME) {
+  try {
+    const found = readdirSync(home).flatMap(v => readdirSync(join(home, v)).filter(d => /^ventoy-/.test(d)).map(d => join(home, v, d)));
+    return found.sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))[0];
+  } catch { return undefined; }
+}
+
+export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || findVentoyDir(), ventoyVersion = process.env.ROMINIT_VENTOY_VERSION,
   imagePath = process.env.ROMINIT_ISO_PATH, imageSha256 = process.env.ROMINIT_ISO_SHA256, byIdDir = '/dev/disk/by-id',
   runCommand = (file, args, options) => execFile(file, args, options), spawnProcess = nodeSpawn,
   fetchImage = globalThis.fetch, imageCacheDir = IMAGE_CACHE_DIR, getAlpineImage = alpineImage,
