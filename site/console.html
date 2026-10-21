@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-console="__ID__">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="__DESCRIPTION__">
+    <title>__NAME__ · Console research · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./console.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to __NAME__</a>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> CONSOLES</span></a>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Research</span>
+        <nav class="sitenav" aria-label="Site"><a href="./" data-nav="devices">Devices</a><a href="./?view=brands" data-nav="brands">Brands</a><a href="./?view=projects" data-nav="projects">Projects</a><a href="./?view=popular" data-nav="popular">Popular</a><a href="./?category=pc" data-nav="os">OS</a><a href="./?category=console" data-nav="consoles" aria-current="page">Consoles</a></nav>
+        <div class="topbar-side">
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
+        </div>
+      </header>
+      <main id="main" class="console-page">
+        <section id="console-overview" data-rail-label="0 · Overview" class="flash-card console-hero">
+          <div class="console-hero-body">
+            <div><img id="console-logo" class="console-logo" alt="" width="220" height="48">
+              <p class="eyebrow">CONSOLE FAMILY</p><h1 id="console-name">__NAME__</h1>
+              <p id="console-summary" class="intro-copy"></p><div id="console-meta" class="architecture-tags" aria-label="Console release details"></div>
+            </div>
+            <figure class="console-photo"><img id="console-photo" alt="" width="700" height="700"><figcaption id="console-photo-credit"></figcaption></figure>
+          </div>
+          <p class="console-warning" role="note">A homebrew resource catalog. ROMinit does not flash consoles; check the model, installed firmware and project requirements before using a tool.</p>
+        </section>
+        <section id="console-latest" data-rail-label="1 · Latest projects" class="console-grid" aria-label="Latest researched jailbreak and Linux port"></section>
+        <nav class="console-jumps" aria-label="On this page"><a href="#console-emulation-section">Emulation</a><a href="#console-entrypoints-section">Jailbreak routes</a><a href="#console-linux-section">Linux</a><a href="#console-rollback-section">Rollback</a><a href="#console-recovery-section">Recovery</a><a href="#console-tools-section">USB & desktop tools</a><a href="#console-hardware">Hardware</a><a href="#submit-request">Report</a></nav>
+        <details id="console-hardware" data-rail-label="2 · Hardware" class="flash-card console-section"><summary>Hardware, variants & official firmware</summary>
+          <div class="console-grid">
+            <section aria-labelledby="console-specs-title"><h2 id="console-specs-title">Specifications</h2><dl id="console-specs" class="console-facts"></dl></section>
+            <section aria-labelledby="console-firmware-title"><h2 id="console-firmware-title">Current official firmware</h2><p id="console-firmware" class="console-firmware"></p><p id="console-firmware-checked" class="field-help"></p><p id="console-firmware-source" class="console-source"></p></section>
+          </div>
+          <h2 id="console-variants-title">Variants</h2><div id="console-variants" class="console-variants"></div>
+        </details>
+        <section id="console-choose" data-rail-label="3 · Find your route" class="flash-card console-section" aria-labelledby="console-choose-title">
+          <p class="eyebrow">FIND YOUR ROUTE</p><h2 id="console-choose-title">Choose your model & firmware</h2>
+          <div class="console-filters"><label>Console model<select id="console-model" aria-label="Console model"><option value="">All models</option></select></label><label>Installed firmware<select id="console-installed-firmware" aria-label="Installed firmware"><option value="">All researched firmware</option></select></label></div>
+          <p class="field-help">Pick the model and firmware shown in your console settings. The box below links to starting points that list that combination. Open each project’s setup notes for the apps or equipment you need.</p><div id="console-match-status" class="console-matches" role="status" aria-live="polite"></div>
+        </section>
+        <section id="console-emulation-section" data-rail-label="4 · Emulation" class="flash-card console-section"><p class="eyebrow">PLAY OTHER SYSTEMS</p><h2>Emulation</h2><p class="field-help">Emulators let your PS5 play games made for other systems. Some run as PS5 homebrew; others need Linux installed first. The systems and setup needed are listed on each card. Performance varies by game.</p><div id="console-emulation" class="console-homebrew"></div><details class="console-project-details"><summary>Source-only emulation research</summary><div id="console-emulation-research" class="console-homebrew"></div></details></section>
+        <section id="console-entrypoints-section" data-rail-label="5 · Jailbreak routes" class="flash-card console-section"><h2>Jailbreak: where to start</h2><p class="field-help">An entry point is the first way to run community-made code on your console. Different routes use different apps, discs or browser features, and only work on certain firmware versions.</p><div id="console-entrypoints" class="console-homebrew"></div></section>
+        <details id="console-kernel-section" data-rail-label="6 · Deeper access" class="flash-card console-section"><summary>Deeper access: kernel & hypervisor</summary><p class="field-help">These projects unlock more of the console after the first entry point. That extra access can let homebrew use features Sony normally locks away. They are steps in a larger setup, rather than apps you simply install.</p><div id="console-kernel" class="console-homebrew"></div></details>
+        <section id="console-linux-section" data-rail-label="7 · Linux" class="flash-card console-section"><h2>Run Linux on your PS5</h2><p class="field-help">Linux turns the console into a desktop-like computer for compatible software and emulators. You need a supported jailbreak route and usually a separate USB drive.</p><div id="console-linux" class="console-homebrew"></div></section>
+        <details id="console-apps-section" data-rail-label="8 · Homebrew apps" class="flash-card console-section"><summary>Homebrew apps & launchers</summary><p class="field-help">Once you have a working entry point, these tools help load, manage or run community-made apps. Check the setup notes to see which loader each one needs.</p><div id="console-homebrew" class="console-homebrew"></div></details>
+        <section id="console-rollback-section" data-rail-label="9 · Rollback" class="flash-card console-section"><h2>Firmware rollback & research</h2><p class="field-help">Rollback means going back to older system software, often to reach a jailbreak-compatible version. An old update file alone does not make that possible. Recovery reinstalls software; a backup may only work on the console it came from.</p><div id="console-rollback" class="console-homebrew"></div></section>
+        <section id="console-recovery-section" data-rail-label="10 · Recovery" class="flash-card console-section"><h2>Restore the official system software</h2><p class="field-help">Use these links when the console needs Sony’s system software repaired or reinstalled. A full reinstall erases console data. Older files in an archive do not bypass Sony’s update restrictions.</p><div id="console-recovery" class="console-homebrew"></div></section>
+        <section id="console-tools-section" data-rail-label="11 · Tools" class="flash-card console-section"><h2>Desktop, USB & development tools</h2><p class="field-help">A USB image writer prepares a drive; a payload sender uses an existing loader. Neither is automatically a PS5 firmware flasher.</p><div id="console-tools" class="console-homebrew"></div></section>
+        <section id="console-community-section" data-rail-label="12 · Communities" class="flash-card console-section"><h2>Communities & discussion</h2><p class="field-help">Project-published support links and established public discussion. Discord invitations may change; the source link lets you find the current one.</p><div id="console-communities" class="console-homebrew"></div></section>
+        <details id="console-source-section" data-rail-label="13 · Sources" class="flash-card console-section"><summary>Sources & image credits</summary><ul id="console-sources" class="console-sources"></ul><div id="console-image-credits" class="field-help"></div></details>
+        <div id="console-report"></div><p id="console-status" class="field-help" role="status"></p>
+      </main>
+    </div>
+    <noscript><p>Enable JavaScript to view the console research record.</p></noscript>
+  </body>
+</html>

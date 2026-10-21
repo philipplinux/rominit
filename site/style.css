@@ -741,6 +741,15 @@ p.rate-label { margin: .3rem 0 .5rem; }
 #alpine-usb-panel .field-label { display: block; margin: .9rem 0 .3rem; }
 .topbar-search input { width: 9rem; }
 @media (max-width: 1240px) { .topbar-tag { display: none; } }
+/* Pages with the header search have no room for the label in one row (1160px cap): keep the dot, the word stays in the tooltip and for screen readers. */
+.topbar:has(.topbar-search) .topbar-tag { font-size: 0; gap: 0; }
+/* Wide screens keep one header row: the search box gives up width instead of the bar wrapping. Below 1200px the bar wraps to a second row. */
+@media (min-width: 1200px) {
+  .topbar, .sitenav, .topbar-side { flex-wrap: nowrap; }
+  .topbar-side { min-width: 0; }
+  .wordmark, .sitenav, .topbar-side > :not(.topbar-search) { flex-shrink: 0; white-space: nowrap; }
+  .topbar-search { flex: 0 1 9rem; min-width: 4rem; } .topbar-search input { width: 100%; }
+}
 
 .alpine-procon { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
 .alpine-procon h3 { margin: 0 0 .4rem; font-size: .8rem; }
@@ -796,3 +805,60 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .source-row .badge-label img { height: 1em; width: 1em; }
 a.architecture-tag { text-decoration: none; }
 @media (max-width: 1000px) { .alpine-hero .alpine-reqs { position: static; grid-column: 1 / -1; } }
+
+/* Console research pages */
+.console-page { display: grid; gap: 1rem; padding: 1.5rem 0 3rem; }
+.console-hero { background: linear-gradient(135deg, var(--panel-raised), var(--panel)); }
+.console-hero h1 { margin: .25rem 0 .6rem; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; }
+.console-hero .intro-copy { max-width: 54rem; }
+.console-warning { margin: 1rem 0 0; padding: .8rem 1rem; border-left: 3px solid var(--amber); background: rgb(230 195 154 / 8%); color: #e4c99f; font-size: .76rem; line-height: 1.6; }
+.console-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.console-grid h2, .console-section h2 { margin: .2rem 0 .8rem; font-size: 1.05rem; }
+.console-facts { margin: 0; }
+.console-facts > div { display: grid; grid-template-columns: minmax(7rem, .55fr) 1fr; gap: .6rem; border-top: 1px solid var(--line); padding: .6rem 0; font-size: .74rem; }
+.console-facts dt { color: var(--muted); }
+.console-facts dd { margin: 0; overflow-wrap: anywhere; }
+.console-variant-spec { color: var(--muted); }
+.console-firmware { margin: .1rem 0 .4rem; color: var(--amber); font-size: 1.25rem; font-weight: 700; }
+.console-source { margin: .6rem 0 0; font-size: .72rem; }
+.console-variants, .console-homebrew { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .65rem; }
+.console-variant, .console-project { min-width: 0; padding: .85rem; border: 1px solid var(--line); background: rgb(0 0 0 / 18%); }
+.console-variant h3, .console-project h3 { margin: 0; font-size: .88rem; }
+.console-variant h3 { color: var(--teal); }
+.console-project-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.console-project > p { margin: .55rem 0; color: #c9c1b3; font-size: .75rem; line-height: 1.55; }
+.console-project > a { font-size: .72rem; }
+.console-sources { display: grid; gap: .45rem; margin: 0; padding-left: 1.2rem; font-size: .75rem; overflow-wrap: anywhere; }
+@media (max-width: 700px) { .console-grid { grid-template-columns: 1fr; } .console-facts > div { grid-template-columns: minmax(6rem, .65fr) 1fr; } }
+
+.console-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+.console-filters label { display: grid; gap: .4rem; font-size: .8rem; }
+.console-filters select { max-width: 100%; padding: .5rem; }
+.console-project-heading { flex-wrap: wrap; }
+.console-project > div > strong, .console-project ul { font-size: .75rem; line-height: 1.6; }
+.console-project ul { padding-left: 1.2rem; }
+.console-project .console-project-warning { padding: .6rem; border-left: 2px solid var(--amber); color: #e4c99f; }
+.console-project-links { display: flex; flex-wrap: wrap; gap: .7rem; font-size: .75rem; }
+
+.console-hero-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 290px); gap: 2rem; align-items: center; }
+.console-logo { width: 180px; max-width: 100%; height: auto; margin-bottom: 1.2rem; filter: brightness(0) invert(1); }
+.console-photo { margin: 0; text-align: center; }
+.console-photo img { display: block; width: 100%; height: 320px; object-fit: contain; }
+.console-photo figcaption { margin-top: .5rem; font-size: .65rem; }
+.console-highlight h2 { margin: .4rem 0; font-size: 1.4rem; }
+.console-highlight > p { font-size: .8rem; line-height: 1.65; }
+.console-highlight .console-highlight-firmware { color: var(--amber); font-weight: 700; }
+.console-highlight small { display: block; margin-top: 1rem; }
+.console-jumps { display: flex; gap: .65rem 1.2rem; flex-wrap: wrap; padding: .5rem 0; font-size: .8rem; }
+.console-section > summary { cursor: pointer; font-weight: 700; font-size: 1rem; }
+.console-section[open] > summary { margin-bottom: 1rem; }
+.console-project-details { margin: .8rem 0; font-size: .75rem; line-height: 1.6; }
+.console-project-details > summary { cursor: pointer; color: var(--muted); }
+@media (max-width: 700px) { .console-hero-body { grid-template-columns: 1fr; } .console-photo { max-width: 220px; margin-inline: auto; } .console-photo img { height: 240px; } }
+
+.rail-mark.current a b { outline: 2px solid var(--amber, #e8ba65); outline-offset: 3px; }
+.rail-mark.current a small { color: var(--amber, #e8ba65); }
+.console-matches { padding: 16px; border: 1px solid #a5854c; border-radius: 8px; background: #29231a; }
+.console-match-link { display: block; margin-top: 10px; font-weight: 700; }
+.console-project { scroll-margin-top: 100px; }
+.console-project:target { outline: 3px solid #e8ba65; outline-offset: 4px; background: #30291e; }

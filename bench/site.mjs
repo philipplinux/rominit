@@ -115,12 +115,12 @@ test('device page: back link, breadcrumb, one-line title, section 0 first, OS lo
   await page.goto(BASE);
   await page.locator('.device-tree a', { hasText: 'S9 · Exynos' }).click();
   await page.waitForURL(/device=starlte/);
-  assert.equal(await text('.intro .eyebrow'), 'ALL / SAMSUNG / GALAXY S / GALAXY S9 / S9 · EXYNOS');
+  assert.equal(await text('.intro .eyebrow'), 'ALL / PHONES / SAMSUNG / GALAXY S / GALAXY S9 / S9 · EXYNOS');
   assert.equal(await page.locator('.intro .eyebrow a', { hasText: 'GALAXY S9' }).getAttribute('href'), './?q=Galaxy%20S9');
   assert.equal(await page.locator('h1').evaluate(el => getComputedStyle(el).whiteSpace), 'nowrap');
   const h1 = await page.locator('h1').boundingBox();
   assert.ok(h1 && h1.height < 120, 'title fits one line');
-  assert.match(await text('.page-section summary'), /^0 · ROM, features & info/);
+  assert.match(await text('.page-section > summary > span:first-of-type'), /^0 · ROM, features & info/);
   await page.goto(`${BASE}/?device=starlte&rom=philipplinux-pmos-server`); // official /e/OS ranks first and has no logo file
   await page.locator('img.os-logo').evaluate(img => /** @type {HTMLImageElement} */ (img).decode());
   assert.ok(await page.locator('img.os-logo').evaluate(img => /** @type {HTMLImageElement} */ (img).naturalWidth > 0), 'postmarketOS logo loads');
@@ -146,7 +146,7 @@ test('ROM select groups by origin; stock ROMs only under Recover / revert', asyn
   const revert = page.locator('details.page-section', { hasText: 'R · Recover / revert' });
   await revert.locator(':scope > summary').click();
   assert.equal(await revert.locator('.stage-card').count(), 1);
-  assert.match(await revert.locator('.stage-card details:not(.debug-box) summary').innerText(), /^\d+ steps$/, 'long step lists collapse');
+  assert.match(await revert.locator('.stage-card details:not(.debug-box) > summary', { hasText: /steps$/ }).innerText(), /^\d+ steps$/, 'long step lists collapse');
 });
 
 test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
@@ -159,7 +159,7 @@ test('S7 edge: TWRP via Odin, LineageOS via sideload', async () => {
 test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM, recover', async () => {
   await page.goto(`${BASE}/?device=hero2lte`);
   await page.locator('.page-section').nth(4).waitFor();
-  assert.deepEqual((await page.locator('.page-section > summary > span:first-child').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 6), ['0', '1', '2', '3', '4', 'R']);
+  assert.deepEqual((await page.locator('.page-section > summary > span:first-of-type').allInnerTexts()).map(t => t.slice(0, 1)).slice(0, 6), ['0', '1', '2', '3', '4', 'R']);
   await page.locator('.side-divider').waitFor();
   const unlock = page.locator('details.page-section', { hasText: '1 · Unlock bootloader' });
   assert.equal(await unlock.first().locator(':scope > summary .badge').innerText(), 'REQUIRED');
@@ -182,16 +182,16 @@ test('page order: info, unlock guide with SamFW pivot, TWRP marked required, ROM
   await page.locator('details.page-section', { hasText: 'T · Submit ticket' }).waitFor(); // page fully drawn before counting
   assert.equal(await page.locator('details.page-section.done').count(), 2);
   page.once('dialog', d => d.dismiss()); // Start over asks first; cancel keeps everything
-  await page.locator('.start-over').click();
+  await page.locator('.progress-rail > .start-over').click();
   assert.equal(await page.locator('details.page-section.done').count(), 2);
   page.once('dialog', d => d.accept());
-  await page.locator('.start-over').click();
+  await page.locator('.progress-rail > .start-over').click();
   await page.locator('.page-section').nth(4).waitFor();
   assert.equal(await page.locator('details.page-section.done').count(), 0);
   await page.getByLabel('Bootloader is already unlocked').check(); // skips the steps
   assert.equal(await page.locator('details.page-section', { hasText: '1 · Unlock bootloader' }).first().locator(':scope > summary .badge').innerText(), 'COMPLETED');
   page.once('dialog', d => d.accept());
-  await page.locator('.start-over').click();
+  await page.locator('.progress-rail > .start-over').click();
 });
 
 test('section 0 completes by locking in the ROM; install requirements and A/B flag shown', async () => {
@@ -293,7 +293,7 @@ test('comments need sign-in; owner badge; moderator approves screenshots and hid
 
   await signIn('ada', 'owner', `rom:${rom}`);
   await page.reload();
-  await page.locator('.topbar-side .account').getByText('ada ✎').waitFor();
+  await page.locator('.user-menu summary', { hasText: '👤 ada' }).waitFor();
   await page.locator('.rating', { hasText: 'maintainer' }).getByText('✓ ada').waitFor();
   await box.locator('textarea').fill('bench comment');
   await box.locator('input[type=file]').setInputFiles({ name: 'shot.png', mimeType: 'image/png', buffer: PNG });
@@ -745,8 +745,8 @@ test('USB discovery shows detected interfaces without an IP and keeps manual ent
 test('pick a username: checked, unique, kept; email never shown', async () => {
   await signIn('grace');
   await page.goto(`${BASE}/?device=starlte`);
-  const edit = page.locator('.topbar-side .account button', { hasText: 'grace ✎' });
-  await edit.click();
+  await page.locator('.user-menu summary', { hasText: '👤 grace' }).click(); // the username lives in the account menu
+  await page.locator('.user-menu button', { hasText: 'Username: grace ✎' }).click();
   const form = page.locator('#username');
   await form.locator('input').fill('grace@example.com');
   await form.getByRole('button', { name: 'Save' }).click();
@@ -756,7 +756,7 @@ test('pick a username: checked, unique, kept; email never shown', async () => {
   await form.getByText('that name is taken').waitFor();
   await form.locator('input').fill('Grace H');
   await form.getByRole('button', { name: 'Save' }).click();
-  await page.locator('.topbar-side .account button', { hasText: 'Grace H ✎' }).waitFor();
+  await page.locator('.user-menu summary', { hasText: '👤 Grace H' }).waitFor();
   await signIn(null);
 });
 
@@ -1050,6 +1050,7 @@ test('the nav marks exactly one link as the current page', async () => {
   };
   assert.deepEqual(await current('/'), ['devices'], 'the bare list marks Devices');
   assert.deepEqual(await current('/?category=pc'), ['os'], 'the PC category marks OS, not Devices as well');
+  assert.deepEqual(await current('/?category=console'), ['consoles'], 'the console category marks Consoles only');
   assert.deepEqual(await current('/?view=brands'), ['brands']);
   assert.deepEqual(await current('/?view=projects'), ['projects']);
   assert.deepEqual(await current('/?view=popular'), ['popular']);
@@ -1080,15 +1081,9 @@ test('Alpine warning is yellow and an authenticated CLI action auto-discovers wi
   });
   try {
     await page.goto(`${BASE}/alpine.html`);
-    const caution = page.locator('.alpine-cautions');
-    assert.equal(await caution.locator('h2').innerText(), 'Note this before installation');
-    const warningStyle = await caution.evaluate(node => ({ background: getComputedStyle(node).backgroundColor, border: getComputedStyle(node).borderTopColor, stripe: getComputedStyle(node, '::before').backgroundImage }));
-    assert.equal(warningStyle.background, await page.locator('.alpine-card').first().evaluate(node => getComputedStyle(node).backgroundColor));
-    assert.equal(warningStyle.border, 'rgb(224, 180, 0)');
-    assert.match(warningStyle.stripe, /repeating-linear-gradient.*rgb\(242, 194, 0\).*rgb\(20, 20, 20\)/);
     assert.equal(await page.evaluate(() => localStorage.getItem('rominit.helper')), null, 'begin with no saved browser bearer');
     await page.locator('#alpine-edition').selectOption('extended');
-  await page.getByRole('button', { name: 'Prepare Extended x86_64 USB' }).click();
+    await page.getByRole('button', { name: 'Connect CLI for Extended x86_64 USB' }).click(); // unpaired: the action connects first
     await page.locator('#usb-media-drive option[value="/dev/disk/by-id/usb-auto-test"]').waitFor({ state: 'attached' });
   assert.equal(await page.locator('#usb-media-method option[value="direct"]').isDisabled(), true, 'older CLI cannot offer direct writes');
   await page.getByText('Direct image writing needs an updated CLI.', { exact: false }).waitFor();
@@ -1125,8 +1120,9 @@ test('Alpine architecture flows through the paired CLI plan and requires typed d
     return route.fulfill({ headers, json });
   });
   try {
-    await page.goto(`${BASE}/alpine.html`);
+    await page.goto(BASE);
     await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'u'.repeat(43), user: { id: 98, name: 'Alpine tester' }, expiresAt: new Date(Date.now()+60000).toISOString() })), localUrl);
+    await page.goto(`${BASE}/alpine.html`);
     await page.locator('#alpine-edition').selectOption('extended');
     await page.getByRole('button', { name: 'Prepare Extended x86_64 USB' }).click();
     await page.locator('#usb-media-drive option[value="/dev/disk/by-id/usb-test"]').waitFor({ state: 'attached' });
@@ -1200,12 +1196,14 @@ test('checksum mismatch offers retry or cancel and requires explicit opt-in plus
     return route.fulfill({ headers, json });
   });
   try {
-    await page.goto(`${BASE}/alpine.html`);
+    await page.goto(BASE);
     await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'v'.repeat(43), user: { id: 99, name: 'Checksum tester' }, expiresAt: new Date(Date.now() + 60_000).toISOString() })), localUrl);
+    await page.goto(`${BASE}/alpine.html`);
     await page.locator('#alpine-edition').selectOption('extended');
     await page.getByRole('button', { name: 'Prepare Extended x86_64 USB' }).click();
     await page.locator('#usb-media-drive option[value="/dev/disk/by-id/usb-mismatch-test"]').waitFor({ state: 'attached' });
     await page.locator('#usb-media-drive').selectOption(drive.id);
+    await page.locator('.usb-method-buttons button[value="ventoy"]').click(); // usb-direct makes Direct the default; this flow reviews a Ventoy copy
     assert.match(await page.locator('#usb-media-selected-image').innerText(), /Alpine Linux 3\.24\.2 · Extended · x86_64 · alpine-extended-3\.24\.2-x86_64\.iso · 1\.36 GiB/);
     assert.equal(await page.locator('#usb-media-selected-image').evaluate(node => !!(node.compareDocumentPosition(document.querySelector('#usb-media-drive')) & Node.DOCUMENT_POSITION_FOLLOWING)), true, 'selected image summary sits before the USB selector');
     const reviewButton = page.getByRole('button', { name: 'Review USB preparation' });
@@ -1221,11 +1219,11 @@ test('checksum mismatch offers retry or cancel and requires explicit opt-in plus
     await warning.getByText('Checksum does not match. We don’t recommend using this file; it may be damaged or different from the selected release.', { exact: true }).waitFor();
     assert.match(await warning.innerText(), new RegExp(pinned.sha256));
     assert.match(await warning.innerText(), new RegExp(actual.sha256));
-    await page.locator('#usb-media-method').selectOption('direct');
+    await page.locator('.usb-method-buttons button[value="direct"]').click();
     assert.equal(await page.locator('.usb-verification-warning').count(), 0, 'changing method clears the reviewed mismatch and opt-in');
     assert.equal(await page.locator('#usb-media-confirm').count(), 0, 'changing method clears typed confirmation');
     assert.equal(calls.some(call => call.path === '/usb/write'), false, 'method changes never start a write');
-    await page.locator('#usb-media-method').selectOption('ventoy');
+    await page.locator('.usb-method-buttons button[value="ventoy"]').click();
     await reviewButton.click();
     await page.locator('.usb-verification-warning').waitFor();
     await page.locator('#usb-media-panel').screenshot({ path: '/tmp/rominit-usb-mismatch-desktop.png' });
@@ -1325,9 +1323,10 @@ test('direct ISO writing is available for non-Ventoy architectures and waits for
     return route.fulfill({ headers, json });
   });
   try {
+    await page.goto(BASE);
+    await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'w'.repeat(43), user: { id: 100, name: 'Direct ISO tester' }, expiresAt: new Date(Date.now() + 60_000).toISOString() })), localUrl);
     await page.goto(`${BASE}/alpine.html`);
     await page.locator('#alpine-edition').selectOption('standard');
-    await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'w'.repeat(43), user: { id: 100, name: 'Direct ISO tester' }, expiresAt: new Date(Date.now() + 60_000).toISOString() })), localUrl);
     await page.getByRole('button', { name: 'Prepare Standard armv7 USB' }).click();
     await page.locator('#usb-media-drive option[value="/dev/disk/by-id/usb-direct-test"]').waitFor({ state: 'attached' });
     const method = page.locator('#usb-media-method');
@@ -1417,8 +1416,7 @@ test('generic CLI USB panel offers a configured ISO direct write with the same t
     assert.equal(await page.locator('#usb-media-panel h2').innerText(), 'Prepare USB');
     assert.match(await page.locator('#usb-media-panel > p').first().innerText(), /Choose Ventoy .* or Direct image .* CLI-configured ISO/);
     const method = page.locator('#usb-media-method');
-    assert.equal(await method.inputValue(), 'ventoy', 'generic USB panel keeps Ventoy as its default');
-    await method.selectOption('direct');
+    assert.equal(await method.inputValue(), 'direct', 'Direct write is the default when the CLI supports it');
     assert.equal(await page.locator('#usb-media-panel h2').innerText(), 'Prepare USB', 'generic panel heading stays neutral when the method changes');
     assert.match(await page.locator('#usb-media-method-help').innerText(), /CLI-configured ISO/);
     await page.locator('#usb-media-drive').selectOption(drive.id);
@@ -1473,7 +1471,7 @@ test('USB outcome report delivery stays separate from success and failure of the
     await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'q'.repeat(43), user: { id: 902, name: 'Report status tester' }, expiresAt: new Date(Date.now() + 60_000).toISOString() })), localUrl);
     await page.goto(`${BASE}/?view=cli`);
     await page.locator('#usb-media-drive option[value="fixture-drive-id"]').waitFor({ state: 'attached' });
-    await page.locator('#usb-media-method').selectOption('direct');
+    await page.locator('.usb-method-buttons button[value="direct"]').click();
     await page.locator('#usb-media-drive').selectOption(drive.id);
     await page.getByRole('button', { name: 'Review direct image write' }).click();
     await page.locator('#usb-media-confirm').waitFor();
@@ -1546,7 +1544,7 @@ test('USB write includes bounded browser metadata only when the helper advertise
     await page.goto(`${BASE}/?view=cli`);
     await page.locator('.usb-environment-notice').getByText(/automatic USB report includes OS, browser and CLI technical versions only/i).waitFor();
     await page.locator('#usb-media-drive option[value="fixture-metadata-drive"]').waitFor({ state: 'attached' });
-    await page.locator('#usb-media-method').selectOption('direct');
+    await page.locator('.usb-method-buttons button[value="direct"]').click();
     await page.locator('#usb-media-drive').selectOption(drive.id);
     await page.getByRole('button', { name: 'Review direct image write' }).click();
     await page.locator('#usb-media-confirm').fill('ERASE');

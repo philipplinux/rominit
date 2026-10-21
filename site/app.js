@@ -1,5 +1,8 @@
+import { progressRail } from './progress-rail.js';
+import { reportBox, requestButton } from './report.js';
 import { h } from './dom.js';
 import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
+import { CONSOLES } from '../src/consoles/index.js';
 import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
@@ -27,7 +30,7 @@ hostSelect.addEventListener('change', () => {
   document.dispatchEvent(new Event('host-change'));
 });
 // First visit: confirm the guessed computer once, since every stage's setup steps follow it.
-if (!stored) {
+if (!stored && params.get('category') !== 'console') {
   const pick = h('select', { className: 'host-confirm-select', ariaLabel: "Your computer's operating system" },
     ...Object.entries(HOSTS).map(([id, name]) => h('option', { value: id, textContent: name, selected: id === host })));
   const dialog = h('dialog', { className: 'host-confirm' },
@@ -943,8 +946,8 @@ function devicePicker(index) {
   // Pick one device category or all categories.
   const requestedCategory = params.get('category');
   const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
-    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' || c === 'pc' ? OSES.length : 0);
-    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === (requestedCategory && requestedCategory in CATEGORIES ? requestedCategory : 'all'), onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
+    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' ? OSES.length + CONSOLES.length : c === 'pc' ? OSES.length : c === 'console' ? CONSOLES.length : 0);
+    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === (requestedCategory && Object.hasOwn(CATEGORIES, requestedCategory) ? requestedCategory : 'all'), onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
@@ -977,12 +980,17 @@ function devicePicker(index) {
     const osEntry = osHits.map(os => h('article', { className: 'os-entry' }, h('a', { href: `./${os.id}`, className: 'os-title' }, h('img', { src: `./${os.page.logo.src}`, alt: '', width: 40, height: 40 }), h('strong', { textContent: os.name })),
       h('p', { className: 'field-help', textContent: `${os.editions.length} editions · ${os.version}` }),
       h('div', { className: 'architecture-tags', ariaLabel: 'Architectures' }, ...[...new Set(osArchitectures(os).map(arch => ARCH_FAMILY[arch] ?? arch))].map(name => h('span', { className: 'architecture-tag', textContent: name })))));
-    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs)).map(([c, label]) => c === 'pc' && showOs
+    const consoleHits = on.has('console') ? CONSOLES.filter(console => words.every(word => `${console.name} ${console.id} ${console.manufacturer} ${console.summary} ${console.variants.map(v => v.model).join(' ')}`.toLowerCase().includes(word))) : [];
+    const showConsoles = consoleHits.length > 0;
+    const consoleEntry = consoleHits.map(console => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${console.id}`, className: 'os-title', textContent: console.name }),
+      h('p', { className: 'field-help', textContent: `${console.releaseYear} · ${console.manufacturer} · ${console.variants.length} variants`})));
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs || c === 'console' && showConsoles)).map(([c, label]) => c === 'console' && showConsoles
+      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...consoleEntry, ...(tree[c] ? vendors(tree[c]) : [])) : c === 'pc' && showOs
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
       : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
-    if (!hits.length && !showOs && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
-    else if (!hits.length && !showOs) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
+    if (!hits.length && !showOs && !showConsoles && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length && !showOs && !showConsoles) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);
@@ -1215,53 +1223,6 @@ async function popularView(index) {
   return card;
 }
 
-/** @param {string} kind @param {string} title @param {string} rom */
-function requestButton(kind, title, rom = '') {
-  const button = h('button', { type: 'button', className: 'button button-secondary', textContent: title, onclick() {
-    const text = h('textarea', { className: 'confirmation-input', required: true, maxLength: 2000, rows: 4,
-      placeholder: kind === 'update' ? 'New version and current version (for example: 2.5 replaces 2.3).' : kind === 'mirror' ? 'Which files should we mirror, and why?' : 'ROM name and/or device model, and what you would like added.' });
-    const url = h('input', { className: 'confirmation-input', type: 'url', required: kind !== 'mirror', maxLength: 2000, placeholder: 'https://…' });
-    const status = h('p', { role: 'status', className: 'field-help' });
-    const send = h('button', { type: 'submit', className: 'button button-primary', textContent: 'Send request' });
-    const dialog = h('dialog', { className: 'host-confirm', ariaLabel: title }, h('form', { async onsubmit(event) {
-      event.preventDefault(); send.disabled = true; status.textContent = 'Sending…';
-      const response = await fetch('./api/requests', { method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ kind, rom: rom || null, page: location.pathname + location.search, text: text.value, url: url.value || null }) }).catch(() => null);
-      const reply = await response?.json().catch(() => ({}));
-      status.textContent = response?.ok ? 'Thanks, request sent for review.' : `Could not send: ${reply?.error ?? 'network error'}.`;
-      send.disabled = !!response?.ok;
-    } }, h('h2', { textContent: title }), rom && h('p', { textContent: rom }),
-      h('label', { className: 'field-help' }, 'Details', text), h('label', { className: 'field-help' }, kind === 'mirror' ? 'Source URL (optional)' : 'ROM or device source URL', url),
-      send, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Close', onclick: () => dialog.close() }), status));
-    dialog.addEventListener('close', () => { dialog.remove(); button.focus(); });
-    document.body.append(dialog); dialog.showModal();
-  } });
-  return button;
-}
-
-/** "Something wrong on this page?" form; falls back to a GitHub issue link. */
-function reportBox() {
-  const page = location.pathname + location.search;
-  const text = h('textarea', { className: 'confirmation-input', placeholder: 'What is wrong or missing? (wrong file, broken step, outdated info…)', maxLength: 2000, rows: 3 });
-  const where = h('select', { className: 'report-section' }, h('option', { value: '', textContent: 'Whole page' }));
-  const send = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Send ticket' }), status = h('small', {});
-  const issue = `https://github.com/philipplinux/rominit/issues/new?title=${encodeURIComponent(`Problem on ${page}`)}`;
-  send.addEventListener('click', async () => {
-    status.textContent = 'Sending…';
-    const response = await fetch('./api/reports', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page, text: text.value, section: where.value }) }).catch(() => null);
-    const reply = await response?.json().catch(() => ({}));
-    status.textContent = response?.ok ? 'Thanks, ticket sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
-    if (response?.ok) text.value = '';
-  });
-  const box = h('details', { id: 'submit-request', className: 'page-section report', ontoggle() {
-    if (where.isConnected) return; // built on first open, from this page's own sections
-    for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
-    text.before(h('label', { className: 'field-help' }, 'About: ', where));
-  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket / Request' }), h('small', { textContent: 'report a problem or request a new ROM / device' })),
-    h('p', {}, requestButton('new', 'Request new ROM / device')),
-    h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
-  return box;
-}
 /** What the page is built from. A test keeps this in step with package.json dependencies. */
 const SOFTWARE = [
   ['In this page (bundled into app.js)', [
@@ -1479,12 +1440,12 @@ async function start() {
   const navSearch = /** @type {HTMLInputElement|null} */ (document.querySelector('.topbar input[type=search]'));
   if (navSearch) navSearch.value = params.get('q') ?? '';
   if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
-  // The OS link opens a category, Devices is the bare list, the rest are views.
+  // OS and Consoles open a category, Devices is the bare list, the rest are views.
   for (const a of document.querySelectorAll('.sitenav a')) {
     if (codename) break;
     const link = /** @type {HTMLAnchorElement} */ (a);
     const href = new URL(link.href);
-    const matches = link.dataset.nav === 'os' ? href.searchParams.get('category') === params.get('category')
+    const matches = href.searchParams.has('category') ? href.searchParams.get('category') === params.get('category')
       : link.dataset.nav === 'devices' ? !view && !params.get('category')
         : href.searchParams.get('view') === view;
     if (matches) link.setAttribute('aria-current', 'page');
@@ -1715,47 +1676,6 @@ async function start() {
     // R and S sit apart from the numbered flow: a way back, and a way to tell us something is wrong.
     h('p', { className: 'side-divider', textContent: 'when things go wrong' }),
     recoverSection);
-}
-/** Left rail like a scrollbar: the rail is the whole page, milestones 0–4, R, T sit at their section's place (so long sections
- * get long stretches), the thumb is what the window shows. Green when a section is done, amber ring on the next one to do,
- * +/- opens or closes the section. @param {HTMLDetailsElement[]} sections */
-function progressRail(sections) {
-  const marks = sections.map(sec => {
-    const [num, label] = (sec.querySelector(':scope > summary > span')?.textContent ?? '').split(' · ');
-    const fold = h('button', { type: 'button', className: 'rail-fold', onclick() { sec.open = !sec.open; } });
-    const sync = () => { fold.textContent = sec.open ? '−' : '+'; fold.title = `${sec.open ? 'Close' : 'Open'} ${label}`; };
-    sec.addEventListener('toggle', sync); sync();
-    const mark = h('div', { className: 'rail-mark' }, fold, h('a', { href: '#', title: label, onclick(/** @type {Event} */ e) {
-      e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, h('b', { textContent: num }), h('small', { textContent: label })));
-    mark.dataset.num = num; // R and T take their section's colours
-    return mark;
-  });
-  const fill = h('i', { className: 'rail-fill' }), thumb = h('i', { className: 'rail-thumb' });
-  const place = () => {
-    const page = Math.max(1, document.documentElement.scrollHeight);
-    // Two sections closer than a two-line label still get that much room; pushed up from the bottom if needed.
-    const gap = Math.min(44, rail.clientHeight / sections.length) / Math.max(1, rail.clientHeight); // short window: squeeze evenly
-    const tops = sections.map(sec => (sec.getBoundingClientRect().top + scrollY) / page);
-    for (let i = 1; i < tops.length; i++) tops[i] = Math.max(tops[i], tops[i - 1] + gap);
-    for (let i = tops.length - 1; i >= 0; i--) tops[i] = Math.min(tops[i], i === tops.length - 1 ? 1 : tops[i + 1] - gap);
-    tops.forEach((top, i) => { marks[i].style.top = `${100 * top}%`; });
-    fill.style.height = thumb.style.top = `${100 * scrollY / page}%`;
-    thumb.style.height = `${100 * innerHeight / page}%`;
-  };
-  const paint = () => {
-    const next = sections.findIndex(sec => !sec.classList.contains('done') && sec.classList.contains('required'));
-    marks.forEach((mark, i) => { const c = sections[i].classList; mark.className = `rail-mark${c.contains('done') ? ' done' : c.contains('skipped') ? ' done skipped' : i === next ? ' next' : ''}`; });
-  };
-  // Sections flip their own done / required classes; opening or closing one moves the rest, so re-place on resize too.
-  const watch = new MutationObserver(paint);
-  for (const sec of sections) watch.observe(sec, { attributes: true, attributeFilter: ['class'] });
-  let frame = 0;
-  const soon = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(place); };
-  addEventListener('scroll', soon, { passive: true });
-  new ResizeObserver(soon).observe(document.body);
-  const rail = h('nav', { className: 'progress-rail', ariaLabel: 'Progress through this page' }, fill, thumb, ...marks);
-  paint(); soon();
-  return rail;
 }
 for (const a of document.querySelectorAll('a[href="#submit-request"]')) a.addEventListener('click', () => {
   const box = /** @type {HTMLDetailsElement|null} */ (document.getElementById('submit-request'));

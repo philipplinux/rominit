@@ -1,0 +1,2449 @@
+{
+  "id": "ps5",
+  "name": "Sony PlayStation 5 family",
+  "manufacturer": "Sony",
+  "releaseYear": 2020,
+  "models": [
+    {
+      "id": "original",
+      "name": "Original PS5"
+    },
+    {
+      "id": "slim",
+      "name": "PS5 Slim"
+    },
+    {
+      "id": "pro",
+      "name": "PS5 Pro"
+    }
+  ],
+  "summary": "Explore PS5 family hardware and firmware-specific routes into homebrew across original, Slim and Pro.",
+  "specs": {
+    "cpu": "Custom AMD Zen 2, 8 cores / 16 threads",
+    "gpu": "Custom AMD RDNA graphics; original/Slim up to 10.3 TFLOPS, Pro 16.7 TFLOPS",
+    "memory": "16 GB GDDR6; Pro adds 2 GB DDR5",
+    "storage": "Custom SSD; capacity varies by model",
+    "media": "UHD Blu-ray on disc editions; Digital editions have no drive, and Slim/Pro can use an optional paired drive"
+  },
+  "variants": [
+    {
+      "model": "Original PS5",
+      "region": "Worldwide",
+      "releaseYear": 2020,
+      "storage": "825 GB custom SSD",
+      "notes": "CFI-10xx, CFI-11xx and CFI-12xx model groups. Sold as a disc edition with an integrated UHD Blu-ray drive or Digital Edition without a drive.",
+      "specs": {
+        "cpu": "Custom AMD Zen 2, 8 cores / 16 threads, variable frequency up to 3.5 GHz",
+        "gpu": "Custom AMD RDNA 2, up to 2.23 GHz (10.3 TFLOPS)",
+        "memory": "16 GB GDDR6",
+        "media": "Integrated UHD Blu-ray drive on disc edition; Digital Edition has no drive"
+      }
+    },
+    {
+      "model": "PS5 Slim",
+      "region": "Worldwide",
+      "releaseYear": 2023,
+      "storage": "1 TB on CFI-20xx; CFI-21xx: 1 TB disc edition / 825 GB Digital Edition",
+      "notes": "CFI-20xx Slim launched in 2023. Disc and Digital Editions exist; a detachable disc drive can be paired with compatible CFI-20xx/21xx Digital models.",
+      "specs": {
+        "cpu": "Custom AMD Zen 2, 8 cores / 16 threads, variable frequency up to 3.5 GHz",
+        "gpu": "Custom AMD RDNA 2, up to 2.23 GHz (10.3 TFLOPS)",
+        "memory": "16 GB GDDR6",
+        "media": "Disc model or Digital Edition; compatible detachable UHD Blu-ray drive"
+      }
+    },
+    {
+      "model": "PS5 Pro",
+      "region": "Worldwide",
+      "releaseYear": 2024,
+      "storage": "2 TB custom SSD",
+      "notes": "CFI-70xx/71xx model groups. Digital base console with 2 TB SSD; compatible detachable UHD Blu-ray drive is sold separately. The 30th Anniversary Limited Edition is also 2 TB, released November 21, 2024; its included disc-drive cover does not include the drive.",
+      "specs": {
+        "cpu": "Custom AMD Zen 2, 8 cores / 16 threads",
+        "gpu": "Custom AMD RDNA-based GPU, 16.7 TFLOPS",
+        "memory": "16 GB GDDR6 + 2 GB DDR5",
+        "media": "Digital base console; compatible detachable UHD Blu-ray drive sold separately"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "26.07-14.20.00",
+    "shortVersion": "14.20",
+    "checkedDate": "2026-10-21",
+    "source": "https://www.playstation.com/en-us/support/hardware/ps5/system-software-info/"
+  },
+  "firmwareOptions": [
+    "1.00",
+    "1.01",
+    "1.02",
+    "1.05",
+    "1.10",
+    "1.11",
+    "1.12",
+    "1.13",
+    "1.14",
+    "2.00",
+    "2.20",
+    "2.25",
+    "2.26",
+    "2.30",
+    "2.50",
+    "2.70",
+    "3.00",
+    "3.10",
+    "3.20",
+    "3.21",
+    "4.00",
+    "4.02",
+    "4.03",
+    "4.50",
+    "4.51",
+    "5.00",
+    "5.02",
+    "5.10",
+    "5.50",
+    "6.00",
+    "6.02",
+    "6.50",
+    "7.00",
+    "7.01",
+    "7.20",
+    "7.40",
+    "7.60",
+    "7.61",
+    "8.00",
+    "8.20",
+    "8.40",
+    "8.60",
+    "9.00",
+    "9.20",
+    "9.40",
+    "9.60",
+    "10.00",
+    "10.01",
+    "10.20",
+    "10.40",
+    "11.00",
+    "11.20",
+    "11.60",
+    "12.00",
+    "12.02",
+    "12.20",
+    "12.40",
+    "12.60",
+    "12.70",
+    "13.00",
+    "13.20",
+    "13.40",
+    "13.42",
+    "13.60",
+    "14.20"
+  ],
+  "homebrew": [
+    {
+      "name": "UMTX2",
+      "models": [
+        "original"
+      ],
+      "firmware": "Upstream states PS5 1.00–5.50 support and provides a separate offset file for each listed firmware revision.",
+      "summary": "A browser-based starting point for running unofficial code on an original PS5. It supports only the exact firmware revisions listed below.",
+      "source": "https://github.com/idlesauce/umtx2",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original"
+          ],
+          "supportedFirmware": [
+            "1.00",
+            "1.01",
+            "1.02",
+            "1.05",
+            "1.10",
+            "1.11",
+            "1.12",
+            "1.13",
+            "1.14",
+            "2.00",
+            "2.20",
+            "2.25",
+            "2.26",
+            "2.30",
+            "2.50",
+            "2.70",
+            "3.00",
+            "3.10",
+            "3.20",
+            "3.21",
+            "4.00",
+            "4.02",
+            "4.03",
+            "4.50",
+            "4.51",
+            "5.00",
+            "5.02",
+            "5.10",
+            "5.50"
+          ],
+          "status": "documented",
+          "note": "These exact revisions each have an upstream PS5 offset file. The repository does not publish separate Slim or Pro support."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "PS5 on one of the listed firmware revisions.",
+        "A compatible WebKit route; upstream provides hosted pages and a media browser package."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/idlesauce/umtx2"
+        },
+        {
+          "label": "Per-firmware PS5 offsets",
+          "url": "https://github.com/idlesauce/umtx2/tree/main/document/en/ps5/offsets"
+        }
+      ]
+    },
+    {
+      "name": "Relapse",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Exact upstream offsets are listed from 7.00 through 13.60, with gaps; Pro-specific coverage is not separately stated.",
+      "summary": "Uses the PS5 browser to start an exploit that can open deeper system access for unofficial apps. It may take retries, and a failure can freeze or crash the console.",
+      "source": "https://github.com/ntfargo/Relapse-Exploit",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "7.00",
+            "7.01",
+            "7.20",
+            "7.40",
+            "7.60",
+            "7.61",
+            "8.00",
+            "8.20",
+            "8.40",
+            "8.60",
+            "9.00",
+            "9.20",
+            "9.40",
+            "9.60",
+            "10.00",
+            "10.01",
+            "10.20",
+            "10.40",
+            "11.00",
+            "11.20",
+            "11.60",
+            "12.00",
+            "12.02",
+            "12.20",
+            "12.40",
+            "12.60",
+            "12.70",
+            "13.00",
+            "13.20",
+            "13.40",
+            "13.42",
+            "13.60"
+          ],
+          "status": "documented",
+          "note": "These are the exact firmware revisions represented by upstream Relapse offsets. The repository describes PS5 support but does not publish a separate original-versus-Slim matrix."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The upstream README does not state Pro-specific support; do not infer it from the generic PS5 firmware list."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "PS5 on a firmware revision represented in the upstream offset list."
+      ],
+      "warnings": [
+        "Upstream warns that retries may be needed and kernel-stage failures can hang or panic the console."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/ntfargo/Relapse-Exploit"
+        }
+      ]
+    },
+    {
+      "name": "Y2JB",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Upstream requires at least 4.03 and names backup packages for 4.03–12.40 and 12.60+; it does not publish an exact tested firmware matrix.",
+      "summary": "Uses the YouTube app to start unofficial code, which can then load a separate kernel exploit. The project gives setup ranges but no exact tested firmware list.",
+      "source": "https://github.com/Gezine/Y2JB",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Upstream describes PS5 support and setup ranges, but does not list exact tested revisions or split original and Slim hardware."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The README does not state PS5 Pro-specific support."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "PS5 system software 4.03 or newer.",
+        "Follow upstream account activation instructions; its fake-activation section requires a separate fake-activated account when a legit PSN account already exists.",
+        "For the non-jailbroken route, a USB drive and the matching pre-made system backup.",
+        "YouTube app package 01.000.003 for 4.03–12.40 or 01.000.030 for 12.60+ per upstream instructions."
+      ],
+      "warnings": [
+        "Restoring the supplied system backup factory-resets the PS5 and erases console data; make a separate backup first."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/Gezine/Y2JB"
+        }
+      ]
+    },
+    {
+      "name": "Y2JB + Lapse",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Y2JB describes the Lapse payload as working only up to 10.01. PSFree/Lapse lists PS5 vulnerability scope 1.00–10.01, but its current repository does not claim a tested PS5 chain.",
+      "summary": "A follow-on step for Y2JB that tries to open kernel-level access. The source gives a ceiling of 10.01, not a full list of working console and firmware combinations.",
+      "source": "https://github.com/Gezine/Y2JB",
+      "kind": "kernel",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The source gives a ceiling, not an exact tested revision list or original/Slim split."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No Pro-specific support is stated."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "Y2JB userland running on the console.",
+        "Firmware no higher than 10.01 per the Y2JB Lapse payload note.",
+        "A compatible payload receiver for the next ELF stage."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Y2JB source",
+          "url": "https://github.com/Gezine/Y2JB"
+        },
+        {
+          "label": "PSFree / Lapse source",
+          "url": "https://github.com/Al-Azif/psfree-lapse"
+        }
+      ]
+    },
+    {
+      "name": "P2JB (Y2JB chain)",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "This community implementation lists 11.00, 11.20, 11.40, 11.60 and 12.00 as supported; 12.02+ offsets are unknown in this repo and 13.00+ is patched.",
+      "summary": "A kernel exploit loaded from Y2JB to open deeper system access. This implementation lists five firmware versions and has no separate PS5 Pro list.",
+      "source": "https://github.com/DuskFal1/p2jb",
+      "kind": "kernel",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "11.00",
+            "11.20",
+            "11.40",
+            "11.60",
+            "12.00"
+          ],
+          "status": "documented",
+          "note": "These exact revisions are listed by the implementation; its README says PS5 generically and does not split original from Slim."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The repository does not state PS5 Pro-specific support."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "Y2JB userland running on the console.",
+        "One of the exact firmware revisions listed by this implementation.",
+        "A compatible ELF loader on USB, as described by the project."
+      ],
+      "warnings": [
+        "The project estimates roughly seven hours for the exploit run; this estimate is not a completion guarantee."
+      ],
+      "links": [
+        {
+          "label": "P2JB implementation",
+          "url": "https://github.com/DuskFal1/p2jb"
+        },
+        {
+          "label": "Y2JB userland",
+          "url": "https://github.com/Gezine/Y2JB"
+        },
+        {
+          "label": "Alternative Y2JB port (different firmware/build limits)",
+          "url": "https://github.com/matem6/P2JB-Y2JB-Porting"
+        }
+      ]
+    },
+    {
+      "name": "Remote Lua Loader (save game)",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The project says the loader is not firmware-dependent and specifically reports a PS5 Pro test on 10.40; it gives no full exact firmware matrix.",
+      "summary": "Runs Lua code from a supported game save as a way into unofficial code. It needs an activated PS5 account and a jailbroken PS4 to prepare the save; the project reports one PS5 Pro test on 10.40.",
+      "source": "https://github.com/n0llptr/remote_lua_loader",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Setup names PS5 and PS5 Slim, but the README gives no exact firmware test for those models."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [
+            "10.40"
+          ],
+          "status": "documented",
+          "note": "The upstream README explicitly reports a PS5 Pro test on firmware 10.40; this is the only exact PS5 firmware test it names."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A previously PSN-activated PS5 account.",
+        "A jailbroken PS4 on firmware equal to or earlier than the PS5 firmware to prepare the save.",
+        "A game from the loader’s supported Artemis-engine list, installed on the PS5.",
+        "A matching save-data transfer from USB."
+      ],
+      "warnings": [
+        "The setup replaces files in an exported game-save folder and imports modified save data; preserve an untouched copy of existing saves."
+      ],
+      "links": [
+        {
+          "label": "Project README",
+          "url": "https://github.com/n0llptr/remote_lua_loader"
+        },
+        {
+          "label": "PS5 / Slim / Pro setup",
+          "url": "https://github.com/n0llptr/remote_lua_loader/blob/main/SETUP.md"
+        },
+        {
+          "label": "Supported games",
+          "url": "https://github.com/n0llptr/remote_lua_loader/blob/main/README.md"
+        }
+      ]
+    },
+    {
+      "name": "BD-JB5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The upstream entrypoint is documented through 13.42. At 13.60+ its BD-J unpatch step requires an already-jailbroken console, so it is not a first-entry route there.",
+      "summary": "Uses a prepared Blu-ray Java disc to run code through the PS5 disc player. The project documents it as an entry point through 13.42; on 13.60 and newer, it requires another jailbreak first.",
+      "source": "https://github.com/Gezine/BD-JB5",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Upstream states support through 13.42 but does not publish exact firmware revisions or an original/Slim hardware matrix."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No Pro-specific support is stated."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A Blu-ray-capable PS5 and a BD-J disc carrying the project.",
+        "For 13.60 and newer, a separate working jailbreak and ELF loader are required before using bdj_unpatch."
+      ],
+      "warnings": [
+        "Do not reinstall firmware after the 13.60+ BD-J unpatch; upstream says reinstalling removes the patch and loses BD-JB."
+      ],
+      "links": [
+        {
+          "label": "BD-JB5 source",
+          "url": "https://github.com/Gezine/BD-JB5"
+        }
+      ]
+    },
+    {
+      "name": "PS5 Linux",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Original/Slim: exact listed versions. Pro: 13.60 only.",
+      "summary": "Boots Linux from an external USB drive so the PS5 can work like a small desktop PC. Firmware support differs by model; the Pro is listed only on 13.60.",
+      "source": "https://github.com/ps5-linux/ps5-linux-loader/blob/main/README.md",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "3.00",
+            "3.10",
+            "3.20",
+            "3.21",
+            "4.00",
+            "4.02",
+            "4.03",
+            "4.50",
+            "4.51",
+            "5.00",
+            "5.02",
+            "5.10",
+            "5.50",
+            "6.00",
+            "6.02",
+            "6.50",
+            "7.00",
+            "7.01",
+            "7.20",
+            "7.40",
+            "7.60",
+            "7.61",
+            "13.00",
+            "13.20",
+            "13.60"
+          ],
+          "status": "documented",
+          "note": "Upstream lists these exact Phat/Slim revisions; its README notes no M.2 support on 3.00–3.21."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [
+            "13.60"
+          ],
+          "status": "documented",
+          "note": "Upstream lists 13.60 as the only supported Pro firmware."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A matching console/firmware combination from the exact matrix.",
+        "A working exploit/ELF loader, a USB drive of at least 64 GB and USB keyboard/mouse."
+      ],
+      "warnings": [
+        "Linux boot conflicts with active etaHEN/kstuff; follow the Linux loader guide.",
+        "Writing the Linux image erases its target USB drive; ROMinit does not perform this operation."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/ps5-linux/ps5-linux-loader/blob/main/README.md"
+        }
+      ]
+    },
+    {
+      "name": "etaHEN (upstream)",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Release notes report 8.40–10.01 support fixes in 2.4B; exact current model/firmware matrix remains unverified. This is separate from the unofficial 11.00–13.60 port.",
+      "summary": "Adds a homebrew menu, plugins, optional FTP and Itemzflow features after a jailbreak. Upstream release notes mention fixes for 8.40–10.01; the exact current model and firmware list is not published.",
+      "source": "https://github.com/etaHEN/etaHEN",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No exact current firmware/model matrix was published in the reviewed upstream README."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A compatible exploit and Payload SDK ELF loader (required by upstream 2.4B release notes)."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Upstream releases",
+          "url": "https://github.com/etaHEN/etaHEN/releases"
+        }
+      ]
+    },
+    {
+      "name": "kstuff-lite",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Kernel payload; an exact supported-firmware list was not confirmed from its upstream README.",
+      "summary": "Adds kernel support that some homebrew and package features rely on after a compatible jailbreak. Support can vary by build, and the project has no exact firmware list.",
+      "source": "https://github.com/EchoStretch/kstuff-lite",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No exact current firmware/model matrix verified; firmware support must be checked against the specific release."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A compatible jailbroken PS5 and a kstuff build matching its firmware."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/EchoStretch/kstuff-lite"
+        }
+      ]
+    },
+    {
+      "name": "PS5 Payload SDK",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Development SDK for exploited PS5 systems; exact current firmware offsets were not verified.",
+      "summary": "A developer toolkit for building software that runs on PS5 as payloads. It does not provide a way into the console by itself; firmware support depends on the exploit and loader used.",
+      "source": "https://github.com/ps5-payload-dev/sdk",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The README describes development for exploited PS5s but no exact supported firmware list."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/ps5-payload-dev/sdk"
+        }
+      ]
+    },
+    {
+      "name": "PS5 Payload ELF Loader",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Runs after a compatible jailbreak and bootstrap loader; the project does not publish an exact firmware list.",
+      "summary": "Lets a jailbroken PS5 receive and run ELF payload files from another tool. It needs a compatible bootstrap loader, and the project does not list exact firmware support.",
+      "source": "https://github.com/ps5-payload-dev/elfldr",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Upstream documents prerequisites and behavior but no exact firmware/model matrix."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with a compatible ELF loading path."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/ps5-payload-dev/elfldr"
+        }
+      ]
+    },
+    {
+      "name": "Itemzflow",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "PS5 support is listed upstream; exact firmware/model compatibility is not published in the reviewed README.",
+      "summary": "A homebrew game manager with an alternate home menu and a PS5 game compatibility list. It needs a compatible jailbreak; the project does not list exact firmware support.",
+      "source": "https://github.com/LightningMods/Itemzflow",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The README links PS5 game compatibility information but does not specify a firmware/model support matrix."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 and compatible homebrew environment."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/LightningMods/Itemzflow"
+        }
+      ]
+    },
+    {
+      "name": "etaHEN 2.5B Unified r1 (unofficial port)",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Exact release profiles: 11.00–13.60 with gaps; 11.40 excluded. Hardware-specific testing is not established here.",
+      "summary": "A community port of etaHEN that adds a menu, plugins, an FPS display and bundled kstuff-lite. Its release lists firmware profiles with gaps and no separate Pro support list.",
+      "source": "https://github.com/GronedWaffel/etahen-11.00-13.60/releases",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "11.00",
+            "11.20",
+            "11.60",
+            "12.00",
+            "12.02",
+            "12.20",
+            "12.40",
+            "12.60",
+            "12.70",
+            "13.00",
+            "13.20",
+            "13.40",
+            "13.42",
+            "13.60"
+          ],
+          "status": "documented",
+          "note": "The release publishes exact PS5 profiles; this records project claims, not testing of each console revision."
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "This release does not publish a separate Pro validation matrix."
+        }
+      ],
+      "requirements": [
+        "A compatible jailbreak and ELF loader after a fresh boot."
+      ],
+      "warnings": [
+        "Do not load over an existing etaHEN instance.",
+        "Includes kstuff-lite: do not load a second kstuff copy."
+      ],
+      "links": [
+        {
+          "label": "Source and releases",
+          "url": "https://github.com/GronedWaffel/etahen-11.00-13.60/releases"
+        }
+      ],
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "name": "Byepervisor Reborn",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Upstream fully supports 13.20 and 13.60; 13.00 is listed as untested. The broader 6.xx–13.60 vulnerability span is not the implemented support list.",
+      "summary": "A developer research payload for exploring PS5 hypervisor access, below the normal kernel layer. It needs kernel access and elfldr; upstream lists 13.20 and 13.60 as supported and 13.00 as untested.",
+      "source": "https://github.com/PS5Dev/Byepervisor-Reborn",
+      "kind": "research",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "13.20",
+            "13.60"
+          ],
+          "status": "documented",
+          "note": "Upstream explicitly handles Pro and non-Pro memory layouts."
+        },
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "13.00"
+          ],
+          "status": "unverified",
+          "note": "Upstream labels 13.00 untested; no claim for every firmware affected by the underlying bug."
+        }
+      ],
+      "requirements": [
+        "An already working kernel exploit chain and elfldr.",
+        "Rest Mode USB power configured as required by upstream."
+      ],
+      "warnings": [
+        "Developer base exploit: does not include HEN or other patches.",
+        "Rest Mode/resume failure can shut down the console."
+      ],
+      "links": [
+        {
+          "label": "Developer guide",
+          "url": "https://github.com/PS5Dev/Byepervisor-Reborn"
+        }
+      ],
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "name": "PS5 Payload Web Server",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Requires an exploited PS5 and running ELF loader; exact firmware/model matrix not published.",
+      "summary": "Adds a web page for launching homebrew and browsing files on the PS5. It needs an exploited console and a running ELF loader.",
+      "source": "https://github.com/ps5-payload-dev/websrv",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The project documents a BD-J/WebKit prerequisite rather than an exact firmware matrix."
+        }
+      ],
+      "requirements": [
+        "A compatible jailbreak and ps5-payload-elfldr already running."
+      ],
+      "warnings": [
+        "Upstream notes that launching homebrew while another homebrew is running can crash."
+      ],
+      "links": [
+        {
+          "label": "Releases",
+          "url": "https://github.com/ps5-payload-dev/websrv/releases"
+        }
+      ],
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "name": "ezRemote Client",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Requires websrv; the project does not publish an exact PS5 firmware/model matrix.",
+      "summary": "A PS5 file manager for connecting to FTP, SFTP, SMB, NFS, WebDAV and HTTP servers. It needs websrv and a working homebrew setup.",
+      "source": "https://github.com/cy33hc/ps5-ezremote-client",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Application prerequisites are documented; firmware support must be checked through the selected jailbreak, loader and websrv build."
+        }
+      ],
+      "requirements": [
+        "An exploited PS5 with the websrv payload running.",
+        "The application files installed under /data/homebrew as described upstream."
+      ],
+      "warnings": [
+        "Background downloads do not continue through Rest Mode.",
+        "Upstream warns that too many queued background installs can crash ezRemote Server."
+      ],
+      "links": [
+        {
+          "label": "Releases",
+          "url": "https://github.com/cy33hc/ps5-ezremote-client/releases"
+        }
+      ],
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "checkedDate": "2026-10-21",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "This host-side tool does not establish console firmware compatibility."
+        }
+      ],
+      "warnings": [
+        "Writing an image erases the target drive. Double-check the selected device."
+      ],
+      "links": [
+        {
+          "label": "Official downloads",
+          "url": "https://etcher.balena.io/"
+        },
+        {
+          "label": "PS5 Linux media instructions",
+          "url": "https://github.com/ps5-linux/ps5-linux-loader/blob/main/README.md"
+        }
+      ],
+      "name": "balenaEtcher",
+      "kind": "usb-tool",
+      "firmware": "USB media preparation; does not flash PS5 system firmware.",
+      "summary": "Writes a Linux image to a USB drive for booting PS5 Linux, then checks that the write completed. It runs on a computer and does not install PS5 system software.",
+      "source": "https://etcher.balena.io/",
+      "requirements": [
+        "A supported PS5 Linux image and a suitable external drive (upstream requires at least 64 GB)."
+      ]
+    },
+    {
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "checkedDate": "2026-10-21",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "This host-side tool does not establish console firmware compatibility."
+        }
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Project and distribution information",
+          "url": "https://github.com/Al-Azif/hermes-link"
+        }
+      ],
+      "name": "Hermes Link",
+      "kind": "usb-tool",
+      "firmware": "Network payload sender; not a USB firmware flasher or an initial jailbreak.",
+      "summary": "Sends payload data over a network to a PS5 that already has a compatible loader running. It needs that network loader and does not prepare USB media.",
+      "source": "https://github.com/Al-Azif/hermes-link",
+      "requirements": [
+        "A working exploit and payload loader on the PS5.",
+        "A matching payload and correct network address/port."
+      ]
+    },
+    {
+      "name": "RetroArch for PS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Requires a working PS5 homebrew environment; the project does not publish an app-specific firmware compatibility matrix.",
+      "summary": "One app for using emulators for older consoles and computers on a PS5 homebrew setup. The project lists 33 built cores for 44 systems; which games run depends on the core.",
+      "source": "https://github.com/SocialMDev/ps5_retroarch",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Multi-system: NES, Game Boy family, SNES, N64, GameCube/Wii, DS/3DS, PS1/PS2/PSP, Sega consoles, arcade, home computers, and more.",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Project requires a compatible jailbreak and launcher; no project-specific firmware or model test matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "Compatible PS5 jailbreak and homebrew launcher.",
+        "ShadowMountPlus 1.7 beta 4 or later is recommended for USB and extended-storage access."
+      ],
+      "warnings": [
+        "Alpha software; core and game compatibility varies.",
+        "No games, BIOS files, console firmware, or decryption keys are bundled; use your own legally obtained dumps."
+      ],
+      "links": [
+        {
+          "label": "Source and supported systems",
+          "url": "https://github.com/SocialMDev/ps5_retroarch"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/SocialMDev/ps5_retroarch/releases"
+        }
+      ],
+      "availability": "Published alpha build; upstream lists supported systems."
+    },
+    {
+      "name": "PS5SX2",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Upstream-reported tests: PS5 Pro 10.01 and 11.40; non-Pro PS5 models, including Slim, 6.02, 8.40, 10.01, 10.60, 11.40, 11.60, 12.00, and 12.70. These are test reports, not a guarantee.",
+      "summary": "Runs PlayStation 2 games in a native PS5 port of PCSX2. The developers publish console and firmware test reports; versions outside their table are not covered by those reports.",
+      "source": "https://github.com/mumer92/ps5sx2",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "PlayStation 2",
+      "compatibility": [
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [
+            "10.01",
+            "11.40"
+          ],
+          "status": "unverified",
+          "note": "Project reports PS5 Pro tests on these firmware versions"
+        },
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "6.02",
+            "8.40",
+            "10.01",
+            "10.60",
+            "11.40",
+            "11.60",
+            "12.00",
+            "12.70"
+          ],
+          "status": "unverified",
+          "note": "Project reports non-Pro PS5 tests, including Slim, on these firmware versions"
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with kstuff and the PS5SX2 Helper payload, plus ShadowMountPlus or the documented title-launch method.",
+        "A PS2 BIOS and game dumps supplied by the user."
+      ],
+      "warnings": [
+        "Game results vary and can regress between builds.",
+        "No BIOS, games, or keys are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source, test matrix, and game compatibility",
+          "url": "https://github.com/mumer92/ps5sx2"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/mumer92/ps5sx2/releases"
+        }
+      ],
+      "availability": "Published build; upstream reports tests on the listed model and firmware pairs."
+    },
+    {
+      "name": "PSXS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The project says development happens on firmware 13.60; it does not publish a broader tested firmware matrix.",
+      "summary": "Runs PlayStation 1 games in a native PS5 app with Beetle PSX HW and PCSX-ReARMed cores. It can choose a core per game and includes saves, Vulkan graphics and RetroAchievements.",
+      "source": "https://github.com/SynoPiia/PSXS5",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "PlayStation 1",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Firmware 13.60 is the stated development environment, not a published support matrix."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with etaHEN and kstuff, plus ShadowMountPlus or the documented helper route.",
+        "PS1 games supplied by the user; an optional PS1 BIOS improves compatibility."
+      ],
+      "warnings": [
+        "Hobby project; expect rough edges and title-specific compatibility differences.",
+        "No games or BIOS files are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and setup",
+          "url": "https://github.com/SynoPiia/PSXS5"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/SynoPiia/PSXS5/releases"
+        }
+      ],
+      "availability": "Published build; upstream describes a native PS1 app."
+    },
+    {
+      "name": "SwanStationPS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The project says development happens on firmware 13.60; it does not publish a broader tested firmware matrix.",
+      "summary": "Runs PlayStation 1 games in a standalone PS5 app based on SwanStation. It can share PSXS5 game and BIOS folders so both apps use the same files.",
+      "source": "https://github.com/darkxex/SwanStationPS5",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "PlayStation 1",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Firmware 13.60 is the stated development environment, not a published support matrix."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with etaHEN and kstuff, plus ShadowMountPlus.",
+        "PS1 game dumps; the built-in OpenBIOS is available, while a user-supplied BIOS may improve compatibility."
+      ],
+      "warnings": [
+        "Separate PS1 app that overlaps with PSXS5; it is not a new system-compatibility tier.",
+        "No games or copyrighted BIOS files are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and setup",
+          "url": "https://github.com/darkxex/SwanStationPS5"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/darkxex/SwanStationPS5/releases"
+        }
+      ],
+      "availability": "Published build; upstream describes a native PS1 app."
+    },
+    {
+      "name": "PSP5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "No project-specific firmware range is published; requires a working PS5 homebrew environment.",
+      "summary": "A standalone PS5 app for emulating PSP games, based on PPSSPP. The repository has source code but no downloadable release package.",
+      "source": "https://github.com/tsuramatsu1/psp5",
+      "kind": "emulation-research",
+      "runtime": "native",
+      "systems": "PlayStation Portable",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No project-specific firmware or model test matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A working PS5 homebrew environment and a title launcher.",
+        "A jailbreak service that grants folder listing for USB game libraries; otherwise games must be in the title's own folder."
+      ],
+      "warnings": [
+        "The repository has no GitHub release listed; treat it as a source project requiring a build.",
+        "No PSP games or system files are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and setup",
+          "url": "https://github.com/tsuramatsu1/psp5"
+        }
+      ],
+      "availability": "Source-only; repository has no GitHub release package."
+    },
+    {
+      "name": "PS5-ECAM",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The project says any firmware up to 13.60 where the console can run homebrew; the firmware entry point and HEN remain firmware-dependent.",
+      "summary": "An all-in-one app for emulating Wii U, Nintendo 3DS, Nintendo DS and Switch games. It bundles Cemu, Azahar, melonDS and Eden through ProsperoEden; the latest listed release is 5.0.0.",
+      "source": "https://github.com/premohq/PS5-ECAM",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Wii U, Nintendo 3DS, Nintendo DS, Nintendo Switch",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Project setup guide describes any firmware up to 13.60 if homebrew can be loaded; model-specific compatibility is not published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A PS5 that can run homebrew with etaHEN, OnionHEN, or an ELF loader on port 9021.",
+        "For Switch, user-supplied game keys and firmware are required; each system needs user-owned game dumps."
+      ],
+      "warnings": [
+        "Game compatibility and performance vary by emulator and title.",
+        "PS5CEMU-HAR was renamed to PS5-ECAM; do not list the legacy app as a separate current project.",
+        "No games, keys, or firmware are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and setup",
+          "url": "https://github.com/premohq/PS5-ECAM"
+        },
+        {
+          "label": "Latest release",
+          "url": "https://github.com/premohq/PS5-ECAM/releases/latest"
+        }
+      ],
+      "availability": "Published build (5.0.0); setup and firmware ceiling are upstream-reported."
+    },
+    {
+      "name": "ProsperoEden",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Requires a working PS5 homebrew environment; the project does not publish a complete supported-firmware matrix.",
+      "summary": "A native PS5 app for Nintendo Switch emulation, also used inside PS5-ECAM. The project labels it early alpha and asks testers to report their console and system software.",
+      "source": "https://github.com/Swordpdf/ProsperoEden",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Nintendo Switch",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Upstream describes an early alpha and asks testers to report model and system software; no full matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 and the title-launch/elevation setup documented by the project.",
+        "User-supplied Switch games, keys, and firmware."
+      ],
+      "warnings": [
+        "Early alpha; video, audio, controller input, and saves are reported working, but game compatibility and performance vary.",
+        "No Switch games, keys, or firmware are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and current status",
+          "url": "https://github.com/Swordpdf/ProsperoEden"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Swordpdf/ProsperoEden/releases"
+        }
+      ],
+      "availability": "Published early-alpha build; upstream asks testers to report model and system software."
+    },
+    {
+      "name": "Porpoise-X",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The project documents user reports on firmware 13.60 and does not publish a complete model/firmware matrix.",
+      "summary": "Uses Dolphin to emulate GameCube and Wii games on PS5, with a game library and per-game settings. Wii support and motion-heavy controls are marked experimental.",
+      "source": "https://github.com/premohq/Porpoise-X",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Nintendo GameCube, Wii, WiiWare, Virtual Console, and Wii channels",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "13.60"
+          ],
+          "status": "unverified",
+          "note": "Project documents user reports for selected jailbreaks on 13.60; no complete model matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A PS5 that can run homebrew, with a supported jailbreak/HEN and title launcher; ShadowMountPlus 1.7 beta 4 or newer is recommended.",
+        "User-owned GameCube/Wii game dumps."
+      ],
+      "warnings": [
+        "Wii support and motion-heavy controls are experimental; per-game performance varies.",
+        "No games, BIOS, or firmware are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source, requirements, and compatibility notes",
+          "url": "https://github.com/premohq/Porpoise-X"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/premohq/Porpoise-X/releases"
+        }
+      ],
+      "availability": "Published build; upstream lists selected firmware 13.60 reports."
+    },
+    {
+      "name": "Castation",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Only the authors' console and loader combinations are reported tested; firmware versions and broader model support are not published.",
+      "summary": "Runs Dreamcast games in a native PS5 app based on Flycast. It reads common disc-image formats; the project notes current speed and graphics limits.",
+      "source": "https://github.com/BrinooTk/castation",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Sega Dreamcast",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Authors report testing on their own consoles; other firmware and loader combinations are unverified."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with a homebrew environment and Homebrew Launcher.",
+        "User-owned Dreamcast disc images; a BIOS is optional because HLE BIOS is available."
+      ],
+      "warnings": [
+        "Reported emulation speed is about 96% of full speed, with occasional shader/JIT hitches and slowdowns in demanding scenes.",
+        "No games or BIOS files are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and known limitations",
+          "url": "https://github.com/BrinooTk/castation"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/BrinooTk/castation/releases"
+        }
+      ],
+      "availability": "Published build; authors report hardware testing, but model and firmware are unspecified."
+    },
+    {
+      "name": "PS5X360",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Development setup reports firmware 13.60; other firmware/model setups are unverified. The latest 0.6.0 package was not itself opened on a console before publication.",
+      "summary": "An experimental PS5 port of Xenia Canary for Xbox 360 games, with Vulkan graphics, audio and DualSense input. Game compatibility varies, and release 0.6.0 was not itself tested on a console.",
+      "source": "https://github.com/BrinooTk/PS5X360",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Xbox 360",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Project reports development on firmware 13.60 but does not provide a complete model matrix; latest package was not console-tested as a release."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A working PS5 homebrew environment, including the documented jailbreak, kstuff, and title launcher setup.",
+        "Xbox 360 game files supplied by the user; no Xbox 360 BIOS is required by the project."
+      ],
+      "warnings": [
+        "Experimental; crashes, visual errors, uneven performance, and title-specific failures are expected.",
+        "The latest package release is not a fresh hardware acceptance test; use its release notes for evidence limits.",
+        "Release notes state the v0.6.0 package was not opened on a console before publication; earlier development tests do not validate this exact build."
+      ],
+      "links": [
+        {
+          "label": "Source and development status",
+          "url": "https://github.com/BrinooTk/PS5X360"
+        },
+        {
+          "label": "Releases and test caveats",
+          "url": "https://github.com/BrinooTk/PS5X360/releases"
+        }
+      ],
+      "availability": "Published build (0.6.0); release states this package was not itself console-tested, hardware validation incomplete."
+    },
+    {
+      "name": "XPSemu",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The project reports testing on a PS5 Fat but does not publish its firmware version or a broader model matrix.",
+      "summary": "An experimental native PS5 app for original Xbox games, based on xemu. The Alpha 2 report says it boots and runs selected games on a PS5 Fat; game support varies.",
+      "source": "https://github.com/ZiZc3/XPSemu",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Original Xbox",
+      "compatibility": [
+        {
+          "models": [
+            "original"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Upstream reports Alpha 2 tests on a PS5 Fat; firmware is not stated."
+        },
+        {
+          "models": [
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No model-specific test evidence was found."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with the required helper payload and ShadowMountPlus.",
+        "User-dumped original Xbox system files and games."
+      ],
+      "warnings": [
+        "Alpha; performance and compatibility vary, and some games remain slow or incomplete.",
+        "No BIOS, games, or keys are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and compatibility",
+          "url": "https://github.com/ZiZc3/XPSemu"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/ZiZc3/XPSemu/releases"
+        }
+      ],
+      "availability": "Published alpha build; upstream reports tests on a PS5 Fat, with firmware unspecified."
+    },
+    {
+      "name": "rpcs3-PS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "The repository reports a PS5 Pro test on firmware 13.60; no other console/firmware combinations are documented.",
+      "summary": "An early native PS5 port of RPCS3 for PlayStation 3 games. The developer reports Need for Speed Carbon playable in one PS5 Pro test on 13.60; this is source code, not an official RPCS3 release.",
+      "source": "https://github.com/lavavex/rpcs3-PS5",
+      "kind": "emulation-research",
+      "runtime": "native",
+      "systems": "PlayStation 3",
+      "compatibility": [
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [
+            "13.60"
+          ],
+          "status": "unverified",
+          "note": "The repository reports this single-console test"
+        },
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No model-specific test evidence was found."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A PS5 homebrew environment; building requires a Linux/Arch-like development host, the PS5 payload toolchain, and about 20 GB of disk space.",
+        "User-supplied PS3 firmware and game dumps."
+      ],
+      "warnings": [
+        "Source only and personal use only; the repository says built title binaries must not be redistributed because of its license mix.",
+        "Experimental, with crashes and freezes expected; most games are untested."
+      ],
+      "links": [
+        {
+          "label": "Source and hardware test notes",
+          "url": "https://github.com/lavavex/rpcs3-PS5"
+        }
+      ],
+      "availability": "Source-only; no GitHub release/package. Developer reports one PS5 Pro test on 13.60."
+    },
+    {
+      "name": "KB-RPCS3",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "No supported firmware or model matrix is published.",
+      "summary": "A separate early project to run RPCS3 as a native PS5 app for PlayStation 3 games. Alpha 0.1.0 is source code only, and its release says the combined executable has not passed final PS5 testing.",
+      "source": "https://github.com/kamb205/KB-RPCS3",
+      "kind": "emulation-research",
+      "runtime": "native",
+      "systems": "PlayStation 3",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No model/firmware hardware compatibility matrix was found."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A working PS5 homebrew environment and a source build using the documented PS5 toolchain."
+      ],
+      "warnings": [
+        "Alpha source release; no downloadable PS5 package is available, and the project identifies an unresolved license mix that prevents binary distribution.",
+        "Expect crashes; no games or firmware are bundled.",
+        "Do not present as an installable emulator: its release contains source and checksums, not a PS5 title package."
+      ],
+      "links": [
+        {
+          "label": "Source and licensing status",
+          "url": "https://github.com/kamb205/KB-RPCS3"
+        },
+        {
+          "label": "Alpha source release",
+          "url": "https://github.com/kamb205/KB-RPCS3/releases/tag/v0.1.0-alpha"
+        }
+      ],
+      "availability": "Source-only alpha; release has no PS5 package and says the combined executable has not passed final PS5 testing."
+    },
+    {
+      "name": "Vita3K for PS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "No project-specific PS5 firmware or model compatibility matrix is published.",
+      "summary": "An experimental PS5 port of Vita3K for PlayStation Vita games, with a controller-driven interface. Its README says games can run, while the porting plan still lists the first hardware boot as pending.",
+      "source": "https://github.com/tsuramatsu1/Vita3K-PS5",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "PlayStation Vita",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No firmware/model matrix is published, and the README conflicts with the porting plan about hardware validation."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with the PS5SX2 Helper, kstuff, and ShadowMountPlus, as documented by the project.",
+        "User-provided Vita firmware, game files, and required licenses."
+      ],
+      "warnings": [
+        "No games, firmware, or licenses are bundled.",
+        "Experimental alpha package. README claims games boot and run, but the porting plan still lists first hardware boot as an acceptance task; resolve this source conflict before describing it as hardware-validated."
+      ],
+      "links": [
+        {
+          "label": "PS5 port source and requirements",
+          "url": "https://github.com/tsuramatsu1/Vita3K-PS5"
+        },
+        {
+          "label": "PS5 porting plan and status",
+          "url": "https://github.com/tsuramatsu1/Vita3K-PS5/blob/ps5/docs/ps5-porting-plan.md"
+        },
+        {
+          "label": "Published alpha package",
+          "url": "https://github.com/tsuramatsu1/Vita3K-PS5/releases/tag/alpha"
+        }
+      ],
+      "availability": "Published alpha package (PPSA99300.zip); README claims games run, while porting plan still lists first hardware boot as pending."
+    },
+    {
+      "name": "Ruffle Flash PS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Requires a jailbroken PS5 with kstuff and a helper; no project-specific firmware matrix is published.",
+      "summary": "Runs Flash games and animations in a native PS5 app using Ruffle, an open-source Flash Player emulator. It supports ActionScript 1, 2 and 3.",
+      "source": "https://github.com/ZiZc3/Ruffle-Flash-PS5",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Adobe Flash / SWF content",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No project-specific firmware or model test matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A jailbroken PS5 with kstuff, a helper payload, and ShadowMountPlus.",
+        "User-provided SWF files."
+      ],
+      "warnings": [
+        "Compatibility follows Ruffle and varies by content; H.264 Flash video is unsupported and demanding ActionScript 3 games can run slowly.",
+        "No SWF content is bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and requirements",
+          "url": "https://github.com/ZiZc3/Ruffle-Flash-PS5"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/ZiZc3/Ruffle-Flash-PS5/releases"
+        }
+      ],
+      "availability": "Published build; upstream lists Flash feature support."
+    },
+    {
+      "name": "EmuC0re",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Project claims support on PS5 firmware up to 13.00 through LuaC0re; it does not claim later firmware support.",
+      "summary": "A proof-of-concept NES emulator that runs as a small userland payload through LuaC0re, without a kernel exploit. The source claims support through firmware 13.00 and lists supported NES mappers.",
+      "source": "https://github.com/egycnq/EmuC0re",
+      "kind": "emulation-research",
+      "runtime": "native",
+      "systems": "Nintendo Entertainment System (NES)",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Project claims firmware support up to 13.00 and requires LuaC0re; model-specific tests are not listed."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "LuaC0re and the documented PS2 game trigger (Star Wars Racer Revenge, US CUSA03474 or EU CUSA03492).",
+        "A PC on the same network to send the payload and upload user-provided NES ROMs."
+      ],
+      "warnings": [
+        "Proof of concept; games using unsupported NES mappers will not run.",
+        "No games are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source, firmware claim, and mapper support",
+          "url": "https://github.com/egycnq/EmuC0re"
+        }
+      ],
+      "availability": "Source-only userland payload; the firmware ceiling is a project claim."
+    },
+    {
+      "name": "LuaGB",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Requires LuaC0re; the project does not publish a PS5 firmware range.",
+      "summary": "A Game Boy and Game Boy Color emulator that runs as shellcode through LuaC0re. It uses the fixGB core and reads games and saves from savedata; the project gives no PS5 firmware range.",
+      "source": "https://github.com/soniciso1/LuaGB",
+      "kind": "emulation-research",
+      "runtime": "native",
+      "systems": "Nintendo Game Boy, Game Boy Color, Game Boy Sound System",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No project-specific firmware or model test matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "LuaC0re set up with its loader, Star Wars Racer Revenge (US CUSA03474 or EU CUSA03492), and a PC on the same network.",
+        "ROMs must be placed in the game's savedata container as documented."
+      ],
+      "warnings": [
+        "Small source project; no formal release or compatibility matrix is published.",
+        "No games are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and requirements",
+          "url": "https://github.com/soniciso1/LuaGB"
+        }
+      ],
+      "availability": "Source-only project; no formal release or firmware matrix."
+    },
+    {
+      "name": "PS5 Linux (emulation host)",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "PS5 Phat/Slim: 3.00, 3.10, 3.20, 3.21, 4.00, 4.02, 4.03, 4.50, 4.51, 5.00, 5.02, 5.10, 5.50, 6.00, 6.02, 6.50, 7.00, 7.01, 7.20, 7.40, 7.60, 7.61, 13.00, 13.20, or 13.60. PS5 Pro: 13.60 only. M.2 support is unavailable on 3.xx listed by the project.",
+      "summary": "Boots Linux from USB, then lets you install desktop emulators on the PS5. This is a way to run Linux emulators, not a native PS5 emulator; the model and firmware list is below.",
+      "source": "https://github.com/ps5-linux/ps5-linux-loader",
+      "kind": "emulation",
+      "runtime": "linux",
+      "systems": "Linux emulators installed separately from the selected distribution; no emulator is bundled with this project.",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "3.00",
+            "3.10",
+            "3.20",
+            "3.21",
+            "4.00",
+            "4.02",
+            "4.03",
+            "4.50",
+            "4.51",
+            "5.00",
+            "5.02",
+            "5.10",
+            "5.50",
+            "6.00",
+            "6.02",
+            "6.50",
+            "7.00",
+            "7.01",
+            "7.20",
+            "7.40",
+            "7.60",
+            "7.61",
+            "13.00",
+            "13.20",
+            "13.60"
+          ],
+          "status": "unverified",
+          "note": "Firmware list is from the upstream loader README. M.2 support is unavailable on 3.00–3.21"
+        },
+        {
+          "models": [
+            "pro"
+          ],
+          "supportedFirmware": [
+            "13.60"
+          ],
+          "status": "unverified",
+          "note": "Upstream lists PS5 Pro 13.60 only"
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "A supported PS5 firmware/model combination, the PS5-Linux loader, a USB boot drive, and Linux peripherals as documented.",
+        "A Linux distribution image; install any emulator packages separately."
+      ],
+      "warnings": [
+        "This is a Linux host path, not a native PS5 emulator and not a promise that every desktop emulator package or game works.",
+        "Requires re-running the exploit to boot Linux; project does not support firmware 14.00 or higher."
+      ],
+      "links": [
+        {
+          "label": "Loader source and supported firmware",
+          "url": "https://github.com/ps5-linux/ps5-linux-loader"
+        },
+        {
+          "label": "Current PS5 Linux images",
+          "url": "https://github.com/ps5-linux/ps5-linux-image/releases"
+        }
+      ],
+      "availability": "Linux host, not an emulator; loader and distro images are published with an upstream firmware list."
+    },
+    {
+      "kind": "rollback",
+      "name": "PS5 firmware rollback status — no verified general method",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "No general rollback firmware support established",
+      "summary": "Records the documented PS5 downgrade limit: the sources say an older system PUP will not install, and no general rollback method is documented. This is a status reference, not a downgrade tool.",
+      "source": "https://www.psdevwiki.com/ps5/System_Software_Installation",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No PS5 model-specific rollback method was verified; the installation guide says lower-version PUPs do not install."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [],
+      "warnings": [
+        "An archived older PUP is not a downgrade method. Sony reinstall/update and PS4 revert procedures must not be presented as PS5 rollback.",
+        "Any isolated rollback claim needs independent, reproducible confirmation before being treated as usable."
+      ],
+      "links": [
+        {
+          "label": "PS5 DevWiki installation limits",
+          "url": "https://www.psdevwiki.com/ps5/System_Software_Installation"
+        },
+        {
+          "label": "Upstream ps5-linux firmware notes (states downgrade is not possible)",
+          "url": "https://github.com/ps5-linux/ps5-linux-loader"
+        },
+        {
+          "label": "Sony official update and reinstall instructions",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps5/system-software/"
+        }
+      ]
+    },
+    {
+      "kind": "recovery",
+      "name": "Sony PS5 system software update and reinstall",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Latest official system software: 26.07-14.20.00, checked on Sony's features page. Update and reinstall files are different.",
+      "summary": "Sony’s official instructions for updating PS5 from USB or reinstalling system software in Safe Mode. Reinstalling erases console data; it does not provide an older-firmware selector.",
+      "source": "https://www.playstation.com/en-us/support/hardware/ps5/system-software/",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "14.20"
+          ],
+          "status": "documented",
+          "note": "Official PS5 recovery/update track, shared by the PS5 family; not a claim that reinstall accepts older firmware."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "FAT32- or exFAT-formatted USB drive with PS5/UPDATE/PS5UPDATE.PUP; use Safe Mode as Sony documents."
+      ],
+      "warnings": [
+        "Sony says system software reinstallation deletes all PS5 data.",
+        "Sony warns an interrupted installation can damage the console and recommends official Sony update data and documented methods."
+      ],
+      "links": [
+        {
+          "label": "Sony current system software features",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps5/system-software-info/"
+        }
+      ]
+    },
+    {
+      "kind": "recovery",
+      "name": "Darthsternie's PS5 firmware archive",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Historical system and recovery PUP archive; not an authority for the current release or proof of downgrade support.",
+      "summary": "A third-party archive of historical PS5 update and recovery PUP files with checksums. An older file in the archive does not make a PS5 downgrade possible.",
+      "source": "https://darthsternie.net/ps5-firmwares/",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The archive does not give a CFI model compatibility matrix or a downgrade bypass."
+        }
+      ],
+      "checkedDate": "2026-10-21",
+      "requirements": [],
+      "warnings": [
+        "This is a third-party archive, not Sony. Its listed MD5 values are not a substitute for independent authenticity checks.",
+        "Historical PUPs do not enable downgrading; follow the official Sony install path only when its version checks accept the package.",
+        "The recovery PUP reinstall path erases console data."
+      ],
+      "links": [
+        {
+          "label": "Upstream ps5-linux guide (references archive; says downgrade is not possible)",
+          "url": "https://github.com/ps5-linux/ps5-linux-loader"
+        },
+        {
+          "label": "Community SHA-256 and MD5 checksum list",
+          "url": "https://github.com/MewX/ps5-official-firmware-list"
+        },
+        {
+          "label": "Sony official update and reinstall instructions",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps5/system-software/"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sony original PS5 hardware specifications",
+      "url": "https://blog.playstation.com/2020/03/18/unveiling-new-details-of-playstation-5-hardware-technical-specs/"
+    },
+    {
+      "label": "Sony PS5 Slim announcement (2023)",
+      "url": "https://blog.playstation.com/2023/10/10/new-look-for-ps5-console-this-holiday-season/"
+    },
+    {
+      "label": "Sony PS5 Pro launch (2024)",
+      "url": "https://blog.playstation.com/2024/11/07/getting-started-with-playstation-5-pro-out-today/"
+    },
+    {
+      "label": "Sony PS5 system software updates",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps5/system-software-info/"
+    },
+    {
+      "label": "Sony PS5 model and setup guidance",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps5-get-started-set-up/"
+    },
+    {
+      "label": "Sony PS5 detachable disc-drive compatibility",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps5-disc-drive-set-up/"
+    },
+    {
+      "label": "Sony PS5 Pro specifications",
+      "url": "https://www.playstation.com/content/dam/global_pdc/en-hr/corporate/support/manuals/ps5-docs/7100/CFI-71XX_PS5_Safety_Guide_Web%24en-hr.pdf"
+    },
+    {
+      "label": "Sony PS5 Slim CFI-21xx manual",
+      "url": "https://www.playstation.com/content/dam/global_pdc/pl/corporate/support/manuals/ps5-docs/2100ab/CFI-21XX_PS5_Instruction_Manual_Web%24pl.pdf"
+    },
+    {
+      "label": "UMTX2 upstream repository",
+      "url": "https://github.com/idlesauce/umtx2"
+    },
+    {
+      "label": "Relapse upstream repository",
+      "url": "https://github.com/ntfargo/Relapse-Exploit"
+    },
+    {
+      "label": "Y2JB upstream repository",
+      "url": "https://github.com/Gezine/Y2JB"
+    },
+    {
+      "label": "PSFree / Lapse source",
+      "url": "https://github.com/Al-Azif/psfree-lapse"
+    },
+    {
+      "label": "PS5 Linux loader",
+      "url": "https://github.com/ps5-linux/ps5-linux-loader"
+    },
+    {
+      "label": "etaHEN upstream repository",
+      "url": "https://github.com/etaHEN/etaHEN"
+    },
+    {
+      "label": "PS5 Payload SDK",
+      "url": "https://github.com/ps5-payload-dev/sdk"
+    },
+    {
+      "label": "PS5 Payload ELF Loader",
+      "url": "https://github.com/ps5-payload-dev/elfldr"
+    },
+    {
+      "label": "Itemzflow",
+      "url": "https://github.com/LightningMods/Itemzflow"
+    },
+    {
+      "label": "Per-firmware PS5 offsets",
+      "url": "https://github.com/idlesauce/umtx2/tree/main/document/en/ps5/offsets"
+    },
+    {
+      "label": "P2JB (Y2JB chain)",
+      "url": "https://github.com/DuskFal1/p2jb"
+    },
+    {
+      "label": "Remote Lua Loader (save game)",
+      "url": "https://github.com/n0llptr/remote_lua_loader"
+    },
+    {
+      "label": "PS5 / Slim / Pro setup",
+      "url": "https://github.com/n0llptr/remote_lua_loader/blob/main/SETUP.md"
+    },
+    {
+      "label": "Supported games",
+      "url": "https://github.com/n0llptr/remote_lua_loader/blob/main/README.md"
+    },
+    {
+      "label": "BD-JB5",
+      "url": "https://github.com/Gezine/BD-JB5"
+    },
+    {
+      "label": "PS5 Linux",
+      "url": "https://github.com/ps5-linux/ps5-linux-loader/blob/main/README.md"
+    },
+    {
+      "label": "kstuff-lite",
+      "url": "https://github.com/EchoStretch/kstuff-lite"
+    },
+    {
+      "label": "etaHEN 2.5B Unified r1 (unofficial port)",
+      "url": "https://github.com/GronedWaffel/etahen-11.00-13.60/releases"
+    },
+    {
+      "label": "Byepervisor Reborn",
+      "url": "https://github.com/PS5Dev/Byepervisor-Reborn"
+    },
+    {
+      "label": "PS5 Payload Web Server",
+      "url": "https://github.com/ps5-payload-dev/websrv"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/ps5-payload-dev/websrv/releases"
+    },
+    {
+      "label": "ezRemote Client",
+      "url": "https://github.com/cy33hc/ps5-ezremote-client"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/cy33hc/ps5-ezremote-client/releases"
+    },
+    {
+      "label": "Sony 30th Anniversary variants",
+      "url": "https://blog.playstation.com/2024/09/19/celebrating-30-years-of-playstation-with-a-nostalgic-look/"
+    },
+    {
+      "label": "Alternative Y2JB port (different firmware/build limits)",
+      "url": "https://github.com/matem6/P2JB-Y2JB-Porting"
+    },
+    {
+      "label": "Upstream releases",
+      "url": "https://github.com/etaHEN/etaHEN/releases"
+    },
+    {
+      "label": "balenaEtcher",
+      "url": "https://etcher.balena.io/"
+    },
+    {
+      "label": "Hermes Link",
+      "url": "https://github.com/Al-Azif/hermes-link"
+    },
+    {
+      "label": "RetroArch for PS5",
+      "url": "https://github.com/SocialMDev/ps5_retroarch"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/SocialMDev/ps5_retroarch/releases"
+    },
+    {
+      "label": "PS5SX2",
+      "url": "https://github.com/mumer92/ps5sx2"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/mumer92/ps5sx2/releases"
+    },
+    {
+      "label": "PSXS5",
+      "url": "https://github.com/SynoPiia/PSXS5"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/SynoPiia/PSXS5/releases"
+    },
+    {
+      "label": "SwanStationPS5",
+      "url": "https://github.com/darkxex/SwanStationPS5"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/darkxex/SwanStationPS5/releases"
+    },
+    {
+      "label": "PSP5",
+      "url": "https://github.com/tsuramatsu1/psp5"
+    },
+    {
+      "label": "PS5-ECAM",
+      "url": "https://github.com/premohq/PS5-ECAM"
+    },
+    {
+      "label": "Latest release",
+      "url": "https://github.com/premohq/PS5-ECAM/releases/latest"
+    },
+    {
+      "label": "ProsperoEden",
+      "url": "https://github.com/Swordpdf/ProsperoEden"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/Swordpdf/ProsperoEden/releases"
+    },
+    {
+      "label": "Porpoise-X",
+      "url": "https://github.com/premohq/Porpoise-X"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/premohq/Porpoise-X/releases"
+    },
+    {
+      "label": "Castation",
+      "url": "https://github.com/BrinooTk/castation"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/BrinooTk/castation/releases"
+    },
+    {
+      "label": "PS5X360",
+      "url": "https://github.com/BrinooTk/PS5X360"
+    },
+    {
+      "label": "Releases and test caveats",
+      "url": "https://github.com/BrinooTk/PS5X360/releases"
+    },
+    {
+      "label": "XPSemu",
+      "url": "https://github.com/ZiZc3/XPSemu"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/ZiZc3/XPSemu/releases"
+    },
+    {
+      "label": "rpcs3-PS5",
+      "url": "https://github.com/lavavex/rpcs3-PS5"
+    },
+    {
+      "label": "KB-RPCS3",
+      "url": "https://github.com/kamb205/KB-RPCS3"
+    },
+    {
+      "label": "Alpha source release",
+      "url": "https://github.com/kamb205/KB-RPCS3/releases/tag/v0.1.0-alpha"
+    },
+    {
+      "label": "Vita3K for PS5",
+      "url": "https://github.com/tsuramatsu1/Vita3K-PS5"
+    },
+    {
+      "label": "PS5 porting plan and status",
+      "url": "https://github.com/tsuramatsu1/Vita3K-PS5/blob/ps5/docs/ps5-porting-plan.md"
+    },
+    {
+      "label": "Published alpha package",
+      "url": "https://github.com/tsuramatsu1/Vita3K-PS5/releases/tag/alpha"
+    },
+    {
+      "label": "Ruffle Flash PS5",
+      "url": "https://github.com/ZiZc3/Ruffle-Flash-PS5"
+    },
+    {
+      "label": "Releases",
+      "url": "https://github.com/ZiZc3/Ruffle-Flash-PS5/releases"
+    },
+    {
+      "label": "EmuC0re",
+      "url": "https://github.com/egycnq/EmuC0re"
+    },
+    {
+      "label": "LuaGB",
+      "url": "https://github.com/soniciso1/LuaGB"
+    },
+    {
+      "label": "Current PS5 Linux images",
+      "url": "https://github.com/ps5-linux/ps5-linux-image/releases"
+    },
+    {
+      "label": "PS5 firmware rollback status — no verified general method",
+      "url": "https://www.psdevwiki.com/ps5/System_Software_Installation"
+    },
+    {
+      "label": "Sony official update and reinstall instructions",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps5/system-software/"
+    },
+    {
+      "label": "Darthsternie's PS5 firmware archive",
+      "url": "https://darthsternie.net/ps5-firmwares/"
+    },
+    {
+      "label": "Community SHA-256 and MD5 checksum list",
+      "url": "https://github.com/MewX/ps5-official-firmware-list"
+    }
+  ],
+  "media": {
+    "logo": {
+      "src": "consoles/ps5-logo.svg",
+      "alt": "PlayStation 5 logo and wordmark",
+      "width": 512,
+      "height": 111,
+      "page": "https://commons.wikimedia.org/wiki/File:PlayStation_5_logo_and_wordmark.svg",
+      "artist": "Sony Interactive Entertainment",
+      "license": "Public domain as a simple text logo (PD-textlogo); PlayStation is a Sony trademark",
+      "sourceURL": "https://upload.wikimedia.org/wikipedia/commons/c/cb/PlayStation_5_logo_and_wordmark.svg",
+      "dimensions": {
+        "commonsNominal": "512x111",
+        "svgViewBox": "0 0 990.96 215.56"
+      }
+    },
+    "photo": {
+      "src": "consoles/ps5-console.webp",
+      "alt": "Original PlayStation 5 disc edition console with a DualSense controller",
+      "width": 602,
+      "height": 900,
+      "page": "https://commons.wikimedia.org/wiki/File:Playstation_5_base_edition_with_controller_(original).jpg",
+      "artist": "Howardcorn33",
+      "license": "CC0 1.0 Universal Public Domain Dedication",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceURL": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Playstation_5_base_edition_with_controller_%28original%29.jpg",
+      "dimensions": {
+        "source": "2592x3872 JPEG",
+        "local": "602x900 WebP"
+      },
+      "changes": "Resized and converted from JPEG to WebP; uncropped"
+    }
+  },
+  "highlights": [
+    {
+      "title": "Latest Jailbreak",
+      "name": "Relapse",
+      "firmware": "Up to firmware 13.60",
+      "summary": "Relapse is a software exploit that can open a route to run unofficial apps. Its firmware list has gaps, and Pro support is not separately stated.",
+      "source": "https://github.com/ntfargo/Relapse-Exploit",
+      "checkedDate": "2026-10-21",
+      "target": "console-entrypoints-section"
+    },
+    {
+      "title": "Latest Linux port",
+      "name": "ps5-linux",
+      "firmware": "Original / Slim: listed versions through 13.60 · Pro: 13.60",
+      "summary": "PS5 Linux boots a Linux desktop from an external USB drive, turning the console into a PC-style system. The firmware list differs by model; Pro is listed only on 13.60.",
+      "source": "https://github.com/ps5-linux/ps5-linux-loader",
+      "checkedDate": "2026-10-21",
+      "target": "console-linux-section"
+    }
+  ],
+  "communities": [
+    {
+      "name": "etaHEN / PKG-Zone support Discord",
+      "url": "https://discord.gg/xs2F46tKzK",
+      "description": "Project support, payload questions and etaHEN troubleshooting.",
+      "source": "https://github.com/etaHEN/etaHEN",
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "name": "PS5 Linux support & development",
+      "url": "https://github.com/ps5-linux/ps5-linux-loader/issues",
+      "description": "Project issue tracker and development. Follow the source page for current community invitations; the previously published Discord invite was unavailable when checked.",
+      "source": "https://github.com/ps5-linux/ps5-linux-loader",
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "name": "GBAtemp PS5 community",
+      "url": "https://gbatemp.net/forums/sony-playstation-5.298/",
+      "description": "Public PS5 homebrew and exploit discussion; community claims need checking against project sources.",
+      "source": "https://gbatemp.net/forums/sony-playstation-5.298/",
+      "checkedDate": "2026-10-21"
+    },
+    {
+      "name": "PS5 exploit guide discussion",
+      "url": "https://gbatemp.net/threads/ps5-exploit-guide.613891/",
+      "description": "Long-running community guide and discussion with firmware-specific notes.",
+      "source": "https://gbatemp.net/threads/ps5-exploit-guide.613891/",
+      "checkedDate": "2026-10-21"
+    }
+  ]
+}

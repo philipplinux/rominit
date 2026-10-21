@@ -6,12 +6,14 @@ import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
 import { loadCatalog } from './load-catalog.mjs';
 import { OSES } from '../src/os/index.js';
+import { CONSOLES } from '../src/consoles/index.js';
 
 const { devices, errors } = await loadCatalog();
 assert(!errors.length, `Catalog problems:\n${errors.join('\n')}`);
 
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist/catalog', { recursive: true });
+await mkdir('dist/catalog/consoles', { recursive: true });
 // Ship only runtime source and metadata; credentials stay in the OS store.
 execFileSync('tar', ['-czf', 'dist/rominit-cli.tar.gz', '--transform=s,^,rominit-cli/,', 'bin', 'src', 'scripts', 'catalog', 'site/bench', 'package.json', 'package-lock.json', 'README.md', 'LICENSE']);
 // The page loads the small index first, then one file per picked device.
@@ -19,6 +21,7 @@ const index = devices.map(({ codename, category, vendor, name, series, family, v
   roms: roms.filter(r => r.origin !== 'stock').map(({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external }) => ({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external: !!external })) }));
 await writeFile('dist/catalog/index.json', JSON.stringify(index));
 for (const device of devices) await writeFile(`dist/catalog/${device.codename}.json`, JSON.stringify(device));
+for (const console of CONSOLES) await writeFile(`dist/catalog/consoles/${console.id}.json`, JSON.stringify(console));
 
 await cp('site/style.css', 'dist/style.css');
 
@@ -26,11 +29,13 @@ await cp('site/logos', 'dist/logos', { recursive: true });
 await cp('site/shots', 'dist/shots', { recursive: true });
 await cp('site/phones', 'dist/phones', { recursive: true });
 await cp('site/avatars', 'dist/avatars', { recursive: true });
+await cp('site/consoles', 'dist/consoles', { recursive: true });
 await cp('site/bench', 'dist/bench', { recursive: true });
 await writeFile('dist/404.html', '<!doctype html><meta charset="utf-8"><title>Not found · ROMinit</title><p>Not found. <a href="/">ROMinit</a></p>\n'); // without it Pages answers every missing path with index.html
 await build({ entryPoints: ['site/app.js'], outfile: 'dist/app.js', bundle: true,
   format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 await build({ entryPoints: ['site/os.js'], outfile: 'dist/os.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
+await build({ entryPoints: ['site/console.js'], outfile: 'dist/console.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 // ?v=<content hash> so a redeploy is picked up despite the host's cache
 const version = async file => createHash('sha256').update(await readFile(`dist/${file}`)).digest('hex').slice(0, 10);
 let html = await readFile('site/index.html', 'utf8');
@@ -55,7 +60,21 @@ for (const os of OSES) {
   await writeFile(`dist/${os.id}.html`, osHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
 }
 
+// Console pages share one research template; the catalog owns facts and sources, not flash recipes.
+const consoleTemplate = await readFile('site/console.html', 'utf8');
+for (const file of ['console.js', 'style.css']) assert(consoleTemplate.includes(`"./${file}"`), `console.html lacks ${file}`);
+for (const console of CONSOLES) {
+  let consoleHtml = consoleTemplate;
+  for (const file of ['console.js', 'style.css']) consoleHtml = consoleHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
+  const stamp = { ID: console.id, NAME: console.name, DESCRIPTION: console.summary };
+  await writeFile(`dist/${console.id}.html`, consoleHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
+}
+
 const notices = OSES.flatMap(os => os.page.credits);
+for (const console of CONSOLES) for (const media of Object.values(console.media)) {
+  assert(existsSync(`site/${media.src}`), `missing ${media.src}`);
+  notices.push(`${media.src}\n${media.artist}, ${media.page}, ${media.license}.`);
+}
 for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash-wasm/LICENSE', 'hash-wasm/src/sha256.c', '@napi-rs/keyring/LICENSE',
   '@lineageos-infra/libmjolnir/LICENSE', '@yume-chan/adb/LICENSE', '@yume-chan/adb-daemon-webusb/LICENSE',
   '@yume-chan/adb-credential-web/LICENSE', '@yume-chan/stream-extra/LICENSE', '@yume-chan/struct/LICENSE',
@@ -73,4 +92,4 @@ for (const { photo } of devices) if (photo) {
     : `${photo.src}\nPhoto by ${photo.artist}, ${photo.page}, ${photo.license}; resized and converted to WebP${photo.license === 'CC0' ? '' : `, this copy under the same license`}.`);
 }
 await writeFile('dist/THIRD-PARTY-NOTICES.txt', notices.join('\n\n'));
-console.log(`built dist/: ${devices.length} devices, ${devices.reduce((n, d) => n + d.roms.length, 0)} ROMs`);
+console.log(`built dist/: ${devices.length} devices, ${devices.reduce((n, d) => n + d.roms.length, 0)} ROMs, ${CONSOLES.length} console families`);
