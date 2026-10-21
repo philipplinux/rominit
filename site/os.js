@@ -22,7 +22,7 @@ const sizes = bytes => `${(bytes / 1024 ** 2).toFixed(1)} MiB`;
 for (const name of [...new Set(osArchitectures(OS).map(arch => ARCH_FAMILY[arch]))])
   document.getElementById('alpine-architectures')?.append(h('span', { className: 'architecture-tag', textContent: name }));
 for (const text of OS.requirements?.badges ?? []) // system requirements, from the OS's own docs
-  document.getElementById('os-reqs')?.append(h('a', { className: 'architecture-tag', href: OS.requirements.source, target: '_blank', rel: 'noopener noreferrer', title: `System requirements, checked ${OS.requirements.checked}`, textContent: text }));
+  document.getElementById('os-reqs')?.append(h('a', { className: 'architecture-tag', href: OS.requirements.source, target: '_blank', rel: 'noopener noreferrer', title: `Minimum (checked ${OS.requirements.checked}). ${OS.requirements.note ?? ''}`, textContent: text }));
 editionSelect.append(...OS.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
 document.title = `${OS.name} · OS · ROMinit`;
 const logo = /** @type {HTMLImageElement} */ (byId('os-logo'));
