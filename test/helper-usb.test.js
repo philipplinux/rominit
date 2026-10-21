@@ -55,14 +55,14 @@ test('USB API revalidates sessions, rejects untrusted requests and payloads, and
         throw Object.assign(Error('private publisher mismatch detail'), { status: 409, code: 'USB_UNVERIFIED' });
       return { state: 'pending', log: [], drive: 'disk-1', method: 'ventoy' };
     },
-    status: async () => { calls.push(['status']); return { state: 'idle' }; },
+    status: async () => { calls.push(['status']); return { state: 'succeeded', jobId: 'j'.repeat(43), reportStatus: 'pending' }; },
   };
   let credentialErrors = 0;
   const { helper, token } = await start(t, { usbMedia, onCredentialError: () => credentialErrors++ });
 
   const siteStatus = await send(helper, '/status', { headers: auth(token) });
   assert.equal(siteStatus.status, 200);
-  assert.deepEqual(JSON.parse(siteStatus.body).capabilities, ['bench', 'bench-targets', 'bench-sound', 'usb-media', 'usb-images', 'usb-unverified', 'usb-direct']);
+  assert.deepEqual(JSON.parse(siteStatus.body).capabilities, ['bench', 'bench-targets', 'bench-sound', 'usb-media', 'usb-images', 'usb-unverified', 'usb-environment', 'usb-direct']);
   const preflight = await send(helper, '/usb/plan', { method: 'OPTIONS', headers: {
     'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'authorization, content-type',
     'Access-Control-Request-Private-Network': 'true',
@@ -83,6 +83,8 @@ test('USB API revalidates sessions, rejects untrusted requests and payloads, and
     ['/usb/write', { planId: 'plan-1', confirm: 7 }],
     ['/usb/write', { planId: 'plan-1', confirm: 'ERASE', allowUnverified: 'true' }],
     ['/usb/write', { planId: 'plan-1', confirm: 'ERASE', allowUnverified: 1 }],
+    ['/usb/write', { planId: 'plan-1', confirm: 'ERASE', browser: { browser: 'Chrome 123', browserVersion: '123', browserOs: 'linux', browserOsVersion: '6.12' } }],
+    ['/usb/write', { planId: 'plan-1', confirm: 'ERASE', browser: { browser: 'chrome', browserVersion: '123', browserOs: 'linux', browserOsVersion: '6.12', extra: 'custom' } }],
   ]) {
     assert.equal((await send(helper, path, post(token, body))).status, 400);
   }
@@ -112,18 +114,20 @@ test('USB API revalidates sessions, rejects untrusted requests and payloads, and
   assert.equal(blockedMismatch.status, 409);
   assert.match(blockedMismatch.body, /does not match the publisher size or SHA-256/);
   assert.doesNotMatch(blockedMismatch.body, /private publisher mismatch detail/);
-  const acceptedMismatch = await send(helper, '/usb/write', post(token, { planId: 'mismatch', confirm: 'ERASE', allowUnverified: true }));
+  const browser = { browser: 'chrome', browserVersion: '123.4', browserOs: 'linux', browserOsVersion: '6.12.0' };
+  const acceptedMismatch = await send(helper, '/usb/write', post(token, { planId: 'mismatch', confirm: 'ERASE', allowUnverified: true, browser }));
   assert.equal(acceptedMismatch.status, 202);
+  assert.deepEqual(calls.find(call => call[0] === 'execute' && call[1].planId === 'mismatch' && call[1].allowUnverified).at(1).browser, browser);
   const status = await send(helper, '/usb/status', { headers: auth(token) });
   assert.equal(status.status, 200);
-  assert.deepEqual(JSON.parse(status.body), { state: 'idle' });
+  assert.deepEqual(JSON.parse(status.body), { state: 'succeeded', jobId: 'j'.repeat(43), reportStatus: 'pending' });
   assert.deepEqual(calls, [
     ['drives'], ['plan', { driveId: 'disk-1', method: 'ventoy' }], ['plan', { driveId: 'disk-1', method: 'ventoy', imageId: 'alpine-standard-x86_64' }],
     ['plan', { driveId: 'disk-1', method: 'direct', imageId: 'alpine-standard-armv7' }],
     ['plan', { driveId: 'disk-1', method: 'ventoy', imageId: 'ambiguous' }],
     ['execute', { planId: 'plan-1', confirm: 'ERASE' }],
     ['execute', { planId: 'mismatch', confirm: 'ERASE' }],
-    ['execute', { planId: 'mismatch', confirm: 'ERASE', allowUnverified: true }], ['status'],
+    ['execute', { planId: 'mismatch', confirm: 'ERASE', allowUnverified: true, browser }], ['status'],
   ]);
   assert.equal(credentialErrors, 0);
 });

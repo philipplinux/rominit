@@ -6,7 +6,7 @@ import { lstat, mkdtemp, mkdir, readFile, rename, rm, stat, symlink, truncate, w
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
-import { createUsbMedia } from '../bin/usb-media.mjs';
+import { collectUsbEnvironment, createUsbMedia } from '../bin/usb-media.mjs';
 
 const bytes = value => Buffer.from(value);
 const digest = value => createHash('sha256').update(value).digest('hex');
@@ -215,11 +215,14 @@ async function fixture(options = {}) {
     ventoyDir: options.noVentoy ? null : ventoyDir, ventoyVersion: '1.1.18', imagePath, imageSha256: options.imageSha256 ?? digest(image), byIdDir: idDir,
     runCommand, spawnProcess, resolvePath, fileStat, fileStatFs, mediaMountRoots: [mediaRoot],
     imageCacheDir: cacheDir, fetchImage: options.fetchImage,
+    hostEnvironment: options.hostEnvironment ?? null,
     ...(options.alpineImage ? { getAlpineImage: id => id === options.alpineImage.id ? options.alpineImage : undefined } : {}),
     trustStat,
     readText: async path => path === '/proc/swaps' ? 'Filename Type Size Used Priority\n' : readFile(path, 'utf8'),
     listDir: async path => path === idDir ? [idPath.split('/').at(-1)] : [],
     makeId: () => `fixture-plan-${++nextId}`,
+    makeJobId: options.makeJobId ?? (() => 'j'.repeat(43)),
+    ...(options.reportOutcome ? { reportOutcome: options.reportOutcome } : {}),
     ...(options.installTimeout ? { installTimeout: options.installTimeout } : {}),
     ...(options.directWriteTimeoutMs ? { directWriteTimeout: () => options.directWriteTimeoutMs } : {}),
   });
@@ -671,6 +674,144 @@ test('direct method plans an unsupported Ventoy architecture, writes the whole U
   assert.equal((await readFile(fakeDevice)).toString(), 'leave this unchanged');
 });
 
+test('accepted USB job reports only scrubbed technical outcome data and keeps report pending until POST completes', async t => {
+  const expected = bytes('publisher bytes');
+  const actual = bytes('accepted downloaded bytes after checksum override');
+  const alpineImage = { id: 'fixture-report-image', arch: 's390x', format: 'iso', url: 'https://images.test/private-filename.iso',
+    sha256: digest(expected), size: expected.length, usb: false };
+  let captured, finishReport, reportCalls = 0, idCalls = 0;
+  const fx = await fixture({ noVentoy: true, alpineImage, fetchImage: async () => new Response(actual),
+    makeJobId: () => { idCalls++; return 'r'.repeat(43); },
+    reportOutcome: payload => { reportCalls++; captured = payload; return new Promise(resolve => { finishReport = resolve; }); } });
+  t.after(fx.cleanup);
+  const plan = await directPlanned(fx, alpineImage.id);
+  const accepted = await fx.backend.execute({ planId: plan.id, confirm: plan.confirm, allowUnverified: true });
+  assert.equal(accepted.jobId, 'r'.repeat(43));
+  assert.equal(accepted.reportStatus, undefined, 'outcome reporting starts only after the USB operation is terminal');
+  assert.equal(idCalls, 1);
+  const deadline = Date.now() + 1_000;
+  while (Date.now() < deadline && !captured) await sleep(5);
+  assert.deepEqual(captured, {
+    jobId: 'r'.repeat(43), method: 'direct', action: 'direct', outcome: 'success',
+    image: { id: 'fixture-report-image', size: actual.length }, drive: { capacityBytes: 4_000_000_000 },
+    verification: { source: 'mismatch-accepted' }, readback: { size: actual.length, matched: true },
+  });
+  assert.doesNotMatch(JSON.stringify(captured), /sha256|hash|private-filename|\/dev\/|Fixture USB|serial|user/i);
+  assert.equal(fx.backend.status().state, 'succeeded');
+  assert.equal(fx.backend.status().reportStatus, 'pending');
+  finishReport();
+  const sentDeadline = Date.now() + 1_000;
+  while (Date.now() < sentDeadline && fx.backend.status().reportStatus !== 'sent') await sleep(5);
+  assert.equal(fx.backend.status().state, 'succeeded');
+  assert.equal(fx.backend.status().reportStatus, 'sent');
+  assert.equal(reportCalls, 1);
+});
+
+test('failed USB outcome reports a fixed failure code without including raw error details', async t => {
+  let captured;
+  const fx = await fixture({ noVentoy: true, busyUnmount: true,
+    reportOutcome: async payload => { captured = payload; } });
+  t.after(fx.cleanup);
+  const plan = await directPlanned(fx);
+  await fx.backend.execute({ planId: plan.id, confirm: plan.confirm });
+  const deadline = Date.now() + 1_000;
+  while (Date.now() < deadline && (fx.backend.status().state !== 'failed' || fx.backend.status().reportStatus === 'pending')) await sleep(5);
+  const result = fx.backend.status();
+  assert.equal(result.state, 'failed');
+  assert.equal(result.reportStatus, 'sent');
+  assert.equal(captured.outcome, 'failed');
+  assert.equal(captured.failureCode, 'unmount');
+  assert.equal(captured.verification.source, 'verified');
+  assert.deepEqual(captured.image, { id: 'local-configured', size: fx.image.length });
+  assert.equal(captured.drive.capacityBytes, 4_000_000_000);
+  assert.equal(Object.hasOwn(captured, 'error'), false);
+  assert.doesNotMatch(JSON.stringify(captured), /\/dev\/|Fixture USB|sha256|hash/i);
+});
+
+test('a failed outcome POST remains visible without changing a successful USB result', async t => {
+  const fx = await fixture({ noVentoy: true,
+    reportOutcome: async () => { throw Error('private path /dev/sdz and raw stderr'); } });
+  t.after(fx.cleanup);
+  const plan = await directPlanned(fx);
+  await fx.backend.execute({ planId: plan.id, confirm: plan.confirm });
+  const deadline = Date.now() + 1_000;
+  while (Date.now() < deadline && (fx.backend.status().state !== 'succeeded' || fx.backend.status().reportStatus === 'pending')) await sleep(5);
+  const result = fx.backend.status();
+  assert.equal(result.state, 'succeeded');
+  assert.equal(result.reportStatus, 'failed');
+  assert.equal(result.error, undefined);
+});
+
+test('native USB diagnostics are allowlisted, cached per helper, and can include validated browser details', async t => {
+  const hostEnvironment = { hostOs: 'linux', hostOsVersion: '43', hostDistro: 'fedora', hostArch: 'x64',
+    kernelVersion: '6.12.3', cliVersion: 'a1b2c3d4e5f6', nodeVersion: '24.18.0' };
+  const browser = { browser: 'chrome', browserVersion: '128.0.1', browserOs: 'linux', browserOsVersion: '43' };
+  let captured;
+  const fx = await fixture({ noVentoy: true, hostEnvironment,
+    reportOutcome: async payload => { captured = payload; } });
+  t.after(fx.cleanup);
+  const plan = await directPlanned(fx);
+  const accepted = await fx.backend.execute({ planId: plan.id, confirm: plan.confirm, browser });
+  assert.equal(Object.hasOwn(accepted, 'reportEnvironment'), false);
+  const result = await terminalJob(fx.backend);
+  assert.equal(result.state, 'succeeded');
+  assert.deepEqual(captured.environment, { ...hostEnvironment, ...browser });
+  assert.doesNotMatch(JSON.stringify(captured.environment), /hostname|custom distro|private string/i);
+});
+
+test('invalid browser data is rejected before consuming the USB plan and invalid injected diagnostics are omitted', async t => {
+  let captured;
+  const hostileEnvironment = { hostOs: 'linux', hostOsVersion: 'private host version', hostDistro: 'custom-private-distro',
+    hostArch: 'x64', kernelVersion: '6.12.0', cliVersion: 'a1b2c3d4e5f6', nodeVersion: '24.18.0', hostname: 'private-host' };
+  const fx = await fixture({ noVentoy: true, hostEnvironment: hostileEnvironment,
+    reportOutcome: async payload => { captured = payload; } });
+  t.after(fx.cleanup);
+  const plan = await directPlanned(fx);
+  await assert.rejects(fx.backend.execute({ planId: plan.id, confirm: plan.confirm, browser: {
+    browser: 'Chrome 128', browserVersion: '128.0', browserOs: 'linux', browserOsVersion: '6.12', rawUserAgent: 'private' } }),
+  error => error.status === 400);
+  await fx.backend.execute({ planId: plan.id, confirm: plan.confirm });
+  assert.equal((await terminalJob(fx.backend)).state, 'succeeded');
+  assert.equal(Object.hasOwn(captured, 'environment'), false);
+  assert.doesNotMatch(JSON.stringify(captured), /private host version|custom-private-distro|private-host|rawUserAgent/i);
+});
+
+test('asynchronous environment collection cannot allow two writes to accept the same USB plan', async t => {
+  let finishEnvironment;
+  const pendingEnvironment = new Promise(resolve => { finishEnvironment = resolve; });
+  const fx = await fixture({ noVentoy: true, hostEnvironment: pendingEnvironment });
+  t.after(fx.cleanup);
+  const plan = await directPlanned(fx);
+  const write1 = fx.backend.execute({ planId: plan.id, confirm: plan.confirm });
+  const write2 = fx.backend.execute({ planId: plan.id, confirm: plan.confirm });
+  finishEnvironment({ hostOs: 'linux', hostOsVersion: '43', hostDistro: 'fedora', hostArch: 'x64',
+    kernelVersion: '6.12.3', cliVersion: 'a1b2c3d4e5f6', nodeVersion: '24.18.0' });
+  const results = await Promise.allSettled([write1, write2]);
+  assert.equal(results.filter(result => result.status === 'fulfilled').length, 1);
+  const rejected = results.find(result => result.status === 'rejected');
+  assert.equal(rejected.reason.status, 409);
+  assert.equal((await terminalJob(fx.backend)).state, 'succeeded');
+});
+
+test('host environment maps whitelisted distro and numeric prefixes without retaining raw OS release strings', async () => {
+  const fedora = await collectUsbEnvironment({ platform: 'linux', arch: 'x64', kernelRelease: '6.15.7-200.fc43.x86_64',
+    nodeVersion: '24.18.0', readOsRelease: async () => 'NAME="Fedora Workstation Private Label"\nID="Fedora"\nVERSION_ID="43 (Private Label)"\n',
+    readSource: async () => Buffer.from('fixture source') });
+  assert.deepEqual(fedora, { hostOs: 'linux', hostOsVersion: '43', hostDistro: 'fedora', hostArch: 'x64',
+    kernelVersion: '6.15.7', cliVersion: digest(Buffer.from('fixture source\0'.repeat(5))).slice(0, 12), nodeVersion: '24.18.0' });
+
+  const custom = await collectUsbEnvironment({ platform: 'linux', arch: 'mips', kernelRelease: 'release-custom-private',
+    nodeVersion: 'v24.18.0', readOsRelease: async () => 'NAME="Private Custom Linux"\nID="internal-acme-build"\nVERSION_ID="private-release-9"\n',
+    readSource: async () => Buffer.from('fixture source') });
+  assert.equal(custom.hostOs, 'linux');
+  assert.equal(custom.hostDistro, 'other');
+  assert.equal(custom.hostArch, 'other');
+  assert.equal(custom.nodeVersion, '24.18.0');
+  assert.equal(Object.hasOwn(custom, 'hostOsVersion'), false);
+  assert.equal(Object.hasOwn(custom, 'kernelVersion'), false);
+  assert.doesNotMatch(JSON.stringify(custom), /internal-acme|Private Custom|release-custom-private/);
+});
+
 test('direct progress is stage ordered, range checked, monotonic, and returned as a snapshot', async t => {
   const data = bytes('progress fixture ISO');
   const malformed = [
@@ -807,4 +948,10 @@ test('direct write timeout blocks another write while the USB result is unknown'
   assert.match(result.error, /timed out; the USB may be incomplete/);
   const next = await directPlanned(fx);
   await assert.rejects(fx.backend.execute({ planId: next.id, confirm: next.confirm }), error => error.status === 409 && /previous USB write timed out/.test(error.message));
+});
+
+test('CLI build ID hashes the real packaged source files through file URLs', async () => {
+  const environment = await collectUsbEnvironment({ platform: 'linux', arch: 'x64', kernelRelease: '6.15.7',
+    nodeVersion: '24.18.0', readOsRelease: async () => 'ID=fedora\nVERSION_ID=44\n' });
+  assert.match(environment.cliVersion, /^[a-f0-9]{12}$/);
 });

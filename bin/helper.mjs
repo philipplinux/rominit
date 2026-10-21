@@ -2,6 +2,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createServer } from 'node:http';
 import { PhoneBenchError, runPhoneBench as defaultPhoneBench, validatePhoneBench } from './phone-bench.mjs';
 import { listBenchTargets as defaultBenchTargets } from './bench-targets.mjs';
+import { validateUsbBrowser } from '../src/usb-environment.js';
 
 const CODE = /^[A-Za-z0-9_-]{43}$/;
 const API_KEY = /^rmi_[A-Za-z0-9_-]{43}$/;
@@ -12,7 +13,7 @@ const BODY_LIMIT = 2048;
 const AUTH_ERROR = 'ROMinit API key was rejected or expired. Run "rominit auth".';
 const TRANSIENT_ERROR = 'ROMinit is temporarily unavailable. Keep the CLI open and retry.';
 const token = () => randomBytes(32).toString('base64url');
-const USB_BODY_KEYS = { '/usb/plan': ['driveId', 'method', 'imageId'], '/usb/write': ['planId', 'confirm', 'allowUnverified'] };
+const USB_BODY_KEYS = { '/usb/plan': ['driveId', 'method', 'imageId'], '/usb/write': ['planId', 'confirm', 'allowUnverified', 'browser'] };
 const USB_REQUIRED_KEYS = { '/usb/plan': ['driveId', 'method'], '/usb/write': ['planId', 'confirm'] };
 
 export function siteOrigin(site) {
@@ -282,7 +283,7 @@ export async function startHelper({ site = process.env.ROMINIT_URL ?? 'https://r
       void (async () => {
         try {
           await refreshSession(current);
-          return reply(200, { user: current.user, expiresAt: new Date(current.expires).toISOString(), capabilities: ['bench', 'bench-targets', 'bench-sound', ...(usbMedia ? ['usb-media', 'usb-images', 'usb-unverified', ...(usbMedia.directSupported ? ['usb-direct'] : [])] : [])] });
+          return reply(200, { user: current.user, expiresAt: new Date(current.expires).toISOString(), capabilities: ['bench', 'bench-targets', 'bench-sound', ...(usbMedia ? ['usb-media', 'usb-images', 'usb-unverified', 'usb-environment', ...(usbMedia.directSupported ? ['usb-direct'] : [])] : [])] });
         } catch (error) { return identityFailure(current, error); }
       })();
       return;
@@ -302,9 +303,11 @@ export async function startHelper({ site = process.env.ROMINIT_URL ?? 'https://r
           const keys = USB_BODY_KEYS[path];
           const required = USB_REQUIRED_KEYS[path];
           if (!keys || !required || required.some(key => !Object.hasOwn(value, key)) || Object.keys(value).some(key => !keys.includes(key)) ||
-              Object.keys(value).some(key => key === 'allowUnverified' && path === '/usb/write'
-                ? typeof value[key] !== 'boolean'
-                : typeof value[key] !== 'string' || !value[key].trim() || value[key].length > BODY_LIMIT))
+              Object.entries(value).some(([key, item]) => key === 'allowUnverified' && path === '/usb/write'
+                ? typeof item !== 'boolean'
+                : key === 'browser' && path === '/usb/write'
+                  ? !validateUsbBrowser(item)
+                  : typeof item !== 'string' || !item.trim() || item.length > BODY_LIMIT))
             return reject(400);
           if (!sessionActive(current, localToken)) return reject(401);
         }
@@ -313,7 +316,8 @@ export async function startHelper({ site = process.env.ROMINIT_URL ?? 'https://r
           const result = path === '/usb/drives' ? await usbMedia.listDrives()
             : path === '/usb/plan' ? await usbMedia.plan({ driveId: value.driveId, method: value.method, ...(Object.hasOwn(value, 'imageId') ? { imageId: value.imageId } : {}) })
               : path === '/usb/write' ? await usbMedia.execute({ planId: value.planId, confirm: value.confirm,
-                ...(Object.hasOwn(value, 'allowUnverified') ? { allowUnverified: value.allowUnverified } : {}) })
+                ...(Object.hasOwn(value, 'allowUnverified') ? { allowUnverified: value.allowUnverified } : {}),
+                ...(Object.hasOwn(value, 'browser') ? { browser: validateUsbBrowser(value.browser) } : {}) })
                 : await usbMedia.status();
           return reply(path === '/usb/write' ? 202 : 200, result);
         } catch (error) {

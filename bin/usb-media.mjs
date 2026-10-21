@@ -4,11 +4,12 @@ import { createReadStream } from 'node:fs';
 import { constants as fsConstants } from 'node:fs';
 import { copyFile, lstat, mkdir, open, readFile, readdir, realpath, rename, stat, statfs, unlink } from 'node:fs/promises';
 import { basename, isAbsolute, join, resolve as resolveFilePath } from 'node:path';
-import { homedir } from 'node:os';
+import { arch as osArch, homedir, platform as osPlatform, release as osRelease } from 'node:os';
 import { promisify } from 'node:util';
 import { run as runVentoy } from '../src/recipes/ventoy.js';
 import { run as runUsbImage } from '../src/recipes/usb-image.js';
 import { alpineImage } from '../src/alpine.js';
+import { validateUsbBrowser, validateUsbEnvironment } from '../src/usb-environment.js';
 
 const execFile = promisify(nodeExecFile);
 const PLAN_MS = 5 * 60_000;
@@ -30,6 +31,78 @@ const IMAGE_DOWNLOAD_TIMEOUT = 15 * 60_000;
 const IMAGE_CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), '.cache'), 'rominit', 'alpine');
 const BIN = { lsblk: '/usr/bin/lsblk', sudo: '/usr/bin/sudo', sh: '/usr/bin/sh', python: '/usr/bin/python3', udisksctl: '/usr/bin/udisksctl' };
 const LSBLK_FIELDS = 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,FSTYPE,LABEL,MOUNTPOINTS,PKNAME';
+const USB_VERSION_SOURCES = [new URL('./cli.mjs', import.meta.url), new URL('./helper.mjs', import.meta.url), new URL(import.meta.url),
+  new URL('../src/recipes/usb-image.js', import.meta.url), new URL('../src/usb-environment.js', import.meta.url)];
+let cachedUsbEnvironment;
+
+function numericVersionPrefix(value) {
+  if (typeof value !== 'string') return undefined;
+  const match = /^(?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*)){0,3}(?=$|[^\d.])/.exec(value.trim());
+  return match && match[0].length <= 32 ? match[0] : undefined;
+}
+
+function releaseField(contents, key) {
+  if (typeof contents !== 'string') return '';
+  const line = contents.split(/\r?\n/).find(value => value.startsWith(`${key}=`));
+  if (!line) return '';
+  const raw = line.slice(key.length + 1).trim();
+  return raw.length >= 2 && ['"', "'"].includes(raw[0]) && raw.at(-1) === raw[0] ? raw.slice(1, -1) : raw;
+}
+
+function hostOsName(platform) {
+  return ({ linux: 'linux', android: 'android', win32: 'windows', darwin: 'macos', ios: 'ios', chromeos: 'chromeos' })[platform] ?? 'unknown';
+}
+
+function hostArchitecture(value) {
+  return ({ x64: 'x64', arm64: 'arm64', arm: 'arm', ia32: 'ia32', riscv64: 'riscv64', ppc64: 'ppc64', ppc64le: 'ppc64', s390x: 's390x' })[value] ?? 'other';
+}
+
+function hostDistroName(value) {
+  return ({ fedora: 'fedora', ubuntu: 'ubuntu', debian: 'debian', alpine: 'alpine', arch: 'arch', manjaro: 'manjaro',
+    opensuse: 'opensuse', 'opensuse-leap': 'opensuse', 'opensuse-tumbleweed': 'opensuse', nixos: 'nixos',
+    linuxmint: 'linuxmint', centos: 'centos', rhel: 'rhel', rocky: 'rocky' })[value.toLowerCase()] ?? 'other';
+}
+
+/** Collect only bounded, allowlisted diagnostics. Raw os-release and kernel strings are never returned. */
+export async function collectUsbEnvironment({ platform = osPlatform(), arch = osArch(), kernelRelease = osRelease(),
+  nodeVersion = process.versions.node, readOsRelease = () => readFile('/etc/os-release', 'utf8'),
+  readSource = path => readFile(path) } = {}) {
+  let hostOs = hostOsName(platform);
+  let release = '';
+  if (platform === 'linux' || platform === 'android' || platform === 'chromeos') {
+    try { release = await readOsRelease(); } catch { /* Host OS and kernel details remain useful without distro metadata. */ }
+  }
+  const id = releaseField(release, 'ID').toLowerCase();
+  if (id === 'android') hostOs = 'android';
+  else if (id === 'chromeos' || id === 'chromiumos') hostOs = 'chromeos';
+
+  const value = {
+    hostOs,
+    hostArch: hostArchitecture(arch),
+    ...(numericVersionPrefix(kernelRelease) ? { kernelVersion: numericVersionPrefix(kernelRelease) } : {}),
+    ...(numericVersionPrefix(nodeVersion.replace(/^v/, '')) ? { nodeVersion: numericVersionPrefix(nodeVersion.replace(/^v/, '')) } : {}),
+  };
+  if (['linux', 'android', 'chromeos'].includes(hostOs)) {
+    const version = numericVersionPrefix(releaseField(release, 'VERSION_ID'));
+    if (version) value.hostOsVersion = version;
+  }
+  if (hostOs === 'linux') value.hostDistro = hostDistroName(id);
+
+  try {
+    const hash = createHash('sha256');
+    for (const source of USB_VERSION_SOURCES) {
+      hash.update(await readSource(source));
+      hash.update('\0');
+    }
+    value.cliVersion = hash.digest('hex').slice(0, 12);
+  } catch { /* Version fingerprint is optional if a packaged source file is unreadable. */ }
+  return validateUsbEnvironment(value);
+}
+
+function getCachedUsbEnvironment() {
+  cachedUsbEnvironment ??= collectUsbEnvironment().catch(() => null);
+  return cachedUsbEnvironment;
+}
 const DIRECT_WRITER = String.raw`
 import fcntl, hashlib, json, os, stat, struct, sys, time
 
@@ -272,7 +345,9 @@ async function sha256File(path) {
 
 function snapshotJob(job) {
   if (!job) return { state: 'idle', log: [] };
-  return { ...job, log: [...job.log], drive: { ...job.drive, mounts: [...job.drive.mounts] },
+  const publicJob = { ...job };
+  delete publicJob.reportEnvironment;
+  return { ...publicJob, log: [...job.log], drive: { ...job.drive, mounts: [...job.drive.mounts] },
     ...(job.progress ? { progress: { ...job.progress } } : {}),
     ...(job.verification ? { verification: { ...job.verification,
       expected: { ...job.verification.expected }, actual: { ...job.verification.actual } } } : {}),
@@ -284,14 +359,19 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
   imagePath = process.env.ROMINIT_ISO_PATH, imageSha256 = process.env.ROMINIT_ISO_SHA256, byIdDir = '/dev/disk/by-id',
   runCommand = (file, args, options) => execFile(file, args, options), spawnProcess = nodeSpawn,
   fetchImage = globalThis.fetch, imageCacheDir = IMAGE_CACHE_DIR, getAlpineImage = alpineImage,
+  hostEnvironment,
   readText = readFile, listDir = readdir, resolvePath = realpath, fileStat = stat, fileStatFs = statfs,
   trustStat = lstat, installerOwnerUid = 0,
   mediaMountRoots = ['/run/media', '/media'], installTimeout = INSTALL_TIMEOUT,
   directWriteTimeout = size => Math.min(DIRECT_MAX_TIMEOUT, DIRECT_MIN_TIMEOUT + Math.ceil(2 * size / DIRECT_BYTES_PER_MS)),
-  now = Date.now, makeId = () => randomBytes(32).toString('base64url') } = {}) {
+  now = Date.now, makeId = () => randomBytes(32).toString('base64url'),
+  makeJobId = () => randomBytes(32).toString('base64url'), reportOutcome } = {}) {
   const plans = new Map();
   let job = null;
   let writeBlocked = false;
+  const hostEnvironmentPromise = hostEnvironment === undefined ? getCachedUsbEnvironment()
+    : Promise.resolve(hostEnvironment).then(validateUsbEnvironment).catch(() => null);
+  if (reportOutcome !== undefined && typeof reportOutcome !== 'function') throw Error('A USB outcome reporter must be a function.');
 
   const command = async (file, args, timeout = COMMAND_TIMEOUT) => runCommand(file, args,
     { encoding: 'utf8', timeout, maxBuffer: 8 * 1024 * 1024, windowsHide: true });
@@ -788,6 +868,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
   }
 
   async function runInstaller(target, path, jobState) {
+    jobState.phase = 'installing';
     append(jobState, `Running Ventoy installer for ${path}.`);
     await new Promise((resolve, reject) => {
       let child, timedOut = false, settled = false, inputError = null, killTimer, settleTimer;
@@ -844,12 +925,56 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
     });
   }
 
+  function outcomePayload(plan, jobState) {
+    const hasImage = !!plan.image;
+    const image = hasImage ? {
+      id: plan.image.id ?? 'local-configured',
+      size: plan.imageActual?.size ?? plan.image.size,
+    } : { id: 'none', size: 0 };
+    const payload = {
+      jobId: jobState.jobId,
+      method: plan.method,
+      action: plan.action,
+      outcome: jobState.state === 'succeeded' ? 'success' : 'failed',
+      image,
+      drive: { capacityBytes: plan.drive.size },
+      verification: { source: !hasImage ? 'none' : plan.verification?.status === 'mismatch' ? 'mismatch-accepted' : 'verified' },
+      ...(jobState.readback ? { readback: { size: jobState.readback.size, matched: jobState.readback.matched } } : {}),
+      ...(jobState.reportEnvironment ? { environment: { ...jobState.reportEnvironment } } : {}),
+    };
+    if (jobState.state === 'failed') {
+      const error = String(jobState.error ?? '').toLowerCase();
+      const phase = jobState.phase;
+      const failureCode = /timed out/.test(error) ? 'timeout'
+        : /identity changed|disk changed|device changed|no longer available|capacity changed/.test(error) ? 'device_changed'
+          : phase === 'unmounting' || /could not unmount/.test(error) ? 'unmount'
+            : phase === 'verifying' || /readback|verification failed|did not verify/.test(error) ? 'readback'
+              : ['copying', 'installing', 'writing', 'syncing'].includes(phase) ? 'write'
+                : !phase || phase === 'preflight' ? 'preflight' : 'unknown';
+      payload.failureCode = failureCode;
+    }
+    return payload;
+  }
+
+  async function reportTerminal(plan, jobState) {
+    if (!reportOutcome) return;
+    jobState.reportStatus = 'pending';
+    try {
+      await reportOutcome(outcomePayload(plan, jobState));
+      jobState.reportStatus = 'sent';
+    } catch {
+      // Reporting is a separate inbox side effect. It must not change the USB outcome or expose response details.
+      jobState.reportStatus = 'failed';
+    }
+  }
+
   async function executePlan(plan) {
-    job.state = 'running';
+    const jobState = job;
+    jobState.state = 'running';
     try {
       if (plan.method === 'direct') {
         await writeDirect(plan);
-        job.state = 'succeeded';
+        jobState.state = 'succeeded';
         return;
       }
       const target = await ventoy();
@@ -866,7 +991,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
         if (!existingVentoyLayout(current, 409)) throw fail(409, 'The existing Ventoy layout changed. Create a new plan.');
         await verifyVentoyVersion(target, current.public.path, 409);
         await copyImage(plan, plan.identity.mounted);
-        job.state = 'succeeded';
+        jobState.state = 'succeeded';
         return;
       }
       try { await command(BIN.sudo, ['-n', '/usr/bin/true']); }
@@ -919,11 +1044,13 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
         },
         copyImage: async () => copyImage(plan),
       }, plan, message => append(job, message));
-      job.state = 'succeeded';
+      jobState.state = 'succeeded';
     } catch (error) {
-      job.state = 'failed';
-      job.error = safeText(error?.message || error, 1000) || 'USB operation failed.';
-      append(job, job.error);
+      jobState.state = 'failed';
+      jobState.error = safeText(error?.message || error, 1000) || 'USB operation failed.';
+      append(jobState, jobState.error);
+    } finally {
+      await reportTerminal(plan, jobState);
     }
   }
 
@@ -996,9 +1123,12 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
         ...(verification ? { verification: { status: verification.status, expected: { ...verification.expected }, actual: { ...verification.actual } } } : {}),
         drive: { ...value.drive, mounts: [...value.drive.mounts] } };
     },
-    async execute({ planId, confirm, allowUnverified = false } = {}) {
+    async execute({ planId, confirm, allowUnverified = false, browser } = {}) {
       if (typeof planId !== 'string' || !planId || typeof confirm !== 'string' || typeof allowUnverified !== 'boolean')
         throw fail(400, 'A USB plan, exact confirmation phrase, and optional boolean checksum override are required.');
+      const normalizedBrowser = browser === undefined ? undefined : validateUsbBrowser(browser);
+      if (browser !== undefined && !normalizedBrowser) throw fail(400, 'Browser diagnostics are invalid.');
+      const hostEnvironment = await hostEnvironmentPromise;
       const plan = plans.get(planId);
       if (!plan || now() >= plan.expires) { plans.delete(planId); throw fail(409, 'The USB plan is missing or expired. Create a new plan.'); }
       if (writeBlocked) throw fail(409, 'A previous USB write timed out or has an unknown result. Restart the helper before another write.');
@@ -1006,11 +1136,15 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR, ven
       if (confirm !== plan.confirm) { plans.delete(planId); throw fail(400, `Confirmation must exactly match ${plan.confirm}.`); }
       if (plan.verification?.status === 'mismatch' && allowUnverified !== true)
         throw fail(409, 'This Alpine ISO does not match the publisher size or SHA-256. Explicitly allow the checksum mismatch to continue.', 'USB_UNVERIFIED');
+      const reportEnvironment = validateUsbEnvironment({ ...(hostEnvironment ?? {}), ...(normalizedBrowser ?? {}) });
+      const jobId = makeJobId();
+      if (typeof jobId !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(jobId)) throw fail(503, 'Could not create the USB outcome report ID.');
       plans.delete(planId);
       const verification = plan.verification ? { ...plan.verification, accepted: plan.verification.status === 'mismatch' } : undefined;
       const deadlineAt = plan.method === 'direct' ? new Date(now() + plan.directTimeoutMs).toISOString() : undefined;
-      job = { state: 'pending', log: [], drive: { id: plan.drive.id, path: plan.drive.path, model: plan.drive.model,
+      job = { state: 'pending', jobId, log: [], drive: { id: plan.drive.id, path: plan.drive.path, model: plan.drive.model,
         size: plan.drive.size, mounted: plan.drive.mounted, mounts: [...plan.drive.mounts] }, method: plan.method,
+        ...(reportEnvironment ? { reportEnvironment } : {}),
         ...(verification ? { verification } : {}), ...(deadlineAt ? { deadlineAt } : {}) };
       setImmediate(() => { void executePlan(plan); });
       return snapshotJob(job);

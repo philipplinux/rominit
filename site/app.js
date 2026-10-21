@@ -2,6 +2,7 @@ import { h } from './dom.js';
 import { ALPINE, ALPINE_ARCHITECTURES, ARCH_FAMILY } from '../src/alpine.js';
 import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor } from '../src/catalog.js';
 import { connect } from '../src/protocols/usb.js';
+import { validateUsbEnvironment } from '../src/usb-environment.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
@@ -1006,24 +1007,25 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: five numbered folders, always shown with their counts: 01 page tickets (by section), 02 flash failures, 03 phone tests (03a site, 03b CLI run + bench, 03c CLI bench only), 04 agent reports (by outcome), 05 device searches. */
+/** Admin inbox: seven numbered folders, always shown with their counts: 01 page tickets, 02 flash failures, 03 phone tests, 04 agent reports, 05 OS-USB outcomes, 06 device searches, 07 ROM requests. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, osUsb = { success: [], failed: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
   const folder = (name, hint, n, body, total = n) => h('details', { className: 'page-section inbox-group', open: n > 0 },
     h('summary', {}, h('span', { textContent: `${name} · ${n}` }), h('small', { textContent: hint })), ...(total ? body : [h('p', { className: 'empty-files', textContent: 'Nothing here.' })]));
-  /** "File as [label] [File]"; filing removes the item. @param {string} inbox @param {string} ref @param {HTMLElement} li */
-  const fileAs = (inbox, ref, li) => {
+  /** "File as [label] [File]"; filing removes the item. @param {string} inbox @param {string} ref @param {HTMLElement} li @param {string} [defaultLabel] @param {()=>void} [afterFile] */
+  const fileAs = (inbox, ref, li, defaultLabel, afterFile) => {
     const label = h('select', {}, ...labels.map((/** @type {string} */ l) => h('option', { textContent: l })));
+    if (labels.includes(defaultLabel)) label.value = defaultLabel;
     return h('label', { className: 'field-help' }, 'File as ', label, ' ', h('button', { type: 'button', className: 'button button-secondary', textContent: 'File', async onclick() {
       const ok = (await fetch('./api/inbox', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ inbox, ref, label: label.value }) })).ok;
-      if (ok) li.remove(); else li.append(h('small', { textContent: ' could not file' }));
+      if (ok) { li.remove(); afterFile?.(); } else li.append(h('small', { textContent: ' could not file' }));
     } }));
   };
   /** One phone test: which ROM, what it changes vs the catalog, and the moves to the other sub-folders. @param {any} x */
@@ -1051,6 +1053,91 @@ async function inboxView(index) {
   const byState = b => [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
     h('summary', { className: 'field-label', textContent: `${title} · ${b[state].length}` }),
     h('ol', { className: 'comments' }, ...b[state].map(benchItem))));
+  const usbSize = bytes => Number.isSafeInteger(bytes) && bytes > 0
+    ? bytes < 1024 ** 3 ? `${(bytes / 1024 ** 2).toFixed(1)} MiB` : `${(bytes / 1024 ** 3).toFixed(2)} GiB`
+    : 'Unknown size';
+  const usbMethods = { direct: 'Direct image write', ventoy: 'Ventoy' };
+  const usbActions = { direct: 'write image', copy: 'copy ISO', install: 'install Ventoy' };
+  const usbVerification = { verified: 'Source checksum verified', 'mismatch-accepted': 'Source checksum mismatch accepted', none: 'Source checksum not reported' };
+  const usbFailure = {
+    preflight: 'USB preflight did not pass.', device_changed: 'The selected USB changed after review.',
+    unmount: 'Could not unmount the USB drive.', write: 'Writing the image failed.',
+    timeout: 'The USB operation timed out.', readback: 'USB readback verification failed.', unknown: 'The USB operation failed for an unknown reason.'
+  };
+  const usbEnum = (values, value, fallback) => typeof value === 'string' && Object.hasOwn(values, value) ? values[value] : fallback;
+  const usbOsName = { linux: 'Linux', windows: 'Windows', macos: 'macOS', android: 'Android', ios: 'iOS', chromeos: 'ChromeOS', unknown: 'Unknown OS' };
+  const usbBrowserName = { chrome: 'Chrome', chromium: 'Chromium', edge: 'Edge', firefox: 'Firefox', safari: 'Safari', opera: 'Opera', brave: 'Brave', other: 'Other browser' };
+  const usbDistroName = { fedora: 'Fedora', ubuntu: 'Ubuntu', debian: 'Debian', alpine: 'Alpine', arch: 'Arch Linux', manjaro: 'Manjaro', opensuse: 'openSUSE', nixos: 'NixOS', linuxmint: 'Linux Mint', centos: 'CentOS', rhel: 'RHEL', rocky: 'Rocky Linux', other: 'Linux distribution' };
+  const usbEnvironmentText = value => {
+    const environment = validateUsbEnvironment(value);
+    if (!environment) return null;
+    const parts = [];
+    if (environment.hostOs) {
+      const os = environment.hostDistro ? `${usbDistroName[environment.hostDistro]} ${usbOsName[environment.hostOs]}` : usbOsName[environment.hostOs];
+      const version = environment.hostOsVersion ? ` ${environment.hostOsVersion}` : '';
+      const arch = environment.hostArch ? ` · ${environment.hostArch}` : '';
+      parts.push(`Host ${os}${version}${arch}`);
+    }
+    if (environment.kernelVersion) parts.push(`kernel ${environment.kernelVersion}`);
+    if (environment.browser) {
+      const browserVersion = environment.browserVersion ? ` ${environment.browserVersion}` : '';
+      const os = environment.browserOs ? ` on ${usbOsName[environment.browserOs]}${environment.browserOsVersion ? ` platform ${environment.browserOsVersion}` : ''}` : '';
+      parts.push(`${usbBrowserName[environment.browser]}${browserVersion}${os}`);
+    }
+    if (environment.cliVersion) parts.push(`ROMinit CLI ${environment.cliVersion}`);
+    if (environment.nodeVersion) parts.push(`Node.js ${environment.nodeVersion}`);
+    return parts.length ? `Technical environment: ${parts.join(' · ')}` : null;
+  };
+  /** Render only allowlisted operational fields; never display IDs, paths, models, or arbitrary logs/errors. @param {any} x @param {'success'|'failed'} outcome @param {any[]} items */
+  const osUsbItem = (x, outcome, items) => {
+    const image = x?.image && typeof x.image === 'object' ? x.image : {};
+    const rawImageName = typeof image.name === 'string' ? image.name : '';
+    const safeCatalogName = /^Alpine Linux [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+$/.test(rawImageName);
+    const safeIsoName = /^[\p{L}\p{N}][\p{L}\p{N} ._+()-]{0,150}\.iso$/iu.test(rawImageName);
+    const imageName = rawImageName === 'Local ISO' || rawImageName === 'No ISO' || safeCatalogName || safeIsoName ? rawImageName : 'Selected image';
+    const imageId = typeof image.id === 'string' && /^[A-Za-z0-9_.+-]{1,80}$/.test(image.id) ? image.id : 'unknown';
+    const method = usbEnum(usbMethods, x?.method, 'Unknown method');
+    const action = usbEnum(usbActions, x?.action, 'unknown action');
+    const sourceVerification = usbEnum(usbVerification, x?.verification?.source, 'Source checksum status unavailable');
+    const capacity = usbSize(x?.drive?.capacityBytes);
+    const readbackSize = usbSize(x?.readback?.size);
+    const readback = x?.readback?.matched === true ? `USB readback matched${readbackSize !== 'Unknown size' ? ` · ${readbackSize}` : ''}`
+      : x?.readback?.matched === false ? 'USB readback did not match' : 'USB readback not available';
+    const at = typeof x?.at === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(x.at) ? `${x.at} UTC` : 'Time unavailable';
+    const failureCode = outcome === 'failed' && typeof x?.failureCode === 'string' && Object.hasOwn(usbFailure, x.failureCode) ? x.failureCode : null;
+    const failure = outcome === 'failed' ? usbEnum(usbFailure, failureCode, 'The USB operation failed.') : null;
+    const technicalEnvironment = usbEnvironmentText(x?.environment);
+    const li = h('li', { className: 'os-usb-report' },
+      h('strong', { textContent: outcome === 'success' ? 'USB operation succeeded' : 'USB operation failed' }),
+      h('small', { textContent: `${at} · Unreviewed` }),
+      h('p', { className: 'field-help' }, 'Image: ', h('strong', { textContent: imageName }), ' · ID ', h('code', { textContent: imageId }), ` · ${imageId === 'none' && image.size === 0 ? 'No image' : usbSize(image.size)}`),
+      h('p', { className: 'field-help', textContent: `${method} · ${action} · USB capacity ${capacity}` }),
+      h('p', { className: 'field-help', textContent: `${sourceVerification} · ${readback}` }),
+      technicalEnvironment && h('p', { className: 'field-help usb-environment-details', textContent: technicalEnvironment }),
+      failure && h('p', { className: 'field-help flash-warn' }, 'Failure ', h('code', { textContent: failureCode ?? 'unknown' }), ` · ${failure}`));
+    const ref = typeof x?.jobId === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(x.jobId) ? x.jobId : null;
+    if (ref) li.append(fileAs('os-usb', ref, li, 'user-side', () => {
+      const position = items.indexOf(x);
+      if (position >= 0) items.splice(position, 1);
+      const successCount = usbSuccess.length, failedCount = usbFailed.length, total = successCount + failedCount;
+      const header = osUsbFolder?.querySelector(':scope > summary');
+      if (header) {
+        const count = header.querySelector('span'), hint = header.querySelector('small');
+        if (count) count.textContent = `05 OS-USB · ${total}`;
+        if (hint) hint.textContent = `${successCount} success · ${failedCount} failed · unreviewed outcomes`;
+      }
+      const successHeader = usbSuccessGroup?.querySelector(':scope > summary'), failedHeader = usbFailedGroup?.querySelector(':scope > summary');
+      if (successHeader) successHeader.textContent = `Success · ${successCount}`;
+      if (failedHeader) failedHeader.textContent = `Failed · ${failedCount}`;
+    }));
+    return li;
+  };
+  const usbSuccess = Array.isArray(osUsb?.success) ? osUsb.success : [], usbFailed = Array.isArray(osUsb?.failed) ? osUsb.failed : [];
+  const osUsbTotal = usbSuccess.length + usbFailed.length;
+  let osUsbFolder = null, usbSuccessGroup = null, usbFailedGroup = null;
+  const usbGroup = (title, items, outcome) => h('details', { className: 'inbox-sub', open: title === 'Failed' || items.length > 0 },
+    h('summary', { className: 'field-label', textContent: `${title} · ${items.length}` }),
+    h('ol', { className: 'comments' }, ...items.map(x => osUsbItem(x, outcome, items))));
   /** Phone tests by source, each split by state: 03a the site, 03b a rominit CLI flash + bench, 03c `rominit bench` alone (flashed another way). */
   const keep = (/** @type {(x: any) => boolean} */ f) => Object.fromEntries(Object.entries(cli).map(([state, xs]) => [state, xs.filter(f)]));
   const benchParts = [['03a Site', benchmarks], ['03b CLI run + bench', keep(x => x.flash !== 'elsewhere')], ['03c CLI bench only', keep(x => x.flash === 'elsewhere')]];
@@ -1085,9 +1172,12 @@ async function inboxView(index) {
               h('pre', { className: 'bench-output', textContent: x.steps.map((/** @type {any} */ s) => `stage ${s.stage}${s.step ? ` step ${s.step}` : ''} · ${s.outcome}${s.detail ? ` · ${s.detail}` : ''}`).join('\n') })));
           return li.append(fileAs('agents', x.id, li)), li;
         }))))),
-    folder('05 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
+    osUsbFolder = folder('05 OS-USB', `${usbSuccess.length} success · ${usbFailed.length} failed · unreviewed outcomes`, osUsbTotal, [
+      h('p', { className: 'field-help', textContent: 'Operational USB reports are unreviewed. Filing classifies this report; it does not approve or change any phone ROM rating.' }),
+      usbSuccessGroup = usbGroup('Success', usbSuccess, 'success'), usbFailedGroup = usbGroup('Failed', usbFailed, 'failed')]),
+    folder('06 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
-  card.append(folder('06 Requests', 'new ROMs / devices, updates and mirrors', Object.values(requests).flat().length,
+  card.append(folder('07 Requests', 'new ROMs / devices, updates and mirrors', Object.values(requests).flat().length,
     [['new', 'New ROM / device'], ['update', 'ROM updates'], ['mirror', 'ROM mirrors']].map(([kind, title]) => h('details', { className: 'inbox-sub', open: requests[kind].length > 0 },
       h('summary', { className: 'field-label', textContent: `${title} · ${requests[kind].length}` }),
       h('ol', { className: 'comments' }, ...requests[kind].map((/** @type {any} */ x) => {
