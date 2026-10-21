@@ -2,6 +2,7 @@ import { ALPINE, ALPINE_ARCHITECTURES, ARCH_FAMILY, alpineImage } from '../src/a
 import { h } from './dom.js';
 import { ensureHelper, helperRequest, helperSession } from './helper.js';
 import { usbMediaPanel } from './usb-media.js';
+import { PROVIDER_NAMES, mountAccount } from './account.js';
 
 const editionSelect = /** @type {HTMLSelectElement} */ (document.getElementById('alpine-edition'));
 const images = /** @type {HTMLElement} */ (document.getElementById('alpine-images'));
@@ -19,9 +20,8 @@ editionSelect.append(...ALPINE.editions.map(edition => h('option', { value: edit
 document.getElementById('alpine-version').textContent = `Version ${ALPINE.version} · Stable`;
 document.getElementById('alpine-release').replaceChildren(h('strong', { className: 'alpine-version-inline', textContent: `Version ${ALPINE.version}` }), ` · Stable · released ${ALPINE.releaseDate}`);
 
-const providerName = p => p === 'github' ? 'GitHub' : p[0].toUpperCase() + p.slice(1);
 const signInHint = providers => providers?.length
-  ? ['Sign in with ', ...providers.flatMap((p, i) => [i ? ' or ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: providerName(p) })]), ', then press Connect CLI again.']
+  ? ['Sign in with ', ...providers.flatMap((p, i) => [i ? ' or ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: PROVIDER_NAMES[p] ?? p })]), ', then press Connect CLI again.']
   : ['Sign-in is not set up at this address. Open ', h('a', { href: 'https://rominit.pages.dev/alpine', textContent: 'rominit.pages.dev' }), ' instead.'];
 const cliHint = () => ['Run ', h('code', { textContent: 'rominit auth' }), ' once, then ', h('code', { textContent: 'rominit serve' }), ' on this computer. ', h('a', { href: './?view=cli', textContent: 'CLI setup' }), '.'];
 
@@ -95,10 +95,10 @@ function render() {
   images.replaceChildren(...selectedEdition.images.map(image => h('article', { className: 'alpine-image', id: image.id },
     h('div', { className: 'alpine-image-title' }, h('strong', { textContent: image.arch }), h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), ...(image.usb === true ? [h('span', { className: 'architecture-tag ventoy-supported', textContent: 'Ventoy supported' })] : []), h('span', { className: 'field-help', textContent: `${image.format} · ${sizes(image.size)}` })),
     h('div', { className: 'alpine-image-actions' }, ['iso', 'img.gz'].includes(image.format)
-      ? h('button', { type: 'button', className: 'button button-primary', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
+      ? h('button', { type: 'button', className: 'button button-primary alpine-main-action', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
       : h('span', { className: 'field-help', textContent: 'Download · platform-specific setup' }),
-      h('a', { href: image.url, textContent: 'Download' }),
-      h('a', { href: ALPINE.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' }),
+      h('a', { className: 'button button-secondary', href: image.url, textContent: 'Download' }),
+      h('a', { className: 'button button-secondary', href: ALPINE.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' }),
       h('a', { href: `${image.url}.sha256`, target: '_blank', rel: 'noopener noreferrer', textContent: 'SHA-256' })))));
 }
 editionSelect.addEventListener('change', () => {
@@ -111,3 +111,4 @@ render();
 const initialImage = alpineImage(params.get('image') ?? '');
 if (['iso', 'img.gz'].includes(initialImage?.format) && selectedEdition.images.includes(initialImage)) void chooseImage(initialImage.id);
 void probeCli();
+void mountAccount();

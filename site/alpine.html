@@ -14,17 +14,49 @@
     <div class="page-shell">
       <header class="topbar">
         <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> OS</span></a>
-        <nav class="sitenav" aria-label="Page"><a href="./">All devices &amp; OS</a><a href="./?view=cli">ROMinit CLI</a></nav>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Experimental</span>
+        <nav class="sitenav" aria-label="Site"><a href="./">Devices</a><a href="./?view=brands">Brands</a><a href="./?view=projects">Projects</a><a href="./?view=popular">Popular</a><a href="./alpine" aria-current="page">OS</a></nav>
+        <div class="topbar-side">
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="./#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
+        </div>
       </header>
       <main id="main" class="alpine-page">
-        <section class="intro">
-          <p class="eyebrow">OPERATING SYSTEM / INDEPENDENT LINUX</p>
-          <div class="alpine-heading"><img class="alpine-logo" src="./logos/alpine.svg" alt="Alpine Linux logo" width="180" height="85"><div><h1>Alpine Linux<span>.</span></h1><p id="alpine-version" class="alpine-version"></p><p class="intro-copy">A small Linux base built around musl and BusyBox. Pick an edition for your use, then the architecture of the machine that will run it.</p></div></div>
-          <div id="alpine-architectures" class="architecture-tags" aria-label="Supported architecture families"></div>
+        <section class="alpine-hero alpine-card">
+          <img class="alpine-logo" src="./logos/alpine.svg" alt="Alpine Linux logo" width="180" height="85">
+          <div class="alpine-hero-text">
+            <p class="eyebrow">OPERATING SYSTEM / INDEPENDENT LINUX</p>
+            <h1>Alpine Linux<span>.</span></h1>
+            <p id="alpine-version" class="alpine-version"></p>
+            <p class="intro-copy">A small Linux base built around musl and BusyBox. Pick an edition for your use, then the architecture of the machine that will run it.</p>
+            <div id="alpine-architectures" class="architecture-tags" aria-label="Supported architecture families"></div>
+          </div>
         </section>
         <section class="alpine-preview alpine-card" aria-labelledby="preview-title">
-          <div><p class="eyebrow">SEE IT RUN</p><h2 id="preview-title">What boots from the Standard ISO</h2><p class="field-help">Alpine Linux 3.24.2 Standard starts in a terminal. This recording shows release information, apk and installer help. <a href="https://wiki.alpinelinux.org/wiki/Desktop_environments_and_Window_managers">A graphical desktop can be added afterward</a>.</p><p><a href="https://alpinelinux.org/" rel="noopener noreferrer" target="_blank">Official Alpine Linux website ↗</a></p><p><a href="https://www.youtube.com/watch?v=YNYtJ3jyMRs" rel="noopener noreferrer" target="_blank">Watch a YouTube demo ↗</a></p><p class="field-help">Trafotin · “Installing Alpine Linux as a Desktop OS” (2023). An older community walkthrough; follow current official installation instructions.</p></div>
-          <figure><img id="alpine-operation" src="./shots/alpine-operation.gif" alt="Alpine Linux terminal showing release information, apk and setup-alpine help" width="640" height="352"><figcaption>Alpine Linux 3.24.2 · ROMinit VM recording · no host disk attached.</figcaption></figure>
+          <div class="alpine-preview-text">
+            <p class="eyebrow">SEE IT RUN</p>
+            <h2 id="preview-title">What boots from the Standard ISO</h2>
+            <p class="field-help">Alpine Linux 3.24.2 Standard starts in a plain terminal: no desktop, a few seconds to a prompt. The recording runs three commands in a ROMinit test VM.</p>
+            <ol class="alpine-cmds">
+              <li><code>cat /etc/alpine-release</code><span>release number</span></li>
+              <li><code>uname -rm</code><span>kernel and CPU</span></li>
+              <li><code>apk --version</code><span>package manager</span></li>
+            </ol>
+            <p class="alpine-links">
+              <a href="https://alpinelinux.org/" rel="noopener noreferrer" target="_blank">Alpine website ↗</a>
+              <a href="https://wiki.alpinelinux.org/wiki/Desktop_environments_and_Window_managers" rel="noopener noreferrer" target="_blank">Add a desktop ↗</a>
+              <a href="https://www.youtube.com/watch?v=YNYtJ3jyMRs" rel="noopener noreferrer" target="_blank">YouTube demo ↗</a>
+            </p>
+            <p class="field-help">The video is an older community walkthrough (Trafotin, 2023); follow the current official installation instructions.</p>
+          </div>
+          <figure class="alpine-term">
+            <div class="alpine-term-bar" aria-hidden="true"><i></i><i></i><i></i><span>alpine-standard-x86_64 · 3.24.2</span></div>
+            <img id="alpine-operation" src="./shots/alpine-operation.gif" alt="Alpine Linux terminal showing release information, apk and setup-alpine help" width="640" height="352">
+            <figcaption>ROMinit VM recording · no host disk attached.</figcaption>
+          </figure>
         </section>
         <section class="alpine-card alpine-downloads" aria-labelledby="downloads-title">
           <p class="eyebrow">EDITION → ARCHITECTURE → USB</p><h2 id="downloads-title">Choose your Alpine Linux</h2>
