@@ -2,7 +2,9 @@
   "name": "rominit",
   "private": true,
   "type": "module",
-  "bin": {"rominit": "bin/rominit.mjs"},
+  "bin": {
+    "rominit": "bin/rominit.mjs"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test",
@@ -13,6 +15,7 @@
   },
   "dependencies": {
     "@lineageos-infra/libmjolnir": "0.7.4",
+    "@napi-rs/keyring": "2.1.1",
     "@yume-chan/adb": "2.6.4",
     "@yume-chan/adb-credential-web": "2.1.0",
     "@yume-chan/adb-daemon-webusb": "2.3.2",

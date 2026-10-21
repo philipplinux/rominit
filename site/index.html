@@ -14,28 +14,17 @@
     <a class="skip-link" href="#main">Skip to flasher</a>
     <div class="page-shell">
       <header class="topbar">
-        <div class="brand">
-          <a class="wordmark" href="./" aria-label="ROMinit home">
-            <span class="wordmark-mark" aria-hidden="true">R</span>
-            <span>ROMINIT <span class="wordmark-divider">/</span> WEBUSB</span>
-          </a>
-          <div class="brand-sub">
-            <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
-              <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a></nav>
-            </details>
-            <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
-          </div>
-        </div>
-        <nav class="sitenav" aria-label="Site">
-          <div class="search-col">
-            <form action="./" role="search"><input type="search" name="q" placeholder="Search phones…" aria-label="Search phones"></form>
-            <label class="host-pick">Flashing from <select id="host" aria-label="Your computer's operating system"></select></label>
-          </div>
-          <a href="./">Devices</a><a href="./?view=brands">Brands</a><a href="./?view=projects">Projects</a><a href="./?view=popular">Popular</a>
-        </nav>
+        <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> WEBUSB</span></a>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Experimental</span>
+        <nav class="sitenav" aria-label="Site"><a href="./">Devices</a><a href="./?view=brands">Brands</a><a href="./?view=projects">Projects</a><a href="./?view=popular">Popular</a><a href="./alpine">OS</a></nav>
         <div class="topbar-side">
-          <span class="topbar-note"><a href="https://www.buymeacoffee.com/philipplinux">☕ BUY ME A COFFEE</a></span>
-          <small class="topbar-note experimental"><span class="live-dot" aria-hidden="true"></span> EXPERIMENTAL</small>
+        <form class="topbar-search" action="./" role="search"><input type="search" name="q" placeholder="Search phones…" aria-label="Search phones"></form>
+        <label class="host-pick"><span>From</span><select id="host" aria-label="Your computer's operating system"></select></label>
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="./#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
         </div>
       </header>
       <p class="disclaimer" role="note"><strong>⚠ Use at your own risk!</strong> No guarantees provided. Flashing needs Chrome or Edge (WebUSB) over HTTPS; each stage lists what your computer needs first.<button type="button" class="disclaimer-close" aria-label="Hide this notice">×</button></p>

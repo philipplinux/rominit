@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PassThrough } from 'node:stream';
 import test from 'node:test';
-import { loadDevices, main } from '../bin/cli.mjs';
+import { loadDevices, main, sshArgs } from '../bin/cli.mjs';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 
 const { devices } = await loadCatalog();
@@ -197,4 +197,110 @@ test('catalog comes from the site per device, 404 = unknown, --local reads catal
   const t = io(false);
   assert.equal(await main(['plan', 'laurel_sprout', rom.id], t, { get }), 0);
   assert.match(t.chunks.out, /confirm: ERASE MI A3/);
+});
+
+test('twrp-dd runs through the ADB shell only after TTY confirmation and forwards the requested bench host', async () => {
+  const device = structuredClone(mia3);
+  device.codename = 'jfltexx'; device.name = 'Samsung Galaxy S4'; device.detect = { adb: { device: 'jfltexx' } };
+  const payload = 's4 recovery image';
+  const hash = sha(payload);
+  const stage = { title: 'Install TWRP', recipe: 'twrp-dd', mode: 'recovery', warning: 'Writes recovery.', confirm: 'ERASE S4',
+    by_name: '/dev/block/by-name', files: [{ name: 'recovery.img', size: payload.length, sha256: hash, source: 'test' }],
+    steps: [['write', 'RECOVERY', 'recovery.img'], ['reboot']], options: [] };
+  const rom = { ...structuredClone(device.roms[0]), id: 'twrp-test', os: 'postmarketOS', version: 'test', stages: [stage] };
+  device.roms = [rom];
+  const catalog = { devices: [device] };
+  const dir = mkdtempSync(join(tmpdir(), 'rominit-twrp-'));
+  writeFileSync(join(dir, 'recovery.img'), payload);
+  const commands = [], writes = [], benches = [];
+  const shell = { run: async command => {
+    commands.push(command);
+    if (command === 'getprop ro.product.device') return { code: 0, out: 'jfltexx' };
+    if (command === 'getprop ro.twrp.version') return { code: 0, out: '3.7.0' };
+    if (command === 'cat /proc/mounts') return { code: 0, out: '' };
+    if (command.startsWith('test -b ')) return { code: 0, out: '' };
+    if (command.startsWith('readlink -f ')) return { code: 0, out: '/dev/block/sda1' };
+    if (command.startsWith('blockdev --getsize64 ')) return { code: 0, out: '1048576' };
+    if (command.startsWith('head -c ')) return { code: 0, out: `${hash}  -` };
+    if (command === 'sync' || command === 'reboot') return { code: 0, out: '' };
+    throw Error(`Unexpected shell command: ${command}`);
+  }, pipe: async (command, file) => { writes.push([command, await file.text()]); return { code: 0, out: '' }; } };
+  const args = ['run', 'jfltexx', rom.id, '--stage', '1', '--dir', dir, '--host', 'fe80::1%usb0'];
+  let opened = 0;
+  const blocked = io(false, 'ERASE S4');
+  assert.equal(await main(args, blocked, { catalog, session: async () => { opened++; return shell; } }), 1);
+  assert.match(blocked.chunks.out, /stdin is not a terminal/);
+  assert.equal(opened, 0);
+
+  const t = io(true, 'ERASE S4');
+  assert.equal(await main(args, t, { catalog, session: async () => { opened++; return shell; }, bench: async (...call) => benches.push(call) }), 0);
+  assert.equal(opened, 1);
+  assert.deepEqual(writes, [['dd of=/dev/block/by-name/RECOVERY bs=1048576', payload]]);
+  assert.ok(commands.includes('reboot'));
+  assert.equal(benches[0][4].host, 'fe80::1%usb0');
+});
+
+test('Node ADB credentials use WebCrypto in memory, and password SSH disables key auth', async () => {
+  const { ephemeralAdbCredentials, installBrowserShims } = await import('../bin/node-env.mjs');
+  installBrowserShims();
+  const device = {};
+  assert.equal(new globalThis.USBConnectionEvent('connect', { device }).device, device);
+  const credentials = ephemeralAdbCredentials();
+  const key = await credentials.generateKey();
+  assert.equal(key.name, 'ROMinit@CLI');
+  assert.ok(key.buffer instanceof Uint8Array && key.buffer.length > 1000);
+  const stored = [];
+  for await (const saved of credentials.iterateKeys()) stored.push(saved);
+  assert.deepEqual(stored, [key]);
+  const fresh = [];
+  for await (const saved of ephemeralAdbCredentials().iterateKeys()) fresh.push(saved);
+  assert.deepEqual(fresh, []);
+  assert.deepEqual(sshArgs('user', 'password', 'phone'), ['-o', 'PreferredAuthentications=password', '-o', 'PubkeyAuthentication=no',
+    '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', 'user@phone', 'sh']);
+  assert.deepEqual(sshArgs('user', '', 'phone').slice(0, 2), ['-o', 'StrictHostKeyChecking=no']);
+});
+
+test('Node WebUSB requestDevice reuses the selected device without replacing getDevices or events', async () => {
+  const { pinUsbRequestDevice } = await import('../bin/cli.mjs');
+  const chosen = { vendorId: 1, productId: 2 };
+  const usb = /** @type {any} */ (new EventTarget());
+  const getDevices = async () => [chosen];
+  usb.getDevices = getDevices;
+  usb.requestDevice = async () => { throw Error('must not re-enumerate USB devices'); };
+
+  pinUsbRequestDevice(usb, chosen);
+
+  assert.equal(await usb.requestDevice({ filters: [{ vendorId: 99 }] }), chosen);
+  assert.equal(usb.getDevices, getDevices);
+  assert.deepEqual(await usb.getDevices(), [chosen]);
+  assert.ok(usb instanceof EventTarget);
+});
+
+test('selected Node USB descriptors are cached before ADB transfers can hold native borrows', async () => {
+  const { cacheUsbDescriptors } = await import('../bin/cli.mjs');
+  let transferActive = false, reads = 0;
+  const device = {};
+  for (const name of ['serialNumber', 'manufacturerName', 'productName', 'vendorId', 'productId']) {
+    Object.defineProperty(device, name, { configurable: true, get() {
+      assert.equal(transferActive, false, `${name} getter ran during a USB transfer`);
+      reads++;
+      return `cached-${name}`;
+    } });
+  }
+
+  cacheUsbDescriptors(device);
+  transferActive = true;
+
+  assert.deepEqual(['serialNumber', 'manufacturerName', 'productName', 'vendorId', 'productId'].map(name => device[name]),
+    ['cached-serialNumber', 'cached-manufacturerName', 'cached-productName', 'cached-vendorId', 'cached-productId']);
+  assert.equal(reads, 5);
+});
+
+test('expected ADB disconnect rejection is consumed without hiding active operation errors', async () => {
+  const { handleAdbDisconnect } = await import('../src/protocols/usb.js');
+  const disconnect = Promise.reject(new Error('transferIn error: Disconnected'));
+  const adb = handleAdbDisconnect({ disconnected: disconnect, run: async () => { throw Error('active shell failure'); } });
+
+  await assert.rejects(adb.run(), /active shell failure/);
+  await new Promise(resolve => setImmediate(resolve));
 });

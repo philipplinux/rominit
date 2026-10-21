@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="Alpine Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.">
+    <title>Alpine Linux · OS · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./alpine.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to Alpine Linux</a>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> OS</span></a>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Experimental</span>
+        <nav class="sitenav" aria-label="Site"><a href="./">Devices</a><a href="./?view=brands">Brands</a><a href="./?view=projects">Projects</a><a href="./?view=popular">Popular</a><a href="./alpine" aria-current="page">OS</a></nav>
+        <div class="topbar-side">
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="./#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
+        </div>
+      </header>
+      <main id="main" class="alpine-page">
+        <section class="alpine-hero alpine-card">
+          <img class="alpine-logo" src="./logos/alpine.svg" alt="Alpine Linux logo" width="180" height="85">
+          <div class="alpine-hero-text">
+            <p class="eyebrow">OPERATING SYSTEM / INDEPENDENT LINUX</p>
+            <h1>Alpine Linux<span>.</span></h1>
+            <p id="alpine-version" class="alpine-version"></p>
+            <p class="intro-copy">A small Linux base built around musl and BusyBox. Pick an edition for your use, then the architecture of the machine that will run it.</p>
+            <div id="alpine-architectures" class="architecture-tags" aria-label="Supported architecture families"></div>
+          </div>
+        </section>
+        <section class="alpine-preview alpine-card" aria-labelledby="preview-title">
+          <div class="alpine-preview-text">
+            <p class="eyebrow">IS IT FOR YOU?</p>
+            <h2 id="preview-title">Alpine Linux, pros and cons</h2>
+            <div class="alpine-procon">
+              <div><h3>Pros</h3><ul><li>Tiny and fast: a prompt in seconds, runs on old hardware.</li><li>apk packages and OpenRC keep it simple and hands-on.</li><li>Diskless, data and system modes give you a choice of persistence.</li></ul></div>
+              <div><h3>Cons</h3><ul><li>Terminal only: no desktop unless you add one.</li><li>musl and BusyBox differ from glibc/GNU, so some apps need checking.</li><li>Needs network to add packages; Wi-Fi can need extra setup.</li></ul></div>
+            </div>
+            <p class="alpine-links">
+              <a href="https://alpinelinux.org/" rel="noopener noreferrer" target="_blank">Alpine website ↗</a>
+              <a href="https://wiki.alpinelinux.org/wiki/Desktop_environments_and_Window_managers" rel="noopener noreferrer" target="_blank">Add a desktop ↗</a>
+              <a href="https://www.youtube.com/watch?v=YNYtJ3jyMRs" rel="noopener noreferrer" target="_blank">YouTube demo ↗</a>
+            </p>
+            <p class="field-help">The recording shows three commands in a ROMinit test VM. The video is an older community walkthrough (Trafotin, 2023); follow the current official installation instructions.</p>
+          </div>
+          <figure class="alpine-term">
+            <div class="alpine-term-bar" aria-hidden="true"><i></i><i></i><i></i><span>alpine-standard-x86_64 · 3.24.2</span></div>
+            <img id="alpine-operation" src="./shots/alpine-operation.gif" alt="Alpine Linux terminal showing release information, apk and setup-alpine help" width="640" height="352">
+            <figcaption>ROMinit VM recording · no host disk attached.</figcaption>
+          </figure>
+        </section>
+        <section class="alpine-card alpine-downloads" aria-labelledby="downloads-title">
+          <p class="eyebrow">EDITION → ARCHITECTURE → USB</p><h2 id="downloads-title">Choose your Alpine Linux</h2>
+          <div class="alpine-selection"><label for="alpine-edition">Edition</label><select id="alpine-edition"></select><span id="alpine-release" class="field-help"></span></div>
+          <p id="alpine-edition-description"></p><p id="alpine-edition-note" class="field-help"></p>
+          <div id="alpine-images" class="alpine-images"></div>
+          <noscript><p>Enable JavaScript to select editions, or use <a href="https://alpinelinux.org/downloads/">Alpine’s official downloads</a>.</p></noscript>
+          <section id="alpine-usb" aria-label="Prepare the selected image on USB"><h3>Prepare a USB</h3><p id="alpine-usb-status" class="status" role="status" aria-live="polite"></p><div id="alpine-usb-panel"></div></section>
+        </section>
+        <p class="alpine-status">Ventoy is the primary USB route. The Standard x86_64 ISO was copied and read-back verified on a test stick; booting that stick on a physical PC remains untested. Direct image writing is an explicit alternative that erases the stick; a matching read-back checksum verifies the write, not hardware boot compatibility. ARM64 ISO boot requires compatible UEFI hardware; Raspberry Pi media uses its own setup route.</p>
+        <footer class="alpine-footer"><a href="https://alpinelinux.org/downloads/">Official downloads &amp; checksums</a><a href="https://gitlab.alpinelinux.org/alpine/aports">Alpine source</a><a href="https://wiki.alpinelinux.org/wiki/Installation">Installation guide</a><a href="https://www.ventoy.net/en/index.html">Ventoy firmware support</a><span>Release metadata checked 2026-10-20</span></footer>
+      </main>
+    </div>
+  </body>
+</html>

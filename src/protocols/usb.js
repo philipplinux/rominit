@@ -11,21 +11,31 @@ export async function connectOdin() {
   return odin;
 }
 
-/** ADB (TWRP or Android): pick the phone and authenticate (accept the prompt on the phone if shown). */
-export async function connectAdb() {
+/** ADB (TWRP or Android): pick the phone and authenticate (accept the prompt on the phone if shown).
+ * @param {import('@yume-chan/adb').AdbCredentialStore} [credentialStore] */
+export async function connectAdb(credentialStore = new AdbWebCredentialStore('ROMinit')) {
   const manager = AdbDaemonWebUsbDeviceManager.BROWSER;
   if (!manager) throw Error('WebUSB is not available in this browser.');
   const device = await manager.requestDevice();
   if (!device) throw Error('No device selected.');
-  return openAdb(device);
+  return openAdb(device, credentialStore);
 }
 
-/** @param {import('@yume-chan/adb-daemon-webusb').AdbDaemonWebUsbDevice} device */
-async function openAdb(device) {
+/** @param {import('@yume-chan/adb-daemon-webusb').AdbDaemonWebUsbDevice} device
+ * @param {import('@yume-chan/adb').AdbCredentialStore} [credentialStore] */
+async function openAdb(device, credentialStore = new AdbWebCredentialStore('ROMinit')) {
   const connection = await device.connect();
   const transport = await AdbDaemonTransport.authenticate({
-    serial: device.serial, connection, credentialStore: new AdbWebCredentialStore('ROMinit') });
-  return { adb: new Adb(transport), usb: device.raw };
+    serial: device.serial, connection, credentialStore });
+  const adb = handleAdbDisconnect(new Adb(transport));
+  return { adb, usb: device.raw };
+}
+
+/** Consume the transport monitor rejection so a normal reboot disconnect cannot crash Node after a successful command.
+ * Awaited shell and pipe operations still report their own transfer failures to the recipe. @param {Adb} adb */
+export function handleAdbDisconnect(adb) {
+  void adb.disconnected.catch(() => {});
+  return adb;
 }
 
 /**
@@ -42,11 +52,12 @@ export function adbMove(state, want) {
 }
 
 /** Connects over ADB and moves the phone into `want` itself (Android → TWRP → sideload), reconnecting to the
- * same serial each time (same browser permission, no second picker). @param {'recovery'|'sideload'} want @param {(line:string)=>void} log */
-async function connectAdbIn(want, log) {
+ * same serial each time (same browser permission, no second picker). @param {'recovery'|'sideload'} want @param {(line:string)=>void} log
+ * @param {import('@yume-chan/adb').AdbCredentialStore} [credentialStore] */
+async function connectAdbIn(want, log, credentialStore = new AdbWebCredentialStore('ROMinit')) {
   const state = (/** @type {Adb} */ adb) => /** @type {string|undefined} */ (adb.banner.state); // raw banner word; the lib's type lists fewer
   const manager = /** @type {NonNullable<typeof AdbDaemonWebUsbDeviceManager.BROWSER>} */ (AdbDaemonWebUsbDeviceManager.BROWSER);
-  let current = await connectAdb();
+  let current = await connectAdb(credentialStore);
   const serial = current.usb.serialNumber;
   for (let moves = 0; ; moves++) {
     log(`ADB banner: ${JSON.stringify(current.adb.banner)}`);
@@ -64,7 +75,7 @@ async function connectAdbIn(want, log) {
       await new Promise(r => setTimeout(r, 1000));
       const device = (await manager.getDevices()).find(d => d.serial === serial);
       if (!device) continue;
-      next = await openAdb(device).catch(e => (log(`Reconnect failed: ${e?.message ?? e}`), null));
+      next = await openAdb(device, credentialStore).catch(e => (log(`Reconnect failed: ${e?.message ?? e}`), null));
       if (next && state(next.adb) !== move.wait) { log(`Phone back in ${state(next.adb)}, waiting for ${move.wait}`); await next.adb.close().catch(() => {}); next = null; }
     }
     if (!next) throw Error(want === 'sideload'
@@ -75,13 +86,44 @@ async function connectAdbIn(want, log) {
 }
 
 /**
- * Shell runner for the twrp-dd recipe. Needs the shell v2 protocol: the legacy shell may
- * mangle binary stdin, which would silently corrupt the written partition.
+ * Shell runner for old TWRP without shell protocol v2. The legacy shell may mangle binary stdin and has no exit
+ * code, so images go over sync (adb push) in chunks to /tmp (tmpfs, RAM-bound) and `dd` writes each at its offset;
+ * exit codes come from an echoed marker. `pipe` commands must be a `dd of=… bs=1MiB` that reads stdin.
+ * @param {Adb} adb @param {number} [chunk] @returns {import('../recipes/twrp-dd.js').Shell}
+ */
+export function legacyShell(adb, chunk = 64 * 1024 * 1024) {
+  const tmp = '/tmp/rominit.chunk';
+  const run = async (/** @type {string} */ command) => {
+    const out = (await adb.subprocess.noneProtocol.spawnWaitText(`${command}; echo ROMINIT_RC=$?`)).replace(/\r/g, '');
+    const rc = out.match(/ROMINIT_RC=(\d+)\s*$/);
+    return { code: rc ? Number(rc[1]) : -1, out: out.replace(/ROMINIT_RC=\d+\s*$/, '') };
+  };
+  return {
+    run,
+    async pipe(command, file, progress) {
+      for (let offset = 0; offset < file.size; offset += chunk) {
+        const sync = await adb.sync();
+        try {
+          await sync.write({ filename: tmp, file: /** @type {any} */ (file.slice(offset, offset + chunk).stream()) });
+        } finally { await sync.dispose(); }
+        const result = await run(`${command} if=${tmp} seek=${offset / (1024 * 1024)} conv=notrunc`);
+        if (result.code !== 0) { await run(`rm -f ${tmp}`); return result; }
+        progress(Math.min(1, (offset + chunk) / file.size));
+      }
+      await run(`rm -f ${tmp}`);
+      return { code: 0, out: '' };
+    }
+  };
+}
+
+/**
+ * Shell runner for the twrp-dd recipe. Prefers shell protocol v2 (binary-safe stdin, real exit codes);
+ * falls back to legacyShell on old TWRP.
  * @param {Adb} adb @returns {import('../recipes/twrp-dd.js').Shell}
  */
 export function adbShell(adb) {
   const shell = adb.subprocess.shellProtocol;
-  if (!shell) throw Error('Phone ADB lacks shell protocol v2; refusing binary writes.');
+  if (!shell) return legacyShell(adb);
   /** @param {{getReader():{read():Promise<{done:boolean,value?:Uint8Array}>}}} stream */
   async function text(stream) {
     const chunks = [];
@@ -156,16 +198,19 @@ export function patientGetvar(run, ms = 15000) {
 
 /** One USB connection per catalog protocol. `usb` is the raw device, watched for disconnects.
  * @param {string} protocol @param {(line:string)=>void} [log] connect steps and the phone's identity, for the debug log
+ * @param {import('@yume-chan/adb').AdbCredentialStore} [credentialStore]
  * @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
-export async function connect(protocol, log = () => {}) {
-  const found = await open(protocol, log);
+export async function connect(protocol, log = () => {}, credentialStore) {
+  const found = await open(protocol, log, credentialStore);
   const u = found.usb;
   log(`USB device: ${u?.manufacturerName ?? '?'} ${u?.productName ?? '?'} (${u?.vendorId?.toString(16).padStart(4, '0')}:${u?.productId?.toString(16).padStart(4, '0')}) serial ${u?.serialNumber ?? '?'}`);
   return found;
 }
 
-/** @param {string} protocol @param {(line:string)=>void} log @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
-async function open(protocol, log) {
+/** @param {string} protocol @param {(line:string)=>void} log
+ * @param {import('@yume-chan/adb').AdbCredentialStore} [credentialStore]
+ * @returns {Promise<{session:any, usb:USBDevice|undefined}>} */
+async function open(protocol, log, credentialStore) {
   if (protocol === 'fastboot') {
     // One instance per page: each FastbootDevice keeps a USB "connect" listener that re-claims the phone on replug,
     // so a second instance (Retry connect) would find the interface taken.
@@ -181,9 +226,9 @@ async function open(protocol, log) {
     const odin = await connectOdin();
     return { session: odin, usb: odin.usbDevice };
   }
-  if (protocol === 'sideload') return connectAdbIn('sideload', log).then(({ adb, usb }) => ({ session: adb, usb }));
+  if (protocol === 'sideload') return connectAdbIn('sideload', log, credentialStore).then(({ adb, usb }) => ({ session: adb, usb }));
   if (protocol === 'adb') {
-    const { adb, usb } = await connectAdbIn('recovery', log);
+    const { adb, usb } = await connectAdbIn('recovery', log, credentialStore);
     return { session: adbShell(adb), usb };
   }
   throw Error(`Unknown USB protocol ${protocol}.`);

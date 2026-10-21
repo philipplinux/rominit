@@ -1,0 +1,48 @@
+{
+  "device": "jfltexx",
+  "recovery": {
+    "id": "twrp",
+    "name": "TWRP",
+    "version": "3.6.1_9-0",
+    "project": "https://twrp.me/",
+    "source": "https://twrp.me/samsung/samsunggalaxys4internationalqualcomm.html",
+    "vetting": "curated",
+    "requirements": [
+      "Samsung GT-I9505 (jfltexx) only.",
+      "Boot straight into TWRP after the flash: a normal boot can restore the stock recovery."
+    ],
+    "imported": "2026-10-17",
+    "imported_from": "https://dl.twrp.me/jfltexx/ and https://dl.twrp.me/jflte/ (sha256 checked against TeamWin's .sha256 files)",
+    "stages": [
+      {
+        "title": "Install TWRP 3.6.1",
+        "section": "tools",
+        "optional": "Skip if TWRP is already installed.",
+        "recipe": "odin",
+        "mode": "download",
+        "confirm": "FLASH TWRP",
+        "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot can restore the stock recovery.",
+        "require_pit": [
+          "BOOT",
+          "RECOVERY"
+        ],
+        "files": [
+          {
+            "name": "twrp-3.6.1_9-0-jflte.img",
+            "size": 10248208,
+            "sha256": "bc0b4041cc77819397fef68ce911bcc4c12f94cffc50eadd7be1f76629c32bda",
+            "source": "https://dl.twrp.me/jflte/twrp-3.6.1_9-0-jflte.img.html"
+          }
+        ],
+        "steps": [
+          [
+            "flash",
+            "RECOVERY",
+            "twrp-3.6.1_9-0-jflte.img"
+          ]
+        ],
+        "done": "TWRP written. Do not boot Android: pull the battery, put it back, then hold Volume Up + Home + Power until TWRP appears."
+      }
+    ]
+  }
+}

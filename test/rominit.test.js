@@ -18,7 +18,7 @@ test('real catalog validates', () => {
   assert.deepEqual(errors, []);
   for (const codename of ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte', 'oriole']) assert.ok(devices.some(d => d.codename === codename), codename);
   const supportOnly = devices.filter(d => d.supportOnly);
-  assert.equal(supportOnly.length, 25);
+  assert.equal(supportOnly.length, 24);
   assert.ok(supportOnly.every(d => !d.roms.length && d.supportUrl.startsWith('https://')));
   // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
   const external = device('oriole');
@@ -263,6 +263,19 @@ test('S9 ROM stage writes, verifies, formats after unmounting, reboots', async (
   const actions = shell.log.filter(c => /^(dd|umount|mke2fs|reboot)/.test(c));
   assert.deepEqual(actions.map(c => c.split(' ').slice(0, 2).join(' ')), [
     `dd of=${stage.by_name}/SYSTEM`, `dd of=${stage.by_name}/VENDOR`, `dd of=${stage.by_name}/BOOT`, 'umount /sdcard', 'umount /data', 'mke2fs -F', 'reboot']);
+});
+
+test('S4 ROM stage unmounts USERDATA before writing it; without the unmount step it fails closed', async () => {
+  const dev = device('jfltexx'), stage = dev.roms.find(r => r.id === 'philipplinux-pmos-server').stages[1];
+  const mounted = ['/dev/block/userdata /data ext4', '/dev/block/userdata /sdcard ext4'];
+  const shell = twrp({ product: 'jflte', mounted });
+  await recipes['twrp-dd'].run(shell, { device: dev, stage, files: fakeFiles(stage), steps: stepsFor(stage) }, noop, noop);
+  assert.deepEqual(shell.log.filter(c => /^(dd|umount|reboot)/.test(c)).map(c => c.split(' ').slice(0, 2).join(' ')), [
+    `dd of=${stage.by_name}/boot`, 'umount /sdcard', 'umount /data', `dd of=${stage.by_name}/userdata`, 'reboot']);
+  const noUnmount = twrp({ product: 'jflte', mounted });
+  const steps = stepsFor(stage).filter(([verb]) => verb !== 'unmount');
+  await assert.rejects(recipes['twrp-dd'].run(noUnmount, { device: dev, stage, files: fakeFiles(stage), steps }, noop, noop), /userdata .* is mounted/);
+  assert.ok(!noUnmount.log.some(c => c.startsWith('dd ')));
 });
 
 test('S9 ROM stage fails closed', async () => {
@@ -541,6 +554,26 @@ test('ADB phones are moved into the mode the recipe needs', async () => {
   assert.match(adbMove('bootloader', 'sideload').error, /Boot TWRP/);
 });
 
+test('old TWRP without shell v2: images go over sync in chunks, dd writes each at its offset', async () => {
+  const { adbShell } = await import('../src/protocols/usb.js');
+  const commands = [], pushed = [];
+  const adb = {
+    subprocess: { shellProtocol: undefined, noneProtocol: { spawnWaitText: async command => {
+      commands.push(command);
+      return command.startsWith('false') ? 'boom\r\nROMINIT_RC=1\r\n' : 'ok\r\nROMINIT_RC=0\r\n';
+    } } },
+    sync: async () => ({ write: async ({ file }) => pushed.push(await new Response(file).text()), dispose: async () => {} })
+  };
+  assert.deepEqual(await adbShell(/** @type {any} */ (adb)).run('getprop x'), { code: 0, out: 'ok\n' });
+  assert.equal((await adbShell(/** @type {any} */ (adb)).run('false')).code, 1);
+  commands.length = 0;
+  const { legacyShell } = await import('../src/protocols/usb.js');
+  const result = await legacyShell(/** @type {any} */ (adb), 1024 * 1024).pipe('dd of=/dev/block/X bs=1048576', new Blob(['a'.repeat(2.5 * 1024 * 1024)]), noop);
+  assert.equal(result.code, 0);
+  assert.deepEqual(pushed.map(p => p.length), [1048576, 1048576, 524288]);
+  assert.deepEqual(commands.map(c => c.match(/seek=(\d+)/)?.[1] ?? c.split(';')[0]), ['0', '1', '2', 'rm -f /tmp/rominit.chunk']);
+});
+
 test('host OS: detected from the browser, setup lines per protocol, errors mapped to the fix', async () => {
   const { detectHost, prereqsFor, fixFor, browserProblem } = await import('../src/hosts.js');
   assert.equal(detectHost({ userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/140' }), 'windows');
@@ -563,7 +596,7 @@ test('ROMvault lint: frontmatter, tags, links, index and the full net are clean'
 });
 
 test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their links, lint-clean', { skip: !existsSync(new URL('../romvault/AGENTS.md', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
-  const { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
+  const { cpSync, lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
   const { tmpdir } = await import('node:os');
   const { join } = await import('node:path');
   const { lint } = await import('../scripts/romvault-lint.mjs');
@@ -572,7 +605,8 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
   try {
     const root = new URL('..', import.meta.url).pathname; // pages link ../../catalog/ and ../../romsources/: mirror the repo around the copy
     for (const e of readdirSync(root)) if (e !== 'romvault') symlinkSync(join(root, e), join(dir, e));
-    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, filter: src => !src.includes('/.git') });
+    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, dereference: true, filter: src => !src.includes('/.git') });
+    assert.equal(lstatSync(vault).isSymbolicLink(), false, 'test fixture must never link to the real ROMvault');
     rmSync(join(vault, 'series/google-pixel-7.md'));
     rmSync(join(vault, 'socs/sdm670.md'));
     for (const f of ['README.md', 'lines/google-pixel.md', 'devices/google-sargo.md', 'devices/google-bonito.md']) {
@@ -598,4 +632,17 @@ test('sources page lists every dependency', async () => {
     const short = dep.split('/').pop() ?? dep;
     assert.ok(listed.includes(dep) || listed.toLowerCase().includes(short.toLowerCase()), `${dep} missing from SOFTWARE in site/app.js`);
   }
+});
+
+test('requests API validates request kind, URLs, paths and ROMs', async () => {
+  const { onRequestPost } = await import('../functions/api/requests.js');
+  const saved = [];
+  const env = { SALT: 'test', ASSETS: { fetch: async () => Response.json([{ codename: 'x', roms: [{ id: 'lineage' }] }]) },
+    DB: { prepare: sql => ({ bind: (...args) => ({ first: async () => null, run: async () => (saved.push([sql, args]), { meta: { changes: 1 } }) }) }) } };
+  const post = body => onRequestPost({ env, request: new Request('https://x/api/requests', { method: 'POST', body: JSON.stringify(body) }) });
+  const common = { kind: 'update', page: '/?device=x', rom: 'x/lineage', url: 'https://example.org/rom', text: 'Please update this listing' };
+  for (const body of [{ ...common, url: 'javascript:alert(1)' }, { ...common, page: '//evil.test' }, { ...common, rom: 'x/missing' }]) assert.equal((await post(body)).status, 400);
+  assert.equal((await post({ ...common, kind: 'mirror', url: undefined })).status, 200);
+  assert.equal((await post(common)).status, 200);
+  assert.deepEqual(saved.map(([, args]) => args[0]), ['mirror', 'update']);
 });

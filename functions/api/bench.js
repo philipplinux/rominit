@@ -1,9 +1,10 @@
-// Phone test runs. GET ?device= lists accepted results, GET ?tested lists codenames that have one. POST {rom, via?: 'cli'} starts one ({code}; via 'cli' = the rominit CLI, inbox 03b / 03c); GET ?code= polls for the script output, and once sent returns the card and its review state; POST {code, final, note} submits the corrected card.
+// Phone test runs. GET ?device= lists accepted results, GET ?tested lists codenames that have one. POST {rom, via?: 'cli'} starts one ({code}; via 'cli' = the rominit CLI, inbox 03b / 03c); GET ?code= polls for the script output, and once received returns the saved card and its review state; POST {code, final, note} saves the report.
 import { json, voterOf } from '../_lib/api.js';
 import { romInfo, userOf } from '../_lib/auth.js';
 
 export const TIERS = ['full', 'partial', 'broken', 'blocked', 'untested', 'n/a', 'inconclusive'];
 const code = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
+const editable = `accepted IS NULL AND review IS NULL AND NOT EXISTS (SELECT 1 FROM triage t WHERE t.inbox = 'benchmarks' AND t.ref = bench_runs.code)`;
 
 /** @param {{request:Request, env:any}} context */
 export async function onRequestGet({ request, env }) {
@@ -44,13 +45,25 @@ export async function onRequestPost({ request, env }) {
     await env.DB.prepare('INSERT INTO bench_runs (code, rom, version, voter, user_id, via) VALUES (?1, ?2, ?3, ?4, ?5, ?6)').bind(run.code, body.rom, rom.version ?? null, voter, (await userOf(env, request))?.id ?? null, body.via === 'cli' ? 'cli' : null).run();
     return json(run);
   }
+  if (body.discard === true) {
+    const { meta } = await env.DB.prepare(`DELETE FROM bench_runs WHERE code = ?1 AND voter = ?2 AND ${editable}`).bind(String(body.code), voter).run();
+    if (meta.changes) return json({ ok: true });
+    const owned = await env.DB.prepare('SELECT 1 FROM bench_runs WHERE code = ?1 AND voter = ?2').bind(String(body.code), voter).first();
+    return owned
+      ? json({ error: 'This report has entered review or was decided; it cannot be discarded. Ask a reviewer if it needs removal.' }, 409)
+      : json({ error: 'unknown test' }, 404);
+  }
   const { final, note, flash = null } = body;
   const entries = final && typeof final === 'object' && !Array.isArray(final) ? Object.entries(final) : [];
   if (!entries.length || entries.length > 60 || !entries.every(([k, v]) => /^[a-z_]{1,24}$/.test(k) && TIERS.includes(/** @type {string} */ (v))))
     return json({ error: 'final must map features to ' + TIERS.join('/') }, 400);
   if (note !== undefined && (typeof note !== 'string' || note.length > 2000)) return json({ error: 'note up to 2000 characters' }, 400);
   if (![null, 'verified', 'unmatched', 'elsewhere'].includes(flash)) return json({ error: 'flash must be verified, unmatched, elsewhere or null' }, 400);
-  const { meta } = await env.DB.prepare("UPDATE bench_runs SET final = ?2, note = ?3, flash = ?5, submitted = datetime('now') WHERE code = ?1 AND submitted IS NULL AND voter = ?4")
+  const { meta } = await env.DB.prepare(`UPDATE bench_runs SET final = ?2, note = ?3, flash = ?5, submitted = coalesce(submitted, datetime('now')) WHERE code = ?1 AND voter = ?4 AND ${editable}`)
     .bind(String(body.code), JSON.stringify(final), note?.trim() || null, voter, flash).run();
-  return meta.changes ? json({ ok: true }) : json({ error: 'unknown or already submitted test' }, 404);
+  if (meta.changes) return json({ ok: true });
+  const owned = await env.DB.prepare('SELECT 1 FROM bench_runs WHERE code = ?1 AND voter = ?2').bind(String(body.code), voter).first();
+  return owned
+    ? json({ error: 'This report has entered review or was decided; edits are locked. Ask a reviewer to reopen it if it needs changes.' }, 409)
+    : json({ error: 'unknown test' }, 404);
 }
