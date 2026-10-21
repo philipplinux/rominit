@@ -1,5 +1,6 @@
 import { OSES, ARCH_FAMILY, osArchitectures, osImage } from '../src/os/index.js';
 import { h } from './dom.js';
+import './header-tuck.js';
 import { ensureHelper, helperRequest, helperSession } from './helper.js';
 import { usbMediaPanel } from './usb-media.js';
 import { PROVIDER_NAMES, mountAccount } from './account.js';

@@ -1,0 +1,30 @@
+{
+  "id": "anyps5",
+  "name": "AnyPS5",
+  "plays": ["ps5"],
+  "summary": "Ports PS5 game and app executables to Linux and Windows. Strictly it is a relinker, not an emulator: it links the game against its own PS5 system library implementations and recompiles shaders to Vulkan, so the game runs as a native program with no emulator process.",
+  "source": "https://github.com/boykopovar/AnyPS5",
+  "license": "GPL-2.0",
+  "version": "v0.1.3",
+  "releaseDate": "2026-10-20",
+  "checkedDate": "2026-10-21",
+  "hosts": ["Linux", "Windows", "macOS (relinker only)"],
+  "how": [
+    "Dump a game you own from a jailbroken PS5: one executable ELF plus its sce_sys/ and sce_module/ folders.",
+    "Convert it with the desktop release or the web converter; the web converter runs in your browser and keeps files on your device.",
+    "Run the converted program on Linux or Windows; controllers work through SDL, mapped in anyps5-input.ini."
+  ],
+  "requirements": [
+    "Your own legally obtained app dump (ELF, sce_sys/, sce_module/)",
+    "A Linux or Windows PC with a Vulkan GPU"
+  ],
+  "warnings": [
+    "Early 0.1.x release: many games are blocked; check the community blocker map before converting.",
+    "AnyPS5 bundles no firmware or keys; dumping your own games needs a jailbroken console."
+  ],
+  "links": [
+    { "label": "Upstream repository", "url": "https://github.com/boykopovar/AnyPS5" },
+    { "label": "Releases", "url": "https://github.com/boykopovar/AnyPS5/releases" },
+    { "label": "Web converter", "url": "https://boykopovar.github.io/AnyPS5/" }
+  ]
+}

@@ -20,7 +20,7 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 /** Top of the device tree. Pi, routers, ARM boards etc. come later. */
-export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', console: 'Consoles', pc: 'OS' };
+export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
 /** catalog/devices/<folder>/<vendor>/<codename>.json: the folder sets the device's category, so each kind keeps its own tree. */
 export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];

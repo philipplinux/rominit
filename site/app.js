@@ -1,8 +1,10 @@
 import { progressRail } from './progress-rail.js';
 import { reportBox, requestButton } from './report.js';
 import { h } from './dom.js';
+import './header-tuck.js';
 import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
+import { EMULATORS } from '../src/emulators/index.js';
 import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
@@ -946,7 +948,7 @@ function devicePicker(index) {
   // Pick one device category or all categories.
   const requestedCategory = params.get('category');
   const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
-    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' ? OSES.length + CONSOLES.length : c === 'pc' ? OSES.length : c === 'console' ? CONSOLES.length : 0);
+    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' ? OSES.length + CONSOLES.length + EMULATORS.length : c === 'pc' ? OSES.length : c === 'console' ? CONSOLES.length : c === 'emulator' ? EMULATORS.length : 0);
     return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === (requestedCategory && Object.hasOwn(CATEGORIES, requestedCategory) ? requestedCategory : 'all'), onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
@@ -984,13 +986,18 @@ function devicePicker(index) {
     const showConsoles = consoleHits.length > 0;
     const consoleEntry = consoleHits.map(console => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${console.id}`, className: 'os-title', textContent: console.name }),
       h('p', { className: 'field-help', textContent: `${console.releaseYear} · ${console.manufacturer} · ${console.variants.length} variants`})));
-    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs || c === 'console' && showConsoles)).map(([c, label]) => c === 'console' && showConsoles
+    const emulatorHits = on.has('emulator') ? EMULATORS.filter(emulator => words.every(word => `${emulator.name} ${emulator.id} ${emulator.plays.join(' ')} ${emulator.hosts.join(' ')} ${emulator.summary}`.toLowerCase().includes(word))) : [];
+    const showEmulators = emulatorHits.length > 0;
+    const emulatorEntry = emulatorHits.map(emulator => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${emulator.id}`, className: 'os-title', textContent: emulator.name }),
+      h('p', { className: 'field-help', textContent: `Plays ${emulator.plays.map(id => CONSOLES.find(c => c.id === id)?.name ?? id).join(', ')} · on ${emulator.hosts.join(', ')} · ${emulator.version}` })));
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs || c === 'console' && showConsoles || c === 'emulator' && showEmulators)).map(([c, label]) => c === 'emulator' && showEmulators
+      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...emulatorEntry) : c === 'console' && showConsoles
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...consoleEntry, ...(tree[c] ? vendors(tree[c]) : [])) : c === 'pc' && showOs
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
       : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
-    if (!hits.length && !showOs && !showConsoles && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
-    else if (!hits.length && !showOs && !showConsoles) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
+    if (!hits.length && !showOs && !showConsoles && !showEmulators && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length && !showOs && !showConsoles && !showEmulators) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);

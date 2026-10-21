@@ -67,3 +67,13 @@ test('PS5 overview has credited local assets and separates emulation readiness f
   assert(sony.compatibility.some(rule => rule.supportedFirmware.includes(ps5.firmware.shortVersion)));
   assert(sony.warnings.some(warning => /deletes|erases/i.test(warning)));
 });
+
+test('emulator pages are sourced, link a known console and are linked back from it', async () => {
+  const { EMULATORS } = await import('../src/emulators/index.js');
+  for (const emulator of EMULATORS) {
+    assert.match(emulator.source, /^https:\/\//);
+    assert.match(emulator.checkedDate, /^\d{4}-\d{2}-\d{2}$/);
+    assert(emulator.links.every(link => link.url.startsWith('https://')));
+    for (const id of emulator.plays) assert(CONSOLES.find(c => c.id === id).homebrew.some(project => project.page === emulator.id), `${id} does not link ${emulator.id}`);
+  }
+});

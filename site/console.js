@@ -1,6 +1,7 @@
 import { progressRail } from './progress-rail.js';
 import { CONSOLES, consoleCompatibility } from '../src/consoles/index.js';
 import { h } from './dom.js';
+import './header-tuck.js';
 import { mountAccount } from './account.js';
 import { reportBox } from './report.js';
 
@@ -36,18 +37,34 @@ if (!info) {
   byId('console-meta').replaceChildren(
     h('span', { className: 'architecture-tag', textContent: info.manufacturer }),
     h('span', { className: 'architecture-tag', textContent: `Released ${info.releaseYear}` }));
-  byId('console-specs').replaceChildren(...factRows(info.specs, facts));
-
   const firmware = info.firmware;
-  byId('console-firmware').textContent = firmware.version ?? 'Current version not verified';
-  byId('console-firmware-checked').textContent = firmware.checkedDate ? `Checked ${firmware.checkedDate}. Firmware changes over time.` : 'Firmware information needs a dated check.';
-  const firmwareSource = external(firmware.source, 'Firmware source ↗');
+  byId('console-firmware').textContent = firmware.version ?? 'not verified';
+  byId('console-firmware-checked').textContent = firmware.checkedDate ? `checked ${firmware.checkedDate}` : 'needs a dated check';
+  const firmwareSource = external(firmware.source, 'source ↗');
   if (firmwareSource) byId('console-firmware-source').append(firmwareSource);
 
-  byId('console-variants').replaceChildren(...(info.variants ?? []).map(variant => h('article', { className: 'console-variant' },
-    h('h3', { textContent: variant.model }),
-    h('dl', { className: 'console-facts' }, ...factRows({ region: variant.region, releaseYear: variant.releaseYear, storage: variant.storage, notes: variant.notes }, { region: 'Region', releaseYear: 'Release year', storage: 'Storage', notes: 'Notes' }),
-      ...factRows(variant.specs, facts).map(row => { row.classList.add('console-variant-spec'); return row; })))));
+  // How open each model is, per layer, derived from the projects' documented firmware lists, never typed by hand.
+  const layers = [['Unofficial code', project => project.kind === 'entrypoint'], ['Kernel', project => project.kind === 'kernel'],
+    ['Hypervisor', project => project.access === 'hypervisor'], ['Linux', project => project.kind === 'linux']];
+  const byVersion = (a, b) => a.localeCompare(b, undefined, { numeric: true });
+  byId('console-models').replaceChildren(...info.models.map(model => {
+    const variant = info.variants?.find(v => v.model === model.name) ?? {};
+    const versionsFor = test => [...new Set(info.homebrew.filter(test).flatMap(project => project.compatibility
+      .filter(rule => rule.status === 'documented' && rule.models.includes(model.id)).flatMap(rule => rule.supportedFirmware)))].sort(byVersion);
+    const entry = versionsFor(layers[0][1]);
+    const verdict = entry.includes(firmware.shortVersion) ? ['yes', `Open on current firmware ${firmware.shortVersion}`] : entry.length ? ['older', `Older firmware only · not ${firmware.shortVersion}`] : ['none', 'No documented entry point'];
+    return h('article', { className: 'console-variant' },
+      h('h3', { textContent: `${model.name}${variant.releaseYear ? ` · ${variant.releaseYear}` : ''}` }),
+      h('p', { className: `console-jb-verdict console-jb-${verdict[0]}`, textContent: verdict[1] }),
+      h('div', {}, ...layers.map(([label, test]) => { const list = versionsFor(test);
+        // A deeper layer only counts where this model also has a documented entry point on that firmware.
+        const stranded = list.length && test !== layers[0][1] && !list.some(version => entry.includes(version));
+        return h('span', { className: `console-jb-layer${!list.length ? ' console-jb-none' : stranded ? ' console-jb-older' : ''}`, title: stranded ? `Documented for ${list.join(', ')}, but no entry point is documented for this model on those versions` : '',
+          textContent: `${label} ${!list.length ? '–' : stranded ? 'no entry point yet' : list.length < 3 ? list.join(', ') : `up to ${list.at(-1)}`}` }); })),
+      h('details', { className: 'console-project-details' }, h('summary', { textContent: 'Hardware specs' }),
+        h('dl', { className: 'console-facts' }, ...factRows({ storage: variant.storage, ...variant.specs }, { storage: 'Storage', ...facts }))),
+      variant.notes ? h('details', { className: 'console-project-details' }, h('summary', { textContent: 'Model numbers & notes' }), h('p', { textContent: `${variant.region ? `${variant.region}. ` : ''}${variant.notes}` })) : null);
+  }));
 
   const modelSelect = /** @type {HTMLSelectElement} */ (byId('console-model'));
   modelSelect.append(...info.models.map(model => h('option', { value: model.id, textContent: model.name })));
@@ -59,11 +76,13 @@ if (!info) {
   if (info.models.some(model => model.id === params.get('model'))) modelSelect.value = params.get('model');
   if (params.has('firmware')) firmwareSelect.value = versions.includes(params.get('firmware')) ? params.get('firmware') : 'unlisted';
   const modelName = id => info.models.find(model => model.id === id)?.name ?? id;
+  /** Page section id, project kinds shown there, label in the route finder. */
+  const sections = [['console-entrypoints', ['entrypoint'], 'Jailbreak routes'], ['console-kernel', ['kernel', 'research'], 'Deeper access'], ['console-linux', ['linux'], 'Linux'], ['console-homebrew', ['payload/app'], 'Homebrew apps'], ['console-emulation', ['emulation'], 'Emulation'], ['console-emulation-research', ['emulation-research'], 'Emulation research'], ['console-pc', ['pc-port'], 'PS5 games elsewhere'], ['console-rollback', ['rollback'], 'Rollback'], ['console-recovery', ['recovery'], 'Recovery'], ['console-tools', ['tool', 'usb-tool'], 'Tools']];
   const renderProjects = () => {
     const model = modelSelect.value, firmware = firmwareSelect.value;
     const projects = info.homebrew.map(project => ({ project, state: consoleCompatibility(project, model, firmware) }));
     projects.sort((a, b) => Number(b.state.startsWith('Documented')) - Number(a.state.startsWith('Documented')));
-    for (const [id, kinds] of [['console-emulation', ['emulation']], ['console-emulation-research', ['emulation-research']], ['console-entrypoints', ['entrypoint']], ['console-kernel', ['kernel', 'research']], ['console-linux', ['linux']], ['console-homebrew', ['payload/app']], ['console-rollback', ['rollback']], ['console-recovery', ['recovery']], ['console-tools', ['tool', 'usb-tool']]]) {
+    for (const [id, kinds] of sections) {
       byId(String(id)).replaceChildren(...projects.filter(({ project }) => kinds.includes(project.kind)).map(({ project, state }) => h('article', { id: projectId(project), className: 'console-project', tabIndex: -1 },
         h('div', { className: 'console-project-heading' }, h('h3', { textContent: project.name })),
         'availability' in project ? h('p', { className: 'console-project-availability', textContent: project.availability }) : null,
@@ -74,18 +93,27 @@ if (!info) {
           ...project.compatibility.map(rule => h('p', { className: 'field-help', textContent: `${rule.models.map(modelName).join(', ')}: ${rule.supportedFirmware.length ? rule.supportedFirmware.join(', ') : 'No exact firmware list published'}. ${rule.note ?? ''}` })),
           project.requirements.length ? h('div', {}, h('strong', { textContent: 'Requires' }), h('ul', {}, ...project.requirements.map(text => h('li', { textContent: text })))) : null),
         ...project.warnings.map(text => h('p', { className: 'console-project-warning', textContent: text })),
-        h('div', { className: 'console-project-links' }, external(project.source, 'Project guide ↗'), ...project.links.filter(link => link.url !== project.source).map(link => external(link.url, `${link.label} ↗`))),
+        h('div', { className: 'console-project-links' }, project.page ? h('a', { href: `./${project.page}`, textContent: 'ROMinit page →' }) : null, external(project.source, 'Project guide ↗'), ...project.links.filter(link => link.url !== project.source).map(link => external(link.url, `${link.label} ↗`))),
         h('p', { className: 'field-help', textContent: `Sources checked ${project.checkedDate}` }))));
     }
-    const matches = projects.filter(({ project, state }) => project.kind === 'entrypoint' && state.startsWith('Documented'));
+    const listsModel = project => project.compatibility.some(rule => rule.models.includes(model));
+    const fw = firmware && firmware !== 'unlisted' ? ` · ${firmware}` : '';
+    const groups = [[`Documented for ${modelName(model)}${fw}`, projects.filter(({ state }) => state.startsWith('Documented'))],
+      [`Lists ${modelName(model)}, firmware not confirmed`, projects.filter(({ project, state }) => state === 'Unverified' && listsModel(project))]].filter(([, items]) => items.length);
+    const link = project => h('a', { className: 'console-match-link', href: `#${projectId(project)}`, textContent: project.name, onclick() {
+      const card = byId(projectId(project));
+      for (let fold = card.closest('details'); fold; fold = fold.parentElement?.closest('details') ?? null) fold.open = true;
+      card.focus({ preventScroll: true });
+      card.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    } });
     byId('console-match-status').replaceChildren(
-      h('strong', { textContent: !model || !firmware ? 'Choose both a model and firmware to find your starting point.' : matches.length ? `Starting points for ${modelName(model)} · ${firmware}` : 'No starting point lists this combination yet.' }),
-      ...(!model || !firmware ? [] : matches.map(({ project }) => h('a', { className: 'console-match-link', href: `#${projectId(project)}`, textContent: `${project.name} — show this project ↓`, onclick() {
-        const card = byId(projectId(project));
-        card.focus({ preventScroll: true });
-        card.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-      } }))),
-      h('p', { className: 'field-help', textContent: 'These are first steps, not a complete jailbreak setup. Read the project’s requirements before starting. All projects remain listed below.' }));
+      h('strong', { textContent: !model ? 'Choose your model to see the projects that list it.' : groups.length ? `Projects for ${modelName(model)}${fw}` : 'No project lists this combination yet.' }),
+      ...(!model ? [] : groups.flatMap(([title, items]) => [h('h3', { className: 'console-match-group', textContent: `${title} (${items.length})` }),
+        ...sections.flatMap(([, kinds, label]) => {
+          const inSection = items.filter(({ project }) => kinds.includes(project.kind));
+          return inSection.length ? [h('div', { className: 'console-match-row' }, h('span', { className: 'console-match-section', textContent: label }), ...inSection.map(({ project }) => link(project)))] : [];
+        })])),
+      h('p', { className: 'field-help', textContent: 'Documented means the project names this model and firmware. "Firmware not confirmed" projects list your model without an exact firmware list: check their notes first. These are first steps, not a complete jailbreak setup. All projects remain listed below.' }));
     const url = new URL(location.href);
     for (const [key, value] of [['model', model], ['firmware', firmware]]) {
       if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);

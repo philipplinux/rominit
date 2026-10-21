@@ -7,6 +7,7 @@ import { build } from 'esbuild';
 import { loadCatalog } from './load-catalog.mjs';
 import { OSES } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
+import { EMULATORS } from '../src/emulators/index.js';
 
 const { devices, errors } = await loadCatalog();
 assert(!errors.length, `Catalog problems:\n${errors.join('\n')}`);
@@ -35,6 +36,7 @@ await writeFile('dist/404.html', '<!doctype html><meta charset="utf-8"><title>No
 await build({ entryPoints: ['site/app.js'], outfile: 'dist/app.js', bundle: true,
   format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 await build({ entryPoints: ['site/os.js'], outfile: 'dist/os.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
+await build({ entryPoints: ['site/emulator.js'], outfile: 'dist/emulator.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 await build({ entryPoints: ['site/console.js'], outfile: 'dist/console.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true, legalComments: 'linked' });
 // ?v=<content hash> so a redeploy is picked up despite the host's cache
 const version = async file => createHash('sha256').update(await readFile(`dist/${file}`)).digest('hex').slice(0, 10);
@@ -68,6 +70,17 @@ for (const console of CONSOLES) {
   for (const file of ['console.js', 'style.css']) consoleHtml = consoleHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
   const stamp = { ID: console.id, NAME: console.name, DESCRIPTION: console.summary };
   await writeFile(`dist/${console.id}.html`, consoleHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
+}
+
+// Emulator pages share one template the same way; ids must not collide with console or OS pages.
+const emulatorTemplate = await readFile('site/emulator.html', 'utf8');
+for (const file of ['emulator.js', 'style.css']) assert(emulatorTemplate.includes(`"./${file}"`), `emulator.html lacks ${file}`);
+for (const emulator of EMULATORS) {
+  assert(![...OSES, ...CONSOLES].some(other => other.id === emulator.id), `${emulator.id}: page id already used`);
+  let emulatorHtml = emulatorTemplate;
+  for (const file of ['emulator.js', 'style.css']) emulatorHtml = emulatorHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
+  const stamp = { ID: emulator.id, NAME: emulator.name, DESCRIPTION: emulator.summary };
+  await writeFile(`dist/${emulator.id}.html`, emulatorHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
 }
 
 const notices = OSES.flatMap(os => os.page.credits);

@@ -849,6 +849,7 @@
     },
     {
       "name": "Byepervisor Reborn",
+      "access": "hypervisor",
       "models": [
         "original",
         "slim",
@@ -1862,6 +1863,46 @@
         }
       ],
       "availability": "Source-only project; no formal release or firmware matrix."
+    },
+    {
+      "name": "AnyPS5",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Runs on a Linux or Windows PC, not on the console; firmware of the source console does not apply.",
+      "summary": "Ports PS5 game and app executables to Linux and Windows. It relinks the executable against its own system library implementations and recompiles shaders to Vulkan, with no emulator or separate runtime process. A web converter runs in the browser and keeps files on your device.",
+      "source": "https://github.com/boykopovar/AnyPS5",
+      "kind": "pc-port",
+      "page": "anyps5",
+      "runtime": "Relinked native executable on Linux or Windows (Vulkan); relinker-only build on macOS",
+      "compatibility": [],
+      "checkedDate": "2026-10-21",
+      "requirements": [
+        "Your own legally obtained app dump: one executable ELF plus its sce_sys/ and sce_module/ folders",
+        "A Linux or Windows PC with a Vulkan GPU",
+        "A controller via SDL (mapping in anyps5-input.ini)"
+      ],
+      "warnings": [
+        "Early 0.1.x release: many games are blocked; check the community blocker map before converting.",
+        "AnyPS5 bundles no firmware or keys; dumping your own games needs a jailbroken console."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/boykopovar/AnyPS5"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/boykopovar/AnyPS5/releases"
+        },
+        {
+          "label": "Web converter",
+          "url": "https://boykopovar.github.io/AnyPS5/"
+        }
+      ],
+      "availability": "Release v0.1.3, published 2026-10-20 · GPL-2.0"
     },
     {
       "name": "PS5 Linux (emulation host)",

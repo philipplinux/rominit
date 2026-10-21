@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-emulator="__ID__">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="__DESCRIPTION__">
+    <title>__NAME__ · Emulators · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./emulator.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to __NAME__</a>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> EMULATORS</span></a>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Research</span>
+        <nav class="sitenav" aria-label="Site"><a href="./" data-nav="devices">Devices</a><a href="./?view=brands" data-nav="brands">Brands</a><a href="./?view=projects" data-nav="projects">Projects</a><a href="./?view=popular" data-nav="popular">Popular</a><a href="./?category=pc" data-nav="os">OS</a><a href="./?category=console" data-nav="consoles">Consoles</a><a href="./?category=emulator" data-nav="emulators" aria-current="page">Emulators</a></nav>
+        <div class="topbar-side">
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
+        </div>
+      </header>
+      <main id="main" class="console-page">
+        <section id="emu-overview" data-rail-label="0 · Overview" class="flash-card console-hero">
+          <p class="eyebrow">EMULATOR · <span id="emu-plays"></span></p><h1 id="emu-name">__NAME__</h1>
+          <p id="emu-summary" class="intro-copy"></p><div id="emu-meta" class="architecture-tags" aria-label="Release details"></div>
+          <p class="console-warning" role="note">ROMinit links to the project; it does not host games, firmware or keys.</p>
+        </section>
+        <section id="emu-how" data-rail-label="1 · How it works" class="flash-card console-section"><h2>How it works</h2><ol id="emu-steps"></ol></section>
+        <section id="emu-needs" data-rail-label="2 · Requirements" class="flash-card console-section"><h2>What you need</h2><ul id="emu-requirements"></ul><div id="emu-warnings"></div></section>
+        <section id="emu-links-section" data-rail-label="3 · Links" class="flash-card console-section"><h2>Links</h2><div id="emu-links" class="console-project-links"></div><p id="emu-checked" class="field-help"></p></section>
+        <div id="console-report"></div>
+      </main>
+    </div>
+    <noscript><p>Enable JavaScript to view this page.</p></noscript>
+  </body>
+</html>
