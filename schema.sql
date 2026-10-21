@@ -31,6 +31,16 @@ CREATE TABLE IF NOT EXISTS reports (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   section TEXT -- which page section it is about ("2 · Custom recovery"), or NULL for the whole page
 );
+CREATE TABLE IF NOT EXISTS requests (
+  id INTEGER PRIMARY KEY,
+  kind TEXT NOT NULL CHECK (kind IN ('new', 'update', 'mirror')),
+  page TEXT NOT NULL,
+  rom TEXT,
+  url TEXT,
+  voter TEXT NOT NULL,
+  text TEXT NOT NULL,
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS counts (
   rom TEXT NOT NULL,   -- <codename>/<rom id>
@@ -64,17 +74,17 @@ CREATE TABLE IF NOT EXISTS roles (
   PRIMARY KEY (user_id, role, scope)
 );
 
--- Phone tests: the page starts a run, the phone's script fetches and posts back through the run's code, the user corrects and submits.
+-- Phone tests: the script posts raw results; the page autosubmits and saves corrections until review starts.
 -- Script fixes: SELECT rom, output FROM bench_runs WHERE output LIKE '% inconclusive %' (each line names the probe, exit code and error).
 CREATE TABLE IF NOT EXISTS bench_runs (
-  code TEXT PRIMARY KEY,   -- random, valid for an hour until submitted
+  code TEXT PRIMARY KEY,   -- probe code, valid for an hour until first report save
   rom TEXT NOT NULL,
   version TEXT,            -- the ROM's catalog version when the test started (ROM ids stay stable across updates)
   voter TEXT NOT NULL,
   user_id INTEGER,
   created TEXT NOT NULL DEFAULT (datetime('now')),
   output TEXT,             -- what the script printed, up to 128 KB, package list included
-  final TEXT,              -- JSON {feature: status} after the user's corrections
+  final TEXT,              -- JSON {feature: status}, updated by autosaved corrections
   note TEXT,
   submitted TEXT,
   accepted TEXT,          -- set by an admin: the card's results now show on the ROM page
@@ -83,11 +93,11 @@ CREATE TABLE IF NOT EXISTS bench_runs (
   via TEXT                -- 'cli': sent by the rominit CLI (inbox 03b / 03c); NULL: the site
 );
 
--- Inboxes, one per kind of incoming item: `benchmarks` (submitted phone tests), `reports` (page reports), `failures` (stopped flash stages), `agents` (runs reported through the MCP). Add one by adding a UNION arm.
+-- Inboxes, one per kind of incoming item. Add one by adding a UNION arm.
 -- An LLM (or a person) sorts each item with scripts/inbox.mjs; sorted items leave the inbox.
 CREATE TABLE IF NOT EXISTS triage (
   inbox TEXT NOT NULL,
-  ref TEXT NOT NULL,       -- bench_runs.code, reports.id, flash_failures.id or agent_runs.id
+  ref TEXT NOT NULL,       -- source row key
   label TEXT NOT NULL CHECK (label IN ('script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other')),
   summary TEXT NOT NULL,
   at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -144,16 +154,57 @@ CREATE TABLE IF NOT EXISTS agent_steps (
   detail TEXT               -- error line, bootloader version, the workaround used
 );
 CREATE INDEX IF NOT EXISTS agent_steps_run ON agent_steps (run_id, at);
+-- OS USB preparation results reported by an authenticated local CLI. No account identifiers,
+-- serials, paths, hostnames, hashes or free-form diagnostics are retained here.
+CREATE TABLE IF NOT EXISTS os_usb_runs (
+  job_id TEXT PRIMARY KEY CHECK (length(job_id) = 43 AND job_id NOT GLOB '*[^A-Za-z0-9_-]*'),
+  method TEXT NOT NULL CHECK (method IN ('ventoy', 'direct')),
+  action TEXT NOT NULL CHECK (action IN ('install', 'copy', 'direct')),
+  outcome TEXT NOT NULL CHECK (outcome IN ('success', 'failed')),
+  image_id TEXT NOT NULL,
+  image_name TEXT NOT NULL,
+  image_size INTEGER NOT NULL CHECK (image_size BETWEEN 0 AND 70368744177664),
+  source_verification TEXT NOT NULL CHECK (source_verification IN ('verified', 'mismatch-accepted', 'none')),
+  drive_capacity INTEGER NOT NULL CHECK (drive_capacity > 0),
+  readback_size INTEGER CHECK (readback_size BETWEEN 0 AND 70368744177664),
+  readback_matched INTEGER CHECK (readback_matched IN (0, 1)),
+  failure_code TEXT CHECK (failure_code IN ('preflight', 'device_changed', 'unmount', 'write', 'timeout', 'readback', 'unknown')),
+  environment TEXT CHECK (environment IS NULL OR json_valid(environment)),
+  retries INTEGER CHECK (retries IS NULL OR retries BETWEEN 1 AND 10),
+  at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CHECK ((image_id = 'none' AND image_name = 'No ISO' AND image_size = 0 AND source_verification = 'none') OR
+         (image_id <> 'none' AND image_name <> 'No ISO' AND image_size > 0 AND source_verification <> 'none')),
+  CHECK ((method = 'ventoy' AND action IN ('install', 'copy')) OR (method = 'direct' AND action = 'direct')),
+  CHECK (action <> 'copy' OR image_id <> 'none'),
+  CHECK (method <> 'direct' OR image_id <> 'none'),
+  CHECK ((readback_size IS NULL AND readback_matched IS NULL) OR (readback_size IS NOT NULL AND readback_matched IS NOT NULL)),
+  CHECK ((outcome = 'success' AND failure_code IS NULL AND
+            ((image_id = 'none' AND readback_size IS NULL) OR
+             (image_id <> 'none' AND readback_matched = 1 AND readback_size = image_size AND image_size <= drive_capacity))) OR
+         (outcome = 'failed' AND failure_code IS NOT NULL))
+);
+CREATE INDEX IF NOT EXISTS os_usb_runs_outcome_at ON os_usb_runs (outcome, at DESC);
 CREATE VIEW IF NOT EXISTS inbox AS
-  SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'flash', flash, 'via', via, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
+  SELECT inbox, ref, at, subject, body FROM (
+    SELECT 'benchmarks' AS inbox, code AS ref, submitted AS at, rom AS subject, json_object('final', json(final), 'note', note, 'flash', flash, 'via', via, 'output', output) AS body FROM bench_runs WHERE submitted IS NOT NULL
+    UNION ALL
+    SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports
+    UNION ALL
+    SELECT 'requests-' || kind, CAST(id AS TEXT), at, page, json_object('kind', kind, 'rom', rom, 'url', url, 'text', text) FROM requests
+    UNION ALL
+    SELECT 'failures', CAST(id AS TEXT), at, rom, json_object('stage', stage, 'error', error, 'log', log) FROM flash_failures
+    UNION ALL
+    SELECT 'agents', r.id, r.finished, r.rom, json_object('outcome', r.outcome, 'resolution', r.resolution, 'host', r.host, 'tools', r.tools, 'version', r.version,
+      'steps', (SELECT json_group_array(json_object('stage', s.stage, 'step', s.step, 'outcome', s.outcome, 'detail', s.detail)) FROM agent_steps s WHERE s.run_id = r.id))
+    FROM agent_runs r WHERE r.finished IS NOT NULL
+  ) existing_inboxes
   UNION ALL
-  SELECT 'reports', CAST(id AS TEXT), at, page, text FROM reports
-  UNION ALL
-  SELECT 'failures', CAST(id AS TEXT), at, rom, json_object('stage', stage, 'error', error, 'log', log) FROM flash_failures
-  UNION ALL
-  SELECT 'agents', r.id, r.finished, r.rom, json_object('outcome', r.outcome, 'resolution', r.resolution, 'host', r.host, 'tools', r.tools, 'version', r.version,
-    'steps', (SELECT json_group_array(json_object('stage', s.stage, 'step', s.step, 'outcome', s.outcome, 'detail', s.detail)) FROM agent_steps s WHERE s.run_id = r.id))
-  FROM agent_runs r WHERE r.finished IS NOT NULL;
+  SELECT 'os-usb', job_id, at, 'OS USB', json_object('method', method, 'action', action, 'outcome', outcome,
+    'image', json_object('id', image_id, 'name', image_name, 'size', image_size),
+    'verification', json_object('source', source_verification), 'drive', json_object('capacityBytes', drive_capacity),
+    'readback', CASE WHEN readback_size IS NULL THEN NULL ELSE json_object('size', readback_size, 'matched', readback_matched = 1) END,
+    'failureCode', failure_code, 'retries', retries, 'environment', json(environment))
+  FROM os_usb_runs;
 CREATE TABLE IF NOT EXISTS favorites (
   user_id INTEGER NOT NULL, -- users.id
   rom TEXT NOT NULL,        -- <codename>/<rom id>
@@ -167,3 +218,13 @@ CREATE TABLE IF NOT EXISTS searches (
   at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS searches_q ON searches (q, voter, at);
+
+-- One-use browser approval for the local CLI. Stores no grant code or CLI verifier.
+CREATE TABLE IF NOT EXISTS helper_grants (
+  code_hash TEXT PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  challenge TEXT NOT NULL,
+  expires TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS helper_grants_user_expiry ON helper_grants (user_id, expires);
+CREATE INDEX IF NOT EXISTS helper_grants_expiry ON helper_grants (expires);

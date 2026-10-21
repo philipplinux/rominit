@@ -1,8 +1,14 @@
+import { h } from './dom.js';
+import { ALPINE, ALPINE_ARCHITECTURES, ARCH_FAMILY } from '../src/alpine.js';
 import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
+import { validateUsbEnvironment } from '../src/usb-environment.js';
 import { redact, summarize, traced } from '../src/debug.js';
 import { fetchPinned } from '../src/download.js';
 import { HOSTS, browserProblem, detectHost, fixFor, prereqsFor } from '../src/hosts.js';
+import { disconnectHelper, ensureHelper, helperRequest, helperSession, pairHelper } from './helper.js';
+import { usbMediaPanel } from './usb-media.js';
+import { PROVIDER_NAMES, me, mountAccount, signInLinks } from './account.js';
 
 const DONATE = 'https://www.buymeacoffee.com/philipplinux';
 // ROMinit's own builds: this host lets the page download them itself (CORS), so a stage can attach them in one click.
@@ -33,18 +39,12 @@ if (!stored) {
   dialog.showModal();
 }
 
-/** Tiny DOM builder: catalog data only ever lands in text nodes, never in innerHTML.
- * @template {keyof HTMLElementTagNameMap} K
- * @param {K} tag @param {Record<string, any>} props @param {any[]} children @returns {HTMLElementTagNameMap[K]} */
-function h(tag, props = {}, ...children) {
-  const node = Object.assign(document.createElement(tag), props);
-  node.append(...children.filter(c => c !== null && c !== undefined && c !== false && c !== ''));
-  return node;
-}
 /** Catalog text with `code` spans. @param {string} text */
 const rich = (text = '') => text.split('`').map((part, i) => i % 2 ? h('code', {}, part) : part);
 /** @param {unknown} error */
 const message = error => error instanceof Error ? error.message : String(error);
+/** Quote a command argument for a POSIX shell, preserving embedded apostrophes. @param {string} value */
+const shellArg = value => `'${value.replaceAll("'", "'\\''")}'`;
 const main = /** @type {HTMLElement} */ (document.getElementById('main'));
 const go = (/** @type {Record<string,string>} */ query) => { location.search = `?${new URLSearchParams(query)}`; };
 
@@ -188,48 +188,7 @@ async function webp(file) {
   throw Error('screenshot too large');
 }
 /** Who is signed in and which logins exist; null without the API. @type {Promise<{user:any, providers:string[]}|null>} */
-const me = fetch('./api/me', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-const PROVIDER_NAMES = /** @type {Record<string, string>} */ ({ google: 'Google', github: 'GitHub' });
-/** "Sign in with Google · GitHub", returning to this page. @param {string[]} providers */
-const signInLinks = providers => providers.flatMap((p, i) => [i ? ' · ' : '', h('a', { href: `./auth/${p}/login?return=${encodeURIComponent(location.pathname + location.search)}`, textContent: PROVIDER_NAMES[p] ?? p })]);
-const PROVIDER_LOGOS = /** @type {Record<string, string>} */ ({
-  google: '<svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>',
-  github: '<svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>',
-});
-/** Header, under BUY ME A COFFEE: a SIGN IN button that opens the provider badges, or the account menu. */
-me.then(info => {
-  if (!info?.providers.length && !info?.user) return;
-  const slot = h('span', { className: 'account' });
-  if (info.user) {
-    const input = h('input', { value: info.user.name, maxLength: 30, required: true }), status = h('small', { textContent: 'Shown on your comments. Your email is never shown.' });
-    const pop = h('form', { id: 'username', popover: 'auto', className: 'signin-pop', async onsubmit(/** @type {Event} */ e) {
-      e.preventDefault();
-      const r = await fetch('./api/me', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: input.value }) });
-      const body = await r.json().catch(() => ({}));
-      if (r.ok) location.reload(); else status.textContent = body.error ?? 'could not save';
-    } }, h('strong', { textContent: 'Your username' }), input, h('button', { type: 'submit', className: 'button', textContent: 'Save' }), status);
-    const edit = h('button', { type: 'button', title: 'Change your username', textContent: `Username: ${info.user.name} ✎` });
-    edit.popoverTargetElement = pop;
-    const here = (/** @type {string} */ view) => params.get('view') === view && !params.get('device') ? 'page' : null;
-    const item = (/** @type {string} */ view, /** @type {string} */ text) => { const a = h('a', { href: `./?view=${view}`, textContent: text }); if (here(view)) a.setAttribute('aria-current', 'page'); return a; };
-    // One button for everything about you: username, favorites, inbox (admins), API tokens, sign out.
-    slot.append(h('details', { className: 'site-menu user-menu' }, h('summary', { title: 'Your account', textContent: `👤 ${info.user.name} ▾` }),
-      h('nav', { ariaLabel: 'Account' }, edit, item('favorites', '♥ Favorites'),
-        info.user.roles.some((/** @type {any} */ r) => r.role === 'admin') && item('inbox', 'Inbox'),
-        item('agents', 'API tokens'),
-        h('button', { type: 'button', textContent: 'Sign out', async onclick() { await fetch('./auth/logout', { method: 'POST' }); location.reload(); } }))), pop);
-  }
-  else {
-    const back = encodeURIComponent(location.pathname + location.search);
-    const pop = h('div', { id: 'signin', popover: 'auto', className: 'signin-pop' }, h('strong', { textContent: 'Sign in to ROMinit' }),
-      ...info.providers.map(p => { const a = h('a', { className: `signin-badge ${p}`, href: `./auth/${p}/login?return=${back}` }); a.innerHTML = `${PROVIDER_LOGOS[p] ?? ''}<span>Continue with ${PROVIDER_NAMES[p] ?? p}</span>`; return a; }),
-      h('small', { textContent: 'Only your name and email are used: for comments and ratings. No tracking.' }));
-    const open = h('button', { type: 'button', className: 'link-button', textContent: 'SIGN IN' });
-    open.popoverTargetElement = pop;
-    slot.append(open, pop);
-  }
-  document.querySelector('.topbar-side')?.append(slot);
-});
+mountAccount();
 /** Newest Linux kernel any non-stock ROM brings, as a hardware tag: "community Linux 7.2". @param {any} device */
 const communityKernel = device => {
   const v = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock' && r.rating?.kernel).map((/** @type {any} */ r) => r.rating.kernel.version)
@@ -317,40 +276,66 @@ const SHIPS = /** @type {Record<string, (p:Set<string>) => boolean>} */ ({
   android_apps: p => p.has('waydroid') || p.has('com.android.vending') || p.has('org.fdroid.fdroid'),
   google_play: p => p.has('com.android.vending') && ![...p].some(x => x.startsWith('org.microg')),
   microg: p => [...p].some(x => x.startsWith('org.microg')),
-  root: p => p.has('com.topjohnwu.magisk') || p.has('me.weishu.kernelsu') || p.has('sudo') || p.has('doas'),
+  root: p => ['com.topjohnwu.magisk', 'me.weishu.kernelsu', 'magisk', 'kernelsu', 'sudo', 'sudo-rs', 'doas', 'doas-suid'].some(x => p.has(x)),
 });
 /** Script output → {features: {f: {status, note}}, info: [], debug: [], packages}. @param {string} output */
 function parseBench(output) {
   /** @type {Record<string, {status:string, note:string}>} */ const features = {};
   const info = [], debug = [], packages = new Set();
+  /** @type {{status:string, note:string}|null} */ let root = null;
   for (const line of output.split('\n')) {
     const m = line.match(/^([a-z_]+) (full|partial|broken|blocked|untested|ask|inconclusive) ?(.*)$/);
+    const rootMatch = line.match(/^@root (available|unverified|missing)(?: (.*))?$/);
     if (m && FEATURES.includes(m[1])) features[m[1]] = { status: m[2], note: m[3] };
+    else if (rootMatch) root = { status: rootMatch[1], note: rootMatch[2] ?? '' };
     else if (line.startsWith('@debug ')) debug.push(line.slice(7));
     else if (line.startsWith('@pkgs ')) for (const name of line.slice(6).split(' ')) if (name) packages.add(name);
     else if (line.startsWith('@ ') && line !== '@ done') info.push(line.slice(2));
   }
-  return { features, info, debug, packages };
+  return { features, info, debug, packages, root };
 }
 /**
  * "4 · Test your phone": one command runs a read-only script on the phone (on it, over SSH or ADB), the page waits for its output,
  * shows a report card the user corrects by tapping, asks a few questions (all on request) and submits it.
  * @param {any} rom @param {string} key
+ * @param {string[]} sent @param {() => string|null} flash
+ * @param {{user?:string,password?:string,host?:string,usbHost?:string,way?:string,sound?:boolean}} connection
  */
-function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /** @type {string|null} */ (null)) {
+function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /** @type {string|null} */ (null), connection = {}) {
   const linux = rom.os === 'postmarketOS';
   const [defaultUser, defaultPassword] = (rom.login ?? 'user / ').split(' / ');
-  let loginUser = defaultUser, loginPassword = defaultPassword; // the login box below can change both
-  let sshHost = `${loginUser}@<phone address>`; // last USB / Wi-Fi target, reused in the password hint
+  let loginUser = connection.user ?? defaultUser, loginPassword = connection.password ?? defaultPassword ?? '';
+  let phoneHost = connection.host ?? '', usbHost = connection.usbHost ?? '172.16.42.1', phoneWay = connection.way, phoneSound = connection.sound ?? false;
+  const credentials = () => ({ user: loginUser, password: loginPassword, host: phoneHost, usbHost, way: phoneWay, sound: phoneSound });
+  try { localStorage.removeItem('rominit.phoneIp'); } catch { /* connection details stay in memory */ }
+  let sshHost = `${loginUser}@<phone address>`;
   const box = h('div', { className: 'bench' });
   const start = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Start a phone test' });
-  box.append(h('p', { className: 'intro-copy', textContent: 'One command checks every feature on the phone in a few seconds. It only reads, changes nothing and stays silent. Then you fix anything it got wrong with a tap.' }), start);
+  let pairedHelper = false;
+  const connectHelper = h('p', { className: 'field-help', textContent: 'For one-click testing, keep `rominit serve` running on this computer. ROMinit checks and connects to the CLI when you start the test.' });
+  box.append(h('p', { className: 'intro-copy', textContent: 'Checks the phone silently, then asks about features that need a real try. The report autosubmits when results arrive; your corrections save automatically.' }), h('p', { className: 'field-label', textContent: `Testing ${rom.name} · ${rom.os} · automatic OS detection. Select the ROM currently installed on the phone.` }), start, linux ? connectHelper : '');
+  me.then(info => {
+    const session = helperSession();
+    pairedHelper = linux && !!session && session.user.id === info?.user?.id;
+    start.textContent = pairedHelper ? 'Run with CLI' : 'Start a phone test';
+    connectHelper.hidden = !linux || pairedHelper;
+  });
   start.addEventListener('click', async () => {
     start.disabled = true;
+    let session = null, connectionError = '';
+    const info = linux ? await me : null;
+    if (linux) {
+      if (info?.user) {
+        try { session = await ensureHelper(info.user.id, helperSession()); }
+        catch (error) { connectionError = message(error); }
+      } else connectionError = info ? 'Sign in to ROMinit to connect the CLI.' : 'Could not check your ROMinit account. Check your connection and retry.';
+    }
+    const autoRun = !!session;
+    start.textContent = autoRun ? 'Starting with CLI…' : 'Starting phone test…';
     const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rom: key }) }).catch(() => null);
     const reply = await r?.json().catch(() => ({}));
-    if (!r?.ok) { start.disabled = false; box.append(h('p', { className: 'status', textContent: `Could not start: ${reply?.error ?? 'network error'}.` })); return; }
-    waitFor(reply.code);
+    if (!r?.ok) { start.disabled = false; start.textContent = pairedHelper ? 'Run with CLI' : 'Start a phone test'; box.append(h('p', { className: 'status', textContent: `Could not start: ${reply?.error ?? 'network error'}.` })); return; }
+    waitFor(reply.code, autoRun, session, connectionError);
   });
   // Your sent cards and where review stands: from your account when signed in, else the codes this browser kept, else none.
   fetch(`./api/bench?mine=${encodeURIComponent(key)}`).then(r => r.json()).catch(() => ({})).then(({ codes }) => (codes = codes ?? [...sent].reverse()) &&
@@ -367,53 +352,177 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
     }).catch(() => row.remove());
     return row;
   }))));
+  /** @param {string} code @param {(busy:boolean) => void} onBusy */
+  function discardButton(code, onBusy = () => {}) {
+    return h('button', { type: 'button', className: 'button button-secondary bench-discard', textContent: 'Discard test', async onclick() {
+      this.disabled = true; onBusy(true);
+      const response = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, discard: true }) }).catch(() => null);
+      if (!response?.ok) { this.disabled = false; onBusy(false); this.textContent = 'Could not discard — retry'; return; }
+      box.dispatchEvent(new CustomEvent('bench-discarded', { bubbles: true, detail: code }));
+      box.replaceWith(benchBox(rom, key, sent.filter(item => item !== code), flash, credentials()));
+    } });
+  }
   /** @param {string} code */
-  function waitFor(code) {
+  function waitFor(code, autoRun = false, initialSession = null, initialConnectionError = '') {
     const url = `${location.origin}/b/${code}`;
-    const sound = h('input', { type: 'checkbox' });
+    let localHelper = initialSession ?? helperSession();
+    let helperReady = !!localHelper;
+    const sound = h('input', { type: 'checkbox', checked: phoneSound });
     // Browsers cannot open SSH themselves, so the page builds the one command: USB uses postmarketOS' fixed USB-network address.
     const ssh = 'ssh -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new ';
     const ways = linux ? [['USB cable', 'usb'], ['Wi-Fi', 'wifi'], ['Terminal on the phone', '']]
-      : [['ADB from a computer', 'adb shell '], ['On the phone (terminal app)', '']];
-    let way = ways[0][1];
+      : [['ADB from a computer', 'adb shell '], ['SSH from a computer', 'ssh'], ['On the phone (terminal app)', '']];
+    const savedWay = (() => { try { const value = localStorage.getItem('rominit.benchTransport'); return value === 'wifi' || value === 'usb' ? value : 'usb'; } catch { return 'usb'; } })();
+    let way = phoneWay ?? (linux ? savedWay : ways[0][1]);
     const ip = h('input', { type: 'text', className: 'bench-target', inputMode: 'decimal', spellcheck: false, placeholder: '192.168.1.50',
-      value: (() => { try { return localStorage.getItem('rominit.phoneIp') ?? ''; } catch { return ''; } })() });
+      value: phoneHost });
     const ipRow = h('label', { className: 'field-help', hidden: true }, 'Phone IP address (Settings → Wi-Fi, or `ip a` on the phone): ', ip);
-    // Changed login? Typed here, kept in this browser only: the user goes into the command, the password only into the hint.
-    const userBox = h('input', { type: 'text', className: 'bench-target', spellcheck: false, autocomplete: 'username', value: loginUser });
-    const passBox = h('input', { type: 'text', className: 'bench-target', spellcheck: false, autocomplete: 'off', value: loginPassword });
+    let targetDiscovery = false, usbEdited = !!connection.usbHost;
+    const targetSelect = h('select', { className: 'confirmation-input', ariaLabel: 'USB-network phone' }, new Option('Enter an address manually', ''));
+    const targetHelp = h('small', { className: 'field-help' });
+    const targetRow = h('label', { className: 'field-help', hidden: true }, 'USB-network phone detected by CLI', targetSelect, targetHelp);
+    targetSelect.addEventListener('change', () => {
+      usbEdited = true;
+      if (targetSelect.value) usbHost = targetSelect.value;
+      render();
+    });
+
+    // Login details stay in this tab and are sent only to the paired local CLI when the user runs the test.
+    const userBox = h('input', { type: 'text', className: 'bench-target', spellcheck: false, autocomplete: 'off', value: loginUser });
+    const passBox = h('input', { type: 'password', className: 'bench-target', spellcheck: false, autocomplete: 'off', value: loginPassword });
     const loginRow = h('div', { className: 'field-help bench-login' }, h('label', {}, 'User ', userBox), ' ', h('label', {}, 'Password ', passBox),
-      h('small', { textContent: ' default from the ROM; change it if you set your own' }));
+      h('small', { textContent: ' Prefilled from the ROM’s public defaults. Your edits stay in this tab’s memory.' }));
     const hint = h('p', { className: 'field-help' });
     const command = h('code', { className: 'bench-command' });
+    const helperRun = h('button', { type: 'button', className: 'button button-primary', textContent: 'Run with CLI', hidden: true });
+    const helperStatus = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+    const helperNote = h('p', { className: 'field-help', textContent: 'This run may play a short tone and buzz. The report will tell you if a tool or permission prevented a check.', hidden: true });
+    const sshSelected = () => way === 'usb' || way === 'wifi' || way === 'ssh';
     const render = () => {
-      loginUser = userBox.value.trim() || defaultUser; loginPassword = passBox.value;
-      loginRow.hidden = !(way === 'usb' || way === 'wifi');
+      loginUser = userBox.value.trim() || defaultUser; loginPassword = passBox.value; phoneWay = way; phoneSound = sound.checked;
+      loginRow.hidden = !sshSelected();
       const sh = sound.checked ? 'ROMINIT_SOUND=1 sh' : 'sh';
-      if (way === 'usb' || way === 'wifi') sshHost = `${loginUser}@${way === 'usb' ? '172.16.42.1' : ip.value.trim() || '<phone IP>'}`;
-      const prefix = way === 'usb' || way === 'wifi' ? `${ssh}${sshHost} ` : way;
-      ipRow.hidden = way !== 'wifi';
-      hint.textContent = linux ? `Paste it into a terminal on your computer. ${way ? `When asked, type the password ${loginPassword || 'you set'}. ` : ''}Test code ${code}, valid for an hour. Reflashed the phone and SSH says REMOTE HOST IDENTIFICATION HAS CHANGED? The new install has a new key: run ssh-keygen -R 172.16.42.1 (on Wi-Fi: the phone IP), then the command again.`
-        : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.`;
+      ip.value = way === 'usb' ? usbHost : phoneHost;
+      if (sshSelected()) sshHost = `${loginUser}@${ip.value.trim() || '<phone IP>'}`;
+      const prefix = sshSelected() ? `${ssh}-- ${shellArg(sshHost)} ` : way;
+      ipRow.hidden = !sshSelected();
+      targetRow.hidden = way !== 'usb' || !targetDiscovery;
+      targetSelect.value = [...targetSelect.options].some(option => option.value === usbHost) ? usbHost : '';
+      hint.textContent = sshSelected() ? `Paste it into a terminal on your computer. The command prompts for the phone password; Run with CLI sends the password field only to your paired CLI. Test code ${code}, valid for an hour. The phone needs an SSH server and a login allowed to run the benchmark commands.${linux ? ' After a reflash, remove the old host key with ssh-keygen -R 172.16.42.1 (or the Wi-Fi IP).' : ''}`
+        : linux ? `Paste it into a terminal on the phone. Test code ${code}, valid for an hour.`
+          : `Test code ${code}, valid for an hour. Freshly flashed? USB debugging starts off again: Settings › About phone, tap Build number 7 times, then Developer options › USB debugging on, plug in and tap Allow on the phone (until then ADB says unauthorized). No network on the phone? Use ADB from a computer; the computer does the downloading. A terminal app lacks the permissions for most checks; ADB works best.`;
       command.textContent = `curl -fsSL ${url} | ${prefix}${prefix && sound.checked ? `'${sh}'` : sh} | curl -sS --data-binary @- ${url}`;
+      const canUseHelper = sshSelected();
+      helperRun.hidden = !canUseHelper;
+      helperRun.disabled = sshSelected() && !ip.value.trim();
+      connectHelper.hidden = !(linux || way === 'ssh') || helperReady;
+      helperNote.hidden = !canUseHelper || !sound.checked;
     };
-    ip.addEventListener('input', () => { try { localStorage.setItem('rominit.phoneIp', ip.value.trim()); } catch { /* private window */ } render(); });
-    const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix], i) => h('button', { type: 'button', role: 'tab', ariaSelected: String(!i), textContent: label,
-      onclick(/** @type {Event} */ e) { way = prefix; for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render(); } })));
+    const runWithHelper = async () => {
+      if (!box.isConnected) return;
+      if (!sshSelected()) {
+        helperStatus.textContent = 'Choose SSH or a USB/Wi-Fi connection to run with the CLI.';
+        return;
+      }
+      if (sshSelected() && !ip.value.trim()) {
+        helperStatus.textContent = 'Enter the phone IP address to run with the CLI.';
+        ip.focus();
+        return;
+      }
+      helperRun.disabled = true;
+      helperStatus.textContent = 'Checking the ROMinit CLI connection…';
+      let cliReached = false;
+      try {
+        const account = await me;
+        if (!account?.user) throw Error('Sign in to ROMinit before connecting the CLI.');
+        const session = await ensureHelper(account.user.id, helperSession());
+        localHelper = session; helperReady = true; render();
+        const ready = await helperRequest(session, '/status');
+        cliReached = true;
+        if (ready.user?.id !== account.user.id) throw Error('The helper is connected to a different account.');
+        if (!ready.capabilities?.includes('bench')) {
+          helperStatus.replaceChildren('This CLI needs an update before it can run browser benchmarks. ', h('a', { href: '/rominit-cli.tar.gz', textContent: 'Download updated CLI' }), ' and restart rominit serve.');
+          helperRun.disabled = false;
+          return;
+        }
+        if (sound.checked && !ready.capabilities?.includes('bench-sound')) {
+          helperStatus.textContent = 'Update and reconnect the CLI to run speaker and vibration checks, or use the copied terminal command.';
+          helperRun.disabled = false;
+          return;
+        }
+        if (!box.isConnected) return;
+        helperStatus.textContent = 'Running the benchmark on your phone…';
+        await helperRequest(session, '/bench', { code, rom: key, host: ip.value.trim(), user: loginUser, password: loginPassword, ...(sound.checked ? { sound: true } : {}) });
+        helperRun.textContent = 'CLI run complete';
+        helperStatus.textContent = 'The test finished. The report autosubmits; review and correct it below.';
+      } catch (error) {
+        helperStatus.textContent = `Could not run the benchmark: ${message(error)} You can still use the terminal command below.`;
+        helperRun.disabled = false;
+        if (!cliReached || message(error).startsWith('Could not reach your local ROMinit CLI')) {
+          helperReady = false;
+          render();
+        }
+      }
+    };
+    helperRun.addEventListener('click', runWithHelper);
+    me.then(async info => {
+      helperReady = !!localHelper && localHelper.user.id === info?.user?.id;
+      if (initialConnectionError) helperStatus.textContent = `CLI connection error: ${initialConnectionError} You can still use the terminal command below.`;
+      let canAutoRun = autoRun;
+      if (helperReady && linux) {
+        try {
+          const ready = await helperRequest(localHelper, '/status');
+          if (ready.capabilities?.includes('bench-targets')) {
+            const { targets, interfaces = [] } = await helperRequest(localHelper, '/bench/targets');
+            targetDiscovery = true;
+            for (const target of targets) {
+              const host = /^fe[89ab][0-9a-f]:/i.test(target.host) ? `${target.host}%${target.interface}` : target.host;
+              targetSelect.append(new Option(`${target.label} · ${host}`, host));
+            }
+            for (const adapter of interfaces) {
+              if (targets.some(target => target.interface === adapter.name)) continue;
+              const label = `${adapter.name} — ${adapter.addresses.length ? 'no peer address detected' : 'no IP address configured'}`;
+              const option = new Option(label, ''); option.disabled = true; targetSelect.append(option);
+            }
+            if (targets.length === 1 && !usbEdited) usbHost = targetSelect.options[1].value;
+            targetHelp.textContent = targets.length ? 'Candidates from USB-network interfaces; SSH connectivity is not yet verified. Manual IP entry is available below.' : interfaces.length ? 'USB-network adapter detected, but no usable phone address. Configure the USB network connection or use Wi-Fi; the helper does not change network settings.' : 'No USB-network targets detected. Enter an address below or use Wi-Fi.';
+            if (way === 'usb') {
+              canAutoRun = false;
+              helperStatus.textContent = targets.length ? 'Choose the USB-network phone or check the selected address, then run with CLI.' : interfaces.length ? 'USB-network adapter detected without a peer address. Wi-Fi SSH or manual entry is available.' : 'No USB-network phone detected. Check the USB network link or enter an address manually.';
+            }
+          }
+        } catch (error) { canAutoRun = false; helperStatus.textContent = `${message(error)} You can enter the phone address manually.`; }
+      }
+      render();
+      if (canAutoRun && box.isConnected) void runWithHelper();
+    });
+    ip.addEventListener('input', () => { if (way === 'usb') { usbHost = ip.value.trim(); usbEdited = true; } else phoneHost = ip.value.trim(); render(); });
+    const tabs = h('div', { className: 'bench-tabs', role: 'tablist' }, ...ways.map(([label, prefix]) => h('button', { type: 'button', role: 'tab', ariaSelected: String(way === prefix), textContent: label,
+      onclick(/** @type {Event} */ e) {
+        way = prefix;
+        if (linux && (way === 'usb' || way === 'wifi')) try { localStorage.setItem('rominit.benchTransport', way); } catch { /* private window */ }
+        for (const t of tabs.children) t.setAttribute('aria-selected', String(t === e.currentTarget)); render();
+      } })));
     for (const el of [sound, userBox, passBox]) el.addEventListener('input', render);
     sound.addEventListener('change', render); render();
     const waiting = h('div', { className: 'bench-wait' }, h('span', { className: 'breath', ariaHidden: 'true' }), h('span', { textContent: 'Waiting for your phone… breathe in, breathe out.' }));
     box.replaceChildren(
-      h('p', { className: 'field-label', textContent: linux ? 'How is the phone connected?' : 'Run this, wherever your phone has a shell' }), tabs, ipRow, linux ? loginRow : '',
+      h('p', { className: 'field-label', textContent: `Testing ${rom.name} · ${rom.os} · automatic OS detection` }),
+      h('p', { className: 'field-label', textContent: linux ? 'How is the phone connected?' : 'Run this, wherever your phone has a shell' }), tabs, targetRow, ipRow, loginRow,
       h('div', { className: 'bench-run' }, command, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Copy', async onclick() {
         await navigator.clipboard?.writeText(command.textContent ?? '').catch(() => {}); this.textContent = 'Copied'; } })),
-      h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone and buzzes once)'),
+      connectHelper, helperRun, helperStatus, helperNote,
+      h('label', { className: 'field-help' }, sound, ' Also check speaker and vibration (plays a short tone; buzzes if supported)'),
       hint,
-      waiting);
+      waiting, discardButton(code));
     const started = Date.now();
     const poll = async () => {
       if (!box.isConnected || Date.now() - started > 3600_000) return;
       const run = await fetch(`./api/bench?code=${code}`, { cache: 'no-store' }).then(r => r.json()).catch(() => null);
+      if (run?.output?.startsWith('@ failed os-mismatch:')) {
+        waiting.lastChild.textContent = run.output.slice('@ failed os-mismatch:'.length).trim();
+        return;
+      }
       if (run?.output?.startsWith('@ failed')) waiting.lastChild.textContent = `Nothing came from the phone last time: check the cable or IP${linux ? ' (SSH host key changed after a reflash? ssh-keygen -R 172.16.42.1)' : ''}, then run the command again. Still listening…`;
       if (run?.output && !run.output.startsWith('@ failed')) card(code, run.output); else setTimeout(poll, 3000);
     };
@@ -421,15 +530,17 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
   }
   /** @param {string} code @param {string} output */
   function card(code, output) {
-    const { features, info, debug, packages } = parseBench(output);
+    const { features, info, debug, packages, root } = parseBench(output);
     /** @type {Record<string, string>} */ const final = {};
     for (const f of FEATURES) final[f] = rom.rating?.features?.[f] === 'n/a' ? 'n/a' : features[f]?.status === 'ask' ? 'untested' : features[f]?.status ?? 'untested';
+    const needsConfirmation = new Set(FEATURES.filter(f => features[f]?.status === 'ask' && final[f] === 'untested'));
     const tiles = /** @type {Record<string, HTMLButtonElement>} */ ({});
     const score = h('div', { className: 'bench-score' });
     const paint = (/** @type {string} */ f) => {
-      const t = tiles[f]; t.className = `bench-tile ${final[f] === 'n/a' ? 'na' : final[f]}`;
-      t.title = `${TIER_HELP[final[f]]}${features[f]?.note ? ` · ${features[f].note}` : ''} · tap to change`;
-      /** @type {HTMLElement} */ (t.lastChild).textContent = `${TIER_MARK[final[f]]} ${final[f]}`;
+      const t = tiles[f], pending = needsConfirmation.has(f);
+      t.className = `bench-tile ${final[f] === 'n/a' ? 'na' : final[f]}${pending ? ' needs-confirmation' : ''}`;
+      t.title = `${pending ? 'needs your confirmation; not automatically verified' : TIER_HELP[final[f]]}${features[f]?.note ? ` · ${features[f].note}` : ''} · tap to change`;
+      /** @type {HTMLElement} */ (t.lastChild).textContent = pending ? '? needs confirmation' : `${TIER_MARK[final[f]]} ${final[f]}`;
       const counted = FEATURES.filter(x => final[x] !== 'n/a'), n = (/** @type {string} */ s) => counted.filter(x => final[x] === s).length;
       score.replaceChildren(h('strong', { textContent: `${Math.round(100 * (n('full') + n('partial') / 2) / (counted.length || 1))}%` }),
         h('span', { textContent: ` works · ${n('full')} full · ${n('partial')} partial · ${n('broken')} broken · ${n('blocked')} blocked · ${n('untested') + n('inconclusive')} open` }));
@@ -437,7 +548,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
     let delay = 0;
     const groups = Object.entries(FEATURE_GROUPS).map(([group, list]) => h('div', { className: 'bench-group' }, h('p', { className: 'field-label', textContent: group }),
       h('div', { className: 'bench-tiles' }, ...list.map(f => {
-        tiles[f] = h('button', { type: 'button', style: `animation-delay:${(delay++) * 40}ms`, onclick() { final[f] = TIERS[(TIERS.indexOf(final[f]) + 1) % TIERS.length]; paint(f); } },
+        tiles[f] = h('button', { type: 'button', style: `animation-delay:${(delay++) * 40}ms`, onclick() { needsConfirmation.delete(f); final[f] = TIERS[(TIERS.indexOf(final[f]) + 1) % TIERS.length]; paint(f); changed(); } },
           h('span', { className: 'icon', textContent: ICON[f] ?? '•' }), h('span', { textContent: LABEL[f] ?? f.replace(/_/g, ' ') }), h('small', {}));
         return tiles[f];
       }))));
@@ -454,7 +565,7 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
         const q = features[f]?.status === 'ask' ? features[f].note : `Have you tried ${LABEL[f] ?? f.replace(/_/g, ' ')}? Does it work?`;
         const row = h('div', { className: 'bench-q' }, h('span', { className: 'icon', textContent: ICON[f] ?? '•' }), h('span', { textContent: q }));
         for (const [label, tier] of [['👍 yes', 'full'], ['〰 partly', 'partial'], ['👎 no', 'broken'], ['skip', '']])
-          row.append(h('button', { type: 'button', className: 'button button-secondary', textContent: label, onclick() { if (tier) { final[f] = tier; paint(f); } row.classList.add('answered'); row.querySelectorAll('button').forEach(b => { b.disabled = true; }); } }));
+          row.append(h('button', { type: 'button', className: 'button button-secondary', textContent: label, onclick() { if (tier) { needsConfirmation.delete(f); final[f] = tier; paint(f); changed(); } row.classList.add('answered'); row.querySelectorAll('button').forEach(b => { b.disabled = true; }); } }));
         questions.append(row);
       }
       const left = pool.filter(f => !asked.has(f)).length;
@@ -463,36 +574,87 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
     more.addEventListener('click', () => ask(pool.length));
     ask(Math.max(3, pool.filter(f => features[f]?.status === 'ask').length)); // every only-you-can-tell question together, then a few untested
     const note = h('textarea', { className: 'confirmation-input', placeholder: 'Anything the test missed? (optional)', maxLength: 2000, rows: 2 });
-    const status = h('small', {});
-    const send = h('button', { type: 'button', className: 'button button-primary', textContent: 'Send report card', async onclick() {
-      send.disabled = true; status.textContent = 'Sending…';
-      const r = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, final, note: note.value, flash: flash() }) }).catch(() => null);
-      if (r?.ok) {
-        status.textContent = ''; send.textContent = '✓ Sent';
-        const thanks = h('div', { className: 'bench-thanks' }, h('p', { className: 'bench-thanks-title', textContent: 'Thank you! 🎉' }),
-          h('p', { textContent: `Your report card for ${rom.name} is in. It shows the next person what really works on this phone, and tells the ROM's makers what to fix.` }),
-          h('div', { className: 'bench-appeal' },
-            h('p', { className: 'bench-appeal-title', textContent: 'Please help keep ROMinit going.' }),
-            h('p', { textContent: 'ROMinit is made by one person. It has no ads, no tracking and no paywall, and we want to keep it that way. Most people who use it never chip in, and that is fine. But if ROMinit saved you an evening of forum threads and bricked-phone panic, the price of one coffee keeps it running for the next person. Thank you.' }),
-            h('a', { className: 'button button-primary bench-donate', href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' }),
-            h('small', { textContent: 'One-off, any amount, through Buy Me a Coffee.' })));
-        box.prepend(thanks); thanks.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        box.dispatchEvent(new CustomEvent('bench-sent', { bubbles: true, detail: code }));
-      }
-      else { send.disabled = false; status.textContent = `Could not send: ${(await r?.json().catch(() => ({})))?.error ?? 'network error'}.`; }
+    const status = h('small', { role: 'status', ariaLive: 'polite' });
+    let dirty = true, saved = false, stopped = false, locked = false, saveTimer = 0;
+    /** @type {Promise<boolean>|null} */ let saving = null;
+    const thanks = h('p', { className: 'bench-thanks', hidden: true }, 'Thank you! ',
+      h('a', { className: 'bench-donate', href: DONATE, target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Support ROMinit' }));
+    const retrySave = h('button', { type: 'button', className: 'button button-secondary', hidden: true, textContent: 'Retry saving', onclick() { void flush(); } });
+    async function flush() {
+      clearTimeout(saveTimer);
+      if (stopped || !box.isConnected) return false;
+      if (saving) return saving;
+      saving = (async () => {
+        while (dirty && !stopped && !locked) {
+          dirty = false;
+          status.textContent = saved ? 'Saving changes…' : 'Autosubmitting report…';
+          retrySave.hidden = true;
+          const response = await fetch('./api/bench', { method: 'POST', headers: { 'content-type': 'application/json' }, keepalive: true, signal: AbortSignal.timeout(15_000),
+            body: JSON.stringify({ code, final, note: note.value, flash: flash() }) }).catch(() => null);
+          if (stopped) return false;
+          if (!response?.ok) {
+            dirty = true;
+            locked = !!response && response.status >= 400 && response.status < 500;
+            const error = (await response?.json().catch(() => ({})))?.error ?? 'network error';
+            status.textContent = `Not saved: ${error}.${locked ? ' Use Retest to start a fresh report.' : ' Retry when connected.'}`;
+            retrySave.hidden = locked;
+            if (locked) { note.disabled = true; more.disabled = true; for (const button of [...Object.values(tiles), ...questions.querySelectorAll('button')]) button.disabled = true; }
+            return false;
+          }
+          if (!saved) {
+            saved = true; thanks.hidden = false;
+            box.dispatchEvent(new CustomEvent('bench-sent', { bubbles: true, detail: code }));
+          }
+          status.textContent = 'Report autosubmitted. Changes save automatically until review starts.';
+        }
+        return !dirty;
+      })();
+      const ok = await saving; saving = null; return ok;
+    }
+    function changed() {
+      if (stopped || locked) return;
+      dirty = true; clearTimeout(saveTimer);
+      status.textContent = 'Changes waiting to save…';
+      saveTimer = window.setTimeout(() => { void flush(); }, 600);
+    }
+    const onLeave = () => { void flush(); };
+    addEventListener('pagehide', onLeave);
+    const stop = () => { stopped = true; clearTimeout(saveTimer); removeEventListener('pagehide', onLeave); };
+    const retest = h('button', { type: 'button', className: 'button button-secondary', textContent: 'Retest', async onclick() {
+      this.disabled = true;
+      if (!locked && !await flush()) { this.disabled = false; return; }
+      stop();
+      box.replaceWith(benchBox(rom, key, saved ? [...new Set([...sent, code])] : sent, flash, credentials()));
     } });
+    const discard = discardButton(code, busy => {
+      stopped = busy; clearTimeout(saveTimer); retest.disabled = busy;
+      if (busy) removeEventListener('pagehide', onLeave);
+      else { addEventListener('pagehide', onLeave); changed(); }
+    });
+    note.addEventListener('input', changed);
     const failed = FEATURES.filter(f => features[f]?.status === 'inconclusive');
     // What the package list says the ROM ships, next to what the catalog claims.
-    const ships = packages.size ? h('p', { className: 'rating' }, h('strong', { textContent: `found in ${packages.size} packages` }),
-      ...Object.entries(SHIPS).map(([key, test]) => { const found = test(packages), claim = rom.rating?.includes?.[key];
+    const ships = packages.size || root ? h('p', { className: 'rating' }, packages.size ? h('strong', { textContent: `found in ${packages.size} packages` }) : '',
+      ...Object.entries(SHIPS).filter(([key]) => packages.size || key === 'root').map(([key, test]) => {
+        const found = test(packages), claim = rom.rating?.includes?.[key];
+        if (key === 'root') {
+          const state = root?.status === 'available' ? 'available' : root?.status === 'unverified' || found ? 'unverified' : 'untested';
+          const mark = state === 'available' ? '✓' : state === 'unverified' ? '~' : '·';
+          const title = state === 'available' ? root?.note : state === 'unverified' ? root?.note || 'root package found; access not verified' : root?.note || 'root access was not detected; interactive commands were not tested';
+          const mismatch = state !== 'unverified' && state !== 'untested' && claim && (claim === 'yes') !== (state === 'available');
+          return h('span', { className: `feature ${state === 'available' ? 'works' : state === 'unverified' ? 'partial' : 'untested'}`,
+            title: `${title}${mismatch ? ` · catalog says ${claim}` : ''}`, textContent: `${mark} Root${mismatch ? ' *' : ''}` });
+        }
         return h('span', { className: `feature ${found ? 'works' : 'untested'}`, title: claim && (claim === 'yes') !== found ? `catalog says ${claim}` : '',
-          textContent: `${found ? '✓' : '✗'} ${LABEL[key] ?? key}${claim && (claim === 'yes') !== found ? ' *' : ''}` }); })) : '';
+          textContent: `${found ? '✓' : '✗'} ${LABEL[key] ?? key}${claim && (claim === 'yes') !== found ? ' *' : ''}` });
+      })) : '';
     // Default passwords are public: offer the change, typed on the phone so it never reaches this page.
-    const password = rom.login && linux && loginPassword === defaultPassword ? h('div', { className: 'hints' }, h('strong', { textContent: 'Change the default password' }),
-      h('p', { className: 'field-help', textContent: `${loginUser} / ${loginPassword} is printed on this page for everyone. Change it now; you type the new one on the phone (or in your SSH session), so it never reaches ROMinit.` }),
+    const password = rom.login && linux && defaultPassword ? h('div', { className: 'hints' }, h('strong', { textContent: 'Change the default password' }),
+      h('p', { className: 'field-help', textContent: 'This ROM’s default login is public. Change its password now; type the new one on the phone or in your SSH session, so it never reaches ROMinit.' }),
       h('code', { className: 'bench-command', textContent: 'passwd' }), ' on the phone, or ',
-      h('code', { className: 'bench-command', textContent: `ssh -t ${sshHost} passwd` })) : '';
-    box.replaceChildren(h('p', { className: 'field-label', textContent: 'Report card' }), score,
+      h('code', { className: 'bench-command', textContent: `ssh -t -- ${shellArg(sshHost)} passwd` })) : '';
+    box.replaceChildren(h('div', { className: 'bench-card-header' }, h('p', { className: 'field-label', textContent: 'Report card' }), h('div', { className: 'bench-card-actions' }, retest, discard)), score,
+      h('p', { className: 'field-help', textContent: 'This report autosubmits. Corrections and notes save automatically until review starts.' }),
       h('p', { className: 'rate-label', textContent: '✎ tap any tile to correct it' }),
       info.length ? h('p', { className: 'field-help', textContent: info.join(' · ') }) : '',
       questions.childElementCount || pool.length ? h('div', {}, h('p', { className: 'field-label', textContent: 'Quick questions' }), questions, more) : '',
@@ -500,7 +662,8 @@ function benchBox(rom, key, sent = /** @type {string[]} */ ([]), flash = () => /
       ...groups,
       failed.length ? h('details', { className: 'bench-debug' }, h('summary', { textContent: `${failed.length} check${failed.length > 1 ? 's' : ''} inconclusive: the script failed there (sent with your card so it gets fixed)` }),
         h('pre', { textContent: [...failed.map(f => `${f}: ${features[f].note}`), ...debug].join('\n') })) : '',
-      ships, note, send, status, password);
+      ships, note, status, retrySave, thanks, password);
+    void flush();
   }
   return box;
 }
@@ -755,13 +918,13 @@ function stageCard(device, stage, n, count, key) {
 /** @param {any[]} index */
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
-  // Five levels, best first; the pick shows that level and every better one. Default hides support-only and placeholder phones.
+  // Five levels, best first; the pick shows that level and every better one. Default includes every level for now.
   const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
-    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'untested', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
-  // One box per branch of the tree above the search; click toggles it on/off, all on by default.
-  const branches = h('div', { className: 'branch-boxes', role: 'group', ariaLabel: 'Device types' }, ...Object.entries(CATEGORIES).map(([c, label]) => {
-    const n = index.filter(d => d.category === c).length;
-    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'checkbox', value: c, checked: true, onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
+    h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'placeholder', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
+  // Pick one device category or all categories.
+  const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
+    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' || c === 'pc' ? 1 : 0);
+    return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === 'all', onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
@@ -776,8 +939,9 @@ function devicePicker(index) {
     const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     const text = (/** @type {any} */ d) => [CATEGORIES[d.category], d.vendor, d.series, d.family, d.variant, d.name, d.codename, ...d.models, ...d.roms.map((/** @type {any} */ r) => `${r.os} ${r.name}`), ...(d.unsupported ?? []).flatMap((/** @type {any} */ u) => [u.name, ...u.models])].join(' ').toLowerCase();
     const matches = index.filter(d => words.every(w => text(d).includes(w)));
-    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'untested');
-    const on = new Set([...branches.querySelectorAll('input:checked')].map(i => /** @type {HTMLInputElement} */ (i).value));
+    const upTo = levels.indexOf(/** @type {HTMLInputElement} */ (level.querySelector('input:checked'))?.value ?? 'placeholder');
+    const category = /** @type {HTMLInputElement} */ (branches.querySelector('input:checked'))?.value ?? 'all';
+    const on = new Set(category === 'all' ? Object.keys(CATEGORIES) : [category]);
     const hits = matches.filter(d => on.has(d.category) && levels.indexOf(deviceLevel(d, tested)) <= upTo);
     // All › category › vendor › series › family › variant; every category shows, empty ones say so (only while not searching).
     /** @type {Record<string, Record<string, Record<string, Record<string, any[]>>>>} */ const tree = {};
@@ -787,11 +951,16 @@ function devicePicker(index) {
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems))))))));
-    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length)).map(([c, label]) => tree[c]
+    const showAlpine = on.has('pc') && words.every(word => `${ALPINE.name} alpinelinux ${ALPINE_ARCHITECTURES.join(' ')} ${Object.values(ARCH_FAMILY).join(' ')}`.toLowerCase().includes(word));
+    const osEntry = h('article', { className: 'os-entry' }, h('a', { href: './alpine.html', className: 'os-title' }, h('img', { src: './logos/alpine.svg', alt: '', width: 40, height: 40 }), h('strong', { textContent: ALPINE.name })),
+      h('p', { className: 'field-help', textContent: `${ALPINE.editions.length} editions · ${ALPINE.version}` }),
+      h('div', { className: 'architecture-tags', ariaLabel: 'Architectures' }, ...[...new Set(Object.values(ARCH_FAMILY))].map(name => h('span', { className: 'architecture-tag', textContent: name }))));
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showAlpine)).map(([c, label]) => c === 'pc' && showAlpine
+      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
       : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
-    if (!hits.length && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
-    else if (!hits.length) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
+    if (!hits.length && !showAlpine && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length && !showAlpine) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);
@@ -830,24 +999,25 @@ async function favoritesView(index) {
   return card;
 }
 
-/** Admin inbox: five numbered folders, always shown with their counts: 01 page tickets (by section), 02 flash failures, 03 phone tests (03a site, 03b CLI run + bench, 03c CLI bench only), 04 agent reports (by outcome), 05 device searches. */
+/** Admin inbox: seven numbered folders, always shown with their counts: 01 page tickets, 02 flash failures, 03 phone tests, 04 agent reports, 05 OS-USB outcomes, 06 device searches, 07 ROM requests. */
 /** @param {any[]} index */
 async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], agents = { success: [], partial: [], failed: [], abandoned: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, osUsb = { success: [], failed: [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
   const folder = (name, hint, n, body, total = n) => h('details', { className: 'page-section inbox-group', open: n > 0 },
     h('summary', {}, h('span', { textContent: `${name} · ${n}` }), h('small', { textContent: hint })), ...(total ? body : [h('p', { className: 'empty-files', textContent: 'Nothing here.' })]));
-  /** "File as [label] [File]"; filing removes the item. @param {string} inbox @param {string} ref @param {HTMLElement} li */
-  const fileAs = (inbox, ref, li) => {
+  /** "File as [label] [File]"; filing removes the item. @param {string} inbox @param {string} ref @param {HTMLElement} li @param {string} [defaultLabel] @param {()=>void} [afterFile] */
+  const fileAs = (inbox, ref, li, defaultLabel, afterFile) => {
     const label = h('select', {}, ...labels.map((/** @type {string} */ l) => h('option', { textContent: l })));
+    if (labels.includes(defaultLabel)) label.value = defaultLabel;
     return h('label', { className: 'field-help' }, 'File as ', label, ' ', h('button', { type: 'button', className: 'button button-secondary', textContent: 'File', async onclick() {
       const ok = (await fetch('./api/inbox', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ inbox, ref, label: label.value }) })).ok;
-      if (ok) li.remove(); else li.append(h('small', { textContent: ' could not file' }));
+      if (ok) { li.remove(); afterFile?.(); } else li.append(h('small', { textContent: ' could not file' }));
     } }));
   };
   /** One phone test: which ROM, what it changes vs the catalog, and the moves to the other sub-folders. @param {any} x */
@@ -875,6 +1045,91 @@ async function inboxView(index) {
   const byState = b => [['new', 'New'], ['review', 'Review'], ['approved', 'Approved'], ['rejected', 'Rejected (not counted)']].map(([state, title]) => h('details', { className: 'inbox-sub', open: state === 'new' || state === 'review' },
     h('summary', { className: 'field-label', textContent: `${title} · ${b[state].length}` }),
     h('ol', { className: 'comments' }, ...b[state].map(benchItem))));
+  const usbSize = bytes => Number.isSafeInteger(bytes) && bytes > 0
+    ? bytes < 1024 ** 3 ? `${(bytes / 1024 ** 2).toFixed(1)} MiB` : `${(bytes / 1024 ** 3).toFixed(2)} GiB`
+    : 'Unknown size';
+  const usbMethods = { direct: 'Direct image write', ventoy: 'Ventoy' };
+  const usbActions = { direct: 'write image', copy: 'copy ISO', install: 'install Ventoy' };
+  const usbVerification = { verified: 'Source checksum verified', 'mismatch-accepted': 'Source checksum mismatch accepted', none: 'Source checksum not reported' };
+  const usbFailure = {
+    preflight: 'USB preflight did not pass.', device_changed: 'The selected USB changed after review.',
+    unmount: 'Could not unmount the USB drive.', write: 'Writing the image failed.',
+    timeout: 'The USB operation timed out.', readback: 'USB readback verification failed.', unknown: 'The USB operation failed for an unknown reason.'
+  };
+  const usbEnum = (values, value, fallback) => typeof value === 'string' && Object.hasOwn(values, value) ? values[value] : fallback;
+  const usbOsName = { linux: 'Linux', windows: 'Windows', macos: 'macOS', android: 'Android', ios: 'iOS', chromeos: 'ChromeOS', unknown: 'Unknown OS' };
+  const usbBrowserName = { chrome: 'Chrome', chromium: 'Chromium', edge: 'Edge', firefox: 'Firefox', safari: 'Safari', opera: 'Opera', brave: 'Brave', other: 'Other browser' };
+  const usbDistroName = { fedora: 'Fedora', ubuntu: 'Ubuntu', debian: 'Debian', alpine: 'Alpine', arch: 'Arch Linux', manjaro: 'Manjaro', opensuse: 'openSUSE', nixos: 'NixOS', linuxmint: 'Linux Mint', centos: 'CentOS', rhel: 'RHEL', rocky: 'Rocky Linux', other: 'Linux distribution' };
+  const usbEnvironmentText = value => {
+    const environment = validateUsbEnvironment(value);
+    if (!environment) return null;
+    const parts = [];
+    if (environment.hostOs) {
+      const os = environment.hostDistro ? `${usbDistroName[environment.hostDistro]} ${usbOsName[environment.hostOs]}` : usbOsName[environment.hostOs];
+      const version = environment.hostOsVersion ? ` ${environment.hostOsVersion}` : '';
+      const arch = environment.hostArch ? ` · ${environment.hostArch}` : '';
+      parts.push(`Host ${os}${version}${arch}`);
+    }
+    if (environment.kernelVersion) parts.push(`kernel ${environment.kernelVersion}`);
+    if (environment.browser) {
+      const browserVersion = environment.browserVersion ? ` ${environment.browserVersion}` : '';
+      const os = environment.browserOs ? ` on ${usbOsName[environment.browserOs]}${environment.browserOsVersion ? ` platform ${environment.browserOsVersion}` : ''}` : '';
+      parts.push(`${usbBrowserName[environment.browser]}${browserVersion}${os}`);
+    }
+    if (environment.cliVersion) parts.push(`ROMinit CLI ${environment.cliVersion}`);
+    if (environment.nodeVersion) parts.push(`Node.js ${environment.nodeVersion}`);
+    return parts.length ? `Technical environment: ${parts.join(' · ')}` : null;
+  };
+  /** Render only allowlisted operational fields; never display IDs, paths, models, or arbitrary logs/errors. @param {any} x @param {'success'|'failed'} outcome @param {any[]} items */
+  const osUsbItem = (x, outcome, items) => {
+    const image = x?.image && typeof x.image === 'object' ? x.image : {};
+    const rawImageName = typeof image.name === 'string' ? image.name : '';
+    const safeCatalogName = /^Alpine Linux [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+ · [0-9A-Za-z._+-]+$/.test(rawImageName);
+    const safeIsoName = /^[\p{L}\p{N}][\p{L}\p{N} ._+()-]{0,150}\.iso$/iu.test(rawImageName);
+    const imageName = rawImageName === 'Local ISO' || rawImageName === 'No ISO' || safeCatalogName || safeIsoName ? rawImageName : 'Selected image';
+    const imageId = typeof image.id === 'string' && /^[A-Za-z0-9_.+-]{1,80}$/.test(image.id) ? image.id : 'unknown';
+    const method = usbEnum(usbMethods, x?.method, 'Unknown method');
+    const action = usbEnum(usbActions, x?.action, 'unknown action');
+    const sourceVerification = usbEnum(usbVerification, x?.verification?.source, 'Source checksum status unavailable');
+    const capacity = usbSize(x?.drive?.capacityBytes);
+    const readbackSize = usbSize(x?.readback?.size);
+    const readback = x?.readback?.matched === true ? `USB readback matched${readbackSize !== 'Unknown size' ? ` · ${readbackSize}` : ''}`
+      : x?.readback?.matched === false ? 'USB readback did not match' : 'USB readback not available';
+    const at = typeof x?.at === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(x.at) ? `${x.at} UTC` : 'Time unavailable';
+    const failureCode = outcome === 'failed' && typeof x?.failureCode === 'string' && Object.hasOwn(usbFailure, x.failureCode) ? x.failureCode : null;
+    const failure = outcome === 'failed' ? usbEnum(usbFailure, failureCode, 'The USB operation failed.') : null;
+    const technicalEnvironment = usbEnvironmentText(x?.environment);
+    const li = h('li', { className: 'os-usb-report' },
+      h('strong', { textContent: outcome === 'success' ? 'USB operation succeeded' : 'USB operation failed' }),
+      h('small', { textContent: `${at} · Unreviewed` }),
+      h('p', { className: 'field-help' }, 'Image: ', h('strong', { textContent: imageName }), ' · ID ', h('code', { textContent: imageId }), ` · ${imageId === 'none' && image.size === 0 ? 'No image' : usbSize(image.size)}`),
+      h('p', { className: 'field-help', textContent: `${method} · ${action} · USB capacity ${capacity}` }),
+      h('p', { className: 'field-help', textContent: `${sourceVerification} · ${readback}` }),
+      technicalEnvironment && h('p', { className: 'field-help usb-environment-details', textContent: technicalEnvironment }),
+      failure && h('p', { className: 'field-help flash-warn' }, 'Failure ', h('code', { textContent: failureCode ?? 'unknown' }), ` · ${failure}`));
+    const ref = typeof x?.jobId === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(x.jobId) ? x.jobId : null;
+    if (ref) li.append(fileAs('os-usb', ref, li, 'user-side', () => {
+      const position = items.indexOf(x);
+      if (position >= 0) items.splice(position, 1);
+      const successCount = usbSuccess.length, failedCount = usbFailed.length, total = successCount + failedCount;
+      const header = osUsbFolder?.querySelector(':scope > summary');
+      if (header) {
+        const count = header.querySelector('span'), hint = header.querySelector('small');
+        if (count) count.textContent = `05 OS-USB · ${total}`;
+        if (hint) hint.textContent = `${successCount} success · ${failedCount} failed · unreviewed outcomes`;
+      }
+      const successHeader = usbSuccessGroup?.querySelector(':scope > summary'), failedHeader = usbFailedGroup?.querySelector(':scope > summary');
+      if (successHeader) successHeader.textContent = `Success · ${successCount}`;
+      if (failedHeader) failedHeader.textContent = `Failed · ${failedCount}`;
+    }));
+    return li;
+  };
+  const usbSuccess = Array.isArray(osUsb?.success) ? osUsb.success : [], usbFailed = Array.isArray(osUsb?.failed) ? osUsb.failed : [];
+  const osUsbTotal = usbSuccess.length + usbFailed.length;
+  let osUsbFolder = null, usbSuccessGroup = null, usbFailedGroup = null;
+  const usbGroup = (title, items, outcome) => h('details', { className: 'inbox-sub', open: title === 'Failed' || items.length > 0 },
+    h('summary', { className: 'field-label', textContent: `${title} · ${items.length}` }),
+    h('ol', { className: 'comments' }, ...items.map(x => osUsbItem(x, outcome, items))));
   /** Phone tests by source, each split by state: 03a the site, 03b a rominit CLI flash + bench, 03c `rominit bench` alone (flashed another way). */
   const keep = (/** @type {(x: any) => boolean} */ f) => Object.fromEntries(Object.entries(cli).map(([state, xs]) => [state, xs.filter(f)]));
   const benchParts = [['03a Site', benchmarks], ['03b CLI run + bench', keep(x => x.flash !== 'elsewhere')], ['03c CLI bench only', keep(x => x.flash === 'elsewhere')]];
@@ -909,8 +1164,19 @@ async function inboxView(index) {
               h('pre', { className: 'bench-output', textContent: x.steps.map((/** @type {any} */ s) => `stage ${s.stage}${s.step ? ` step ${s.step}` : ''} · ${s.outcome}${s.detail ? ` · ${s.detail}` : ''}`).join('\n') })));
           return li.append(fileAs('agents', x.id, li)), li;
         }))))),
-    folder('05 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
+    osUsbFolder = folder('05 OS-USB', `${usbSuccess.length} success · ${usbFailed.length} failed · unreviewed outcomes`, osUsbTotal, [
+      h('p', { className: 'field-help', textContent: 'Operational USB reports are unreviewed. Filing classifies this report; it does not approve or change any phone ROM rating.' }),
+      usbSuccessGroup = usbGroup('Success', usbSuccess, 'success'), usbFailedGroup = usbGroup('Failed', usbFailed, 'failed')]),
+    folder('06 Searches', `last 90 days · ${missed} with no match`, searches.length, [h('ol', { className: 'selected-files popular' }, ...searches.map((/** @type {any} */ s) => h('li', { className: s.hits ? '' : 'missed' },
       h('a', { href: `./?q=${encodeURIComponent(s.q)}`, textContent: s.q }), ` · ${s.people} ${s.people === 1 ? 'person' : 'people'} · ${s.hits ? `${s.hits} match${s.hits === 1 ? '' : 'es'}` : 'NO MATCH'} · ${s.last}`)))]));
+  card.append(folder('07 Requests', 'new ROMs / devices, updates and mirrors', Object.values(requests).flat().length,
+    [['new', 'New ROM / device'], ['update', 'ROM updates'], ['mirror', 'ROM mirrors']].map(([kind, title]) => h('details', { className: 'inbox-sub', open: requests[kind].length > 0 },
+      h('summary', { className: 'field-label', textContent: `${title} · ${requests[kind].length}` }),
+      h('ol', { className: 'comments' }, ...requests[kind].map((/** @type {any} */ x) => {
+        const li = h('li', {}, h('small', { textContent: `${x.at} UTC${x.rom ? ` · ${x.rom}` : ''}` }),
+          h('p', { textContent: x.text }), x.url && /^https?:\/\//i.test(x.url) && link(x.url, 'Source'));
+        return li.append(fileAs(`requests-${kind}`, String(x.id), li)), li;
+      }))))));
   return card;
 }
 
@@ -927,6 +1193,30 @@ async function popularView(index) {
   return card;
 }
 
+/** @param {string} kind @param {string} title @param {string} rom */
+function requestButton(kind, title, rom = '') {
+  const button = h('button', { type: 'button', className: 'button button-secondary', textContent: title, onclick() {
+    const text = h('textarea', { className: 'confirmation-input', required: true, maxLength: 2000, rows: 4,
+      placeholder: kind === 'update' ? 'New version and current version (for example: 2.5 replaces 2.3).' : kind === 'mirror' ? 'Which files should we mirror, and why?' : 'ROM name and/or device model, and what you would like added.' });
+    const url = h('input', { className: 'confirmation-input', type: 'url', required: kind !== 'mirror', maxLength: 2000, placeholder: 'https://…' });
+    const status = h('p', { role: 'status', className: 'field-help' });
+    const send = h('button', { type: 'submit', className: 'button button-primary', textContent: 'Send request' });
+    const dialog = h('dialog', { className: 'host-confirm', ariaLabel: title }, h('form', { async onsubmit(event) {
+      event.preventDefault(); send.disabled = true; status.textContent = 'Sending…';
+      const response = await fetch('./api/requests', { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ kind, rom: rom || null, page: location.pathname + location.search, text: text.value, url: url.value || null }) }).catch(() => null);
+      const reply = await response?.json().catch(() => ({}));
+      status.textContent = response?.ok ? 'Thanks, request sent for review.' : `Could not send: ${reply?.error ?? 'network error'}.`;
+      send.disabled = !!response?.ok;
+    } }, h('h2', { textContent: title }), rom && h('p', { textContent: rom }),
+      h('label', { className: 'field-help' }, 'Details', text), h('label', { className: 'field-help' }, kind === 'mirror' ? 'Source URL (optional)' : 'ROM or device source URL', url),
+      send, h('button', { type: 'button', className: 'button button-secondary', textContent: 'Close', onclick: () => dialog.close() }), status));
+    dialog.addEventListener('close', () => { dialog.remove(); button.focus(); });
+    document.body.append(dialog); dialog.showModal();
+  } });
+  return button;
+}
+
 /** "Something wrong on this page?" form; falls back to a GitHub issue link. */
 function reportBox() {
   const page = location.pathname + location.search;
@@ -941,11 +1231,12 @@ function reportBox() {
     status.textContent = response?.ok ? 'Thanks, ticket sent.' : `Could not send: ${reply?.error ?? 'network error'}. Use the GitHub link instead.`;
     if (response?.ok) text.value = '';
   });
-  const box = h('details', { className: 'page-section report', ontoggle() {
+  const box = h('details', { id: 'submit-request', className: 'page-section report', ontoggle() {
     if (where.isConnected) return; // built on first open, from this page's own sections
     for (const s of document.querySelectorAll('details.page-section:not(.report) > summary > span')) where.append(h('option', { textContent: s.textContent }));
     text.before(h('label', { className: 'field-help' }, 'About: ', where));
-  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket' }), h('small', { textContent: 'something wrong on this page?' })),
+  } }, h('summary', {}, h('span', { textContent: 'T · Submit ticket / Request' }), h('small', { textContent: 'report a problem or request a new ROM / device' })),
+    h('p', {}, requestButton('new', 'Request new ROM / device')),
     h('div', { className: 'comment-box' }, text, send, status, h('small', {}, 'Or ', h('a', { href: issue, target: '_blank', rel: 'noopener noreferrer', textContent: 'open a GitHub issue' }), '.')));
   return box;
 }
@@ -965,6 +1256,7 @@ const SOFTWARE = [
     ['TypeScript', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/TypeScript', 'type checks (not shipped)'],
     ['wrangler', 'Cloudflare', 'MIT OR Apache-2.0', 'https://github.com/cloudflare/workers-sdk', 'deploys to Cloudflare Pages'],
     ['playwright-core', 'Microsoft', 'Apache-2.0', 'https://github.com/microsoft/playwright', 'bench tests (not shipped)'],
+    ['@napi-rs/keyring', 'N-API for Rust contributors', 'MIT', 'https://github.com/Brooooooklyn/keyring-node', 'OS credential storage for the CLI (not in the page)'],
     ['usb (node-usb)', 'Rob Moran, Christopher Klein and contributors', 'MIT', 'https://github.com/node-usb/node-usb', 'USB access for the rominit command-line tool (not in the page)'],
   ]],
   ['Pictures', [
@@ -990,25 +1282,33 @@ function aboutView() {
     h('p', { className: 'field-help', textContent: 'Flashing can brick a phone and voids warranties; ROMinit comes with no warranty. Android is a trademark of Google LLC. Phone, vendor and OS names belong to their owners; ROMinit is not affiliated with or endorsed by any of them.' }),
     h('p', {}, h('a', { href: './?view=sources', textContent: 'Sources & licenses' })));
 }
-/** CLI tool: the same catalog recipes from a terminal, for people and for agents running on their machine. */
-function cliView() {
+/** CLI install instructions and its browser-connected mode live on the same page. */
+async function cliView() {
   const code = (/** @type {string} */ text) => h('pre', { className: 'bench-output', textContent: text });
-  return h('section', { className: 'flash-card info-page' }, h('label', { className: 'field-label', textContent: 'CLI tool' }),
-    h('p', { className: 'intro-copy', textContent: 'rominit is a command-line tool that runs the same recipes as this page from a terminal: same catalog, same SHA-256 checks, same confirm phrases. Use it where the browser cannot help (no WebUSB, scripts, an AI agent on your own computer). Experimental: tested on Linux so far.' }),
+  const connection = await cliConnectionView();
+  const page = h('section', { className: 'flash-card info-page' }, h('h1', { className: 'field-label', textContent: 'ROMinit CLI' }),
+    h('p', { className: 'intro-copy', textContent: 'The ROMinit CLI runs the same recipes as this page from a terminal: same catalog, same SHA-256 checks, same confirm phrases. Use it where the browser cannot help (no WebUSB, scripts, an AI agent on your own computer). Experimental: tested on Linux so far.' }),
+    connection,
     h('h3', { textContent: 'Install' }),
-    h('p', { className: 'field-help', textContent: 'Needs Node.js and git:' }),
-    code('git clone https://github.com/philipplinux/rominit\ncd rominit\nnpm ci --omit=dev\nalias rominit="node $PWD/bin/rominit.mjs"\nrominit devices'),
+    h('p', { className: 'field-help', textContent: 'Install the current CLI from this site (needs Node.js):' }),
+    code(`curl -fLO ${location.origin}/rominit-cli.tar.gz\ntar -xzf rominit-cli.tar.gz\ncd rominit-cli\nnpm ci --omit=dev\nalias rominit="node $PWD/bin/rominit.mjs"\nrominit auth`),
     h('p', { className: 'field-help', textContent: 'On Linux, if the phone shows in lsusb but not in "rominit devices", this user lacks USB access: install udev rules (e.g. android-udev-rules).' }),
     h('h3', { textContent: 'Commands' }),
-    code(['# phones in fastboot or ADB mode', 'rominit devices',
+    code(['# sign in once, then connect this CLI to the browser', 'rominit auth', 'rominit serve',
+      '# phones in fastboot or ADB mode', 'rominit devices',
       "# a phone's ROMs, then one ROM's stages, files and steps", 'rominit plan <codename> [rom-id]',
       '# download the files and check their SHA-256', 'rominit fetch <codename> <rom-id>',
       '# flash one stage', 'rominit run <codename> <rom-id> --stage N',
       '# read-only phone test over SSH (postmarketOS)', 'rominit bench <codename> <rom-id>',
       '', '# any command: --json = one JSON event per line (scripts, agents)', "# --local = read a checkout's catalog/ instead of this site"].join('\n')),
+    h('h3', { id: 'usb-setup', textContent: 'USB preparation · Linux' }),
+    h('p', { className: 'field-help' }, 'The Alpine Linux page uses this same CLI. Direct ISO writing needs Linux, Python 3, lsblk, udisksctl and noninteractive sudo permission. Ventoy additionally needs a reviewed, root-owned ', link('https://www.ventoy.net/en/download.html', 'Ventoy installation'), '. ', link('https://github.com/philipplinux/rominit#usb-preparation-linux', 'USB setup instructions'), '.'),
+    code('ROMINIT_VENTOY_DIR=/absolute/path/to/reviewed/ventoy rominit serve'),
     h('h3', { textContent: 'Safety' }),
     h('ul', {}, ...['It reads phone and ROM data from this site (catalog/<codename>.json), no account needed.', 'A destructive stage asks you to type its confirm phrase in the terminal. Without a terminal it stops; an agent cannot type it for you.', 'Every file is checked against its pinned size and SHA-256 before it is written.'].map(t => h('li', { textContent: t }))),
-    h('p', { className: 'intro-copy' }, 'Want your AI agent to look things up without installing anything? Use the ', h('a', { href: './?view=agents', textContent: 'Hosted MCP' }), '.'));
+    h('p', { className: 'intro-copy' }, 'Want your AI agent to look things up without installing anything? Use the ', h('a', { href: './?view=agents', textContent: 'Hosted MCP' }), '.'),
+    h('p', { className: 'field-help' }, 'Preparing Alpine Linux? Open the ', h('a', { href: './alpine.html', textContent: 'Alpine USB guide' }), '.'));
+  return page;
 }
 /** Hosted MCP: endpoint, setup, the deal (read our data, report how the flash went), and your API tokens. */
 async function agentsView() {
@@ -1064,23 +1364,106 @@ async function agentsView() {
     h('p', { className: 'field-help', textContent: 'Claude Code:' }), copyable(cli),
     h('p', { className: 'field-help', textContent: 'Other MCP clients (JSON config):' }), copyable(config));
 }
+/** Connect this browser tab to the same ROMinit CLI used by rominit serve. */
+async function cliConnectionView() {
+  const info = await me;
+  const status = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+  const controls = h('div', {}), panels = h('div', {});
+  let usbPanel = null;
+  const box = h('div', { id: 'cli-browser-connection' }, h('hr'), h('h3', { textContent: 'Connect this browser to ROMinit CLI' }),
+    h('p', { className: 'field-help', textContent: 'Keep rominit serve running on this computer. ROMinit checks the local CLI automatically when you use a CLI feature; the browser may ask to allow local network access.' }),
+    controls, status, panels,
+    h('p', { className: 'field-help', textContent: 'The short-lived CLI connection is remembered across tabs in this browser for up to 30 days or until the website login expires. Phone SSH credentials stay in page memory and go only to the local CLI when a benchmark runs. Disconnecting does not erase the CLI login.' }));
+  if (!info) {
+    status.textContent = 'Could not check your ROMinit sign-in. Reload the page to retry.';
+    return box;
+  }
+  if (!info.user) {
+    controls.append(h('p', { className: 'intro-copy' }, 'Sign in to approve your CLI connection: ', ...signInLinks(info?.providers ?? [])));
+    return box;
+  }
+  const user = info.user;
+  const returnToPhone = (() => {
+    try { const path = sessionStorage.getItem('rominit.helper.return'); return path && /^\/(?![/\\])/.test(path) ? path : './'; }
+    catch { return './'; }
+  })();
+  controls.append(h('p', { textContent: `Account: ${user.name}` }));
+  /** @param {any} session @param {HTMLButtonElement} button */
+  const checkConnection = async (session, button, summary) => {
+    button.disabled = true;
+    try {
+      const active = await ensureHelper(user.id, session);
+      const result = await helperRequest(active, '/status');
+      if (result.user?.id !== user.id) throw Error('The CLI is connected to a different account. Disconnect and pair again.');
+      if (summary) summary.textContent = `Connected as ${active.user.name} · expires ${new Date(active.expiresAt).toLocaleString()}`;
+      const capabilities = Array.isArray(result.capabilities) ? result.capabilities : [];
+      if (capabilities.includes('usb-media')) {
+        if (!usbPanel) { usbPanel = usbMediaPanel(active, h); panels.append(usbPanel); }
+      } else { usbPanel?.remove(); usbPanel = null; }
+      if (capabilities.includes('bench')) status.textContent = `ROMinit CLI ready as ${result.user.name}.`;
+      else status.replaceChildren('ROMinit CLI connected. Phone benchmarks need an updated CLI: ', h('a', { href: '/rominit-cli.tar.gz', textContent: 'download it' }), ' and restart rominit serve.');
+    } catch (error) { status.textContent = `${message(error)} Keep rominit serve running and allow local network access when asked.`; }
+    finally { button.disabled = false; }
+  };
+  /** @param {any} session */
+  const connected = session => {
+    const summary = h('p', { textContent: `Connected as ${session.user.name} · expires ${new Date(session.expiresAt).toLocaleString()}` });
+    controls.replaceChildren(summary,
+      h('p', { className: 'field-help', textContent: 'This short-lived connection is shared across tabs in this browser. Continue to your phone test from any open ROMinit tab.' }),
+      h('button', { type: 'button', className: 'button button-secondary', textContent: 'Check CLI connection', onclick() { void checkConnection(session, /** @type {HTMLButtonElement} */ (this), summary); } }),
+      h('button', { type: 'button', className: 'button button-secondary', textContent: 'Disconnect CLI', async onclick() {
+        this.disabled = true;
+        try { await disconnectHelper(); status.textContent = 'Disconnected. Run rominit serve again to reconnect.'; }
+        catch { status.textContent = 'Connection forgotten in this browser. Close rominit serve on its computer to stop the unreachable CLI.'; }
+        usbPanel?.remove(); usbPanel = null;
+        controls.replaceChildren(h('p', { textContent: 'No CLI connected.' }));
+      } }),
+      h('p', {}, h('a', { href: returnToPhone, textContent: returnToPhone === './' ? 'Back to ROMinit' : 'Back to phone test' })));
+    const button = /** @type {HTMLButtonElement} */ (controls.querySelector('button'));
+    void checkConnection(session, button, summary);
+  };
+  const hasPairingParams = ['port', 'state', 'challenge'].some(key => params.has(key));
+  const port = params.get('port') ?? '', state = params.get('state') ?? '', challenge = params.get('challenge') ?? '';
+  if (!hasPairingParams) {
+    status.textContent = 'Checking for a running ROMinit CLI…';
+    void ensureHelper(user.id).then(connected).catch(error => { status.textContent = message(error); });
+    return box;
+  }
+  if (!/^[1-9]\d{0,4}$/.test(port) || Number(port) > 65535 || !/^[A-Za-z0-9_-]{43}$/.test(state) || !/^[a-f0-9]{64}$/.test(challenge)) {
+    status.textContent = 'This pairing link is invalid or expired. Restart rominit serve and open its latest link.';
+    return box;
+  }
+  controls.append(h('p', { textContent: `Connect ROMinit CLI on this computer (port ${port}) as ${user.name}?` }),
+    h('button', { type: 'button', className: 'button button-primary', textContent: 'Approve and connect helper', async onclick() {
+      this.disabled = true; status.textContent = 'Connecting to your local helper…';
+      try {
+        const session = await pairHelper(params, user.id);
+        history.replaceState(null, '', './?view=cli');
+        connected(session); status.textContent = 'ROMinit CLI connected.';
+      } catch (error) {
+        status.textContent = `${message(error)} Keep rominit serve running; allow local network access when asked, then retry using its pairing link.`;
+        this.disabled = false;
+      }
+    } }));
+  return box;
+}
 async function start() {
-  const codename = params.get('device'), view = params.get('view');
+  const codename = params.get('device'), requestedView = params.get('view'), view = requestedView === 'helper' ? 'cli' : requestedView;
   // Disclaimer × hides it; remembered per browser.
   const notice = document.querySelector('.disclaimer');
   try { if (localStorage.getItem('rominit.noticeHidden')) notice?.remove(); } catch {}
   notice?.querySelector('button')?.addEventListener('click', () => { notice.remove(); try { localStorage.setItem('rominit.noticeHidden', '1'); } catch {} });
   // Header nav: mark where we are and keep the search text.
-  const navSearch = /** @type {HTMLInputElement|null} */ (document.querySelector('.sitenav input'));
+  const navSearch = /** @type {HTMLInputElement|null} */ (document.querySelector('.topbar input[type=search]'));
   if (navSearch) navSearch.value = params.get('q') ?? '';
   if (!codename && !view) navSearch?.form?.remove(); // the device list has its own search box
-  for (const a of document.querySelectorAll('.sitenav a')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
+  for (const a of document.querySelectorAll('.sitenav a:not([href$="alpine"])')) if (!codename && new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
   if (!codename) {
     const index = await (await fetch('./catalog/index.json')).json();
     for (const a of document.querySelectorAll('.site-menu a, .top-links a')) if (new URL(/** @type {HTMLAnchorElement} */ (a).href).searchParams.get('view') === view) a.setAttribute('aria-current', 'page');
     if (view === 'sources' || view === 'about') { main.append(view === 'sources' ? sourcesView() : aboutView()); return; }
     if (view === 'agents') { main.append(await agentsView()); return; }
-    if (view === 'cli') { main.append(cliView()); return; }
+    if (view === 'cli') { main.append(await cliView()); return; }
     main.append(view === 'brands' ? tilesView(index, 'Brands', d => [d.vendor], () => true) : view === 'projects' ? tilesView(index, 'Projects', d => d.roms.map((/** @type {any} */ r) => r.os), (r, k) => r.os === k) : view === 'popular' ? await popularView(index) : view === 'favorites' ? await favoritesView(index) : view === 'inbox' ? await inboxView(index) : devicePicker(index));
     return;
   }
@@ -1162,6 +1545,7 @@ async function start() {
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
       rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
       rom && sourceRow(rom, `${device.codename}/${rom.id}`),
+      rom && h('p', { className: 'inbox-actions' }, requestButton('update', 'Request ROM update', `${device.codename}/${rom.id}`), requestButton('mirror', 'Request ROM mirror', `${device.codename}/${rom.id}`)),
       rom && kindRow(rom),
       rom && starsRow(`${device.codename}/${rom.id}`),
       rom && countsRow(`${device.codename}/${rom.id}`),
@@ -1219,9 +1603,23 @@ async function start() {
   const otherRecoveries = recoveryInstallers.length && h('details', { className: 'pivots' }, h('summary', { textContent: `Other recovery installers (${recoveryInstallers.length}) · opt-in, only if you need one` }),
     h('p', { className: 'field-help', textContent: 'Not needed for the selected ROM; a recovery it needs is in section 2. These are alternatives and are not compatible with every ROM.' }), ...recoveryInstallers);
   // Optional, so never amber; it goes green once a report card for this ROM was sent from this browser.
-  const testSection = rom && section('4 · Test your phone', 'optional · about 2 minutes · report card', false, [benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
+  const benchRomSelect = /** @type {HTMLSelectElement} */ (romSelect.cloneNode(true));
+  benchRomSelect.value = rom?.id ?? '';
+  benchRomSelect.setAttribute('aria-label', 'Installed ROM for this test');
+  benchRomSelect.addEventListener('change', () => {
+    location.href = `?${new URLSearchParams({ device: codename, rom: benchRomSelect.value })}#phone-test`;
+  });
+  const testSection = rom && section('4 · Test your phone', `${rom.name} ${rom.version} · optional`, location.hash === '#phone-test', [
+    h('label', { className: 'field-label' }, 'ROM currently installed on this phone', benchRomSelect),
+    h('p', { className: 'field-help', textContent: 'Choose the ROM running on the phone now. Changing it opens a fresh test for that ROM.' }),
+    benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
+  if (testSection) testSection.id = 'phone-test';
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
-  if (rom) { testSection.addEventListener('bench-sent', (/** @type {any} */ e) => { progress.tested = [...new Set([...progress.tested ?? [], rom.id])]; progress.cards = { ...progress.cards, [rom.id]: [...progress.cards?.[rom.id] ?? [], e.detail] }; save(); markTested(); }); markTested(); }
+  if (rom) { testSection.addEventListener('bench-sent', (/** @type {any} */ e) => { progress.tested = [...new Set([...progress.tested ?? [], rom.id])]; progress.cards = { ...progress.cards, [rom.id]: [...progress.cards?.[rom.id] ?? [], e.detail] }; save(); markTested(); }); testSection.addEventListener('bench-discarded', (/** @type {any} */ e) => {
+    progress.cards = { ...progress.cards, [rom.id]: (progress.cards?.[rom.id] ?? []).filter(code => code !== e.detail) };
+    if (!progress.cards[rom.id].length) progress.tested = (progress.tested ?? []).filter(id => id !== rom.id);
+    save(); markTested();
+  }); markTested(); }
   const romCards = rom && flashable(rom) ? cards(rom, 'rom') : [];
   // Flashed some other way (own tools, another guide): counts as done, but marked unconfirmed since ROMinit did not see it.
   const flashedElsewhere = h('input', { type: 'checkbox', checked: !!rom && !!progress.flashedElsewhere?.includes(rom.id) });
@@ -1328,8 +1726,14 @@ function progressRail(sections) {
   paint(); soon();
   return rail;
 }
+for (const a of document.querySelectorAll('a[href="#submit-request"]')) a.addEventListener('click', () => {
+  const box = /** @type {HTMLDetailsElement|null} */ (document.getElementById('submit-request'));
+  if (box) box.open = true;
+  a.closest('details')?.removeAttribute('open');
+});
 start().then(() => {
   main.append(reportBox());
+  if (location.hash === '#phone-test') document.getElementById('phone-test')?.scrollIntoView({ block: 'start' });
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).
   const sections = /** @type {HTMLDetailsElement[]} */ ([...main.querySelectorAll(':scope > details.page-section')]);
   if (sections.length < 2) return;

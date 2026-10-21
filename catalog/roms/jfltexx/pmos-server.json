@@ -5,15 +5,15 @@
       "id": "philipplinux-pmos-server",
       "os": "postmarketOS",
       "name": "postmarketOS server",
-      "version": "local-2026-10-18-jflte-v3",
+      "version": "local-2026-10-18-jflte-v4",
       "origin": "unofficial",
       "status": "experimental",
       "vetting": "curated",
       "risk": {
         "level": "mid",
-        "why": "local build of upstream postmarketOS (testing port, mainline 7.2) by one maintainer; image not published yet"
+        "why": "unofficial postmarketOS testing-port build; v4 rebuilt and image-checked, hardware flash pending"
       },
-      "notes": "Headless server image: SSH over USB (172.16.42.1), NetworkManager for Wi-Fi. Local build, not hosted: pick the files from your own pmbootstrap build. Booted on a GT-I9505: USB networking, Wi-Fi and Bluetooth work. Other Wi-Fi module revisions: nvram files in /usr/share/firmware-samsung-jflte/wifi/, copy yours to /usr/lib/firmware/brcm/brcmfmac4335-sdio.samsung,jflte.txt if Wi-Fi is weak.",
+      "notes": "Shared v4 headless server image with explicit SSH client/server packages and enabled sshd. Login user / 147147; change the shared password. No personal SSH keys, SSH host keys or Wi-Fi profiles are embedded. V4 image contents and USB DTB flags are checked; v4 has not yet been flashed. Previous v3 passed CLI flash/read-back/boot/USB SSH and the quiet benchmark: Wi-Fi saw no networks, audio/camera/cellular were unavailable. The website can run the quiet benchmark through a paired local CLI helper.",
       "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/master/device/testing/device-samsung-jflte",
       "maintainer": {
         "name": "philipplinux",
@@ -126,13 +126,15 @@
               "name": "lk2nd.img",
               "size": 249872,
               "sha256": "b2096fbf2985ea5321d9ec85dfb94f3249dd727416e1398e10b2e50e56933f1e",
-              "source": "https://github.com/msm8916-mainline/lk2nd"
+              "source": "https://github.com/msm8916-mainline/lk2nd",
+              "url": "https://huggingface.co/PhilippLinux/s4-postmarketos/resolve/052409de356a0407da6699a21b65d010b0b1f27a/v2026.10.18-v4/lk2nd.img"
             },
             {
-              "name": "samsung-jflte.img",
-              "size": 757071872,
-              "sha256": "2a8932bca3eb2a22b51f4267504f27560c55208360fc4045ef18e7a9669ffd75",
-              "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/master/device/testing/device-samsung-jflte"
+              "name": "samsung-jflte-v4.img",
+              "size": 756023296,
+              "sha256": "5b4e14d49cb5c898af7c39a4e2a3da0fb43ab9b06ea2e5e4c56823302f66ecf2",
+              "source": "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/master/device/testing/device-samsung-jflte",
+              "url": "https://huggingface.co/PhilippLinux/s4-postmarketos/resolve/052409de356a0407da6699a21b65d010b0b1f27a/v2026.10.18-v4/samsung-jflte-v4.img"
             }
           ],
           "steps": [
@@ -148,7 +150,7 @@
             [
               "write",
               "userdata",
-              "samsung-jflte.img"
+              "samsung-jflte-v4.img"
             ]
           ],
           "options": [
@@ -163,7 +165,7 @@
               ]
             }
           ],
-          "done": "lk2nd and postmarketOS written and verified on the phone. First boot takes a minute or two; then ssh to 172.16.42.1 over USB."
+          "done": "lk2nd and postmarketOS written and verified on the phone. First boot takes a minute or two; then ssh as user to 172.16.42.1 over USB (password 147147). Change the password. Disconnect other postmarketOS USB phones using the same IP."
         }
       ]
     }

@@ -54,7 +54,7 @@ export const covers = (scope, rom) => scope === '*' || [`os:${rom.os}`, `vendor:
 /** Strongest role a user holds over this ROM: admin > owner > moderator, or null. @param {{role:string, scope:string}[]} roles @param {any} rom */
 export const roleOver = (roles, rom) => ['admin', 'owner', 'moderator'].find(role => roles.some(r => r.role === role && covers(r.scope, rom))) ?? null;
 
-/** Owner of a valid personal API token (`Authorization: Bearer <token>`), or null. Tokens only report agent runs:
+/** Owner of a valid personal API token (`Authorization: Bearer <token>`), or null. Tokens identify CLI/helpers and report agent runs:
  * never use this where userOf() guards account, comment or admin actions. @param {any} env @param {Request} request */
 export async function tokenUser(env, request) {
   const token = /^Bearer (\S{20,200})$/.exec(request.headers.get('authorization') ?? '')?.[1];

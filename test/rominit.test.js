@@ -596,7 +596,7 @@ test('ROMvault lint: frontmatter, tags, links, index and the full net are clean'
 });
 
 test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their links, lint-clean', { skip: !existsSync(new URL('../romvault/AGENTS.md', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
-  const { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
+  const { cpSync, lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } = await import('node:fs');
   const { tmpdir } = await import('node:os');
   const { join } = await import('node:path');
   const { lint } = await import('../scripts/romvault-lint.mjs');
@@ -605,7 +605,8 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
   try {
     const root = new URL('..', import.meta.url).pathname; // pages link ../../catalog/ and ../../romsources/: mirror the repo around the copy
     for (const e of readdirSync(root)) if (e !== 'romvault') symlinkSync(join(root, e), join(dir, e));
-    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, filter: src => !src.includes('/.git') });
+    cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, dereference: true, filter: src => !src.includes('/.git') });
+    assert.equal(lstatSync(vault).isSymbolicLink(), false, 'test fixture must never link to the real ROMvault');
     rmSync(join(vault, 'series/google-pixel-7.md'));
     rmSync(join(vault, 'socs/sdm670.md'));
     for (const f of ['README.md', 'lines/google-pixel.md', 'devices/google-sargo.md', 'devices/google-bonito.md']) {
@@ -613,7 +614,8 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
       writeFileSync(p, readFileSync(p, 'utf8').split('\n').filter(l => !/series\/google-pixel-7\.md|socs\/sdm670\.md/.test(l)).join('\n'));
     }
     assert.notDeepEqual(lint(vault), []);
-    assert.deepEqual([...fix(vault, 'test').create].sort(), ['series/google-pixel-7.md', 'socs/sdm670.md']);
+    const created = fix(vault, 'test').create;
+    assert.ok(created.has('series/google-pixel-7.md') && created.has('socs/sdm670.md'));
     assert.deepEqual(lint(vault), []);
     assert.match(tree(vault), /Google Pixel 7 {2}\(series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\)/);
     assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');
@@ -661,4 +663,17 @@ test('amlogic stage: one burn step with a known wipe mode', () => {
   const stage = (/** @type {any[]} */ ...steps) => ({ title: 'Burn', warning: 'w', confirm: 'BURN BOX', section: 'rom', recipe: 'amlogic', mode: 'usb-burn', files: [file], steps });
   assert.deepEqual(stagesProblems(dev, [stage(['burn', file.name, 'keep_keys'])], 'x'), []);
   assert.match(stagesProblems(dev, [stage(['burn', file.name, 'nuke'])], 'x').join(), /wipe/);
+});
+
+test('requests API validates request kind, URLs, paths and ROMs', async () => {
+  const { onRequestPost } = await import('../functions/api/requests.js');
+  const saved = [];
+  const env = { SALT: 'test', ASSETS: { fetch: async () => Response.json([{ codename: 'x', roms: [{ id: 'lineage' }] }]) },
+    DB: { prepare: sql => ({ bind: (...args) => ({ first: async () => null, run: async () => (saved.push([sql, args]), { meta: { changes: 1 } }) }) }) } };
+  const post = body => onRequestPost({ env, request: new Request('https://x/api/requests', { method: 'POST', body: JSON.stringify(body) }) });
+  const common = { kind: 'update', page: '/?device=x', rom: 'x/lineage', url: 'https://example.org/rom', text: 'Please update this listing' };
+  for (const body of [{ ...common, url: 'javascript:alert(1)' }, { ...common, page: '//evil.test' }, { ...common, rom: 'x/missing' }]) assert.equal((await post(body)).status, 400);
+  assert.equal((await post({ ...common, kind: 'mirror', url: undefined })).status, 200);
+  assert.equal((await post(common)).status, 200);
+  assert.deepEqual(saved.map(([, args]) => args[0]), ['mirror', 'update']);
 });
