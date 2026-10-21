@@ -86,9 +86,9 @@ const sourceRow = (/** @type {any} */ rom, /** @type {string} */ key, /** @type 
   badge('xda', 'XDA', 'search', { href: `https://xdaforums.com/search/?q=${encodeURIComponent(`${device.vendor} ${device.name}`)}`, target: '_blank', rel: 'noopener noreferrer', title: 'Search XDA Forums for this phone' }), favoriteButton(key));
 /**
  * Badges under the model card: one per ROM project, the newest stock Android, and each recovery. A project with several builds says
- * "multiple available" and opens section 0. @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {HTMLDetailsElement} infoSection @param {HTMLDetailsElement} recoverSection
+ * "multiple available" and opens section 0. @param {any} device @param {any[]} roms non-stock ROMs, best first @param {any[]} stock @param {any} rom the ROM section 0 shows now @param {HTMLDetailsElement} infoSection @param {HTMLDetailsElement} recoverSection
  */
-function badgeRow(device, roms, stock, infoSection, recoverSection) {
+function badgeRow(device, roms, stock, rom, infoSection, recoverSection) {
   // postmarketOS is rolling, so its number is the Linux kernel; others show the release number, or the base when the version is a date/build.
   const shown = (/** @type {any} */ r) => r.os === 'postmarketOS' ? `Linux ${r.rating.kernel.version}`
     : r.version.match(/^v?\d{1,3}\.\d+(?: A\d+)?/)?.[0] ?? r.rating.base.replace(`${r.os} `, '');
@@ -96,7 +96,9 @@ function badgeRow(device, roms, stock, infoSection, recoverSection) {
   for (const r of roms) if (r.status !== 'broken') byOs.set(r.os, [...(byOs.get(r.os) ?? []), r]);
   const jump = (/** @type {HTMLDetailsElement} */ sec) => (/** @type {Event} */ e) => { e.preventDefault(); sec.open = true; sec.scrollIntoView({ behavior: 'smooth' }); };
   const romBadges = [...byOs].map(([os, list]) => list.length === 1
-    ? badge(os.toLowerCase(), os, shown(list[0]), { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
+    // Another ROM reloads the page with it selected, and #rom scrolls there once loaded.
+    ? badge(os.toLowerCase(), os, shown(list[0]), list[0].id === rom?.id ? { href: '#', title: `${list[0].name} ${list[0].version}: selected in section 0`, onclick: jump(infoSection) }
+      : { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}#rom`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
     : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick: jump(infoSection) }));
   const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
   const stockBadge = latest && badge('android', 'Stock Android', latest.rating.base.replace('Android ', ''), { href: '#', title: `${latest.name} ${latest.version}: restore it in section R`, onclick: jump(recoverSection) });
@@ -1692,7 +1694,7 @@ async function start() {
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
       device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display].join(' · ') }),
       tags.some(t => !isOs(t)) && h('p', { className: 'hardware-line', textContent: tags.filter(t => !isOs(t)).join(' · ') }),
-      badgeRow(device, roms, stock, infoSection, recoverSection)),
+      badgeRow(device, roms, stock, rom, infoSection, recoverSection)),
     infoSection,
     unlockSection,
     twrpSection,
@@ -1754,6 +1756,7 @@ start().then(() => {
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).
   const sections = /** @type {HTMLDetailsElement[]} */ ([...main.querySelectorAll(':scope > details.page-section')]);
   if (sections.length < 2) return;
+  if (location.hash === '#rom') { sections[0].open = true; sections[0].scrollIntoView({ block: 'start' }); } // a ROM badge picked this ROM
   const rail = progressRail(sections);
   // Start over moves to the top of the rail; the title-row button stays for phones, where the rail is hidden.
   const restart = /** @type {HTMLButtonElement|null} */ (main.querySelector('.title-row .start-over'));
