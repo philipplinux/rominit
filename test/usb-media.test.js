@@ -473,13 +473,13 @@ test('legacy helper-configured ISO checksum mismatch uses the same explicit over
   assert.deepEqual(await readFile(join(fx.mountpoint, 'alpine.iso')), fx.image);
 });
 
-test('incomplete streams and downloads beyond the 4 GiB bound remain hard failures', async t => {
+test('incomplete streams and downloads beyond the 16 GiB bound remain hard failures', async t => {
   const data = bytes('download stream');
   const alpineImage = { id: 'fixture-standard-x86_64', arch: 'x86_64', format: 'iso', url: 'https://images.test/alpine.iso',
     sha256: digest(data), size: data.length, usb: true };
   const cases = [
     { response: () => ({ ok: true, redirected: false, headers: { get: () => null }, body: { async *[Symbol.asyncIterator]() { yield data; throw Error('network ended unexpectedly'); } } }) },
-    { response: () => ({ ok: true, redirected: false, headers: { get: name => name === 'content-length' ? String(4 * 1024 ** 3 + 1) : null }, body: { async *[Symbol.asyncIterator]() { throw Error('must not read oversized response'); } } }) },
+    { response: () => ({ ok: true, redirected: false, headers: { get: name => name === 'content-length' ? String(16 * 1024 ** 3 + 1) : null }, body: { async *[Symbol.asyncIterator]() { throw Error('must not read oversized response'); } } }) },
   ];
   for (const { response } of cases) {
     const fx = await fixture({ alpineImage, fetchImage: async () => response() });

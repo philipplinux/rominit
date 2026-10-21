@@ -26,8 +26,8 @@ const LOG_LINES = 100;
 const LOG_BYTES = 16 * 1024;
 const LOG_LINE_BYTES = 512;
 const MAX_PLANS = 64;
-const MAX_IMAGE_BYTES = 4 * 1024 ** 3;
-const IMAGE_DOWNLOAD_TIMEOUT = 15 * 60_000;
+const MAX_IMAGE_BYTES = 16 * 1024 ** 3; // full desktop ISOs (Omarchy is 6 GB+); Ventoy is exFAT and direct writes are raw, so no FAT32 4 GiB cap
+const IMAGE_DOWNLOAD_TIMEOUT = 15 * 60_000; // floor; big images get 1 ms per KiB (about 1 MB/s)
 const IMAGE_CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), '.cache'), 'rominit', 'alpine');
 const BIN = { lsblk: '/usr/bin/lsblk', sudo: '/usr/bin/sudo', sh: '/usr/bin/sh', python: '/usr/bin/python3', udisksctl: '/usr/bin/udisksctl' };
 const LSBLK_FIELDS = 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,FSTYPE,LABEL,MOUNTPOINTS,PKNAME';
@@ -588,7 +588,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
 
     let response;
     try {
-      response = await fetchImage(pin.url, { redirect: 'error', signal: AbortSignal.timeout(IMAGE_DOWNLOAD_TIMEOUT) });
+      response = await fetchImage(pin.url, { redirect: 'error', signal: AbortSignal.timeout(Math.max(IMAGE_DOWNLOAD_TIMEOUT, Math.ceil(pin.size / DIRECT_BYTES_PER_MS))) });
     } catch { throw fail(502, 'Could not download the selected Alpine ISO. Check the network and try again.'); }
     if (!response?.ok || !response.body || response.redirected) throw fail(502, 'The selected Alpine ISO download failed or redirected.');
     const contentLengthHeader = response.headers?.get?.('content-length');
@@ -596,7 +596,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       ? null : Number(contentLengthHeader);
     if (contentLength !== null && (!Number.isSafeInteger(contentLength) || contentLength < 0))
       throw fail(502, 'The selected Alpine ISO has an invalid download length.');
-    if (contentLength !== null && contentLength > MAX_IMAGE_BYTES) throw fail(502, 'The Alpine ISO download exceeds the 4 GiB safety limit.');
+    if (contentLength !== null && contentLength > MAX_IMAGE_BYTES) throw fail(502, 'The Alpine ISO download exceeds the 16 GiB safety limit.');
     const contentEncoding = String(response.headers?.get?.('content-encoding') ?? '').trim().toLowerCase();
     const expectedTransferLength = contentLength !== null && (!contentEncoding || contentEncoding === 'identity')
       ? contentLength : null;
@@ -610,7 +610,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       for await (const chunk of response.body) {
         const buffer = Buffer.from(chunk);
         size += buffer.length;
-        if (size > MAX_IMAGE_BYTES) throw Error('The Alpine ISO download exceeds the 4 GiB safety limit.');
+        if (size > MAX_IMAGE_BYTES) throw Error('The Alpine ISO download exceeds the 16 GiB safety limit.');
         hash.update(buffer);
         let offset = 0;
         while (offset < buffer.length) {
@@ -644,7 +644,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
     } catch (error) {
       await file?.close().catch(() => {});
       await unlink(partPath).catch(() => {});
-      throw fail(502, ['The Alpine ISO download exceeds the 4 GiB safety limit.', 'The Alpine ISO download is empty.',
+      throw fail(502, ['The Alpine ISO download exceeds the 16 GiB safety limit.', 'The Alpine ISO download is empty.',
         'The Alpine ISO download ended before its advertised size.', 'The selected Alpine ISO has an invalid download length.'].includes(error?.message)
         ? error.message : 'Could not download the selected Alpine ISO completely.');
     }
@@ -1171,7 +1171,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       }
       const actualSize = image?.actual?.size ?? image?.size;
       if (method === 'direct' && image && actualSize > MAX_IMAGE_BYTES)
-        throw fail(409, 'The selected ISO exceeds the 4 GiB direct-write safety limit.');
+        throw fail(409, 'The selected ISO exceeds the 16 GiB direct-write safety limit.');
       if (image && actualSize + (action === 'install' ? VENTOY_OVERHEAD : 0) > found.public.size)
         throw fail(409, `The selected ISO (${actualSize} bytes) does not fit on this USB disk${action === 'install' ? ' with Ventoy partition space reserved' : ''}.`);
       if (image && found.public.mounts.some(path => under(image.sourcePath, path)))
