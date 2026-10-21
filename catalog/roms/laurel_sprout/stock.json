@@ -402,7 +402,7 @@
       ],
       "slots": "ab",
       "requirements": [
-        "Unlocked bootloader; it stays unlocked unless you tick the relock option.",
+        "Unlocked bootloader: a locked phone refuses every fastboot flash, even Xiaomi's own signed images. It stays unlocked unless you tick the relock option. Locked and still booting? Take Xiaomi's update in Settings → System update instead.",
         "Writes both slots (a and b), like Xiaomi's flash_all.sh.",
         "Anti-rollback: the flasher refuses if the phone is newer than this package."
       ]
