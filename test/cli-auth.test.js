@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { PassThrough } from 'node:stream';
 import test from 'node:test';
-import { main } from '../bin/cli.mjs';
+import { main, sendUsbOutcome } from '../bin/cli.mjs';
 import { identifyCredential } from '../bin/helper.mjs';
 import { credentialFingerprint } from '../bin/credentials.mjs';
 
@@ -154,6 +154,121 @@ test('web auth persists the first redeemed credential through its callback witho
     assert.equal(paired.data.name, 'Pair  [31m');
     assert.equal(text().includes(API_KEY), false);
   } finally { assert.equal(await runningAuth.stop(), 0); }
+});
+
+test('the USB report uses the saved CLI key only in Authorization and retries a transient response with the same job ID', async () => {
+  const calls = [];
+  let attempts = 0;
+  const payload = {
+    jobId: 'j'.repeat(43), method: 'direct', action: 'direct', outcome: 'success',
+    image: { id: 'alpine-standard-aarch64', size: 1024 }, drive: { capacityBytes: 4096 },
+    verification: { source: 'verified' }, readback: { size: 1024, matched: true },
+  };
+  const result = await sendUsbOutcome(SITE, API_KEY, payload, async (url, options) => {
+    calls.push({ url, options });
+    attempts++;
+    if (attempts === 1) throw Error('temporary network failure');
+    return Response.json({ ok: true, duplicate: true });
+  }, 0);
+  assert.deepEqual(result, { ok: true, duplicate: true });
+  assert.equal(calls.length, 2);
+  assert.equal(calls[0].url, `${SITE}/api/os-usb`);
+  assert.equal(calls[0].options.method, 'POST');
+  assert.equal(calls[0].options.headers.authorization, `Bearer ${API_KEY}`);
+  assert.deepEqual(JSON.parse(calls[0].options.body), payload);
+  assert.deepEqual(JSON.parse(calls[1].options.body), payload);
+  assert.equal(calls[0].options.body.includes(API_KEY), false);
+  assert.equal(calls[0].options.redirect, 'error');
+  assert.ok(calls[0].options.signal);
+});
+
+test('USB report does not retry rejected 4xx responses or expose response text', async () => {
+  let calls = 0;
+  await assert.rejects(sendUsbOutcome(SITE, API_KEY, { jobId: 'j'.repeat(43) }, async () => {
+    calls++;
+    return new Response('private server details', { status: 409 });
+  }, 0), /OS USB outcome report failed/);
+  assert.equal(calls, 1);
+});
+
+test('USB report retries rate-limit and server errors once with the same opaque job ID', async () => {
+  const payload = { jobId: 'q'.repeat(43) };
+  for (const status of [429, 503]) {
+    let calls = 0;
+    await sendUsbOutcome(SITE, API_KEY, payload, async (_url, options) => {
+      calls++;
+      assert.deepEqual(JSON.parse(options.body), payload);
+      return calls === 1 ? new Response('{}', { status }) : Response.json({ ok: true, duplicate: true });
+    }, 0);
+    assert.equal(calls, 2);
+  }
+});
+
+test('native USB reporter drops invalid environment diagnostics instead of forwarding custom fields', async () => {
+  let sent;
+  const payload = { jobId: 'v'.repeat(43), method: 'direct', action: 'direct', outcome: 'failed',
+    image: { id: 'none', size: 0 }, drive: { capacityBytes: 4096 }, verification: { source: 'none' },
+    failureCode: 'preflight', environment: { hostOs: 'linux', hostDistro: 'private-acme-build', rawHost: 'workstation-philipp' } };
+  await sendUsbOutcome(SITE, API_KEY, payload, async (_url, options) => {
+    sent = JSON.parse(options.body);
+    return Response.json({ ok: true, duplicate: false });
+  }, 0);
+  assert.equal(Object.hasOwn(sent, 'environment'), false);
+  assert.doesNotMatch(JSON.stringify(sent), /private-acme-build|workstation-philipp|rawHost/);
+});
+
+test('a web-paired key becomes available to the USB reporter without entering its body', async () => {
+  const { io } = streams();
+  let mediaOptions, helperOptions, stored;
+  const payload = {
+    jobId: 'k'.repeat(43), method: 'ventoy', action: 'copy', outcome: 'success',
+    image: { id: 'alpine-standard-x86_64', size: 80 }, drive: { capacityBytes: 100 },
+    verification: { source: 'verified' }, readback: { size: 80, matched: true },
+  };
+  let sent;
+  const running = await untilReady(['auth', '--json'], io, {
+    site: SITE,
+    createUsbMedia: options => { mediaOptions = options; return {}; },
+    startHelper: async options => { helperOptions = options; return liveHelper(); },
+    saveCredential: async (_site, key) => { stored = key; },
+    get: async (url, options) => { sent = { url, options }; return Response.json({ ok: true, duplicate: false }); },
+  });
+  try {
+    await assert.rejects(mediaOptions.reportOutcome(payload), /No saved ROMinit API key/);
+    await helperOptions.saveCredential(API_KEY);
+    await mediaOptions.reportOutcome(payload);
+    assert.equal(stored, API_KEY);
+    assert.equal(sent.url, `${SITE}/api/os-usb`);
+    assert.equal(sent.options.headers.authorization, `Bearer ${API_KEY}`);
+    assert.deepEqual(JSON.parse(sent.options.body), payload);
+    assert.equal(sent.options.body.includes(API_KEY), false);
+  } finally { assert.equal(await running.stop(), 0); }
+});
+
+test('serve binds USB reports to the key loaded from the OS credential store', async () => {
+  const { io } = streams();
+  let mediaOptions, helperOptions, sent;
+  const payload = {
+    jobId: 's'.repeat(43), method: 'ventoy', action: 'install', outcome: 'failed',
+    image: { id: 'none', size: 0 }, drive: { capacityBytes: 2 * 1024 ** 3 },
+    verification: { source: 'none' }, failureCode: 'preflight',
+  };
+  const running = await untilReady(['serve', '--json'], io, {
+    site: SITE,
+    loadCredential: async () => API_KEY,
+    identifyCredential: async () => identity,
+    createUsbMedia: options => { mediaOptions = options; return {}; },
+    startHelper: async options => { helperOptions = options; return liveHelper(); },
+    get: async (url, options) => { sent = { url, options }; return Response.json({ ok: true, duplicate: false }); },
+  });
+  try {
+    assert.equal(helperOptions.credential, API_KEY);
+    await mediaOptions.reportOutcome(payload);
+    assert.equal(sent.url, `${SITE}/api/os-usb`);
+    assert.equal(sent.options.headers.authorization, `Bearer ${API_KEY}`);
+    assert.deepEqual(JSON.parse(sent.options.body), payload);
+    assert.equal(sent.options.body.includes(API_KEY), false);
+  } finally { assert.equal(await running.stop(), 0); }
 });
 
 test('manual key entry refuses non-interactive input and never stores or sends anything', async () => {

@@ -1,5 +1,6 @@
-// Admin inbox. GET: unsorted page reports, unsorted flash failures, unsorted agent reports (finished MCP runs, by outcome), and phone tests split into new / review / approved / rejected.
-// POST {inbox: 'reports' | 'failures' | 'agents', ref, label}: file a report or failure (it leaves the inbox; scripts/inbox.mjs files from the CLI).
+import { validateUsbEnvironment } from '../../src/usb-environment.js';
+// Admin inbox. GET: unsorted page reports, failures, OS USB results, agent reports and phone tests split by state.
+// POST {inbox: 'reports' | 'failures' | 'agents' | 'os-usb', ref, label}: triage an incoming item.
 // POST {inbox: 'benchmarks', ref, action: new | review | approve | reject}: approved results show on the ROM page.
 import { userOf } from '../_lib/auth.js';
 import { json } from '../_lib/api.js';
@@ -28,7 +29,27 @@ export async function onRequestGet({ request, env }) {
     WHERE r.finished IS NOT NULL AND t.ref IS NULL ORDER BY r.finished DESC LIMIT 400`).all();
   const agents = { success: [], partial: [], failed: [], abandoned: [] };
   for (const run of runs2.results) agents[run.outcome]?.push({ ...run, steps: JSON.parse(run.steps) });
-  return json({ reports: reports.results, requests, benchmarks, cli, failures: failures.results, agents, labels: LABELS });
+  const usbRuns = await env.DB.prepare(`SELECT r.job_id, r.method, r.action, r.outcome, r.image_id, r.image_name, r.image_size,
+      r.source_verification, r.drive_capacity, r.readback_size, r.readback_matched, r.failure_code, r.environment, r.at
+    FROM os_usb_runs r LEFT JOIN triage t ON t.inbox = 'os-usb' AND t.ref = r.job_id
+    WHERE t.ref IS NULL ORDER BY r.at DESC LIMIT 500`).all();
+  const osUsb = { success: [], failed: [] };
+  for (const row of usbRuns.results) {
+    let environment = null;
+    try { environment = row.environment ? validateUsbEnvironment(JSON.parse(row.environment)) : null; }
+    catch { /* Older or malformed diagnostics are omitted. */ }
+    const item = {
+      ...(environment ? { environment } : {}),
+      jobId: row.job_id, method: row.method, action: row.action, outcome: row.outcome,
+      image: { id: row.image_id, name: row.image_name, size: row.image_size },
+      verification: { source: row.source_verification },
+      drive: { capacityBytes: row.drive_capacity }, at: row.at,
+      ...(row.readback_size === null ? {} : { readback: { size: row.readback_size, matched: row.readback_matched === 1 } }),
+      ...(row.failure_code === null ? {} : { failureCode: row.failure_code }),
+    };
+    osUsb[row.outcome]?.push(item);
+  }
+  return json({ reports: reports.results, requests, benchmarks, cli, failures: failures.results, agents, osUsb, labels: LABELS });
 }
 
 /** @param {{request:Request, env:any}} context */
@@ -44,7 +65,12 @@ export async function onRequestPost({ request, env }) {
       .bind(ref, ...{ approve: ['catalog-update', 'approved: shown on the ROM page'], reject: ['other', 'rejected on the site'] }[action]).run();
     return json({ ok: true });
   }
-  if (!['reports', 'failures', 'agents', 'requests-new', 'requests-update', 'requests-mirror'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
+  if (!['reports', 'failures', 'agents', 'requests-new', 'requests-update', 'requests-mirror', 'os-usb'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
+  if (inbox === 'os-usb') {
+    if (!/^[A-Za-z0-9_-]{43}$/.test(ref)) return json({ error: 'invalid OS USB reference' }, 400);
+    const exists = await env.DB.prepare('SELECT 1 FROM os_usb_runs WHERE job_id = ?1').bind(ref).first();
+    if (!exists) return json({ error: 'unknown OS USB report' }, 404);
+  }
   await env.DB.prepare("INSERT OR REPLACE INTO triage (inbox, ref, label, summary) VALUES (?1, ?2, ?3, 'filed on the site')").bind(inbox, ref, label).run();
   return json({ ok: true });
 }

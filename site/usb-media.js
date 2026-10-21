@@ -1,5 +1,6 @@
 import { ALPINE, alpineImage } from '../src/alpine.js';
 import { helperRequest } from './helper.js';
+import { collectUsbBrowserEnvironment } from './usb-environment.js';
 
 const size = bytes => Number.isFinite(bytes) && bytes > 0 ? `${(bytes / 1024 ** 3).toFixed(1)} GiB` : 'Unknown capacity';
 const imageSize = bytes => Number.isSafeInteger(bytes) && bytes > 0
@@ -22,6 +23,8 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const catalogImage = imageId ? alpineImage(imageId) : null;
   const catalogEdition = catalogImage && ALPINE.editions.find(edition => edition.images.some(image => image.id === catalogImage.id));
   let panelCapabilities = Array.isArray(capabilities) ? capabilities : null;
+  // Only query browser diagnostics for helpers that explicitly accept the allowlisted fields.
+  let browserEnvironment = panelCapabilities?.includes('usb-environment') ? collectUsbBrowserEnvironment().catch(() => null) : null;
   const directEligible = !catalogImage || ['iso', 'img.gz'].includes(catalogImage.format);
   let directAvailable = directEligible && !!panelCapabilities?.includes('usb-direct');
   const driveSelect = /** @type {HTMLSelectElement} */ (h('select', { id: 'usb-media-drive', disabled: true }));
@@ -32,6 +35,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const methodHelp = h('p', { className: 'field-help', id: 'usb-media-method-help' });
   const selectedSummary = h('p', { id: 'usb-media-selected-image', className: 'usb-selected-image', hidden: !catalogImage });
   const driveInfo = h('div', { className: 'usb-drive-info' }), planBox = h('div', {}), status = h('p', { className: 'status', role: 'status', ariaLive: 'polite' });
+  const reportNotice = h('p', { id: 'usb-media-report-status', className: 'field-help usb-report-status', role: 'status', ariaLive: 'polite', hidden: true });
   const progressLabel = h('label', { id: 'usb-media-progress-label', htmlFor: 'usb-media-progress', textContent: 'USB operation progress' });
   const progressBar = /** @type {HTMLProgressElement} */ (h('progress', { id: 'usb-media-progress', max: 100 }));
   const progressDetail = h('span', { id: 'usb-media-progress-detail', className: 'usb-progress-detail' });
@@ -50,13 +54,15 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     h('p', { className: 'field-help', textContent: imageId
       ? 'Ventoy is available only for images marked as supported. Direct image writing is offered for ISO files only; archives remain download-only. Check the model, capacity and device path before continuing.'
       : 'Any data on the selected drive will be erased. Check the model, capacity and device path before continuing.' }),
+    h('p', { className: 'field-help usb-environment-notice', textContent: 'When supported, the automatic USB report includes OS, browser and CLI technical versions only; it does not include personal details.' }),
     selectedSummary,
     h('label', { className: 'field-label', htmlFor: methodSelect.id, textContent: 'USB install type' }), methodSelect, methodHelp,
     driveHeading, driveSelect, driveInfo,
     h('div', {}, h('button', { type: 'button', className: 'button button-primary', textContent: imageId ? 'Review USB preparation' : 'Review Ventoy installation', disabled: true, onclick: review })),
     planBox,
-    status, progressBox, statusCheck, jobLog);
+    status, reportNotice, progressBox, statusCheck, jobLog);
   let drives = [], currentPlan = null, confirmInput = null, installButton = null, busy = false, writeDeadline = 0, activeImageName = null, activeImageSize = null, activeAction = null, activeMethod = 'ventoy', activeUnverified = false, activeReadback = null;
+  let reportPollTimer = 0, reportPollGeneration = 0;
 
   function imageSummaryLabel(image) {
     const name = imageFilename(image);
@@ -118,9 +124,56 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     clearProgress();
     setBusy(busy);
   };
+  function clearReportNotice() {
+    reportPollGeneration++;
+    clearTimeout(reportPollTimer); reportPollTimer = 0;
+    reportNotice.hidden = true; reportNotice.textContent = '';
+  }
+  function reportDelivery(job, generation = reportPollGeneration, attempts = 0, deadline = Date.now() + 60_000) {
+    if (generation !== reportPollGeneration) return;
+    const jobId = typeof job?.jobId === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(job.jobId) ? job.jobId : null;
+    const reportStatus = ['pending', 'sent', 'failed'].includes(job?.reportStatus) ? job.reportStatus : null;
+    if (!jobId) { reportNotice.hidden = true; reportNotice.textContent = ''; return; }
+    reportNotice.hidden = false;
+    if (reportStatus === 'sent') {
+      clearTimeout(reportPollTimer); reportPollTimer = 0;
+      reportNotice.textContent = 'USB outcome report sent to the OS-USB inbox.';
+      return;
+    }
+    if (reportStatus === 'failed') {
+      clearTimeout(reportPollTimer); reportPollTimer = 0;
+      reportNotice.textContent = 'USB outcome report could not be delivered to the OS-USB inbox. The USB operation result above is unchanged.';
+      return;
+    }
+    reportNotice.textContent = reportStatus === 'pending'
+      ? 'USB outcome report is being sent to the OS-USB inbox. The USB operation result above is unchanged.'
+      : 'Checking USB outcome report delivery to the OS-USB inbox. The USB operation result above is unchanged.';
+    if (attempts >= 60 || Date.now() >= deadline || reportPollTimer) {
+      if (attempts >= 60 || Date.now() >= deadline) reportNotice.textContent = 'Could not confirm outcome report delivery to the OS-USB inbox. The USB operation result above is unchanged.';
+      return;
+    }
+    reportPollTimer = setTimeout(async () => {
+      reportPollTimer = 0;
+      if (!panel.isConnected || generation !== reportPollGeneration) return;
+      try {
+        const latest = await helperRequest(session, '/usb/status');
+        if (!panel.isConnected || generation !== reportPollGeneration) return;
+        if (latest?.jobId !== jobId) {
+          reportNotice.textContent = 'Could not confirm outcome report delivery to the OS-USB inbox. The USB operation result above is unchanged.';
+          return;
+        }
+        reportDelivery(latest, generation, attempts + 1, deadline);
+      } catch {
+        if (generation !== reportPollGeneration) return;
+        if (attempts + 1 >= 60 || Date.now() >= deadline) reportNotice.textContent = 'Could not confirm outcome report delivery to the OS-USB inbox. The USB operation result above is unchanged.';
+        else { reportNotice.textContent = 'Checking USB outcome report delivery to the OS-USB inbox. The USB operation result above is unchanged.'; reportDelivery({ jobId }, generation, attempts + 1, deadline); }
+      }
+    }, 1000);
+  }
   const selectedDrive = () => drives.find(d => String(d.id) === driveSelect.value);
   const showDrive = () => {
     clearPlan();
+    clearReportNotice();
     if (catalogImage) setImageSummary(catalogImage, catalogImage.size);
     else setImageSummary(null);
     jobLog.hidden = true; jobLog.textContent = ''; statusCheck.hidden = true;
@@ -138,6 +191,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   driveSelect.addEventListener('change', showDrive);
   methodSelect.addEventListener('change', () => {
     if (busy) return;
+    clearReportNotice();
     clearPlan();
     if (catalogImage) setImageSummary(catalogImage, catalogImage.size);
     updateMethodHelp();
@@ -151,11 +205,13 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
 
   async function refresh() {
     const previous = driveSelect.value;
+    clearReportNotice();
     clearPlan(); setBusy(true); status.textContent = 'Looking for USB drives…';
     try {
       if (!panelCapabilities) {
         const helperStatus = await helperRequest(session, '/status');
         panelCapabilities = Array.isArray(helperStatus.capabilities) ? helperStatus.capabilities : [];
+        if (panelCapabilities.includes('usb-environment')) browserEnvironment = collectUsbBrowserEnvironment().catch(() => null);
         directAvailable = directEligible && panelCapabilities.includes('usb-direct');
         if (directOption) {
           directOption.disabled = !directAvailable;
@@ -298,6 +354,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     activeMethod = plan.method;
     activeUnverified = plan.verification?.status === 'mismatch';
     activeReadback = plan.readback;
+    clearReportNotice();
     clearPlan(); setBusy(true); jobLog.hidden = false;
     statusCheck.hidden = true;
     status.textContent = activeMethod === 'direct'
@@ -308,7 +365,11 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     showProgress({ phase: activeMethod === 'direct' ? 'writing' : activeAction === 'copy' ? 'copying' : 'installing' });
     writeDeadline = Date.now() + (activeMethod === 'direct' ? 3 * 60 * 60_000 : 16 * 60_000);
     try {
-      const job = await helperRequest(session, '/usb/write', { planId: plan.id, confirm: confirmation, ...(plan.allowUnverified ? { allowUnverified: true } : {}) });
+      if (panelCapabilities?.includes('usb-environment') && !browserEnvironment) browserEnvironment = collectUsbBrowserEnvironment().catch(() => null);
+      const browser = panelCapabilities?.includes('usb-environment') ? await browserEnvironment : null;
+      if (!panel.isConnected) return;
+      const job = await helperRequest(session, '/usb/write', { planId: plan.id, confirm: confirmation,
+        ...(plan.allowUnverified ? { allowUnverified: true } : {}), ...(browser ? { browser } : {}) });
       if (!panel.isConnected || showJob(job)) return;
       if (activeJob(job) && Date.now() < writeDeadline) setTimeout(poll, 1500);
       else { statusCheck.hidden = false; statusCheck.disabled = false; }
@@ -370,6 +431,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     else jobLog.textContent = typeof job?.log === 'string' ? job.log : '';
     if (job?.state === 'succeeded') {
       clearProgress();
+      reportDelivery(job);
       if (activeImageName && (!validImageMeasure(job.readback) || job.readback.matched !== true || job.readback.sha256 !== activeReadback?.sha256 || job.readback.size !== activeReadback?.size)) {
         status.textContent = 'Operation finished, but the final USB checksum was not confirmed. Check the log before using the USB.';
         statusCheck.hidden = true; setBusy(false); activeImageName = null; activeImageSize = null; activeAction = null; activeMethod = 'ventoy'; activeUnverified = false; activeReadback = null; return true;
@@ -393,6 +455,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     }
     if (job?.state === 'failed') {
       clearProgress();
+      reportDelivery(job);
       status.textContent = `${job.error || (activeMethod === 'direct' ? 'Direct image write failed.' : 'Ventoy installation failed.')} Boot untested; review the log before trying again.`;
       statusCheck.hidden = true; setBusy(false); activeImageName = null; activeImageSize = null; activeAction = null; activeMethod = 'ventoy'; activeUnverified = false; activeReadback = null; return true;
     }

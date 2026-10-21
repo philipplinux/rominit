@@ -9,6 +9,7 @@ import { Writable } from 'node:stream';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
 import { assertConsent, recipes, stepsFor } from '../src/catalog.js';
 import { checksum } from '../src/hash.js';
+import { validateUsbEnvironment } from '../src/usb-environment.js';
 import { ephemeralAdbCredentials, installBrowserShims } from './node-env.mjs';
 import { deleteBrowserSession, deleteCredential, loadBrowserSession, loadCredential, saveBrowserSession, saveCredential } from './credentials.mjs';
 import { identifyCredential, siteOrigin, startHelper } from './helper.mjs';
@@ -257,6 +258,8 @@ export const USB_GONE = /cancel|timeout of|no phone in|libusb|disconnect|stall|N
 
 const SITE = process.env.ROMINIT_URL ?? 'https://rominit.pages.dev';
 const HELPER_PORT = 18787;
+const USB_REPORT_API_KEY = /^rmi_[A-Za-z0-9_-]{43}$/;
+const USB_REPORT_RETRY_DELAY = 250;
 const PMOS_USB = '172.16.42.1'; // postmarketOS' fixed USB-network address, as on the site's test box
 const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new Promise(ok => {
   const s = tcp({ host, port, timeout: 3000 }, () => { s.destroy(); ok(true); });
@@ -267,6 +270,40 @@ const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new
 export function sshArgs(user, password, host) {
   return [...(password ? ['-o', 'PreferredAuthentications=password', '-o', 'PubkeyAuthentication=no'] : []),
     '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', `${user}@${host}`, 'sh'];
+}
+
+/** Send one scrubbed USB outcome report with one idempotent retry for transient failures.
+ * @param {string} site @param {string} credential @param {Record<string, any>} payload
+ * @param {typeof fetch} [get] @param {number} [retryDelayMs] */
+export async function sendUsbOutcome(site, credential, payload, get = fetch, retryDelayMs = USB_REPORT_RETRY_DELAY) {
+  if (!USB_REPORT_API_KEY.test(credential) || typeof get !== 'function') throw Error('OS USB outcome report is unavailable.');
+  const endpoint = `${siteOrigin(site)}/api/os-usb`;
+  let reportPayload = payload;
+  if (payload && Object.hasOwn(payload, 'environment')) {
+    const { environment, ...safePayload } = payload;
+    const normalized = validateUsbEnvironment(environment);
+    reportPayload = normalized ? { ...safePayload, environment: normalized } : safePayload;
+  }
+  const body = JSON.stringify(reportPayload);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const response = await get(endpoint, {
+        method: 'POST', redirect: 'error', signal: AbortSignal.timeout(8_000),
+        headers: { authorization: `Bearer ${credential}`, 'content-type': 'application/json' },
+        body,
+      });
+      if (response.status === 429 || response.status >= 500) throw Object.assign(Error('Temporary OS USB report failure.'), { retryable: true });
+      if (!response.ok) throw Object.assign(Error('OS USB report was rejected.'), { retryable: false });
+      const result = await response.json();
+      if (result?.ok !== true || typeof result.duplicate !== 'boolean')
+        throw Object.assign(Error('OS USB report response was invalid.'), { retryable: true });
+      return result;
+    } catch (error) {
+      if (error?.retryable === false || attempt === 1) throw Error('OS USB outcome report failed.');
+      if (retryDelayMs > 0) await new Promise(resolveDelay => setTimeout(resolveDelay, retryDelayMs));
+    }
+  }
+  throw Error('OS USB outcome report failed.');
 }
 
 /** After a postmarketOS flash: wait for SSH over USB, run site/bench/linux.sh (read-only) on the phone, save and print its lines.
@@ -398,17 +435,25 @@ async function runHelper(helper, out, account = null) {
  * @param {{session?:()=>Promise<any>, get?:typeof fetch, catalog?:{devices:any[]}, bench?:typeof bench, site?:string, startHelper?:typeof startHelper,
  * loadCredential?:typeof loadCredential, saveCredential?:typeof saveCredential, deleteCredential?:typeof deleteCredential,
  * loadBrowserSession?:typeof loadBrowserSession, saveBrowserSession?:typeof saveBrowserSession, deleteBrowserSession?:typeof deleteBrowserSession,
- * identifyCredential?:typeof identifyCredential, readApiKey?:(io:any)=>Promise<string>, now?:()=>number}} [deps] test seams @returns {Promise<number>} exit code */
+ * identifyCredential?:typeof identifyCredential, readApiKey?:(io:any)=>Promise<string>, createUsbMedia?:typeof createUsbMedia,
+ * usbReportRetryDelayMs?:number, now?:()=>number}} [deps] test seams @returns {Promise<number>} exit code */
 export async function main(argv, io, deps = {}) {
   let out = reporter(argv.includes('--json'), io);
-  const mockedCredentialStore = ['loadCredential', 'saveCredential', 'deleteCredential', 'startHelper'].some(key => Object.hasOwn(deps, key));
+  const mockedCredentialStore = ['loadCredential', 'saveCredential', 'deleteCredential', 'startHelper', 'createUsbMedia'].some(key => Object.hasOwn(deps, key));
   const loadSavedBrowserSession = deps.loadBrowserSession ?? (mockedCredentialStore ? async () => null : loadBrowserSession);
   const saveSavedBrowserSession = deps.saveBrowserSession ?? (mockedCredentialStore ? async () => {} : saveBrowserSession);
   const deleteSavedBrowserSession = deps.deleteBrowserSession ?? (mockedCredentialStore ? async () => {} : deleteBrowserSession);
   try {
     const { flags, rest } = parse(argv);
     const [cmd, codename, romId] = rest;
-    const usbMedia = ['auth', 'serve'].includes(cmd) && process.platform === 'linux' ? createUsbMedia() : undefined;
+    const usbEnabled = ['auth', 'serve'].includes(cmd) && process.platform === 'linux';
+    const usbSite = usbEnabled ? siteOrigin(deps.site ?? SITE) : undefined;
+    let usbCredential = null;
+    const usbMedia = usbEnabled ? (deps.createUsbMedia ?? createUsbMedia)({
+      reportOutcome: payload => usbCredential
+        ? sendUsbOutcome(usbSite ?? SITE, usbCredential, payload, deps.get ?? fetch, deps.usbReportRetryDelayMs ?? USB_REPORT_RETRY_DELAY)
+        : Promise.reject(Error('No saved ROMinit API key is available for OS USB reporting.')),
+    }) : undefined;
     if (cmd === 'auth') {
       if (rest.length !== 1 || helperArgs(argv)) throw Error('auth takes no device arguments or flash flags.');
       const site = siteOrigin(deps.site ?? SITE);
@@ -416,10 +461,11 @@ export async function main(argv, io, deps = {}) {
         const key = await (deps.readApiKey ?? promptApiKey)(io);
         const account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now);
         await (deps.saveCredential ?? saveCredential)(site, key);
+        usbCredential = key;
         const browserSession = await loadSavedBrowserSession(site, key, undefined, deps.now);
         const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, usbMedia, port: browserSession?.port ?? HELPER_PORT,
           browserSession, credential: key, identity: account,
-          saveCredential: saved => (deps.saveCredential ?? saveCredential)(site, saved),
+          saveCredential: async saved => { await (deps.saveCredential ?? saveCredential)(site, saved); usbCredential = saved; },
           saveSession: (session, credential) => saveSavedBrowserSession(site, credential, session),
           deleteSession: () => deleteSavedBrowserSession(site),
           onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".') });
@@ -427,7 +473,7 @@ export async function main(argv, io, deps = {}) {
         return 0;
       }
       const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, usbMedia, port: HELPER_PORT,
-        saveCredential: key => (deps.saveCredential ?? saveCredential)(site, key),
+        saveCredential: async key => { await (deps.saveCredential ?? saveCredential)(site, key); usbCredential = key; },
         saveSession: (session, credential) => saveSavedBrowserSession(site, credential, session),
         deleteSession: () => deleteSavedBrowserSession(site),
         onPair: user => {
@@ -445,6 +491,7 @@ export async function main(argv, io, deps = {}) {
       const site = siteOrigin(deps.site ?? SITE);
       const key = await (deps.loadCredential ?? loadCredential)(site);
       if (!key) throw Error('No saved ROMinit API key. Run "rominit auth" first.');
+      usbCredential = key;
       let account;
       try { account = await (deps.identifyCredential ?? identifyCredential)(site, key, deps.get, deps.now); }
       catch (error) {
@@ -454,7 +501,7 @@ export async function main(argv, io, deps = {}) {
       const browserSession = await loadSavedBrowserSession(site, key, undefined, deps.now);
       const helper = await (deps.startHelper ?? startHelper)({ site, fetch: deps.get, now: deps.now, usbMedia, port: browserSession?.port ?? HELPER_PORT,
         browserSession, credential: key, identity: account,
-        saveCredential: saved => (deps.saveCredential ?? saveCredential)(site, saved),
+        saveCredential: async saved => { await (deps.saveCredential ?? saveCredential)(site, saved); usbCredential = saved; },
         saveSession: (session, credential) => saveSavedBrowserSession(site, credential, session),
         deleteSession: () => deleteSavedBrowserSession(site),
         onCredentialError: () => out.error('Saved ROMinit API key was rejected or expired. Run "rominit auth".') });

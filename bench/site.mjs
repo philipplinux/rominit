@@ -792,6 +792,66 @@ test('report form', async () => {
   assert.match(d1('--command', 'SELECT page FROM reports'), /device=starlte/);
 });
 
+test('admin OS-USB inbox shows safe operational outcomes and files them without ROM approval', async () => {
+  const leaked = ['PRIVATE_USER', 'PRIVATE_HOST', 'PRIVATE_PATH', 'PRIVATE_SERIAL', 'PRIVATE_IP', 'PRIVATE_RAW_LOG', 'PRIVATE_DRIVE_ID', 'PRIVATE_HASH'];
+  let filed = null;
+  const inbox = {
+    reports: [], benchmarks: { new: [], review: [], approved: [], rejected: [] }, cli: { new: [], review: [], approved: [], rejected: [] },
+    failures: [], requests: { new: [], update: [], mirror: [] }, agents: { success: [], partial: [], failed: [], abandoned: [] },
+    osUsb: {
+      success: [{ jobId: 'safeSuccessJob_123', method: 'direct', action: 'direct', outcome: 'success', at: '2026-10-21 05:10:00',
+        image: { id: 'genericLocalISO', name: 'Local ISO', size: 64 * 1024 ** 2, sha256: 'PRIVATE_HASH', path: 'PRIVATE_PATH' },
+        drive: { capacityBytes: 2 * 1024 ** 3, id: 'PRIVATE_DRIVE_ID', path: 'PRIVATE_PATH', model: 'PRIVATE_HOST', serial: 'PRIVATE_SERIAL' },
+        verification: { source: 'verified' }, readback: { size: 64 * 1024 ** 2, matched: true, sha256: 'PRIVATE_HASH' },
+        environment: { hostOs: 'linux', hostOsVersion: '44', hostDistro: 'fedora', hostArch: 'x64', kernelVersion: '6.12.4', cliVersion: 'e7ac927798be', nodeVersion: '24.18.0', browser: 'chrome', browserVersion: '140.0.7339.0', browserOs: 'linux', browserOsVersion: '6.12.4' },
+        user: 'PRIVATE_USER', host: 'PRIVATE_HOST', ip: 'PRIVATE_IP', log: 'PRIVATE_RAW_LOG' }],
+      failed: [{ jobId: 'safeFailedJob_456', method: 'ventoy', action: 'install', outcome: 'failed', at: '2026-10-21 05:20:00',
+        image: { id: 'none', name: 'No ISO', size: 0 }, drive: { capacityBytes: 16 * 1024 ** 3 },
+        verification: { source: 'none' }, failureCode: 'readback', rawError: 'PRIVATE_RAW_LOG', account: 'PRIVATE_USER' }]
+    },
+    labels: ['script-fix', 'recipe-fix', 'user-side', 'catalog-update', 'site-bug', 'device-report', 'spam', 'other']
+  };
+  await page.route('**/api/me', route => route.fulfill({ json: { user: { id: 901, name: 'Inbox tester', roles: [{ role: 'admin' }] }, providers: [] } }));
+  await page.route('**/api/inbox', async route => {
+    if (route.request().method() === 'POST') { filed = route.request().postDataJSON(); return route.fulfill({ json: { ok: true } }); }
+    return route.fulfill({ json: inbox });
+  });
+  await page.route('**/api/searches', route => route.fulfill({ json: [] }));
+  try {
+    await page.goto(`${BASE}/?view=inbox`);
+    const folders = page.locator('.inbox-group');
+    await folders.nth(4).locator(':scope > summary').getByText('05 OS-USB · 2').waitFor();
+    await folders.nth(5).locator(':scope > summary').getByText('06 Searches · 0').waitFor();
+    await folders.nth(6).locator(':scope > summary').getByText('07 Requests · 0').waitFor();
+    const osUsb = folders.nth(4), reports = osUsb.locator('.os-usb-report');
+    assert.equal(await reports.count(), 2);
+    const success = reports.filter({ hasText: 'USB operation succeeded' });
+    assert.match(await success.innerText(), /Local ISO · ID genericLocalISO · 64\.0 MiB/);
+    assert.match(await success.innerText(), /Direct image write · write image · USB capacity 2\.00 GiB/);
+    assert.match(await success.innerText(), /Source checksum verified · USB readback matched · 64\.0 MiB/);
+    assert.match(await success.innerText(), /Technical environment: Host Fedora Linux 44 · x64 · kernel 6\.12\.4 · Chrome 140\.0\.7339\.0 on Linux platform 6\.12\.4 · ROMinit CLI e7ac927798be · Node\.js 24\.18\.0/);
+    const failed = reports.filter({ hasText: 'USB operation failed' });
+    assert.match(await failed.innerText(), /Ventoy · install Ventoy · USB capacity 16\.00 GiB/);
+    assert.match(await failed.innerText(), /Source checksum not reported · USB readback not available/);
+    assert.match(await failed.innerText(), /USB readback verification failed/);
+    const rendered = await osUsb.innerText();
+    for (const secret of leaked) assert.equal(rendered.includes(secret), false, `UI leaked ${secret}`);
+    assert.match(rendered, /Filing classifies this report; it does not approve or change any phone ROM rating/);
+    assert.equal(await osUsb.getByRole('button', { name: 'Approve' }).count(), 0, 'USB outcomes do not get phone-rating approval controls');
+    await failed.locator('select').selectOption('device-report');
+    const post = page.waitForRequest(request => request.url().endsWith('/api/inbox') && request.method() === 'POST');
+    await failed.getByRole('button', { name: 'File' }).click();
+    await post;
+    assert.deepEqual(filed, { inbox: 'os-usb', ref: 'safeFailedJob_456', label: 'device-report' });
+    await failed.waitFor({ state: 'detached' });
+    await osUsb.locator(':scope > summary').getByText('05 OS-USB · 1').waitFor();
+    assert.match(await osUsb.locator(':scope > summary').innerText(), /1 success · 0 failed · unreviewed outcomes/i);
+    assert.match(await osUsb.innerText(), /Failed · 0/i);
+  } finally {
+    await page.unroute('**/api/me'); await page.unroute('**/api/inbox'); await page.unroute('**/api/searches');
+  }
+});
+
 test('phone width: no horizontal scroll', async () => {
   await page.setViewportSize({ width: 375, height: 800 });
   for (const path of ['/', '/?device=starlte', '/?device=laurel_sprout']) {
@@ -1311,5 +1371,129 @@ test('generic CLI USB panel offers a configured ISO direct write with the same t
   } finally {
     await page.evaluate(() => { localStorage.removeItem('rominit.helper'); sessionStorage.removeItem('rominit.helper'); });
     await page.unroute(`${localUrl}/**`); await page.unroute('**/api/me');
+  }
+});
+
+test('USB outcome report delivery stays separate from success and failure of the USB write', async () => {
+  const localUrl = 'http://127.0.0.1:49162', calls = [];
+  const configured = { id: 'genericLocalISO', name: 'Local ISO', size: 64 * 1024 ** 2, sha256: 'f'.repeat(64) };
+  const drive = { id: 'fixture-drive-id', path: '/fixture/path', model: 'Fixture USB', size: 2 * 1024 ** 3, available: true, mounted: false, mounts: [] };
+  let finalReportStatus = 'sent', currentJobId = 'reportStatusJob_001', statusChecks = 0;
+  await page.route('**/api/me', route => route.fulfill({ json: { user: { id: 902, name: 'Report status tester' }, providers: [] } }));
+  await page.route(`${localUrl}/**`, async route => {
+    const request = route.request(), path = new URL(request.url()).pathname;
+    const headers = { 'access-control-allow-origin': BASE, 'access-control-allow-methods': 'GET, POST', 'access-control-allow-headers': 'authorization,content-type', 'access-control-allow-private-network': 'true' };
+    if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
+    const body = request.method() === 'POST' ? request.postDataJSON() : null;
+    calls.push({ path, body });
+    const job = { state: 'succeeded', method: 'direct', phase: 'complete', log: ['fixture-only; no real USB write'],
+      verification: { status: 'verified', accepted: false, expected: { size: configured.size, sha256: configured.sha256 }, actual: { size: configured.size, sha256: configured.sha256 } },
+      readback: { size: configured.size, sha256: configured.sha256, matched: true }, jobId: currentJobId };
+    let json;
+    if (path === '/status') json = { user: { id: 902, name: 'Report status tester' }, capabilities: ['usb-media', 'usb-direct'] };
+    else if (path === '/usb/drives') json = [drive];
+    else if (path === '/usb/plan') json = { id: 'report-status-plan', method: 'direct', action: 'direct', confirm: 'ERASE', drive,
+      expiresAt: new Date(Date.now() + 60_000).toISOString(), image: configured,
+      verification: { status: 'verified', expected: { size: configured.size, sha256: configured.sha256 }, actual: { size: configured.size, sha256: configured.sha256 } } };
+    else if (path === '/usb/write') json = job; // outcome reporting starts after the USB job succeeds
+    else if (path === '/usb/status') {
+      statusChecks++;
+      json = { ...job, reportStatus: statusChecks === 1 ? 'pending' : finalReportStatus };
+    } else json = {};
+    return route.fulfill({ headers, json });
+  });
+  const runWrite = async () => {
+    await page.goto(BASE);
+    await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'q'.repeat(43), user: { id: 902, name: 'Report status tester' }, expiresAt: new Date(Date.now() + 60_000).toISOString() })), localUrl);
+    await page.goto(`${BASE}/?view=cli`);
+    await page.locator('#usb-media-drive option[value="fixture-drive-id"]').waitFor({ state: 'attached' });
+    await page.locator('#usb-media-method').selectOption('direct');
+    await page.locator('#usb-media-drive').selectOption(drive.id);
+    await page.getByRole('button', { name: 'Review direct image write' }).click();
+    await page.locator('#usb-media-confirm').waitFor();
+    await page.locator('#usb-media-confirm').fill('ERASE');
+    const write = page.waitForRequest(request => new URL(request.url()).pathname === '/usb/write' && request.method() === 'POST');
+    await page.getByRole('button', { name: 'Erase and write image to USB' }).click();
+    const request = await write;
+    assert.equal(Object.hasOwn(request.postDataJSON(), 'browser'), false, 'older helpers do not receive optional browser metadata');
+  };
+  try {
+    await runWrite();
+    const flashSuccess = page.getByText(/Complete — Local ISO .* written directly to USB and readback SHA-256 verified/);
+    await flashSuccess.waitFor();
+    const notice = page.locator('#usb-media-report-status');
+    await notice.getByText('Checking USB outcome report delivery to the OS-USB inbox. The USB operation result above is unchanged.').waitFor();
+    await notice.getByText('USB outcome report is being sent to the OS-USB inbox. The USB operation result above is unchanged.').waitFor();
+    assert.equal(await flashSuccess.count(), 1, 'pending report does not turn USB success into a pending operation');
+    await notice.getByText('USB outcome report sent to the OS-USB inbox.').waitFor();
+    assert.equal(await flashSuccess.count(), 1, 'report delivery does not change the USB result');
+
+    finalReportStatus = 'failed'; currentJobId = 'reportStatusJob_002'; statusChecks = 0;
+    await runWrite();
+    await page.getByText(/Complete — Local ISO .* written directly to USB and readback SHA-256 verified/).waitFor();
+    await page.locator('#usb-media-report-status').getByText('USB outcome report is being sent to the OS-USB inbox. The USB operation result above is unchanged.').waitFor();
+    await page.locator('#usb-media-report-status').getByText('USB outcome report could not be delivered to the OS-USB inbox. The USB operation result above is unchanged.').waitFor();
+    await page.getByText(/Complete — Local ISO .* written directly to USB and readback SHA-256 verified/).waitFor();
+    assert.equal(calls.filter(call => call.path === '/usb/write').length, 2);
+    assert.equal(calls.filter(call => call.path === '/usb/status').length, 4, 'each terminal report is polled until sent or failed');
+  } finally {
+    await page.evaluate(() => { localStorage.removeItem('rominit.helper'); sessionStorage.removeItem('rominit.helper'); }).catch(() => {});
+    await page.unroute('**/api/me'); await page.unroute(`${localUrl}/**`);
+  }
+});
+
+test('USB write includes bounded browser metadata only when the helper advertises support', async () => {
+  const previousPage = page, calls = [], localUrl = 'http://127.0.0.1:49163';
+  const configured = { name: 'Local ISO', size: 64 * 1024 ** 2, sha256: 'f'.repeat(64) };
+  const drive = { id: 'fixture-metadata-drive', path: '/fixture/path', model: 'Fixture USB', size: 2 * 1024 ** 3, available: true, mounted: false, mounts: [] };
+  page = await browser.newPage();
+  await page.addInitScript(() => {
+    localStorage.setItem('host', 'linux');
+    Object.defineProperty(navigator, 'userAgentData', { configurable: true, value: {
+      brands: [{ brand: 'Not A(Brand', version: '99' }, { brand: 'Google Chrome', version: '140' }],
+      platform: 'Windows',
+      getHighEntropyValues: async () => ({
+        fullVersionList: [{ brand: 'Not A(Brand', version: '99' }, { brand: 'Google Chrome', version: '140.0.7339.0' }],
+        platform: 'Windows', platformVersion: '15.0.0'
+      })
+    } });
+  });
+  await page.route('**/api/me', route => route.fulfill({ json: { user: { id: 903, name: 'Environment tester' }, providers: [] } }));
+  await page.route(`${localUrl}/**`, async route => {
+    const request = route.request(), path = new URL(request.url()).pathname;
+    const headers = { 'access-control-allow-origin': BASE, 'access-control-allow-methods': 'GET, POST', 'access-control-allow-headers': 'authorization,content-type', 'access-control-allow-private-network': 'true' };
+    if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
+    const body = request.method() === 'POST' ? request.postDataJSON() : null;
+    calls.push({ path, body });
+    const json = path === '/status' ? { user: { id: 903, name: 'Environment tester' }, capabilities: ['usb-media', 'usb-direct', 'usb-environment'] }
+      : path === '/usb/drives' ? [drive]
+        : path === '/usb/plan' ? { id: 'fixture-environment-plan', method: 'direct', action: 'direct', confirm: 'ERASE', drive,
+          expiresAt: new Date(Date.now() + 60_000).toISOString(), image: configured,
+          verification: { status: 'verified', expected: configured, actual: configured } }
+          : path === '/usb/write' ? { state: 'succeeded', method: 'direct', log: ['fixture-only; no real USB write'], verification: { status: 'verified', accepted: false, expected: configured, actual: configured }, readback: { size: configured.size, sha256: configured.sha256, matched: true }, jobId: 'environmentJob_001', reportStatus: 'sent' }
+            : {};
+    return route.fulfill({ headers, json });
+  });
+  try {
+    await page.goto(BASE);
+    await page.evaluate(url => localStorage.setItem('rominit.helper', JSON.stringify({ url, token: 'y'.repeat(43), user: { id: 903, name: 'Environment tester' }, expiresAt: new Date(Date.now() + 60_000).toISOString() })), localUrl);
+    await page.goto(`${BASE}/?view=cli`);
+    await page.locator('.usb-environment-notice').getByText(/automatic USB report includes OS, browser and CLI technical versions only/i).waitFor();
+    await page.locator('#usb-media-drive option[value="fixture-metadata-drive"]').waitFor({ state: 'attached' });
+    await page.locator('#usb-media-method').selectOption('direct');
+    await page.locator('#usb-media-drive').selectOption(drive.id);
+    await page.getByRole('button', { name: 'Review direct image write' }).click();
+    await page.locator('#usb-media-confirm').fill('ERASE');
+    await page.getByRole('button', { name: 'Erase and write image to USB' }).click();
+    await page.getByText(/Complete — Local ISO .* written directly to USB and readback SHA-256 verified/).waitFor();
+    const write = calls.find(call => call.path === '/usb/write');
+    assert.deepEqual(write.body, { planId: 'fixture-environment-plan', confirm: 'ERASE', browser: {
+      browser: 'chrome', browserVersion: '140.0.7339.0', browserOs: 'windows', browserOsVersion: '15.0.0'
+    } });
+    assert.equal(JSON.stringify(write.body).includes('Mozilla/'), false, 'raw user-agent text is never transmitted');
+  } finally {
+    await page.evaluate(() => { localStorage.removeItem('rominit.helper'); sessionStorage.removeItem('rominit.helper'); }).catch(() => {});
+    await page.unroute(`${localUrl}/**`).catch(() => {}); await page.unroute('**/api/me').catch(() => {});
+    await page.close(); page = previousPage;
   }
 });
