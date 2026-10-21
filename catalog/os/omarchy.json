@@ -1,0 +1,79 @@
+{
+  "id": "omarchy",
+  "name": "Omarchy",
+  "shortName": "Omarchy",
+  "defaultEdition": "installer",
+  "version": "4.0.6",
+  "releaseDate": "2026-10-19",
+  "requirements": {
+    "summary": "2 GB RAM works · Secure Boot and TPM off",
+    "note": "The project says a 2011 ThinkPad X220 with 2 GB of RAM can run Omarchy. Secure Boot and/or TPM must be turned off in the BIOS to install. The ISO is 6.0 GiB, so the USB stick needs 8 GB or more.",
+    "source": "https://omarchy.org/manual/getting-started/",
+    "checked": "2026-10-21"
+  },
+  "kernel": { "version": "7.2.8", "line": "omarchy", "checked": "2026-10-21", "source": "https://nightly.omarchy.org/stable/latest.json" },
+  "source": "https://omarchy.org/",
+  "page": {
+    "description": "Omarchy editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED DESKTOP",
+    "intro": "An Arch-based desktop built around Hyprland and Quickshell, made to be changed. Pick an edition, then the architecture of the machine that will run it.",
+    "logo": { "src": "logos/omarchy.svg", "alt": "Omarchy logo", "width": 180, "height": 42 },
+    "pros": [
+      "A finished desktop in minutes: one ISO, five questions, then it installs itself.",
+      "Arch-based, so the package manager is current and there is no release train to wait for.",
+      "Hyprland, Quickshell, Neovim and the common toolchain are wired together from the start.",
+      "Themes restyle the terminal, bar, notifications and wallpaper in one step."
+    ],
+    "cons": [
+      "Secure Boot and TPM must be off in the BIOS, and that stays off.",
+      "The installer encrypts the disk by default, and Bluetooth keyboards cannot unlock it at boot.",
+      "A 6.0 GiB ISO, so the USB stick needs 8 GB or more and the download takes a while.",
+      "Apple Silicon Macs are not supported; Intel Macs work but have known limitations."
+    ],
+    "links": [
+      { "label": "Omarchy website", "href": "https://omarchy.org/" },
+      { "label": "Getting started", "href": "https://omarchy.org/manual/getting-started/" },
+      { "label": "Themes", "href": "https://omarchy.org/manual/themes/" }
+    ],
+    "previewNote": "The screenshot is the project's own desktop layout from the manual. It is not a ROMinit recording: no image was written to a USB stick and no machine was booted from one.",
+    "shot": {
+      "src": "shots/omarchy-desktop.webp",
+      "alt": "Omarchy desktop with a dwindle window layout",
+      "width": 1600,
+      "height": 900,
+      "bar": "omarchy-4.0.6.iso · 4.0.6",
+      "caption": "Omarchy desktop layout from the project manual · no USB written, no boot tested."
+    },
+    "status": "One path to get Omarchy onto a USB stick: its official ISO. The image is 6.0 GiB, so use an 8 GB stick or larger. Writing erases it.",
+    "footer": [
+      { "label": "Official ISO and checksums", "href": "https://omarchy.org/" },
+      { "label": "Omarchy source", "href": "https://github.com/omacom/omarchy" },
+      { "label": "Installation guide", "href": "https://omarchy.org/manual/getting-started/" },
+      { "label": "Ventoy firmware support", "href": "https://www.ventoy.net/en/index.html" }
+    ],
+    "checked": "2026-10-21",
+    "credits": [
+      "logos/omarchy.svg\nOmarchy logo, from https://github.com/omacom/omarchy/blob/quattro/logo.svg, recoloured for this dark page. Omarchy names and marks belong to their owners; no endorsement implied.",
+      "shots/omarchy-desktop.webp\nOmarchy desktop layout screenshot from the project manual, https://github.com/omacom/omarchy/blob/quattro/manual/images/navigation-dwindle-layout.webp. Shown to identify the project; reuse rights are not established by this catalog."
+    ]
+  },
+  "editions": [
+    {
+      "id": "installer",
+      "name": "Installer",
+      "description": "The only official installation image. It boots, asks five configuration questions and installs Omarchy onto the drive you select.",
+      "usbNote": "Secure Boot and TPM must be off. The ISO is 6.0 GiB, so the USB stick needs 8 GB or more.",
+      "images": [
+        {
+          "id": "omarchy-installer-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://iso.omarchy.org/omarchy-4.0.6.iso",
+          "sha256": "b542db5fecc37395d9af6654a8146ebed225f275ae4d5a6fcf432e40afe7bb88",
+          "size": 6448529408,
+          "usb": true
+        }
+      ]
+    }
+  ]
+}
