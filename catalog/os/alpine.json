@@ -49,7 +49,7 @@
       "bar": "alpine-standard-x86_64 · 3.24.2",
       "caption": "ROMinit VM recording · no host disk attached."
     },
-    "status": "We try to give you every available path to get Alpine onto a USB stick. Most are untested and unconfirmed, so use them at your own discretion. The only check so far: the Standard x86_64 ISO was copied and read-back verified on a test stick; booting it on a physical PC remains untested. Direct image writing erases the stick, and a matching read-back checksum verifies the write, not hardware boot compatibility. ARM64 ISO boot requires compatible UEFI hardware; Raspberry Pi media uses its own setup route.",
+    "status": "A few paths to get Alpine onto a USB stick. Most are untested, and writing erases the stick. Good luck!",
     "footer": [
       {
         "label": "Official downloads & checksums",
