@@ -114,6 +114,7 @@ function find(devices, codename, romId) {
 /** Plan: the ROM's stages, files and steps from the catalog. @param {any} device @param {any} rom */
 export function planOf(device, rom) {
   return { device: device.codename, rom: rom.id, version: rom.version, status: rom.status,
+    ...(rom.external ? { external: rom.external } : {}),
     stages: (rom.stages ?? []).map((/** @type {any} */ s, /** @type {number} */ i) => ({ stage: i + 1, title: s.title, recipe: s.recipe, mode: s.mode, warning: s.warning, confirm: s.confirm,
       files: s.files.map((/** @type {any} */ f) => ({ name: f.name, size: f.size, sha256: f.sha256, url: f.url ?? null, source: f.source })), steps: stepsFor(s) })) };
 }
@@ -535,7 +536,7 @@ export async function main(argv, io, deps = {}) {
     const dir = resolve(flags.dir || join('rominit-files', codename, rom.id));
     if (cmd === 'plan') {
       const plan = planOf(device, rom);
-      out.done([`${plan.device} / ${plan.rom} ${plan.version} (${plan.status})`, ...plan.stages.flatMap(s => [
+      out.done([`${plan.device} / ${plan.rom} ${plan.version} (${plan.status})`, ...(plan.external ? [`External ${plan.external.kind ?? 'installer'}: ${plan.external.url}`, plan.external.why, 'No automated ROMinit flash stages.'] : []), ...plan.stages.flatMap(s => [
         `Stage ${s.stage}: ${s.title} [${s.recipe}, ${s.mode}]`, `  warning: ${s.warning}`, `  confirm: ${s.confirm}`,
         ...s.files.map((/** @type {any} */ f) => `  file ${f.name}  ${f.size} bytes  sha256 ${f.sha256}  ${f.url ?? '(no direct url: ' + f.source + ')'}`),
         ...s.steps.map((/** @type {any[]} */ st) => `  step ${st.join(' ')}`)])].join('\n'), plan);

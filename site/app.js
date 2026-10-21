@@ -70,7 +70,7 @@ const complete = (rating, use, details = false) => {
   const untested = USES[use].filter(f => rating.features[f] === 'untested').length;
   return `as ${use} ${completeness(rating, USES[use])}%${details && untested ? ` (${untested} untested)` : ''}`;
 };
-const score = rating => `${complete(rating, 'computer')} · ${complete(rating, 'phone')} · ${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
+const score = (rating, category = 'phone') => `${complete(rating, 'computer')} · ${category === 'tv' ? '' : `${complete(rating, 'phone')} · `}${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
 /** Origin and status chips, colored like the feature states. @param {any} rom */
 const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent: 'release' }),
   h('span', { className: 'feature', title: ORIGINS[rom.origin], textContent: rom.origin }),
@@ -106,8 +106,9 @@ function badgeRow(device, roms, stock, rom, infoSection, recoverSection) {
       : { href: `./?${new URLSearchParams({ device: device.codename, rom: list[0].id })}#rom`, title: `${list[0].name} ${list[0].version}: select it in section 0` })
     : badge(os.toLowerCase(), os, 'multiple available', { href: '#', title: 'Pick one in section 0', onclick: jump(infoSection) }));
   const latest = [...stock].sort((a, b) => b.rating.released.localeCompare(a.rating.released))[0];
-  const stockAndroid = latest?.rating.base.replace('Android ', '') ?? device.recovery?.stockAndroid;
-  const stockBadge = stockAndroid && badge('android', 'Stock Android', stockAndroid, { href: '#', title: 'Stock Android: restore it in section R', onclick: jump(recoverSection) });
+  const stockVersion = latest?.rating.base.replace('Android ', '') ?? device.recovery?.stockOs?.version ?? device.recovery?.stockAndroid;
+  const stockName = device.recovery?.stockOs?.name ?? 'Stock Android';
+  const stockBadge = stockVersion && badge('android', stockName, stockVersion, { href: '#', title: `${stockName}: recovery information in section R`, onclick: jump(recoverSection) });
   const recoveryBadges = (device.recoveries ?? []).map((/** @type {any} */ r) => badge(r.id, r.name, r.version, { href: r.project, target: '_blank', rel: 'noopener noreferrer', title: `${r.name} recovery project` }));
   return h('p', { className: 'badge-row' }, ...romBadges, stockBadge, ...recoveryBadges);
 }
@@ -126,8 +127,8 @@ function favoriteButton(key) {
 }
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: device/vendor kernel' };
 /** Kernel, base, build date and support. @param {any} rating */
-const metaRow = rating => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
-  `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), complete(rating, 'phone', true)].map(text => h('span', { className: 'feature', textContent: text })));
+const metaRow = (rating, category = 'phone') => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
+  `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), ...category === 'tv' ? [] : [complete(rating, 'phone', true)]].map(text => h('span', { className: 'feature', textContent: text })));
 /** Default login, shown where people look for it. @param {string} login `user / password` */
 const loginRow = login => { const [user, password] = login.split(' / ');
   return h('div', { className: 'login-box' }, h('strong', { textContent: 'login' }), h('pre', {}, h('code', { textContent: `user      ${user}\npassword  ${password}` })),
@@ -957,7 +958,7 @@ function devicePicker(index) {
   let tested = new Set();
   fetch('./api/bench?tested').then(r => r.ok ? r.json() : []).then(c => { tested = new Set(c); render(); }).catch(() => {});
   const list = h('div', { className: 'device-tree' });
-  const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating)})`).join(', ');
+  const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating, d.category)})`).join(', ');
   const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), d.supportOnly
     ? ` · ${d.models.join(', ') || 'model number unknown'} · ${d.codename} · support only · no ROMinit recipe yet`
     : ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
@@ -1498,6 +1499,8 @@ async function start() {
   const roms = device.roms.filter((/** @type {any} */ r) => r.origin !== 'stock').sort((/** @type {any} */ a, /** @type {any} */ b) => rank(a) - rank(b));
   const stock = device.roms.filter((/** @type {any} */ r) => r.origin === 'stock');
   const rom = roms.find((/** @type {any} */ r) => r.id === params.get('rom')) ?? roms[0];
+  const externalGuide = rom?.external?.kind === 'guide';
+  const externalInstaller = rom?.external && !externalGuide;
   document.title = `${device.vendor} ${device.name} · ROMinit`;
   const romSelect = h('select', { className: 'confirmation-input' }, ...Object.keys(ORIGINS).map(origin => h('optgroup', { label: origin },
     ...roms.filter((/** @type {any} */ r) => r.origin === origin).map((/** @type {any} */ r) => new Option(`${parent(r) ? '↳ ' : ''}${r.name} ${r.version} (${parent(r) ? 'superseded, ' : ''}${r.recommended ? 'recommended, ' : ''}${r.external ? 'link-only, ' : ''}${r.pick ? 'community pick, ' : ''}${r.risk.level === 'high' ? 'high risk, ' : ''}${r.status}, ${r.vetting === 'scraped' ? 'scraped placeholder' : r.vetting})`, r.id, false, r === rom)))).filter(g => g.children.length));
@@ -1542,11 +1545,11 @@ async function start() {
     lockButtons.push(button);
     return button;
   };
-  const infoSection = section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating)}` : 'none in the catalog yet', true, [
+  const infoSection = section('0 · ROM, features & info', rom ? `${rom.name} ${rom.version} · ${rom.origin} · ${rom.status} · ${score(rom.rating, device.category)}` : 'none in the catalog yet', true, [
       rom?.notes && h('p', { className: 'intro-copy' }, ...rich(rom.notes)),
       h('label', { className: 'field-label rom-label' }, rom && h('img', { className: 'os-logo', src: `./logos/${rom.os.toLowerCase()}.svg`, alt: '', onerror() { this.remove(); } }), rom ? rom.os : 'ROM'), h('div', { className: 'rom-pick' }, romSelect, rom && lockButton()),
       // A dashed arrow runs from the top lock-in button, past the details, down to the centred one at the bottom.
-      rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
+      rom ? h('div', { className: 'lock-path' }, rom.screenshots?.length ? slideshow(rom.screenshots) : !externalGuide && h('div', { className: 'slideshow no-shot', textContent: 'No screen picture yet' }),
       rom && sourceRow(rom, `${device.codename}/${rom.id}`, device),
       rom && h('p', { className: 'inbox-actions' }, requestButton('update', 'Request ROM update', `${device.codename}/${rom.id}`), requestButton('mirror', 'Request ROM mirror', `${device.codename}/${rom.id}`)),
       rom && kindRow(rom),
@@ -1554,7 +1557,7 @@ async function start() {
       rom && countsRow(`${device.codename}/${rom.id}`),
       rom && ownersRow(`${device.codename}/${rom.id}`, rom.maintainer),
       rom && ratingRow(rom.rating),
-      rom && metaRow(rom.rating),
+      rom && metaRow(rom.rating, device.category),
       ...(rom ? includesRows(rom.rating) : []),
       rom && requirementsRow(rom)) : '',
       rom && h('div', { className: 'lock-end' }, rom.login && loginRow(rom.login), lockButton()),
@@ -1570,12 +1573,13 @@ async function start() {
   const manual = unlock && h('ol', { className: 'guide' }, ...unlock.steps.map((/** @type {string} */ step, /** @type {number} */ i) => h('li', {}, h('label', {}, stepBoxes[i], ' ', ...rich(step)))));
   const localUnlock = oneClick && h('div', { className: 'stages' }, h('p', { className: 'field-help' }, h('strong', { textContent: 'One click: ' }),
     'turn on OEM unlocking in Developer options, put the device in fastboot mode, then this sends the unlock command from the browser instead of a computer terminal.'), oneClick);
-  const unlockSection = section('1 · Unlock bootloader', unlock ? rom?.external ? 'use the official installer; ROMinit is optional' : 'once per phone; tick each step' : 'not needed', !!unlock, unlock ? [
-    rom?.external && h('p', { className: 'external-unlock intro-copy' }, link(rom.external.url, `Unlock with the ${rom.os} installer (recommended)`),
+  const unlockSection = section('1 · Unlock bootloader', unlock ? externalInstaller ? 'use the official installer; ROMinit is optional' : externalGuide ? 'check eligibility in the community guide first' : 'once per device; tick each step' : 'not needed', !!unlock, unlock ? [
+    externalGuide && h('p', { className: 'intro-copy', textContent: unlock.text }),
+    externalInstaller && h('p', { className: 'external-unlock intro-copy' }, link(rom.external.url, `Unlock with the ${rom.os} installer (recommended)`),
       ' — use the same installer to unlock, flash and relock. Follow its preparation steps and confirm on the device. Unlocking erases your data.'),
     h('label', { className: 'field-help' }, alreadyUnlocked, ' Bootloader is already unlocked on this device'),
     unlock.hints?.length && h('details', { className: 'hints' }, h('summary', {}, h('strong', { textContent: `Good to know · ${unlock.hints.length} hint${unlock.hints.length === 1 ? '' : 's'}` })), h('ul', {}, ...unlock.hints.map((/** @type {string} */ hint) => h('li', {}, ...rich(hint))))),
-    rom?.external && localUnlock ? h('details', { className: 'alt-path rominit-unlock' }, h('summary', { textContent: 'Optional: unlock with ROMinit instead' }), localUnlock) : localUnlock,
+    externalInstaller && localUnlock ? h('details', { className: 'alt-path rominit-unlock' }, h('summary', { textContent: 'Optional: unlock with ROMinit instead' }), localUnlock) : localUnlock,
     oneClick ? h('details', { className: 'alt-path' }, h('summary', { textContent: 'Alternative path: unlock by hand' }), manual) : manual,
     unlock.pivots?.length && h('details', { className: 'pivots' }, h('summary', { textContent: 'Stuck? Locked or soft-bricked' }),
       h('dl', {}, ...unlock.pivots.flatMap((/** @type {any} */ p) => [h('dt', {}, ...rich(p.problem)), h('dd', {}, ...rich(p.fix), ' ', p.url && link(p.url, 'Open'))]))),
@@ -1587,9 +1591,9 @@ async function start() {
     return alreadyUnlocked.checked || stepBoxes.every(box => box.checked);
   });
   const haveTwrp = h('input', { type: 'checkbox', checked: !!progress.twrp });
-  const twrpSection = section('2 · Custom recovery', tools.length ? 'needed before the ROM' : 'not needed for this ROM', tools.length > 0,
+  const twrpSection = section('2 · Custom recovery', tools.length ? 'needed before the ROM' : externalGuide ? 'follow the install guide' : 'not needed for this ROM', tools.length > 0 || externalGuide,
     tools.length ? [h('label', { className: 'field-help' }, haveTwrp, ' A custom recovery (TWRP or similar) is already installed on this phone'), h('div', { className: 'stages' }, ...tools)]
-      : [h('p', { className: 'field-help', textContent: 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : 'NOT REQUIRED');
+      : [h('p', { className: 'field-help', textContent: externalGuide ? 'The external install guide defines the recovery required. Follow those steps before installing; no recovery stage is automated here.' : 'This ROM flashes without a custom recovery.' })], tools.length ? 'REQUIRED' : externalGuide ? 'SEE GUIDE' : 'NOT REQUIRED');
   let twrpDone = 0;
   twrpSection.addEventListener('stage-done', () => { if (++twrpDone >= tools.length) haveTwrp.checked = true; });
   if (tools.length) required(twrpSection, () => { progress.twrp = haveTwrp.checked; save(); return haveTwrp.checked; });
@@ -1614,9 +1618,9 @@ async function start() {
   benchRomSelect.addEventListener('change', () => {
     location.href = `?${new URLSearchParams({ device: codename, rom: benchRomSelect.value })}#phone-test`;
   });
-  const testSection = rom && section('4 · Test your phone', `${rom.name} ${rom.version} · optional`, location.hash === '#phone-test', [
-    h('label', { className: 'field-label' }, 'ROM currently installed on this phone', benchRomSelect),
-    h('p', { className: 'field-help', textContent: 'Choose the ROM running on the phone now. Changing it opens a fresh test for that ROM.' }),
+  const testSection = rom && section(device.category === 'tv' ? '4 · Test your device' : '4 · Test your phone', `${rom.name} ${rom.version} · optional`, location.hash === '#phone-test', [
+    h('label', { className: 'field-label' }, `ROM currently installed on this ${device.category === 'tv' ? 'device' : 'phone'}`, benchRomSelect),
+    h('p', { className: 'field-help', textContent: `Choose the ROM running on the ${device.category === 'tv' ? 'device' : 'phone'} now. Changing it opens a fresh test for that ROM.` }),
     benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
   if (testSection) testSection.id = 'phone-test';
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
@@ -1631,8 +1635,8 @@ async function start() {
   const romSection = section('3 · Flash ROM', rom ? `${rom.name} ${rom.version}` : 'none in the catalog yet', true, [
       rom && requirementsRow(rom),
       rom?.login && loginRow(rom.login),
-      rom?.external && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Link-only: ' }), ...rich(rom.external.why), ' ', link(rom.external.url, `Open the ${rom.os} installer`)),
-      (romCards.length || rom?.external) && h('label', { className: 'field-help' }, flashedElsewhere, rom?.external ? ` I flashed ${rom.name} with that installer` : ' I flashed this ROM another way (marked unconfirmed)'),
+      rom?.external && h('p', { className: 'experimental-note' }, h('strong', { textContent: externalGuide ? 'Community install guide: ' : 'Link-only: ' }), ...rich(rom.external.why), ' ', link(rom.external.url, `Open the ${rom.os} ${externalGuide ? 'install guide' : 'installer'}`)),
+      (romCards.length || rom?.external) && h('label', { className: 'field-help' }, flashedElsewhere, externalGuide ? ` I installed ${rom.name} using the guide (unconfirmed)` : rom?.external ? ` I flashed ${rom.name} with that installer` : ' I flashed this ROM another way (marked unconfirmed)'),
       rom && !rom.external && (flashable(rom) ? h('div', { className: 'stages' }, ...romCards)
         : h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Known broken: ' }), 'this release is listed for the record and cannot be flashed here. Pick another ROM.'))], romCards.length || rom?.external ? 'REQUIRED' : '');
   let romDone = 0, romUnmatched = false;
@@ -1659,7 +1663,7 @@ async function start() {
   if (romCards.length || rom?.external) { romSection.addEventListener('change', unconfirmed); romSection.addEventListener('stage-done', unconfirmed); unconfirmed(); } // after required() set the badge
   // Under the intro, three rows: specs, phone tags (year, microSD, cameras, telephoto, LiDAR), then badges for the ROM projects, stock Android and recoveries.
   const tags = /** @type {string[]} */ (device.hardware?.tags ?? []), isOs = (/** @type {string} */ t) => /android|linux|jailbreak|os\b/i.test(t); // iOS, postmarketOS, Sailfish OS…
-  const recoverSection = section('R · Recover / revert', stock.length || device.recovery?.stockAndroid ? 'back to stock' : 'manual for now', false, [
+  const recoverSection = section('R · Recover / revert', stock.length || device.recovery?.stockAndroid || device.recovery?.stockOs ? 'back to stock' : 'manual for now', false, [
     device.recovery && h('p', { className: 'experimental-note' }, h('strong', { textContent: 'Way back: ' }), ...rich(device.recovery.text), ' ', device.recovery.url && link(device.recovery.url, 'More')),
     ...stock.map((/** @type {any} */ r) => h('div', { className: 'stages' }, h('p', { className: 'intro-copy' }, `${r.name} ${r.version}. `, ...rich(r.notes ?? ''), ' ', r.homepage && link(r.homepage, 'Source')),
       ...r.stages.map((/** @type {any} */ stage, /** @type {number} */ i) => stageCard(device, stage, i + 1, r.stages.length, `${device.codename}/${r.id}`)))),
@@ -1677,7 +1681,7 @@ async function start() {
           if (!confirm(`Start over on this ${device.name}? This forgets the locked-in ROM and every ticked step in this browser.`)) return;
           try { localStorage.removeItem(progressKey); } catch { /* private window */ } location.reload(); } },
           Object.assign(h('span', { className: 'rewind', ariaHidden: 'true' }), { innerHTML: REWIND_SVG }), h('small', { textContent: 'Start over' }))),
-      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} Everything runs in this browser; you download the files from their source and nothing is uploaded.` }),
+      h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} ${externalGuide ? 'This page links to an external install guide; use the tools and computer it requires.' : 'Everything runs in this browser; you download the files from their source and nothing is uploaded.'}` }),
       device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display].join(' · ') }),
       tags.some(t => !isOs(t)) && h('p', { className: 'hardware-line', textContent: tags.filter(t => !isOs(t)).join(' · ') }),
       badgeRow(device, roms, stock, rom, infoSection, recoverSection)),

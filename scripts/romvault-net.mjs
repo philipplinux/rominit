@@ -9,7 +9,7 @@ import { frontmatter } from './romvault-lint.mjs';
 import { CATEGORY_DIRS } from '../src/catalog.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const CATEGORY_FILE = { phone: 'phones', tablet: 'tablets', console: 'consoles', pc: 'x86-pcs' };
+const CATEGORY_FILE = { phone: 'phones', tablet: 'tablets', tv: 'tv-boxes', console: 'consoles', pc: 'x86-pcs' };
 /** Child folder per page type, top to bottom. */
 const DOWN = { category: 'vendors', vendor: 'lines', line: 'series', series: 'devices', device: 'roms' };
 const slug = (/** @type {string} */ s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

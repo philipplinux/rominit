@@ -10,7 +10,7 @@ const VAULT = join(ROOT, 'romvault');
 const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'soc', 'rom', 'scraping', 'skill', 'index', 'log'];
 const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', socs: 'soc', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
-const CLASSES = ['phone', 'tablet', 'console', 'pc']; // catalog device.category values
+const CLASSES = ['phone', 'tablet', 'tv', 'console', 'pc']; // catalog device.category values
 const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
 
 /** @param {string} dir @returns {string[]} */
@@ -67,7 +67,7 @@ export function lint(vault = VAULT) {
       const nested = tag.match(/^(device|series)\/(.+)$/);
       if (nested ? !exists(`${nested[1] === 'device' ? 'devices' : 'series'}/${nested[2]}.md`) : !tags.has(tag)) say(file, `tag "${tag}" not in the AGENTS.md list (or its page is missing)`);
     }
-    if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')}): tag everything about phones "phone"`);
+    if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')})`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
     if (rel !== 'README.md' && text.split('\n').length > MAX_LINES) say(file, `over ${MAX_LINES} lines: split it`);

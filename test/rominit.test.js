@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { FEATURES, USES, assertConsent, completeness, deviceLevel, problems, recipes, selectFiles, stagesProblems, stepsFor, unlockStage } from '../src/catalog.js';
+import { CATEGORIES, CATEGORY_DIRS, FEATURES, USES, assertConsent, completeness, deviceLevel, problems, recipes, selectFiles, stagesProblems, stepsFor, unlockStage } from '../src/catalog.js';
 import { checksum, verifyPins } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -13,6 +13,11 @@ const s9 = () => device('starlte').roms.find(r => r.id === 'philipplinux-pmos-se
 /** Small fake images standing in for the stage's pinned files. */
 const fakeFiles = stage => stage.files.map(pin => ({ ...pin, size: pin.name.length, sha256: sha(pin.name), file: new Blob([pin.name]) }));
 const noop = () => {};
+
+test('TV boxes and sticks have an independent catalog category and device tree', () => {
+  assert.equal(CATEGORIES.tv, 'TV boxes & sticks');
+  assert.equal(CATEGORY_DIRS['tv-boxes'], 'tv');
+});
 
 test('real catalog validates', () => {
   assert.deepEqual(errors, []);
@@ -36,6 +41,14 @@ test('real catalog validates', () => {
   assert.match(problems(tablet, { device: tablet.codename, roms: [{ ...tabletRom, rating: { ...tabletRom.rating, sources: [{ label: 'unsafe', url: 'javascript:alert(1)' }] } }] }).join('\n'), /labelled https/);
   assert.match(problems({ ...tablet, recovery: { stockAndroid: '17', url: 'http://example.com' } }, { device: tablet.codename, roms: tablet.roms }).join('\n'), /recovery.stockAndroid/);
   assert.ok(tablet.roms.every(r => r.external && !r.stages.length));
+  const stick = device('mantis');
+  assert.equal(stick.category, 'tv');
+  assert.ok(stick.models.includes('E9L29Y'));
+  assert.equal(stick.roms[0].origin, 'unofficial');
+  assert.equal(stick.roms[0].external.kind, 'guide');
+  assert.equal(stick.roms[0].stages.length, 0);
+  assert.equal(stick.unlock.fastboot, undefined, 'no generic unlock command for the Fire TV');
+  assert.match(problems(stick, { device: 'mantis', roms: [{ ...stick.roms[0], external: { ...stick.roms[0].external, kind: 'command' } }] }).join('\n'), /external.kind/);
   assert.match(problems(external, { device: 'oriole', roms: [{ ...external.roms[0], stages: device('laurel_sprout').roms[0].stages }] }).join('\n'), /external needs/);
 });
 

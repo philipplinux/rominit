@@ -79,6 +79,31 @@ test('Pixel Tablet lives in the tablet tree and uses the phone install flow', as
   await page.setViewportSize({ width: 1280, height: 720 });
 });
 
+test('Fire TV sample has its own tree and distinguishes a community guide from a flasher', async () => {
+  await page.goto(`${BASE}/?category=tv`);
+  assert.equal(await page.locator('.sitenav a[aria-current="page"]').getAttribute('data-nav'), 'tv');
+  await page.locator('a[href="?device=mantis"]').click();
+  await page.getByRole('heading', { name: 'Flash your Fire TV Stick 4K (2018).' }).waitFor();
+  assert.match(await text('.eyebrow'), /TV BOXES & STICKS/);
+  const body = await text('#main');
+  assert.match(body, /E9L29Y/);
+  assert.match(body, /graphical TV interface/);
+  assert.match(body, /Community install guide/);
+  assert.match(body, /VM190/);
+  assert.match(body, /SELinux (?:runs )?permissive/);
+  assert.doesNotMatch(body, /as phone|official installer|Open the LineageOS installer|This ROM flashes without a custom recovery|Everything runs in this browser/);
+  assert.equal(await page.locator('.external-unlock').count(), 0);
+  assert.equal(await page.locator('.rominit-unlock, .stage-card').count(), 0);
+  const photo = page.locator('.phone-photo img');
+  await photo.evaluate(img => img.decode());
+  assert.ok(await photo.evaluate(img => img.naturalWidth > 0));
+  await page.locator('.badge-row a', { hasText: 'Stock Fire OS' }).click();
+  assert.match(await text('#main'), /not a USB firmware reflash/);
+  await page.setViewportSize({ width: 390, height: 900 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await page.setViewportSize({ width: 1280, height: 720 });
+});
+
 test('coffee link in header and footer', async () => {
   await page.goto(BASE);
   assert.equal(await page.locator(`.topbar a[href="${DONATE}"]`).count(), 1);
@@ -1083,6 +1108,7 @@ test('the nav marks exactly one link as the current page', async () => {
   assert.deepEqual(await current('/'), ['devices'], 'the bare list marks Devices');
   assert.deepEqual(await current('/?category=pc'), ['os'], 'the PC category marks OS, not Devices as well');
   assert.deepEqual(await current('/?category=console'), ['consoles'], 'the console category marks Consoles only');
+  assert.deepEqual(await current('/?category=tv'), ['tv']);
   assert.deepEqual(await current('/?view=brands'), ['brands']);
   assert.deepEqual(await current('/?view=projects'), ['projects']);
   assert.deepEqual(await current('/?view=popular'), ['popular']);

@@ -43,6 +43,16 @@ test('plan prints stages, files, steps and the confirm phrase', async () => {
   for (const text of ['Stage 1', 'confirm: ERASE MI A3', 'vbmeta.img', sha('vbmeta.img'), 'step flash boot_b boot.img']) assert.match(t.chunks.out, new RegExp(text));
 });
 
+test('external community guide plans report the route without inventing USB stages', async () => {
+  const t = io(false), guide = devices.find(d => d.codename === 'mantis');
+  assert.equal(await main(['plan', 'mantis', guide.roms[0].id, '--json'], t, { catalog: { devices } }), 0);
+  const [done] = events(t.chunks.out);
+  assert.equal(done.data.external.kind, 'guide');
+  assert.deepEqual(done.data.stages, []);
+  assert.match(done.text, /External guide: https:\/\/xdaforums.com/);
+  assert.match(done.text, /No automated ROMinit flash stages/);
+});
+
 test('--json emits one event per line with type, text and fraction', async () => {
   const t = io(false);
   await main(['plan', 'laurel_sprout', rom.id, '--json'], t, { catalog });

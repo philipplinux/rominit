@@ -404,6 +404,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 @media (max-width: 640px) { .lock-path, .lock-end { --gap: 1rem; } .lock-path { padding-right: .8rem; } }
 
 .title-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.title-row h1 { white-space: normal; min-width: 0; }
 .start-over { flex: none; display: grid; justify-items: center; gap: .15rem; border: 1px solid var(--line, #333); background: none; color: var(--muted); font: inherit; padding: .5rem .7rem; cursor: pointer; }
 .start-over .rewind { display: block; line-height: 0; }
 .start-over small { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; }
@@ -753,6 +754,11 @@ p.rate-label { margin: .3rem 0 .5rem; }
   .topbar-side { min-width: 0; }
   .wordmark, .sitenav, .topbar-side > :not(.topbar-search) { flex-shrink: 0; white-space: nowrap; }
   .topbar-search { flex: 0 1 9rem; min-width: 4rem; } .topbar-search input { width: 100%; }
+}
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .topbar { column-gap: .75rem; }
+  .sitenav { gap: .6rem; margin-left: 0; }
+  .sitenav a { font-size: .65rem; letter-spacing: .07em; }
 }
 
 .alpine-procon { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }

@@ -1,0 +1,111 @@
+{
+  "device": "mantis",
+  "roms": [
+    {
+      "id": "r0rt1z2-lineage-14.1",
+      "os": "LineageOS",
+      "name": "LineageOS 14.1 for TV",
+      "version": "20250106",
+      "origin": "unofficial",
+      "status": "legacy",
+      "vetting": "curated",
+      "risk": {
+        "level": "high",
+        "why": "Legacy Android 7.1.2 community build; December 2024 backported patches and SELinux permissive. This is not current Android security support."
+      },
+      "rating": {
+        "checked": "2026-10-21",
+        "features": {
+          "flashing": "partial",
+          "usb_net": "untested",
+          "storage": "works",
+          "sdcard": "n/a",
+          "battery": "n/a",
+          "screen": "works",
+          "touch": "n/a",
+          "gpu": "works",
+          "audio": "works",
+          "camera": "n/a",
+          "camera_flash": "n/a",
+          "wifi": "works",
+          "bluetooth": "works",
+          "gps": "n/a",
+          "nfc": "n/a",
+          "calls": "n/a",
+          "sms": "n/a",
+          "data": "n/a",
+          "ir": "n/a",
+          "fde": "untested",
+          "otg": "untested",
+          "hdmi": "works",
+          "fingerprint": "n/a",
+          "accelerometer": "n/a",
+          "magnetometer": "n/a",
+          "light": "n/a",
+          "proximity": "n/a",
+          "hall": "n/a",
+          "haptics": "n/a",
+          "barometer": "n/a"
+        },
+        "includes": {
+          "google_play": "no",
+          "microg": "no",
+          "android_apps": "yes",
+          "phone_ui": "no",
+          "root": "optional",
+          "updates": "no",
+          "encryption": "no",
+          "relock": "no",
+          "banking_apps": "no",
+          "ssh": "no",
+          "docker": "no"
+        },
+        "kernel": {
+          "version": "4.4.120",
+          "type": "downstream"
+        },
+        "base": "Android 7.1.2 · TV interface",
+        "released": "2025-01-06",
+        "support": "maintenance",
+        "sources": [
+          {
+            "label": "Maintainer release and feature reports",
+            "url": "https://github.com/r0rt1z2-releases/LineageOS_mantis/releases"
+          },
+          {
+            "label": "Device source and specifications",
+            "url": "https://github.com/LOSMantis/android_device_amazon_mantis"
+          },
+          {
+            "label": "Unlock compatibility notes",
+            "url": "https://github.com/zenfyrdev/bootloader-unlock-wall-of-shame/blob/main/brands/amazon/README.md"
+          }
+        ],
+        "note": "Installation depends on a supported unlockable hardware/firmware combination. Wi-Fi, Bluetooth, display, hardware/software video decoding, audio, MTP and DRM are reported working by the maintainer. GMS/Google Apps are listed as buggy; DRM support does not guarantee every paid streaming service or 4K playback. No ROMinit hardware test. USB networking, OTG and encryption are not verified here."
+      },
+      "notes": "A graphical TV interface operated with a remote, not a terminal-only ROM. Runs Android apps without the stock Amazon home screen. This is an unofficial, legacy LineageOS build; Google Apps have known issues and SELinux runs permissive. Installation is a community Linux USB unlock followed by TWRP/ADB work, not a browser installer. Check eligibility first.",
+      "source": "https://github.com/LOSMantis/android_device_amazon_mantis",
+      "maintainer": {
+        "name": "R0rt1z2",
+        "source": "https://github.com/R0rt1z2"
+      },
+      "homepage": "https://github.com/r0rt1z2-releases/LineageOS_mantis/releases/tag/20250106",
+      "discussion": "https://xdaforums.com/t/rom-work-in-progress-mantis-lineageos-14-1-for-fire-tv-stick-4k.4083703/",
+      "external": {
+        "kind": "guide",
+        "url": "https://xdaforums.com/t/rom-work-in-progress-mantis-lineageos-14-1-for-fire-tv-stick-4k.4083703/",
+        "why": "Read the maintainer’s ROM guide and current unlock restrictions first. Eligible units use community Linux/FireISO USB tools to unlock and install TWRP, then the documented TWRP/ADB install path. ROMinit has not validated a WebUSB sideload or automated CLI recipe for mantis, and this link is a community guide, not an official flasher."
+      },
+      "stages": [],
+      "slots": "single",
+      "requirements": [
+        "E9L29Y / AFTMM, codename mantis, first-generation Fire TV Stick 4K (2018) only.",
+        "Confirm exact hardware revision and installed Fire OS against the current unlock guide; eligibility is unknown until checked.",
+        "Successfully complete the applicable community unlock and install the matching TWRP before installing the ROM.",
+        "Back up data first. Unlock/install procedures can erase data; board work and unsupported downgrades can brick the stick.",
+        "Use the exact maintainer ROM package and instructions. Do not relock a community-modified bootloader.",
+        "An HDMI display, suitable USB data/power connections, and the host tools specified by the guide are required."
+      ]
+    }
+  ]
+}

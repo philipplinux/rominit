@@ -1,0 +1,71 @@
+{
+  "codename": "mantis",
+  "vendor": "Amazon",
+  "name": "Fire TV Stick 4K (2018)",
+  "series": "Fire TV",
+  "family": "Fire TV Stick 4K (1st gen)",
+  "variant": "Fire TV Stick 4K (2018)",
+  "models": [
+    "E9L29Y",
+    "AFTMM"
+  ],
+  "photo": {
+    "src": "phones/mantis.webp",
+    "page": "https://developer.amazon.com/docs/device-specs/device-specifications-fire-tv-streaming-media-player.html",
+    "license": "press",
+    "artist": "Amazon"
+  },
+  "notes": "Original first-generation 2018 model only, not the newer 4K or 4K Max. Unlock eligibility depends on the hardware revision and installed Fire OS. There is no verified one-click WebUSB install for this model in ROMinit.",
+  "detect": {
+    "adb": {
+      "device": "mantis"
+    }
+  },
+  "modes": {
+    "adb": "Enable ADB debugging in Fire TV Developer Options and follow Amazon’s ADB connection instructions. Stock Fire TV debugging is normally over the local network; this is not an unlocked USB flashing mode.",
+    "recovery": "Only after a successful supported community unlock: enter the installed TWRP using the unlock package’s recovery instructions. Do not assume stock recovery can install LineageOS."
+  },
+  "unlock": {
+    "text": "Community Linux/FireISO USB unlock only, after checking exact hardware and Fire OS eligibility. Amazon provides no ordinary customer bootloader-unlock button or public unlock token.",
+    "url": "https://xdaforums.com/t/unlock-root-twrp-unbrick-fire-tv-stick-4k-mantis.3978459/",
+    "steps": [
+      "Check the exact installed Fire OS and hardware revision against the current mantis unlock guide before making changes. A model number alone does not establish eligibility.",
+      "Review the maintainer compatibility notes: VM190-and-later revisions have BootROM download mode disabled. An alternate Fire OS 6.2.8.1 route was later patched; this is not a universal firmware cutoff or a promise that downgrade is safe.",
+      "Only if eligible, follow the community Linux/FireISO USB procedure. It can require opening the stick and board-level work; unlocking and installing another OS can erase data or brick it.",
+      "Tick this final step only after the supported unlock succeeds and TWRP recovery is installed and verified. Otherwise stop here."
+    ],
+    "hints": [
+      "Keep the Fire OS version unknown until you have checked it in Settings → My Fire TV → About.",
+      "Amazon-signed unlock images are not a public consumer unlock service. Never use a generic fastboot unlock command for this model.",
+      "Use the exact mantis guide and files; instructions for tank, sheldon, karat or another Fire TV are not interchangeable."
+    ],
+    "pivots": [
+      {
+        "problem": "The guide does not support this hardware/firmware combination",
+        "fix": "Keep the existing OS and stop. Do not erase partitions, guess a downgrade, or try another Fire TV model’s files.",
+        "url": "https://github.com/zenfyrdev/bootloader-unlock-wall-of-shame/blob/main/brands/amazon/README.md"
+      }
+    ]
+  },
+  "recovery": {
+    "stockOs": {
+      "name": "Stock Fire OS",
+      "version": "6"
+    },
+    "text": "Amazon’s factory-reset instructions erase apps and user data but keep Fire OS; they are not a USB firmware reflash or a guaranteed recovery from overwritten partitions. No public official Amazon USB flasher was found. Modified/unbootable sticks need the exact applicable community recovery guide.",
+    "url": "https://www.amazon.com/gp/help/customer/display.html?nodeId=TKtU99Au0k4hXxaN54"
+  },
+  "hardware": {
+    "soc": "mt8695",
+    "ram": "1.5 GB DDR4 RAM",
+    "cpu": "MediaTek MT8695 · quad-core 1.7 GHz",
+    "gpu": "IMG GE8300",
+    "display": "External HDMI · up to 4K at 60 Hz",
+    "tags": [
+      "2018 · 1st generation",
+      "8 GB storage",
+      "Remote-controlled TV interface",
+      "Micro-USB power/data · no touchscreen"
+    ]
+  }
+}

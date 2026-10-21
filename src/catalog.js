@@ -20,9 +20,9 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 /** Top of the device tree. Pi, routers, ARM boards etc. come later. */
-export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
+export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tv: 'TV boxes & sticks', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
 /** catalog/devices/<folder>/<vendor>/<codename>.json: the folder sets the device's category, so each kind keeps its own tree. */
-export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet' };
+export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', 'tv-boxes': 'tv' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Search levels, best first: an approved ROMinit phone test, a curated ROM, a scraped ROM with a recipe, support-only (no recipe), only link-only ROMs. */
 export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder' };
@@ -131,6 +131,7 @@ export function problems(device, romFile) {
   need(device?.vendor && device?.name, `${device?.codename}: vendor and name are required`);
   need(device?.series && device?.family && device?.variant, `${device?.codename}: series, family and variant are required (All › vendor › series › family › variant)`);
   need(device?.recovery?.stockAndroid === undefined || (/^\d+$/.test(device.recovery.stockAndroid) && device.recovery.url?.startsWith('https://')), `${device?.codename}: recovery.stockAndroid needs an Android version and an https recovery url`);
+  need(device?.recovery?.stockOs === undefined || (typeof device.recovery.stockOs?.name === 'string' && device.recovery.stockOs.name && typeof device.recovery.stockOs.version === 'string' && device.recovery.stockOs.version && device.recovery.url?.startsWith('https://')), `${device?.codename}: recovery.stockOs needs a name, version and an https recovery url`);
   need((device?.unsupported ?? []).every(u => u.name && u.models?.length && u.why), `${device?.codename}: unsupported variants need name, models and why`);
   const unlock = device?.unlock;
   need(unlock === undefined || (unlock.text && unlock.steps?.length && [...unlock.steps, ...unlock.hints ?? []].every(step => typeof step === 'string')
@@ -168,8 +169,9 @@ export function problems(device, romFile) {
     // Community pick (XDA top pick, years of releases): set by a person only, like `curated`; scrapers never write it.
     need(rom.pick === undefined || (rom.pick.text && rom.pick.url?.startsWith('https://')), `${at}: pick needs text and an https url`);
     need(rom.os && rom.version && (rom.stages?.length || rom.external), `${at}: os, version and stages are required`);
-    // Link-only: the publisher's own installer does the flash (no pinned files yet). Kept as a marker to revisit with a real recipe.
+    // Link-only: an external installer or guide handles installation; no executable stages are claimed.
     need(rom.external === undefined || (rom.external.url?.startsWith('https://') && rom.external.why && !rom.stages?.length), `${at}: external needs an https url and why, and no stages`);
+    need(rom.external?.kind === undefined || ['installer', 'guide'].includes(rom.external.kind), `${at}: external.kind must be installer or guide`);
     // The id names a ROM line and stays put across small updates (ratings, comments and tests hang off it); a big jump is a new entry that supersedes the old one from the same publisher file.
     // <publisher>-<line>: the same line from two builders stays two entries (philipplinux-pmos-server vs official-pmos-mainline).
     const publisher = rom.origin === 'official' ? 'official' : rom.origin === 'stock' ? device.vendor : rom.maintainer?.name;
