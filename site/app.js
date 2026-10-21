@@ -1,6 +1,5 @@
 import { h } from './dom.js';
 import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
-const [alpine] = OSES; // the OS entry in the device search
 import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
@@ -971,16 +970,18 @@ function devicePicker(index) {
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems))))))));
-    const showAlpine = on.has('pc') && words.every(word => `${alpine.name} alpinelinux ${osArchitectures(alpine).join(' ')} ${Object.values(ARCH_FAMILY).join(' ')}`.toLowerCase().includes(word));
-    const osEntry = h('article', { className: 'os-entry' }, h('a', { href: './alpine.html', className: 'os-title' }, h('img', { src: './logos/alpine.svg', alt: '', width: 40, height: 40 }), h('strong', { textContent: alpine.name })),
-      h('p', { className: 'field-help', textContent: `${alpine.editions.length} editions · ${alpine.version}` }),
-      h('div', { className: 'architecture-tags', ariaLabel: 'Architectures' }, ...[...new Set(Object.values(ARCH_FAMILY))].map(name => h('span', { className: 'architecture-tag', textContent: name }))));
-    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showAlpine)).map(([c, label]) => c === 'pc' && showAlpine
-      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]
+    // OS pages (catalog/os) sit at the top of the PC category, matched by name, id and architecture.
+    const osHits = on.has('pc') ? OSES.filter(os => words.every(word => `${os.name} ${os.id} ${osArchitectures(os).map(arch => `${arch} ${ARCH_FAMILY[arch] ?? ''}`).join(' ')}`.toLowerCase().includes(word))) : [];
+    const showOs = osHits.length > 0;
+    const osEntry = osHits.map(os => h('article', { className: 'os-entry' }, h('a', { href: `./${os.id}`, className: 'os-title' }, h('img', { src: `./${os.page.logo.src}`, alt: '', width: 40, height: 40 }), h('strong', { textContent: os.name })),
+      h('p', { className: 'field-help', textContent: `${os.editions.length} editions · ${os.version}` }),
+      h('div', { className: 'architecture-tags', ariaLabel: 'Architectures' }, ...[...new Set(osArchitectures(os).map(arch => ARCH_FAMILY[arch] ?? arch))].map(name => h('span', { className: 'architecture-tag', textContent: name })))));
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs)).map(([c, label]) => c === 'pc' && showOs
+      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
       : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
-    if (!hits.length && !showAlpine && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
-    else if (!hits.length && !showAlpine) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
+    if (!hits.length && !showOs && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length && !showOs) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);
@@ -1322,12 +1323,12 @@ async function cliView() {
       '# read-only phone test over SSH (postmarketOS)', 'rominit bench <codename> <rom-id>',
       '', '# any command: --json = one JSON event per line (scripts, agents)', "# --local = read a checkout's catalog/ instead of this site"].join('\n')),
     h('h3', { id: 'usb-setup', textContent: 'USB preparation · Linux' }),
-    h('p', { className: 'field-help' }, 'The Alpine Linux page uses this same CLI. Direct ISO writing needs Linux, Python 3, lsblk, udisksctl and noninteractive sudo permission. Ventoy additionally needs a reviewed, root-owned ', link('https://www.ventoy.net/en/download.html', 'Ventoy installation'), '. ', link('https://github.com/philipplinux/rominit#usb-preparation-linux', 'USB setup instructions'), '.'),
+    h('p', { className: 'field-help' }, 'The OS pages use this same CLI. Direct ISO writing needs Linux, Python 3, lsblk, udisksctl and noninteractive sudo permission. Ventoy additionally needs a reviewed, root-owned ', link('https://www.ventoy.net/en/download.html', 'Ventoy installation'), '. ', link('https://github.com/philipplinux/rominit#usb-preparation-linux', 'USB setup instructions'), '.'),
     code('ROMINIT_VENTOY_DIR=/absolute/path/to/reviewed/ventoy rominit serve'),
     h('h3', { textContent: 'Safety' }),
     h('ul', {}, ...['It reads phone and ROM data from this site (catalog/<codename>.json), no account needed.', 'A destructive stage asks you to type its confirm phrase in the terminal. Without a terminal it stops; an agent cannot type it for you.', 'Every file is checked against its pinned size and SHA-256 before it is written.'].map(t => h('li', { textContent: t }))),
     h('p', { className: 'intro-copy' }, 'Want your AI agent to look things up without installing anything? Use the ', h('a', { href: './?view=agents', textContent: 'Hosted MCP' }), '.'),
-    h('p', { className: 'field-help' }, 'Preparing Alpine Linux? Open the ', h('a', { href: './alpine.html', textContent: 'Alpine USB guide' }), '.'));
+    h('p', { className: 'field-help' }, 'Preparing a PC OS? Open its USB guide: ', ...OSES.flatMap((os, i) => [i ? ', ' : '', h('a', { href: `./${os.id}`, textContent: os.name })]), '.'));
   return page;
 }
 /** Hosted MCP: endpoint, setup, the deal (read our data, report how the flash went), and your API tokens. */
