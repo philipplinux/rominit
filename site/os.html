@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-os="__ID__">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="__DESCRIPTION__">
+    <title>__NAME__ · OS · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./os.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to __NAME__</a>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> OS</span></a>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Experimental</span>
+        <nav class="sitenav" aria-label="Site"><a href="./">Devices</a><a href="./?view=brands">Brands</a><a href="./?view=projects">Projects</a><a href="./?view=popular">Popular</a><a href="./alpine" aria-current="page">OS</a></nav>
+        <div class="topbar-side">
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="./#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
+        </div>
+      </header>
+      <main id="main" class="alpine-page">
+        <section class="alpine-hero alpine-card">
+          <img id="os-logo" class="alpine-logo" alt="">
+          <div class="alpine-hero-text">
+            <p id="os-eyebrow" class="eyebrow"></p>
+            <h1 id="os-name"></h1>
+            <p id="alpine-version" class="alpine-version"></p>
+            <p id="os-intro" class="intro-copy"></p>
+            <div id="alpine-architectures" class="architecture-tags" aria-label="Supported architecture families"></div>
+          </div>
+        </section>
+        <section class="alpine-preview alpine-card" aria-labelledby="preview-title">
+          <div class="alpine-preview-text">
+            <p class="eyebrow">IS IT FOR YOU?</p>
+            <h2 id="preview-title"></h2>
+            <div class="alpine-procon"><div><h3>Pros</h3><ul id="os-pros"></ul></div><div><h3>Cons</h3><ul id="os-cons"></ul></div></div>
+            <p id="os-links" class="alpine-links"></p>
+            <p id="os-preview-note" class="field-help"></p>
+          </div>
+          <figure class="alpine-term">
+            <div class="alpine-term-bar" aria-hidden="true"><i></i><i></i><i></i><span id="os-shot-bar"></span></div>
+            <img id="alpine-operation">
+            <figcaption id="os-shot-caption"></figcaption>
+          </figure>
+        </section>
+        <section class="alpine-card alpine-downloads" aria-labelledby="downloads-title">
+          <p class="eyebrow">EDITION → ARCHITECTURE → USB</p><h2 id="downloads-title"></h2>
+          <div class="alpine-selection"><label for="alpine-edition">Edition</label><select id="alpine-edition"></select><span id="alpine-release" class="field-help"></span></div>
+          <p id="alpine-edition-description"></p><p id="alpine-edition-note" class="field-help"></p>
+          <div id="alpine-images" class="alpine-images"></div>
+          <noscript><p>Enable JavaScript to select editions, or use the <a href="__SOURCE__">official downloads</a>.</p></noscript>
+          <section id="alpine-usb" aria-label="Prepare the selected image on USB"><h3>Prepare a USB</h3><p id="alpine-usb-status" class="status" role="status" aria-live="polite"></p><div id="alpine-usb-panel"></div></section>
+        </section>
+        <p id="os-status" class="alpine-status"></p>
+        <footer id="os-footer" class="alpine-footer"></footer>
+      </main>
+    </div>
+  </body>
+</html>

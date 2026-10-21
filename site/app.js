@@ -1,5 +1,6 @@
 import { h } from './dom.js';
-import { ALPINE, ALPINE_ARCHITECTURES, ARCH_FAMILY } from '../src/alpine.js';
+import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
+const [alpine] = OSES; // the OS entry in the device search
 import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
@@ -951,9 +952,9 @@ function devicePicker(index) {
       ...sorted(series).map(([name, families]) => h('details', { open: true }, h('summary', { textContent: name }),
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems))))))));
-    const showAlpine = on.has('pc') && words.every(word => `${ALPINE.name} alpinelinux ${ALPINE_ARCHITECTURES.join(' ')} ${Object.values(ARCH_FAMILY).join(' ')}`.toLowerCase().includes(word));
-    const osEntry = h('article', { className: 'os-entry' }, h('a', { href: './alpine.html', className: 'os-title' }, h('img', { src: './logos/alpine.svg', alt: '', width: 40, height: 40 }), h('strong', { textContent: ALPINE.name })),
-      h('p', { className: 'field-help', textContent: `${ALPINE.editions.length} editions · ${ALPINE.version}` }),
+    const showAlpine = on.has('pc') && words.every(word => `${alpine.name} alpinelinux ${osArchitectures(alpine).join(' ')} ${Object.values(ARCH_FAMILY).join(' ')}`.toLowerCase().includes(word));
+    const osEntry = h('article', { className: 'os-entry' }, h('a', { href: './alpine.html', className: 'os-title' }, h('img', { src: './logos/alpine.svg', alt: '', width: 40, height: 40 }), h('strong', { textContent: alpine.name })),
+      h('p', { className: 'field-help', textContent: `${alpine.editions.length} editions · ${alpine.version}` }),
       h('div', { className: 'architecture-tags', ariaLabel: 'Architectures' }, ...[...new Set(Object.values(ARCH_FAMILY))].map(name => h('span', { className: 'architecture-tag', textContent: name }))));
     list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showAlpine)).map(([c, label]) => c === 'pc' && showAlpine
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]

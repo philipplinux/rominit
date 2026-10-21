@@ -8,7 +8,7 @@ import { arch as osArch, homedir, platform as osPlatform, release as osRelease }
 import { promisify } from 'node:util';
 import { run as runVentoy } from '../src/recipes/ventoy.js';
 import { run as runUsbImage } from '../src/recipes/usb-image.js';
-import { alpineImage } from '../src/alpine.js';
+import { osImage } from '../src/os/index.js';
 import { validateUsbBrowser, validateUsbEnvironment } from '../src/usb-environment.js';
 
 const execFile = promisify(nodeExecFile);
@@ -435,7 +435,7 @@ function findVentoyDir(home = VENTOY_HOME) {
 export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || findVentoyDir(), ventoyVersion = process.env.ROMINIT_VENTOY_VERSION,
   imagePath = process.env.ROMINIT_ISO_PATH, imageSha256 = process.env.ROMINIT_ISO_SHA256, byIdDir = '/dev/disk/by-id',
   runCommand = (file, args, options) => execFile(file, args, options), spawnProcess = nodeSpawn,
-  fetchImage = globalThis.fetch, imageCacheDir = IMAGE_CACHE_DIR, getAlpineImage = alpineImage,
+  fetchImage = globalThis.fetch, imageCacheDir = IMAGE_CACHE_DIR, getAlpineImage = osImage,
   hostEnvironment,
   readText = readFile, listDir = readdir, resolvePath = realpath, fileStat = stat, fileStatFs = statfs,
   trustStat = lstat, installerOwnerUid = 0,

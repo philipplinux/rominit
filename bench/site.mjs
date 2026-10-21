@@ -1,4 +1,6 @@
-import { ALPINE, alpineImage } from '../src/alpine.js';
+import { OSES } from '../src/os/index.js';
+const [alpine] = OSES;
+import { osImage } from '../src/os/index.js';
 // Website bench: every agreed site feature, end to end in a real browser against `wrangler pages dev` with a fresh local D1.
 // Run: npm run build && npm run bench   (CHROMIUM=/path/to/chrome to override the browser)
 import assert from 'node:assert/strict';
@@ -915,7 +917,7 @@ test('benchmark ROM picker reminds the installed ROM and stays on the benchmark 
 test('Alpine Linux parent defaults to Extended and shows architecture badges, downloads, logo and auto-looping operation GIF', async () => {
   await page.goto(`${BASE}/alpine.html`);
   await page.getByRole('heading', { name: 'Alpine Linux.' }).waitFor();
-  const ventoySupportedCount = ALPINE.editions.flatMap(edition => edition.images).filter(image => image.usb === true).length;
+  const ventoySupportedCount = alpine.editions.flatMap(edition => edition.images).filter(image => image.usb === true).length;
   assert.equal(ventoySupportedCount, 9, 'catalog marks nine images as Ventoy supported');
   assert.equal(await page.locator('#alpine-edition').inputValue(), 'extended', 'Extended is the default edition when no query selection exists');
   assert.equal(await page.locator('.alpine-image').count(), 2, 'the default Extended edition has two ISO choices');
@@ -926,7 +928,7 @@ test('Alpine Linux parent defaults to Extended and shows architecture badges, do
   assert.equal(await page.locator('#alpine-usb-method').evaluate(node => !!(node.compareDocumentPosition(document.querySelector('#alpine-usb-drive')) & Node.DOCUMENT_POSITION_FOLLOWING)), true, 'method placeholder precedes the drive selector');
   await page.locator('#alpine-edition').selectOption('standard');
   assert.equal(await page.locator('.alpine-image').count(), 8);
-  assert.equal(await page.locator('.ventoy-supported').count(), ALPINE.editions[0].images.filter(image => image.usb === true).length);
+  assert.equal(await page.locator('.ventoy-supported').count(), alpine.editions[0].images.filter(image => image.usb === true).length);
   assert.equal(await page.locator('.ventoy-supported').count(), 3, 'Standard shows a Ventoy badge only on its three supported ISO cards');
   const desktopEditionMetrics = await page.evaluate(() => {
     const row = document.querySelector('.alpine-selection').getBoundingClientRect();
@@ -1054,8 +1056,8 @@ test('Alpine architecture flows through the paired CLI plan and requires typed d
     calls.push({ path, body: request.postDataJSON() });
     const json = path === '/status' ? { user: { id: 98, name: 'Alpine tester' }, capabilities: ['usb-media', 'usb-images'] }
       : path === '/usb/drives' ? [drive]
-      : path === '/usb/plan' ? { id: 'fixture-plan', method: 'ventoy', action: copyOnly ? 'copy' : 'install', confirm: copyOnly ? 'COPY' : 'ERASE', drive, expiresAt: new Date(Date.now()+60000).toISOString(), warning: 'Erases the fixture drive', image: { ...alpineImage('alpine-extended-x86_64'), name: 'alpine-extended-3.24.2-x86_64.iso', ...(wrongImage ? { sha256: 'a'.repeat(64) } : {}) } }
-      : { state: 'succeeded', log: ['fixture-only'], drive, readback: { size: alpineImage('alpine-extended-x86_64').size, sha256: alpineImage('alpine-extended-x86_64').sha256, matched: true } };
+      : path === '/usb/plan' ? { id: 'fixture-plan', method: 'ventoy', action: copyOnly ? 'copy' : 'install', confirm: copyOnly ? 'COPY' : 'ERASE', drive, expiresAt: new Date(Date.now()+60000).toISOString(), warning: 'Erases the fixture drive', image: { ...osImage('alpine-extended-x86_64'), name: 'alpine-extended-3.24.2-x86_64.iso', ...(wrongImage ? { sha256: 'a'.repeat(64) } : {}) } }
+      : { state: 'succeeded', log: ['fixture-only'], drive, readback: { size: osImage('alpine-extended-x86_64').size, sha256: osImage('alpine-extended-x86_64').sha256, matched: true } };
     return route.fulfill({ headers, json });
   });
   try {
@@ -1101,7 +1103,7 @@ test('checksum mismatch offers retry or cancel and requires explicit opt-in plus
   let planCount = 0, mismatch = true, action = 'copy', supportsOverride = false, statusPolls = 0, lastWrite = null;
   const drive = { id: '/dev/disk/by-id/usb-mismatch-test', path: '/dev/sdz', model: 'Fixture USB', size: 2 * 1024 ** 3, available: true, mounted: false, mounts: [] };
   let omitReadback = false;
-  const pinned = alpineImage('alpine-extended-x86_64');
+  const pinned = osImage('alpine-extended-x86_64');
   const actual = { size: pinned.size - 100 * 1024 ** 2, sha256: 'b'.repeat(64) };
   await page.route('**/api/me', route => route.fulfill({ json: { user: { id: 99, name: 'Checksum tester' }, providers: [] } }));
   await page.route(`${localUrl}/**`, async route => {
@@ -1232,7 +1234,7 @@ test('checksum mismatch offers retry or cancel and requires explicit opt-in plus
 test('direct ISO writing is available for non-Ventoy architectures and waits for typed ERASE', async () => {
   const localUrl = 'http://127.0.0.1:49160', calls = [];
   let statusPolls = 0;
-  const pinned = alpineImage('alpine-standard-armv7');
+  const pinned = osImage('alpine-standard-armv7');
   const measured = { size: pinned.size, sha256: pinned.sha256 };
   const drive = { id: '/dev/disk/by-id/usb-direct-test', path: '/dev/sdz', model: 'Fixture USB', size: 2 * 1024 ** 3, available: true, mounted: false, mounts: [] };
   await page.route('**/api/me', route => route.fulfill({ json: { user: { id: 100, name: 'Direct ISO tester' }, providers: [] } }));
