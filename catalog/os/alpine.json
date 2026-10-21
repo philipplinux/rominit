@@ -6,7 +6,7 @@
   "version": "3.24.2",
   "releaseDate": "2026-09-17",
   "requirements": {
-    "badges": ["128–512 MB RAM", "100–700 MB disk", "Internet"],
+    "badges": ["RAM 128 MB · 512 MB with a desktop", "Disk 0–700 MB · none diskless", "Internet for a sys install"],
     "source": "https://wiki.alpinelinux.org/wiki/Installation",
     "checked": "2026-10-21"
   },
