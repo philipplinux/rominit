@@ -694,12 +694,13 @@ p.rate-label { margin: .3rem 0 .5rem; }
 }
 
 /* Alpine page */
-.alpine-hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2rem; align-items: center; margin: 1.5rem 0 1rem; padding: 1.8rem; background: linear-gradient(135deg, var(--panel-raised), var(--panel)); }
+.alpine-hero { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2rem; align-items: center; margin: 1.5rem 0 1rem; padding: 1.8rem; background: linear-gradient(135deg, var(--panel-raised), var(--panel)); }
 .alpine-hero .alpine-logo { flex: none; width: 190px; padding-right: 2rem; border-right: 1px solid var(--line); box-sizing: content-box; }
 .alpine-hero h1 { margin: .2rem 0 .6rem; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; }
 .alpine-hero .alpine-version { display: inline-block; margin: 0 0 .8rem; padding: .25rem .6rem; border: 1px solid var(--amber); color: var(--amber); font-size: .72rem; font-weight: 700; letter-spacing: .06em; }
 .alpine-hero .intro-copy { margin: 0 0 .6rem; max-width: 46rem; }
 .alpine-hero .architecture-tags { margin: .6rem 0 0; }
+.alpine-hero .alpine-reqs { position: absolute; top: 1.8rem; right: 1.8rem; margin: 0; }
 .alpine-preview { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 1.8rem; align-items: start; margin-bottom: 1rem; }
 .alpine-preview h2 { margin: .2rem 0 .7rem; font-size: 1.15rem; }
 .alpine-cmds { display: grid; gap: .45rem; margin: 1rem 0; padding: 0; list-style: none; counter-reset: cmd; }
@@ -727,6 +728,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .alpine-status { margin: 1rem 0 1.5rem; }
 @media (max-width: 700px) {
   .alpine-hero { grid-template-columns: 1fr; padding: 1.2rem; gap: 1rem; }
+  .alpine-hero .alpine-reqs { position: static; }
   .alpine-hero .alpine-logo { width: 150px; padding: 0 0 1rem; border-right: 0; border-bottom: 1px solid var(--line); }
   .alpine-preview { grid-template-columns: 1fr; }
   .alpine-images { grid-template-columns: 1fr; }
@@ -793,3 +795,4 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .source-row .badge-label, .source-row .badge-value { padding: .3rem .55rem; }
 .source-row .badge-label img { height: 1em; width: 1em; }
 a.architecture-tag { text-decoration: none; }
+@media (max-width: 1000px) { .alpine-hero .alpine-reqs { position: static; grid-column: 1 / -1; } }
