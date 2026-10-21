@@ -80,7 +80,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
       : 'Any data on the selected drive will be erased. Check the model, capacity and device path before continuing.' }),
     h('p', { className: 'field-help usb-environment-notice', textContent: 'When supported, the automatic USB report includes OS, browser and CLI technical versions only; it does not include personal details.' }),
     selectedSummary,
-    h('p', { className: 'field-label', textContent: 'USB install type' }), methodButtons, methodSelect, methodHelp,
+    h('div', { className: 'usb-method-row' }, h('span', { className: 'field-label', textContent: 'USB install type' }), methodButtons), methodSelect, methodHelp,
     driveHeading, driveSelect, driveInfo,
     h('div', {}, h('button', { type: 'button', className: 'button button-primary usb-review', textContent: imageId ? 'Review USB preparation' : 'Review Ventoy installation', disabled: true, onclick: review })),
     planBox,

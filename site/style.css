@@ -775,3 +775,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .usb-method-buttons .button.selected { border-color: var(--teal); color: var(--teal); background: rgb(127 168 121 / 14%); }
 
 .status.error { margin: .8rem 0; padding: .65rem .85rem; border: 1px solid #c0675f; border-left-width: 4px; background: rgb(192 103 95 / 14%); color: #f0b8b1; font-size: .78rem; font-weight: 700; }
+
+.usb-method-row { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem .9rem; margin: .3rem 0 .5rem; }
+.usb-method-row .field-label { margin: 0; }
+.usb-method-row .usb-method-buttons { margin: 0; }
