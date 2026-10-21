@@ -100,7 +100,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     selectedSummary.hidden = false;
   }
   if (catalogImage) setImageSummary(catalogImage, catalogImage.size);
-  if (directAvailable && (!catalogImage || catalogImage.usb !== true)) methodSelect.value = 'direct';
+  if (directAvailable) methodSelect.value = 'direct';
 
   function methodSupported(method = methodSelect.value) {
     if (method === 'direct') return directAvailable;
