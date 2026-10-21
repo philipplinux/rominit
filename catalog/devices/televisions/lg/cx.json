@@ -1,0 +1,219 @@
+{
+  "codename": "cx",
+  "vendor": "LG",
+  "name": "OLED CX / C10 (2020)",
+  "series": "OLED",
+  "family": "CX (C10)",
+  "variant": "LG OLED CX / C10 (2020)",
+  "models": [
+    "OLED55CX9LA"
+  ],
+  "photo": {
+    "src": "phones/lg-cx.webp",
+    "page": "https://www.lg.com/de/tvs-und-soundbars/oled/oled55cx9la/",
+    "license": "press",
+    "artist": "LG"
+  },
+  "notes": "LG’s 2020 OLED CX family, also known as C10, runs webOS 5.0. This page covers the European OLED55CX9LA. Choose an app deployment or root route below using the TV’s exact model, webOS TV Version and Software Version from Settings → Support → TV Information. No installable replacement OS for the CX was found in the sources checked on 21 October 2026.",
+  "officialSupport": {
+    "status": "dropped",
+    "source": "https://www.lg.com/uk/support/announcement/GBNTC20220419152260/"
+  },
+  "supportOnly": true,
+  "supportUrl": "https://cani.rootmy.tv/",
+  "supportLabel": "Check model and firmware compatibility",
+  "supportRoutes": [
+    {
+      "name": "LG Developer Mode",
+      "kind": "App deployment",
+      "description": "Install third-party webOS apps while keeping stock webOS. Start here for apps that do not need root.",
+      "requirements": [
+        "Install LG’s Developer Mode app from LG Apps and sign in with an LG Developer account.",
+        "Use a computer on the same network, enable Key Server, then pair with webOS CLI or Dev Manager.",
+        "Renew the developer session before it expires; expiry removes developer-installed apps. Root-only apps and services remain unavailable."
+      ],
+      "url": "https://webostv.developer.lge.com/develop/getting-started/developer-mode-app",
+      "checked": "2026-10-21",
+      "section": "apps"
+    },
+    {
+      "name": "Homebrew Channel",
+      "kind": "Apps and customization",
+      "description": "Browse, install and update community webOS apps. Root adds startup hooks, system services and remote access.",
+      "requirements": [
+        "Use Developer Mode for ordinary apps, or a compatible root method for privileged features.",
+        "Download the project’s release IPK; follow its installation guide for the chosen mode.",
+        "Root installations must not coexist with LG’s Developer Mode app. Protect SSH credentials and keep remote access on a trusted network."
+      ],
+      "url": "https://github.com/webosbrew/webos-homebrew-channel",
+      "checked": "2026-10-21",
+      "section": "apps"
+    },
+    {
+      "name": "SlopBro",
+      "kind": "Network root",
+      "description": "Community Python exploit that installs Homebrew Channel and persistent root. Upstream reports webOS 4–11 use with light testing; exact firmware compatibility still matters.",
+      "requirements": [
+        "Python 3 on a computer, the TV’s IP address, network access in both directions and acceptance of the TV’s pairing prompt.",
+        "Check the current upstream instructions for the installed firmware; broad webOS version coverage is not a guarantee for every CX.",
+        "Remove LG Developer Mode before keeping a rooted installation. Updates can close an exploit or remove root; changing system files can prevent boot."
+      ],
+      "url": "https://github.com/throwaway96/slopbro",
+      "checked": "2026-10-21",
+      "section": "root"
+    },
+    {
+      "name": "faultmanager autoroot",
+      "kind": "Developer Mode root · firmware dependent",
+      "description": "Root and Homebrew Channel installer reached through Developer Mode. Upstream warns that almost all recent webOS 5+ firmware is patched.",
+      "requirements": [
+        "Check the exact software build in CanI.RootMy.TV before attempting this route.",
+        "Initially use Developer Mode and SSH or Dev Manager to run the upstream script.",
+        "After root succeeds, uninstall LG Developer Mode before rebooting; do not reinstall it while rooted."
+      ],
+      "url": "https://github.com/throwaway96/faultmanager-autoroot",
+      "checked": "2026-10-21",
+      "section": "root"
+    },
+    {
+      "name": "DejaVuln autoroot",
+      "kind": "USB root · firmware dependent",
+      "description": "USB-based root and Homebrew Channel installer for vulnerable webOS builds. Most recent webOS 5+ firmware is patched.",
+      "requirements": [
+        "Check the exact firmware against CanI.RootMy.TV before choosing this route. A webOS 5 label alone is insufficient.",
+        "Use the upstream release archive and a single-partition FAT32 or NTFS USB drive, following its Music / Media Player instructions.",
+        "Uninstall LG Developer Mode before rebooting after root; do not reinstall it on a rooted TV."
+      ],
+      "url": "https://github.com/throwaway96/dejavuln-autoroot",
+      "checked": "2026-10-21",
+      "section": "root"
+    },
+    {
+      "name": "RootMyTV",
+      "kind": "Browser root · legacy firmware",
+      "description": "Older browser-based root and Homebrew Channel installer. For 2020 TVs it is patched from webOS TV Version 5.4.0 onward; older versions are not guaranteed to work.",
+      "requirements": [
+        "Read webOS TV Version, not the separate Software Version field.",
+        "Use only on a vulnerable older build after checking the project’s compatibility table; the reported CX webOS 5.6.2 configuration is already patched for this method.",
+        "Uninstall LG Developer Mode first. The project says firmware downgrading is unavailable without existing root."
+      ],
+      "url": "https://github.com/RootMyTV/RootMyTV.github.io",
+      "checked": "2026-10-21",
+      "section": "root"
+    },
+    {
+      "name": "webOS OSE / custom Linux",
+      "kind": "Development sources · no CX image",
+      "description": "webOS Open Source Edition is a separate build platform with Raspberry Pi reference hardware. No CX installer or supported CX replacement ROM was found.",
+      "requirements": [
+        "OSE’s documented reference target is Raspberry Pi 4, not this LG TV.",
+        "The public lg-webos-kexec experiment targets different Realtek hardware (50UP81009LR); its kernel is not a CX image.",
+        "Do not flash unrelated Android TV, OSE or Linux images onto the CX. These sources are for porting research."
+      ],
+      "url": "https://www.webosose.org/docs/guides/setup/system-requirements/",
+      "checked": "2026-10-21",
+      "section": "custom-os"
+    },
+    {
+      "section": "recovery",
+      "name": "LG model support and firmware",
+      "kind": "Official model support",
+      "description": "LG’s exact OLED55CX9LA.AEUD support page lists firmware 04.64.00 (13 May 2026), owner manuals and a USB update guide.",
+      "requirements": [
+        "Match the full model suffix and region before downloading any firmware.",
+        "Use LG’s model-specific update instructions. An ordinary firmware updater is not a verified recovery flasher for a TV that cannot boot.",
+        "Updating may remove root or close exploit paths; do not assume it supports downgrades."
+      ],
+      "url": "https://www.lg.com/de/support/produkt-hilfe/cs-OLED55CX9LA.AEUD",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "recovery",
+      "name": "Reset to Initial Settings",
+      "kind": "Official factory reset",
+      "description": "Resets the TV’s configuration and installed apps when webOS still opens. This is a settings reset, not a firmware reinstall or downgrade.",
+      "requirements": [
+        "For 2020 webOS 5.0: All Settings → Support → Reset to Initial Settings.",
+        "Erases accounts, installed apps and saved settings; record anything needed before confirming on the TV.",
+        "If the TV cannot reach its menus, use LG repair support; no public CX bootloader recovery procedure has been verified here."
+      ],
+      "url": "https://www.lg.com/us/support/help-library/lg-tv-how-to-reset-my-lg-smart-tv--1441914092672",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "tools",
+      "name": "LG webOS CLI",
+      "kind": "Public manufacturer development tools",
+      "description": "Official computer-side tools to inspect web apps, install and launch packages, and retrieve TV system information. Useful for app diagnosis; no CX firmware recovery function is documented.",
+      "requirements": [
+        "Use the current webOS CLI and LG’s documented installation instructions.",
+        "For stock webOS, pair through Developer Mode on the same network.",
+        "App debugging tools do not replace service-center diagnostics, panel calibration or a firmware flasher."
+      ],
+      "url": "https://webostv.developer.lge.com/develop/tools/cli-introduction",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "tools",
+      "name": "LG Remote Service",
+      "kind": "Manufacturer-assisted diagnosis",
+      "description": "LG Support can inspect an internet-connected smart TV and help diagnose problems through its built-in Remote Service feature.",
+      "requirements": [
+        "For 2020 webOS 5 TVs, open Support → Quick Help → LG Remote Service where available in your region.",
+        "Contact LG Support, accept the terms and give the on-screen access code to the LG agent.",
+        "This is an attended support service, not a public technician PC program or a verified unbrick route."
+      ],
+      "url": "https://www.lg.com/eastafrica/support/product-help/CT20076005-20155414931816",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "discussion",
+      "name": "webOS Homebrew / OpenLGTV community",
+      "kind": "Community discussion",
+      "description": "Community contacts for webOS apps, rooting and TV development. The project publishes its OpenLGTV discussion links.",
+      "requirements": [
+        "Read the current community guidance before posting.",
+        "Include the exact TV model, webOS TV Version and Software Version when asking about compatibility."
+      ],
+      "url": "https://www.webosbrew.org/pages/",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "discussion",
+      "name": "SlopBro issue tracker",
+      "kind": "Public technical discussion",
+      "description": "Public reports and troubleshooting for the network root method, including firmware-specific failures. Use this tracker for SlopBro bugs.",
+      "requirements": [
+        "Search existing issues for your firmware and error before opening a report.",
+        "Include reproducible symptoms and redact private details from logs."
+      ],
+      "url": "https://github.com/throwaway96/slopbro/issues",
+      "checked": "2026-10-21"
+    }
+  ],
+  "hardware": {
+    "cpu": "4 × Arm Cortex-A55",
+    "ram": "3 GB physical RAM (about 2.6 GB visible to Linux)",
+    "gpu": "Arm Mali-G51 MP3",
+    "display": "55-inch OLED · 3840 × 2160",
+    "chipset": "LG O20 / LG1212 · α9 Gen 3",
+    "architecture": "ARMv8.2-A CPU · AArch64 kernel · 32-bit ARM userspace",
+    "storage": "8 GB eMMC class",
+    "note": "Community root-shell report from OLED48CXPUB and OLED65CXPUA. CPU, RAM and storage have not been read from this European OLED55CX9LA; regional hardware may differ.",
+    "source": "https://rorygallagher2024.github.io/glasshouse/development/tv-specs/cx/"
+  },
+  "software": {
+    "os": "webOS 5.x · launched with webOS 5.0",
+    "latestFirmware": "04.64.00",
+    "released": "2026-05-13",
+    "checked": "2026-10-21",
+    "source": "https://www.lg.com/de/support/produkt-hilfe/cs-OLED55CX9LA.AEUD",
+    "reportedOs": "webOS 5.6.2-21 · reported on OLED55CX9LA / firmware 04.64.00",
+    "reportSource": "https://github.com/Danmoreng/lg-webos-root"
+  },
+  "ownership": {
+    "label": "Root access reported",
+    "details": "Community root/SSH was reported on OLED55CX9LA with firmware 04.64.00 / webOS 5.6.2-21. Installed firmware and root state are unknown. Bootloader unlock and a replacement OS are not verified.",
+    "source": "https://github.com/Danmoreng/lg-webos-root"
+  }
+}

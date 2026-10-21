@@ -1,0 +1,57 @@
+{
+  "codename": "raspberry-pi",
+  "vendor": "Raspberry Pi",
+  "name": "Family",
+  "series": "Single-board computers",
+  "family": "Raspberry Pi",
+  "variant": "Raspberry Pi family",
+  "models": [
+    "Raspberry Pi single-board computers"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://www.raspberrypi.com/",
+  "supportLabel": "Raspberry Pi website · main tools, OS downloads and documentation",
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.raspberrypi.com/software/operating-systems/"
+  },
+  "notes": "One family reference for Raspberry Pi single-board computers. Get Raspberry Pi Imager, official operating systems, hardware information and recovery documentation from the manufacturer. The community projects below cover gaming, media, home automation and networking; each project lists its own supported Pi models.",
+  "supportRoutes": [
+    {
+      "section": "projects",
+      "name": "Recalbox",
+      "kind": "Retro gaming OS",
+      "description": "Turn a supported Pi into a retro gaming console. The project publishes Pi 4/400 and selected Pi 5 images; choose your exact board on its website.",
+      "requirements": [],
+      "url": "https://www.recalbox.com/download/rpi",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "projects",
+      "name": "LibreELEC",
+      "kind": "Media centre",
+      "description": "A small Kodi-focused OS with Raspberry Pi builds. Use the image for the exact Pi model.",
+      "requirements": [],
+      "url": "https://libreelec.tv/downloads/raspberry/",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "projects",
+      "name": "Home Assistant",
+      "kind": "Home automation",
+      "description": "Run a home automation hub on a Pi. The official appliance guide targets Pi 4 and Pi 5 with at least 2 GB RAM.",
+      "requirements": [],
+      "url": "https://www.home-assistant.io/installation/raspberrypi/",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "projects",
+      "name": "Pi-hole",
+      "kind": "Network DNS filtering",
+      "description": "Run network-wide DNS filtering on a Pi with a supported Linux OS, or in a container. This is an application rather than a replacement OS.",
+      "requirements": [],
+      "url": "https://pi-hole.net/",
+      "checked": "2026-10-21"
+    }
+  ]
+}

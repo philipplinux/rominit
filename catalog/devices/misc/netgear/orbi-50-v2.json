@@ -1,0 +1,149 @@
+{
+  "codename": "orbi-50-v2",
+  "vendor": "NETGEAR",
+  "name": "Orbi RBR50v2 / RBS50v2",
+  "series": "Orbi",
+  "family": "Orbi 50 v2",
+  "variant": "Orbi 50 v2 router and satellite",
+  "models": [
+    "RBR50v2",
+    "RBS50v2"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://github.com/openwrt/openwrt/pull/22321",
+  "supportLabel": "OpenWrt v2 development and compatibility",
+  "notes": "The Orbi 50 v2 family includes the RBR50v2 router and RBS50v2 satellite. They have different RAM, flash and firmware targets. OpenWrt v2 support is an open development contribution, not an upstream stable or snapshot download. Do not use v1 Orbi images or swap router and satellite images. NETGEAR describes this legacy series as security-fixes-only; firmware and community options are below.",
+  "officialSupport": {
+    "status": "ongoing",
+    "summary": "security fixes only · legacy series",
+    "source": "https://community.netgear.com/kb/en-home-orbi-firmware-releases/new---rbk1020304050-series-firmware-version-2-7-6-6-released/2473282"
+  },
+  "hardware": {
+    "cpu": "Quad-core Arm Cortex-A7 · RBR50v2 vendor listing: 710 MHz",
+    "ram": "RBR50v2 router: 512 MB · RBS50v2 satellite: 256 MB",
+    "chipset": "Qualcomm IPQ4019",
+    "architecture": "32-bit Arm / ARMv7 · OpenWrt target arm_cortex-a7_neon-vfpv4",
+    "gpu": "Not specified for this networking target",
+    "storage": "NAND flash: RBR50v2 512 MB · RBS50v2 128 MB",
+    "display": "No integrated screen; network management and status LEDs",
+    "source": "https://github.com/openwrt/openwrt/commit/3657f90.patch",
+    "note": "Memory and v2 target details come from the development patch. RBR50v2 vendor data confirms router memory and quad-core clock; do not treat the satellite as the same hardware configuration."
+  },
+  "software": {
+    "os": "NETGEAR Orbi stock firmware",
+    "latestFirmware": "2.7.6.6",
+    "released": "2026-01-13",
+    "checked": "2026-10-21",
+    "source": "https://kb.netgear.com/000070455/RBR50-RBS50-Firmware-Version-2-7-6-6"
+  },
+  "ownership": {
+    "label": "Community firmware port",
+    "details": "An OpenWrt source port exists for these exact v2 models, but the upstream pull request is still open. A development build and a model-matched recovery path are required; no universal Orbi image is implied.",
+    "source": "https://github.com/openwrt/openwrt/pull/22321"
+  },
+  "supportRoutes": [
+    {
+      "section": "os",
+      "name": "OpenWrt for Orbi v2",
+      "kind": "Development source · not a stable release",
+      "description": "The upstream contribution adds separate RBR50v2 and RBS50v2 targets. The pull request is still open; published v1 images are not suitable for v2 hardware.",
+      "requirements": [
+        "Confirm the exact v2 model before considering a build; router and satellite targets are distinct.",
+        "Review the current PR, build instructions and device limitations; support for a different Orbi does not establish support here.",
+        "The patch says the RBR50v2 stock web interface rejects the OpenWrt image; use the documented model-specific recovery/install route."
+      ],
+      "url": "https://github.com/openwrt/openwrt/pull/22321",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "recovery",
+      "name": "nmrpflash",
+      "kind": "Community Ethernet recovery tool",
+      "description": "Public NETGEAR Ethernet recovery utility. Its tested-device list explicitly includes RBR50v2 and RBS50, but does not name RBS50v2. The OpenWrt v2 contribution discusses this recovery route.",
+      "requirements": [
+        "Do not treat RBS50 (v1) in the tool’s list as proof for RBS50v2; establish the exact satellite recovery path before any write.",
+        "Use a wired, isolated connection and firmware for the exact router or satellite.",
+        "Recovery writes firmware and may erase configuration; preserve settings and stock firmware first.",
+        "Read the project’s platform, interface and firewall requirements before using it."
+      ],
+      "url": "https://github.com/jclehner/nmrpflash",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "recovery",
+      "name": "NETGEAR stock firmware",
+      "kind": "Official release and rollback reference",
+      "description": "The 2.7.6.6 security release is dated 13 January 2026 and explicitly applies to both v2 models, with separate router and satellite downloads.",
+      "requirements": [
+        "Match RBR50v2 versus RBS50v2 and check the current support page before downloading.",
+        "Follow NETGEAR’s manual update guidance; a normal stock update is not a guaranteed unbrick procedure."
+      ],
+      "url": "https://kb.netgear.com/000070455/RBR50-RBS50-Firmware-Version-2-7-6-6",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "recovery",
+      "name": "Factory reset",
+      "kind": "Official settings reset",
+      "description": "NETGEAR’s reset procedure restores configuration defaults. It does not replace OpenWrt with stock firmware or reinstall a damaged image.",
+      "requirements": [
+        "A reset erases saved settings; record what you need before confirming on the unit."
+      ],
+      "url": "https://kb.netgear.com/000034592/How-do-I-reset-my-Orbi-system-to-factory-default-settings",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "tools",
+      "name": "NETGEAR support",
+      "kind": "Public manufacturer resources",
+      "description": "Find model-specific stock firmware, manuals and update instructions on the manufacturer’s support site.",
+      "requirements": [
+        "Search the complete model identifier, including v2."
+      ],
+      "url": "https://www.netgear.com/support/",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "projects",
+      "name": "OpenWrt DNS filtering",
+      "kind": "Packages for an installed OpenWrt build",
+      "description": "OpenWrt documents DNS-based ad blocking packages. These are services added after a suitable OpenWrt build is running, not replacement firmware images.",
+      "requirements": [
+        "Check package availability and flash/RAM capacity for the selected build."
+      ],
+      "url": "https://openwrt.org/docs/guide-user/services/ad-blocking",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "projects",
+      "name": "OPNsense",
+      "kind": "Separate x86-64 firewall hardware",
+      "description": "An open-source routing, firewall and VPN platform for compatible x86-64 hardware. It is not an image for these Arm-based Orbi units.",
+      "requirements": [
+        "Use the project’s hardware-sizing guide for a separate PC or firewall appliance."
+      ],
+      "url": "https://docs.opnsense.org/manual/hardware.html",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "projects",
+      "name": "pfSense CE",
+      "kind": "Separate supported firewall hardware",
+      "description": "Community firewall software for amd64 systems; supported Netgate Arm appliances are a separate platform. Generic Orbi Arm hardware is not supported.",
+      "requirements": [
+        "Check the official hardware requirements; do not flash a pfSense image to an Orbi."
+      ],
+      "url": "https://docs.netgate.com/pfsense/en/latest/hardware/index.html",
+      "checked": "2026-10-21"
+    },
+    {
+      "section": "discussion",
+      "name": "OpenWrt community",
+      "kind": "Public networking discussion",
+      "description": "Community discussion for supported devices, development ports and OpenWrt configuration. Check the linked v2 contribution for exact device status.",
+      "requirements": [],
+      "url": "https://forum.openwrt.org/",
+      "checked": "2026-10-21"
+    }
+  ]
+}

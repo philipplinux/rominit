@@ -5,7 +5,7 @@ import './header-tuck.js';
 import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
 import { EMULATORS } from '../src/emulators/index.js';
-import { CATEGORIES, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, unlockStage } from '../src/catalog.js';
+import { CATEGORIES, SUPPORT_ROUTE_SECTIONS, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, officialSupportText, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
 import { redact, summarize, traced } from '../src/debug.js';
@@ -32,7 +32,8 @@ hostSelect.addEventListener('change', () => {
   document.dispatchEvent(new Event('host-change'));
 });
 // First visit: confirm the guessed computer once, since every stage's setup steps follow it.
-if (!stored && params.get('category') !== 'console') {
+const confirmHost = () => {
+  if (stored) return;
   const pick = h('select', { className: 'host-confirm-select', ariaLabel: "Your computer's operating system" },
     ...Object.entries(HOSTS).map(([id, name]) => h('option', { value: id, textContent: name, selected: id === host })));
   const dialog = h('dialog', { className: 'host-confirm' },
@@ -42,7 +43,8 @@ if (!stored && params.get('category') !== 'console') {
   dialog.addEventListener('close', () => { hostSelect.value = pick.value; hostSelect.dispatchEvent(new Event('change')); dialog.remove(); });
   document.body.append(dialog);
   dialog.showModal();
-}
+};
+if (!params.has('device') && !['console', 'television', 'misc'].includes(params.get('category'))) confirmHost();
 
 /** Catalog text with `code` spans. @param {string} text */
 const rich = (text = '') => text.split('`').map((part, i) => i % 2 ? h('code', {}, part) : part);
@@ -70,7 +72,7 @@ const complete = (rating, use, details = false) => {
   const untested = USES[use].filter(f => rating.features[f] === 'untested').length;
   return `as ${use} ${completeness(rating, USES[use])}%${details && untested ? ` (${untested} untested)` : ''}`;
 };
-const score = (rating, category = 'phone') => `${complete(rating, 'computer')} · ${category === 'tv' ? '' : `${complete(rating, 'phone')} · `}${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
+const score = (rating, category = 'phone') => `${complete(rating, 'computer')} · ${['tvmedia', 'television'].includes(category) ? '' : `${complete(rating, 'phone')} · `}${rating.kernel.type} kernel ${rating.kernel.version} · ${rating.support}`;
 /** Origin and status chips, colored like the feature states. @param {any} rom */
 const kindRow = rom => h('p', { className: 'rating' }, h('strong', { textContent: 'release' }),
   h('span', { className: 'feature', title: ORIGINS[rom.origin], textContent: rom.origin }),
@@ -125,10 +127,20 @@ function favoriteButton(key) {
   };
   return button;
 }
+/** The maker's stock OS updates, linked to the source: green while ongoing, red once dropped. @param {any} s */
+const officialSupportRow = s => s && h('p', { className: 'rating' }, h('a', { className: `feature ${s.status === 'ongoing' ? 'works' : 'broken'}`, href: s.source, target: '_blank', rel: 'noopener noreferrer', textContent: officialSupportText(s, 'Stock OS: maker') }));
+/** Community projects that keep the phone alive, separate from the maker: each ROM's project and support state, or the Nura listing on support-only pages. @param {any} device */
+const communityRow = device => {
+  const items = device.supportOnly ? [[device.supportLabel ? `${device.supportLabel}: listed` : 'Nura postmarketOS community: listed', 'works', device.supportUrl]]
+    : [...new Map(device.roms.map((/** @type {any} */ r) => [r.os, [`${r.os}: ${r.rating?.support ?? 'support unknown'}`, r.rating?.support === 'abandoned' ? 'broken' : 'works']])).values()];
+  return items.length > 0 && h('p', { className: 'rating' }, ...items.map(([text, state, href]) => href
+    ? h('a', { className: `feature ${state}`, href, target: '_blank', rel: 'noopener noreferrer', textContent: `Community: ${text}` })
+    : h('span', { className: `feature ${state}`, textContent: `Community: ${text}` })));
+};
 const KERNEL = { mainline: 'mainline: gets upstream fixes', downstream: 'downstream: device/vendor kernel' };
 /** Kernel, base, build date and support. @param {any} rating */
 const metaRow = (rating, category = 'phone') => h('p', { className: 'rating' }, ...[`kernel ${rating.kernel.version} (${KERNEL[rating.kernel.type]})`, rating.base,
-  `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), ...category === 'tv' ? [] : [complete(rating, 'phone', true)]].map(text => h('span', { className: 'feature', textContent: text })));
+  `built ${rating.released}`, `support: ${rating.support}`, complete(rating, 'computer', true), ...['tvmedia', 'television'].includes(category) ? [] : [complete(rating, 'phone', true)]].map(text => h('span', { className: 'feature', textContent: text })));
 /** Default login, shown where people look for it. @param {string} login `user / password` */
 const loginRow = login => { const [user, password] = login.split(' / ');
   return h('div', { className: 'login-box' }, h('strong', { textContent: 'login' }), h('pre', {}, h('code', { textContent: `user      ${user}\npassword  ${password}` })),
@@ -961,7 +973,7 @@ function devicePicker(index) {
   const romsOf = (/** @type {any} */ d) => d.roms.map((/** @type {any} */ r) => `${r.os} ${r.version} (${r.origin}, ${r.status}, ${r.vetting}, ${score(r.rating, d.category)})`).join(', ');
   const deviceLink = (/** @type {any} */ d) => h('li', {}, h('a', { href: `?device=${encodeURIComponent(d.codename)}`, textContent: d.variant }), d.supportOnly
     ? ` · ${d.models.join(', ') || 'model number unknown'} · ${d.codename} · support only · no ROMinit recipe yet`
-    : ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`);
+    : ` · ${d.models.join(', ')} · ${d.codename} · ${romsOf(d)}`, d.officialSupport && ` · stock OS ${d.officialSupport.status}`);
   /** Variants we know but cannot flash, listed so owners see why. */
   const unsupportedItems = (/** @type {any} */ d) => (d.unsupported ?? []).map((/** @type {any} */ u) => h('li', { className: 'unsupported' }, `${u.name} · ${u.models.join(', ')} · not supported: ${u.why}`));
   const render = () => {
@@ -1471,18 +1483,63 @@ async function start() {
     return;
   }
   const response = await fetch(`./catalog/${encodeURIComponent(codename)}.json`);
-  if (!response.ok) { main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
+  if (!response.ok) { confirmHost(); main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
+  if (!device.supportOnly || !device.supportRoutes) confirmHost();
+  if (['television', 'misc'].includes(device.category)) document.querySelector(`.sitenav a[href="./?category=${device.category}"]`)?.setAttribute('aria-current', 'page');
   if (device.supportOnly) {
     document.title = `${device.vendor} ${device.name} · ROMinit`;
+    if (device.supportRoutes) {
+      const categoryName = CATEGORIES[device.category];
+      const deviceName = device.category === 'television' ? 'TV' : 'device';
+      const routeCard = route => h('article', { className: 'tv-route' },
+        h('div', { className: 'tv-route-meta' }, h('span', { className: 'tv-route-kind', textContent: route.kind }), h('time', { dateTime: route.checked, textContent: `Checked ${route.checked}` })),
+        h('h3', { textContent: route.name }), h('p', { textContent: route.description }),
+        route.requirements.length > 0 && h('strong', { className: 'tv-route-requirements-label', textContent: route.section === 'discussion' ? 'Before you post' : 'Before you start' }),
+        route.requirements.length > 0 && h('ul', {}, ...route.requirements.map(text => h('li', { textContent: text }))),
+        h('a', { className: 'button button-secondary', href: route.url, target: '_blank', rel: 'noopener noreferrer', textContent: `Open ${route.name}` }));
+      const routeSections = Object.entries(SUPPORT_ROUTE_SECTIONS).filter(([id]) => device.supportRoutes?.some(route => route.section === id));
+      main.append(h('section', { className: 'console-page tv-page device-guide' },
+        h('section', { className: 'console-hero flash-card tv-hero', id: 'tv-overview' },
+          h('a', { className: 'back-link', href: `./?category=${device.category}`, textContent: `← ${categoryName}` }),
+          h('div', { className: 'console-hero-body' },
+            h('div', {}, h('p', { className: 'eyebrow', textContent: `${device.vendor} / ${device.series} / ${categoryName.toUpperCase()} GUIDES` }),
+              h('h1', {}, h('span', { textContent: `${device.category === 'misc' ? `${device.vendor} ` : ''}${device.name}.` })),
+              h('p', { className: 'intro-copy', textContent: device.notes || `Community routes for ${device.vendor} ${device.name}.` }),
+              h('div', { className: 'tv-status' }, officialSupportRow(device.officialSupport),
+                device.ownership && h('a', { className: 'feature partial', href: device.ownership.source, target: '_blank', rel: 'noopener noreferrer', title: device.ownership.details, ariaLabel: `Ownership: ${device.ownership.label}. ${device.ownership.details}`, textContent: `Ownership: ${device.ownership.label}` })),
+              h('p', { className: 'field-help' }, link(device.supportUrl, device.supportLabel || 'Device compatibility guide'), ' · External installation guides.')),
+            device.photo && h('figure', { className: 'console-photo tv-photo' },
+              h('img', { src: `./${device.photo.src}`, alt: `${device.vendor} ${device.name}`, loading: 'eager' }),
+              h('figcaption', {}, h('a', { href: device.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: device.photo.license === 'press' ? `Image © ${device.photo.artist}` : `Photo: ${device.photo.artist}, ${device.photo.license}` }))))),
+        (device.hardware || device.software) && h('details', { className: 'tv-specs flash-card', id: 'tv-hardware' },
+          h('summary', {}, h('span', { textContent: 'Hardware & software' })),
+          h('dl', {}, ...[
+            ['Manufacturer OS', device.software?.os], ['Reported updated OS', device.software?.reportedOs], ['Latest manufacturer firmware', device.software?.latestFirmware && `${device.software.latestFirmware} · released ${device.software.released} · checked ${device.software.checked}`],
+            ['Installed version', device.category === 'television' ? 'Unknown · check Settings → Support → TV Information on the TV' : 'Unknown · inspect the OS installed on your device'],
+            ['Chipset / SoC', device.hardware?.chipset], ['Architecture', device.hardware?.architecture],
+            ['CPU', device.hardware?.cpu], ['RAM', device.hardware?.ram], ['GPU', device.hardware?.gpu],
+            ['Storage', device.hardware?.storage], ['Display', device.hardware?.display]
+          ].filter(([, value]) => value).flatMap(([label, value]) => [h('dt', { textContent: label }), h('dd', { textContent: value })])),
+          device.hardware?.note && h('p', { className: 'field-help', textContent: device.hardware.note }),
+          h('p', { className: 'field-help' }, device.hardware?.source && link(device.hardware.source, 'Hardware report'), ' · ', device.software?.source && link(device.software.source, 'Manufacturer OS and documentation'), device.software?.reportSource && ' · ', device.software?.reportSource && link(device.software.reportSource, 'OS version report'))),
+        h('nav', { className: 'console-jumps', ariaLabel: `${deviceName} guide sections` }, ...routeSections.map(([id, title]) => h('a', { href: `#tv-${id}`, textContent: title }))),
+        ...routeSections.map(([id, title]) => h('section', { className: 'tv-route-section', id: `tv-${id}`, ariaLabel: title },
+          h('div', { className: 'tv-routes-intro' }, h('h2', { textContent: title })),
+          h('div', { className: 'tv-route-grid' }, ...device.supportRoutes.filter(route => route.section === id).map(routeCard))))));
+      return;
+    }
     main.append(h('section', { className: 'intro' },
       h('a', { className: 'back-link', href: './', textContent: '← BACK' }),
       h('p', { className: 'eyebrow', textContent: `${device.vendor} / ${device.series} / SUPPORT ONLY` }),
       h('h1', {}, h('span', { textContent: `${device.name}.` })),
-      h('p', { className: 'feature untested', textContent: 'No ROMinit flash recipe is catalogued for this phone yet.' }),
-      h('p', { className: 'intro-copy', textContent: `Nura lists this phone in its Community device catalog. That does not mean ROMinit has a verified image, install recipe, or recovery path. This support-only page is shown when your search has no flashable match.` }),
-      h('p', { className: 'intro-copy' }, link(device.supportUrl, 'Nura device page'), ` · codename ${device.codename}`),
-      h('p', { className: 'field-help', textContent: 'Useful next details to gather: exact model number, device-specific install steps, and a safe recovery or stock restore path.' })));
+      device.photo && h('img', { className: 'support-photo', src: `./${device.photo.src}`, alt: `${device.vendor} ${device.name}`, loading: 'eager' }),
+      h('p', { className: 'feature untested', textContent: 'No ROMinit install recipe is catalogued for this device yet.' }),
+      h('p', { className: 'intro-copy', textContent: device.notes || 'This support-only page does not imply a verified image, install recipe, or recovery path.' }),
+      h('p', { className: 'intro-copy' }, link(device.supportUrl, device.supportLabel || 'External device support'), ` · codename ${device.codename}`),
+      officialSupportRow(device.officialSupport),
+      communityRow(device),
+      h('p', { className: 'field-help', textContent: 'Check the exact model and software version, current device-specific install guidance, and a safe stock recovery path.' })));
     return;
   }
   // Accepted phone tests override the catalog's feature states; blocked / untested / inconclusive keep the catalog value.
@@ -1618,9 +1675,9 @@ async function start() {
   benchRomSelect.addEventListener('change', () => {
     location.href = `?${new URLSearchParams({ device: codename, rom: benchRomSelect.value })}#phone-test`;
   });
-  const testSection = rom && section(device.category === 'tv' ? '4 · Test your device' : '4 · Test your phone', `${rom.name} ${rom.version} · optional`, location.hash === '#phone-test', [
-    h('label', { className: 'field-label' }, `ROM currently installed on this ${device.category === 'tv' ? 'device' : 'phone'}`, benchRomSelect),
-    h('p', { className: 'field-help', textContent: `Choose the ROM running on the ${device.category === 'tv' ? 'device' : 'phone'} now. Changing it opens a fresh test for that ROM.` }),
+  const testSection = rom && section(['tvmedia', 'television'].includes(device.category) ? '4 · Test your device' : '4 · Test your phone', `${rom.name} ${rom.version} · optional`, location.hash === '#phone-test', [
+    h('label', { className: 'field-label' }, `ROM currently installed on this ${['tvmedia', 'television'].includes(device.category) ? 'device' : 'phone'}`, benchRomSelect),
+    h('p', { className: 'field-help', textContent: `Choose the ROM running on the ${['tvmedia', 'television'].includes(device.category) ? 'device' : 'phone'} now. Changing it opens a fresh test for that ROM.` }),
     benchBox(rom, `${device.codename}/${rom.id}`, progress.cards?.[rom.id] ?? [], () => flashOf())], 'OPTIONAL');
   if (testSection) testSection.id = 'phone-test';
   const markTested = () => { const ok = !!progress.tested?.includes(rom.id); testSection.classList.toggle('done', ok); testSection.querySelector(':scope > summary .badge').textContent = ok ? 'COMPLETED' : 'OPTIONAL'; };
@@ -1684,6 +1741,8 @@ async function start() {
       h('p', { className: 'intro-copy', textContent: `${device.vendor} ${device.name} (${device.models.join(', ')}, ${device.codename}) only. ${device.notes ?? ''} ${externalGuide ? 'This page links to an external install guide; use the tools and computer it requires.' : 'Everything runs in this browser; you download the files from their source and nothing is uploaded.'}` }),
       device.hardware && h('p', { className: 'hardware-line', textContent: [device.hardware.ram, device.hardware.cpu, device.hardware.gpu, device.hardware.display].join(' · ') }),
       tags.some(t => !isOs(t)) && h('p', { className: 'hardware-line', textContent: tags.filter(t => !isOs(t)).join(' · ') }),
+      officialSupportRow(device.officialSupport),
+      communityRow(device),
       badgeRow(device, roms, stock, rom, infoSection, recoverSection)),
     infoSection,
     unlockSection,
@@ -1701,6 +1760,18 @@ for (const a of document.querySelectorAll('a[href="#submit-request"]')) a.addEve
 });
 start().then(() => {
   main.append(reportBox());
+  const guide = main.querySelector('.device-guide');
+  if (guide) {
+    const sections = [...guide.querySelectorAll(':scope > section, :scope > details')].map(element => /** @type {HTMLElement} */ (element));
+    for (const section of sections) section.dataset.railLabel = section.querySelector('h2, summary > span')?.textContent ?? 'Overview';
+    const report = /** @type {HTMLElement} */ (main.querySelector('#submit-request'));
+    report.dataset.railLabel = 'Report';
+    const rail = progressRail([...sections, report]);
+    rail.classList.add('tv-rail');
+    rail.setAttribute('aria-label', 'Device guide sections');
+    main.append(rail);
+    return;
+  }
   if (location.hash === '#phone-test') document.getElementById('phone-test')?.scrollIntoView({ block: 'start' });
   // Device pages: one milestone per section, R and T included (T is the ticket box added just above).
   const sections = /** @type {HTMLDetailsElement[]} */ ([...main.querySelectorAll(':scope > details.page-section')]);

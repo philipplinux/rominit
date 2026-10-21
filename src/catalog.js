@@ -19,11 +19,23 @@ export const INCLUDES = ['google_play', 'microg', 'android_apps', 'phone_ui', 'r
 export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
-/** Top of the device tree. Pi, routers, ARM boards etc. come later. */
-export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tv: 'TV boxes & sticks', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
+/** Top of the device tree. */
+export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tvmedia: 'TV media boxes & sticks', television: 'Smart TVs', misc: 'Misc & IoT', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
 /** catalog/devices/<folder>/<vendor>/<codename>.json: the folder sets the device's category, so each kind keeps its own tree. */
-export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', 'tv-boxes': 'tv' };
+export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', tvmedia: 'tvmedia', televisions: 'television', misc: 'misc' };
+export const SUPPORT_ROUTE_SECTIONS = { os: 'Operating systems', apps: 'Apps', root: 'Root', 'custom-os': 'Custom OS', recovery: 'Recovery', tools: 'Manufacturer tools', projects: 'Community projects', discussion: 'Discussion' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
+/** The maker's own updates for the stock OS: still coming, or over (the stock OS is obsolete). `until` is the promised end or the last update. */
+export const OFFICIAL_SUPPORT = ['ongoing', 'dropped'];
+/** First-party updates only (community projects never count; no current maker statement = dropped). Same field on devices, consoles, OS releases and emulators. @param {any} s officialSupport @returns {string[]} */
+export const officialSupportProblems = s => OFFICIAL_SUPPORT.includes(s?.status) && /^\d{4}(-\d{2})?$/.test(s.until ?? '0000') && s.source?.startsWith('https://') && (s.summary === undefined || (typeof s.summary === 'string' && s.summary.length <= 120)) ? []
+  : [`officialSupport needs status (${OFFICIAL_SUPPORT.join('/')}), until (YYYY or YYYY-MM, optional) and an https source`];
+/** "Stock OS: maker updates until 2031-10". @param {any} s @param {string} who whose updates */
+export const officialSupportText = (s, who) => `${who} updates ${s.summary ?? (s.status === 'dropped' ? `ended${s.until ? ` ${s.until}` : ''}, no more fixes` : s.until ? `until ${s.until}` : 'ongoing, no end date announced')}`;
+const isHttpsUrl = value => {
+  try { const url = new URL(value); return url.protocol === 'https:' && !!url.hostname; }
+  catch { return false; }
+};
 /** Search levels, best first: an approved ROMinit phone test, a curated ROM, a scraped ROM with a recipe, support-only (no recipe), only link-only ROMs. */
 export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder' };
 /** A phone's best level. @param {any} d index entry @param {Set<string>} tested codenames with an approved phone test @returns {keyof LEVELS} */
@@ -132,6 +144,17 @@ export function problems(device, romFile) {
   need(device?.series && device?.family && device?.variant, `${device?.codename}: series, family and variant are required (All › vendor › series › family › variant)`);
   need(device?.recovery?.stockAndroid === undefined || (/^\d+$/.test(device.recovery.stockAndroid) && device.recovery.url?.startsWith('https://')), `${device?.codename}: recovery.stockAndroid needs an Android version and an https recovery url`);
   need(device?.recovery?.stockOs === undefined || (typeof device.recovery.stockOs?.name === 'string' && device.recovery.stockOs.name && typeof device.recovery.stockOs.version === 'string' && device.recovery.stockOs.version && device.recovery.url?.startsWith('https://')), `${device?.codename}: recovery.stockOs needs a name, version and an https recovery url`);
+  need(device?.supportLabel === undefined || (typeof device.supportLabel === 'string' && device.supportLabel.length <= 100), `${device?.codename}: supportLabel must be plain text up to 100 characters`);
+  const ownership = device?.ownership;
+  need(ownership === undefined || (['label', 'details'].every(k => typeof ownership[k] === 'string' && ownership[k]) && isHttpsUrl(ownership.source)),
+    `${device?.codename}: ownership needs label, details and an https source`);
+  need(device?.supportRoutes === undefined || (Array.isArray(device.supportRoutes) && device.supportRoutes.every(route =>
+    Object.hasOwn(SUPPORT_ROUTE_SECTIONS, route?.section) && typeof route?.name === 'string' && route.name.trim() && route.name.length <= 120 &&
+    typeof route.kind === 'string' && route.kind.trim() && route.kind.length <= 80 &&
+    typeof route.description === 'string' && route.description.trim() && route.description.length <= 800 &&
+    Array.isArray(route.requirements) && route.requirements.every(r => typeof r === 'string' && r.trim() && r.length <= 400) &&
+    isHttpsUrl(route.url) && typeof route.checked === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(route.checked))),
+  `${device?.codename}: supportRoutes need a valid section, name, kind, description, requirements list, an https URL and a checked YYYY-MM-DD date`);
   need((device?.unsupported ?? []).every(u => u.name && u.models?.length && u.why), `${device?.codename}: unsupported variants need name, models and why`);
   const unlock = device?.unlock;
   need(unlock === undefined || (unlock.text && unlock.steps?.length && [...unlock.steps, ...unlock.hints ?? []].every(step => typeof step === 'string')
@@ -142,6 +165,14 @@ export function problems(device, romFile) {
   const hw = device?.hardware; // one site line: RAM · CPU · GPU · resolution · tags
   need(hw === undefined || (['ram', 'cpu', 'gpu', 'display'].every(k => typeof hw[k] === 'string' && hw[k]) && (hw.tags ?? []).every((/** @type {unknown} */ t) => typeof t === 'string')),
     `${device?.codename}: hardware needs ram, cpu, gpu and display strings (tags are strings)`);
+  need(hw === undefined || (['chipset', 'architecture', 'storage', 'note'].every(k => hw[k] === undefined || (typeof hw[k] === 'string' && hw[k]))
+    && (hw.source === undefined || isHttpsUrl(hw.source))), `${device?.codename}: optional hardware details must be text with an https source`);
+  const software = device?.software;
+  need(software === undefined || (typeof software.os === 'string' && software.os && /^\d{4}-\d{2}-\d{2}$/.test(software.checked) && isHttpsUrl(software.source)
+    && (software.latestFirmware === undefined || (typeof software.latestFirmware === 'string' && software.latestFirmware && /^\d{4}-\d{2}-\d{2}$/.test(software.released)))),
+    `${device?.codename}: software needs os, checked date and an https source; latestFirmware needs a release date`);
+  need(software?.reportedOs === undefined || (typeof software.reportedOs === 'string' && software.reportedOs && isHttpsUrl(software.reportSource)),
+    `${device?.codename}: software.reportedOs needs text and an https reportSource`);
   // Header picture kept in site/phones with its credit: a free-licensed Commons photo, or the vendor's own press image.
   need(device?.category === undefined || device.category in CATEGORIES, `${device?.codename}: category must be one of ${Object.keys(CATEGORIES).join('/')} (set by its catalog/devices folder)`);
   const photo = device?.photo, press = photo?.license === 'press';

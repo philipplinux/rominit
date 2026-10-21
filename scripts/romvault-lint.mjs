@@ -10,7 +10,7 @@ const VAULT = join(ROOT, 'romvault');
 const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'soc', 'rom', 'scraping', 'skill', 'index', 'log'];
 const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', socs: 'soc', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
-const CLASSES = ['phone', 'tablet', 'tv', 'console', 'pc']; // catalog device.category values
+const CLASSES = ['phone', 'tablet', 'tvmedia', 'television', 'misc', 'console', 'pc']; // catalog device.category values
 const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
 
 /** @param {string} dir @returns {string[]} */
@@ -70,7 +70,8 @@ export function lint(vault = VAULT) {
     if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')})`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
-    if (rel !== 'README.md' && text.split('\n').length > MAX_LINES) say(file, `over ${MAX_LINES} lines: split it`);
+    const max = rel === 'log.md' ? 400 : MAX_LINES; // log rotates at ~400 (romvault-maintenance skill)
+    if (rel !== 'README.md' && text.split('\n').length > max) say(file, `over ${max} lines: split it`);
     for (const target of links(file)) if (!existsSync(target)) say(file, `broken link ${relative(dirname(file), target)}`);
     if (rel !== 'README.md' && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');

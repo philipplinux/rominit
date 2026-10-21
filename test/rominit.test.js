@@ -14,16 +14,16 @@ const s9 = () => device('starlte').roms.find(r => r.id === 'philipplinux-pmos-se
 const fakeFiles = stage => stage.files.map(pin => ({ ...pin, size: pin.name.length, sha256: sha(pin.name), file: new Blob([pin.name]) }));
 const noop = () => {};
 
-test('TV boxes and sticks have an independent catalog category and device tree', () => {
-  assert.equal(CATEGORIES.tv, 'TV boxes & sticks');
-  assert.equal(CATEGORY_DIRS['tv-boxes'], 'tv');
+test('TV media boxes and sticks have an independent catalog category and device tree', () => {
+  assert.equal(CATEGORIES.tvmedia, 'TV media boxes & sticks');
+  assert.equal(CATEGORY_DIRS.tvmedia, 'tvmedia');
 });
 
 test('real catalog validates', () => {
   assert.deepEqual(errors, []);
   for (const codename of ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte', 'oriole']) assert.ok(devices.some(d => d.codename === codename), codename);
   const supportOnly = devices.filter(d => d.supportOnly);
-  assert.equal(supportOnly.length, 24);
+  assert.equal(supportOnly.length, 27);
   assert.ok(supportOnly.every(d => !d.roms.length && d.supportUrl.startsWith('https://')));
   // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
   const external = device('oriole');
@@ -42,7 +42,7 @@ test('real catalog validates', () => {
   assert.match(problems({ ...tablet, recovery: { stockAndroid: '17', url: 'http://example.com' } }, { device: tablet.codename, roms: tablet.roms }).join('\n'), /recovery.stockAndroid/);
   assert.ok(tablet.roms.every(r => r.external && !r.stages.length));
   const stick = device('mantis');
-  assert.equal(stick.category, 'tv');
+  assert.equal(stick.category, 'tvmedia');
   assert.ok(stick.models.includes('E9L29Y'));
   assert.equal(stick.roms[0].origin, 'unofficial');
   assert.equal(stick.roms[0].external.kind, 'guide');

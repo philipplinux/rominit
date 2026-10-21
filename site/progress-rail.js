@@ -2,11 +2,12 @@ import { h } from './dom.js';
 
 /** Left rail like a scrollbar: the rail is the whole page, milestones 0–4, R, T sit at their section's place (so long sections
  * get long stretches), the thumb is what the window shows. Green when a section is done, amber ring on the next one to do,
- * +/- opens or closes the section. @param {HTMLElement[]} sections */
+ * +/- opens or closes the section. Plain rail labels show names without milestone numbers. @param {HTMLElement[]} sections */
 export function progressRail(sections) {
   const marks = sections.map(sec => {
     const details = sec instanceof HTMLDetailsElement ? sec : null;
-    const [num, label] = (sec.dataset.railLabel ?? sec.querySelector(':scope > summary > span')?.textContent ?? '').split(' · ');
+    const text = sec.dataset.railLabel ?? sec.querySelector(':scope > summary > span')?.textContent ?? '';
+    const [num, label] = text.includes(' · ') ? text.split(' · ') : ['', text];
     const fold = details ? h('button', { type: 'button', className: 'rail-fold', onclick() { details.open = !details.open; } }) : null;
     if (details && fold) {
       const sync = () => { fold.textContent = details.open ? '−' : '+'; fold.title = `${details.open ? 'Close' : 'Open'} ${label}`; };
