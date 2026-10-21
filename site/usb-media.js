@@ -43,6 +43,11 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   const progressBox = h('div', { className: 'usb-progress', hidden: true }, progressLabel, progressBar, progressDetail);
   const jobLog = h('pre', { className: 'bench-output', hidden: true, ariaLive: 'off' });
   const statusCheck = /** @type {HTMLButtonElement} */ (h('button', { type: 'button', className: 'button button-secondary', textContent: 'Check installation status', hidden: true, onclick: checkStatus }));
+  const thanks = h('div', { className: 'usb-thanks', hidden: true },
+    h('strong', { textContent: 'Done. Thank you!' }),
+    h('p', {}, 'Thanks for using ROMinit, and thanks to the ', h('a', { href: 'https://alpinelinux.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Alpine Linux project' }),
+      ' and everyone who builds and maintains it. If this saved you time, a coffee keeps ROMinit going: ',
+      h('a', { href: 'https://www.buymeacoffee.com/philipplinux', target: '_blank', rel: 'noopener noreferrer', textContent: '☕ Buy me a coffee' })));
   const panelTitle = h('h2', { textContent: imageId ? 'Prepare Alpine USB' : 'Prepare USB' });
   const refreshButton = /** @type {HTMLButtonElement} */ (h('button', { type: 'button', className: 'button button-secondary usb-refresh-button', textContent: 'Refresh drives', onclick: refresh }));
   const driveHeading = h('div', { className: 'usb-drive-heading' }, h('label', { className: 'field-label', htmlFor: driveSelect.id, textContent: 'USB drive' }), refreshButton);
@@ -60,7 +65,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     driveHeading, driveSelect, driveInfo,
     h('div', {}, h('button', { type: 'button', className: 'button button-primary', textContent: imageId ? 'Review USB preparation' : 'Review Ventoy installation', disabled: true, onclick: review })),
     planBox,
-    status, reportNotice, progressBox, statusCheck, jobLog);
+    status, thanks, reportNotice, progressBox, statusCheck, jobLog);
   let drives = [], currentPlan = null, confirmInput = null, installButton = null, busy = false, writeDeadline = 0, activeImageName = null, activeImageSize = null, activeAction = null, activeMethod = 'ventoy', activeUnverified = false, activeReadback = null;
   let reportPollTimer = 0, reportPollGeneration = 0;
 
@@ -176,7 +181,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     clearReportNotice();
     if (catalogImage) setImageSummary(catalogImage, catalogImage.size);
     else setImageSummary(null);
-    jobLog.hidden = true; jobLog.textContent = ''; statusCheck.hidden = true;
+    jobLog.hidden = true; jobLog.textContent = ''; statusCheck.hidden = true; thanks.hidden = true;
     status.textContent = '';
     const drive = selectedDrive();
     driveInfo.replaceChildren();
@@ -356,7 +361,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
     activeReadback = plan.readback;
     clearReportNotice();
     clearPlan(); setBusy(true); jobLog.hidden = false;
-    statusCheck.hidden = true;
+    statusCheck.hidden = true; thanks.hidden = true;
     status.textContent = activeMethod === 'direct'
       ? `Writing ${activeImageName || 'the selected ISO'} (${imageSize(activeImageSize)}) directly to USB. All existing drive data is being erased…`
       : activeImageName
@@ -450,7 +455,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
               : `${activeImageName} (${imageSize(activeImageSize)}) operation succeeded, but the helper did not confirm checksum mismatch acceptance. Review the log before use. Boot untested.`
             : activeAction === 'copy' ? `${activeImageName} (${imageSize(activeImageSize)}) copied to existing Ventoy USB; files preserved. Boot untested.` : `Ventoy prepared; ${activeImageName} (${imageSize(activeImageSize)}) copied and verified. Boot untested.`
           : 'Ventoy prepared. No ISO copied. Boot untested.';
-      if (!activeUnverified || mismatchAccepted) status.textContent = `Complete — ${status.textContent}`;
+      if (!activeUnverified || mismatchAccepted) { status.textContent = `Complete — ${status.textContent}`; thanks.hidden = false; }
       statusCheck.hidden = true; setBusy(false); activeImageName = null; activeImageSize = null; activeAction = null; activeMethod = 'ventoy'; activeUnverified = false; activeReadback = null; return true;
     }
     if (job?.state === 'failed') {
