@@ -82,7 +82,7 @@ export function lint(vault = VAULT) {
   }
 
   // The net: ROM ↔ device ↔ series ↔ line ↔ vendor ↔ category, both directions; every catalog device has a page.
-  const catalogDevices = readdirSync(join(ROOT, 'catalog/devices')).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', v)).map(f => JSON.parse(readFileSync(join(ROOT, 'catalog/devices', v, f), 'utf8'))));
+  const catalogDevices = readdirSync(join(ROOT, 'catalog/devices'), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(c => readdirSync(join(ROOT, 'catalog/devices', c.name), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', c.name, v.name)).filter(f => f.endsWith('.json')).map(f => JSON.parse(readFileSync(join(ROOT, 'catalog/devices', c.name, v.name, f), 'utf8')))));
   const families = /** @type {Map<string, Set<string>>} */ (new Map());
   for (const d of catalogDevices) {
     const page = join(vault, 'devices', `${d.codename}.md`);

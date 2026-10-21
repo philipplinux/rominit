@@ -19,8 +19,10 @@ export const INCLUDES = ['google_play', 'microg', 'android_apps', 'phone_ui', 'r
 export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
-/** Top of the device tree; a device without `category` is a phone. Pi, routers, ARM boards etc. come later. */
+/** Top of the device tree. Pi, routers, ARM boards etc. come later. */
 export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', console: 'Consoles', pc: 'OS' };
+/** catalog/devices/<folder>/<vendor>/<codename>.json: the folder sets the device's category, so each kind keeps its own tree. */
+export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** Search levels, best first: an approved ROMinit phone test, a curated ROM, a scraped ROM with a recipe, support-only (no recipe), only link-only ROMs. */
 export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder' };
@@ -139,7 +141,7 @@ export function problems(device, romFile) {
   need(hw === undefined || (['ram', 'cpu', 'gpu', 'display'].every(k => typeof hw[k] === 'string' && hw[k]) && (hw.tags ?? []).every((/** @type {unknown} */ t) => typeof t === 'string')),
     `${device?.codename}: hardware needs ram, cpu, gpu and display strings (tags are strings)`);
   // Header picture kept in site/phones with its credit: a free-licensed Commons photo, or the vendor's own press image.
-  need(device?.category === undefined || device.category in CATEGORIES, `${device?.codename}: category must be one of ${Object.keys(CATEGORIES).join('/')} (left out = phone)`);
+  need(device?.category === undefined || device.category in CATEGORIES, `${device?.codename}: category must be one of ${Object.keys(CATEGORIES).join('/')} (set by its catalog/devices folder)`);
   const photo = device?.photo, press = photo?.license === 'press';
   need(photo === undefined || (/^phones\/[\w-]+\.webp$/.test(photo.src) && photo.artist
     && (press ? photo.page?.startsWith('https://') : photo.page?.startsWith('https://commons.wikimedia.org/') && /^(CC0|CC BY(-SA)? [\d.]+)$/.test(photo.license))),

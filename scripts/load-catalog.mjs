@@ -1,17 +1,23 @@
 import { readdir, readFile } from 'node:fs/promises';
-import { problems, recoveryProblems } from '../src/catalog.js';
+import { CATEGORY_DIRS, problems, recoveryProblems } from '../src/catalog.js';
 
 const root = new URL('../catalog/', import.meta.url);
 const json = async path => JSON.parse(await readFile(new URL(path, root), 'utf8'));
+/** Sub-folders only, so a README or .DS_Store next to them is ignored. @param {string} path */
+const dirs = async path => (await readdir(new URL(path, root), { withFileTypes: true })).filter(e => e.isDirectory()).map(e => e.name);
 
 /** Every device with its ROMs, plus every catalog problem found (build fails on any). */
 export async function loadCatalog() {
   const devices = [];
   const errors = [];
-  for (const vendor of await readdir(new URL('devices/', root))) {
-    for (const name of await readdir(new URL(`devices/${vendor}/`, root))) {
-      const device = await json(`devices/${vendor}/${name}`);
-      if (name !== `${device.codename}.json`) errors.push(`devices/${vendor}/${name}: file name must be <codename>.json`);
+  const folders = await dirs('devices/');
+  for (const folder of folders.filter(f => !Object.hasOwn(CATEGORY_DIRS, f))) errors.push(`devices/${folder}: unknown category folder (one of ${Object.keys(CATEGORY_DIRS).join(', ')})`);
+  for (const folder of folders.filter(f => Object.hasOwn(CATEGORY_DIRS, f))) for (const vendor of await dirs(`devices/${folder}/`)) {
+    for (const name of (await readdir(new URL(`devices/${folder}/${vendor}/`, root))).filter(f => f.endsWith('.json'))) {
+      const file = await json(`devices/${folder}/${vendor}/${name}`);
+      if (name !== `${file.codename}.json`) errors.push(`devices/${folder}/${vendor}/${name}: file name must be <codename>.json`);
+      if ('category' in file) errors.push(`devices/${folder}/${vendor}/${name}: drop "category", the folder sets it`);
+      const device = { ...file, category: CATEGORY_DIRS[folder] };
       const roms = [];
       const recoveries = [];
       const dir = new URL(`roms/${device.codename}/`, root);
@@ -30,7 +36,7 @@ export async function loadCatalog() {
       }
       if (new Set(recoveries.map(r => r.id)).size !== recoveries.length) errors.push(`${device.codename}: duplicate recovery ids`);
       if (device.supportOnly && (!device.supportUrl?.startsWith('https://') || roms.length)) errors.push(`${device.codename}: support-only needs an https supportUrl and no ROMs`);
-      devices.push({ category: 'phone', ...device, roms, recoveries });
+      devices.push({ ...device, roms, recoveries });
     }
   }
   if (new Set(devices.map(d => d.codename)).size !== devices.length) errors.push('duplicate device codenames');
