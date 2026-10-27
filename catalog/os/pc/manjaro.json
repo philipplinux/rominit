@@ -1,0 +1,85 @@
+{
+  "id": "manjaro",
+  "name": "Manjaro",
+  "shortName": "Manjaro",
+  "defaultEdition": "xfce",
+  "version": "26.1.0",
+  "releaseDate": "2026-08-12",
+  "source": "https://manjaro.org/",
+  "page": {
+    "description": "Manjaro editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED DESKTOP",
+    "intro": "Arch-based, but released as tested snapshots with a choice of three desktops. Pick an edition, then write the 64-bit image to a stick.",
+    "logo": { "src": "logos/manjaro.svg", "alt": "Manjaro logo", "width": 512, "height": 512 },
+    "pros": [
+      "Arch packages with Manjaro's own testing and held-back updates.",
+      "Three desktop editions maintained from one release.",
+      "Hardware detection and driver setup included.",
+      "Rolling release: no version upgrades to plan."
+    ],
+    "cons": [
+      "Rolling updates still land often; deferring them for long is not supported.",
+      "The AUR is unsupported by the project.",
+      "The Commons screenshot shows OpenRC with WindowMaker, not a stock edition.",
+      "x86_64 only."
+    ],
+    "links": [
+      { "label": "Manjaro website", "href": "https://manjaro.org/" },
+      { "label": "26.1 announcement", "href": "https://forum.manjaro.org/t/manjaro-26-1-bian-may-released/189526" }
+    ],
+    "previewNote": "A stock screenshot of a Manjaro OpenRC system with the WindowMaker desktop from Wikimedia Commons. It is not a stock 26.1 edition and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/manjaro/manjaro-desktop.webp",
+      "alt": "Manjaro OpenRC desktop running WindowMaker with terminal windows",
+      "width": 1600,
+      "height": 900,
+      "bar": "manjaro-xfce-26.1.0-260812-linux71.iso · 26.1.0",
+      "caption": "Stock screenshot of Manjaro OpenRC with WindowMaker · not a stock edition, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:A_full_wmaker_desktop_run_on_top_of_manjaro_openrc.jpg",
+        "license": "CC0",
+        "artist": "Mrbrklyn"
+      }
+    },
+    "status": "One path per edition: the 64-bit ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://manjaro.org/download/" },
+      { "label": "26.1 announcement", "href": "https://forum.manjaro.org/t/manjaro-26-1-bian-may-released/189526" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/manjaro.svg\nManjaro logo, public domain, by the Manjaro developers, https://commons.wikimedia.org/wiki/File:Manjaro-logo.svg.",
+      "shots/manjaro/manjaro-desktop.webp\nManjaro OpenRC with WindowMaker, screenshot by Mrbrklyn, https://commons.wikimedia.org/wiki/File:A_full_wmaker_desktop_run_on_top_of_manjaro_openrc.jpg, CC0. Converted to WebP. Not a stock 26.1 edition."
+    ]
+  },
+  "editions": [
+    {
+      "id": "xfce",
+      "name": "Xfce",
+      "description": "The lean default edition, with Xfce and the project's own tools.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "manjaro-xfce-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.manjaro.org/xfce/26.1.0/manjaro-xfce-26.1.0-260812-linux71.iso", "sha256": "eb8e3d3f455475c06b508f0115e2247e8764562e36176203a2315552c84afc98", "sha256Url": "https://download.manjaro.org/xfce/26.1.0/manjaro-xfce-26.1.0-260812-linux71.iso.sha256", "size": 5142491136, "usb": false }
+      ]
+    },
+    {
+      "id": "gnome",
+      "name": "GNOME",
+      "description": "The GNOME edition, for a stock GNOME workflow.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "manjaro-gnome-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.manjaro.org/gnome/26.1.0/manjaro-gnome-26.1.0-260812-linux71.iso", "sha256": "b4c94d45c0da1992dfa9c7f3fbfd1bd5ebbdebaaa61f994660e0304357eb029f", "sha256Url": "https://download.manjaro.org/gnome/26.1.0/manjaro-gnome-26.1.0-260812-linux71.iso.sha256", "size": 5299992576, "usb": false }
+      ]
+    },
+    {
+      "id": "kde",
+      "name": "KDE Plasma",
+      "description": "The KDE Plasma edition with the full Plasma desktop.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "manjaro-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.manjaro.org/kde/26.1.0/manjaro-kde-26.1.0-260812-linux71.iso", "sha256": "711b64362abe0b45348dc33bd4a2c654641e069b50ae9ae37c01771da880aa99", "sha256Url": "https://download.manjaro.org/kde/26.1.0/manjaro-kde-26.1.0-260812-linux71.iso.sha256", "size": 5534201856, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://manjaro.org/" }
+}
