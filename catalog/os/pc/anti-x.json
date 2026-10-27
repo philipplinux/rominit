@@ -1,0 +1,114 @@
+{
+  "id": "anti-x",
+  "name": "antiX",
+  "shortName": "antiX",
+  "defaultEdition": "full",
+  "version": "26.1",
+  "releaseDate": "2026-09-29",
+  "source": "https://antixlinux.com/antix-26-1-released/",
+  "page": {
+    "description": "antiX editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / LIGHTWEIGHT DEBIAN",
+    "intro": "A lean Debian-based desktop for old machines, with five init systems and no systemd. Pick the full desktop or the smaller core image, then the architecture.",
+    "logo": { "src": "logos/anti-x.png", "alt": "antiX logo", "width": 138, "height": 111 },
+    "pros": [
+      "Runs on very little: core fits a 256 MB machine with swap.",
+      "Five init systems to choose from, and no systemd or elogind.",
+      "Debian 13 base with the project's own live-USB tooling.",
+      "Full and core flavours for both 64-bit and 32-bit machines."
+    ],
+    "cons": [
+      "The look is dated and the defaults are spartan.",
+      "The project publishes no end-of-life date, so support is best-effort.",
+      "Full and core images differ by more than size: core needs you to add a desktop.",
+      "The only Commons screenshot shows a 2010 release, not 26.1."
+    ],
+    "links": [
+      { "label": "antiX website", "href": "https://antixlinux.com/" },
+      { "label": "26.1 release post", "href": "https://antixlinux.com/antix-26-1-released/" }
+    ],
+    "previewNote": "A stock screenshot of antiX from 2010, from Wikimedia Commons. It is not 26.1 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/anti-x/anti-x-desktop.webp",
+      "alt": "antiX desktop from 2010 with a dark panel and icons",
+      "width": 1280,
+      "height": 800,
+      "bar": "antiX-26.1_x64-full.iso · 26.1",
+      "caption": "Stock screenshot of a 2010 antiX release · not 26.1, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Antix_desktop_(2010-12-26).jpg",
+        "license": "CC BY-SA 3.0",
+        "artist": "Fiodorik"
+      }
+    },
+    "status": "Two paths: the full desktop ISO or the smaller core ISO, written with dd or any image writer. Writing erases the stick; the live system installs to the disk you choose.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://antixlinux.com/antix-26-1-released/" },
+      { "label": "antiX website", "href": "https://antixlinux.com/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/anti-x.png\nantiX logo, public domain, by the antiX Linux Developers, https://commons.wikimedia.org/wiki/File:AntiX_logo.png. PNG rather than SVG because the project's mark is only published as a raster image.",
+      "shots/anti-x/anti-x-desktop.webp\nantiX desktop (2010) screenshot by Fiodorik, https://commons.wikimedia.org/wiki/File:Antix_desktop_(2010-12-26).jpg, CC BY-SA 3.0. Converted to WebP; this copy under the same licence. Not a 26.1 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "full",
+      "name": "Full",
+      "description": "The complete antiX desktop: IceWM, a browser, office and media tools on one live ISO.",
+      "usbNote": "Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "anti-x-full-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_x64-full.iso",
+          "sha256": "293381af0b7c48399abe015da8f67d41fd34372b73c4aafcf53747fbaed22371",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_x64-full.iso.sha256",
+          "size": 2452619264,
+          "usb": false
+        },
+        {
+          "id": "anti-x-full-x86",
+          "arch": "x86",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_386-full.iso",
+          "sha256": "6ec6f6522c69b4411d32f61e853709cdaf94df709c264b2a4d7de9724ce57fbc",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_386-full.iso.sha256",
+          "size": 2260729856,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "name": "Core",
+      "description": "A minimal command-line base with the antiX tools; you add the desktop you want.",
+      "usbNote": "Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "anti-x-core-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_x64-core.iso",
+          "sha256": "4f17a36c506a6771460545e18de6f5ea08f5664bca0e0bc285be52b41f5be762",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_x64-core.iso.sha256",
+          "size": 703594496,
+          "usb": false
+        },
+        {
+          "id": "anti-x-core-x86",
+          "arch": "x86",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_386-core.iso",
+          "sha256": "5e07ed85acba1d2c33a7e41b089e80ce203eeb11d81af8c830e64e2e058ead7e",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/ANTIX/Final/antiX-26.1/antiX-26.1_386-core.iso.sha256",
+          "size": 673185792,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://antixlinux.com/antix-26-1-released/" }
+}
