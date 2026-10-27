@@ -49,9 +49,12 @@ test('Omarchy pins the official 4.0.6 installer ISO for x86_64', () => {
   assert.equal(osImageEntry(image.id).edition.id, edition.id);
 });
 
-test('every OS record is complete and its artifacts are pinned to the publisher', () => {
+test('every OS record is complete and its artifacts are pinned to the publisher', async () => {
   assert.ok(OSES.length >= 2, 'the template is proven by more than one OS');
   assert.equal(new Set(OSES.map(os => os.id)).size, OSES.length, 'OS ids are unique');
+  const { readdirSync } = await import('node:fs'); // browser and Workers bundles have no fs, so OSES imports by hand; this catches a forgotten import
+  const files = readdirSync(new URL('../catalog/os', import.meta.url), { recursive: true }).filter(f => String(f).endsWith('.json')).map(f => String(f).split('/').at(-1).slice(0, -5));
+  assert.deepEqual(files.sort(), OSES.map(os => os.id).sort(), 'every catalog/os/<group>/<id>.json is imported in src/os/index.js');
   for (const os of OSES) {
     assert.match(os.id, /^[a-z0-9-]+$/);
     assert.ok(os.name && os.shortName && os.version && os.releaseDate && os.source);
