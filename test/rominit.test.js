@@ -615,6 +615,27 @@ test('host OS: detected from the browser, setup lines per protocol, errors mappe
   assert.match(browserProblem({ secure: true, host: 'windows' }) ?? '', /Edge/);
 });
 
+test('ROMvault log rotation: oldest entries move verbatim to monthly archives, nothing lost, second run no-op', async () => {
+  const { mkdtempSync, readFileSync, rmSync, writeFileSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { rotate, CAP } = await import('../scripts/romvault-log.mjs');
+  const dir = mkdtempSync(join(tmpdir(), 'romvault-log-'));
+  try {
+    const entries = Array.from({ length: 300 }, (_, i) => `## [2026-${i < 150 ? '09' : '10'}-${String(1 + i % 28).padStart(2, '0')}] update | p${i}.md: x (t)\n`);
+    writeFileSync(join(dir, 'log.md'), `---\ntype: log\ntitle: ROMvault log\ndate: 2026-09-01\nupdated: 2026-09-01\n---\n\n# ROMvault log\n\n## For future agent\nRules.\n\n${entries.join('\n')}`);
+    assert.ok(rotate(dir, '2026-10-27') > 0);
+    const live = readFileSync(join(dir, 'log.md'), 'utf8'), sep = readFileSync(join(dir, 'logs/2026/log-2026-09.md'), 'utf8');
+    assert.ok(live.split('\n').length <= 205 && live.split('\n').length < CAP);
+    assert.match(live, /Rules\.\n\nOlder entries: \[2026-09\]\(logs\/2026\/log-2026-09\.md\)/);
+    assert.match(live, /p299\.md/); assert.match(live, /^updated: 2026-10-27$/m);
+    const oct = join(dir, 'logs/2026/log-2026-10.md'), archived = sep + (existsSync(oct) ? readFileSync(oct, 'utf8') : '');
+    assert.equal((live.match(/^## \[/gm) ?? []).length + (archived.match(/^## \[/gm) ?? []).length, 300, 'every entry kept exactly once');
+    assert.ok(sep.indexOf('p0.md') < sep.indexOf('p1.md'), 'archive is oldest first');
+    assert.equal(rotate(dir, '2026-10-27'), 0);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 // ROMvault is a private checkout (git-ignored); public CI has no copy.
 test('ROMvault lint: frontmatter, tags, links, index and the full net are clean', { skip: !existsSync(new URL('../romvault/AGENTS.md', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
   const { lint } = await import('../scripts/romvault-lint.mjs');

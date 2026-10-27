@@ -4,6 +4,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { catalogDevices as devicesInCatalog, romFiles } from './load-catalog.mjs';
+import { ARCHIVE, CAP as LOG_CAP } from './romvault-log.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const VAULT = process.env.ROMVAULT_DIR ? resolve(process.env.ROMVAULT_DIR) : join(ROOT, 'romvault'); // ROMVAULT_DIR: lint a worktree
@@ -88,10 +89,13 @@ export function lint(vault = VAULT) {
     if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')})`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
-    const max = /^log(-.*)?\.md$/.test(rel) ? 400 : MAX_LINES; // log rotates at ~400, archives (log-YYYY.md) are append-only (romvault-maintenance skill)
-    if (rel !== 'README.md' && text.replace(/\n$/, '').split('\n').length > max) say(file, `over ${max} lines: split it`); // trailing newline is not a line
+    const archive = ARCHIVE.test(rel); // logs/<YYYY>/log-<YYYY-MM>.md: one month, append-only, no cap (scripts/romvault-log.mjs)
+    if (rel.startsWith('logs/') && !archive) say(file, 'log archives are logs/<YYYY>/log-<YYYY-MM>.md');
+    const max = rel === 'log.md' ? LOG_CAP : archive ? Infinity : MAX_LINES;
+    if (rel !== 'README.md' && text.replace(/\n$/, '').split('\n').length > max) say(file, rel === 'log.md' ? `over ${max} lines: run node scripts/romvault-log.mjs` : `over ${max} lines: split it`); // trailing newline is not a line
     for (const target of links(file)) if (!existsSync(relative(vault, target).startsWith('..') ? resolve(ROOT, 'romvault', relative(vault, target)) : target)) say(file, `broken link ${relative(dirname(file), target)}`); // links leaving the vault (../catalog) resolve from the rominit root, also for a worktree
-    if (rel !== 'README.md' && !inNet(rel) && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
+    if (archive) { if (!linksTo(join(vault, 'log.md'), file)) say(file, 'not on the "Older entries:" line of log.md'); }
+    else if (rel !== 'README.md' && !inNet(rel) && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');
     if (fm.type === 'device' && fm.soc) { // sideways: device ↔ socs/<soc>.md, so devices sharing a chip find each other
       const soc = join(vault, 'socs', `${fm.soc}.md`);
@@ -124,9 +128,14 @@ export function lint(vault = VAULT) {
   for (const d of catalogDevices) for (const [, entry] of romFiles(d.path)) {
     for (const rom of entry.roms) if (!pages.has(join(vault, d.path, 'roms', `${rom.id}.md`))) problems.push(`romvault/${d.path}/roms/${rom.id}.md: missing (catalog has ${rom.name})`);
   }
-  const log = pages.get(join(vault, 'log.md')) ?? '';
-  for (const line of log.split('\n').filter(l => l.startsWith('## ') && !l.startsWith('## For future agent')))
-    if (!/^## \[\d{4}-\d{2}-\d{2}\] (create|update|move|delete) \| .+ \(.+\)$/.test(line)) problems.push(`romvault/log.md: malformed entry "${line.slice(0, 60)}"`);
+  for (const [file, text] of pages) { // log.md and its archive months
+    const rel = relative(vault, file), month = ARCHIVE.exec(rel)?.[2];
+    if (rel !== 'log.md' && !month) continue;
+    for (const line of text.split('\n').filter(l => l.startsWith('## ') && !l.startsWith('## For future agent'))) {
+      if (!/^## \[\d{4}-\d{2}-\d{2}\] (create|update|move|delete) \| .+ \(.+\)$/.test(line)) say(file, `malformed entry "${line.slice(0, 60)}"`);
+      else if (month && !line.startsWith(`## [${month}-`)) say(file, `entry from another month "${line.slice(0, 60)}"`);
+    }
+  }
   for (const [file, text] of pages) {
     const rel = relative(vault, file);
     const fm = frontmatter(text) ?? {};
