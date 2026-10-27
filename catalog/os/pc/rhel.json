@@ -1,0 +1,42 @@
+{
+  "id": "rhel",
+  "name": "Red Hat Enterprise Linux",
+  "shortName": "RHEL",
+  "infoOnly": true,
+  "editions": [],
+  "source": "https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux",
+  "page": {
+    "description": "Red Hat Enterprise Linux: what it is, who it is for, and where to get it from Red Hat.",
+    "eyebrow": "OPERATING SYSTEM / ENTERPRISE LINUX",
+    "intro": "Red Hat's commercial enterprise Linux, the distribution that CentOS Stream, AlmaLinux and Rocky Linux rebuild. Red Hat publishes the media and the support terms; ROMinit does not pin an image for it.",
+    "logo": { "src": "logos/rhel.svg", "alt": "Red Hat logo", "width": 180, "height": 180 },
+    "pros": [
+      "Ten-year life cycles per major release, with defined maintenance phases.",
+      "Certified hardware, ISV software and cloud images in one subscription.",
+      "Upstream of CentOS Stream, so fixes arrive here after they stabilise.",
+      "Support, training and errata come from one vendor."
+    ],
+    "cons": [
+      "Needs a Red Hat subscription for updates and support.",
+      "No free public download without a Red Hat account.",
+      "Media and rebuilds differ: this page is a signpost, not a pinned image.",
+      "Red Hat's own pages state the life-cycle dates; none is repeated here."
+    ],
+    "links": [
+      { "label": "Red Hat Enterprise Linux", "href": "https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux" },
+      { "label": "Life-cycle policy", "href": "https://access.redhat.com/support/policy/updates/errata" },
+      { "label": "Downloads for subscribers", "href": "https://access.redhat.com/downloads" }
+    ],
+    "previewNote": "Information-only page: Red Hat supplies the media and ROMinit does not pin or test an image here.",
+    "status": "Red Hat publishes and supports its own media. This page only points at Red Hat's product and life-cycle pages; there is nothing to download from ROMinit and no USB path.",
+    "footer": [
+      { "label": "Red Hat Enterprise Linux", "href": "https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux" },
+      { "label": "Life-cycle policy", "href": "https://access.redhat.com/support/policy/updates/errata" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/rhel.svg\nRed Hat logo from Simple Icons (CC0), https://simpleicons.org; the Red Hat name and mark belong to Red Hat, Inc., shown only to identify Red Hat Enterprise Linux. No endorsement implied."
+    ]
+  },
+  "officialSupport": { "status": "ongoing", "source": "https://access.redhat.com/support/policy/updates/errata" }
+}
