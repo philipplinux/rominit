@@ -1,17 +1,26 @@
 // ROMvault lint: enforces romvault/AGENTS.md (frontmatter, tags, signposts, links, index, dated claims, log format, a page per catalog device and ROM).
 // `npm run lint` prints problems; test/rominit.test.js fails on any.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { catalogDevices as devicesInCatalog, romFiles } from './load-catalog.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const VAULT = process.env.ROMVAULT_DIR ? resolve(process.env.ROMVAULT_DIR) : join(ROOT, 'romvault'); // ROMVAULT_DIR: lint a worktree
 const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'soc', 'rom', 'scraping', 'skill', 'index', 'log'];
-const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', socs: 'soc', roms: 'rom', scraping: 'scraping' };
+/** Page type a path demands, undefined when free (topic pages beside a device). @param {string} rel */
+const folderType = rel => {
+  const [top, a, b, c, d, e] = rel.split('/'), file = rel.split('/').at(-1)?.slice(0, -3);
+  if (top === 'devices') return d === 'roms' ? 'rom' : e === undefined && d === `${c}.md` ? 'device' : undefined; // devices/<category>/<vendor>/<codename>/<codename>.md, …/roms/<rom>.md
+  if (top === 'vendors') return b === 'lines' ? 'line' : b === 'series' ? 'series' : c === undefined && file === a ? 'vendor' : undefined; // vendors/<vendor>/<vendor>.md, lines/, series/
+  return { categories: 'category', os: 'project', projects: 'project', socs: 'soc', scraping: 'scraping' }[top];
+};
+/** Pages reached through the net (category → vendor → line → series → device → ROM), so README does not list them. @param {string} rel */
+const inNet = rel => rel.startsWith('devices/') || /^vendors\/[^/]+\/(lines|series)\//.test(rel);
+/** Parent folders of the net above the device. */
+const UP_PAGE = { series: (/** @type {string} */ r) => /^vendors\/[^/]+\/lines\//.test(r), line: (/** @type {string} */ r) => /^vendors\/([^/]+)\/\1\.md$/.test(r), vendor: (/** @type {string} */ r) => r.startsWith('categories/') };
 const MAX_LINES = 200;
 const CLASSES = ['phone', 'tablet', 'tvmedia', 'television', 'misc', 'networking', 'console', 'pc']; // catalog device.category values
-const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
 
 /** @param {string} dir @returns {string[]} */
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => e.name.startsWith('.') ? [] : e.isDirectory() ? walk(join(dir, e.name)) : e.name.endsWith('.md') ? [join(dir, e.name)] : []);
@@ -50,7 +59,8 @@ export function lint(vault = VAULT) {
   // wholesale, but from the first page that has the field every device/rom/project page must.
   const reviewedAdopted = [...pages.values()].some(t => frontmatter(t)?.reviewed);
   const readme = pages.get(join(vault, 'README.md')) ?? '';
-  const exists = (/** @type {string} */ rel) => existsSync(join(vault, rel));
+  /** `device/<codename>` and `series/<name>` tags: the page a tag names, wherever it is nested. */
+  const pageNamed = new Set([...pages.keys()].flatMap(f => { const r = relative(vault, f), t = folderType(r); return t === 'device' || t === 'series' ? [`${t}/${basename(f, '.md')}`] : []; }));
   /** Resolved local link targets of a page. @param {string} file */
   const links = file => [...(pages.get(file) ?? '').matchAll(/\]\(([^)#\s]+)(#[^)]*)?\)/g)].map(m => m[1]).filter(h => !/^[a-z]+:/.test(h)).map(h => resolve(dirname(file), decodeURI(h)));
   const linksTo = (/** @type {string} */ from, /** @type {string} */ to) => links(from).includes(to);
@@ -61,8 +71,8 @@ export function lint(vault = VAULT) {
     if (!fm) { say(file, 'no frontmatter'); continue; }
     for (const key of ['type', 'title', 'date', 'updated']) if (!fm[key]) say(file, `frontmatter: missing ${key}`);
     if (!TYPES.includes(fm.type)) say(file, `frontmatter: type "${fm.type}" not one of ${TYPES.join(', ')}`);
-    const folder = rel.split('/')[0];
-    if (FOLDER_TYPE[folder] && fm.type !== FOLDER_TYPE[folder]) say(file, `frontmatter: type should be ${FOLDER_TYPE[folder]} in ${folder}/`);
+    const want = folderType(rel);
+    if (want && fm.type !== want) say(file, `frontmatter: type should be ${want} at ${rel}`);
     for (const key of ['date', 'updated', 'reviewed']) if (fm[key] && !/^\d{4}-\d{2}-\d{2}$/.test(fm[key])) say(file, `frontmatter: ${key} is not YYYY-MM-DD`);
     if (fm.updated < fm.date) say(file, 'frontmatter: updated is before date');
     if (fm.reviewed && (fm.reviewed < fm.date || fm.reviewed > fm.updated)) say(file, 'frontmatter: reviewed must fall between date and updated');
@@ -72,7 +82,7 @@ export function lint(vault = VAULT) {
     if (['rom', 'project'].includes(fm.type) && !/\b(as of|checked|fetched) \d{4}-\d{2}/i.test(text)) say(file, 'no dated claim: add "(as of YYYY-MM)", "checked" or "fetched YYYY-MM-DD" to versions and support status');
     for (const tag of fm.tags ?? []) {
       const nested = tag.match(/^(device|series)\/(.+)$/);
-      if (nested ? !exists(`${nested[1] === 'device' ? 'devices' : 'series'}/${nested[2]}.md`) : !tags.has(tag)) say(file, `tag "${tag}" not in the AGENTS.md list (or its page is missing)`);
+      if (nested ? !pageNamed.has(`${nested[1]}/${nested[2]}`) : !tags.has(tag)) say(file, `tag "${tag}" not in the AGENTS.md list (or its page is missing)`);
     }
     if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')})`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
@@ -80,7 +90,7 @@ export function lint(vault = VAULT) {
     const max = /^log(-.*)?\.md$/.test(rel) ? 400 : MAX_LINES; // log rotates at ~400, archives (log-YYYY.md) are append-only (romvault-maintenance skill)
     if (rel !== 'README.md' && text.replace(/\n$/, '').split('\n').length > max) say(file, `over ${max} lines: split it`); // trailing newline is not a line
     for (const target of links(file)) if (!existsSync(relative(vault, target).startsWith('..') ? resolve(ROOT, 'romvault', relative(vault, target)) : target)) say(file, `broken link ${relative(dirname(file), target)}`); // links leaving the vault (../catalog) resolve from the rominit root, also for a worktree
-    if (rel !== 'README.md' && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
+    if (rel !== 'README.md' && !inNet(rel) && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');
     if (fm.type === 'device' && fm.soc) { // sideways: device ↔ socs/<soc>.md, so devices sharing a chip find each other
       const soc = join(vault, 'socs', `${fm.soc}.md`);
@@ -94,11 +104,11 @@ export function lint(vault = VAULT) {
   const catalogDevices = devicesInCatalog();
   const families = /** @type {Map<string, Set<string>>} */ (new Map());
   for (const d of catalogDevices) {
-    const page = join(vault, 'devices', `${d.codename}.md`);
-    if (!pages.has(page)) { problems.push(`romvault/devices/${d.codename}.md: missing (catalog has ${d.vendor} ${d.name})`); continue; }
+    const page = join(vault, d.path, `${d.codename}.md`);
+    if (!pages.has(page)) { problems.push(`romvault/${d.path}/${d.codename}.md: missing (catalog has ${d.vendor} ${d.name})`); continue; }
     const fm = frontmatter(pages.get(page) ?? '') ?? {};
-    const parents = [...pages.keys()].filter(f => relative(vault, f).startsWith('series/') && linksTo(f, page));
-    if (!parents.length) problems.push(`romvault/devices/${d.codename}.md: no series page lists it`);
+    const parents = [...pages.keys()].filter(f => /^vendors\/[^/]+\/series\//.test(relative(vault, f)) && linksTo(f, page));
+    if (!parents.length) problems.push(`romvault/${d.path}/${d.codename}.md: no series page lists it`);
     for (const s of parents) if (!linksTo(page, s)) say(page, `does not link up to ${relative(vault, s)}`);
     if (!(fm.tags ?? []).includes(`device/${d.codename}`)) say(page, `tag device/${d.codename} missing`);
     if (!(fm.tags ?? []).includes(d.category)) say(page, `tag ${d.category} missing (catalog category)`);
@@ -111,7 +121,7 @@ export function lint(vault = VAULT) {
     else if (catalog && !fams.has(catalog)) say(s, `catalog: "${catalog}" but its devices are family "${[...fams][0]}"`);
   }
   for (const d of catalogDevices) for (const [, entry] of romFiles(d.path)) {
-    for (const rom of entry.roms) if (!pages.has(join(vault, 'roms', entry.device, `${rom.id}.md`))) problems.push(`romvault/roms/${entry.device}/${rom.id}.md: missing (catalog has ${rom.name})`);
+    for (const rom of entry.roms) if (!pages.has(join(vault, d.path, 'roms', `${rom.id}.md`))) problems.push(`romvault/${d.path}/roms/${rom.id}.md: missing (catalog has ${rom.name})`);
   }
   const log = pages.get(join(vault, 'log.md')) ?? '';
   for (const line of log.split('\n').filter(l => l.startsWith('## ') && !l.startsWith('## For future agent')))
@@ -120,17 +130,17 @@ export function lint(vault = VAULT) {
     const rel = relative(vault, file);
     const fm = frontmatter(text) ?? {};
     if (fm.type === 'rom') {
-      const codename = rel.split('/')[1];
-      const device = join(vault, 'devices', `${codename}.md`);
-      if (!linksTo(file, device)) say(file, `does not link up to devices/${codename}.md`);
+      const folder = dirname(dirname(file)), codename = basename(folder); // devices/…/<codename>/roms/<rom>.md
+      const device = join(folder, `${codename}.md`);
+      if (!linksTo(file, device)) say(file, `does not link up to ${relative(vault, device)}`);
       if (pages.has(device) && !linksTo(device, file)) say(device, `does not list ${rel}`);
       if (!(fm.tags ?? []).includes(`device/${codename}`)) say(file, `tag device/${codename} missing`);
       if (!links(file).some(f => /\/catalog\/devices\/.+\/roms\//.test(f))) say(file, 'no link to its catalog JSON');
     }
-    const up = UP[fm.type];
+    const up = UP_PAGE[/** @type {keyof typeof UP_PAGE} */ (fm.type)];
     if (up) {
-      const parents = [...pages.keys()].filter(f => relative(vault, f).startsWith(`${up}/`) && linksTo(file, f));
-      if (!parents.length) say(file, `does not link up to a ${up}/ page`);
+      const parents = [...pages.keys()].filter(f => up(relative(vault, f)) && linksTo(file, f));
+      if (!parents.length) say(file, `does not link up to its ${{ series: 'line', line: 'vendor', vendor: 'category' }[/** @type {string} */ (fm.type)]} page`);
       for (const v of parents) if (!linksTo(v, file)) say(v, `does not list ${rel}`);
     }
   }
