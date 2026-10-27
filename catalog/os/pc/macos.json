@@ -1,0 +1,41 @@
+{
+  "id": "macos",
+  "name": "macOS",
+  "shortName": "macOS",
+  "infoOnly": true,
+  "editions": [],
+  "source": "https://www.apple.com/macos/",
+  "page": {
+    "description": "macOS: what it is, why ROMinit does not catalogue an installer, and where Apple publishes it.",
+    "eyebrow": "OPERATING SYSTEM / APPLE DESKTOP",
+    "intro": "Apple's desktop operating system for Macs. It ships only through Apple, as a Mac App Store download or a DMG/PKG, and the installer must be made on a Mac with createinstallmedia; ROMinit therefore lists no image for it.",
+    "logo": { "src": "logos/macos.svg", "alt": "Apple logo", "width": 180, "height": 180 },
+    "pros": [
+      "Free upgrades for Macs that the current release supports.",
+      "Tight integration with Apple hardware, iCloud and the rest of Apple's software.",
+      "Signed installers and system updates from Apple's own servers.",
+      "Long security-update windows for recent major versions."
+    ],
+    "cons": [
+      "Only runs on Apple hardware; it is not installable on a generic PC.",
+      "No ISO: the installer is a DMG/PKG or a Mac App Store download.",
+      "A bootable USB needs a working Mac and Apple's createinstallmedia tool.",
+      "ROMinit does not catalogue or verify an image for it."
+    ],
+    "links": [
+      { "label": "macOS", "href": "https://www.apple.com/macos/" },
+      { "label": "Create a bootable installer", "href": "https://support.apple.com/en-us/101578" }
+    ],
+    "previewNote": "Information-only page: Apple supplies macOS as a DMG/PKG or App Store download, and ROMinit does not pin or test an image here.",
+    "status": "Apple publishes macOS as a Mac App Store download or a DMG/PKG, and a bootable installer is made on a Mac with createinstallmedia. This page only points at Apple's pages; there is nothing to download from ROMinit and no USB path.",
+    "footer": [
+      { "label": "macOS", "href": "https://www.apple.com/macos/" },
+      { "label": "Create a bootable installer", "href": "https://support.apple.com/en-us/101578" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/macos.svg\nApple logo from Simple Icons (CC0), https://simpleicons.org; the Apple name and mark belong to Apple Inc., shown only to identify macOS. No endorsement implied."
+    ]
+  },
+  "officialSupport": { "status": "ongoing", "source": "https://www.apple.com/macos/" }
+}
