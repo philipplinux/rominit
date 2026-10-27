@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
 import { loadCatalog } from './load-catalog.mjs';
-import { OSES } from '../src/os/index.js';
+import { OSES, osPhotoProblems } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
 import { EMULATORS } from '../src/emulators/index.js';
 
@@ -53,12 +53,11 @@ for (const file of ['os.js', 'style.css']) assert(osTemplate.includes(`"./${file
 for (const os of OSES) {
   let osHtml = osTemplate;
   for (const file of ['os.js', 'style.css']) osHtml = osHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
-  // A missing logo or shot would ship a broken page, so the build stops instead.
-  for (const asset of [os.page.logo.src, os.page.shot.src]) assert(existsSync(`site/${asset}`), `${os.id}: missing site/${asset}`);
-  // A stock photo must say who took it, where it came from and under which licence.
-  const photo = os.page.shot.photo;
-  if (photo) assert(/^https:\/\/commons\.wikimedia\.org\//.test(photo.page) && /^(CC0|CC BY(-SA)? [\d.]+)$/.test(photo.license) && photo.artist,
-    `${os.id}: shot photo needs a Wikimedia Commons page, artist and a CC0 / CC BY[-SA] licence`);
+  // A missing logo or shot would ship a broken page, so the build stops instead. A logo-only OS has no shot.
+  for (const asset of [os.page.logo.src, os.page.shot?.src].filter(Boolean)) assert(existsSync(`site/${asset}`), `${os.id}: missing site/${asset}`);
+  // A screenshot must say who took it, where it came from and under which licence.
+  const photo = os.page.shot?.photo;
+  if (photo) assert.deepEqual(osPhotoProblems(photo), [], `${os.id}: ${osPhotoProblems(photo).join('; ')}`);
   const stamp = { ID: os.id, NAME: os.name, DESCRIPTION: os.page.description, SOURCE: os.source };
   await writeFile(`dist/${os.id}.html`, osHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
 }

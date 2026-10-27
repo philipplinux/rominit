@@ -119,10 +119,12 @@ export function planOf(device, rom) {
       files: s.files.map((/** @type {any} */ f) => ({ name: f.name, size: f.size, sha256: f.sha256, url: f.url ?? null, source: f.source })), steps: stepsFor(s) })) };
 }
 
-/** Does this size+SHA-256 pin match the file on disk? @param {string} path @param {{size:number,sha256:string}} pin */
+/** Does this size+digest pin match the file on disk? The pin names the algorithm (sha256 preferred, sha512 fallback).
+ * @param {string} path @param {{size:number,sha256?:string,sha512?:string}} pin */
 async function matches(path, pin) {
   const info = await stat(path).catch(() => null);
-  return !!info && info.size === pin.size && await checksum(await openAsBlob(path)) === pin.sha256;
+  const algorithm = pin.sha512 && !pin.sha256 ? 'sha512' : 'sha256';
+  return !!info && info.size === pin.size && await checksum(await openAsBlob(path), undefined, algorithm) === pin[algorithm];
 }
 
 /** Download every pinned file that has a direct url; skip present+matching ones. Fails closed on size/hash mismatch.

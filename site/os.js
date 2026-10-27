@@ -38,11 +38,18 @@ byId('os-pros').replaceChildren(...page.pros.map(text => h('li', { textContent: 
 byId('os-cons').replaceChildren(...page.cons.map(text => h('li', { textContent: text })));
 byId('os-links').replaceChildren(...links(page.links));
 byId('os-preview-note').textContent = page.previewNote;
-byId('os-shot-bar').textContent = page.shot.bar;
-// A stock photo carries its attribution in the caption, as device photos do.
-byId('os-shot-caption').replaceChildren(page.shot.caption,
-  ...(page.shot.photo ? [' · ', h('a', { href: page.shot.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: `Photo: ${page.shot.photo.artist}, ${page.shot.photo.license}` })] : []));
-Object.assign(byId('alpine-operation'), { src: `./${page.shot.src}`, alt: page.shot.alt, width: page.shot.width, height: page.shot.height });
+// A logo-only OS ships no screenshot: say so instead of rendering a broken image.
+if (page.shot) {
+  byId('os-shot-bar').textContent = page.shot.bar;
+  // A screenshot carries its attribution in the caption, as device photos do.
+  byId('os-shot-caption').replaceChildren(page.shot.caption,
+    ...(page.shot.photo ? [' · ', h('a', { href: page.shot.photo.page, target: '_blank', rel: 'noopener noreferrer', textContent: `Photo: ${page.shot.photo.artist}, ${page.shot.photo.license}` })] : []));
+  Object.assign(byId('alpine-operation'), { src: `./${page.shot.src}`, alt: page.shot.alt, width: page.shot.width, height: page.shot.height });
+} else {
+  byId('os-shot-bar').textContent = 'preview unavailable';
+  byId('alpine-operation').remove();
+  byId('os-shot-caption').textContent = 'No screenshot with a reusable licence was available for this release.';
+}
 byId('downloads-title').textContent = `Choose your ${OS.name}`;
 byId('os-status').textContent = page.status;
 byId('os-footer').replaceChildren(...page.footer.map(link => h('a', { href: link.href, textContent: link.label })), h('span', { textContent: `Release metadata checked ${page.checked}` }));
@@ -125,9 +132,11 @@ function render() {
   document.getElementById('alpine-edition-description').textContent = selectedEdition.description;
   document.getElementById('alpine-edition-note').textContent = selectedEdition.usbNote;
   images.replaceChildren(...selectedEdition.images.map(image => h('article', { className: 'alpine-image', id: image.id },
-    h('div', { className: 'alpine-image-title' }, h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), h('strong', { textContent: image.arch }), h('span', { className: `architecture-tag${image.usb === true ? ' ventoy-supported' : ''}`, textContent: image.usb === true ? 'Ventoy supported' : 'No Ventoy' }), h('span', { className: 'alpine-image-size', textContent: `${image.format} · ${sizes(image.size)}` }), h('a', { href: image.sha256Url ?? `${image.url}.sha256`, target: '_blank', rel: 'noopener noreferrer', textContent: 'SHA-256' })),
+    h('div', { className: 'alpine-image-title' }, h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), h('strong', { textContent: image.arch }), h('span', { className: `architecture-tag${image.usb === true ? ' ventoy-supported' : ''}`, textContent: image.usb === true ? 'Ventoy supported' : 'No Ventoy' }), h('span', { className: 'alpine-image-size', textContent: `${image.format} · ${sizes(image.size)}` }), h('a', { href: image.sha256 ? image.sha256Url ?? `${image.url}.sha256` : image.sha512Url ?? `${image.url}.sha512`, target: '_blank', rel: 'noopener noreferrer', textContent: image.sha256 ? 'SHA-256' : 'SHA-512' })),
     h('div', { className: 'alpine-image-actions' }, USB_FORMATS.includes(image.format)
-      ? h('button', { type: 'button', className: 'button button-primary alpine-main-action', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
+      ? image.sha256 // shortcut: the USB writer verifies SHA-256 only, so sha512-only media stays download-only
+        ? h('button', { type: 'button', className: 'button button-primary alpine-main-action', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
+        : h('span', { className: 'field-help', textContent: 'Download · SHA-512 only, USB preparation needs SHA-256' })
       : h('span', { className: 'field-help', textContent: 'Download · platform-specific setup' }),
       h('a', { className: 'button button-secondary', href: image.url, textContent: 'Download' }),
       h('a', { className: 'button button-secondary', href: OS.source, target: '_blank', rel: 'noopener noreferrer', textContent: 'Source' })))));

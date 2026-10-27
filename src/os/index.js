@@ -24,11 +24,11 @@ import zorinOsJson from '../../catalog/os/pc/zorin-os.json' with { type: 'json' 
 /** Image formats the CLI writes to a USB disk directly; compressed ones are unpacked while writing. */
 export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
 
-/** @typedef {{ id: string, arch: string, format: string, url: string, sha256: string, sha256Url?: string, size: number, usb: boolean }} OsImage */
+/** @typedef {{ id: string, arch: string, format: string, url: string, sha256?: string, sha256Url?: string, sha512?: string, sha512Url?: string, size: number, usb: boolean }} OsImage */
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */
 /** @typedef {{ label: string, href: string }} OsLink */
 /** @typedef {{ page: string, license: string, artist: string }} OsShotPhoto */
-/** @typedef {{ description: string, eyebrow: string, intro: string, logo: { src: string, alt: string, width: number, height: number }, pros: string[], cons: string[], links: OsLink[], previewNote: string, shot: { src: string, alt: string, width: number, height: number, bar: string, caption: string, photo?: OsShotPhoto }, status: string, footer: OsLink[], checked: string, credits: string[] }} OsPage */
+/** @typedef {{ description: string, eyebrow: string, intro: string, logo: { src: string, alt: string, width: number, height: number }, pros: string[], cons: string[], links: OsLink[], previewNote: string, shot?: { src: string, alt: string, width: number, height: number, bar: string, caption: string, photo?: OsShotPhoto }, status: string, footer: OsLink[], checked: string, credits: string[] }} OsPage */
 /** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[] }} Os */
 
 /** Every OS page, in the order the site lists them. @type {Os[]} */
@@ -50,3 +50,52 @@ export const osImageEntry = id => {
 
 /** @param {string} id */
 export const osImage = id => osImageEntry(id)?.image;
+
+/** Publishers that ship no SHA-256 still need a verifiable pin: sha512 is the fallback, and both may be present. */
+const DIGEST = { sha256: /^[a-f0-9]{64}$/, sha512: /^[a-f0-9]{128}$/ };
+/** What is wrong with one image's pin; empty means usable. @param {any} image @returns {string[]} */
+export const osImagePinProblems = image => {
+  const out = [];
+  if (!image?.sha256 && !image?.sha512) out.push(`${image?.id}: needs a sha256 or sha512 pin`);
+  for (const algorithm of /** @type {const} */ (['sha256', 'sha512'])) {
+    const digest = image?.[algorithm], url = image?.[`${algorithm}Url`];
+    if (digest !== undefined && !DIGEST[algorithm].test(digest)) out.push(`${image?.id}: ${algorithm} must be ${algorithm === 'sha512' ? 128 : 64} lowercase hex`);
+    if (url !== undefined && (digest === undefined || !/^https:\/\//.test(url))) out.push(`${image?.id}: ${algorithm}Url needs an https url and a ${algorithm} pin`);
+  }
+  return out;
+};
+/** A screenshot is credited under a free licence, or — second choice — as the publisher's own screenshot with the terms the site states. */
+export const OS_PHOTO_LICENCE = /^(CC0|CC BY(-SA)? [\d.]+|(?:GPL|LGPL|MPL|FDL)(?: [\d.]+)?|Publisher screenshot(?: \([^)]*\)|, .+)?)$/;
+/** A photo page may be Commons or the project's own site; both must be https, with artist and licence stated. @param {any} photo @returns {string[]} */
+export const osPhotoProblems = photo => [
+  ...(photo?.page && /^https:\/\//.test(photo.page) ? [] : ['photo needs an https source page']),
+  ...(photo?.artist ? [] : ['photo needs an artist']),
+  ...(OS_PHOTO_LICENCE.test(photo?.license ?? '') ? [] : ['photo needs a free licence or a publisher-screenshot credit']),
+];
+/** Structural problems with one OS record. The site resolves ids separately, so this stays pure. @param {any} os @returns {string[]} */
+export const osRecordProblems = os => {
+  const out = [];
+  if (!/^[a-z0-9-]+$/.test(os?.id ?? '')) out.push('id must be lowercase kebab-case');
+  if (!(os?.name && os?.shortName && os?.version && os?.releaseDate && os?.source)) out.push(`${os?.id}: name, shortName, version, releaseDate and source are required`);
+  else if (new URL(os.source).protocol !== 'https:') out.push(`${os.id}: source must be https`);
+  if (!os?.editions?.length) out.push(`${os?.id}: needs editions`);
+  else if (!os.editions.some((/** @type {any} */ e) => e.id === os.defaultEdition)) out.push(`${os.id}: default edition does not exist`);
+  const page = os?.page ?? {};
+  if (!(page.description && page.eyebrow && page.intro && page.status && page.checked)) out.push(`${os?.id}: page needs description, eyebrow, intro, status and checked`);
+  if (!page.pros?.length || !page.cons?.length) out.push(`${os?.id}: page needs pros and cons`);
+  if (!page.links?.length || !page.footer?.length || !page.credits?.length) out.push(`${os?.id}: page needs links, footer and credits`);
+  if (!page.logo?.src) out.push(`${os?.id}: a logo is required`);
+  if (page.shot && !(page.shot.src && page.shot.alt)) out.push(`${os?.id}: a shot needs src and alt`);
+  const images = (os?.editions ?? []).flatMap((/** @type {any} */ edition) => edition.images ?? []);
+  if (new Set(images.map((/** @type {any} */ i) => i.id)).size !== images.length) out.push(`${os?.id}: image ids are not unique`);
+  for (const image of images) {
+    if (!String(image.id).startsWith(`${os.id}-`)) out.push(`${image.id}: not namespaced by OS`);
+    try { if (new URL(image.url).protocol !== 'https:' || new URL(image.url).username) out.push(`${image.id}: url must be https without credentials`); }
+    catch { out.push(`${image.id}: url is not a URL`); }
+    out.push(...osImagePinProblems(image));
+    if (!Number.isSafeInteger(image.size) || image.size <= 0) out.push(`${image.id}: needs a byte size`);
+    if (!/^(iso|img\.gz|tar\.gz)$/.test(image.format ?? '')) out.push(`${image.id}: format must be iso, img.gz or tar.gz`);
+    if (typeof image.usb !== 'boolean') out.push(`${image.id}: usb must be a boolean`);
+  }
+  return out;
+};
