@@ -22,5 +22,5 @@ romvault/
 rominit-files/
 # private research workspace (third-party data, not for publishing); ~/projects/rominit-research links here
 research/
-# local work copies (git worktrees: romvault-additions on branch additions, os-catalog on branch os-catalog); catalog/romsources/site links let ROMvault links resolve
+# local work copies (git worktrees: romvault-additions on branch additions, os-catalog on branch os-catalog); catalog/site links let ROMvault links resolve
 work/

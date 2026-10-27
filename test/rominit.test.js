@@ -629,7 +629,7 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
   const { fix, tree } = await import('../scripts/romvault-net.mjs');
   const dir = mkdtempSync(join(tmpdir(), 'romvault-')), vault = join(dir, 'romvault');
   try {
-    const root = new URL('..', import.meta.url).pathname; // pages link ../../catalog/ and ../../romsources/: mirror the repo around the copy
+    const root = new URL('..', import.meta.url).pathname; // pages link ../../catalog/: mirror the repo around the copy
     for (const e of readdirSync(root)) if (e !== 'romvault') symlinkSync(join(root, e), join(dir, e));
     cpSync(new URL('../romvault', import.meta.url), vault, { recursive: true, dereference: true, filter: src => !src.includes('/.git') });
     assert.equal(lstatSync(vault).isSymbolicLink(), false, 'test fixture must never link to the real ROMvault');
