@@ -3,6 +3,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { createWriteStream, openAsBlob } from 'node:fs';
 import { mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
 import { connect as tcp } from 'node:net';
+import { devNull } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { Writable } from 'node:stream';
@@ -270,7 +271,7 @@ const portOpen = (/** @type {string} */ host, /** @type {number} */ port) => new
 /** Password logins skip private-key auth so sshpass cannot answer an unrelated key-passphrase prompt. */
 export function sshArgs(user, password, host) {
   return [...(password ? ['-o', 'PreferredAuthentications=password', '-o', 'PubkeyAuthentication=no'] : []),
-    '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', `${user}@${host}`, 'sh'];
+    '-o', 'StrictHostKeyChecking=no', '-o', `UserKnownHostsFile=${devNull}`, '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', `${user}@${host}`, 'sh'];
 }
 
 /** Send one scrubbed USB outcome report with one idempotent retry for transient failures.

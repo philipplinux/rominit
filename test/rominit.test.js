@@ -482,7 +482,7 @@ test('role scopes and return paths', async () => {
 test('untar reads a gzip tar with long names and skips unwanted entries', async () => {
   const { execFileSync } = await import('node:child_process');
   const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } = await import('node:fs');
-  const dir = mkdtempSync('/tmp/rominit-tar-'), deep = `${'d'.repeat(120)}/images`;
+  const dir = mkdtempSync((await import('node:path')).join((await import('node:os')).tmpdir(), 'rominit-tar-')), deep = `${'d'.repeat(120)}/images`;
   mkdirSync(`${dir}/${deep}`, { recursive: true });
   writeFileSync(`${dir}/${deep}/boot.img`, 'x'.repeat(70000));
   writeFileSync(`${dir}/${deep}/skip.img`, 'skip');

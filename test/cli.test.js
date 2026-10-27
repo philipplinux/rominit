@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { tmpdir } from 'node:os';
+import { devNull, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PassThrough } from 'node:stream';
 import test from 'node:test';
@@ -266,7 +266,7 @@ test('Node ADB credentials use WebCrypto in memory, and password SSH disables ke
   for await (const saved of ephemeralAdbCredentials().iterateKeys()) fresh.push(saved);
   assert.deepEqual(fresh, []);
   assert.deepEqual(sshArgs('user', 'password', 'phone'), ['-o', 'PreferredAuthentications=password', '-o', 'PubkeyAuthentication=no',
-    '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', 'user@phone', 'sh']);
+    '-o', 'StrictHostKeyChecking=no', '-o', `UserKnownHostsFile=${devNull}`, '-o', 'LogLevel=ERROR', '-o', 'ConnectTimeout=8', 'user@phone', 'sh']);
   assert.deepEqual(sshArgs('user', '', 'phone').slice(0, 2), ['-o', 'StrictHostKeyChecking=no']);
 });
 

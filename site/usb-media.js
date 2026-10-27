@@ -246,6 +246,8 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
         if (!catalogImage) reviewButton.textContent = methodSelect.value === 'direct' ? 'Review direct image write' : 'Review Ventoy installation';
         updateMethodHelp();
       }
+      // the helper only offers USB writing on Linux for now
+      if (!panelCapabilities.includes('usb-media')) throw Error('The ROMinit CLI cannot write USB drives on this OS yet. Download the image below, check its SHA-256, and write it with Rufus (Windows) or balenaEtcher (Windows or Mac).');
       const found = await helperRequest(session, '/usb/drives');
       if (!panel.isConnected) return;
       if (!Array.isArray(found)) throw Error('The helper returned an invalid USB drive list.');

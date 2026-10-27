@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test 'test/*.test.js'",
+    "test": "node --test \"test/*.test.js\"",
     "check": "tsc --noEmit",
     "bench": "node --test --test-concurrency=1 bench/site.mjs",
     "inbox": "node scripts/inbox.mjs",
