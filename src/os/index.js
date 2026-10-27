@@ -6,6 +6,7 @@ import ubuntuJson from '../../catalog/os/pc/ubuntu.json' with { type: 'json' };
 import fedoraJson from '../../catalog/os/pc/fedora.json' with { type: 'json' };
 import debianJson from '../../catalog/os/pc/debian.json' with { type: 'json' };
 import linuxMintJson from '../../catalog/os/pc/linux-mint.json' with { type: 'json' };
+import archLinuxJson from '../../catalog/os/pc/arch-linux.json' with { type: 'json' };
 
 /** Image formats the CLI writes to a USB disk directly; compressed ones are unpacked while writing. */
 export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
@@ -18,7 +19,7 @@ export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
 /** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[] }} Os */
 
 /** Every OS page, in the order the site lists them. @type {Os[]} */
-export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (linuxMintJson)];
+export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (linuxMintJson), /** @type {Os} */ (archLinuxJson)];
 
 /** CPU architecture to family label. */
 export const ARCH_FAMILY = { x86: "x86", x86_64: "x86", aarch64: "ARM", armv7: "ARM", armhf: "ARM", loongarch64: "LoongArch", ppc64le: "PowerPC", riscv64: "RISC-V", s390x: "IBM Z" };
