@@ -57,9 +57,10 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
   assert.deepEqual(files.sort(), OSES.map(os => os.id).sort(), 'every catalog/os/<group>/<id>.json is imported in src/os/index.js');
   for (const os of OSES) {
     assert.match(os.id, /^[a-z0-9-]+$/);
-    assert.ok(os.name && os.shortName && os.version && os.releaseDate && os.source);
+    // Info-only product pages carry no release to date; everything else still needs version and date.
+    assert.ok(os.name && os.shortName && os.source && (os.infoOnly === true || (os.version && os.releaseDate)));
     assert.equal(new URL(os.source).protocol, 'https:');
-    assert.ok(os.editions.length, `${os.id} has editions`);
+    assert.ok(os.infoOnly === true || os.editions.length, `${os.id} has editions`);
     assert.ok(os.editions.some(edition => edition.id === os.defaultEdition), `${os.id} default edition exists`);
     assert.ok(os.page.description && os.page.eyebrow && os.page.intro && os.page.status && os.page.checked);
     assert.ok(os.page.pros.length && os.page.cons.length);
