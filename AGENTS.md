@@ -27,4 +27,4 @@ Photos, logos and screenshots come from existing sources: the project's or maker
 
 ## Research intake
 
-Raw collection and review land in `~/projects/rominit-research/`, divided into `phones`, `tablets`, `consoles`, `x86-pcs` and `shared`. Existing `romsources/research/` is a local compatibility symlink. ROMvault ingests only material Philipp deems ready; collecting or validating data does not authorize ingestion. See the research root README and AGENTS.md.
+Raw collection and review land in `research/` (git-ignored, not for publishing; `~/projects/rominit-research` links there), divided into `phones`, `tablets`, `consoles`, `x86-pcs` and `shared`. Existing `romsources/research/` is a local compatibility symlink. ROMvault ingests only material Philipp deems ready; collecting or validating data does not authorize ingestion. See the research root README and AGENTS.md. Work copies (git worktrees: `work/romvault-additions` on ROMvault branch `additions`, `work/os-catalog` on branch `os-catalog`) live in `work/` (git-ignored); work happens there, not in main.
