@@ -79,7 +79,7 @@ npm run build   # dist/
 - `catalog/`: devices and ROMs (JSON); `schema.sql` + `migrations/`: D1 database
 - `test/`, `bench/`: unit tests and the end-to-end site bench; `scripts/`: build and catalog loading
 - `romvault/`: ROMvault, the knowledge base (private repository, git-ignored here): vendors, OS projects, device series, devices, per-ROM pages, scraping notes (markdown, rules in `romvault/AGENTS.md`)
-- `romsources/research/`: raw research data the catalog was built from (not served)
+- `romsources/research/`: link to `~/projects/rominit-research/shared/romsources` (raw research, local only, not served); kept because ROMvault pages link through it
 - `romvault/skills/`: ROMinit agent skills (rom-scraper, romvault-maintenance); in a private ROMvault checkout, link them into `.agents/skills/` and `.claude/skills/` (git-ignored)
 
 ## Roadmap
