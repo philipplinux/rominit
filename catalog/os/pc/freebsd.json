@@ -1,0 +1,78 @@
+{
+  "id": "freebsd",
+  "name": "FreeBSD",
+  "shortName": "FreeBSD",
+  "defaultEdition": "disc1",
+  "version": "15.1",
+  "releaseDate": "2026-06-16",
+  "source": "https://www.freebsd.org/releases/",
+  "page": {
+    "description": "FreeBSD editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / BSD",
+    "intro": "A complete BSD operating system, not Linux: its own kernel, userland and package tools. The disc1 image installs offline; bootonly fetches the system over the network.",
+    "logo": { "src": "logos/freebsd.svg", "alt": "FreeBSD logo", "width": 180, "height": 180 },
+    "pros": [
+      "One integrated system: kernel, userland and packages from the same project.",
+      "Stable branches with long support; 15.1 is supported to December 2029.",
+      "ZFS on the root filesystem in the installer.",
+      "The handbook documents the whole system in one place."
+    ],
+    "cons": [
+      "Not Linux: Linux-only tools, drivers and instructions do not apply.",
+      "The installer is text-based and expects you to make partitioning choices.",
+      "Disc1 carries the packages for an offline install; bootonly needs a network.",
+      "The Commons screenshot shows FreeBSD 12, not 15.1."
+    ],
+    "links": [
+      { "label": "FreeBSD website", "href": "https://www.freebsd.org/" },
+      { "label": "Release information", "href": "https://www.freebsd.org/releases/" },
+      { "label": "Handbook", "href": "https://docs.freebsd.org/en/books/handbook/" }
+    ],
+    "previewNote": "A stock screenshot of FreeBSD 12 from Wikimedia Commons. It is not 15.1 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/freebsd/freebsd-desktop.webp",
+      "alt": "FreeBSD 12 desktop with window manager panels and a terminal",
+      "width": 1600,
+      "height": 907,
+      "bar": "FreeBSD-15.1-RELEASE-amd64-disc1.iso · 15.1",
+      "caption": "Stock screenshot of FreeBSD 12 · not 15.1, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:FreeBSD_12.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Fr0xk"
+      }
+    },
+    "status": "Two official images: disc1 for an offline install and bootonly for a network install, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/15.1/" },
+      { "label": "Release information", "href": "https://www.freebsd.org/releases/" },
+      { "label": "Security and supported releases", "href": "https://www.freebsd.org/security/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/freebsd.svg\nFreeBSD logo from Simple Icons (CC0), https://simpleicons.org; the FreeBSD name and mark belong to the FreeBSD Foundation, shown only to identify FreeBSD. No endorsement implied.",
+      "shots/freebsd/freebsd-desktop.webp\nFreeBSD 12 desktop screenshot by Fr0xk, https://commons.wikimedia.org/wiki/File:FreeBSD_12.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 15.1 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "disc1",
+      "name": "Disc1",
+      "description": "The full installer image with the packages needed for an offline installation.",
+      "usbNote": "1.4 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "freebsd-disc1-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/15.1/FreeBSD-15.1-RELEASE-amd64-disc1.iso", "sha256": "fa27646f05a1440fd26ffbb85e06a50bc86e128242a4e9cb7bb3ea76e1aa5fd9", "sha256Url": "https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/15.1/CHECKSUM.SHA256-FreeBSD-15.1-RELEASE-amd64", "size": 1352255488, "usb": false }
+      ]
+    },
+    {
+      "id": "bootonly",
+      "name": "Bootonly",
+      "description": "A small installer that fetches the rest of the system from FreeBSD's mirrors.",
+      "usbNote": "550 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "freebsd-bootonly-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/15.1/FreeBSD-15.1-RELEASE-amd64-bootonly.iso", "sha256": "3e74120a59512cefc35840443bdd05087c8a010a27cf8a6fbb4f7450824f092e", "sha256Url": "https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/15.1/CHECKSUM.SHA256-FreeBSD-15.1-RELEASE-amd64", "size": 546666496, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "until": "2029-12", "source": "https://www.freebsd.org/security/" }
+}
