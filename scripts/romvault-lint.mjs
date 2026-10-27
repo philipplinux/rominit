@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { CATEGORY_DIRS } from '../src/catalog.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const VAULT = join(ROOT, 'romvault');
+const VAULT = process.env.ROMVAULT_DIR ? resolve(process.env.ROMVAULT_DIR) : join(ROOT, 'romvault'); // ROMVAULT_DIR: lint a worktree
 const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'soc', 'rom', 'scraping', 'skill', 'index', 'log'];
 const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', socs: 'soc', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
@@ -42,10 +42,13 @@ const allowedTags = (/** @type {string} */ vault) => {
  * @param {string} [vault] the ROMvault folder (tests pass a copy) */
 export function lint(vault = VAULT) {
   const problems = /** @type {string[]} */ ([]);
-  const say = (/** @type {string} */ file, /** @type {string} */ text) => problems.push(`${relative(ROOT, file)}: ${text}`);
+  const say = (/** @type {string} */ file, /** @type {string} */ text) => problems.push(`${join('romvault', relative(vault, file))}: ${text}`);
   const tags = allowedTags(vault);
   const files = walk(vault).filter(f => !relative(vault, f).startsWith('skills/') && relative(vault, f) !== 'AGENTS.md'); // rules file and skills keep harness format
   const pages = new Map(files.map(f => [f, readFileSync(f, 'utf8')]));
+  // `reviewed` is enforced once a vault has started recording it: an un-migrated checkout is not failed
+  // wholesale, but from the first page that has the field every device/rom/project page must.
+  const reviewedAdopted = [...pages.values()].some(t => frontmatter(t)?.reviewed);
   const readme = pages.get(join(vault, 'README.md')) ?? '';
   const exists = (/** @type {string} */ rel) => existsSync(join(vault, rel));
   /** Resolved local link targets of a page. @param {string} file */
@@ -60,8 +63,12 @@ export function lint(vault = VAULT) {
     if (!TYPES.includes(fm.type)) say(file, `frontmatter: type "${fm.type}" not one of ${TYPES.join(', ')}`);
     const folder = rel.split('/')[0];
     if (FOLDER_TYPE[folder] && fm.type !== FOLDER_TYPE[folder]) say(file, `frontmatter: type should be ${FOLDER_TYPE[folder]} in ${folder}/`);
-    for (const key of ['date', 'updated']) if (fm[key] && !/^\d{4}-\d{2}-\d{2}$/.test(fm[key])) say(file, `frontmatter: ${key} is not YYYY-MM-DD`);
+    for (const key of ['date', 'updated', 'reviewed']) if (fm[key] && !/^\d{4}-\d{2}-\d{2}$/.test(fm[key])) say(file, `frontmatter: ${key} is not YYYY-MM-DD`);
     if (fm.updated < fm.date) say(file, 'frontmatter: updated is before date');
+    if (fm.reviewed && (fm.reviewed < fm.date || fm.reviewed > fm.updated)) say(file, 'frontmatter: reviewed must fall between date and updated');
+    if (reviewedAdopted && ['device', 'rom', 'project'].includes(fm.type) && !fm.reviewed) say(file, 'frontmatter: missing reviewed (last date the page was rechecked)');
+    // `high` = every claim checked within 3 months (AGENTS.md › Revision turns); `reviewed` is the last full recheck
+    if (fm.confidence === 'high' && Date.now() - Date.parse(fm.reviewed ?? fm.updated) > 92 * 864e5) say(file, `confidence high but last checked ${fm.reviewed ?? fm.updated}: give it a revision turn or lower confidence`);
     if (['rom', 'project'].includes(fm.type) && !/\b(as of|checked|fetched) \d{4}-\d{2}/i.test(text)) say(file, 'no dated claim: add "(as of YYYY-MM)", "checked" or "fetched YYYY-MM-DD" to versions and support status');
     for (const tag of fm.tags ?? []) {
       const nested = tag.match(/^(device|series)\/(.+)$/);
@@ -71,8 +78,8 @@ export function lint(vault = VAULT) {
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
     const max = rel === 'log.md' ? 400 : MAX_LINES; // log rotates at ~400 (romvault-maintenance skill)
-    if (rel !== 'README.md' && text.split('\n').length > max) say(file, `over ${max} lines: split it`);
-    for (const target of links(file)) if (!existsSync(target)) say(file, `broken link ${relative(dirname(file), target)}`);
+    if (rel !== 'README.md' && text.replace(/\n$/, '').split('\n').length > max) say(file, `over ${max} lines: split it`); // trailing newline is not a line
+    for (const target of links(file)) if (!existsSync(relative(vault, target).startsWith('..') ? resolve(ROOT, 'romvault', relative(vault, target)) : target)) say(file, `broken link ${relative(dirname(file), target)}`); // links leaving the vault (../catalog) resolve from the rominit root, also for a worktree
     if (rel !== 'README.md' && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');
     if (fm.type === 'device' && fm.soc) { // sideways: device ↔ socs/<soc>.md, so devices sharing a chip find each other

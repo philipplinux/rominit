@@ -647,8 +647,12 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
     const tabletText = readFileSync(tabletPage, 'utf8');
     writeFileSync(tabletPage, tabletText.replace('tags: [tablet,', 'tags: [phone,'));
     assert.ok(lint(vault).some(p => p.includes('tag tablet missing (catalog category)')));
+    writeFileSync(tabletPage, tabletText.replace(/^confidence: .*$/m, 'confidence: high').replace(/^updated: .*$/m, '$&\nreviewed: 2026-01-01'));
+    assert.ok(lint(vault).some(p => p.includes('reviewed must fall between date and updated')));
+    writeFileSync(tabletPage, tabletText.replace(/^updated: .*$/m, `$&\nreviewed: ${tabletText.match(/^date: (\d{4}-\d{2}-\d{2})$/m)[1]}`));
+    assert.ok(lint(vault).some(p => p.includes('missing reviewed')), 'one page with reviewed makes the field required for the rest');
     writeFileSync(tabletPage, tabletText);
-    assert.match(tree(vault), /Google Pixel 7 {2}\(series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\)/);
+    assert.match(tree(vault), /Google Pixel 7 {2}\(series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\) {2}\[\w+ · \d+ turns · reviewed .+ · .+\]/);
     assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

@@ -6,7 +6,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { frontmatter } from './romvault-lint.mjs';
-import { CATEGORY_DIRS } from '../src/catalog.js';
+import { CATEGORY_DIRS, LEVELS, deviceLevel } from '../src/catalog.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CATEGORY_FILE = { phone: 'phones', tablet: 'tablets', tvmedia: 'tvmedia', television: 'tvs', misc: 'misc-iot', console: 'consoles', pc: 'x86-pcs' };
@@ -113,10 +113,25 @@ export function fix(vault, agent = 'script') {
 /** The tree as indented text, following each page's down links; lists catalog devices it never reaches. @param {string} vault */
 export function tree(vault) {
   const v = open(vault), seen = new Set(), out = /** @type {string[]} */ ([]);
+  const turns = v.text('log.md').split('\n').filter(l => /revision turn/i.test(l));
+  const devices = new Map(catalogDevices().map(d => [d.codename, d]));
+  const roms = /** @type {Map<string, any[]>} */ (new Map());
+  for (const f of readdirSync(join(ROOT, 'catalog/roms'), { recursive: true }).filter(f => String(f).endsWith('.json'))) {
+    const entry = JSON.parse(readFileSync(join(ROOT, 'catalog/roms', String(f)), 'utf8'));
+    roms.set(entry.device, [...roms.get(entry.device) ?? [], ...entry.roms]);
+  }
+  /** Review state of a device or ROM page: confidence, revision turns logged, last full recheck, and (devices) the site's catalog level. @param {string} rel */
+  const status = rel => {
+    const fm = frontmatter(v.text(rel)) ?? {}, codename = rel.match(/^devices\/(.+)\.md$/)?.[1];
+    const d = codename && devices.get(codename);
+    // ponytail: no phone-test results here, so a tested device shows as approved or below
+    const level = codename ? ` · ${d ? LEVELS[deviceLevel({ ...d, roms: roms.get(codename) ?? [] }, new Set())] : 'not in catalog'}` : '';
+    return `  [${fm.confidence ?? 'no confidence'} · ${turns.filter(l => l.includes(rel)).length} turns · reviewed ${fm.reviewed ?? '–'}${level}]`;
+  };
   const walk = (/** @type {string} */ rel, /** @type {number} */ depth) => {
     seen.add(rel);
     const type = /** @type {keyof typeof DOWN} */ (frontmatter(v.text(rel))?.type);
-    out.push(`${'  '.repeat(depth)}${v.title(rel)}${['device', 'rom'].includes(type) ? '' : `  (${rel})`}`);
+    out.push(`${'  '.repeat(depth)}${v.title(rel)}${['device', 'rom'].includes(type) ? status(rel) : `  (${rel})`}`);
     // ponytail: a vendor lists all its lines, so a vendor in two categories shows every line under both
     for (const child of v.links(rel).filter(l => DOWN[type] && l.startsWith(`${DOWN[type]}/`) && v.has(l))) walk(child, depth + 1);
   };
