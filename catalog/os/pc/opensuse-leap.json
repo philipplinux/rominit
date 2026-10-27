@@ -1,0 +1,68 @@
+{
+  "id": "opensuse-leap",
+  "name": "openSUSE Leap",
+  "shortName": "Leap",
+  "defaultEdition": "offline",
+  "version": "16.0",
+  "releaseDate": "2025-10-01",
+  "source": "https://get.opensuse.org/leap/",
+  "page": {
+    "description": "openSUSE Leap editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ENTERPRISE-BASED LINUX",
+    "intro": "The stable openSUSE release, built from SUSE's enterprise code base and supported for years rather than months. Pick the offline installer, then the architecture.",
+    "logo": { "src": "logos/opensuse-leap.svg", "alt": "openSUSE logo", "width": 180, "height": 180 },
+    "pros": [
+      "A slow-moving, long-lived release rather than a rolling one.",
+      "YaST and zypper cover installation, updates and system configuration.",
+      "Snapshot rollback on the default Btrfs layout in recent releases.",
+      "Installer images for x86_64 and aarch64."
+    ],
+    "cons": [
+      "Newer software arrives later than in Tumbleweed.",
+      "This publisher signs its media with SHA-512 only, so USB preparation is not offered for it here.",
+      "The Commons screenshot shows Leap 15.4, not 16.0.",
+      "SUSE's enterprise base means some community packages lag."
+    ],
+    "links": [
+      { "label": "openSUSE Leap", "href": "https://get.opensuse.org/leap/" },
+      { "label": "Download mirror", "href": "https://download.opensuse.org/distribution/leap/16.0/offline/" }
+    ],
+    "previewNote": "A stock screenshot of openSUSE Leap 15.4 with GNOME from Wikimedia Commons. It is not 16.0 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/opensuse-leap/leap-desktop.webp",
+      "alt": "openSUSE Leap 15.4 GNOME desktop with the activities overview",
+      "width": 1600,
+      "height": 900,
+      "bar": "Leap-16.0-offline-installer-x86_64.install.iso · 16.0",
+      "caption": "Stock screenshot of openSUSE Leap 15.4 · not 16.0, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:OpenSUSE_Leap_15.4_GNOME_Desktop_en.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Diego Carvalho"
+      }
+    },
+    "status": "One path per architecture: the offline installer ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. openSUSE publishes SHA-512 for these images, so ROMinit offers the download but not USB preparation.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://get.opensuse.org/leap/" },
+      { "label": "Mirror for 16.0", "href": "https://download.opensuse.org/distribution/leap/16.0/offline/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/opensuse-leap.svg\nopenSUSE logo from Simple Icons (CC0), https://simpleicons.org; the openSUSE name and mark belong to SUSE, shown only to identify openSUSE. No endorsement implied.",
+      "shots/opensuse-leap/leap-desktop.webp\nopenSUSE Leap 15.4 GNOME desktop by Diego Carvalho, https://commons.wikimedia.org/wiki/File:OpenSUSE_Leap_15.4_GNOME_Desktop_en.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 16.0 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "offline",
+      "name": "Offline installer",
+      "description": "The full installation image, carrying the packages needed to install without a network.",
+      "usbNote": "4.5 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "opensuse-leap-offline-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-x86_64.install.iso", "sha512": "94411793a1878b3558211c8bbe4f3823c3c5212cc2dd9f9e4532a18be7eddd3be14db5a3bb47a2f36dd957e190ea706cd45af16bce218dfc00f71e64a8469971", "sha512Url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-x86_64.install.iso.sha512", "size": 4538236928, "usb": false },
+        { "id": "opensuse-leap-offline-aarch64", "arch": "aarch64", "format": "iso", "url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-aarch64.install.iso", "sha512": "a6328f07434875bd62ab57400829429ad0a908a0b2085a2323faf657bd7fecc6e1b7852531e562302a57e861c90b92935085d8352ebfa7d33a2cda5b96e577d4", "sha512Url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-aarch64.install.iso.sha512", "size": 4642045952, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://get.opensuse.org/leap/" }
+}
