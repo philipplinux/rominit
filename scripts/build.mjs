@@ -99,6 +99,7 @@ for (const path of ['android-fastboot/LICENSE', '@zip.js/zip.js/index.js', 'hash
   notices.push(`${path}\n${notice}`);
 }
 notices.push('logos/{android,eos,lineageos,xda}.svg\nSimple Icons (CC0), https://simpleicons.org; the marks belong to Google, the /e/ Foundation, the LineageOS project and XDA, shown only to name them. logos/twrp.svg is our own monogram.');
+notices.push('logos/{ubuntu,fedora,debian,linux-mint,arch-linux}.svg\nSimple Icons (CC0), https://simpleicons.org; the marks belong to Canonical, the Fedora Project (Red Hat), Software in the Public Interest, Linux Mint and Arch Linux, shown only to name them.');
 notices.push(`shots/grapheneos/android17-ui.gif
 GrapheneOS Android 17 UI preview, assembled from the home screenshot and an enlarged detail of its default apps. Phone screenshot; not an exact-build or tablet capture.
 Source: https://commons.wikimedia.org/wiki/File:GrapheneOS_home_screen_Android_17.png
