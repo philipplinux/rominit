@@ -801,7 +801,7 @@ test('host environment maps whitelisted distro and numeric prefixes without reta
     nodeVersion: '24.18.0', readOsRelease: async () => 'NAME="Fedora Workstation Private Label"\nID="Fedora"\nVERSION_ID="43 (Private Label)"\n',
     readSource: async () => Buffer.from('fixture source') });
   assert.deepEqual(fedora, { hostOs: 'linux', hostOsVersion: '43', hostDistro: 'fedora', hostArch: 'x64',
-    kernelVersion: '6.15.7', cliVersion: digest(Buffer.from('fixture source\0'.repeat(5))).slice(0, 12), nodeVersion: '24.18.0' });
+    kernelVersion: '6.15.7', cliVersion: digest(Buffer.from('fixture source\0'.repeat(6))).slice(0, 12), nodeVersion: '24.18.0' });
 
   const custom = await collectUsbEnvironment({ platform: 'linux', arch: 'mips', kernelRelease: 'release-custom-private',
     nodeVersion: 'v24.18.0', readOsRelease: async () => 'NAME="Private Custom Linux"\nID="internal-acme-build"\nVERSION_ID="private-release-9"\n',
