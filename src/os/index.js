@@ -122,7 +122,7 @@ export const osRecordProblems = os => {
     catch { out.push(`${image.id}: url is not a URL`); }
     out.push(...osImagePinProblems(image));
     if (!Number.isSafeInteger(image.size) || image.size <= 0) out.push(`${image.id}: needs a byte size`);
-    if (!/^(iso|img\.gz|tar\.gz)$/.test(image.format ?? '')) out.push(`${image.id}: format must be iso, img.gz or tar.gz`);
+    if (!/^(iso|img\.gz|img\.bz2|img\.xz|tar\.gz)$/.test(image.format ?? '')) out.push(`${image.id}: format must be iso, img.gz, img.bz2, img.xz or tar.gz`);
     if (typeof image.usb !== 'boolean') out.push(`${image.id}: usb must be a boolean`);
   }
   return out;

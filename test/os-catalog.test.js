@@ -75,7 +75,7 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
       assert.ok(!url.username && !url.password, `${image.id} has no credentials in its URL`);
       assert.deepEqual(osImagePinProblems(image), [], `${image.id} pins a digest`);
       assert.ok(Number.isSafeInteger(image.size) && image.size > 0, `${image.id} pins a size`);
-      assert.match(image.format, /^(iso|img\.gz|tar\.gz)$/);
+      assert.match(image.format, /^(iso|img\.gz|img\.bz2|img\.xz|tar\.gz)$/);
       assert.equal(typeof image.usb, 'boolean');
       assert.equal(osImage(image.id), image, `${image.id} resolves`);
     }
