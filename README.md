@@ -53,7 +53,7 @@ For local development, set `ROMINIT_URL` to the site's HTTP loopback origin befo
 
 PC operating systems get their own page, built from one shared template. Each OS is one file in `catalog/os/pc/<id>.json` (mobile and network OS go in `os/mobile/` and `os/network/`): the official release metadata, the editions, the SHA-256-pinned images with their size and URL, and the page copy. `src/os/index.js` lists them; the build renders each to `dist/<id>.html` from `site/os.html` and `site/os.js`, and the OS list on the device page links to them.
 
-To add an OS: write the JSON, list it in `src/os/index.js`, and add its logo and screenshot under `site/logos/` and `site/shots/`. The build fails if a referenced asset is missing. Nothing in the template names a specific distribution, so a new OS needs no code change.
+To add an OS: write the JSON, list it in `src/os/index.js`, and add its logo as `site/logos/<id>.svg` and screenshots under `site/shots/<id>/`. Pictures are always local copies (never hotlinked): device photos live at `site/devices/<category>/<vendor>/<name>.webp`; `test/media.test.js` rejects remote or missing `src`, bytes that do not match the extension (svg webp png jpg gif) and SVGs with script, handlers or outside references; `site/_headers` limits images to this site and sandboxes media opened directly. The build fails if a referenced asset is missing. Nothing in the template names a specific distribution, so a new OS needs no code change.
 
 Alpine Linux (`/alpine`) and Omarchy (`/omarchy`) are catalogued today. Omarchy ships one installer ISO for x86_64; its image is 6.0 GiB, so the USB stick needs 8 GB or more, and the CLI's 16 GiB image cap covers it.
 

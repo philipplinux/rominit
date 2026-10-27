@@ -2,7 +2,7 @@
   "codename": "tangorpro",
   "vendor": "Google",
   "name": "Pixel Tablet",
-  "photo": {"src": "phones/tangorpro.webp", "page": "https://support.google.com/googlepixeltablet/answer/13555435?hl=en", "license": "press", "artist": "Google"},
+  "photo": {"src": "devices/tablets/google/tangorpro.webp", "page": "https://support.google.com/googlepixeltablet/answer/13555435?hl=en", "license": "press", "artist": "Google"},
   "series": "Pixel",
   "family": "Pixel Tablet",
   "variant": "Pixel Tablet",

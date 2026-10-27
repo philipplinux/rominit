@@ -25,10 +25,11 @@ for (const device of devices) await writeFile(`dist/catalog/${device.codename}.j
 for (const console of CONSOLES) await writeFile(`dist/catalog/consoles/${console.id}.json`, JSON.stringify(console));
 
 await cp('site/style.css', 'dist/style.css');
+await cp('site/_headers', 'dist/_headers');
 
 await cp('site/logos', 'dist/logos', { recursive: true });
 await cp('site/shots', 'dist/shots', { recursive: true });
-await cp('site/phones', 'dist/phones', { recursive: true });
+await cp('site/devices', 'dist/devices', { recursive: true });
 await cp('site/avatars', 'dist/avatars', { recursive: true });
 await cp('site/consoles', 'dist/consoles', { recursive: true });
 await cp('site/bench', 'dist/bench', { recursive: true });

@@ -2,7 +2,7 @@
   "codename": "tegu",
   "vendor": "Google",
   "name": "Pixel 9a",
-  "photo": {"src": "phones/tegu.webp", "page": "https://commons.wikimedia.org/wiki/File:Pixel_9a_back.jpg", "license": "CC BY 4.0", "artist": "Maksdroider"},
+  "photo": {"src": "devices/phones/google/tegu.webp", "page": "https://commons.wikimedia.org/wiki/File:Pixel_9a_back.jpg", "license": "CC BY 4.0", "artist": "Maksdroider"},
   "series": "Pixel",
   "family": "Pixel 9",
   "variant": "Pixel 9a",

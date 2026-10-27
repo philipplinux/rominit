@@ -176,9 +176,9 @@ export function problems(device, romFile) {
   // Header picture kept in site/phones with its credit: a free-licensed Commons photo, or the vendor's own press image.
   need(device?.category === undefined || device.category in CATEGORIES, `${device?.codename}: category must be one of ${Object.keys(CATEGORIES).join('/')} (set by its catalog/devices folder)`);
   const photo = device?.photo, press = photo?.license === 'press';
-  need(photo === undefined || (/^phones\/[\w-]+\.webp$/.test(photo.src) && photo.artist
+  need(photo === undefined || (/^devices\/[\w-]+\/[\w-]+\/[\w-]+\.webp$/.test(photo.src) && photo.artist
     && (press ? photo.page?.startsWith('https://') : photo.page?.startsWith('https://commons.wikimedia.org/') && /^(CC0|CC BY(-SA)? [\d.]+)$/.test(photo.license))),
-    `${device?.codename}: photo needs src phones/<name>.webp, artist (the vendor for press) and either a Commons page + CC0 / CC BY[-SA] x.y or license "press" + the vendor's https page`);
+    `${device?.codename}: photo needs src devices/<category>/<vendor>/<name>.webp, artist (the vendor for press) and either a Commons page + CC0 / CC BY[-SA] x.y or license "press" + the vendor's https page`);
   need(romFile?.device === device?.codename, `rom file device "${romFile?.device}" ≠ ${device?.codename}`);
   for (const rom of romFile?.roms ?? []) {
     const at = `${device?.codename}/${rom.id}`;

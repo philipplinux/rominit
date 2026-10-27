@@ -1,0 +1,15 @@
+# Images and media load only from this site; nothing is sniffed into another type.
+/*
+  X-Content-Type-Options: nosniff
+  Content-Security-Policy: img-src 'self' data:; media-src 'self'; object-src 'none'
+# Media opened directly (e.g. /logos/x.svg in a tab) can never run script on this origin.
+/logos/*
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; sandbox
+/shots/*
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; sandbox
+/devices/*
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; sandbox
+/consoles/*
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; sandbox
+/avatars/*
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; sandbox

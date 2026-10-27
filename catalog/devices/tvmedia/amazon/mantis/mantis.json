@@ -10,7 +10,7 @@
     "AFTMM"
   ],
   "photo": {
-    "src": "phones/mantis.webp",
+    "src": "devices/tvmedia/amazon/mantis.webp",
     "page": "https://developer.amazon.com/docs/device-specs/device-specifications-fire-tv-streaming-media-player.html",
     "license": "press",
     "artist": "Amazon"

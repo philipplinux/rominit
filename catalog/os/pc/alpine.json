@@ -49,7 +49,7 @@
     ],
     "previewNote": "The recording shows three commands in a ROMinit test VM. The video is an older community walkthrough (Trafotin, 2023); follow the current official installation instructions.",
     "shot": {
-      "src": "shots/alpine-operation.gif",
+      "src": "shots/alpine/alpine-operation.gif",
       "alt": "Alpine Linux terminal showing release information, apk and setup-alpine help",
       "width": 640,
       "height": 352,
@@ -78,7 +78,7 @@
     "checked": "2026-10-20",
     "credits": [
       "logos/alpine.svg\nAlpine Linux project logo, from https://alpinelinux.org/alpinelinux-logo.svg, shown to identify Alpine Linux. Alpine Linux names and marks belong to their owners; no endorsement implied.",
-      "shots/alpine-operation.gif and shots/alpine-operation.png\nROMinit recording of Alpine Linux 3.24.2 Standard x86_64 in QEMU, 2026-10-20. No host disk or network attached."
+      "shots/alpine/alpine-operation.gif and shots/alpine/alpine-operation.png\nROMinit recording of Alpine Linux 3.24.2 Standard x86_64 in QEMU, 2026-10-20. No host disk or network attached."
     ]
   },
   "editions": [

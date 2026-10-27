@@ -2,7 +2,7 @@
   "codename": "hero2lte",
   "vendor": "Samsung",
   "name": "Galaxy S7 edge",
-  "photo": {"src": "phones/hero2lte.webp", "page": "https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_S7_edge_(White_Pearl)_-_Front.jpg", "license": "CC BY-SA 4.0", "artist": "Beamish4"},
+  "photo": {"src": "devices/phones/samsung/hero2lte.webp", "page": "https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_S7_edge_(White_Pearl)_-_Front.jpg", "license": "CC BY-SA 4.0", "artist": "Beamish4"},
   "series": "Galaxy S",
   "family": "Galaxy S7",
   "variant": "S7 edge · Exynos",

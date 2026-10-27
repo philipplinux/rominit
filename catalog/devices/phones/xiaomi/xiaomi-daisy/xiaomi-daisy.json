@@ -2,7 +2,7 @@
   "codename": "xiaomi-daisy",
   "vendor": "Xiaomi",
   "name": "Mi A2 Lite",
-  "photo": {"src": "phones/xiaomi-daisy.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Mi_A2_Lite_(1).jpg", "license": "CC BY-SA 4.0", "artist": "Bindydad123"},
+  "photo": {"src": "devices/phones/xiaomi/xiaomi-daisy.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Mi_A2_Lite_(1).jpg", "license": "CC BY-SA 4.0", "artist": "Bindydad123"},
   "series": "Mi",
   "family": "Mi A2 Lite",
   "variant": "Mi A2 Lite",

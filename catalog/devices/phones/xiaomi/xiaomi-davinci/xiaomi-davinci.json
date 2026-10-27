@@ -2,7 +2,7 @@
   "codename": "xiaomi-davinci",
   "vendor": "Xiaomi",
   "name": "Mi 9T / Redmi K20",
-  "photo": {"src":"phones/xiaomi-davinci.webp", "page":"https://web.archive.org/web/20210101063807/https://www.mi.com/in/redmi-k20/", "license":"press", "artist":"Xiaomi"},
+  "photo": {"src":"devices/phones/xiaomi/xiaomi-davinci.webp", "page":"https://web.archive.org/web/20210101063807/https://www.mi.com/in/redmi-k20/", "license":"press", "artist":"Xiaomi"},
   "series": "Mi",
   "family": "Mi 9T / Redmi K20",
   "variant": "Mi 9T / Redmi K20",

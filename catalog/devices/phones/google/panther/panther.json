@@ -2,7 +2,7 @@
   "codename": "panther",
   "vendor": "Google",
   "name": "Pixel 7",
-  "photo": {"src": "phones/panther.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_7_20230416_HOF00377_RAW-Export.png", "license": "CC BY 4.0", "artist": "PantheraLeo1359531"},
+  "photo": {"src": "devices/phones/google/panther.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_7_20230416_HOF00377_RAW-Export.png", "license": "CC BY 4.0", "artist": "PantheraLeo1359531"},
   "series": "Pixel",
   "family": "Pixel 7",
   "variant": "Pixel 7",

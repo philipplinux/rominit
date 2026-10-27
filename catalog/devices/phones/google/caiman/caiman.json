@@ -2,7 +2,7 @@
   "codename": "caiman",
   "vendor": "Google",
   "name": "Pixel 9 Pro",
-  "photo": {"src":"phones/caiman.webp", "page":"https://web.archive.org/web/20241002034558/https://store.google.com/product/pixel_9_pro?hl=en-US", "license":"press", "artist":"Google"},
+  "photo": {"src":"devices/phones/google/caiman.webp", "page":"https://web.archive.org/web/20241002034558/https://store.google.com/product/pixel_9_pro?hl=en-US", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 9",
   "variant": "Pixel 9 Pro",

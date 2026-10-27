@@ -2,7 +2,7 @@
   "codename": "xiaomi-vince",
   "vendor": "Xiaomi",
   "name": "Redmi 5 Plus",
-  "photo": {"src":"phones/xiaomi-vince.webp", "page":"https://web.archive.org/web/20181228074205/https://www.mi.com/global/redmi-5-plus/", "license":"press", "artist":"Xiaomi"},
+  "photo": {"src":"devices/phones/xiaomi/xiaomi-vince.webp", "page":"https://web.archive.org/web/20181228074205/https://www.mi.com/global/redmi-5-plus/", "license":"press", "artist":"Xiaomi"},
   "series": "Redmi",
   "family": "Redmi 5 Plus",
   "variant": "Redmi 5 Plus",

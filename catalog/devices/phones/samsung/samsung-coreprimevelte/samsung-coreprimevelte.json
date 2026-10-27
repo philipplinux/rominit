@@ -2,7 +2,7 @@
   "codename": "samsung-coreprimevelte",
   "vendor": "Samsung",
   "name": "Galaxy Core Prime VE LTE",
-  "photo": {"src":"phones/samsung-coreprimevelte.webp", "page":"https://www.samsung.com/ie/support/model/SM-G361FHAAANP/", "license":"press", "artist":"Samsung"},
+  "photo": {"src":"devices/phones/samsung/samsung-coreprimevelte.webp", "page":"https://www.samsung.com/ie/support/model/SM-G361FHAAANP/", "license":"press", "artist":"Samsung"},
   "series": "Galaxy Core",
   "family": "Galaxy Core Prime VE LTE",
   "variant": "Galaxy Core Prime VE LTE",

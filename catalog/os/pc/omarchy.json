@@ -37,7 +37,7 @@
     ],
     "previewNote": "A stock photo of an Arch Linux laptop. Omarchy is Arch-based, but this is not Omarchy and not a ROMinit recording: no image was written to a USB stick and no machine was booted from one.",
     "shot": {
-      "src": "shots/omarchy-desktop.webp",
+      "src": "shots/omarchy/omarchy-desktop.webp",
       "alt": "An Acer laptop running a pacman update on Arch Linux",
       "width": 1600,
       "height": 1200,
@@ -59,7 +59,7 @@
     "checked": "2026-10-21",
     "credits": [
       "logos/omarchy.svg\nOmarchy wordmark, from the project's official brand assets at https://omarchy.org/brand/. Omarchy is a pending trademark of its owners; used to identify the project, no endorsement implied.",
-      "shots/omarchy-desktop.webp\nArch Linux running pacman on an Acer laptop, photo by Solijon Solayev, https://commons.wikimedia.org/wiki/File:Arch_Linux_system_update_via_pacman_on_an_Acer_laptop.jpg, CC BY-SA 4.0. Resized and converted to WebP; this copy under the same licence. A generic Arch Linux photo, not Omarchy."
+      "shots/omarchy/omarchy-desktop.webp\nArch Linux running pacman on an Acer laptop, photo by Solijon Solayev, https://commons.wikimedia.org/wiki/File:Arch_Linux_system_update_via_pacman_on_an_Acer_laptop.jpg, CC BY-SA 4.0. Resized and converted to WebP; this copy under the same licence. A generic Arch Linux photo, not Omarchy."
     ]
   },
   "editions": [

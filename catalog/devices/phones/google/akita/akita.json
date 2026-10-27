@@ -2,7 +2,7 @@
   "codename": "akita",
   "vendor": "Google",
   "name": "Pixel 8a",
-  "photo": {"src": "phones/akita.webp", "page": "https://commons.wikimedia.org/wiki/File:Pixel_8a.jpg", "license": "CC BY 4.0", "artist": "Miyako Fujimiya"},
+  "photo": {"src": "devices/phones/google/akita.webp", "page": "https://commons.wikimedia.org/wiki/File:Pixel_8a.jpg", "license": "CC BY 4.0", "artist": "Miyako Fujimiya"},
   "series": "Pixel",
   "family": "Pixel 8",
   "variant": "Pixel 8a",

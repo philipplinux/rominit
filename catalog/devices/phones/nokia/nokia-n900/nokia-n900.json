@@ -2,7 +2,7 @@
   "codename": "nokia-n900",
   "vendor": "Nokia",
   "name": "N900",
-  "photo": {"src": "phones/nokia-n900.webp", "page": "https://commons.wikimedia.org/wiki/File:Nokia_N900-1.jpg", "license": "CC BY-SA 3.0", "artist": "User:Ilya Voyager"},
+  "photo": {"src": "devices/phones/nokia/nokia-n900.webp", "page": "https://commons.wikimedia.org/wiki/File:Nokia_N900-1.jpg", "license": "CC BY-SA 3.0", "artist": "User:Ilya Voyager"},
   "series": "N900",
   "family": "N900",
   "variant": "N900",

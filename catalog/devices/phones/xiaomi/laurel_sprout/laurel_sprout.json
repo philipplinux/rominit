@@ -2,7 +2,7 @@
   "codename": "laurel_sprout",
   "vendor": "Xiaomi",
   "name": "Mi A3",
-  "photo": {"src": "phones/laurel_sprout.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Mi_A3_gray.png", "license": "CC BY-SA 4.0", "artist": "J.avanzado"},
+  "photo": {"src": "devices/phones/xiaomi/laurel_sprout.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Mi_A3_gray.png", "license": "CC BY-SA 4.0", "artist": "J.avanzado"},
   "series": "Mi A",
   "family": "Mi A3",
   "variant": "Mi A3 · global",

@@ -2,7 +2,7 @@
   "codename": "xiaomi-toco",
   "vendor": "Xiaomi",
   "name": "Mi Note 10 Lite",
-  "photo": {"src":"phones/xiaomi-toco.webp", "page":"https://web.archive.org/web/20200605164940/https://www.mi.com/global/mi-note-10-lite/specs", "license":"press", "artist":"Xiaomi"},
+  "photo": {"src":"devices/phones/xiaomi/xiaomi-toco.webp", "page":"https://web.archive.org/web/20200605164940/https://www.mi.com/global/mi-note-10-lite/specs", "license":"press", "artist":"Xiaomi"},
   "series": "Mi",
   "family": "Mi Note 10 Lite",
   "variant": "Mi Note 10 Lite",

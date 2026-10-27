@@ -2,7 +2,7 @@
   "codename": "xiaomi-surya",
   "vendor": "Xiaomi",
   "name": "POCO X3 NFC",
-  "photo": {"src":"phones/xiaomi-surya.webp", "page":"https://web.archive.org/web/20231026232636/https://www.po.co/de/poco-x3-nfc/specs/", "license":"press", "artist":"Xiaomi"},
+  "photo": {"src":"devices/phones/xiaomi/xiaomi-surya.webp", "page":"https://web.archive.org/web/20231026232636/https://www.po.co/de/poco-x3-nfc/specs/", "license":"press", "artist":"Xiaomi"},
   "series": "POCO",
   "family": "POCO X3 NFC",
   "variant": "POCO X3 NFC",

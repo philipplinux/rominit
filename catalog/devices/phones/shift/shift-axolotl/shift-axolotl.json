@@ -2,7 +2,7 @@
   "codename": "shift-axolotl",
   "vendor": "SHIFT",
   "name": "SHIFT6mq",
-  "photo": {"src": "phones/shift-axolotl.webp", "page": "https://commons.wikimedia.org/wiki/File:SHIFT_6mq_front.jpg", "license": "CC BY-SA 4.0", "artist": "Triskal"},
+  "photo": {"src": "devices/phones/shift/shift-axolotl.webp", "page": "https://commons.wikimedia.org/wiki/File:SHIFT_6mq_front.jpg", "license": "CC BY-SA 4.0", "artist": "Triskal"},
   "series": "SHIFT",
   "family": "SHIFT6mq",
   "variant": "SHIFT6mq",

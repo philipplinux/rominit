@@ -2,7 +2,7 @@
   "codename": "xiaomi-tissot",
   "vendor": "Xiaomi",
   "name": "Mi A1",
-  "photo": {"src":"phones/xiaomi-tissot.webp", "page":"https://web.archive.org/web/20181231232005/https://www.mi.com/global/mi-a1/", "license":"press", "artist":"Xiaomi"},
+  "photo": {"src":"devices/phones/xiaomi/xiaomi-tissot.webp", "page":"https://web.archive.org/web/20181231232005/https://www.mi.com/global/mi-a1/", "license":"press", "artist":"Xiaomi"},
   "series": "Mi",
   "family": "Mi A1",
   "variant": "Mi A1",

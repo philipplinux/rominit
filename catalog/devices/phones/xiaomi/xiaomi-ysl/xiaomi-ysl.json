@@ -2,7 +2,7 @@
   "codename": "xiaomi-ysl",
   "vendor": "Xiaomi",
   "name": "Redmi S2 / Redmi Y2",
-  "photo": {"src": "phones/xiaomi-ysl.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Redmi_S2.jpg", "license": "CC BY-SA 4.0", "artist": "Art-barko"},
+  "photo": {"src": "devices/phones/xiaomi/xiaomi-ysl.webp", "page": "https://commons.wikimedia.org/wiki/File:Xiaomi_Redmi_S2.jpg", "license": "CC BY-SA 4.0", "artist": "Art-barko"},
   "series": "Redmi",
   "family": "Redmi S2 / Redmi Y2",
   "variant": "Redmi S2 / Redmi Y2",

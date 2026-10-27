@@ -2,7 +2,7 @@
   "codename": "cheetah",
   "vendor": "Google",
   "name": "Pixel 7 Pro",
-  "photo": {"src":"phones/cheetah.webp", "page":"https://web.archive.org/web/20230302233414/https://store.google.com/product/pixel_7_pro?hl=en-US", "license":"press", "artist":"Google"},
+  "photo": {"src":"devices/phones/google/cheetah.webp", "page":"https://web.archive.org/web/20230302233414/https://store.google.com/product/pixel_7_pro?hl=en-US", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 7",
   "variant": "Pixel 7 Pro",

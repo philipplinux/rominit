@@ -2,7 +2,7 @@
   "codename": "google-sargo",
   "vendor": "Google",
   "name": "Pixel 3a",
-  "photo": {"src": "phones/google-sargo.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_3a_-_2023.jpg", "license": "CC BY 4.0", "artist": "Noël."},
+  "photo": {"src": "devices/phones/google/google-sargo.webp", "page": "https://commons.wikimedia.org/wiki/File:Google_Pixel_3a_-_2023.jpg", "license": "CC BY 4.0", "artist": "Noël."},
   "series": "Pixel",
   "family": "Pixel 3a",
   "variant": "Pixel 3a",

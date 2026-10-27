@@ -2,7 +2,7 @@
   "codename": "oneplus-enchilada",
   "vendor": "OnePlus",
   "name": "6",
-  "photo": {"src": "phones/oneplus-enchilada.webp", "page": "https://commons.wikimedia.org/wiki/File:OnePlus_6_Front1.jpg", "license": "CC BY 4.0", "artist": "Pahkiqaz"},
+  "photo": {"src": "devices/phones/oneplus/oneplus-enchilada.webp", "page": "https://commons.wikimedia.org/wiki/File:OnePlus_6_Front1.jpg", "license": "CC BY 4.0", "artist": "Pahkiqaz"},
   "series": "OnePlus",
   "family": "OnePlus 6",
   "variant": "6",

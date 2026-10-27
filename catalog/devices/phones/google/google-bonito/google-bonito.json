@@ -2,7 +2,7 @@
   "codename": "google-bonito",
   "vendor": "Google",
   "name": "Pixel 3a XL",
-  "photo": {"src": "phones/google-bonito.webp", "page": "https://commons.wikimedia.org/wiki/File:Pixel_3a_XL_Best_Buy.jpg", "license": "CC BY-SA 4.0", "artist": "Ghostofakina"},
+  "photo": {"src": "devices/phones/google/google-bonito.webp", "page": "https://commons.wikimedia.org/wiki/File:Pixel_3a_XL_Best_Buy.jpg", "license": "CC BY-SA 4.0", "artist": "Ghostofakina"},
   "series": "Pixel",
   "family": "Pixel 3a",
   "variant": "Pixel 3a XL",

@@ -2,7 +2,7 @@
   "codename": "felix",
   "vendor": "Google",
   "name": "Pixel Fold",
-  "photo": {"src":"phones/felix.webp", "page":"https://web.archive.org/web/20230802115345/https://store.google.com/product/pixel_fold?hl=en-US", "license":"press", "artist":"Google"},
+  "photo": {"src":"devices/phones/google/felix.webp", "page":"https://web.archive.org/web/20230802115345/https://store.google.com/product/pixel_fold?hl=en-US", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel Fold generation",
   "variant": "Pixel Fold",

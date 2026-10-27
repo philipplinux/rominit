@@ -2,7 +2,7 @@
   "codename": "samsung-starqltechn",
   "vendor": "Samsung",
   "name": "Galaxy S9 Snapdragon China",
-  "photo": {"src":"phones/samsung-starqltechn.webp", "page":"https://www.samsung.com/us/support/mobile/phones/?modelCode=SM-G960UZBAATT", "license":"press", "artist":"Samsung"},
+  "photo": {"src":"devices/phones/samsung/samsung-starqltechn.webp", "page":"https://www.samsung.com/us/support/mobile/phones/?modelCode=SM-G960UZBAATT", "license":"press", "artist":"Samsung"},
   "series": "Galaxy S",
   "family": "Galaxy S9",
   "variant": "Galaxy S9 Snapdragon China",

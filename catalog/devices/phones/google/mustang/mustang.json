@@ -2,7 +2,7 @@
   "codename": "mustang",
   "vendor": "Google",
   "name": "Pixel 10 Pro XL",
-  "photo": {"src":"phones/mustang.webp", "page":"https://store.google.com/product/pixel_10_pro_xl", "license":"press", "artist":"Google"},
+  "photo": {"src":"devices/phones/google/mustang.webp", "page":"https://store.google.com/product/pixel_10_pro_xl", "license":"press", "artist":"Google"},
   "series": "Pixel",
   "family": "Pixel 10",
   "variant": "Pixel 10 Pro XL",
