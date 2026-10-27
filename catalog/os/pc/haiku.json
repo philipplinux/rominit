@@ -1,0 +1,68 @@
+{
+  "id": "haiku",
+  "name": "Haiku",
+  "shortName": "Haiku",
+  "defaultEdition": "anyboot",
+  "version": "R1/beta6",
+  "releaseDate": "2026-08-26",
+  "source": "https://www.haiku-os.org/get-haiku/",
+  "page": {
+    "description": "Haiku editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / BEOS-COMPATIBLE",
+    "intro": "An open-source reimplementation of BeOS: its own kernel and userland, fast boot, and a package manager. One image boots live and installs.",
+    "logo": { "src": "logos/haiku.png", "alt": "Haiku logo", "width": 400, "height": 85 },
+    "pros": [
+      "A complete desktop system that boots in seconds.",
+      "BeOS binary compatibility keeps old BeOS applications running.",
+      "One image works as a live session and as the installer.",
+      "Packages come from Haiku's own repositories with pkgman."
+    ],
+    "cons": [
+      "Still a beta: the project labels R1/beta6 as a test release.",
+      "Not Linux and not BSD: Linux drivers and tools do not apply.",
+      "A smaller application and hardware support base than the mainstream systems.",
+      "The Commons screenshot shows an older Haiku desktop."
+    ],
+    "links": [
+      { "label": "Haiku website", "href": "https://www.haiku-os.org/" },
+      { "label": "Get Haiku", "href": "https://www.haiku-os.org/get-haiku/" },
+      { "label": "Release notes", "href": "https://www.haiku-os.org/docs/releasenotes/" }
+    ],
+    "previewNote": "A stock screenshot of the Haiku desktop with Tracker, from Wikimedia Commons. It is not the R1/beta6 image and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/haiku/haiku-desktop.webp",
+      "alt": "Haiku desktop with the Tracker file manager open",
+      "width": 1162,
+      "height": 671,
+      "bar": "haiku-r1beta6-x86_64-anyboot.iso · R1/beta6",
+      "caption": "Stock screenshot of the Haiku desktop · older release, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Tracker_on_Haiku_Desktop.PNG",
+        "license": "CC BY-SA 3.0",
+        "artist": "BeOS, Haiku Project"
+      }
+    },
+    "status": "One image: the x86_64 anyboot ISO, which boots live and installs from the same session. Writing the stick erases it; the installer then writes to the partition or disk you choose.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://www.haiku-os.org/get-haiku/" },
+      { "label": "Release notes", "href": "https://www.haiku-os.org/docs/releasenotes/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/haiku.png\nHaiku logo, public domain, https://commons.wikimedia.org/wiki/File:Haikulogov2.png (uploader Sven Manguard). PNG rather than SVG because the Commons file is a raster image.",
+      "shots/haiku/haiku-desktop.webp\nTracker on the Haiku desktop, screenshot by BeOS, Haiku Project, https://commons.wikimedia.org/wiki/File:Tracker_on_Haiku_Desktop.PNG, CC BY-SA 3.0. Converted to WebP; this copy under the same licence. Older release, not R1/beta6."
+    ]
+  },
+  "editions": [
+    {
+      "id": "anyboot",
+      "name": "Anyboot (x86_64)",
+      "description": "The x86_64 image: it boots into a live Haiku session with the installer on the desktop.",
+      "usbNote": "1.4 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "haiku-anyboot-x86_64", "arch": "x86_64", "format": "iso", "url": "https://haiku-release.cdn.haiku-os.org/r1beta6/haiku-r1beta6-x86_64-anyboot.iso", "sha256": "bb7743474fd175aea511be1799764ba054465285bbdf54c4722ca61d1fb4f5c9", "sha256Url": "https://haiku-release.cdn.haiku-os.org/r1beta6/haiku-r1beta6-x86_64-anyboot.iso.sha256", "size": 1477246976, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.haiku-os.org/" }
+}

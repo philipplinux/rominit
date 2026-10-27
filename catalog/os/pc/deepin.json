@@ -1,0 +1,82 @@
+{
+  "id": "deepin",
+  "name": "deepin",
+  "shortName": "deepin",
+  "defaultEdition": "community",
+  "version": "25.2.0",
+  "releaseDate": "2026-07-07",
+  "source": "https://www.deepin.org/",
+  "page": {
+    "description": "deepin 25.2.0 ISO: architecture, size and the publisher's SHA256SUMS.",
+    "eyebrow": "OPERATING SYSTEM / DEEPIN DESKTOP",
+    "intro": "A Debian-based desktop from Deepin Technology with its own Deepin Desktop Environment. One amd64 community image.",
+    "logo": {
+      "src": "logos/deepin.svg",
+      "alt": "deepin logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "A polished, self-designed desktop environment.",
+      "Debian package base with Deepin's own store and tools.",
+      "One ISO, so no edition matrix.",
+      "The publisher publishes SHA256SUMS beside the image."
+    ],
+    "cons": [
+      "Only amd64 is published for this build.",
+      "The desktop and apps are opinionated; less vanilla than upstream Debian.",
+      "The release date shown is the mirror directory date (2026-07-07).",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "deepin website",
+        "href": "https://www.deepin.org/"
+      },
+      {
+        "label": "Mirror for 25.2.0",
+        "href": "https://cdimage.deepin.com/releases/25.2.0/amd64/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for deepin; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One image: the amd64 community ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      {
+        "label": "Official downloads",
+        "href": "https://www.deepin.org/en/download/"
+      },
+      {
+        "label": "Mirror for 25.2.0",
+        "href": "https://cdimage.deepin.com/releases/25.2.0/amd64/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/deepin.svg\ndeepin logo from Simple Icons (CC0), https://simpleicons.org; the deepin name and mark belong to Deepin Technology, shown only to identify deepin. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "community",
+      "name": "Community (amd64)",
+      "description": "The community desktop image with DDE and Deepin's applications.",
+      "usbNote": "7.0 GB image: use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "deepin-community-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.deepin.com/releases/25.2.0/amd64/deepin-desktop-community-25.2.0-amd64.iso",
+          "sha256": "f875c9a605bfe6a8425d1d353a3c1ec755bf37f5b0a3231ca19e2145da0ff450",
+          "sha256Url": "https://cdimage.deepin.com/releases/25.2.0/amd64/SHA256SUMS",
+          "size": 6976131072,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.deepin.org/"
+  }
+}

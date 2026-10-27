@@ -1,0 +1,122 @@
+{
+  "id": "nobara",
+  "name": "Nobara",
+  "shortName": "Nobara",
+  "defaultEdition": "official",
+  "version": "44",
+  "releaseDate": "2026-10-13",
+  "source": "https://nobaraproject.org/",
+  "page": {
+    "description": "Nobara 44 images: Official, GNOME and KDE, with sizes and publisher SHA-256 files.",
+    "eyebrow": "OPERATING SYSTEM / FEDORA-BASED DESKTOP",
+    "intro": "A Fedora-based desktop tuned for gaming, with codecs, drivers and patches applied by the project. Three images: Official, GNOME and KDE.",
+    "logo": {
+      "src": "logos/nobara.png",
+      "alt": "Nobara logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Fedora base with gaming and multimedia patches pre-applied.",
+      "Official, GNOME and KDE images from one build.",
+      "The project publishes a per-image SHA-256 file.",
+      "Updates follow Fedora, with the project's own fixes."
+    ],
+    "cons": [
+      "Fedora's short support window means upgrades every few months.",
+      "Tuned defaults are opinionated.",
+      "x86_64 only.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Nobara website",
+        "href": "https://nobaraproject.org/"
+      },
+      {
+        "label": "Download page",
+        "href": "https://nobaraproject.org/download-nobara/"
+      },
+      {
+        "label": "Image host",
+        "href": "https://nobara-images.nobaraproject.org/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Nobara; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One image per desktop, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. All three images are the 2026-10-13 build.",
+    "footer": [
+      {
+        "label": "Download page",
+        "href": "https://nobaraproject.org/download-nobara/"
+      },
+      {
+        "label": "Image host",
+        "href": "https://nobara-images.nobaraproject.org/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/nobara.png\nNobara logotype by the Nobara Project, https://commons.wikimedia.org/wiki/File:Nobara_logotype.png, CC BY-SA 4.0."
+    ]
+  },
+  "editions": [
+    {
+      "id": "official",
+      "name": "Official",
+      "description": "The Official image of the 2026-10-13 build.",
+      "usbNote": "7.0–7.6 GB image: use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "nobara-official-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://nobara-images.nobaraproject.org/Nobara-44-Official-2026-10-13.iso",
+          "sha256": "1eedf22cbfdd245b0ad08120b9bf4123910eff42ca9fede054542f99356ea995",
+          "sha256Url": "https://nobara-images.nobaraproject.org/Nobara-44-Official-2026-10-13.iso.sha256sum",
+          "size": 7629307904,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "gnome",
+      "name": "GNOME",
+      "description": "The GNOME image of the 2026-10-13 build.",
+      "usbNote": "7.0–7.6 GB image: use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "nobara-gnome-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://nobara-images.nobaraproject.org/Nobara-44-GNOME-2026-10-13.iso",
+          "sha256": "47087299d03ecedd67fd3fc6d69803118991caeb26faace9f39429f14ffdb2fd",
+          "sha256Url": "https://nobara-images.nobaraproject.org/Nobara-44-GNOME-2026-10-13.iso.sha256sum",
+          "size": 7004375040,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "kde",
+      "name": "KDE Plasma",
+      "description": "The KDE Plasma image of the 2026-10-13 build.",
+      "usbNote": "7.0–7.6 GB image: use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "nobara-kde-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://nobara-images.nobaraproject.org/Nobara-44-KDE-2026-10-13.iso",
+          "sha256": "9f5f7c126f71d2c79fa410cd14a72f103e9575ee94688d43926195c5d1e6e36b",
+          "sha256Url": "https://nobara-images.nobaraproject.org/Nobara-44-KDE-2026-10-13.iso.sha256sum",
+          "size": 7594487808,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://nobaraproject.org/"
+  }
+}

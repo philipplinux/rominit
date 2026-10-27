@@ -1,0 +1,96 @@
+{
+  "id": "openindiana",
+  "name": "OpenIndiana",
+  "shortName": "OpenIndiana",
+  "defaultEdition": "gui",
+  "version": "20260430",
+  "releaseDate": "2026-04-30",
+  "source": "https://openindiana.org/",
+  "page": {
+    "description": "OpenIndiana Hipster ISO: size, architecture and the project's published SHA-256.",
+    "eyebrow": "OPERATING SYSTEM / ILLUMOS",
+    "intro": "An Illumos-based system, the open continuation of OpenSolaris. The Hipster branch is the rolling release; the GUI image is the one to write.",
+    "logo": {
+      "src": "logos/openindiana.svg",
+      "alt": "OpenIndiana logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "ZFS as the root filesystem, managed by the Illumos tooling.",
+      "Zones and crossbow networking from the Solaris lineage.",
+      "Rolling Hipster branch with periodic images.",
+      "The project publishes a per-image SHA-256 file."
+    ],
+    "cons": [
+      "Not Linux and not BSD: the Illumos userland and driver set differ from both.",
+      "Hardware support is narrower than on Linux.",
+      "The version is the image date (2026-04-30).",
+      "The Commons screenshot is older than this image."
+    ],
+    "links": [
+      {
+        "label": "OpenIndiana website",
+        "href": "https://openindiana.org/"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://openindiana.org/downloads"
+      }
+    ],
+    "previewNote": "A stock screenshot of an OpenIndiana desktop from Wikimedia Commons. It is not the 20260430 image and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/openindiana/openindiana-desktop.webp",
+      "alt": "OpenIndiana desktop with the MATE panels and a terminal",
+      "width": 1600,
+      "height": 900,
+      "bar": "OI-hipster-gui-20260430.iso · 20260430",
+      "caption": "Stock screenshot of an OpenIndiana desktop · older image, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Openindiana-github-screenshot.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Hexalantes"
+      }
+    },
+    "status": "One image: the GUI ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the image date (2026-04-30).",
+    "footer": [
+      {
+        "label": "Downloads",
+        "href": "https://openindiana.org/downloads"
+      },
+      {
+        "label": "Image mirror",
+        "href": "https://dlc.openindiana.org/isos/hipster/20260430/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/openindiana.svg\nOpenIndiana logo, public domain, from https://commons.wikimedia.org/wiki/File:OpenIndiana_logo_large.svg.",
+      "shots/openindiana/openindiana-desktop.webp\nOpenIndiana desktop screenshot by Hexalantes, https://commons.wikimedia.org/wiki/File:Openindiana-github-screenshot.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Older image."
+    ]
+  },
+  "editions": [
+    {
+      "id": "gui",
+      "name": "Hipster GUI (x86_64)",
+      "description": "The Hipster branch GUI image with the MATE desktop and the installer.",
+      "usbNote": "2.7 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "openindiana-gui-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dlc.openindiana.org/isos/hipster/20260430/OI-hipster-gui-20260430.iso",
+          "sha256": "4c05cf70e985a13ec46b2be3ef8476d9abb44848597934676a751d2c90ae5fd6",
+          "sha256Url": "https://dlc.openindiana.org/isos/hipster/20260430/OI-hipster-gui-20260430.iso.sha256sum",
+          "size": 2657839104,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://openindiana.org/"
+  }
+}

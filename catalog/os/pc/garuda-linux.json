@@ -1,0 +1,82 @@
+{
+  "id": "garuda-linux",
+  "name": "Garuda Linux",
+  "shortName": "Garuda",
+  "defaultEdition": "dr460nized",
+  "version": "261027",
+  "releaseDate": "2026-10-27",
+  "source": "https://garudalinux.org/",
+  "page": {
+    "description": "Garuda Linux dr460nized image: size, architecture and the publisher's .sha256 sidecar.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED DESKTOP",
+    "intro": "An Arch-based desktop with its own themes and tuning tools. This entry pins the dr460nized edition, the project's flagship build; other editions follow their own build dates.",
+    "logo": {
+      "src": "logos/garuda-linux.svg",
+      "alt": "Garuda Linux logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Arch base with the project's own BTRFS snapshot setup and tools.",
+      "A complete themed desktop out of the box.",
+      "Rolling updates, no reinstalls.",
+      "Each edition is built and published with its own checksum."
+    ],
+    "cons": [
+      "Rolling updates are frequent and expected.",
+      "x86_64 only.",
+      "Other editions (GNOME, KDE-lite) are on different build dates and are not pinned here.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Garuda Linux website",
+        "href": "https://garudalinux.org/"
+      },
+      {
+        "label": "Build server",
+        "href": "https://builds.garudalinux.org/iso/garuda/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Garuda Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One image pinned: the dr460nized build of 2026-10-27, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The GNOME and KDE-lite editions ship on their own build dates and are not part of this pin.",
+    "footer": [
+      {
+        "label": "Build server",
+        "href": "https://builds.garudalinux.org/iso/garuda/"
+      },
+      {
+        "label": "Garuda Linux website",
+        "href": "https://garudalinux.org/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/garuda-linux.svg\nGaruda Linux logo from Simple Icons (CC0), https://simpleicons.org; the Garuda name and mark belong to the Garuda Linux project, shown only to identify it. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "dr460nized",
+      "name": "dr460nized",
+      "description": "The project's flagship KDE-based desktop, themed and tuned.",
+      "usbNote": "3.6 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "garuda-linux-dr460nized-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://builds.garudalinux.org/iso/garuda/dr460nized/261027/garuda-dr460nized-linux-garuda-261027.iso",
+          "sha256": "944b45417c02bfcabdeed2716eb8d437679fed059fad09ab0fb3a94ec56f3fda",
+          "sha256Url": "https://builds.garudalinux.org/iso/garuda/dr460nized/261027/garuda-dr460nized-linux-garuda-261027.iso.sha256",
+          "size": 3580350464,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://garudalinux.org/"
+  }
+}

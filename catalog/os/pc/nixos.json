@@ -1,0 +1,120 @@
+{
+  "id": "nixos",
+  "name": "NixOS",
+  "shortName": "NixOS",
+  "defaultEdition": "graphical",
+  "version": "26.05",
+  "releaseDate": "2026-05-01",
+  "source": "https://nixos.org/",
+  "page": {
+    "description": "NixOS 26.05 ISO images: architectures, sizes and the channel's SHA-256 table.",
+    "eyebrow": "OPERATING SYSTEM / DECLARATIVE LINUX",
+    "intro": "A Linux distribution built around the Nix package manager: the whole system is described in configuration and rebuilt from it. Graphical and minimal ISOs for x86_64 and aarch64.",
+    "logo": {
+      "src": "logos/nixos.svg",
+      "alt": "NixOS logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Declarative configuration: the system is rebuilt from a file, reproducibly.",
+      "Rollbacks are a boot-menu entry, not a restore procedure.",
+      "Upgrades and rebuilds are the same operation.",
+      "Both graphical and minimal images for two architectures."
+    ],
+    "cons": [
+      "The Nix language and store take real learning.",
+      "The graphical ISO is 3.9 GB.",
+      "Most documentation assumes Nix fluency.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "NixOS website",
+        "href": "https://nixos.org/"
+      },
+      {
+        "label": "Channel for 26.05",
+        "href": "https://channels.nixos.org/nixos-26.05"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for NixOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One ISO per edition and architecture, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The release date shown is the 26.05 channel's own date line.",
+    "footer": [
+      {
+        "label": "Channel for 26.05",
+        "href": "https://channels.nixos.org/nixos-26.05"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://nixos.org/download/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/nixos.svg\nNixOS logo from Simple Icons (CC0), https://simpleicons.org; the NixOS name and mark belong to the NixOS Foundation, shown only to identify NixOS. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "graphical",
+      "name": "Graphical",
+      "description": "The ISO with a desktop installer and a live graphical environment.",
+      "usbNote": "3.9 GB image: use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "nixos-graphical-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12707.718f670e8453/nixos-graphical-26.05.12707.718f670e8453-x86_64-linux.iso",
+          "sha256": "a0f4f454e90e042173896b0a57bb733a5306bf235cefacb925df913f462c540a",
+          "sha256Url": "https://channels.nixos.org/nixos-26.05",
+          "size": 3888513024,
+          "usb": false
+        },
+        {
+          "id": "nixos-graphical-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12707.718f670e8453/nixos-graphical-26.05.12707.718f670e8453-aarch64-linux.iso",
+          "sha256": "80c8600bce4bb227de941e61aee2cfc9f35932fa7343bae0b070e2e0e837bf41",
+          "sha256Url": "https://channels.nixos.org/nixos-26.05",
+          "size": 3924527104,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "description": "The smaller ISO: text installer, no desktop.",
+      "usbNote": "1.8 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "nixos-minimal-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12707.718f670e8453/nixos-minimal-26.05.12707.718f670e8453-x86_64-linux.iso",
+          "sha256": "12f093ce7bf7e9747c67730ee3cc7b22713912382e8d3d6f27ef6b19afd8c800",
+          "sha256Url": "https://channels.nixos.org/nixos-26.05",
+          "size": 1744830464,
+          "usb": false
+        },
+        {
+          "id": "nixos-minimal-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12707.718f670e8453/nixos-minimal-26.05.12707.718f670e8453-aarch64-linux.iso",
+          "sha256": "8203bbfbdab0c3ed148dead9fed855a41b21f2c87e74d3a21413bd565b04bdfe",
+          "sha256Url": "https://channels.nixos.org/nixos-26.05",
+          "size": 1821014016,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://channels.nixos.org/nixos-26.05"
+  }
+}

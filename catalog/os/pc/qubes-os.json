@@ -1,0 +1,100 @@
+{
+  "id": "qubes-os",
+  "name": "Qubes OS",
+  "shortName": "Qubes",
+  "defaultEdition": "iso",
+  "version": "4.3.2",
+  "releaseDate": "2026-10-27",
+  "source": "https://www.qubes-os.org/",
+  "page": {
+    "description": "Qubes OS 4.3.2 ISO: architecture, size and the mirror's DIGESTS file.",
+    "eyebrow": "OPERATING SYSTEM / SECURITY-BY-COMPARTMENTALISATION",
+    "intro": "A desktop that separates work into isolated virtual machines called qubes. It is installed like a normal system, but assumes a hostile environment and a trusted screen.",
+    "logo": {
+      "src": "logos/qubes-os.svg",
+      "alt": "Qubes OS logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Compartmentalisation by default: apps run in separate qubes.",
+      "Templates keep the base system shared and updateable.",
+      "Security-first design with a documented threat model.",
+      "One x86_64 ISO covers the install."
+    ],
+    "cons": [
+      "Needs hardware with VT-x/AMD-V, VT-d and enough RAM (16 GB is realistic).",
+      "The workflow is different from a normal desktop.",
+      "The ISO is 8.5 GB.",
+      "The Commons screenshot is older than 4.3.2."
+    ],
+    "links": [
+      {
+        "label": "Qubes OS website",
+        "href": "https://www.qubes-os.org/"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://www.qubes-os.org/downloads/"
+      },
+      {
+        "label": "Mirror",
+        "href": "https://mirrors.edge.kernel.org/qubes/iso/"
+      }
+    ],
+    "previewNote": "A stock screenshot of a Qubes OS desktop from Wikimedia Commons. It is not 4.3.2 and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/qubes-os/qubes-desktop.webp",
+      "alt": "Qubes OS desktop with the application menu and qube domains",
+      "width": 1600,
+      "height": 900,
+      "bar": "Qubes-R4.3.2-x86_64.iso · 4.3.2",
+      "caption": "Stock screenshot of a Qubes OS desktop · older release, no image written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Qubes-OS-Desktop.png",
+        "license": "CC BY-SA 3.0",
+        "artist": "Brunogabuzomeu"
+      }
+    },
+    "status": "One image: the x86_64 ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The date shown is the mirror file date; Qubes publishes no separate release date on this page.",
+    "footer": [
+      {
+        "label": "Official downloads",
+        "href": "https://www.qubes-os.org/downloads/"
+      },
+      {
+        "label": "Digests for this build",
+        "href": "https://mirrors.edge.kernel.org/qubes/iso/Qubes-R4.3.2-x86_64.iso.DIGESTS"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/qubes-os.svg\nQubes OS logo from Simple Icons (CC0), https://simpleicons.org; the Qubes OS name and mark belong to the Qubes OS project, shown only to identify it. No endorsement implied.",
+      "shots/qubes-os/qubes-desktop.webp\nQubes OS desktop screenshot by Brunogabuzomeu, https://commons.wikimedia.org/wiki/File:Qubes-OS-Desktop.png, CC BY-SA 3.0. Converted to WebP; this copy under the same licence. Older release, not 4.3.2."
+    ]
+  },
+  "editions": [
+    {
+      "id": "iso",
+      "name": "Install (x86_64)",
+      "description": "The x86_64 installation ISO.",
+      "usbNote": "8.5 GB image: use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "qubes-os-iso-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mirrors.edge.kernel.org/qubes/iso/Qubes-R4.3.2-x86_64.iso",
+          "sha256": "13bc750b4635939acf68e37994c57e200e2a0035e6ad43fc917d239fdc726776",
+          "sha256Url": "https://mirrors.edge.kernel.org/qubes/iso/Qubes-R4.3.2-x86_64.iso.DIGESTS",
+          "size": 8459569152,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.qubes-os.org/"
+  }
+}

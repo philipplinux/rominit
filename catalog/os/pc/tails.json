@@ -1,0 +1,96 @@
+{
+  "id": "tails",
+  "name": "Tails",
+  "shortName": "Tails",
+  "defaultEdition": "iso",
+  "version": "7.15.1",
+  "releaseDate": "2026-10-22",
+  "source": "https://tails.net/",
+  "page": {
+    "description": "Tails 7.15.1 ISO: size, architecture and a SHA-256 computed by ROMinit.",
+    "eyebrow": "OPERATING SYSTEM / AMNESIC LIVE SYSTEM",
+    "intro": "A live system that routes traffic through Tor and leaves no trace on the machine it runs on. It is written to a USB stick and booted; there is no installation.",
+    "logo": {
+      "src": "logos/tails.svg",
+      "alt": "Tails logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Tor routing and a fresh session on every boot.",
+      "Runs from a stick without touching the host disk.",
+      "Persistent storage is opt-in and encrypted.",
+      "Published as one image for amd64."
+    ],
+    "cons": [
+      "It is a live system, not a general-purpose installed desktop.",
+      "Slower than a normal desktop because traffic goes through Tor.",
+      "The project publishes signatures and a verification add-on, not a SHA-256.",
+      "The Commons screenshot shows 4.8, not 7.15.1."
+    ],
+    "links": [
+      {
+        "label": "Tails website",
+        "href": "https://tails.net/"
+      },
+      {
+        "label": "Download and verify",
+        "href": "https://tails.net/install/download/"
+      }
+    ],
+    "previewNote": "A stock screenshot of the Tails 4.8 desktop from Wikimedia Commons. It is not 7.15.1 and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/tails/tails-desktop.webp",
+      "alt": "Tails 4.8 desktop with the activities overview",
+      "width": 1366,
+      "height": 768,
+      "bar": "tails-amd64-7.15.1.iso · 7.15.1",
+      "caption": "Stock screenshot of Tails 4.8 · not 7.15.1, no image written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Desktop_of_Tails_4.8.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "ApChrKey"
+      }
+    },
+    "status": "One image: the amd64 ISO, written to a USB stick and booted. Writing erases the stick; the system does not install to the host disk. Its SHA-256 was computed by ROMinit from the official download on 2026-10-27; the project publishes signatures only. The date shown is the mirror file date (2026-10-22).",
+    "footer": [
+      {
+        "label": "Download and verify",
+        "href": "https://tails.net/install/download/"
+      },
+      {
+        "label": "Tails website",
+        "href": "https://tails.net/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/tails.svg\nTails logo from Simple Icons (CC0), https://simpleicons.org; the Tails name and mark belong to the Tails project, shown only to identify Tails. No endorsement implied.",
+      "shots/tails/tails-desktop.webp\nTails 4.8 desktop by ApChrKey, https://commons.wikimedia.org/wiki/File:Desktop_of_Tails_4.8.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 7.15.1 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "iso",
+      "name": "USB image (amd64)",
+      "description": "The live system image for 64-bit machines.",
+      "usbNote": "1.9 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "tails-iso-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.tails.net/tails/stable/tails-amd64-7.15.1/tails-amd64-7.15.1.iso",
+          "sha256": "f0e68387ebe327808c0a037886f804f7b2268ae8c66a677e3a6c6241d764e3c7",
+          "sha256Computed": "2026-10-27",
+          "size": 1879707648,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://tails.net/"
+  }
+}

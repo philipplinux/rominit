@@ -1,0 +1,154 @@
+{
+  "id": "ubuntu",
+  "name": "Ubuntu",
+  "shortName": "Ubuntu",
+  "defaultEdition": "desktop",
+  "version": "26.04.1 LTS",
+  "releaseDate": "2026-08-27",
+  "requirements": {
+    "summary": "2 GHz dual-core · 6 GB RAM · 25 GB disk · 8 GB USB",
+    "note": "Canonical's figures for the desktop: a 2 GHz dual-core processor, 6 GB RAM and 25 GB of free disk for a comfortable experience; below that it points at Xubuntu or Lubuntu. The installation medium needs an 8 GB stick or larger.",
+    "source": "https://documentation.ubuntu.com/release-notes/26.04/",
+    "checked": "2026-10-27"
+  },
+  "kernel": { "version": "7.0", "line": "Ubuntu", "checked": "2026-10-27", "source": "https://ubuntu.com/download/desktop" },
+  "source": "https://ubuntu.com/download/desktop",
+  "page": {
+    "description": "Ubuntu LTS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / UBUNTU LTS",
+    "intro": "Canonical's long-term-support release, on a five-year security clock. Pick Desktop or Server, then the architecture of the machine that will run it.",
+    "logo": { "src": "logos/ubuntu.svg", "alt": "Ubuntu logo", "width": 180, "height": 180 },
+    "pros": [
+      "Five years of free security updates: the LTS is supported until April 2031.",
+      "GNOME 50 desktop and Linux 7.0 on the same 26.04.1 media.",
+      "Server images for amd64, arm64, ppc64el, s390x and RISC-V in the same release.",
+      "One installer family and one set of release notes for desktop and server."
+    ],
+    "cons": [
+      "Desktop wants 6 GB RAM and 25 GB of free disk; below that Canonical recommends Xubuntu or Lubuntu.",
+      "The 26.10 interim brings newer kernels and graphics support, but only nine months of updates; it has its own page.",
+      "The erase-disk option takes the entire selected drive; keeping another system means manual partitioning.",
+      "Writing the stick erases it, and the running system's own disk appears in the same device list."
+    ],
+    "links": [
+      { "label": "Ubuntu website", "href": "https://ubuntu.com/" },
+      { "label": "Download Desktop", "href": "https://ubuntu.com/download/desktop" },
+      { "label": "26.04 release notes", "href": "https://documentation.ubuntu.com/release-notes/26.04/" }
+    ],
+    "previewNote": "A stock screenshot of Ubuntu 16.04 with the Unity desktop from Wikimedia Commons. It is not 26.04 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/ubuntu/ubuntu-desktop.webp",
+      "alt": "Ubuntu 16.04 Unity desktop with Files, a terminal and LibreOffice open",
+      "width": 1600,
+      "height": 1000,
+      "bar": "ubuntu-26.04.1-desktop-amd64.iso · 26.04.1",
+      "caption": "Stock screenshot of Ubuntu 16.04 (Unity) · not 26.04, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_16.04_Desktop_screenshot.png",
+        "license": "CC BY 3.0",
+        "artist": "Rprpr"
+      }
+    },
+    "status": "Two official paths: the Desktop and Server ISOs, written to an 8 GB or larger stick with Disks, Startup Disk Creator or dd. Writing erases the stick; the installer's erase-disk option erases the target disk. This is the five-year choice; the newer 26.10 interim has its own page.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://releases.ubuntu.com/26.04.1/" },
+      { "label": "Release notes", "href": "https://documentation.ubuntu.com/release-notes/26.04/" },
+      { "label": "Ubuntu 26.10 (interim)", "href": "./ubuntu-26-10" },
+      { "label": "Create a bootable USB stick", "href": "https://documentation.ubuntu.com/desktop/en/latest/how-to/create-a-bootable-usb-stick/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/ubuntu.svg\nUbuntu logo from Simple Icons (CC0), https://simpleicons.org; the Ubuntu name and marks belong to Canonical, shown only to identify Ubuntu. No endorsement implied.",
+      "shots/ubuntu/ubuntu-desktop.webp\nUbuntu 16.04 Unity desktop, screenshot by Rprpr, https://commons.wikimedia.org/wiki/File:Ubuntu_16.04_Desktop_screenshot.png, CC BY 3.0. Resized and converted to WebP; this copy under the same licence. Not a 26.04 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop",
+      "description": "The GNOME desktop Canonical ships, with the installer on the same ISO: try it live, then install or repartition.",
+      "usbNote": "8 GB stick or larger. Disks (Restore Disk Image), Startup Disk Creator or dd; writing erases the stick.",
+      "images": [
+        {
+          "id": "ubuntu-desktop-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://releases.ubuntu.com/26.04.1/ubuntu-26.04.1-desktop-amd64.iso",
+          "sha256": "601e30fbf5d97759367c632e2c33630665039b7e2158fd068403da3ccf1bda1f",
+          "sha256Url": "https://releases.ubuntu.com/26.04.1/SHA256SUMS",
+          "size": 6482409472,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-desktop-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-desktop-arm64.iso",
+          "sha256": "c54d196489d3c867975fb3bbb72ca52ec2e137456e305481f81096304e4d2517",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
+          "size": 4154798080,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "server",
+      "name": "Server",
+      "description": "The same release without a desktop: the live server installer for machines that are administered over SSH or a console.",
+      "usbNote": "Bootable on amd64 and arm64. The ppc64el, s390x and RISC-V images target their own firmware and hypervisors, not a PC USB stick.",
+      "images": [
+        {
+          "id": "ubuntu-server-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://releases.ubuntu.com/26.04.1/ubuntu-26.04.1-live-server-amd64.iso",
+          "sha256": "cc8a95cde20f6ced61a322420de00f10cc3c90ced545daa46cb9c1a117f1d927",
+          "sha256Url": "https://releases.ubuntu.com/26.04.1/SHA256SUMS",
+          "size": 2927861760,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-server-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-arm64.iso",
+          "sha256": "af78753c94b924c85c4964c670692a853f7c80299a4064e317edad95462e3168",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
+          "size": 3076861952,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-server-ppc64le",
+          "arch": "ppc64le",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-ppc64el.iso",
+          "sha256": "3eb24626add663104f416bbdb3ca6ed37eabf8bb9a2308d4c9751d0976094826",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
+          "size": 1647902720,
+          "usb": false
+        },
+        {
+          "id": "ubuntu-server-s390x",
+          "arch": "s390x",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-s390x.iso",
+          "sha256": "3756e8b969f67b59e85104cbabe5e1d86e02feb3835a90f6ea97ace86845b49a",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
+          "size": 775876608,
+          "usb": false
+        },
+        {
+          "id": "ubuntu-server-riscv64",
+          "arch": "riscv64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-riscv64.iso",
+          "sha256": "c44c0e9343a477e08943a140d21ac903ec891ece5c0a69f7424e198562f9f272",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
+          "size": 1690697728,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "until": "2031-04", "source": "https://documentation.ubuntu.com/release-notes/26.04/" }
+}

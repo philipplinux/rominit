@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { OSES } from '../src/os/index.js';
+import { OSES, osImagePinProblems, osPhotoProblems, osRecordProblems } from '../src/os/index.js';
 const [alpine, omarchy] = OSES;
 import { osArchitectures, osImage, osImageEntry } from '../src/os/index.js';
 
@@ -57,14 +57,15 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
   assert.deepEqual(files.sort(), OSES.map(os => os.id).sort(), 'every catalog/os/<group>/<id>.json is imported in src/os/index.js');
   for (const os of OSES) {
     assert.match(os.id, /^[a-z0-9-]+$/);
-    assert.ok(os.name && os.shortName && os.version && os.releaseDate && os.source);
+    // Info-only product pages carry no release to date; everything else still needs version and date.
+    assert.ok(os.name && os.shortName && os.source && (os.infoOnly === true || (os.version && os.releaseDate)));
     assert.equal(new URL(os.source).protocol, 'https:');
-    assert.ok(os.editions.length, `${os.id} has editions`);
-    assert.ok(os.editions.some(edition => edition.id === os.defaultEdition), `${os.id} default edition exists`);
+    assert.ok(os.infoOnly === true || os.editions.length, `${os.id} has editions`);
+    assert.ok(os.infoOnly === true || os.editions.some(edition => edition.id === os.defaultEdition), `${os.id} default edition exists`);
     assert.ok(os.page.description && os.page.eyebrow && os.page.intro && os.page.status && os.page.checked);
     assert.ok(os.page.pros.length && os.page.cons.length);
     assert.ok(os.page.links.length && os.page.footer.length && os.page.credits.length);
-    assert.ok(os.page.logo.src && os.page.shot.src && os.page.shot.alt);
+    assert.deepEqual(osRecordProblems(os), [], `${os.id} record is complete`);
     const images = os.editions.flatMap(edition => edition.images);
     assert.equal(new Set(images.map(image => image.id)).size, images.length, `${os.id} image ids are unique`);
     for (const image of images) {
@@ -72,9 +73,9 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
       const url = new URL(image.url);
       assert.equal(url.protocol, 'https:');
       assert.ok(!url.username && !url.password, `${image.id} has no credentials in its URL`);
-      assert.match(image.sha256, /^[a-f0-9]{64}$/, `${image.id} pins a SHA-256`);
+      assert.deepEqual(osImagePinProblems(image), [], `${image.id} pins a digest`);
       assert.ok(Number.isSafeInteger(image.size) && image.size > 0, `${image.id} pins a size`);
-      assert.match(image.format, /^(iso|img\.gz|tar\.gz)$/);
+      assert.match(image.format, /^(iso|img\.gz|img\.bz2|img\.xz|tar\.gz)$/);
       assert.equal(typeof image.usb, 'boolean');
       assert.equal(osImage(image.id), image, `${image.id} resolves`);
     }
@@ -83,11 +84,9 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
 
 test('a stock preview photo carries its author, source and licence', () => {
   for (const os of OSES) {
-    const photo = os.page.shot.photo;
-    if (!photo) continue; // an OS may show its own recording instead
-    assert.ok(photo.artist, `${os.id}: the photo names its author`);
-    assert.match(photo.page, /^https:\/\/commons\.wikimedia\.org\//, `${os.id}: the photo links its Commons page`);
-    assert.match(photo.license, /^(CC0|CC BY(-SA)? [\d.]+)$/, `${os.id}: the photo states a Creative Commons licence`);
+    const photo = os.page.shot?.photo;
+    if (!photo) continue; // an OS may show its own recording or no preview at all
+    assert.deepEqual(osPhotoProblems(photo), [], `${os.id}: the photo carries its author, source and licence`);
     assert.ok(os.page.credits.some(credit => credit.includes(photo.artist) && credit.includes(photo.license)),
       `${os.id}: the photo is credited in the notices`);
   }
@@ -97,4 +96,108 @@ test('every OS and emulator record says whether official support is ongoing or d
   const { officialSupportProblems } = await import('../src/catalog.js');
   const { EMULATORS } = await import('../src/emulators/index.js');
   for (const entry of [...OSES, ...EMULATORS]) assert.deepEqual(officialSupportProblems(entry.officialSupport), [], entry.id);
+});
+
+test('an OS image may pin SHA-512 when the publisher ships no SHA-256', () => {
+  const base = { id: 'x-image-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', size: 1, usb: false };
+  assert.deepEqual(osImagePinProblems({ ...base, sha512: 'a'.repeat(128), sha512Url: 'https://example.com/SHA512SUMS' }), []);
+  assert.deepEqual(osImagePinProblems({ ...base, sha256: 'b'.repeat(64), sha256Url: 'https://example.com/SHA256SUMS' }), []);
+  assert.deepEqual(osImagePinProblems({ ...base, sha256: 'b'.repeat(64), sha256Url: 'https://example.com/SHA256SUMS', sha512: 'a'.repeat(128), sha512Url: 'https://example.com/SHA512SUMS' }), []);
+});
+
+test('a pin with neither digest, a wrong-length digest or a bare checksum url fails', () => {
+  const base = { id: 'x-image-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', size: 1, usb: false };
+  assert.match(osImagePinProblems(base).join(' '), /needs a sha256 or sha512/);
+  assert.match(osImagePinProblems({ ...base, sha256: 'b'.repeat(63) }).join(' '), /sha256 must be 64/);
+  assert.match(osImagePinProblems({ ...base, sha512: 'a'.repeat(127) }).join(' '), /sha512 must be 128/);
+  assert.match(osImagePinProblems({ ...base, sha256Url: 'https://example.com/SHA256SUMS' }).join(' '), /sha256Url needs an https url and a sha256 pin/);
+  assert.match(osImagePinProblems({ ...base, sha256: 'b'.repeat(64), sha256Url: 'http://example.com/x' }).join(' '), /https/);
+});
+
+test('an OS record may ship logo-only when no screenshot can be licensed', () => {
+  const record = {
+    id: 'x-os', name: 'X OS', shortName: 'X', defaultEdition: 'one', version: '1', releaseDate: '2026-01-01', source: 'https://example.com/',
+    editions: [{ id: 'one', name: 'One', description: 'd', usbNote: 'u', images: [{ id: 'x-os-one-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', sha256: 'b'.repeat(64), size: 1, usb: false }] }],
+    page: { description: 'd', eyebrow: 'e', intro: 'i', status: 's', checked: '2026-10-27', pros: ['p'], cons: ['c'], links: [{ label: 'l', href: 'https://example.com/' }], footer: [{ label: 'f', href: 'https://example.com/' }], credits: ['logo'], logo: { src: 'logos/x.svg', alt: 'X', width: 1, height: 1 } },
+  };
+  assert.deepEqual(osRecordProblems(record), []);
+  assert.match(osRecordProblems({ ...record, page: { ...record.page, shot: { src: 'shots/x.webp', alt: '' } } }).join(' '), /shot needs src and alt/);
+  assert.match(osRecordProblems({ ...record, page: { ...record.page, logo: {} } }).join(' '), /a logo is required/);
+});
+
+test('a publisher screenshot carries its source page, artist and the terms the site states', () => {
+  assert.deepEqual(osPhotoProblems({ page: 'https://www.example-os.org/screenshots/desktop', license: 'Publisher screenshot (site terms)', artist: 'Example OS project' }), []);
+  assert.deepEqual(osPhotoProblems({ page: 'https://www.example-os.org/screenshots/desktop', license: 'Publisher screenshot, terms not stated', artist: 'Example OS project' }), []);
+  assert.deepEqual(osPhotoProblems({ page: 'https://www.example-os.org/screenshot.png', license: 'Publisher screenshot', artist: 'Example OS project' }), []);
+  assert.match(osPhotoProblems({ page: 'https://www.example-os.org/x', license: 'Publisher screenshot (site terms)' }).join(' '), /artist/);
+  assert.deepEqual(osPhotoProblems({ page: 'https://www.example-os.org/x', license: 'Publisher screenshot (site terms)', artist: 'A' }), []);
+  assert.match(osPhotoProblems({ license: 'Publisher screenshot (site terms)', artist: 'A' }).join(' '), /https/);
+  assert.match(osPhotoProblems({ page: 'https://www.example-os.org/x', artist: 'A' }).join(' '), /licence|publisher/);
+  assert.match(osPhotoProblems({ page: 'https://www.example-os.org/x', license: 'All rights reserved', artist: 'A' }).join(' '), /licence|publisher/);
+});
+
+test('a screenshot may be credited under GPL/LGPL/MPL/FDL, not only Creative Commons', () => {
+  assert.deepEqual(osPhotoProblems({ page: 'https://example.com/shot', license: 'GPL 2.0', artist: 'Someone' }), []);
+  assert.deepEqual(osPhotoProblems({ page: 'https://commons.wikimedia.org/wiki/File:X', license: 'LGPL 3.0', artist: 'Someone' }), []);
+  assert.deepEqual(osPhotoProblems({ page: 'https://example.com/shot', license: 'MPL 2.0', artist: 'Someone' }), []);
+  assert.deepEqual(osPhotoProblems({ page: 'https://example.com/shot', license: 'FDL 1.3', artist: 'Someone' }), []);
+  assert.deepEqual(osPhotoProblems({ page: 'https://commons.wikimedia.org/wiki/File:X', license: 'CC BY-SA 4.0', artist: 'Someone' }), []);
+  assert.match(osPhotoProblems({ page: 'https://example.com/shot', license: 'all rights reserved', artist: 'Someone' }).join(' '), /licence/);
+  assert.match(osPhotoProblems({ page: 'http://example.com/shot', license: 'GPL 2.0', artist: 'Someone' }).join(' '), /https/);
+  assert.match(osPhotoProblems({ page: 'https://example.com/shot', license: 'GPL 2.0' }).join(' '), /artist/);
+});
+
+test('a SHA-512 pin is verified with SHA-512 and a mismatch names the algorithm', async () => {
+  const { verifyPins } = await import('../src/hash.js');
+  const { createHash } = await import('node:crypto');
+  const body = 'digest me';
+  const good = createHash('sha512').update(body).digest('hex');
+  const file = new File([body], 'image.iso');
+  assert.equal((await verifyPins([{ name: 'image.iso', sha512: good, file }], () => {}))['image.iso'], good);
+  const bad = createHash('sha512').update('other').digest('hex');
+  await assert.rejects(verifyPins([{ name: 'image.iso', sha512: bad, file }], () => {}), /SHA-512 mismatch/);
+  await assert.rejects(verifyPins([{ name: 'image.iso', sha256: 'b'.repeat(64), file }], () => {}), /SHA-256 mismatch/);
+});
+
+const fixtureRecord = () => ({
+  id: 'x-os', name: 'X OS', shortName: 'X', defaultEdition: 'one', version: '1', releaseDate: '2026-01-01', source: 'https://example.com/',
+  editions: [{ id: 'one', name: 'One', description: 'd', usbNote: 'u', images: [{ id: 'x-os-one-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', sha256: 'b'.repeat(64), size: 1, usb: false }] }],
+  page: { description: 'd', eyebrow: 'e', intro: 'i', status: 's', checked: '2026-10-27', pros: ['p'], cons: ['c'], links: [{ label: 'l', href: 'https://example.com/' }], footer: [{ label: 'f', href: 'https://example.com/' }], credits: ['logo'], logo: { src: 'logos/x.svg', alt: 'X', width: 1, height: 1 } },
+});
+
+test('a computed SHA-256 pin passes and needs the date but no publisher url', () => {
+  const image = { id: 'x-image-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', sha256: 'b'.repeat(64), sha256Computed: '2026-10-27', size: 1, usb: false };
+  assert.deepEqual(osImagePinProblems(image), []);
+  assert.match(osImagePinProblems({ ...image, sha256Computed: 'October 2026' }).join(' '), /sha256Computed must be an ISO date/);
+  assert.match(osImagePinProblems({ ...image, sha256Computed: undefined }).join(' '), /^$/);
+  assert.match(osImagePinProblems({ ...image, sha256Url: 'https://example.com/SHA256SUMS' }).join(' '), /computed sha256 has no publisher checksum url/);
+  assert.match(osImagePinProblems({ ...image, sha256: undefined }).join(' '), /sha256Computed needs a sha256 pin/);
+});
+
+test('an info-only record passes with empty editions and no default edition', () => {
+  const record = { ...fixtureRecord(), infoOnly: true, editions: [] };
+  delete record.defaultEdition;
+  assert.deepEqual(osRecordProblems(record), []);
+});
+
+test('an info-only record with editions or images fails', () => {
+  const record = { ...fixtureRecord(), infoOnly: true };
+  assert.match(osRecordProblems(record).join(' '), /an info-only record carries no editions/);
+  const withDefault = { ...fixtureRecord(), infoOnly: true, editions: [] };
+  assert.match(osRecordProblems(withDefault).join(' '), /no defaultEdition/);
+  const noLinks = { ...fixtureRecord(), infoOnly: true, editions: [], page: { ...fixtureRecord().page, links: [] } };
+  assert.match(osRecordProblems(noLinks).join(' '), /an info-only record needs links/);
+});
+
+test('an info-only record needs no release version or date', () => {
+  const record = { ...fixtureRecord(), infoOnly: true, editions: [] };
+  delete record.defaultEdition;
+  delete record.version;
+  delete record.releaseDate;
+  assert.deepEqual(osRecordProblems(record), []);
+});
+
+test('a normal record still needs editions', () => {
+  const record = { ...fixtureRecord(), editions: [] };
+  assert.match(osRecordProblems(record).join(' '), /needs editions/);
 });

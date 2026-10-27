@@ -1,0 +1,53 @@
+{
+  "id": "cachyos",
+  "name": "CachyOS",
+  "shortName": "CachyOS",
+  "defaultEdition": "desktop",
+  "version": "260809",
+  "releaseDate": "2026-08-09",
+  "source": "https://cachyos.org/",
+  "page": {
+    "description": "CachyOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED DESKTOP",
+    "intro": "An Arch-based desktop tuned for current CPUs, with its own kernel builds and package repository. One desktop image, rolling updates.",
+    "logo": { "src": "logos/cachyos.svg", "alt": "CachyOS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Packages built for modern x86-64 CPU levels, with an Arch base.",
+      "Rolling release: no reinstall between monthly images.",
+      "Its own kernel and scheduler options are set up out of the box.",
+      "One image, so no edition matrix to choose from."
+    ],
+    "cons": [
+      "Rolling updates are frequent and expected.",
+      "x86_64 only.",
+      "The version is the monthly image date (2026-08-09), not a semver release.",
+      "No screenshot with a reusable licence was available, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "CachyOS website", "href": "https://cachyos.org/" },
+      { "label": "Download mirror", "href": "https://mirror.cachyos.org/ISO/desktop/260809/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was available for CachyOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One path: the desktop ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The pinned image is the 2026-08-09 build.",
+    "footer": [
+      { "label": "CachyOS website", "href": "https://cachyos.org/" },
+      { "label": "Download mirror", "href": "https://mirror.cachyos.org/ISO/desktop/260809/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/cachyos.svg\nCachyOS logo from Simple Icons (CC0), https://simpleicons.org; the CachyOS name and mark belong to the CachyOS project, shown only to identify CachyOS. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop",
+      "description": "The desktop image, with the project's kernel and the KDE Plasma desktop.",
+      "usbNote": "3.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "cachyos-desktop-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.cachyos.org/ISO/desktop/260809/cachyos-desktop-linux-260809.iso", "sha256": "959f6577f45e25ee9fd8c220fd221b08e4ea79412c7315c0f922dd6d86d5e33c", "sha256Url": "https://mirror.cachyos.org/ISO/desktop/260809/cachyos-desktop-linux-260809.iso.sha256", "size": 3188850688, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://cachyos.org/" }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "openbsd",
+  "name": "OpenBSD",
+  "shortName": "OpenBSD",
+  "defaultEdition": "install",
+  "version": "7.8",
+  "releaseDate": "2025-10-22",
+  "source": "https://www.openbsd.org/",
+  "page": {
+    "description": "OpenBSD 7.8 installer: size, architecture, publisher SHA-256 and a licensed screenshot.",
+    "eyebrow": "OPERATING SYSTEM / BSD",
+    "intro": "A security-focused BSD with its own kernel and userland. The installer image is small; a desktop is added after the base system.",
+    "logo": { "src": "logos/openbsd.svg", "alt": "OpenBSD logo", "width": 180, "height": 180 },
+    "pros": [
+      "Security-first defaults and a small, audited base system.",
+      "Documented, predictable release cadence with six-month support windows.",
+      "The installer is under a gigabyte.",
+      "One handbook covers the whole system."
+    ],
+    "cons": [
+      "Not Linux: Linux drivers and tools do not apply.",
+      "No desktop on the installer; X and a window manager are added separately.",
+      "Hardware support is narrower than on Linux.",
+      "Each release is supported for about a year, so upgrades are routine."
+    ],
+    "links": [
+      { "label": "OpenBSD website", "href": "https://www.openbsd.org/" },
+      { "label": "7.8 release page", "href": "https://www.openbsd.org/78.html" },
+      { "label": "Download mirror", "href": "https://cdn.openbsd.org/pub/OpenBSD/7.8/amd64/" }
+    ],
+    "previewNote": "A stock screenshot of a Window Maker desktop on OpenBSD 6.5 from Wikimedia Commons. It is not 7.8 and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/openbsd/openbsd-desktop.webp",
+      "alt": "Window Maker desktop running on OpenBSD 6.5",
+      "width": 1600,
+      "height": 900,
+      "bar": "install78.iso · 7.8",
+      "caption": "Stock screenshot of OpenBSD 6.5 with Window Maker · not 7.8, no image written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Window_Maker_Desktop_on_OpenBSD_6.5.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Khaosaming"
+      }
+    },
+    "status": "One image: the amd64 installer ISO, written to a USB stick with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "OpenBSD releases", "href": "https://www.openbsd.org/errata78.html" },
+      { "label": "Download mirror", "href": "https://cdn.openbsd.org/pub/OpenBSD/7.8/amd64/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/openbsd.svg\nOpenBSD logo from Simple Icons (CC0), https://simpleicons.org; the OpenBSD name and mark belong to the OpenBSD project, shown only to identify OpenBSD. No endorsement implied.",
+      "shots/openbsd/openbsd-desktop.webp\nWindow Maker on OpenBSD 6.5 by Khaosaming, https://commons.wikimedia.org/wiki/File:Window_Maker_Desktop_on_OpenBSD_6.5.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 7.8 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "install",
+      "name": "Installer (amd64)",
+      "description": "The amd64 installer image with the base system and the standard sets.",
+      "usbNote": "810 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "openbsd-install-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdn.openbsd.org/pub/OpenBSD/7.8/amd64/install78.iso", "sha256": "a228d0a1ef558b4d9ec84c698f0d3ffd13cd38c64149487cba0f1ad873be07b2", "sha256Url": "https://cdn.openbsd.org/pub/OpenBSD/7.8/amd64/SHA256", "size": 811106304, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.openbsd.org/" }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "ghostbsd",
+  "name": "GhostBSD",
+  "shortName": "GhostBSD",
+  "defaultEdition": "amd64",
+  "version": "26.1-R15.0p2",
+  "releaseDate": "2026-04-18",
+  "source": "https://ghostbsd.org/",
+  "page": {
+    "description": "GhostBSD editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / BSD DESKTOP",
+    "intro": "A desktop BSD built on FreeBSD, with the MATE desktop and a graphical installer. One amd64 image.",
+    "logo": { "src": "logos/ghostbsd.png", "alt": "GhostBSD logo", "width": 263, "height": 90 },
+    "pros": [
+      "FreeBSD underneath, with a desktop and installer ready to use.",
+      "MATE desktop configured out of the box.",
+      "The same base as FreeBSD, so the handbook's material applies.",
+      "One image, so no edition matrix."
+    ],
+    "cons": [
+      "Not Linux: Linux-only drivers and tools do not apply.",
+      "amd64 only.",
+      "No support window is published, so none is stated here.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      { "label": "GhostBSD website", "href": "https://ghostbsd.org/" },
+      { "label": "Downloads", "href": "https://ghostbsd.org/download" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for GhostBSD; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One path: the amd64 ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Downloads & checksums", "href": "https://download.ghostbsd.org/releases/amd64/26.1-R15.0p2/" },
+      { "label": "GhostBSD website", "href": "https://ghostbsd.org/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/ghostbsd.png\nGhostBSD logo, BSD licence, by the GhostBSD team, https://commons.wikimedia.org/wiki/File:GhostBSD_logo.png."
+    ]
+  },
+  "editions": [
+    {
+      "id": "amd64",
+      "name": "Desktop (amd64)",
+      "description": "The desktop image with MATE and the graphical installer.",
+      "usbNote": "4.7 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ghostbsd-amd64-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.ghostbsd.org/releases/amd64/26.1-R15.0p2/GhostBSD-26.1-R15.0p2.iso", "sha256": "ff6c4df357df412d3b0c87e054204682b7c13e0cb90bcf61dcda58528a4f948e", "sha256Url": "https://download.ghostbsd.org/releases/amd64/26.1-R15.0p2/GhostBSD-26.1-R15.0p2.iso.sha256", "size": 4652670976, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://ghostbsd.org/" }
+}

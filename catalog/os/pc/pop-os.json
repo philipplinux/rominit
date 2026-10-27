@@ -1,0 +1,114 @@
+{
+  "id": "pop-os",
+  "name": "Pop!_OS",
+  "shortName": "Pop!_OS",
+  "defaultEdition": "generic",
+  "version": "24.04 LTS",
+  "releaseDate": "2026-09-17",
+  "source": "https://system76.com/pop/download",
+  "page": {
+    "description": "Pop!_OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / UBUNTU-BASED DESKTOP",
+    "intro": "System76's Ubuntu-based desktop, built for their own laptops and usable on any PC. One LTS image for 64-bit Intel and AMD machines.",
+    "logo": {
+      "src": "logos/pop-os.svg",
+      "alt": "Pop!_OS logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Based on an Ubuntu LTS base, with System76's own desktop and tools.",
+      "An NVIDIA-ready image exists for machines that need the driver at install time.",
+      "Automatic window tiling and a keyboard-first workflow.",
+      "One image per use case instead of a long edition list."
+    ],
+    "cons": [
+      "Only x86_64 generic images are published for this release.",
+      "No end-of-life date is published on the download page.",
+      "The Commons screenshot shows 21.04, not 24.04.",
+      "Hardware enablement is tuned around System76's own machines."
+    ],
+    "links": [
+      {
+        "label": "Pop!_OS download",
+        "href": "https://system76.com/pop/download"
+      },
+      {
+        "label": "System76",
+        "href": "https://system76.com/"
+      }
+    ],
+    "previewNote": "A stock screenshot of Pop!_OS 21.04 with COSMIC from Wikimedia Commons. It is not 24.04 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/pop-os/pop-desktop.webp",
+      "alt": "Pop!_OS 21.04 desktop with COSMIC, the applications overview and a terminal",
+      "width": 1600,
+      "height": 900,
+      "bar": "pop-os_24.04_amd64_generic_28.iso · 24.04",
+      "caption": "Stock screenshot of Pop!_OS 21.04 · not 24.04, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_21.04_with_the_COSMIC_desktop.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Electron2.0"
+      }
+    },
+    "status": "One image per driver setup: the generic or the NVIDIA ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The date is the official mirror's file date (2026-09-17); System76 publishes no separate release date on this page.",
+    "footer": [
+      {
+        "label": "Official download",
+        "href": "https://system76.com/pop/download"
+      },
+      {
+        "label": "SHA-256 sums for this build",
+        "href": "https://iso.pop-os.org/24.04/amd64/generic/28/SHA256SUMS"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/pop-os.svg\nPop!_OS logo from Simple Icons (CC0), https://simpleicons.org; the Pop!_OS name and mark belong to System76, shown only to identify Pop!_OS. No endorsement implied.",
+      "shots/pop-os/pop-desktop.webp\nPop!_OS 21.04 with COSMIC, screenshot by Electron2.0, https://commons.wikimedia.org/wiki/File:Pop!_OS_21.04_with_the_COSMIC_desktop.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 24.04 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "generic",
+      "name": "Generic (amd64)",
+      "description": "The standard image for 64-bit Intel and AMD machines.",
+      "usbNote": "Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "pop-os-generic-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://iso.pop-os.org/24.04/amd64/generic/28/pop-os_24.04_amd64_generic_28.iso",
+          "sha256": "8d78e500fc95da765a91cddcf2ab7ba71ce4e7997e4f008456d4d872ee8f8221",
+          "sha256Url": "https://iso.pop-os.org/24.04/amd64/generic/28/SHA256SUMS",
+          "size": 3526164480,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "nvidia",
+      "name": "NVIDIA (amd64)",
+      "description": "The same image with the NVIDIA driver included, for machines that need it at install time.",
+      "usbNote": "Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "pop-os-nvidia-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://iso.pop-os.org/24.04/amd64/nvidia/28/pop-os_24.04_amd64_nvidia_28.iso",
+          "sha256": "bd867a6b93810769b2189471cfc2d7b6b9c642213c7bf827de511be5f42ce666",
+          "sha256Url": "https://iso.pop-os.org/24.04/amd64/nvidia/28/SHA256SUMS",
+          "size": 3934945280,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://system76.com/pop/download"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "id": "gentoo",
+  "name": "Gentoo Linux",
+  "shortName": "Gentoo",
+  "defaultEdition": "minimal",
+  "version": "20261025",
+  "releaseDate": "2026-10-25",
+  "source": "https://www.gentoo.org/",
+  "page": {
+    "description": "Gentoo Linux minimal install image: size, checksum and a licensed screenshot.",
+    "eyebrow": "OPERATING SYSTEM / SOURCE-BASED LINUX",
+    "intro": "A source-based distribution built around Portage. This is the minimal install image: it boots, enters a shell and hands the build to you.",
+    "logo": {
+      "src": "logos/gentoo.svg",
+      "alt": "Gentoo logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "You choose the USE flags, profile and init, then rebuild what matters.",
+      "Excellent documentation in the handbook.",
+      "Rolling updates with no reinstalls.",
+      "A running system can be trimmed to exactly what it needs."
+    ],
+    "cons": [
+      "Compiling takes real time; the minimal image builds the system.",
+      "Rolling updates need attention, especially with a custom profile.",
+      "The install image is 1 GB and has no desktop.",
+      "The Commons screenshot is from 2008, not this build."
+    ],
+    "links": [
+      {
+        "label": "Gentoo website",
+        "href": "https://www.gentoo.org/"
+      },
+      {
+        "label": "Download mirror",
+        "href": "https://distfiles.gentoo.org/releases/amd64/autobuilds/current-install-amd64-minimal/"
+      },
+      {
+        "label": "Handbook",
+        "href": "https://wiki.gentoo.org/wiki/Handbook:Main_Page"
+      }
+    ],
+    "previewNote": "A stock screenshot of Gentoo Linux from 2008, from Wikimedia Commons. It is not this build and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/gentoo/gentoo-desktop.webp",
+      "alt": "Gentoo Linux desktop from 2008 with several terminal windows",
+      "width": 1280,
+      "height": 1024,
+      "bar": "install-amd64-minimal-20261025T170057Z.iso · 20261025",
+      "caption": "Stock screenshot of Gentoo Linux from 2008 · not this build, no image written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Gentoo_Linux_screenshot_(2008).jpg",
+        "license": "CC BY-SA 3.0",
+        "artist": "Daemorris"
+      }
+    },
+    "status": "One image: the amd64 minimal install ISO, written to a USB stick and booted into a shell; the handbook builds the system from there. Writing erases the stick; the install then partitions and formats the target disk.",
+    "footer": [
+      {
+        "label": "Official downloads",
+        "href": "https://www.gentoo.org/downloads/"
+      },
+      {
+        "label": "Mirror for this build",
+        "href": "https://distfiles.gentoo.org/releases/amd64/autobuilds/current-install-amd64-minimal/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/gentoo.svg\nGentoo logo from Simple Icons (CC0), https://simpleicons.org; the Gentoo name and mark belong to the Gentoo Foundation, shown only to identify Gentoo. No endorsement implied.",
+      "shots/gentoo/gentoo-desktop.webp\nGentoo Linux screenshot (2008) by Daemorris, https://commons.wikimedia.org/wiki/File:Gentoo_Linux_screenshot_(2008).jpg, CC BY-SA 3.0. Converted to WebP; this copy under the same licence. Not a 20261025 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "minimal",
+      "name": "Minimal install (amd64)",
+      "description": "The minimal install ISO: boot, network, shell and the handbook.",
+      "usbNote": "1 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "gentoo-minimal-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://distfiles.gentoo.org/releases/amd64/autobuilds/current-install-amd64-minimal/install-amd64-minimal-20261025T170057Z.iso",
+          "sha256": "f773d3ef7d9c8130c81f2ed0208486039edf58f044a4af4750f4d5373f731404",
+          "sha256Url": "https://distfiles.gentoo.org/releases/amd64/autobuilds/current-install-amd64-minimal/install-amd64-minimal-20261025T170057Z.iso.sha256",
+          "size": 1034242048,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.gentoo.org/"
+  }
+}

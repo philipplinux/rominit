@@ -1,0 +1,86 @@
+{
+  "id": "arch-linux",
+  "name": "Arch Linux",
+  "shortName": "Arch",
+  "defaultEdition": "installer",
+  "version": "2026.10.01",
+  "releaseDate": "2026-10-01",
+  "requirements": {
+    "summary": "512 MiB RAM · 2 GiB disk · Internet",
+    "note": "Arch runs on any x86_64 machine with 512 MiB RAM, and a basic install takes less than 2 GiB of disk. The live installer itself needs more memory, and packages are fetched from a mirror during installation.",
+    "source": "https://wiki.archlinux.org/title/Installation_guide",
+    "checked": "2026-10-27"
+  },
+  "kernel": { "version": "7.2.7", "line": "rolling", "updates": "7.2.11", "checked": "2026-10-27", "source": "https://archlinux.org/releng/releases/2026.10.01/" },
+  "source": "https://archlinux.org/download/",
+  "page": {
+    "description": "Arch Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ROLLING LINUX",
+    "intro": "A rolling, do-it-yourself distribution: one monthly install image, a package manager that stays current, and no desktop unless you install one. There is one architecture, x86_64.",
+    "logo": { "src": "logos/arch-linux.svg", "alt": "Arch Linux logo", "width": 180, "height": 180 },
+    "pros": [
+      "Rolling release: the monthly image installs a current system, and pacman keeps it current.",
+      "Minimal by design: nothing is installed that you did not choose.",
+      "The same image is an installer and a rescue system.",
+      "The ArchWiki documents almost every step and piece of hardware."
+    ],
+    "cons": [
+      "The official guide is a manual, command-line install, including partitioning.",
+      "No desktop, browser or office suite on the ISO: you add everything after boot.",
+      "No support branches and no end date; you are the maintainer of your system.",
+      "x86_64 only. Arch Linux ARM and other ports are separate projects."
+    ],
+    "links": [
+      { "label": "Arch Linux website", "href": "https://archlinux.org/" },
+      { "label": "Download Arch Linux", "href": "https://archlinux.org/download/" },
+      { "label": "Installation guide", "href": "https://wiki.archlinux.org/title/Installation_guide" }
+    ],
+    "previewNote": "A stock screenshot of Arch Linux with KDE Plasma from Wikimedia Commons, taken in October 2025 with the desktop in Portuguese. It is not the 2026.10.01 image and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/arch-linux/arch-desktop.webp",
+      "alt": "Arch Linux KDE Plasma desktop with Firefox and a terminal showing system information",
+      "width": 1600,
+      "height": 900,
+      "bar": "archlinux-2026.10.01-x86_64.iso · 2026.10.01",
+      "caption": "Stock screenshot of Arch Linux with KDE Plasma (October 2025) · no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Arch_Linux_-_October_2025_(Portuguese).png",
+        "license": "CC0",
+        "artist": "Breno Martins de Oliveira Vasconcelos"
+      }
+    },
+    "status": "One official path: the monthly ISO, written with dd or any image writer. Writing erases the stick; partitioning and formatting happen inside the installer.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://archlinux.org/download/" },
+      { "label": "Release archive", "href": "https://archive.archlinux.org/iso/2026.10.01/" },
+      { "label": "Installation guide", "href": "https://wiki.archlinux.org/title/Installation_guide" },
+      { "label": "USB flash installation medium", "href": "https://wiki.archlinux.org/title/USB_flash_installation_medium" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/arch-linux.svg\nArch Linux logo from Simple Icons (CC0), https://simpleicons.org; the Arch Linux name and logo are recognised trademarks of their owners, shown only to identify Arch Linux. No endorsement implied.",
+      "shots/arch-linux/arch-desktop.webp\nArch Linux with KDE Plasma, screenshot by Breno Martins de Oliveira Vasconcelos, https://commons.wikimedia.org/wiki/File:Arch_Linux_-_October_2025_(Portuguese).png, CC0. Resized and converted to WebP. Not the 2026.10.01 image."
+    ]
+  },
+  "editions": [
+    {
+      "id": "installer",
+      "name": "Installer",
+      "description": "The only official installation image: a live x86_64 system with the installer, archinstall and the rescue tools, built monthly from the current repositories.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick. The installer then partitions and formats the target disk.",
+      "images": [
+        {
+          "id": "arch-linux-installer-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://archive.archlinux.org/iso/2026.10.01/archlinux-2026.10.01-x86_64.iso",
+          "sha256": "684ded26c63240ff4a41e8c25ee84ea6da233f557364821f13d12c2b0a9059a5",
+          "sha256Url": "https://archive.archlinux.org/iso/2026.10.01/sha256sums.txt",
+          "size": 1640497152,
+          "usb": true
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://archlinux.org/releng/releases/" }
+}

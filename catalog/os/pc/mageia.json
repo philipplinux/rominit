@@ -1,0 +1,53 @@
+{
+  "id": "mageia",
+  "name": "Mageia",
+  "shortName": "Mageia",
+  "defaultEdition": "x86_64",
+  "version": "10",
+  "releaseDate": "2026-07-01",
+  "source": "https://www.mageia.org/en/",
+  "page": {
+    "description": "Mageia editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / COMMUNITY LINUX",
+    "intro": "A community distribution with its own installer, control centre and package set, published once a year. One x86_64 image.",
+    "logo": { "src": "logos/mageia.svg", "alt": "Mageia logo", "width": 834, "height": 297 },
+    "pros": [
+      "Its own drakx installer and Mageia Control Center.",
+      "A yearly release cycle with long support for each version.",
+      "Runs on modest hardware with the Xfce or LXQt desktops available at install.",
+      "The publisher signs ISOs with SHA-512 and SHA-3."
+    ],
+    "cons": [
+      "This publisher ships no SHA-256, so ROMinit lists a SHA-512 pin and does not offer USB preparation.",
+      "Smaller package selection than the large distributions.",
+      "Only the month (July 2026) is published for this release; the page uses the 1st accordingly.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      { "label": "Mageia website", "href": "https://www.mageia.org/en/" },
+      { "label": "Download mirror", "href": "https://www.mirrorservice.org/sites/mageia.org/pub/mageia/iso/10/Mageia-10-x86_64/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Mageia; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One path: the x86_64 ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. Mageia publishes SHA-512 for this image, so ROMinit offers the download but not USB preparation. The release is listed as July 2026; the version date above uses the 1st because no exact day is published.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://www.mageia.org/en/downloads/" },
+      { "label": "Mirror for 10", "href": "https://www.mirrorservice.org/sites/mageia.org/pub/mageia/iso/10/Mageia-10-x86_64/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/mageia.svg\nMageia logo by the Mageia Atelier Team, https://commons.wikimedia.org/wiki/File:Mageia_logo.svg, CC BY-SA 3.0."
+    ]
+  },
+  "editions": [
+    {
+      "id": "x86_64",
+      "name": "Installer (x86_64)",
+      "description": "The full DVD image with the installer and package set, for an offline install.",
+      "usbNote": "5.7 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "mageia-x86_64-x86_64", "arch": "x86_64", "format": "iso", "url": "https://www.mirrorservice.org/sites/mageia.org/pub/mageia/iso/10/Mageia-10-x86_64/Mageia-10-x86_64.iso", "sha512": "e02d59303d284dd0ee05ce0b327cbed6d3270410803965078c2fa6961e23d9131775011b111a57476e60f3354321ef46c6c1e107db4db9b708634ed7a26fd270", "sha512Url": "https://www.mirrorservice.org/sites/mageia.org/pub/mageia/iso/10/Mageia-10-x86_64/Mageia-10-x86_64.iso.sha512", "size": 5697957888, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "until": "2028-03", "source": "https://www.mageia.org/en/" }
+}

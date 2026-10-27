@@ -1,0 +1,136 @@
+{
+  "id": "artix",
+  "name": "Artix Linux",
+  "shortName": "Artix",
+  "defaultEdition": "openrc",
+  "version": "20260813",
+  "releaseDate": "2026-08-13",
+  "source": "https://artixlinux.org/",
+  "page": {
+    "description": "Artix Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED, NO SYSTEMD",
+    "intro": "An Arch-based distribution that ships without systemd, in four init variants built from the same base. Pick the init you want, then write the ISO to a stick.",
+    "logo": {
+      "src": "logos/artix.svg",
+      "alt": "Artix logo",
+      "width": 177,
+      "height": 181
+    },
+    "pros": [
+      "Arch packages, with the init system of your choice.",
+      "Four first-class base ISOs: openrc, runit, s6 and dinit.",
+      "Rolling updates, so no release upgrades.",
+      "The base image is small, around 1.2 GB."
+    ],
+    "cons": [
+      "Rolling updates are frequent and expected.",
+      "x86_64 only for these images.",
+      "The version is the build date (2026-08-13).",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Artix website",
+        "href": "https://artixlinux.org/"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://artixlinux.org/download.php"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Artix; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One ISO per init system, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the build date (2026-08-13).",
+    "footer": [
+      {
+        "label": "Official downloads",
+        "href": "https://artixlinux.org/download.php"
+      },
+      {
+        "label": "Checksums for this build",
+        "href": "https://mirror3.artixlinux.org/iso/sha256sums"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/artix.svg\nArtix Linux logo, CC BY-SA 4.0, from https://commons.wikimedia.org/wiki/File:Artix_logo.svg (Commons lists no individual author)."
+    ]
+  },
+  "editions": [
+    {
+      "id": "openrc",
+      "name": "Openrc",
+      "description": "The base Artix image with openrc as init.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "artix-openrc-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.artixlinux.org/iso/artix-base-openrc-20260813-x86_64.iso",
+          "sha256": "6f75cf428b6b2df2d387eceff0d08fb0d93eeff39ec30e0957fbca7851bdf5c6",
+          "sha256Url": "https://mirror3.artixlinux.org/iso/sha256sums",
+          "size": 1235945472,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "runit",
+      "name": "Runit",
+      "description": "The base Artix image with runit as init.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "artix-runit-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.artixlinux.org/iso/artix-base-runit-20260813-x86_64.iso",
+          "sha256": "997027b2dc8e4eeb22d403deea74652f5c38a6e7585a7f99a8bd6c1c79de3ed5",
+          "sha256Url": "https://mirror3.artixlinux.org/iso/sha256sums",
+          "size": 1236367360,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "name": "S6",
+      "description": "The base Artix image with s6 as init.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "artix-s6-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.artixlinux.org/iso/artix-base-s6-20260813-x86_64.iso",
+          "sha256": "a159b0db3819f606b775ba0fa9f239e8fa331e817b7ca4d679c51f88d13922cf",
+          "sha256Url": "https://mirror3.artixlinux.org/iso/sha256sums",
+          "size": 1236232192,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "dinit",
+      "name": "Dinit",
+      "description": "The base Artix image with dinit as init.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "artix-dinit-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.artixlinux.org/iso/artix-base-dinit-20260813-x86_64.iso",
+          "sha256": "bf062d274b48f86c5765d228490b1093d0c6c0546c928cc663947aa3ac3c02b9",
+          "sha256Url": "https://mirror3.artixlinux.org/iso/sha256sums",
+          "size": 1236064256,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://artixlinux.org/"
+  }
+}

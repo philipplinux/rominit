@@ -1,0 +1,77 @@
+{
+  "id": "clonezilla",
+  "name": "Clonezilla Live",
+  "shortName": "Clonezilla",
+  "defaultEdition": "amd64",
+  "version": "3.3.3-37",
+  "releaseDate": "2026-09-13",
+  "source": "https://clonezilla.org/downloads.php",
+  "page": {
+    "description": "Clonezilla Live editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DISK CLONING TOOL",
+    "intro": "A live system for imaging and cloning disks: it boots from a stick, copies partitions or whole drives, and writes nothing until you tell it to. There is one official image.",
+    "logo": { "src": "logos/clonezilla.svg", "alt": "Clonezilla logo", "width": 644, "height": 912 },
+    "pros": [
+      "Images and restores whole disks or single partitions.",
+      "Runs from a live stick, so the machine it works on needs no install.",
+      "Reads and writes many filesystems, including NTFS and ext4.",
+      "Free, and the only image is a single amd64 ISO."
+    ],
+    "cons": [
+      "A text menu interface, not a desktop; mistakes are easy to make.",
+      "Cloning or restoring overwrites the target disk without a safety net.",
+      "Only amd64 is published as a stable ISO.",
+      "The Commons screenshot shows an old menu, not 3.3.3-37."
+    ],
+    "links": [
+      { "label": "Clonezilla website", "href": "https://clonezilla.org/" },
+      { "label": "Downloads", "href": "https://clonezilla.org/downloads.php" },
+      { "label": "Changelog", "href": "https://clonezilla.org/downloads/stable/changelog.php" }
+    ],
+    "previewNote": "A stock screenshot of the Clonezilla boot menu from Wikimedia Commons. It is not 3.3.3-37 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/clonezilla/clonezilla-menu.webp",
+      "alt": "Clonezilla live boot menu with the resolution choices listed",
+      "width": 640,
+      "height": 480,
+      "bar": "clonezilla-live-3.3.3-37-amd64.iso · 3.3.3-37",
+      "caption": "Stock screenshot of the Clonezilla boot menu · older release, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Clonezilla_menu.png",
+        "license": "CC BY-SA 3.0",
+        "artist": "Steven Shiau"
+      }
+    },
+    "status": "One path: the amd64 ISO, written with dd or any image writer. Writing erases the stick; the tool then writes only the disk or partition you select, and restoring replaces its contents.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://clonezilla.org/downloads.php" },
+      { "label": "Changelog", "href": "https://clonezilla.org/downloads/stable/changelog.php" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/clonezilla.svg\nClonezilla logo from Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Clonezilla.svg, CC BY-SA 3.0; the file page names no author. Shown only to identify Clonezilla.",
+      "shots/clonezilla/clonezilla-menu.webp\nClonezilla boot menu screenshot by Steven Shiau, https://commons.wikimedia.org/wiki/File:Clonezilla_menu.png, CC BY-SA 3.0. Converted to WebP; this copy under the same licence. Not a 3.3.3-37 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "amd64",
+      "name": "Live (amd64)",
+      "description": "The stable live image for 64-bit Intel and AMD machines: boot it, then clone or restore a disk.",
+      "usbNote": "Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "clonezilla-amd64-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://downloads.sourceforge.net/project/clonezilla/clonezilla_live_stable/3.3.3-37/clonezilla-live-3.3.3-37-amd64.iso",
+          "sha256": "3079458d926a37d3533e5d5caeb61b6e49c2dc69e2c97e0332ef37986bb3414f",
+          "sha256Url": "https://clonezilla.org/downloads/stable/data/CHECKSUMS.TXT",
+          "size": 505413632,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://clonezilla.org/downloads/stable/changelog.php" }
+}
