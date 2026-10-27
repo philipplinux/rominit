@@ -157,3 +157,38 @@ test('a SHA-512 pin is verified with SHA-512 and a mismatch names the algorithm'
   await assert.rejects(verifyPins([{ name: 'image.iso', sha512: bad, file }], () => {}), /SHA-512 mismatch/);
   await assert.rejects(verifyPins([{ name: 'image.iso', sha256: 'b'.repeat(64), file }], () => {}), /SHA-256 mismatch/);
 });
+
+const fixtureRecord = () => ({
+  id: 'x-os', name: 'X OS', shortName: 'X', defaultEdition: 'one', version: '1', releaseDate: '2026-01-01', source: 'https://example.com/',
+  editions: [{ id: 'one', name: 'One', description: 'd', usbNote: 'u', images: [{ id: 'x-os-one-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', sha256: 'b'.repeat(64), size: 1, usb: false }] }],
+  page: { description: 'd', eyebrow: 'e', intro: 'i', status: 's', checked: '2026-10-27', pros: ['p'], cons: ['c'], links: [{ label: 'l', href: 'https://example.com/' }], footer: [{ label: 'f', href: 'https://example.com/' }], credits: ['logo'], logo: { src: 'logos/x.svg', alt: 'X', width: 1, height: 1 } },
+});
+
+test('a computed SHA-256 pin passes and needs the date but no publisher url', () => {
+  const image = { id: 'x-image-x86_64', arch: 'x86_64', format: 'iso', url: 'https://example.com/x.iso', sha256: 'b'.repeat(64), sha256Computed: '2026-10-27', size: 1, usb: false };
+  assert.deepEqual(osImagePinProblems(image), []);
+  assert.match(osImagePinProblems({ ...image, sha256Computed: 'October 2026' }).join(' '), /sha256Computed must be an ISO date/);
+  assert.match(osImagePinProblems({ ...image, sha256Computed: undefined }).join(' '), /^$/);
+  assert.match(osImagePinProblems({ ...image, sha256Url: 'https://example.com/SHA256SUMS' }).join(' '), /computed sha256 has no publisher checksum url/);
+  assert.match(osImagePinProblems({ ...image, sha256: undefined }).join(' '), /sha256Computed needs a sha256 pin/);
+});
+
+test('an info-only record passes with empty editions and no default edition', () => {
+  const record = { ...fixtureRecord(), infoOnly: true, editions: [] };
+  delete record.defaultEdition;
+  assert.deepEqual(osRecordProblems(record), []);
+});
+
+test('an info-only record with editions or images fails', () => {
+  const record = { ...fixtureRecord(), infoOnly: true };
+  assert.match(osRecordProblems(record).join(' '), /an info-only record carries no editions/);
+  const withDefault = { ...fixtureRecord(), infoOnly: true, editions: [] };
+  assert.match(osRecordProblems(withDefault).join(' '), /no defaultEdition/);
+  const noLinks = { ...fixtureRecord(), infoOnly: true, editions: [], page: { ...fixtureRecord().page, links: [] } };
+  assert.match(osRecordProblems(noLinks).join(' '), /an info-only record needs links/);
+});
+
+test('a normal record still needs editions', () => {
+  const record = { ...fixtureRecord(), editions: [] };
+  assert.match(osRecordProblems(record).join(' '), /needs editions/);
+});

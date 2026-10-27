@@ -32,12 +32,12 @@ import zorinOsJson from '../../catalog/os/pc/zorin-os.json' with { type: 'json' 
 /** Image formats the CLI writes to a USB disk directly; compressed ones are unpacked while writing. */
 export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
 
-/** @typedef {{ id: string, arch: string, format: string, url: string, sha256?: string, sha256Url?: string, sha512?: string, sha512Url?: string, size: number, usb: boolean }} OsImage */
+/** @typedef {{ id: string, arch: string, format: string, url: string, sha256?: string, sha256Url?: string, sha256Computed?: string, sha512?: string, sha512Url?: string, size: number, usb: boolean }} OsImage */
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */
 /** @typedef {{ label: string, href: string }} OsLink */
 /** @typedef {{ page: string, license: string, artist: string }} OsShotPhoto */
 /** @typedef {{ description: string, eyebrow: string, intro: string, logo: { src: string, alt: string, width: number, height: number }, pros: string[], cons: string[], links: OsLink[], previewNote: string, shot?: { src: string, alt: string, width: number, height: number, bar: string, caption: string, photo?: OsShotPhoto }, status: string, footer: OsLink[], checked: string, credits: string[] }} OsPage */
-/** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[] }} Os */
+/** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[], infoOnly?: boolean }} Os */
 
 /** Every OS page, in the order the site lists them. @type {Os[]} */
 export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (almalinuxJson), /** @type {Os} */ (antiXJson), /** @type {Os} */ (archLinuxJson), /** @type {Os} */ (cachyosJson), /** @type {Os} */ (calculateLinuxJson), /** @type {Os} */ (centosStreamJson), /** @type {Os} */ (clonezillaJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (devuanJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (freebsdJson), /** @type {Os} */ (ghostbsdJson), /** @type {Os} */ (haikuJson), /** @type {Os} */ (kaliLinuxJson), /** @type {Os} */ (linuxLiteJson), /** @type {Os} */ (linuxMintJson), /** @type {Os} */ (mageiaJson), /** @type {Os} */ (manjaroJson), /** @type {Os} */ (mxLinuxJson), /** @type {Os} */ (opensuseLeapJson), /** @type {Os} */ (oracleLinuxJson), /** @type {Os} */ (popOsJson), /** @type {Os} */ (rockyLinuxJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (ubuntu2610Json), /** @type {Os} */ (zorinOsJson)];
@@ -70,6 +70,13 @@ export const osImagePinProblems = image => {
     if (digest !== undefined && !DIGEST[algorithm].test(digest)) out.push(`${image?.id}: ${algorithm} must be ${algorithm === 'sha512' ? 128 : 64} lowercase hex`);
     if (url !== undefined && (digest === undefined || !/^https:\/\//.test(url))) out.push(`${image?.id}: ${algorithm}Url needs an https url and a ${algorithm} pin`);
   }
+  // A hash ROMinit computed itself has no publisher file to link, and says when it was computed.
+  if (image?.sha256Computed !== undefined) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(image.sha256Computed)) out.push(`${image?.id}: sha256Computed must be an ISO date`);
+    else if (Number.isNaN(Date.parse(image.sha256Computed))) out.push(`${image?.id}: sha256Computed is not a real date`);
+    if (image.sha256 === undefined) out.push(`${image?.id}: sha256Computed needs a sha256 pin`);
+    if (image.sha256Url !== undefined) out.push(`${image?.id}: a computed sha256 has no publisher checksum url`);
+  }
   return out;
 };
 /** A screenshot is credited under a free licence, or — second choice — as the publisher's own screenshot with the terms the site states. */
@@ -86,15 +93,22 @@ export const osRecordProblems = os => {
   if (!/^[a-z0-9-]+$/.test(os?.id ?? '')) out.push('id must be lowercase kebab-case');
   if (!(os?.name && os?.shortName && os?.version && os?.releaseDate && os?.source)) out.push(`${os?.id}: name, shortName, version, releaseDate and source are required`);
   else if (new URL(os.source).protocol !== 'https:') out.push(`${os.id}: source must be https`);
-  if (!os?.editions?.length) out.push(`${os?.id}: needs editions`);
-  else if (!os.editions.some((/** @type {any} */ e) => e.id === os.defaultEdition)) out.push(`${os.id}: default edition does not exist`);
   const page = os?.page ?? {};
+  const images = (os?.editions ?? []).flatMap((/** @type {any} */ edition) => edition.images ?? []);
+  if (os?.infoOnly === true) {
+    // Description-only page: no media, no default edition, but links and a status so it is still useful.
+    if (os.editions?.length) out.push(`${os.id}: an info-only record carries no editions`);
+    if (os.defaultEdition !== undefined) out.push(`${os.id}: an info-only record has no defaultEdition`);
+    if (!page.links?.length) out.push(`${os.id}: an info-only record needs links`);
+  } else {
+    if (!os?.editions?.length) out.push(`${os?.id}: needs editions`);
+    else if (!os.editions.some((/** @type {any} */ e) => e.id === os.defaultEdition)) out.push(`${os.id}: default edition does not exist`);
+  }
   if (!(page.description && page.eyebrow && page.intro && page.status && page.checked)) out.push(`${os?.id}: page needs description, eyebrow, intro, status and checked`);
   if (!page.pros?.length || !page.cons?.length) out.push(`${os?.id}: page needs pros and cons`);
   if (!page.links?.length || !page.footer?.length || !page.credits?.length) out.push(`${os?.id}: page needs links, footer and credits`);
   if (!page.logo?.src) out.push(`${os?.id}: a logo is required`);
   if (page.shot && !(page.shot.src && page.shot.alt)) out.push(`${os?.id}: a shot needs src and alt`);
-  const images = (os?.editions ?? []).flatMap((/** @type {any} */ edition) => edition.images ?? []);
   if (new Set(images.map((/** @type {any} */ i) => i.id)).size !== images.length) out.push(`${os?.id}: image ids are not unique`);
   for (const image of images) {
     if (!String(image.id).startsWith(`${os.id}-`)) out.push(`${image.id}: not namespaced by OS`);

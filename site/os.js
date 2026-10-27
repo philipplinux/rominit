@@ -16,17 +16,26 @@ const images = /** @type {HTMLElement} */ (document.getElementById('alpine-image
 const usb = /** @type {HTMLElement} */ (document.getElementById('alpine-usb-panel'));
 const status = /** @type {HTMLElement} */ (document.getElementById('alpine-usb-status'));
 const params = new URLSearchParams(location.search);
+const infoOnly = OS.infoOnly === true;
 let selectedEdition = OS.editions.find(edition => edition.id === params.get('edition')) ?? OS.editions.find(edition => edition.id === OS.defaultEdition) ?? OS.editions[0];
 let connecting = false, cliReady = false;
 const busy = () => connecting || usb.querySelector('#usb-media-panel')?.getAttribute('data-busy') === 'true';
 const sizes = bytes => `${(bytes / 1024 ** 2).toFixed(1)} MiB`;
+/** The checksum link, or an honest note when there is no publisher file to link. @param {any} image */
+const checksumUi = image => {
+  if (image.sha256Computed) return [h('span', { className: 'field-help', textContent: `SHA-256 computed by ROMinit on ${image.sha256Computed}, not published by the vendor` })];
+  const url = image.sha256 ? image.sha256Url : image.sha512Url;
+  const label = image.sha256 ? 'SHA-256' : 'SHA-512';
+  return url ? [h('a', { href: url, target: '_blank', rel: 'noopener noreferrer', textContent: label })] : [h('span', { className: 'field-help', textContent: `${label} pinned in the catalog, no publisher checksum file` })];
+};
 
 for (const name of [...new Set(osArchitectures(OS).map(arch => ARCH_FAMILY[arch]))])
   document.getElementById('alpine-architectures')?.append(h('span', { className: 'architecture-tag', textContent: name }));
 if (OS.requirements) // system requirements, from the OS's own docs
   document.getElementById('os-reqs')?.append(h('a', { className: 'architecture-tag', href: OS.requirements.source, target: '_blank', rel: 'noopener noreferrer', title: `Minimum (checked ${OS.requirements.checked}). ${OS.requirements.note ?? ''}`, textContent: OS.requirements.summary }));
 document.getElementById('os-reqs')?.append(h('a', { className: 'architecture-tag', href: OS.officialSupport.source, target: '_blank', rel: 'noopener noreferrer', textContent: officialSupportText(OS.officialSupport, `${OS.shortName} release:`) }));
-editionSelect.append(...OS.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
+if (!infoOnly) editionSelect.append(...OS.editions.map(edition => h('option', { value: edition.id, textContent: edition.name })));
+if (infoOnly) document.getElementById('alpine-edition')?.closest('section')?.remove(); // description-only page: no dead controls
 document.title = `${OS.name} · OS · ROMinit`;
 const logo = /** @type {HTMLImageElement} */ (byId('os-logo'));
 Object.assign(logo, { src: `./${page.logo.src}`, alt: page.logo.alt, width: page.logo.width, height: page.logo.height });
@@ -132,7 +141,8 @@ function render() {
   document.getElementById('alpine-edition-description').textContent = selectedEdition.description;
   document.getElementById('alpine-edition-note').textContent = selectedEdition.usbNote;
   images.replaceChildren(...selectedEdition.images.map(image => h('article', { className: 'alpine-image', id: image.id },
-    h('div', { className: 'alpine-image-title' }, h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), h('strong', { textContent: image.arch }), h('span', { className: `architecture-tag${image.usb === true ? ' ventoy-supported' : ''}`, textContent: image.usb === true ? 'Ventoy supported' : 'No Ventoy' }), h('span', { className: 'alpine-image-size', textContent: `${image.format} · ${sizes(image.size)}` }), h('a', { href: image.sha256 ? image.sha256Url ?? `${image.url}.sha256` : image.sha512Url ?? `${image.url}.sha512`, target: '_blank', rel: 'noopener noreferrer', textContent: image.sha256 ? 'SHA-256' : 'SHA-512' })),
+    h('div', { className: 'alpine-image-title' }, h('span', { className: 'architecture-tag', textContent: ARCH_FAMILY[image.arch] }), h('strong', { textContent: image.arch }), h('span', { className: `architecture-tag${image.usb === true ? ' ventoy-supported' : ''}`, textContent: image.usb === true ? 'Ventoy supported' : 'No Ventoy' }), h('span', { className: 'alpine-image-size', textContent: `${image.format} · ${sizes(image.size)}` }),
+      ...checksumUi(image)),
     h('div', { className: 'alpine-image-actions' }, USB_FORMATS.includes(image.format)
       ? image.sha256 // shortcut: the USB writer verifies SHA-256 only, so sha512-only media stays download-only
         ? h('button', { type: 'button', className: 'button button-primary alpine-main-action', textContent: cliReady ? 'Prepare USB' : 'Connect CLI', ariaLabel: `${cliReady ? 'Prepare' : 'Connect CLI for'} ${selectedEdition.name} ${image.arch} USB`, onclick: () => chooseImage(image.id) })
@@ -147,8 +157,8 @@ editionSelect.addEventListener('change', () => {
   showDrivePrompt(); status.textContent = ''; updateUrl(); render();
 });
 
-render();
+if (!infoOnly) render();
 const initialImage = osImage(params.get('image') ?? '');
-if (USB_FORMATS.includes(initialImage?.format) && selectedEdition.images.includes(initialImage)) void chooseImage(initialImage.id);
-void probeCli();
+if (!infoOnly && USB_FORMATS.includes(initialImage?.format) && selectedEdition?.images.includes(initialImage)) void chooseImage(initialImage.id);
+if (!infoOnly) void probeCli();
 void mountAccount();
