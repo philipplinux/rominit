@@ -61,7 +61,7 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
     assert.ok(os.name && os.shortName && os.source && (os.infoOnly === true || (os.version && os.releaseDate)));
     assert.equal(new URL(os.source).protocol, 'https:');
     assert.ok(os.infoOnly === true || os.editions.length, `${os.id} has editions`);
-    assert.ok(os.editions.some(edition => edition.id === os.defaultEdition), `${os.id} default edition exists`);
+    assert.ok(os.infoOnly === true || os.editions.some(edition => edition.id === os.defaultEdition), `${os.id} default edition exists`);
     assert.ok(os.page.description && os.page.eyebrow && os.page.intro && os.page.status && os.page.checked);
     assert.ok(os.page.pros.length && os.page.cons.length);
     assert.ok(os.page.links.length && os.page.footer.length && os.page.credits.length);
