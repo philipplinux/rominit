@@ -1,0 +1,42 @@
+{
+  "id": "sles",
+  "name": "SUSE Linux Enterprise Server",
+  "shortName": "SLES",
+  "infoOnly": true,
+  "editions": [],
+  "source": "https://www.suse.com/products/server/",
+  "page": {
+    "description": "SUSE Linux Enterprise Server: what it is, who it is for, and where SUSE publishes it.",
+    "eyebrow": "OPERATING SYSTEM / ENTERPRISE LINUX",
+    "intro": "SUSE's commercial enterprise server distribution, the base of openSUSE Leap. SUSE publishes the media and the support terms; ROMinit does not pin an image for it.",
+    "logo": { "src": "logos/sles.svg", "alt": "SUSE logo", "width": 180, "height": 180 },
+    "pros": [
+      "Long service packs and life cycles with defined support phases.",
+      "Certified for SAP, SAP HANA and a wide hardware catalogue.",
+      "YaST and the SUSE tooling carry over to openSUSE Leap.",
+      "Enterprise support, updates and certifications from one vendor."
+    ],
+    "cons": [
+      "Requires a SUSE subscription for updates and support.",
+      "Media are behind SUSE's customer centre, not a public ISO list.",
+      "openSUSE Leap tracks it, but is a separate product with its own media.",
+      "SUSE's life-cycle page states the dates; none is repeated here."
+    ],
+    "links": [
+      { "label": "SUSE Linux Enterprise Server", "href": "https://www.suse.com/products/server/" },
+      { "label": "Life-cycle dates", "href": "https://www.suse.com/lifecycle/" },
+      { "label": "Downloads for customers", "href": "https://www.suse.com/download/sles/" }
+    ],
+    "previewNote": "Information-only page: SUSE supplies the media and ROMinit does not pin or test an image here.",
+    "status": "SUSE publishes and supports its own media. This page only points at SUSE's product, life-cycle and download pages; there is nothing to download from ROMinit and no USB path.",
+    "footer": [
+      { "label": "SUSE Linux Enterprise Server", "href": "https://www.suse.com/products/server/" },
+      { "label": "Life-cycle dates", "href": "https://www.suse.com/lifecycle/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/sles.svg\nSUSE logo from Simple Icons (CC0), https://simpleicons.org; the SUSE name and mark belong to SUSE Software Solutions, shown only to identify SUSE Linux Enterprise Server. No endorsement implied."
+    ]
+  },
+  "officialSupport": { "status": "ongoing", "source": "https://www.suse.com/lifecycle/" }
+}
