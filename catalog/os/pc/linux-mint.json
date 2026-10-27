@@ -1,0 +1,119 @@
+{
+  "id": "linux-mint",
+  "name": "Linux Mint",
+  "shortName": "Mint",
+  "defaultEdition": "cinnamon",
+  "version": "22.3",
+  "releaseDate": "2026-01-13",
+  "requirements": {
+    "summary": "2 GB RAM · 20 GB disk · 1024×768",
+    "note": "The release announcement gives 2 GB RAM and 20 GB of disk as the minimums, and recommends 4 GB RAM and 100 GB of disk for a comfortable install.",
+    "source": "https://blog.linuxmint.com/?p=4981",
+    "checked": "2026-10-27"
+  },
+  "kernel": { "version": "6.14", "line": "HWE", "checked": "2026-10-27", "source": "https://linuxmint.com/rel_zena.php" },
+  "source": "https://linuxmint.com/download.php",
+  "page": {
+    "description": "Linux Mint editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / UBUNTU-BASED DESKTOP",
+    "intro": "The Ubuntu-based desktop with its own Cinnamon shell and a conservative update policy. Pick an edition, then write the 64-bit image to a USB stick.",
+    "logo": { "src": "logos/linux-mint.svg", "alt": "Linux Mint logo", "width": 180, "height": 180 },
+    "pros": [
+      "Cinnamon, MATE and Xfce editions, all on the same Ubuntu 24.04 base.",
+      "Long-term support until April 2029.",
+      "Updates arrive slowly on purpose: Mint's own Update Manager decides what is offered.",
+      "Written for people coming from Windows, with the desktop laid out as expected."
+    ],
+    "cons": [
+      "64-bit only: there is no 32-bit image for very old machines.",
+      "The regular ISOs carry kernel 6.14; very new AMD hardware may need an HWE image instead.",
+      "Based on Ubuntu 24.04, so it trails the current Ubuntu LTS.",
+      "Snap is disabled by default, so instructions written for Ubuntu snap packages need extra steps."
+    ],
+    "links": [
+      { "label": "Linux Mint website", "href": "https://linuxmint.com/" },
+      { "label": "Download Linux Mint", "href": "https://linuxmint.com/download.php" },
+      { "label": "22.3 release notes", "href": "https://linuxmint.com/rel_zena.php" }
+    ],
+    "previewNote": "A stock screenshot of Linux Mint 18.3 Cinnamon from Wikimedia Commons. It is not 22.3 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/linux-mint/mint-desktop.webp",
+      "alt": "Linux Mint 18.3 Cinnamon desktop with the Mint logo wallpaper",
+      "width": 1366,
+      "height": 768,
+      "bar": "linuxmint-22.3-cinnamon-64bit.iso · 22.3",
+      "caption": "Stock screenshot of Linux Mint 18.3 Cinnamon · not 22.3, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Linux_Mint_18.3_Cinnamon_Desktop.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Kesäperuna"
+      }
+    },
+    "status": "One official path per edition: the 64-bit ISO, written with Mint's USB Image Writer, GNOME Disks or dd. Writing erases the stick; the installer's erase-disk option erases the target disk.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://linuxmint.com/download.php" },
+      { "label": "Verify the ISO", "href": "https://linuxmint-installation-guide.readthedocs.io/en/latest/verify.html" },
+      { "label": "22.3 release notes", "href": "https://linuxmint.com/rel_zena.php" },
+      { "label": "Installation guide", "href": "https://linuxmint-installation-guide.readthedocs.io/en/latest/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/linux-mint.svg\nLinux Mint logo from Simple Icons (CC0), https://simpleicons.org; the Linux Mint name and mark belong to the Linux Mint project, shown only to identify Linux Mint. No endorsement implied.",
+      "shots/linux-mint/mint-desktop.webp\nLinux Mint 18.3 Cinnamon desktop, screenshot by Kesäperuna, https://commons.wikimedia.org/wiki/File:Linux_Mint_18.3_Cinnamon_Desktop.png, CC BY-SA 4.0. Resized and converted to WebP; this copy under the same licence. Not a 22.3 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "cinnamon",
+      "name": "Cinnamon",
+      "description": "The edition Mint develops Cinnamon for, and the one the project points new users to.",
+      "usbNote": "64-bit only. Writing erases the stick; the installer then erases or repartitions the target disk.",
+      "images": [
+        {
+          "id": "linux-mint-cinnamon-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://pub.linuxmint.io/stable/22.3/linuxmint-22.3-cinnamon-64bit.iso",
+          "sha256": "a081ab202cfda17f6924128dbd2de8b63518ac0531bcfe3f1a1b88097c459bd4",
+          "size": 3091660800,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "mate",
+      "name": "MATE",
+      "description": "The continuation of GNOME 2, for people who want the classic desktop layout.",
+      "usbNote": "64-bit only. Writing erases the stick.",
+      "images": [
+        {
+          "id": "linux-mint-mate-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://pub.linuxmint.io/stable/22.3/linuxmint-22.3-mate-64bit.iso",
+          "sha256": "7609294da613b75eea89bb918292125e9f06418a368136fb190466e15bf8c373",
+          "size": 3134275584,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "xfce",
+      "name": "Xfce",
+      "description": "The lightest of the three editions, with a smaller memory footprint.",
+      "usbNote": "64-bit only. Writing erases the stick.",
+      "images": [
+        {
+          "id": "linux-mint-xfce-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://pub.linuxmint.io/stable/22.3/linuxmint-22.3-xfce-64bit.iso",
+          "sha256": "45a835b5dddaf40e84d776549e0b19b3fbd49673b6cc6434ebddbfcd217df776",
+          "size": 3033710592,
+          "usb": true
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "until": "2029-04", "source": "https://linuxmint.com/rel_zena.php" }
+}
