@@ -1,0 +1,68 @@
+{
+  "id": "zorin-os",
+  "name": "Zorin OS",
+  "shortName": "Zorin",
+  "defaultEdition": "core",
+  "version": "18.1",
+  "releaseDate": "2026-04-15",
+  "source": "https://zorin.com/os/",
+  "page": {
+    "description": "Zorin OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / UBUNTU-BASED DESKTOP",
+    "intro": "An Ubuntu-based desktop built to look familiar to people leaving Windows or macOS. Core is the free edition; Pro, Education and Lite are separate images.",
+    "logo": { "src": "logos/zorin-os.svg", "alt": "Zorin OS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Desktop layouts that mimic Windows or macOS out of the box.",
+      "Ubuntu LTS base with the usual package and driver support.",
+      "Free Core image; paid Pro adds layouts and extra software.",
+      "Supported until at least June 2029."
+    ],
+    "cons": [
+      "The free Core image is one edition; Pro and Education need a purchase.",
+      "Downloads go through a mirror picker; this page pins one official mirror.",
+      "The Commons screenshot shows 17.3, not 18.1.",
+      "x86_64 only for the pinned image."
+    ],
+    "links": [
+      { "label": "Zorin OS website", "href": "https://zorin.com/os/" },
+      { "label": "Download Core 18", "href": "https://zorin.com/os/download/18/core/" },
+      { "label": "Check ISO integrity", "href": "https://help.zorin.com/docs/getting-started/check-the-integrity-of-your-copy-of-zorin-os/" }
+    ],
+    "previewNote": "A stock screenshot of Zorin OS 17.3 from Wikimedia Commons. It is not 18.1 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/zorin-os/zorin-desktop.webp",
+      "alt": "Zorin OS 17.3 desktop with the taskbar and application menu",
+      "width": 1600,
+      "height": 901,
+      "bar": "Zorin-OS-18.1-Core-64-bit.iso · 18.1",
+      "caption": "Stock screenshot of Zorin OS 17.3 · not 18.1, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Zorin_OS_17.3_Desktop.png",
+        "license": "CC0",
+        "artist": "Average USA patriot"
+      }
+    },
+    "status": "One path for the free edition: the Core 64-bit ISO from an official mirror, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Official download", "href": "https://zorin.com/os/download/18/core/" },
+      { "label": "ISO checksums", "href": "https://help.zorin.com/docs/getting-started/check-the-integrity-of-your-copy-of-zorin-os/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/zorin-os.svg\nZorin OS logo from Simple Icons (CC0), https://simpleicons.org; the Zorin name and mark belong to Zorin Group, shown only to identify Zorin OS. No endorsement implied.",
+      "shots/zorin-os/zorin-desktop.webp\nZorin OS 17.3 desktop by Average USA patriot, https://commons.wikimedia.org/wiki/File:Zorin_OS_17.3_Desktop.png, CC0. Converted to WebP. Not an 18.1 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "core",
+      "name": "Core",
+      "description": "The free edition: one desktop image with the standard Zorin layout and app set.",
+      "usbNote": "4 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "zorin-os-core-x86_64", "arch": "x86_64", "format": "iso", "url": "https://ftp.halifax.rwth-aachen.de/zorinos/18/Zorin-OS-18.1-Core-64-bit.iso", "sha256": "44649b97bd307fc4c8529205d098ebbf98575a1e1ba2ee7d7005b697af1721d5", "sha256Url": "https://help.zorin.com/docs/getting-started/check-the-integrity-of-your-copy-of-zorin-os/", "size": 3909091328, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "until": "2029-06", "source": "https://zorin.com/os/" }
+}
