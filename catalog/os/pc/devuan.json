@@ -1,0 +1,113 @@
+{
+  "id": "devuan",
+  "name": "Devuan GNU/Linux",
+  "shortName": "Devuan",
+  "defaultEdition": "desktop-live",
+  "version": "6.1.1",
+  "releaseDate": "2025-11-02",
+  "source": "https://www.devuan.org/os/releases",
+  "page": {
+    "description": "Devuan editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DEBIAN WITHOUT SYSTEMD",
+    "intro": "Debian with sysvinit instead of systemd. Pick the live desktop, the smaller live image or the installer, then write the 64-bit image to a stick.",
+    "logo": { "src": "logos/devuan.svg", "alt": "Devuan logo", "width": 180, "height": 180 },
+    "pros": [
+      "Debian 13 package base without systemd.",
+      "Live desktop and installer images from the same release.",
+      "Plain sysvinit, so the boot sequence stays readable.",
+      "Direct upgrades from Daedalus and migrations from Debian trixie are documented."
+    ],
+    "cons": [
+      "Only amd64 images are published for Excalibur.",
+      "The project publishes no end-of-life date.",
+      "The 6.1.1 point refresh has no separate announcement date; the page shows the 6.0 suite date.",
+      "The Commons screenshot shows an older Xfce desktop."
+    ],
+    "links": [
+      { "label": "Devuan website", "href": "https://www.devuan.org/" },
+      { "label": "Releases", "href": "https://www.devuan.org/os/releases" },
+      { "label": "Download files", "href": "https://files.devuan.org/devuan_excalibur/" }
+    ],
+    "previewNote": "A stock screenshot of a Devuan Xfce desktop from Wikimedia Commons. It is not 6.1.1 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/devuan/devuan-desktop.webp",
+      "alt": "Devuan Xfce desktop with the application menu open",
+      "width": 800,
+      "height": 600,
+      "bar": "devuan_excalibur_6.1.1_amd64_desktop-live.iso · 6.1.1",
+      "caption": "Stock screenshot of a Devuan Xfce desktop · not this build, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Devuan_screenshot_XFCE4_desktop.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "E70K"
+      }
+    },
+    "status": "One path per image: desktop live, minimal live or netinstall, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. 6.0 Excalibur was released 2025-11-02; 6.1.1 is a later point refresh with no separately published date.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://files.devuan.org/devuan_excalibur/" },
+      { "label": "Release information", "href": "https://www.devuan.org/os/releases" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/devuan.svg\nDevuan logo from Simple Icons (CC0), https://simpleicons.org; the Devuan name and mark belong to the Devuan project, shown only to identify Devuan. No endorsement implied.",
+      "shots/devuan/devuan-desktop.webp\nDevuan Xfce desktop screenshot by E70K, https://commons.wikimedia.org/wiki/File:Devuan_screenshot_XFCE4_desktop.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 6.1.1 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop-live",
+      "name": "Desktop live",
+      "description": "A live Xfce desktop with an installer on the same ISO: try it, then install.",
+      "usbNote": "amd64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "devuan-desktop-live-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://files.devuan.org/devuan_excalibur/desktop-live/devuan_excalibur_6.1.1_amd64_desktop-live.iso",
+          "sha256": "d0d5fc8d8e0b980ff4ccc9f2653a5d549f3ee227ac4e01f3d194d0ca2fe85886",
+          "sha256Url": "https://files.devuan.org/devuan_excalibur/desktop-live/devuan_excalibur_6.1.1_amd64_desktop-live.iso.sha256",
+          "size": 1801322496,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "minimal-live",
+      "name": "Minimal live",
+      "description": "A smaller live system without the full desktop, for rescue or a minimal install.",
+      "usbNote": "amd64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "devuan-minimal-live-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://files.devuan.org/devuan_excalibur/minimal-live/devuan_excalibur_6.1.1_amd64_minimal-live.iso",
+          "sha256": "392032e530b6c03b1e92431401de734fc7746342ae883df486d4a3a4fe403805",
+          "sha256Url": "https://files.devuan.org/devuan_excalibur/minimal-live/devuan_excalibur_6.1.1_amd64_minimal-live.iso.sha256",
+          "size": 919601152,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "installer",
+      "name": "Installer (netinstall)",
+      "description": "The classic installer image: it installs the base system and fetches the rest from Devuan's mirrors.",
+      "usbNote": "amd64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "devuan-installer-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://files.devuan.org/devuan_excalibur/installer-iso/devuan_excalibur_6.1.1_amd64_netinstall.iso",
+          "sha256": "87be42bfcec010f90f86444b404c1efeefbdc9b08a2e82f766d6defefdf654e4",
+          "sha256Url": "https://files.devuan.org/devuan_excalibur/installer-iso/SHA256SUMS.txt",
+          "size": 622985216,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.devuan.org/os/releases" }
+}
