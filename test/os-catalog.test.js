@@ -188,6 +188,14 @@ test('an info-only record with editions or images fails', () => {
   assert.match(osRecordProblems(noLinks).join(' '), /an info-only record needs links/);
 });
 
+test('an info-only record needs no release version or date', () => {
+  const record = { ...fixtureRecord(), infoOnly: true, editions: [] };
+  delete record.defaultEdition;
+  delete record.version;
+  delete record.releaseDate;
+  assert.deepEqual(osRecordProblems(record), []);
+});
+
 test('a normal record still needs editions', () => {
   const record = { ...fixtureRecord(), editions: [] };
   assert.match(osRecordProblems(record).join(' '), /needs editions/);

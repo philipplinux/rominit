@@ -91,7 +91,9 @@ export const osPhotoProblems = photo => [
 export const osRecordProblems = os => {
   const out = [];
   if (!/^[a-z0-9-]+$/.test(os?.id ?? '')) out.push('id must be lowercase kebab-case');
-  if (!(os?.name && os?.shortName && os?.version && os?.releaseDate && os?.source)) out.push(`${os?.id}: name, shortName, version, releaseDate and source are required`);
+  // An info-only product page has no release to date; everything else needs a version and date.
+  const named = os?.name && os?.shortName && os?.source;
+  if (!named || (os?.infoOnly !== true && !(os?.version && os?.releaseDate))) out.push(`${os?.id}: name, shortName, source and (unless info-only) version and releaseDate are required`);
   else if (new URL(os.source).protocol !== 'https:') out.push(`${os.id}: source must be https`);
   const page = os?.page ?? {};
   const images = (os?.editions ?? []).flatMap((/** @type {any} */ edition) => edition.images ?? []);
