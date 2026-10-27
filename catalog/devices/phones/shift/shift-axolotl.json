@@ -9,5 +9,6 @@
   "models": [],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/SHIFT_SHIFT6mq_(shift-axolotl)"
+  "supportUrl": "https://wiki.nura.eco/wiki/SHIFT_SHIFT6mq_(shift-axolotl)",
+  "officialSupport": {"status": "ongoing", "source": "https://shop.shift.eco/shift6mq"}
 }

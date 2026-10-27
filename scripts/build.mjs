@@ -18,7 +18,7 @@ await mkdir('dist/catalog/consoles', { recursive: true });
 // Ship only runtime source and metadata; credentials stay in the OS store.
 execFileSync('tar', ['-czf', 'dist/rominit-cli.tar.gz', '--transform=s,^,rominit-cli/,', 'bin', 'src', 'scripts', 'catalog', 'site/bench', 'package.json', 'package-lock.json', 'README.md', 'LICENSE']);
 // The page loads the small index first, then one file per picked device.
-const index = devices.map(({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl, roms }) => ({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl,
+const index = devices.map(({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl, officialSupport, roms }) => ({ codename, category, vendor, name, series, family, variant, unsupported, models, supportOnly, supportUrl, officialSupport,
   roms: roms.filter(r => r.origin !== 'stock').map(({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external }) => ({ id, os, name, version, origin, status, vetting, recommended, pick, risk, rating, external: !!external })) }));
 await writeFile('dist/catalog/index.json', JSON.stringify(index));
 for (const device of devices) await writeFile(`dist/catalog/${device.codename}.json`, JSON.stringify(device));

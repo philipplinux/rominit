@@ -12,5 +12,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/OnePlus_6_(oneplus-enchilada)"
+  "supportUrl": "https://wiki.nura.eco/wiki/OnePlus_6_(oneplus-enchilada)",
+  "officialSupport": {"status": "dropped", "until": "2021-11", "source": "https://www.xda-developers.com/oneplus-6-oneplus-6t-end-of-life/"}
 }

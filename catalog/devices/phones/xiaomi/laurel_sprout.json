@@ -57,5 +57,6 @@
       "microSD",
       "2 rear cameras"
     ]
-  }
+  },
+  "officialSupport": {"status": "dropped", "until": "2022-08", "source": "https://www.notebookcheck.net/Xiaomi-Mi-A3-receives-its-last-software-update-three-years-after-launch.642113.0.html"}
 }

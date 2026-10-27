@@ -9,5 +9,6 @@
   "models": [],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Nokia_N900_(nokia-n900)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Nokia_N900_(nokia-n900)",
+  "officialSupport": {"status": "dropped", "until": "2010-10", "source": "https://www.osnews.com/story/23952/maemo-5-pr-13-released/"}
 }

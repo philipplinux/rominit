@@ -52,5 +52,6 @@
       "community Android 17",
       "2 rear cameras"
     ]
-  }
+  },
+  "officialSupport": {"status": "ongoing", "until": "2027-07", "source": "https://support.google.com/pixelphone/answer/4457705"}
 }

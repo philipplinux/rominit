@@ -1,5 +1,5 @@
 import { readdir, readFile } from 'node:fs/promises';
-import { CATEGORY_DIRS, problems, recoveryProblems } from '../src/catalog.js';
+import { CATEGORY_DIRS, problems, recoveryProblems, officialSupportProblems } from '../src/catalog.js';
 
 const root = new URL('../catalog/', import.meta.url);
 const json = async path => JSON.parse(await readFile(new URL(path, root), 'utf8'));
@@ -37,6 +37,7 @@ export async function loadCatalog() {
       if (new Set(recoveries.map(r => r.id)).size !== recoveries.length) errors.push(`${device.codename}: duplicate recovery ids`);
       if (device.supportOnly) errors.push(...problems(device, { device: device.codename, roms: [] }));
       if (device.supportOnly && (!device.supportUrl?.startsWith('https://') || roms.length)) errors.push(`${device.codename}: support-only needs an https supportUrl and no ROMs`);
+      errors.push(...officialSupportProblems(device.officialSupport).map(p => `${device.codename}: ${p}`));
       devices.push({ ...device, roms, recoveries });
     }
   }

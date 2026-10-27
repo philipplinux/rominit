@@ -12,5 +12,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_POCO_X3_NFC_(xiaomi-surya)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_POCO_X3_NFC_(xiaomi-surya)",
+  "officialSupport": {"status": "dropped", "source": "https://www.androidupdatetracker.com/p/xiaomi_poco_x3_nfc"}
 }

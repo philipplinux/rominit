@@ -89,3 +89,9 @@ test('a stock preview photo carries its author, source and licence', () => {
       `${os.id}: the photo is credited in the notices`);
   }
 });
+
+test('every OS and emulator record says whether official support is ongoing or dropped', async () => {
+  const { officialSupportProblems } = await import('../src/catalog.js');
+  const { EMULATORS } = await import('../src/emulators/index.js');
+  for (const entry of [...OSES, ...EMULATORS]) assert.deepEqual(officialSupportProblems(entry.officialSupport), [], entry.id);
+});

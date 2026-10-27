@@ -47,5 +47,6 @@
       "microSD",
       "2 rear cameras"
     ]
-  }
+  },
+  "officialSupport": {"status": "ongoing", "until": "2028", "source": "https://support.fairphone.com/hc/en-us/articles/23266849613714-Fairphone-4-Discontinued"}
 }

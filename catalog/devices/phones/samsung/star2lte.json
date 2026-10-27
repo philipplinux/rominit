@@ -79,5 +79,6 @@
       "community Android 15",
       "microSD"
     ]
-  }
+  },
+  "officialSupport": {"status": "dropped", "until": "2022-04", "source": "https://en.wikipedia.org/wiki/Samsung_Galaxy_S9"}
 }

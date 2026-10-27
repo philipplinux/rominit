@@ -67,5 +67,6 @@
       "Remote-controlled TV interface",
       "Micro-USB power/data · no touchscreen"
     ]
-  }
+  },
+  "officialSupport": {"status": "ongoing", "until": "2029-12", "source": "https://www.amazon.com/gp/help/customer/display.html?nodeId=G6SH55LKBSAZ2BAK"}
 }

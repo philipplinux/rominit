@@ -86,5 +86,6 @@
       "community Android 12",
       "microSD"
     ]
-  }
+  },
+  "officialSupport": {"status": "dropped", "until": "2020-04", "source": "https://en.wikipedia.org/wiki/Samsung_Galaxy_S7"}
 }

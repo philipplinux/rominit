@@ -506,5 +506,6 @@
         }
       ]
     }
-  ]
+  ],
+  "officialSupport": {"status": "ongoing", "until": "2028-06", "source": "https://alpinelinux.org/releases/"}
 }

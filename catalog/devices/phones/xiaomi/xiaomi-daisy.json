@@ -11,5 +11,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_A2_Lite_(xiaomi-daisy)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Mi_A2_Lite_(xiaomi-daisy)",
+  "officialSupport": {"status": "dropped", "until": "2021-07", "source": "https://www.notebookcheck.net/The-Xiaomi-Mi-A2-Lite-has-received-its-final-guaranteed-update.551193.0.html"}
 }

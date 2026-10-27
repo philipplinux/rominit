@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { CONSOLES, consoleCompatibility } from '../src/consoles/index.js';
+import { officialSupportProblems } from '../src/catalog.js';
 
 test('console compatibility preserves firmware gaps and model boundaries', () => {
   const project = { compatibility: [{ models: ['original', 'slim'], supportedFirmware: ['13.00', '13.60'], status: 'documented' }, { models: ['pro'], supportedFirmware: ['13.60'], status: 'documented' }] };
@@ -19,6 +20,7 @@ test('console records carry sources, explicit project limits and no executable r
   for (const entry of CONSOLES) {
     assert.match(entry.firmware.checkedDate, /^\d{4}-\d{2}-\d{2}$/);
     assert.match(entry.firmware.source, /^https:\/\//);
+    assert.deepEqual(officialSupportProblems(entry.officialSupport), []);
     assert(entry.variants.some(variant => /Pro/.test(variant.model)));
     assert(entry.homebrew.filter(project => project.kind === 'entrypoint').length >= 3);
     assert(!('roms' in entry) && !('stages' in entry));

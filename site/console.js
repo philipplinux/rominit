@@ -1,6 +1,7 @@
 import { progressRail } from './progress-rail.js';
 import { CONSOLES, consoleCompatibility } from '../src/consoles/index.js';
 import { h } from './dom.js';
+import { officialSupportText } from '../src/catalog.js';
 import './header-tuck.js';
 import { mountAccount } from './account.js';
 import { reportBox } from './report.js';
@@ -36,7 +37,8 @@ if (!info) {
     h('small', { className: 'field-help', textContent: `Sources checked ${highlight.checkedDate}` }))));
   byId('console-meta').replaceChildren(
     h('span', { className: 'architecture-tag', textContent: info.manufacturer }),
-    h('span', { className: 'architecture-tag', textContent: `Released ${info.releaseYear}` }));
+    h('span', { className: 'architecture-tag', textContent: `Released ${info.releaseYear}` }),
+    info.officialSupport && h('a', { className: 'architecture-tag', href: info.officialSupport.source, target: '_blank', rel: 'noopener noreferrer', textContent: officialSupportText(info.officialSupport, `${info.manufacturer} firmware:`) }));
   const firmware = info.firmware;
   byId('console-firmware').textContent = firmware.version ?? 'not verified';
   byId('console-firmware-checked').textContent = firmware.checkedDate ? `checked ${firmware.checkedDate}` : 'needs a dated check';

@@ -52,5 +52,6 @@
       "3 rear cameras",
       "5× telephoto"
     ]
-  }
+  },
+  "officialSupport": {"status": "ongoing", "until": "2032-08", "source": "https://support.google.com/pixelphone/answer/4457705"}
 }

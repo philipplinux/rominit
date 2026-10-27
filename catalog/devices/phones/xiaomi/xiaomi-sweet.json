@@ -12,5 +12,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_Note_10_Pro_(xiaomi-sweet)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_Note_10_Pro_(xiaomi-sweet)",
+  "officialSupport": {"status": "dropped", "until": "2024-03", "source": "https://en.xiaomi-miui.gr/xiaomi-aer-security-updates-eol-2026-full-list/"}
 }

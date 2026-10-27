@@ -46,5 +46,6 @@
       "removable battery",
       "microSD"
     ]
-  }
+  },
+  "officialSupport": {"status": "dropped", "until": "2018-01", "source": "https://samdb.org/model/GT-I9505/"}
 }

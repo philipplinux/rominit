@@ -80,5 +80,6 @@
         }
       ]
     }
-  ]
+  ],
+  "officialSupport": {"status": "ongoing", "source": "https://github.com/omacom/omarchy/releases"}
 }

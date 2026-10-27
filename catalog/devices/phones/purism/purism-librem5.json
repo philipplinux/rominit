@@ -9,5 +9,6 @@
   "models": [],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Purism_Librem5_(purism-librem5)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Purism_Librem5_(purism-librem5)",
+  "officialSupport": {"status": "ongoing", "source": "https://puri.sm/posts/pureos-development-report-august-2026/"}
 }

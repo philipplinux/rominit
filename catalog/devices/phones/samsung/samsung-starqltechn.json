@@ -11,5 +11,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Samsung_Galaxy_S9_(samsung-starqltechn)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Samsung_Galaxy_S9_(samsung-starqltechn)",
+  "officialSupport": {"status": "dropped", "until": "2022-04", "source": "https://en.wikipedia.org/wiki/Samsung_Galaxy_S9"}
 }

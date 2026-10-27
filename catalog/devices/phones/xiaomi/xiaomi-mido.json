@@ -11,5 +11,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_Note_4_(xiaomi-mido)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Xiaomi_Redmi_Note_4_(xiaomi-mido)",
+  "officialSupport": {"status": "dropped", "source": "https://new.c.mi.com/global/post/589148"}
 }

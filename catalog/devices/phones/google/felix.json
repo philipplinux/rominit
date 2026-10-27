@@ -49,5 +49,6 @@
       "stock Android 13–15",
       "community Android 17"
     ]
-  }
+  },
+  "officialSupport": {"status": "ongoing", "until": "2028-06", "source": "https://support.google.com/pixelphone/answer/4457705"}
 }

@@ -26,5 +26,6 @@
     { "label": "Upstream repository", "url": "https://github.com/boykopovar/AnyPS5" },
     { "label": "Releases", "url": "https://github.com/boykopovar/AnyPS5/releases" },
     { "label": "Web converter", "url": "https://boykopovar.github.io/AnyPS5/" }
-  ]
+  ],
+  "officialSupport": {"status": "ongoing", "source": "https://github.com/boykopovar/AnyPS5/releases"}
 }

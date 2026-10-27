@@ -16,5 +16,6 @@
   ],
   "notes": "Support-only placeholder from Nura postmarketOS Community. No ROMinit flash recipe is catalogued yet; upstream device support does not establish a verified ROMinit flash path.",
   "supportOnly": true,
-  "supportUrl": "https://wiki.nura.eco/wiki/Google_Pixel_3a_XL_(google-bonito)"
+  "supportUrl": "https://wiki.nura.eco/wiki/Google_Pixel_3a_XL_(google-bonito)",
+  "officialSupport": {"status": "dropped", "until": "2022-09", "source": "https://9to5google.com/2022/09/06/pixel-3a-final-update/"}
 }

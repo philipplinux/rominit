@@ -51,5 +51,6 @@
       "8 MP front and rear cameras",
       "Charging Speaker Dock"
     ]
-  }
+  },
+  "officialSupport": {"status": "ongoing", "until": "2028-06", "source": "https://support.google.com/googlepixeltablet/answer/13399216"}
 }

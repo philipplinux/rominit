@@ -8,7 +8,7 @@ import omarchyJson from '../../catalog/os/omarchy.json' with { type: 'json' };
 /** @typedef {{ label: string, href: string }} OsLink */
 /** @typedef {{ page: string, license: string, artist: string }} OsShotPhoto */
 /** @typedef {{ description: string, eyebrow: string, intro: string, logo: { src: string, alt: string, width: number, height: number }, pros: string[], cons: string[], links: OsLink[], previewNote: string, shot: { src: string, alt: string, width: number, height: number, bar: string, caption: string, photo?: OsShotPhoto }, status: string, footer: OsLink[], checked: string, credits: string[] }} OsPage */
-/** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, page: OsPage, editions: OsEdition[] }} Os */
+/** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[] }} Os */
 
 /** Every OS page, in the order the site lists them. @type {Os[]} */
 export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson)];

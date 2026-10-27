@@ -1001,7 +1001,7 @@ function devicePicker(index) {
     const consoleHits = on.has('console') ? CONSOLES.filter(console => words.every(word => `${console.name} ${console.id} ${console.manufacturer} ${console.summary} ${console.variants.map(v => v.model).join(' ')}`.toLowerCase().includes(word))) : [];
     const showConsoles = consoleHits.length > 0;
     const consoleEntry = consoleHits.map(console => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${console.id}`, className: 'os-title', textContent: console.name }),
-      h('p', { className: 'field-help', textContent: `${console.releaseYear} · ${console.manufacturer} · ${console.variants.length} variants`})));
+      h('p', { className: 'field-help', textContent: `${console.releaseYear} · ${console.manufacturer} · ${console.variants.length} variants${console.officialSupport ? ` · stock firmware ${console.officialSupport.status}` : ''}`})));
     const emulatorHits = on.has('emulator') ? EMULATORS.filter(emulator => words.every(word => `${emulator.name} ${emulator.id} ${emulator.plays.join(' ')} ${emulator.hosts.join(' ')} ${emulator.summary}`.toLowerCase().includes(word))) : [];
     const showEmulators = emulatorHits.length > 0;
     const emulatorEntry = emulatorHits.map(emulator => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${emulator.id}`, className: 'os-title', textContent: emulator.name }),
