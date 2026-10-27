@@ -1,7 +1,7 @@
-// OS data lives in catalog/os/<id>.json: official release metadata, reviewed and pinned by hand (sha256/size/url), not a live download-page scrape.
-// Add an OS: write its JSON in catalog/os/, import it below and add it to OSES; the build writes dist/<id>.html from site/os.html.
-import alpineJson from '../../catalog/os/alpine.json' with { type: 'json' };
-import omarchyJson from '../../catalog/os/omarchy.json' with { type: 'json' };
+// OS data lives in catalog/os/<pc|mobile|network>/<id>.json: official release metadata, reviewed and pinned by hand (sha256/size/url), not a live download-page scrape.
+// Add an OS: write its JSON in catalog/os/<pc|mobile|network>/, import it below and add it to OSES; the build writes dist/<id>.html from site/os.html.
+import alpineJson from '../../catalog/os/pc/alpine.json' with { type: 'json' };
+import omarchyJson from '../../catalog/os/pc/omarchy.json' with { type: 'json' };
 
 /** @typedef {{ id: string, arch: string, format: string, url: string, sha256: string, size: number, usb: boolean }} OsImage */
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */

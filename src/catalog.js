@@ -21,7 +21,7 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 export const KERNELS = ['mainline', 'downstream'];
 /** Top of the device tree. */
 export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tvmedia: 'TV media boxes & sticks', television: 'Smart TVs', misc: 'Misc & IoT', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
-/** catalog/devices/<folder>/<vendor>/<codename>.json: the folder sets the device's category, so each kind keeps its own tree. */
+/** catalog/devices/<folder>/<vendor>/<codename>/ holds <codename>.json, roms/ and recoveries/: the folder sets the device's category, so each kind keeps its own tree. */
 export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', tvmedia: 'tvmedia', televisions: 'television', misc: 'misc' };
 export const SUPPORT_ROUTE_SECTIONS = { os: 'Operating systems', apps: 'Apps', root: 'Root', 'custom-os': 'Custom OS', recovery: 'Recovery', tools: 'Manufacturer tools', projects: 'Community projects', discussion: 'Discussion' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];

@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CATEGORY_DIRS } from '../src/catalog.js';
+import { catalogDevices as devicesInCatalog, romFiles } from './load-catalog.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const VAULT = process.env.ROMVAULT_DIR ? resolve(process.env.ROMVAULT_DIR) : join(ROOT, 'romvault'); // ROMVAULT_DIR: lint a worktree
@@ -91,7 +91,7 @@ export function lint(vault = VAULT) {
   }
 
   // The net: ROM ↔ device ↔ series ↔ line ↔ vendor ↔ category, both directions; every catalog device has a page.
-  const catalogDevices = readdirSync(join(ROOT, 'catalog/devices'), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(c => readdirSync(join(ROOT, 'catalog/devices', c.name), { withFileTypes: true }).filter(e => e.isDirectory()).flatMap(v => readdirSync(join(ROOT, 'catalog/devices', c.name, v.name)).filter(f => f.endsWith('.json')).map(f => ({ ...JSON.parse(readFileSync(join(ROOT, 'catalog/devices', c.name, v.name, f), 'utf8')), category: CATEGORY_DIRS[c.name] }))));
+  const catalogDevices = devicesInCatalog();
   const families = /** @type {Map<string, Set<string>>} */ (new Map());
   for (const d of catalogDevices) {
     const page = join(vault, 'devices', `${d.codename}.md`);
@@ -110,8 +110,7 @@ export function lint(vault = VAULT) {
     if (fams.size > 1) say(s, `mixes catalog families ${[...fams].join(', ')}: one series page per family`);
     else if (catalog && !fams.has(catalog)) say(s, `catalog: "${catalog}" but its devices are family "${[...fams][0]}"`);
   }
-  for (const f of readdirSync(join(ROOT, 'catalog/roms'), { recursive: true }).filter(f => String(f).endsWith('.json'))) {
-    const entry = JSON.parse(readFileSync(join(ROOT, 'catalog/roms', String(f)), 'utf8'));
+  for (const d of catalogDevices) for (const [, entry] of romFiles(d.path)) {
     for (const rom of entry.roms) if (!pages.has(join(vault, 'roms', entry.device, `${rom.id}.md`))) problems.push(`romvault/roms/${entry.device}/${rom.id}.md: missing (catalog has ${rom.name})`);
   }
   const log = pages.get(join(vault, 'log.md')) ?? '';
@@ -126,7 +125,7 @@ export function lint(vault = VAULT) {
       if (!linksTo(file, device)) say(file, `does not link up to devices/${codename}.md`);
       if (pages.has(device) && !linksTo(device, file)) say(device, `does not list ${rel}`);
       if (!(fm.tags ?? []).includes(`device/${codename}`)) say(file, `tag device/${codename} missing`);
-      if (!links(file).some(f => f.includes('/catalog/roms/'))) say(file, 'no link to its catalog JSON');
+      if (!links(file).some(f => /\/catalog\/devices\/.+\/roms\//.test(f))) say(file, 'no link to its catalog JSON');
     }
     const up = UP[fm.type];
     if (up) {

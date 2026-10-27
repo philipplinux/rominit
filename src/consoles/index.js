@@ -1,5 +1,5 @@
 // Console entries are research records; they do not define flash recipes or downloadable artifacts.
-import ps5 from '../../catalog/consoles/ps5.json' with { type: 'json' };
+import ps5 from '../../catalog/devices/consoles/sony/ps5/ps5.json' with { type: 'json' };
 
 /** Console families with a ROMinit research page. */
 export const CONSOLES = [ps5];

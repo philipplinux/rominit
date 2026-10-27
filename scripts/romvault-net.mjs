@@ -6,17 +6,14 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { frontmatter } from './romvault-lint.mjs';
-import { CATEGORY_DIRS, LEVELS, deviceLevel } from '../src/catalog.js';
+import { LEVELS, deviceLevel } from '../src/catalog.js';
+import { catalogDevices, romFiles } from './load-catalog.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CATEGORY_FILE = { phone: 'phones', tablet: 'tablets', tvmedia: 'tvmedia', television: 'tvs', misc: 'misc-iot', console: 'consoles', pc: 'x86-pcs' };
 /** Child folder per page type, top to bottom. */
 const DOWN = { category: 'vendors', vendor: 'lines', line: 'series', series: 'devices', device: 'roms' };
 const slug = (/** @type {string} */ s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-/** Catalog devices with their vendor folder name (= vendor page slug), file path under catalog/devices and category. */
-const catalogDevices = () => Object.keys(CATEGORY_DIRS).filter(cat => existsSync(join(ROOT, 'catalog/devices', cat))).flatMap(cat => readdirSync(join(ROOT, 'catalog/devices', cat), { withFileTypes: true }).filter(e => e.isDirectory()).map(e => e.name).flatMap(vendor => readdirSync(join(ROOT, 'catalog/devices', cat, vendor)).filter(f => f.endsWith('.json'))
-  .map(f => ({ ...JSON.parse(readFileSync(join(ROOT, 'catalog/devices', cat, vendor, f), 'utf8')), dir: vendor, path: `${cat}/${vendor}/${f}`, category: CATEGORY_DIRS[/** @type {keyof typeof CATEGORY_DIRS} */ (cat)] }))));
 
 /** In-memory vault: read pages, edit text, write once. @param {string} vault */
 function open(vault) {
@@ -90,7 +87,7 @@ export function fix(vault, agent = 'script') {
     if (!v.has(series)) v.create(series, page({ type: 'series', title: `${d.vendor} ${d.family}`, aliases: `[${d.vendor} ${d.family} series]`, catalog: d.family, date: D, updated: D, tags: `[${cat}, ${d.dir}, ${series.slice(0, -3)}]` },
       `The ${d.vendor} ${d.family} family (${d.vendor} ${d.series} line): the devices in it and what they share. Built from the ROMinit catalog as of ${D} by scripts/romvault-net.mjs; per-device steps are on the device pages.`, ['Devices', 'Links']));
     if (!v.has(device)) v.create(device, page({ type: 'device', title: `"${d.vendor} ${d.name} (${d.codename})"`, aliases: `[${d.vendor} ${d.name}]`, catalog: d.codename, date: D, updated: D, tags: `[${cat}, ${d.dir}, device/${d.codename}, ${series.slice(0, -3)}]` },
-      `${stub} Catalog: [${d.path.split('/').pop()}](../../catalog/devices/${d.path}).`, ['ROMs', 'Sources', 'Links']));
+      `${stub} Catalog: [${d.codename}.json](../../catalog/${d.path}/${d.codename}.json).`, ['ROMs', 'Sources', 'Links']));
     v.join(vendor, category, 'Category', 'Vendors');
     v.join(line, vendor, 'Vendor', 'Lines');
     v.join(series, line, 'Line', 'Series');
@@ -116,8 +113,7 @@ export function tree(vault) {
   const turns = v.text('log.md').split('\n').filter(l => /revision turn/i.test(l));
   const devices = new Map(catalogDevices().map(d => [d.codename, d]));
   const roms = /** @type {Map<string, any[]>} */ (new Map());
-  for (const f of readdirSync(join(ROOT, 'catalog/roms'), { recursive: true }).filter(f => String(f).endsWith('.json'))) {
-    const entry = JSON.parse(readFileSync(join(ROOT, 'catalog/roms', String(f)), 'utf8'));
+  for (const d of devices.values()) for (const [, entry] of romFiles(d.path)) {
     roms.set(entry.device, [...roms.get(entry.device) ?? [], ...entry.roms]);
   }
   /** Review state of a device or ROM page: confidence, revision turns logged, last full recheck, and (devices) the site's catalog level. @param {string} rel */
