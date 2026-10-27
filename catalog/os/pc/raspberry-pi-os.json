@@ -1,0 +1,82 @@
+{
+  "id": "raspberry-pi-os",
+  "name": "Raspberry Pi OS",
+  "shortName": "Raspberry Pi OS",
+  "defaultEdition": "desktop",
+  "version": "2026-10-06",
+  "releaseDate": "2026-10-06",
+  "source": "https://www.raspberrypi.com/software/",
+  "page": {
+    "description": "Raspberry Pi OS arm64 desktop image: size, architecture and the project's .sha256 file.",
+    "eyebrow": "OPERATING SYSTEM / RASPBERRY PI",
+    "intro": "The official Raspberry Pi OS for 64-bit boards, here the desktop image. These are Raspberry Pi images, not PC images: they are written to an SD card or USB stick and boot on Pi hardware.",
+    "logo": {
+      "src": "logos/raspberry-pi-os.svg",
+      "alt": "Raspberry Pi logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Official Raspberry Pi OS, tuned for the boards.",
+      "Desktop image with the Pi applications and tools.",
+      "Publishes a .sha256 beside every image.",
+      "Written to SD or USB and booted directly."
+    ],
+    "cons": [
+      "Raspberry Pi only: not a PC or x86 image.",
+      "The desktop image is 1.4 GB compressed.",
+      "The version is the image date (2026-10-06).",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Raspberry Pi software",
+        "href": "https://www.raspberrypi.com/software/"
+      },
+      {
+        "label": "Image host",
+        "href": "https://downloads.raspberrypi.com/raspios_arm64/images/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Raspberry Pi OS; the page shows the logo only. No image was written to a card and nothing was booted.",
+    "status": "One image: the arm64 desktop image, written to an SD card or USB stick with dd or an image writer. Writing replaces the whole device. This is a Raspberry Pi image, not a PC installer. The version is the image date (2026-10-06).",
+    "footer": [
+      {
+        "label": "Image host",
+        "href": "https://downloads.raspberrypi.com/raspios_arm64/images/raspios_arm64-2026-10-06/"
+      },
+      {
+        "label": "Raspberry Pi software",
+        "href": "https://www.raspberrypi.com/software/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/raspberry-pi-os.svg\nRaspberry Pi logo from Simple Icons (CC0), https://simpleicons.org; the Raspberry Pi name and mark belong to Raspberry Pi Ltd, shown only to identify the OS. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop (arm64)",
+      "description": "The 64-bit desktop image for Raspberry Pi 4/5-class boards.",
+      "usbNote": "1.4 GB compressed image for an SD card or USB stick; writing replaces the whole device.",
+      "images": [
+        {
+          "id": "raspberry-pi-os-desktop-aarch64",
+          "arch": "aarch64",
+          "format": "img.xz",
+          "url": "https://downloads.raspberrypi.com/raspios_arm64/images/raspios_arm64-2026-10-06/2026-10-06-raspios-trixie-arm64.img.xz",
+          "sha256": "976766570bee2aaf3047dd78649cfe82abb8fe9687b7f15030cd533ba4e9f7a9",
+          "sha256Url": "https://downloads.raspberrypi.com/raspios_arm64/images/raspios_arm64-2026-10-06/2026-10-06-raspios-trixie-arm64.img.xz.sha256",
+          "size": 1364720984,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.raspberrypi.com/software/"
+  }
+}
