@@ -44,7 +44,7 @@ const confirmHost = () => {
   document.body.append(dialog);
   dialog.showModal();
 };
-if (!params.has('device') && !['console', 'television', 'misc'].includes(params.get('category'))) confirmHost();
+if (!params.has('device') && !['console', 'television', 'misc', 'networking'].includes(params.get('category'))) confirmHost();
 
 /** Catalog text with `code` spans. @param {string} text */
 const rich = (text = '') => text.split('`').map((part, i) => i % 2 ? h('code', {}, part) : part);
@@ -1486,7 +1486,7 @@ async function start() {
   if (!response.ok) { confirmHost(); main.append(h('p', { className: 'status', textContent: `Unknown device ${codename}.` }), h('a', { href: './', textContent: 'Back to all devices' })); return; }
   const device = await response.json();
   if (!device.supportOnly || !device.supportRoutes) confirmHost();
-  if (['television', 'misc'].includes(device.category)) document.querySelector(`.sitenav a[href="./?category=${device.category}"]`)?.setAttribute('aria-current', 'page');
+  if (['television', 'misc', 'networking'].includes(device.category)) document.querySelector(`.sitenav a[href="./?category=${device.category}"]`)?.setAttribute('aria-current', 'page');
   if (device.supportOnly) {
     document.title = `${device.vendor} ${device.name} · ROMinit`;
     if (device.supportRoutes) {
@@ -1504,7 +1504,7 @@ async function start() {
           h('a', { className: 'back-link', href: `./?category=${device.category}`, textContent: `← ${categoryName}` }),
           h('div', { className: 'console-hero-body' },
             h('div', {}, h('p', { className: 'eyebrow', textContent: `${device.vendor} / ${device.series} / ${categoryName.toUpperCase()} GUIDES` }),
-              h('h1', {}, h('span', { textContent: `${device.category === 'misc' ? `${device.vendor} ` : ''}${device.name}.` })),
+              h('h1', {}, h('span', { textContent: `${['misc', 'networking'].includes(device.category) ? `${device.vendor} ` : ''}${device.name}.` })),
               h('p', { className: 'intro-copy', textContent: device.notes || `Community routes for ${device.vendor} ${device.name}.` }),
               h('div', { className: 'tv-status' }, officialSupportRow(device.officialSupport),
                 device.ownership && h('a', { className: 'feature partial', href: device.ownership.source, target: '_blank', rel: 'noopener noreferrer', title: device.ownership.details, ariaLabel: `Ownership: ${device.ownership.label}. ${device.ownership.details}`, textContent: `Ownership: ${device.ownership.label}` })),

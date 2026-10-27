@@ -10,7 +10,7 @@ const VAULT = process.env.ROMVAULT_DIR ? resolve(process.env.ROMVAULT_DIR) : joi
 const TYPES = ['category', 'line', 'vendor', 'project', 'series', 'device', 'soc', 'rom', 'scraping', 'skill', 'index', 'log'];
 const FOLDER_TYPE = { categories: 'category', lines: 'line', vendors: 'vendor', projects: 'project', series: 'series', devices: 'device', socs: 'soc', roms: 'rom', scraping: 'scraping' };
 const MAX_LINES = 200;
-const CLASSES = ['phone', 'tablet', 'tvmedia', 'television', 'misc', 'console', 'pc']; // catalog device.category values
+const CLASSES = ['phone', 'tablet', 'tvmedia', 'television', 'misc', 'networking', 'console', 'pc']; // catalog device.category values
 const UP = { series: 'lines', line: 'vendors', vendor: 'categories' }; // the net above the device: series → line → vendor → category
 
 /** @param {string} dir @returns {string[]} */

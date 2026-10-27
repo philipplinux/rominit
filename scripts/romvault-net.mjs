@@ -10,7 +10,7 @@ import { LEVELS, deviceLevel } from '../src/catalog.js';
 import { catalogDevices, romFiles } from './load-catalog.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const CATEGORY_FILE = { phone: 'phones', tablet: 'tablets', tvmedia: 'tvmedia', television: 'tvs', misc: 'misc-iot', console: 'consoles', pc: 'x86-pcs' };
+const CATEGORY_FILE = { phone: 'phones', tablet: 'tablets', tvmedia: 'tvmedia', television: 'tvs', misc: 'misc-iot', networking: 'networking', console: 'consoles', pc: 'x86-pcs' };
 /** Child folder per page type, top to bottom. */
 const DOWN = { category: 'vendors', vendor: 'lines', line: 'series', series: 'devices', device: 'roms' };
 const slug = (/** @type {string} */ s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

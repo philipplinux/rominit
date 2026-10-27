@@ -20,9 +20,9 @@ export const OPTIONS = ['yes', 'no', 'optional'];
 /** mainline = upstream Linux (gets updates); downstream = the vendor's old fork. */
 export const KERNELS = ['mainline', 'downstream'];
 /** Top of the device tree. */
-export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tvmedia: 'TV media boxes & sticks', television: 'Smart TVs', misc: 'Misc & IoT', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
+export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tvmedia: 'TV media boxes & sticks', television: 'Smart TVs', misc: 'Misc & IoT', networking: 'Networking', console: 'Consoles', pc: 'OS', emulator: 'Emulators' };
 /** catalog/devices/<folder>/<vendor>/<codename>/ holds <codename>.json, roms/ and recoveries/: the folder sets the device's category, so each kind keeps its own tree. */
-export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', tvmedia: 'tvmedia', televisions: 'television', misc: 'misc' };
+export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', tvmedia: 'tvmedia', televisions: 'television', misc: 'misc', networking: 'networking' };
 export const SUPPORT_ROUTE_SECTIONS = { os: 'Operating systems', apps: 'Apps', root: 'Root', 'custom-os': 'Custom OS', recovery: 'Recovery', tools: 'Manufacturer tools', projects: 'Community projects', discussion: 'Discussion' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
 /** The maker's own updates for the stock OS: still coming, or over (the stock OS is obsolete). `until` is the promised end or the last update. */
