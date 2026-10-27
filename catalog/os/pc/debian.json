@@ -1,0 +1,147 @@
+{
+  "id": "debian",
+  "name": "Debian GNU/Linux",
+  "shortName": "Debian",
+  "defaultEdition": "netinst",
+  "version": "13.7.0",
+  "releaseDate": "2026-09-12",
+  "requirements": {
+    "summary": "512 MB RAM · 4 GB disk · Internet",
+    "note": "Without a desktop: 512 MB RAM minimum (1 GB recommended) and 4 GB of disk. With a desktop: 1 GB minimum (2 GB recommended) and 10 GB. The netinst image needs internet; the DVD image installs offline.",
+    "source": "https://www.debian.org/releases/trixie/amd64/ch03s04.en.html",
+    "checked": "2026-10-27"
+  },
+  "kernel": { "version": "6.12", "line": "LTS", "updates": "6.12.113", "checked": "2026-10-27", "source": "https://packages.debian.org/trixie/linux-image-amd64" },
+  "source": "https://www.debian.org/download",
+  "page": {
+    "description": "Debian editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / COMMUNITY LINUX",
+    "intro": "The community distribution everything else is built on, and the base under Ubuntu and Mint. Pick the small netinst image or the offline DVD, then the architecture of the machine that will run it.",
+    "logo": { "src": "logos/debian.svg", "alt": "Debian logo", "width": 180, "height": 180 },
+    "pros": [
+      "Installer images for amd64, arm64, armhf, ppc64el, riscv64 and s390x in one release.",
+      "No desktop is forced: GNOME, KDE Plasma, Xfce and the rest are chosen during installation.",
+      "Five years of support: full Debian support to August 2028, LTS to June 2030.",
+      "The DVD image installs without a network; netinst is under a gigabyte."
+    ],
+    "cons": [
+      "The netinst image cannot finish without a working network connection.",
+      "Packages are older than in Ubuntu or Fedora; Debian favours tested over new.",
+      "There are no desktop editions: the desktop is an installer choice, not a separate image.",
+      "Every point release changes the file names and digests this page pins."
+    ],
+    "links": [
+      { "label": "Debian website", "href": "https://www.debian.org/" },
+      { "label": "Download Debian", "href": "https://www.debian.org/download" },
+      { "label": "Trixie release notes", "href": "https://www.debian.org/releases/trixie/release-notes/" }
+    ],
+    "previewNote": "A stock screenshot of Debian 13 with GNOME, from Wikimedia Commons. Not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/debian/debian-desktop.webp",
+      "alt": "Debian 13 GNOME desktop with the Debian swirl wallpaper and the top bar",
+      "width": 1600,
+      "height": 900,
+      "bar": "debian-13.7.0-amd64-netinst.iso · 13.7.0",
+      "caption": "Stock screenshot of Debian 13 GNOME · no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Debian_13_(Trixie)_-_GNOME_desktop.png",
+        "license": "CC0",
+        "artist": "TOMats"
+      }
+    },
+    "status": "One official path per image: netinst or DVD, written with GNOME Disks, dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://www.debian.org/distrib/" },
+      { "label": "Checksums & signing keys", "href": "https://www.debian.org/CD/verify" },
+      { "label": "Trixie release notes", "href": "https://www.debian.org/releases/trixie/release-notes/" },
+      { "label": "Installation guide", "href": "https://www.debian.org/releases/trixie/installmanual" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/debian.svg\nDebian logo from Simple Icons (CC0), https://simpleicons.org; the Debian name and mark belong to Software in the Public Interest, shown only to identify Debian. No endorsement implied.",
+      "shots/debian/debian-desktop.webp\nDebian 13 \"Trixie\" with GNOME, screenshot by TOMats, https://commons.wikimedia.org/wiki/File:Debian_13_(Trixie)_-_GNOME_desktop.png, CC0. Resized and converted to WebP."
+    ]
+  },
+  "editions": [
+    {
+      "id": "netinst",
+      "name": "Netinst",
+      "description": "A minimal installer that fetches the rest of the system from Debian's mirrors. This is the recommended image for most machines.",
+      "usbNote": "Bootable on amd64 and arm64; the armhf, ppc64el, riscv64 and s390x images target their own boards and firmware. Writing erases the stick.",
+      "images": [
+        {
+          "id": "debian-netinst-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/amd64/iso-cd/debian-13.7.0-amd64-netinst.iso",
+          "sha256": "a7ef94ac2fb9a7fec454552abd629b7cc9d5155c886165a45649f5ce6167e355",
+          "size": 792723456,
+          "usb": true
+        },
+        {
+          "id": "debian-netinst-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/arm64/iso-cd/debian-13.7.0-arm64-netinst.iso",
+          "sha256": "6e93fa1759bd9d4b0fc11e938987de6967ee7de5297dac1be27c3a75cc17024b",
+          "size": 735358976,
+          "usb": true
+        },
+        {
+          "id": "debian-netinst-armhf",
+          "arch": "armhf",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/armhf/iso-cd/debian-13.7.0-armhf-netinst.iso",
+          "sha256": "471528fbb8caee5f5eb385644bbc71847e607cd10d6668a4983cbe185faf6e09",
+          "size": 939831296,
+          "usb": false
+        },
+        {
+          "id": "debian-netinst-ppc64le",
+          "arch": "ppc64le",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/ppc64el/iso-cd/debian-13.7.0-ppc64el-netinst.iso",
+          "sha256": "356690c9ccd15af87c675793924c9dc28e8004928854dff492dbe9c05d1093d1",
+          "size": 651841536,
+          "usb": false
+        },
+        {
+          "id": "debian-netinst-riscv64",
+          "arch": "riscv64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/riscv64/iso-cd/debian-13.7.0-riscv64-netinst.iso",
+          "sha256": "162b1236c64a902052493d8b3ab41e2b36c52975d967eedac4a2e2b2c0158c35",
+          "size": 614772736,
+          "usb": false
+        },
+        {
+          "id": "debian-netinst-s390x",
+          "arch": "s390x",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/s390x/iso-cd/debian-13.7.0-s390x-netinst.iso",
+          "sha256": "a315b4030981cda902d3c261c076f4161c6dad89b47ca2c8d91dccfc09d69b69",
+          "size": 441804800,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "dvd",
+      "name": "DVD (offline)",
+      "description": "The first DVD image: the installer plus the packages for every desktop, so the machine does not need a network to install.",
+      "usbNote": "4 GB image: use a stick that fits it, or write it to a dual-layer DVD. Writing erases the stick.",
+      "images": [
+        {
+          "id": "debian-dvd-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0/amd64/iso-dvd/debian-13.7.0-amd64-DVD-1.iso",
+          "sha256": "347b6c67a3cc0b7ddb60b178f683470c4e2b7ac426c996d9337a2ff36c1a32d2",
+          "size": 3992977408,
+          "usb": true
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "until": "2028-08", "source": "https://www.debian.org/releases/trixie/" }
+}
