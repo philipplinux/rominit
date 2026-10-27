@@ -64,7 +64,7 @@ function open(vault) {
     if (log) writeFileSync(abs('log.md'), readFileSync(abs('log.md'), 'utf8').trimEnd() + '\n' + log);
     return changed;
   };
-  return { text, has, title, links, folder, create, join: join2, index, save, today };
+  return { text, has, title, links, folder, create, join: join2, index, save, today, addItem, href };
 }
 
 const page = (/** @type {Record<string, string>} */ fm, /** @type {string} */ about, /** @type {string[]} */ sections) =>
@@ -104,6 +104,12 @@ export function fix(vault, agent = 'script') {
       `Devices built on the ${fm.soc} chip. They often share kernels, mainline ports, recoveries and flashing quirks, so a fix found for one is worth trying on the others. Built from the device pages' \`soc:\` by scripts/romvault-net.mjs on ${D}.`, ['Devices', 'Links']));
     v.join(device, soc, 'SoC', 'Devices');
     v.index(soc, 'SoCs');
+  }
+  // OS → device: an OS page lists every device that has a ROM page linking it (os/mobile/postmarketos.md → starlte).
+  for (const rom of v.folder('devices').filter(r => /\/roms\/[^/]+\.md$/.test(r))) {
+    const device = `${dirname(dirname(rom))}/${basename(dirname(dirname(rom)))}.md`;
+    for (const os of v.links(rom).filter(l => l.startsWith('os/') && v.has(l) && frontmatter(v.text(l))?.type === 'project'))
+      if (v.has(device) && !v.links(os).includes(device)) v.addItem(os, 'Devices in ROMvault', `- [${v.title(device)}](${v.href(os, device)})`);
   }
   return v.save(agent);
 }

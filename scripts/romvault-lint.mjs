@@ -13,10 +13,11 @@ const folderType = rel => {
   const [top, a, b, c, d, e] = rel.split('/'), file = rel.split('/').at(-1)?.slice(0, -3);
   if (top === 'devices') return d === 'roms' ? 'rom' : e === undefined && d === `${c}.md` ? 'device' : undefined; // devices/<category>/<vendor>/<codename>/<codename>.md, …/roms/<rom>.md
   if (top === 'vendors') return b === 'lines' ? 'line' : b === 'series' ? 'series' : c === undefined && file === a ? 'vendor' : undefined; // vendors/<vendor>/<vendor>.md, lines/, series/
-  return { categories: 'category', os: 'project', socs: 'soc', scraping: 'scraping' }[top];
+  if (top === 'os') return b === `${a}.md` ? 'index' : 'project'; // os/<group>/<group>.md lists the group's OS pages
+  return { categories: 'category', socs: 'soc', scraping: 'scraping' }[top];
 };
 /** Pages reached through the net (category → vendor → line → series → device → ROM), so README does not list them. @param {string} rel */
-const inNet = rel => rel.startsWith('devices/') || /^vendors\/[^/]+\/(lines|series)\//.test(rel);
+const inNet = rel => rel.startsWith('devices/') || /^vendors\/[^/]+\/(lines|series)\//.test(rel) || (rel.startsWith('os/') && folderType(rel) === 'project');
 /** Parent folders of the net above the device. */
 const UP_PAGE = { series: (/** @type {string} */ r) => /^vendors\/[^/]+\/lines\//.test(r), line: (/** @type {string} */ r) => /^vendors\/([^/]+)\/\1\.md$/.test(r), vendor: (/** @type {string} */ r) => r.startsWith('categories/') };
 const MAX_LINES = 200;
@@ -136,6 +137,13 @@ export function lint(vault = VAULT) {
       if (pages.has(device) && !linksTo(device, file)) say(device, `does not list ${rel}`);
       if (!(fm.tags ?? []).includes(`device/${codename}`)) say(file, `tag device/${codename} missing`);
       if (!links(file).some(f => /\/catalog\/devices\/.+\/roms\//.test(f))) say(file, 'no link to its catalog JSON');
+      for (const os of links(file).filter(f => /^os\//.test(relative(vault, f)) && pages.has(f) && folderType(relative(vault, f)) === 'project'))
+        if (!linksTo(os, device)) say(os, `does not list ${relative(vault, device)} (its ROM ${rel} links here; run scripts/romvault-net.mjs fix)`);
+    }
+    if (rel.startsWith('os/') && fm.type === 'project') { // OS → group page up, and something in the group links down to it
+      const group = join(vault, 'os', rel.split('/')[1], `${rel.split('/')[1]}.md`);
+      if (!linksTo(file, group)) say(file, `does not link up to ${relative(vault, group)}`);
+      if (![...pages.keys()].some(f => f !== file && dirname(f) === dirname(file) && linksTo(f, file))) say(file, `not listed by ${relative(vault, group)} or a sibling OS page`);
     }
     const up = UP_PAGE[/** @type {keyof typeof UP_PAGE} */ (fm.type)];
     if (up) {

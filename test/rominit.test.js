@@ -639,7 +639,9 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
       const p = join(vault, f);
       writeFileSync(p, readFileSync(p, 'utf8').split('\n').filter(l => !/series\/google-pixel-7\.md|socs\/sdm670\.md/.test(l)).join('\n'));
     }
-    assert.notDeepEqual(lint(vault), []);
+    const pmos = join(vault, 'os/mobile/postmarketos.md'); // OS → device list is rebuilt from the device's ROM pages
+    writeFileSync(pmos, readFileSync(pmos, 'utf8').split('\n').filter(l => !l.includes('fairphone-fp4/fairphone-fp4.md')).join('\n'));
+    assert.ok(lint(vault).some(p => p.includes('postmarketos.md: does not list devices/phones/fairphone/fairphone-fp4')));
     const created = fix(vault, 'test').create;
     assert.ok(created.has('vendors/google/series/google-pixel-7.md') && created.has('socs/sdm670.md'));
     assert.deepEqual(lint(vault), []);
