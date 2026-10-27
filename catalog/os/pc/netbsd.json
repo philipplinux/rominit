@@ -1,0 +1,96 @@
+{
+  "id": "netbsd",
+  "name": "NetBSD",
+  "shortName": "NetBSD",
+  "defaultEdition": "install",
+  "version": "10.2",
+  "releaseDate": "2026-09-16",
+  "source": "https://www.netbsd.org/",
+  "page": {
+    "description": "NetBSD 10.2 install image: size, architecture and a SHA-256 computed by ROMinit.",
+    "eyebrow": "OPERATING SYSTEM / BSD",
+    "intro": "A portable BSD known for running on a wide range of hardware. The amd64 install image is small and boots into the installer.",
+    "logo": {
+      "src": "logos/netbsd.svg",
+      "alt": "NetBSD logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Runs on an exceptionally wide range of hardware.",
+      "Clean, well-documented installer and packaging system (pkgsrc).",
+      "Small install image, under 700 MB.",
+      "One handbook covers the whole system."
+    ],
+    "cons": [
+      "Not Linux: Linux drivers and tools do not apply.",
+      "No desktop on the installer; X is added after the base system.",
+      "The project publishes MD5 only for this image, so the SHA-256 here is computed by ROMinit.",
+      "The Commons screenshot shows 10.1, not 10.2."
+    ],
+    "links": [
+      {
+        "label": "NetBSD website",
+        "href": "https://www.netbsd.org/"
+      },
+      {
+        "label": "10.2 images",
+        "href": "https://cdn.netbsd.org/pub/NetBSD/images/10.2/"
+      }
+    ],
+    "previewNote": "A stock screenshot of NetBSD 10.1 with Xorg and xterm windows from Wikimedia Commons. It is not 10.2 and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/netbsd/netbsd-desktop.webp",
+      "alt": "NetBSD 10.1 desktop with xterm windows and desktop utilities open",
+      "width": 1281,
+      "height": 765,
+      "bar": "NetBSD-10.2-amd64.iso · 10.2",
+      "caption": "Stock screenshot of NetBSD 10.1 · not 10.2, no image written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:A_Screenshot_In_NetBSD_10.1_Xorg1.20.14_With_Every_Desktop_Utilities_And_xterm_Windows_Open.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Coolis2"
+      }
+    },
+    "status": "One image: the amd64 install ISO, written to a USB stick with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. Its SHA-256 was computed by ROMinit from the official download on 2026-10-27; the project publishes MD5 only. The date shown is the mirror file date (2026-09-16).",
+    "footer": [
+      {
+        "label": "NetBSD releases",
+        "href": "https://www.netbsd.org/releases/"
+      },
+      {
+        "label": "10.2 images",
+        "href": "https://cdn.netbsd.org/pub/NetBSD/images/10.2/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/netbsd.svg\nNetBSD logo from Simple Icons (CC0), https://simpleicons.org; the NetBSD name and mark belong to the NetBSD Foundation, shown only to identify NetBSD. No endorsement implied.",
+      "shots/netbsd/netbsd-desktop.webp\nNetBSD 10.1 desktop screenshot by Coolis2, https://commons.wikimedia.org/wiki/File:A_Screenshot_In_NetBSD_10.1_Xorg1.20.14_With_Every_Desktop_Utilities_And_xterm_Windows_Open.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 10.2 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "install",
+      "name": "Install (amd64)",
+      "description": "The amd64 install ISO with the base system and standard sets.",
+      "usbNote": "655 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "netbsd-install-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdn.netbsd.org/pub/NetBSD/images/10.2/NetBSD-10.2-amd64.iso",
+          "sha256": "0c2ee0a0a030a7167c6394f8fabbef52cd23e615af95706138b8670852908c96",
+          "sha256Computed": "2026-10-27",
+          "size": 654661632,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.netbsd.org/releases/"
+  }
+}
