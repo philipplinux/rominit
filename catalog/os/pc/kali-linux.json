@@ -1,0 +1,78 @@
+{
+  "id": "kali-linux",
+  "name": "Kali Linux",
+  "shortName": "Kali",
+  "defaultEdition": "installer",
+  "version": "2026.3",
+  "releaseDate": "2026-10-26",
+  "source": "https://www.kali.org/releases/",
+  "page": {
+    "description": "Kali Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ROLLING SECURITY DISTRO",
+    "intro": "Debian-based and rolling, built around the security toolset. The installer image is the one to write if you want a full Kali system on the disk.",
+    "logo": { "src": "logos/kali-linux.svg", "alt": "Kali Linux logo", "width": 180, "height": 180 },
+    "pros": [
+      "The security toolset is installed and updated from one repository.",
+      "Rolling release: no reinstalls between point images.",
+      "Debian base, so the usual Debian knowledge carries over.",
+      "Xfce 4.20.8 and kernel 7.1 in this build."
+    ],
+    "cons": [
+      "A rolling image: no end-of-life date is published.",
+      "The toolset is large; this installer ISO is 5 GB.",
+      "Not a general-purpose desktop first; expect security-focused defaults.",
+      "The Commons screenshot shows an older Kali desktop."
+    ],
+    "links": [
+      { "label": "Kali website", "href": "https://www.kali.org/" },
+      { "label": "Release history", "href": "https://www.kali.org/releases/" },
+      { "label": "Downloads", "href": "https://www.kali.org/get-kali/" }
+    ],
+    "previewNote": "A stock screenshot of a Kali Linux desktop from Wikimedia Commons. It is not 2026.3 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/kali-linux/kali-desktop.webp",
+      "alt": "Kali Linux Xfce desktop with the application menu and a terminal",
+      "width": 1600,
+      "height": 900,
+      "bar": "kali-linux-2026.3-installer-amd64.iso · 2026.3",
+      "caption": "Stock screenshot of a Kali desktop · not 2026.3, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Kali-screenshot-20221021.png",
+        "license": "CC0",
+        "artist": "Kali Linux project"
+      }
+    },
+    "status": "One image pinned here: the amd64 installer ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. Kali is rolling and publishes no end-of-life date.",
+    "footer": [
+      { "label": "Official downloads & checksums", "href": "https://www.kali.org/get-kali/" },
+      { "label": "Release history", "href": "https://www.kali.org/releases/" },
+      { "label": "SHA-256 sums for this build", "href": "https://cdimage.kali.org/kali-2026.3/SHA256SUMS" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/kali-linux.svg\nKali Linux logo from Simple Icons (CC0), https://simpleicons.org; the Kali name and mark belong to Offensive Security, shown only to identify Kali. No endorsement implied.",
+      "shots/kali-linux/kali-desktop.webp\nKali desktop screenshot, CC0, attributed to the Kali Linux project, https://commons.wikimedia.org/wiki/File:Kali-screenshot-20221021.png. Converted to WebP. Not a 2026.3 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "installer",
+      "name": "Installer (amd64)",
+      "description": "The full installer: it puts Kali on the disk with the toolset, instead of running live from the stick.",
+      "usbNote": "5 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "kali-linux-installer-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-installer-amd64.iso",
+          "sha256": "db9cbed33edb45727d16911813c2434fcd1419585007884153be22a03b30ec2f",
+          "sha256Url": "https://cdimage.kali.org/kali-2026.3/SHA256SUMS",
+          "size": 5047031808,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.kali.org/releases/" }
+}
