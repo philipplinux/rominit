@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Pictures ship as reviewed local copies: a swapped or hotlinked file must fail here, not reach the site.
 const SITE = new URL('../site/', import.meta.url);
@@ -10,7 +12,7 @@ const MAGIC = { webp: b => b.toString('latin1', 0, 4) === 'RIFF' && b.toString('
 // An SVG may draw, never run or fetch: no script, event handler, embedded HTML, entity or outside reference.
 const SVG_UNSAFE = /<script|\son[a-z]+\s*=|<foreignObject|<!ENTITY|<!DOCTYPE|javascript:|data:text|(?:xlink:)?href\s*=\s*["'](?!#)|url\(\s*["']?(?!#)|@import|<(?:iframe|embed|object)\b/i;
 
-const files = MEDIA_DIRS.flatMap(dir => readdirSync(new URL(dir, SITE), { recursive: true, withFileTypes: true }).filter(e => e.isFile()).map(e => `${e.parentPath.slice(new URL(SITE).pathname.length)}/${e.name}`));
+const files = MEDIA_DIRS.flatMap(dir => readdirSync(new URL(dir, SITE), { recursive: true, withFileTypes: true }).filter(e => e.isFile()).map(e => relative(fileURLToPath(SITE), join(e.parentPath, e.name)).replaceAll(sep, '/')));
 
 test('every site media file is an allowed type whose bytes match its extension', () => {
   assert.ok(files.length > 50);

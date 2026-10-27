@@ -479,7 +479,7 @@ test('role scopes and return paths', async () => {
   assert.deepEqual(['/x?y=1', '//evil.com', '/\\evil', 'https://evil.com', 5].map(safeReturn), ['/x?y=1', '/', '/', '/', '/']);
 });
 
-test('untar reads a gzip tar with long names and skips unwanted entries', async () => {
+test('untar reads a gzip tar with long names and skips unwanted entries', { skip: process.platform !== 'linux' && 'fixture needs GNU tar' }, async () => {
   const { execFileSync } = await import('node:child_process');
   const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } = await import('node:fs');
   const dir = mkdtempSync((await import('node:path')).join((await import('node:os')).tmpdir(), 'rominit-tar-')), deep = `${'d'.repeat(120)}/images`;

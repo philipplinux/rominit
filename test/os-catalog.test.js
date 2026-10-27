@@ -53,7 +53,7 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
   assert.ok(OSES.length >= 2, 'the template is proven by more than one OS');
   assert.equal(new Set(OSES.map(os => os.id)).size, OSES.length, 'OS ids are unique');
   const { readdirSync } = await import('node:fs'); // browser and Workers bundles have no fs, so OSES imports by hand; this catches a forgotten import
-  const files = readdirSync(new URL('../catalog/os', import.meta.url), { recursive: true }).filter(f => String(f).endsWith('.json')).map(f => String(f).split('/').at(-1).slice(0, -5));
+  const files = readdirSync(new URL('../catalog/os', import.meta.url), { recursive: true }).filter(f => String(f).endsWith('.json')).map(f => String(f).split(/[\\/]/).at(-1).slice(0, -5));
   assert.deepEqual(files.sort(), OSES.map(os => os.id).sort(), 'every catalog/os/<group>/<id>.json is imported in src/os/index.js');
   for (const os of OSES) {
     assert.match(os.id, /^[a-z0-9-]+$/);

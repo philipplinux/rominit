@@ -5,7 +5,9 @@ import { EventEmitter } from 'node:events';
 import { lstat, mkdtemp, mkdir, readFile, rename, rm, stat, symlink, truncate, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import test from 'node:test';
+import nodeTest from 'node:test';
+// the USB backend is Linux-only until the Windows and macOS backends land
+const test = process.platform === 'linux' ? nodeTest : nodeTest.skip;
 import { collectUsbEnvironment, createUsbMedia } from '../bin/usb-media.mjs';
 
 const bytes = value => Buffer.from(value);

@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
+import nodeTest from 'node:test';
+// bench scripts run under POSIX sh, which Windows lacks
+const test = process.platform === 'win32' ? nodeTest.skip : nodeTest;
 import { onRequestPost } from '../functions/b/[code].js';
 
 test('OS mismatch is saved as a failed run and returned to the terminal instead of a report card', async () => {

@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import test from 'node:test';
+import nodeTest from 'node:test';
+// the fake sysfs tree uses ':' in names, which Windows paths refuse
+const test = process.platform === 'win32' ? nodeTest.skip : nodeTest;
 import { createBenchTargets } from '../bin/bench-targets.mjs';
 
 const argsKey = args => args.join(' ');

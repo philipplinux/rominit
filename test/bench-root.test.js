@@ -4,7 +4,9 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+import nodeTest from 'node:test';
+// bench scripts run under POSIX sh, which Windows lacks
+const test = process.platform === 'win32' ? nodeTest.skip : nodeTest;
 
 const linuxPath = fileURLToPath(new URL('../site/bench/linux.sh', import.meta.url));
 const linux = await readFile(linuxPath, 'utf8');

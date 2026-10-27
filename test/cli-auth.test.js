@@ -217,7 +217,7 @@ test('native USB reporter drops invalid environment diagnostics instead of forwa
   assert.doesNotMatch(JSON.stringify(sent), /private-acme-build|workstation-philipp|rawHost/);
 });
 
-test('a web-paired key becomes available to the USB reporter without entering its body', async () => {
+test('a web-paired key becomes available to the USB reporter without entering its body', { skip: process.platform !== 'linux' && 'USB is Linux-only' }, async () => {
   const { io } = streams();
   let mediaOptions, helperOptions, stored;
   const payload = {
@@ -245,7 +245,7 @@ test('a web-paired key becomes available to the USB reporter without entering it
   } finally { assert.equal(await running.stop(), 0); }
 });
 
-test('serve binds USB reports to the key loaded from the OS credential store', async () => {
+test('serve binds USB reports to the key loaded from the OS credential store', { skip: process.platform !== 'linux' && 'USB is Linux-only' }, async () => {
   const { io } = streams();
   let mediaOptions, helperOptions, sent;
   const payload = {
