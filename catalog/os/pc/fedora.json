@@ -74,6 +74,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/x86_64/iso/Fedora-Workstation-Live-44-1.7.x86_64.iso",
           "sha256": "1620295f6a00c27c3208f0c00b8ece4eab1ec69b9002152d97488bf26a426ddf",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/x86_64/iso/Fedora-Workstation-44-1.7-x86_64-CHECKSUM",
           "size": 2851612672,
           "usb": true
         },
@@ -83,6 +84,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/aarch64/iso/Fedora-Workstation-Live-44-1.7.aarch64.iso",
           "sha256": "162ba3c552a2d241c7c63ec26777af0255ee1b5a135adc0be986ceed999933ef",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/aarch64/iso/Fedora-Workstation-44-1.7-aarch64-CHECKSUM",
           "size": 2689781760,
           "usb": true
         }
@@ -100,6 +102,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/KDE/x86_64/iso/Fedora-KDE-Desktop-Live-44-1.7.x86_64.iso",
           "sha256": "c8295961d4c41adbf785a31a17c21a971d3b7415fda72dcad0c11c49577bf03a",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/KDE/x86_64/iso/Fedora-KDE-44-1.7-x86_64-CHECKSUM",
           "size": 3368683520,
           "usb": true
         },
@@ -109,6 +112,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/KDE/aarch64/iso/Fedora-KDE-Desktop-Live-44-1.7.aarch64.iso",
           "sha256": "61b39df9bb19aff38b7b7c81d7b2a647aa43948b6683c8467091e0edce833a94",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/KDE/aarch64/iso/Fedora-KDE-44-1.7-aarch64-CHECKSUM",
           "size": 3119904768,
           "usb": true
         }
@@ -126,6 +130,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Silverblue/x86_64/iso/Fedora-Silverblue-ostree-x86_64-44-1.7.iso",
           "sha256": "9ccec9b075a0a4358a7209b2667156aaeeec3a6a3c8d71cada45b57fca9b4682",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Silverblue/x86_64/iso/Fedora-Silverblue-44-1.7-x86_64-CHECKSUM",
           "size": 3331284992,
           "usb": true
         },
@@ -135,6 +140,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Silverblue/aarch64/iso/Fedora-Silverblue-ostree-aarch64-44-1.7.iso",
           "sha256": "0793b987858dba46cb9e0727ad5fa8e819caff055d6d8ca703dff355fb4383cc",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Silverblue/aarch64/iso/Fedora-Silverblue-44-1.7-aarch64-CHECKSUM",
           "size": 3163932672,
           "usb": true
         }
@@ -152,6 +158,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Server/x86_64/iso/Fedora-Server-dvd-x86_64-44-1.7.iso",
           "sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Server/x86_64/iso/Fedora-Server-44-1.7-x86_64-CHECKSUM",
           "size": 3913023488,
           "usb": true
         },
@@ -161,6 +168,7 @@
           "format": "iso",
           "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Server/aarch64/iso/Fedora-Server-dvd-aarch64-44-1.7.iso",
           "sha256": "ba8372682294d0d76f79427cae1273d36891b192ac9bf0f0f9de4e97a7cbe218",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Server/aarch64/iso/Fedora-Server-44-1.7-aarch64-CHECKSUM",
           "size": 3662544896,
           "usb": true
         }

@@ -75,6 +75,7 @@
           "format": "iso",
           "url": "https://archive.archlinux.org/iso/2026.10.01/archlinux-2026.10.01-x86_64.iso",
           "sha256": "684ded26c63240ff4a41e8c25ee84ea6da233f557364821f13d12c2b0a9059a5",
+          "sha256Url": "https://archive.archlinux.org/iso/2026.10.01/sha256sums.txt",
           "size": 1640497152,
           "usb": true
         }

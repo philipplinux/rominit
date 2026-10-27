@@ -73,6 +73,7 @@ test('every OS record is complete and its artifacts are pinned to the publisher'
       assert.equal(url.protocol, 'https:');
       assert.ok(!url.username && !url.password, `${image.id} has no credentials in its URL`);
       assert.match(image.sha256, /^[a-f0-9]{64}$/, `${image.id} pins a SHA-256`);
+      assert.ok(image.sha256Url === undefined || /^https:\/\//.test(image.sha256Url), `${image.id} checksum link is https when present`);
       assert.ok(Number.isSafeInteger(image.size) && image.size > 0, `${image.id} pins a size`);
       assert.match(image.format, /^(iso|img\.gz|tar\.gz)$/);
       assert.equal(typeof image.usb, 'boolean');

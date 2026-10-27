@@ -75,6 +75,7 @@
           "format": "iso",
           "url": "https://releases.ubuntu.com/26.04.1/ubuntu-26.04.1-desktop-amd64.iso",
           "sha256": "601e30fbf5d97759367c632e2c33630665039b7e2158fd068403da3ccf1bda1f",
+          "sha256Url": "https://releases.ubuntu.com/26.04.1/SHA256SUMS",
           "size": 6482409472,
           "usb": true
         },
@@ -84,6 +85,7 @@
           "format": "iso",
           "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-desktop-arm64.iso",
           "sha256": "c54d196489d3c867975fb3bbb72ca52ec2e137456e305481f81096304e4d2517",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
           "size": 4154798080,
           "usb": true
         }
@@ -101,6 +103,7 @@
           "format": "iso",
           "url": "https://releases.ubuntu.com/26.04.1/ubuntu-26.04.1-live-server-amd64.iso",
           "sha256": "cc8a95cde20f6ced61a322420de00f10cc3c90ced545daa46cb9c1a117f1d927",
+          "sha256Url": "https://releases.ubuntu.com/26.04.1/SHA256SUMS",
           "size": 2927861760,
           "usb": true
         },
@@ -110,6 +113,7 @@
           "format": "iso",
           "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-arm64.iso",
           "sha256": "af78753c94b924c85c4964c670692a853f7c80299a4064e317edad95462e3168",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
           "size": 3076861952,
           "usb": true
         },
@@ -119,6 +123,7 @@
           "format": "iso",
           "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-ppc64el.iso",
           "sha256": "3eb24626add663104f416bbdb3ca6ed37eabf8bb9a2308d4c9751d0976094826",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
           "size": 1647902720,
           "usb": false
         },
@@ -128,6 +133,7 @@
           "format": "iso",
           "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-s390x.iso",
           "sha256": "3756e8b969f67b59e85104cbabe5e1d86e02feb3835a90f6ea97ace86845b49a",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
           "size": 775876608,
           "usb": false
         },
@@ -137,6 +143,7 @@
           "format": "iso",
           "url": "https://cdimage.ubuntu.com/releases/26.04.1/release/ubuntu-26.04.1-live-server-riscv64.iso",
           "sha256": "c44c0e9343a477e08943a140d21ac903ec891ece5c0a69f7424e198562f9f272",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.04.1/release/SHA256SUMS",
           "size": 1690697728,
           "usb": false
         }

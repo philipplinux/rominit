@@ -75,6 +75,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/amd64/iso-cd/debian-13.7.0-amd64-netinst.iso",
           "sha256": "a7ef94ac2fb9a7fec454552abd629b7cc9d5155c886165a45649f5ce6167e355",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/amd64/iso-cd/SHA256SUMS",
           "size": 792723456,
           "usb": true
         },
@@ -84,6 +85,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/arm64/iso-cd/debian-13.7.0-arm64-netinst.iso",
           "sha256": "6e93fa1759bd9d4b0fc11e938987de6967ee7de5297dac1be27c3a75cc17024b",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/arm64/iso-cd/SHA256SUMS",
           "size": 735358976,
           "usb": true
         },
@@ -93,6 +95,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/armhf/iso-cd/debian-13.7.0-armhf-netinst.iso",
           "sha256": "471528fbb8caee5f5eb385644bbc71847e607cd10d6668a4983cbe185faf6e09",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/armhf/iso-cd/SHA256SUMS",
           "size": 939831296,
           "usb": false
         },
@@ -102,6 +105,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/ppc64el/iso-cd/debian-13.7.0-ppc64el-netinst.iso",
           "sha256": "356690c9ccd15af87c675793924c9dc28e8004928854dff492dbe9c05d1093d1",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/ppc64el/iso-cd/SHA256SUMS",
           "size": 651841536,
           "usb": false
         },
@@ -111,6 +115,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/riscv64/iso-cd/debian-13.7.0-riscv64-netinst.iso",
           "sha256": "162b1236c64a902052493d8b3ab41e2b36c52975d967eedac4a2e2b2c0158c35",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/riscv64/iso-cd/SHA256SUMS",
           "size": 614772736,
           "usb": false
         },
@@ -120,6 +125,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/s390x/iso-cd/debian-13.7.0-s390x-netinst.iso",
           "sha256": "a315b4030981cda902d3c261c076f4161c6dad89b47ca2c8d91dccfc09d69b69",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/s390x/iso-cd/SHA256SUMS",
           "size": 441804800,
           "usb": false
         }
@@ -137,6 +143,7 @@
           "format": "iso",
           "url": "https://cdimage.debian.org/debian-cd/13.7.0/amd64/iso-dvd/debian-13.7.0-amd64-DVD-1.iso",
           "sha256": "347b6c67a3cc0b7ddb60b178f683470c4e2b7ac426c996d9337a2ff36c1a32d2",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0/amd64/iso-dvd/SHA256SUMS",
           "size": 3992977408,
           "usb": true
         }

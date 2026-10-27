@@ -11,7 +11,7 @@ import archLinuxJson from '../../catalog/os/pc/arch-linux.json' with { type: 'js
 /** Image formats the CLI writes to a USB disk directly; compressed ones are unpacked while writing. */
 export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
 
-/** @typedef {{ id: string, arch: string, format: string, url: string, sha256: string, size: number, usb: boolean }} OsImage */
+/** @typedef {{ id: string, arch: string, format: string, url: string, sha256: string, sha256Url?: string, size: number, usb: boolean }} OsImage */
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */
 /** @typedef {{ label: string, href: string }} OsLink */
 /** @typedef {{ page: string, license: string, artist: string }} OsShotPhoto */
