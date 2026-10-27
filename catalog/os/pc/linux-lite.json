@@ -1,0 +1,67 @@
+{
+  "id": "linux-lite",
+  "name": "Linux Lite",
+  "shortName": "Linux Lite",
+  "defaultEdition": "64bit",
+  "version": "8.0",
+  "releaseDate": "2026-06-01",
+  "source": "https://www.linuxliteos.com/download.php",
+  "page": {
+    "description": "Linux Lite editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / LIGHTWEIGHT UBUNTU-BASED DESKTOP",
+    "intro": "A lightweight Ubuntu-based desktop aimed at people moving from Windows, with Xfce and a small set of preinstalled tools. One 64-bit image.",
+    "logo": { "src": "logos/linux-lite.png", "alt": "Linux Lite logo", "width": 400, "height": 132 },
+    "pros": [
+      "Xfce desktop that stays usable on modest hardware.",
+      "Familiar layout for people coming from Windows.",
+      "Small preinstalled set, so little has to be removed.",
+      "The project publishes a checksum for every ISO."
+    ],
+    "cons": [
+      "Only a 64-bit image is published for this release.",
+      "A small team, so release cadence follows Ubuntu but support statements are sparse.",
+      "The Commons screenshot shows 4.2, not 8.0.",
+      "Little of the tooling is unique to Linux Lite; it is a tuned Ubuntu base."
+    ],
+    "links": [
+      { "label": "Linux Lite website", "href": "https://www.linuxliteos.com/" },
+      { "label": "Download", "href": "https://www.linuxliteos.com/download.php" }
+    ],
+    "previewNote": "A stock screenshot of Linux Lite 4.2 from Wikimedia Commons. It is not 8.0 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/linux-lite/linux-lite-desktop.webp",
+      "alt": "Linux Lite 4.2 desktop with the Xfce panel and desktop icons",
+      "width": 1360,
+      "height": 768,
+      "bar": "linux-lite-8.0-64bit.iso · 8.0",
+      "caption": "Stock screenshot of Linux Lite 4.2 · not 8.0, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Linux_Lite_4.2.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Jwoolery99"
+      }
+    },
+    "status": "One path: the 64-bit ISO from the project's SourceForge, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Official download", "href": "https://www.linuxliteos.com/download.php" },
+      { "label": "Release checksums", "href": "https://sourceforge.net/projects/linux-lite/files/8.0/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/linux-lite.png\nLinux Lite “Simple · Fast · Free” wordmark by Valtamnz, https://commons.wikimedia.org/wiki/File:Linux_Lite_Simple_Fast_Free_logo.png, CC BY-SA 4.0. Resized; this copy under the same licence. PNG because the Commons file is a raster image.",
+      "shots/linux-lite/linux-lite-desktop.webp\nLinux Lite 4.2 desktop screenshot by Jwoolery99, https://commons.wikimedia.org/wiki/File:Linux_Lite_4.2.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not an 8.0 screenshot."
+    ]
+  },
+  "editions": [
+    {
+      "id": "64bit",
+      "name": "64-bit",
+      "description": "The only image for this release: Xfce with the project's default application set.",
+      "usbNote": "2.5 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "linux-lite-64bit-x86_64", "arch": "x86_64", "format": "iso", "url": "https://sourceforge.net/projects/linux-lite/files/8.0/linux-lite-8.0-64bit.iso/download", "sha256": "7cfc63baf597156a0a5ecac87e860aff3967279694b19fa67fb410a34802857e", "sha256Url": "https://sourceforge.net/projects/linux-lite/files/8.0/linux-lite-8.0-64bit.iso.sha256/download", "size": 2533359616, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.linuxliteos.com/download.php" }
+}

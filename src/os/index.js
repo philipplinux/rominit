@@ -12,6 +12,7 @@ import fedoraJson from '../../catalog/os/pc/fedora.json' with { type: 'json' };
 import freebsdJson from '../../catalog/os/pc/freebsd.json' with { type: 'json' };
 import haikuJson from '../../catalog/os/pc/haiku.json' with { type: 'json' };
 import kaliLinuxJson from '../../catalog/os/pc/kali-linux.json' with { type: 'json' };
+import linuxLiteJson from '../../catalog/os/pc/linux-lite.json' with { type: 'json' };
 import linuxMintJson from '../../catalog/os/pc/linux-mint.json' with { type: 'json' };
 import manjaroJson from '../../catalog/os/pc/manjaro.json' with { type: 'json' };
 import mxLinuxJson from '../../catalog/os/pc/mx-linux.json' with { type: 'json' };
@@ -31,7 +32,7 @@ export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
 /** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[] }} Os */
 
 /** Every OS page, in the order the site lists them. @type {Os[]} */
-export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (antiXJson), /** @type {Os} */ (archLinuxJson), /** @type {Os} */ (calculateLinuxJson), /** @type {Os} */ (clonezillaJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (devuanJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (freebsdJson), /** @type {Os} */ (haikuJson), /** @type {Os} */ (kaliLinuxJson), /** @type {Os} */ (linuxMintJson), /** @type {Os} */ (manjaroJson), /** @type {Os} */ (mxLinuxJson), /** @type {Os} */ (popOsJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (ubuntu2610Json), /** @type {Os} */ (zorinOsJson)];
+export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (antiXJson), /** @type {Os} */ (archLinuxJson), /** @type {Os} */ (calculateLinuxJson), /** @type {Os} */ (clonezillaJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (devuanJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (freebsdJson), /** @type {Os} */ (haikuJson), /** @type {Os} */ (kaliLinuxJson), /** @type {Os} */ (linuxLiteJson), /** @type {Os} */ (linuxMintJson), /** @type {Os} */ (manjaroJson), /** @type {Os} */ (mxLinuxJson), /** @type {Os} */ (popOsJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (ubuntu2610Json), /** @type {Os} */ (zorinOsJson)];
 
 /** CPU architecture to family label. */
 export const ARCH_FAMILY = { x86: "x86", x86_64: "x86", aarch64: "ARM", armv7: "ARM", armhf: "ARM", loongarch64: "LoongArch", ppc64le: "PowerPC", riscv64: "RISC-V", s390x: "IBM Z" };
