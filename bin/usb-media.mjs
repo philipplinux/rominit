@@ -30,6 +30,8 @@ const MAX_IMAGE_BYTES = 16 * 1024 ** 3; // full desktop ISOs (Omarchy is 6 GB+);
 const IMAGE_DOWNLOAD_TIMEOUT = 15 * 60_000; // floor; big images get 1 ms per KiB (about 1 MB/s)
 const IMAGE_CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), '.cache'), 'rominit', 'images');
 const BIN = { lsblk: '/usr/bin/lsblk', sudo: '/usr/bin/sudo', sh: '/usr/bin/sh', python: '/usr/bin/python3', udisksctl: '/usr/bin/udisksctl' };
+// img.gz / img.bz2 / img.xz: the writer unpacks them, so the USB reads back as the unpacked bytes
+const PACKED = /\.(gz|bz2|xz)$/i;
 const LSBLK_FIELDS = 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,FSTYPE,LABEL,MOUNTPOINTS,PKNAME';
 const USB_VERSION_SOURCES = [new URL('./cli.mjs', import.meta.url), new URL('./helper.mjs', import.meta.url), new URL(import.meta.url),
   new URL('../src/recipes/usb-image.js', import.meta.url), new URL('../src/usb-environment.js', import.meta.url)];
@@ -830,7 +832,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
     if (!new RegExp(`^${byIdDir.replace(/\/$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/(usb|mmc)-`).test(plan.drive.id))
       throw fail(409, 'The selected USB disk has no trusted stable ID. Create a new plan.');
     const args = ['-n', BIN.python, '-c', DIRECT_WRITER, image.sourcePath, plan.drive.id,
-      String(image.size), image.sha256, match[1], match[2], String(plan.identity.size), /\.(gz|bz2|xz)$/i.exec(image.name)?.[1].toLowerCase() ?? ''];
+      String(image.size), image.sha256, match[1], match[2], String(plan.identity.size), PACKED.exec(image.name)?.[1].toLowerCase() ?? ''];
     jobState.phase = 'writing';
     delete jobState.progress;
     jobState.deadlineAt = new Date(now() + timeoutMs).toISOString();
@@ -882,7 +884,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
         if (!progress || !['writing', 'verifying'].includes(progress.phase) || progress.phase !== protocolPhase ||
           !Number.isSafeInteger(progress.completedBytes) || !Number.isSafeInteger(progress.totalBytes) ||
           progress.completedBytes < 0 || progress.completedBytes > progress.totalBytes ||
-          (progress.phase === 'writing' || !/\.gz$/i.test(image.name)) && progress.totalBytes !== image.size) return;
+          (progress.phase === 'writing' || !PACKED.test(image.name)) && progress.totalBytes !== image.size) return;
         const previous = jobState.progress?.phase === progress.phase ? jobState.progress.completedBytes : -1;
         if (progress.completedBytes < previous) return;
         jobState.progress = { phase: progress.phase, completedBytes: progress.completedBytes, totalBytes: progress.totalBytes };
@@ -964,8 +966,8 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       },
       verify: async () => {
         const actual = plan.imageActual;
-        // A .gz image is inflated by the writer; its readback hash is of the inflated bytes, checked there against what was written.
-        const inflated = /\.gz$/i.test(plan.image.name);
+        // A packed image is unpacked by the writer; its readback hash is of the unpacked bytes, checked there against what was written.
+        const inflated = PACKED.test(plan.image.name);
         if (!job.readback?.matched || !inflated && (job.readback.size !== actual.size || job.readback.sha256 !== actual.sha256))
           throw fail(500, 'The USB readback size or SHA-256 does not match the reviewed download.');
         const afterWrite = (await inventory()).find(value => value.public.id === plan.drive.id);
@@ -1050,8 +1052,8 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
       image,
       drive: { capacityBytes: plan.drive.size },
       verification: { source: !hasImage ? 'none' : plan.verification?.status === 'mismatch' ? 'mismatch-accepted' : 'verified' },
-      // A .gz image reads back as inflated bytes; the report keeps the pinned (compressed) size, which the inbox checks against the catalog.
-      ...(jobState.readback ? { readback: { size: /\.gz$/i.test(plan.image?.name ?? '') ? image.size : jobState.readback.size, matched: jobState.readback.matched } } : {}),
+      // A packed image reads back as unpacked bytes; the report keeps the pinned (compressed) size, which the inbox checks against the catalog.
+      ...(jobState.readback ? { readback: { size: PACKED.test(plan.image?.name ?? '') ? image.size : jobState.readback.size, matched: jobState.readback.matched } } : {}),
       ...(jobState.retries ? { retries: Math.min(jobState.retries, 10) } : {}),
       ...(jobState.reportEnvironment ? { environment: { ...jobState.reportEnvironment } } : {}),
     };

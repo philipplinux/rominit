@@ -168,8 +168,10 @@ async function fixture(options = {}) {
           progress('verifying', 0);
           progress('verifying', expectedSize);
           for (const line of options.extraDirectProgressLines ?? []) output(`ROMINIT_USB_PROGRESS ${line}`);
-          const readback = options.readbackMismatch ? bytes('corrupted readback') : source;
-          const result = { size: readback.length, sha256: digest(readback), matched: readback.length === expectedSize && digest(readback) === expectedHash };
+          // the real writer unpacks img.gz/bz2/xz: readback is the unpacked bytes, matched against what it wrote
+          const packed = /\.(gz|bz2|xz)$/i.test(sourcePath);
+          const readback = options.readbackMismatch ? bytes('corrupted readback') : packed ? Buffer.concat([source, source]) : source;
+          const result = { size: readback.length, sha256: digest(readback), matched: packed ? !options.readbackMismatch : readback.length === expectedSize && digest(readback) === expectedHash };
           output(`ROMINIT_USB_RESULT ${JSON.stringify(result)}`);
           child.stderr.emit('end');
           child.stdout.emit('end');
@@ -959,6 +961,11 @@ for (const ext of ['gz', 'bz2', 'xz']) test(`direct plan accepts a pinned img.${
   t.after(fx.cleanup);
   const plan = await directPlanned(fx, alpineImage.id);
   assert.equal(plan.image.name, `alpine-rpi.img.${ext}`);
+  await fx.backend.execute({ planId: plan.id, confirm: 'ERASE' });
+  const result = await terminalJob(fx.backend);
+  assert.equal(result.state, 'succeeded', result.error);
+  assert.equal(fx.state.directArgs.at(-1), ext);
+  assert.deepEqual(result.readback, { size: 2 * data.length, sha256: digest(Buffer.concat([data, data])), matched: true });
   await assert.rejects(fx.backend.plan({ driveId: '/dev/disk/by-id/usb-fixture-disk', method: 'ventoy', imageId: alpineImage.id }), error => error.status === 400);
 });
 
