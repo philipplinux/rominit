@@ -1,0 +1,118 @@
+{
+  "id": "rocky-linux",
+  "name": "Rocky Linux",
+  "shortName": "Rocky",
+  "defaultEdition": "dvd",
+  "version": "10.2",
+  "releaseDate": "2026-05-26",
+  "source": "https://rockylinux.org/",
+  "page": {
+    "description": "Rocky Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / RHEL-COMPATIBLE",
+    "intro": "A community enterprise Linux built from RHEL's sources, with ten-year support per major version. Boot, minimal or full DVD.",
+    "logo": {
+      "src": "logos/rocky-linux.svg",
+      "alt": "Rocky Linux logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Enterprise Linux compatibility without a subscription.",
+      "Ten-year support horizon for the 10 series.",
+      "Boot, minimal and DVD images from the same build.",
+      "The project publishes a CHECKSUM file per release directory."
+    ],
+    "cons": [
+      "Conservative package versions, as an enterprise rebuild.",
+      "The release date shown is the mirror's file date; the project page was not read here.",
+      "The full DVD is 10 GB.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Rocky Linux website",
+        "href": "https://rockylinux.org/"
+      },
+      {
+        "label": "10.2 mirror",
+        "href": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Rocky Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One path per image: boot, minimal or DVD, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The date is the official mirror's file date (2026-05-26).",
+    "footer": [
+      {
+        "label": "Official downloads & checksums",
+        "href": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/"
+      },
+      {
+        "label": "Rocky Linux website",
+        "href": "https://rockylinux.org/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/rocky-linux.svg\nRocky Linux logo from Simple Icons (CC0), https://simpleicons.org; the Rocky Linux name and mark belong to the Rocky Enterprise Software Foundation, shown only to identify Rocky Linux. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "boot",
+      "name": "Boot",
+      "description": "The network installer: it boots, then fetches packages from Rocky mirrors.",
+      "usbNote": "1.0 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "rocky-linux-boot-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.2-x86_64-boot.iso",
+          "sha256": "bf3a75907948563d0c11f3d1b8546ee9216e18a3ea2dc0a67eb4c45452e210f9",
+          "sha256Url": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/CHECKSUM",
+          "size": 1049538560,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "description": "A smaller self-contained image for an offline install.",
+      "usbNote": "2.1 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "rocky-linux-minimal-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.2-x86_64-minimal.iso",
+          "sha256": "aac6ac3ce781b91a91ce78463405f66c611a5dca4b3840c79e5e01d97302f6c8",
+          "sha256Url": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/CHECKSUM",
+          "size": 2072444928,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "dvd",
+      "name": "DVD",
+      "description": "The full image with the package set, for an offline install.",
+      "usbNote": "10.2 GB image: use media that fits it.",
+      "images": [
+        {
+          "id": "rocky-linux-dvd-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.2-x86_64-dvd1.iso",
+          "sha256": "16ca9c96cdb221ba6e1f68579f21bd69fd8da81c6a921d9068949796f91c8feb",
+          "sha256Url": "https://dl.rockylinux.org/pub/rocky/10/isos/x86_64/CHECKSUM",
+          "size": 10226171904,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://rockylinux.org/"
+  }
+}
