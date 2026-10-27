@@ -1,4 +1,4 @@
-import { osImage, osImageEntry } from '../src/os/index.js';
+import { USB_FORMATS, osImage, osImageEntry } from '../src/os/index.js';
 import { helperRequest } from './helper.js';
 import { collectUsbBrowserEnvironment } from './usb-environment.js';
 
@@ -25,7 +25,7 @@ export function usbMediaPanel(session, h, imageId = null, capabilities = null) {
   let panelCapabilities = Array.isArray(capabilities) ? capabilities : null;
   // Only query browser diagnostics for helpers that explicitly accept the allowlisted fields.
   let browserEnvironment = panelCapabilities?.includes('usb-environment') ? collectUsbBrowserEnvironment().catch(() => null) : null;
-  const directEligible = !catalogImage || ['iso', 'img.gz'].includes(catalogImage.format);
+  const directEligible = !catalogImage || USB_FORMATS.includes(catalogImage.format);
   let directAvailable = directEligible && !!panelCapabilities?.includes('usb-direct');
   const driveSelect = /** @type {HTMLSelectElement} */ (h('select', { id: 'usb-media-drive', disabled: true }));
   const directOption = directEligible ? h('option', { value: 'direct', disabled: !directAvailable, textContent: directAvailable ? 'Direct image (erases USB)' : 'Direct image (update CLI required)' }) : null;

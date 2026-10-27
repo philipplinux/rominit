@@ -3,6 +3,9 @@
 import alpineJson from '../../catalog/os/pc/alpine.json' with { type: 'json' };
 import omarchyJson from '../../catalog/os/pc/omarchy.json' with { type: 'json' };
 
+/** Image formats the CLI writes to a USB disk directly; compressed ones are unpacked while writing. */
+export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
+
 /** @typedef {{ id: string, arch: string, format: string, url: string, sha256: string, size: number, usb: boolean }} OsImage */
 /** @typedef {{ id: string, name: string, description: string, usbNote: string, images: OsImage[] }} OsEdition */
 /** @typedef {{ label: string, href: string }} OsLink */

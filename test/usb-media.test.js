@@ -657,6 +657,7 @@ test('direct method plans an unsupported Ventoy architecture, writes the whole U
   const pythonArgs = fx.state.directArgs.slice(2);
   assert.equal(pythonArgs[0], '-c');
   assert.doesNotMatch(pythonArgs[1], /sys\.argv\[1:\].*--/);
+  assert.equal(pythonArgs.at(-1), '', 'an ISO is written as is, without unpacking');
   assert.match(pythonArgs[1], /O_RDWR \| os\.O_EXCL/);
   assert.match(pythonArgs[1], /O_NOFOLLOW/);
   assert.match(pythonArgs[1], /os\.fstat\(device_fd\)/);
@@ -862,7 +863,7 @@ test('direct plan refuses non-ISO catalog downloads and images larger than the t
     sha256: digest(bytes('archive')), size: 7, usb: false };
   const archiveFx = await fixture({ noVentoy: true, alpineImage: archive, fetchImage: async () => { throw Error('must not download archives'); } });
   try {
-    await assert.rejects(directPlanned(archiveFx, archive.id), error => error.status === 400 && /ISO or img\.gz format/.test(error.message));
+    await assert.rejects(directPlanned(archiveFx, archive.id), error => error.status === 400 && /ISO, img\.gz, img\.bz2 or img\.xz format/.test(error.message));
     assert.equal(archiveFx.state.unmounts, 0);
     assert.equal(archiveFx.state.spawned, 0);
   } finally { await archiveFx.cleanup(); }
@@ -950,14 +951,14 @@ test('direct write timeout blocks another write while the USB result is unknown'
   await assert.rejects(fx.backend.execute({ planId: next.id, confirm: next.confirm }), error => error.status === 409 && /previous USB write timed out/.test(error.message));
 });
 
-test('direct plan accepts a pinned img.gz (Raspberry Pi) but Ventoy still refuses it', async t => {
+for (const ext of ['gz', 'bz2', 'xz']) test(`direct plan accepts a pinned img.${ext} but Ventoy still refuses it`, async t => {
   const data = bytes('compressed Pi image');
-  const alpineImage = { id: 'fixture-rpi', arch: 'aarch64', format: 'img.gz', url: 'https://images.test/alpine-rpi.img.gz',
+  const alpineImage = { id: 'fixture-rpi', arch: 'aarch64', format: `img.${ext}`, url: `https://images.test/alpine-rpi.img.${ext}`,
     sha256: digest(data), size: data.length, usb: false };
   const fx = await fixture({ alpineImage, fetchImage: async () => new Response(data) });
   t.after(fx.cleanup);
   const plan = await directPlanned(fx, alpineImage.id);
-  assert.equal(plan.image.name, 'alpine-rpi.img.gz');
+  assert.equal(plan.image.name, `alpine-rpi.img.${ext}`);
   await assert.rejects(fx.backend.plan({ driveId: '/dev/disk/by-id/usb-fixture-disk', method: 'ventoy', imageId: alpineImage.id }), error => error.status === 400);
 });
 

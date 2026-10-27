@@ -8,7 +8,7 @@ import { arch as osArch, homedir, platform as osPlatform, release as osRelease }
 import { promisify } from 'node:util';
 import { run as runVentoy } from '../src/recipes/ventoy.js';
 import { run as runUsbImage } from '../src/recipes/usb-image.js';
-import { osImageEntry } from '../src/os/index.js';
+import { USB_FORMATS, osImageEntry } from '../src/os/index.js';
 import { validateUsbBrowser, validateUsbEnvironment } from '../src/usb-environment.js';
 
 const execFile = promisify(nodeExecFile);
@@ -104,10 +104,11 @@ function getCachedUsbEnvironment() {
   return cachedUsbEnvironment;
 }
 const DIRECT_WRITER = String.raw`
-import fcntl, hashlib, json, os, stat, struct, sys, time, zlib
+import bz2, fcntl, hashlib, json, lzma, os, stat, struct, sys, time, zlib
 
-source_path, device_id, expected_size, expected_sha, expected_major, expected_minor, expected_capacity, gz_flag = sys.argv[1:]
-gz = gz_flag == '1'
+source_path, device_id, expected_size, expected_sha, expected_major, expected_minor, expected_capacity, compression = sys.argv[1:]
+# img.gz / img.bz2 / img.xz sources are unpacked while writing; '' writes the file as is
+new_inflater = {'gz': lambda: zlib.decompressobj(31), 'bz2': bz2.BZ2Decompressor, 'xz': lzma.LZMADecompressor, '': None}[compression]
 expected_size, expected_major, expected_minor, expected_capacity = map(int, (expected_size, expected_major, expected_minor, expected_capacity))
 source_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW
 device_flags = os.O_RDWR | os.O_EXCL | os.O_CLOEXEC
@@ -180,8 +181,8 @@ try:
     def attempt():
         os.lseek(source_fd, 0, os.SEEK_SET)
         progress_state['bytes'] = 0
-        # A .gz source is inflated while writing; its pinned hash covers the file, the readback covers the inflated bytes.
-        inflater = zlib.decompressobj(31) if gz else None
+        # A compressed source is unpacked while writing; its pinned hash covers the file, the readback covers the unpacked bytes.
+        inflater = new_inflater() if new_inflater else None
         source_hash = hashlib.sha256()
         out_hash = hashlib.sha256()
         out_size = 0
@@ -198,22 +199,43 @@ try:
                     fail('The USB write stopped early; the USB may be incomplete.')
                 offset += count
             out_size += len(data)
+        LIMIT = 16 * 1024 * 1024  # bounded output per step: a small compressed chunk can unpack to gigabytes
+        def unpack(data):
+            try:
+                out = inflater.decompress(data, LIMIT)
+            except (zlib.error, lzma.LZMAError, EOFError, OSError):  # bz2 reports corrupt data as OSError
+                fail('The compressed image is corrupt; the USB may be incomplete.')
+            return out, (inflater.unconsumed_tail if compression == 'gz' else b'')
+        def feed(data):
+            nonlocal inflater
+            while True:
+                out, data = unpack(data)
+                if out:
+                    emit(out)
+                if inflater.eof:
+                    data = inflater.unused_data + data  # multi-stream files (pigz, pbzip2, pixz) carry several streams
+                    if not data:
+                        return
+                    inflater = new_inflater()
+                elif not data and len(out) < LIMIT and (compression == 'gz' or inflater.needs_input):
+                    return
         while consumed < expected_size:
             chunk = os.read(source_fd, min(4 * 1024 * 1024, expected_size - consumed))
             if not chunk:
                 fail('The image ended early during writing; the USB may be incomplete.')
             source_hash.update(chunk)
             consumed += len(chunk)
-            try:
-                emit(inflater.decompress(chunk) if gz else chunk)
-            except zlib.error:
-                fail('The compressed image is corrupt; the USB may be incomplete.')
+            if inflater:
+                feed(chunk)
+            else:
+                emit(chunk)
             report_progress('writing', consumed)
-        if gz:
-            try:
-                emit(inflater.flush())
-            except zlib.error:
-                fail('The compressed image is corrupt; the USB may be incomplete.')
+        if inflater:
+            if compression == 'gz':
+                try:
+                    emit(inflater.flush())
+                except zlib.error:
+                    fail('The compressed image is corrupt; the USB may be incomplete.')
             if not inflater.eof:
                 fail('The compressed image ended early; the USB may be incomplete.')
         if source_hash.hexdigest() != expected_sha:
@@ -560,15 +582,15 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
     const entry = typeof id === 'string' && getImageEntry(id);
     const image = entry?.image;
     const osName = entry?.os?.name ?? 'the operating system';
-    if (!image || image.id !== id || method === 'ventoy' && image.usb !== true || !['iso', 'img.gz'].includes(String(image.format).toLowerCase()) || method === 'ventoy' && image.format !== 'iso' ||
+    if (!image || image.id !== id || method === 'ventoy' && image.usb !== true || !USB_FORMATS.includes(String(image.format).toLowerCase()) || method === 'ventoy' && image.format !== 'iso' ||
         typeof image.arch !== 'string' || !image.arch || !Number.isSafeInteger(image.size) || image.size <= 0 || image.size > MAX_IMAGE_BYTES ||
         typeof image.sha256 !== 'string' || !/^[\da-f]{64}$/i.test(image.sha256))
-      throw fail(400, method === 'direct' ? `Choose a bundled ${osName} image in ISO or img.gz format for direct USB writing.` : `Choose a bundled ${osName} ISO that supports Ventoy USB booting.`);
+      throw fail(400, method === 'direct' ? `Choose a bundled ${osName} image in ISO, img.gz, img.bz2 or img.xz format for direct USB writing.` : `Choose a bundled ${osName} ISO that supports Ventoy USB booting.`);
     let url;
     try { url = new URL(image.url); } catch { throw fail(503, `The bundled ${osName} image URL is invalid.`); }
     const name = basename(url.pathname);
-    if (url.protocol !== 'https:' || url.username || url.password || !/^[\w.+-]+\.(iso|img\.gz)$/i.test(name))
-      throw fail(503, `The bundled ${osName} image is not a downloadable ISO or img.gz.`);
+    if (url.protocol !== 'https:' || url.username || url.password || !/^[\w.+-]+\.(iso|img\.(gz|bz2|xz))$/i.test(name))
+      throw fail(503, `The bundled ${osName} image is not a downloadable ISO or compressed disk image.`);
     return { id: image.id, arch: image.arch, format: image.format, name, url: url.href,
       sha256: image.sha256.toLowerCase(), size: image.size, osName: entry.os.name };
   }
@@ -808,7 +830,7 @@ export function createUsbMedia({ ventoyDir = process.env.ROMINIT_VENTOY_DIR || f
     if (!new RegExp(`^${byIdDir.replace(/\/$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/(usb|mmc)-`).test(plan.drive.id))
       throw fail(409, 'The selected USB disk has no trusted stable ID. Create a new plan.');
     const args = ['-n', BIN.python, '-c', DIRECT_WRITER, image.sourcePath, plan.drive.id,
-      String(image.size), image.sha256, match[1], match[2], String(plan.identity.size), /\.gz$/i.test(image.name) ? '1' : '0'];
+      String(image.size), image.sha256, match[1], match[2], String(plan.identity.size), /\.(gz|bz2|xz)$/i.exec(image.name)?.[1].toLowerCase() ?? ''];
     jobState.phase = 'writing';
     delete jobState.progress;
     jobState.deadlineAt = new Date(now() + timeoutMs).toISOString();
