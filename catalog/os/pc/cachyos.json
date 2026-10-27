@@ -47,6 +47,15 @@
       "images": [
         { "id": "cachyos-desktop-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.cachyos.org/ISO/desktop/260809/cachyos-desktop-linux-260809.iso", "sha256": "959f6577f45e25ee9fd8c220fd221b08e4ea79412c7315c0f922dd6d86d5e33c", "sha256Url": "https://mirror.cachyos.org/ISO/desktop/260809/cachyos-desktop-linux-260809.iso.sha256", "size": 3188850688, "usb": false }
       ]
+    },
+    {
+      "id": "handheld",
+      "name": "Handheld",
+      "description": "The handheld image for gaming PCs such as the Steam Deck, ROG Ally and Legion Go: boots into a Steam gaming session with KDE Plasma as the desktop mode. Its own release, 260628 (June 2026), older than the desktop image.",
+      "usbNote": "2.7 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "cachyos-handheld-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.cachyos.org/ISO/handheld/260628/cachyos-handheld-linux-260628.iso", "sha256": "0567c61f21622e5b4b482a874c41076beeb9bd8c00f046fa40e5c8cfbe34d15f", "sha256Url": "https://mirror.cachyos.org/ISO/handheld/260628/cachyos-handheld-linux-260628.iso.sha256", "size": 2664595456, "usb": false }
+      ]
     }
   ],
   "officialSupport": { "status": "ongoing", "source": "https://cachyos.org/" }
