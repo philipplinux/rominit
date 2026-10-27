@@ -1,0 +1,136 @@
+{
+  "id": "bodhi-linux",
+  "name": "Bodhi Linux",
+  "shortName": "Bodhi",
+  "defaultEdition": "standard",
+  "version": "7.0.0",
+  "releaseDate": "2023-08-21",
+  "source": "https://www.bodhilinux.com/",
+  "page": {
+    "description": "Bodhi Linux 7.0.0 images: Standard, AppPack, HWE and System76, with sizes and publisher SHA-256 files.",
+    "eyebrow": "OPERATING SYSTEM / UBUNTU-BASED, MOKSHA DESKTOP",
+    "intro": "A lightweight Ubuntu-based desktop built around the Moksha window manager, a continuation of Enlightenment 17. Four images for different hardware and app sets.",
+    "logo": {
+      "src": "logos/bodhi-linux.png",
+      "alt": "Bodhi Linux logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Very light desktop, suited to older machines.",
+      "Ubuntu LTS base with a small default application set.",
+      "Four images: Standard, AppPack, HWE and a System76 build.",
+      "Each image has its own published SHA-256 file."
+    ],
+    "cons": [
+      "Ubuntu base, but the project's support window is shorter than Ubuntu's.",
+      "Moksha is niche compared with GNOME or KDE.",
+      "The release date shown is the SourceForge file date (2023-08-21).",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Bodhi Linux website",
+        "href": "https://www.bodhilinux.com/"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://www.bodhilinux.com/download/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Bodhi Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One image per variant, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The release date shown is the SourceForge file date (2023-08-21); the project site publishes no readable date here.",
+    "footer": [
+      {
+        "label": "Downloads",
+        "href": "https://www.bodhilinux.com/download/"
+      },
+      {
+        "label": "SourceForge folder",
+        "href": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/bodhi-linux.png\nBodhi Linux logo by the Bodhi Linux project, https://commons.wikimedia.org/wiki/File:Bodhi_Linux_Logo.png, CC BY-SA 4.0."
+    ]
+  },
+  "editions": [
+    {
+      "id": "standard",
+      "name": "Standard",
+      "description": "The Standard image of Bodhi 7.0.0.",
+      "usbNote": "1.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "bodhi-linux-standard-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64.iso/download",
+          "sha256": "0ddfc1d917b496fade58f141ef1b07ab798b41cc2d23c8e1b5ad9b288f27c538",
+          "sha256Url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64.iso.sha256/download",
+          "size": 1290584064,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "apppack",
+      "name": "AppPack",
+      "description": "The AppPack image of Bodhi 7.0.0.",
+      "usbNote": "2.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "bodhi-linux-apppack-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64-apppack.iso/download",
+          "sha256": "86b0a00d340615acaabf71079b1dcc072942c8e5c7cacc73e59a70f796382a84",
+          "sha256Url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64-apppack.iso.sha256/download",
+          "size": 2293989376,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "hwe",
+      "name": "HWE",
+      "description": "The HWE image of Bodhi 7.0.0.",
+      "usbNote": "1.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "bodhi-linux-hwe-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64-hwe.iso/download",
+          "sha256": "55601a03d305159569b77e6a6008aedc59f5e81df1beb35f6224c0eae6efde70",
+          "sha256Url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64-hwe.iso.sha256/download",
+          "size": 1335623680,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "s76",
+      "name": "System76",
+      "description": "The System76 image of Bodhi 7.0.0.",
+      "usbNote": "1.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "bodhi-linux-s76-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64-s76.iso/download",
+          "sha256": "105fc2642c2499f19eb424100289c720d5fb69aa6a9c8cd9d770d9a96445d894",
+          "sha256Url": "https://sourceforge.net/projects/bodhilinux/files/7.0.0/bodhi-7.0.0-64-s76.iso.sha256/download",
+          "size": 1300955136,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.bodhilinux.com/"
+  }
+}
