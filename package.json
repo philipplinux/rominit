@@ -11,7 +11,8 @@
     "check": "tsc --noEmit",
     "bench": "node --test --test-concurrency=1 bench/site.mjs",
     "inbox": "node scripts/inbox.mjs",
-    "lint": "node scripts/romvault-lint.mjs"
+    "lint": "node scripts/romvault-lint.mjs",
+    "feeds": "node scripts/feeds.mjs"
   },
   "dependencies": {
     "@lineageos-infra/libamlburn": "0.1.1",

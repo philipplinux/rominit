@@ -205,6 +205,18 @@ CREATE VIEW IF NOT EXISTS inbox AS
     'readback', CASE WHEN readback_size IS NULL THEN NULL ELSE json_object('size', readback_size, 'matched', readback_matched = 1) END,
     'failureCode', failure_code, 'retries', retries, 'environment', json(environment))
   FROM os_usb_runs;
+-- New entries from publisher release feeds (npm run feeds); triage inbox 'rss-<feed>'.
+CREATE TABLE IF NOT EXISTS rss_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  feed TEXT NOT NULL,      -- feed group: 'os-pc'
+  source TEXT NOT NULL,    -- OS family (ROMvault page slug)
+  guid TEXT NOT NULL,      -- entry id, else its link
+  title TEXT NOT NULL,
+  link TEXT,
+  published TEXT,          -- as the feed states it
+  at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE (feed, guid)
+);
 CREATE TABLE IF NOT EXISTS favorites (
   user_id INTEGER NOT NULL, -- users.id
   rom TEXT NOT NULL,        -- <codename>/<rom id>

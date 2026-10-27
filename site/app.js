@@ -1058,7 +1058,7 @@ async function inboxView(index) {
   const card = h('section', { className: 'flash-card' }, h('label', { className: 'field-label', textContent: 'Inbox' }));
   const r = await fetch('./api/inbox', { cache: 'no-store' }).catch(() => null);
   if (!r?.ok) return card.append(h('p', { className: 'empty-files', textContent: 'Admins only. Sign in with an admin account.' })), card;
-  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, osUsb = { success: [], failed: [] }, labels } = await r.json();
+  const { reports, benchmarks, cli = { new: [], review: [], approved: [], rejected: [] }, failures = [], requests = { new: [], update: [], mirror: [] }, agents = { success: [], partial: [], failed: [], abandoned: [] }, osUsb = { success: [], failed: [] }, rss = { 'os-pc': [] }, labels } = await r.json();
   const searches = await fetch('./api/searches', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []);
   const missed = searches.filter((/** @type {any} */ s) => !s.hits).length;
   /** One folder; open when it has items. @param {string} name @param {string} hint @param {number} n @param {any[]} body */
@@ -1229,6 +1229,14 @@ async function inboxView(index) {
         const li = h('li', {}, h('small', { textContent: `${x.at} UTC${x.rom ? ` · ${x.rom}` : ''}` }),
           h('p', { textContent: x.text }), x.url && /^https?:\/\//i.test(x.url) && link(x.url, 'Source'));
         return li.append(fileAs(`requests-${kind}`, String(x.id), li)), li;
+      }))))));
+  card.append(folder('08 RSS-Updates', 'new entries in publisher release feeds (npm run feeds): file as catalog-update once the catalog has the release', Object.values(rss).flat().length,
+    [['os-pc', 'OS-PC']].map(([group, title]) => h('details', { className: 'inbox-sub', open: rss[group].length > 0 },
+      h('summary', { className: 'field-label', textContent: `${title} · ${rss[group].length}` }),
+      h('ol', { className: 'comments' }, ...rss[group].map((/** @type {any} */ x) => {
+        const li = h('li', {}, h('strong', { className: 'inbox-rom', textContent: `${x.source} · ` }), x.link && /^https?:\/\//i.test(x.link) ? link(x.link, x.title) : x.title,
+          h('small', { textContent: ` ${x.published ?? ''} · seen ${x.at} UTC` }));
+        return li.append(fileAs(`rss-${group}`, String(x.id), li, 'catalog-update')), li;
       }))))));
   return card;
 }

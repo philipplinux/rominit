@@ -1,6 +1,6 @@
 import { validateUsbEnvironment } from '../../src/usb-environment.js';
-// Admin inbox. GET: unsorted page reports, failures, OS USB results, agent reports and phone tests split by state.
-// POST {inbox: 'reports' | 'failures' | 'agents' | 'os-usb', ref, label}: triage an incoming item.
+// Admin inbox. GET: unsorted page reports, failures, OS USB results, agent reports, release-feed entries and phone tests split by state.
+// POST {inbox: 'reports' | 'failures' | 'agents' | 'os-usb' | 'rss-os-pc', ref, label}: triage an incoming item.
 // POST {inbox: 'benchmarks', ref, action: new | review | approve | reject}: approved results show on the ROM page.
 import { userOf } from '../_lib/auth.js';
 import { json } from '../_lib/api.js';
@@ -50,7 +50,8 @@ export async function onRequestGet({ request, env }) {
     };
     osUsb[row.outcome]?.push(item);
   }
-  return json({ reports: reports.results, requests, benchmarks, cli, failures: failures.results, agents, osUsb, labels: LABELS });
+  const rss = { 'os-pc': (await env.DB.prepare("SELECT i.id, i.source, i.title, i.link, i.published, i.at FROM rss_items i LEFT JOIN triage t ON t.inbox = 'rss-' || i.feed AND t.ref = CAST(i.id AS TEXT) WHERE i.feed = 'os-pc' AND t.ref IS NULL ORDER BY i.at DESC, i.id LIMIT 500").all()).results };
+  return json({ reports: reports.results, requests, benchmarks, cli, failures: failures.results, agents, osUsb, rss, labels: LABELS });
 }
 
 /** @param {{request:Request, env:any}} context */
@@ -66,7 +67,7 @@ export async function onRequestPost({ request, env }) {
       .bind(ref, ...{ approve: ['catalog-update', 'approved: shown on the ROM page'], reject: ['other', 'rejected on the site'] }[action]).run();
     return json({ ok: true });
   }
-  if (!['reports', 'failures', 'agents', 'requests-new', 'requests-update', 'requests-mirror', 'os-usb'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
+  if (!['reports', 'failures', 'agents', 'requests-new', 'requests-update', 'requests-mirror', 'os-usb', 'rss-os-pc'].includes(inbox) || !LABELS.includes(label)) return json({ error: 'needs inbox and a known label or action' }, 400);
   if (inbox === 'os-usb') {
     if (!/^[A-Za-z0-9_-]{43}$/.test(ref)) return json({ error: 'invalid OS USB reference' }, 400);
     const exists = await env.DB.prepare('SELECT 1 FROM os_usb_runs WHERE job_id = ?1').bind(ref).first();
