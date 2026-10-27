@@ -77,7 +77,7 @@ export function lint(vault = VAULT) {
     if (fm.type !== 'log' && !(fm.tags ?? []).some(t => CLASSES.includes(t))) say(file, `no device-class tag (${CLASSES.join(', ')})`);
     if (['rom', 'device', 'series'].includes(fm.type) && !(fm.aliases ?? []).length) say(file, 'frontmatter: aliases (the full phone name) missing');
     if (!text.includes('\n## For future agent\n')) say(file, 'missing "## For future agent"');
-    const max = rel === 'log.md' ? 400 : MAX_LINES; // log rotates at ~400 (romvault-maintenance skill)
+    const max = /^log(-.*)?\.md$/.test(rel) ? 400 : MAX_LINES; // log rotates at ~400, archives (log-YYYY.md) are append-only (romvault-maintenance skill)
     if (rel !== 'README.md' && text.replace(/\n$/, '').split('\n').length > max) say(file, `over ${max} lines: split it`); // trailing newline is not a line
     for (const target of links(file)) if (!existsSync(relative(vault, target).startsWith('..') ? resolve(ROOT, 'romvault', relative(vault, target)) : target)) say(file, `broken link ${relative(dirname(file), target)}`); // links leaving the vault (../catalog) resolve from the rominit root, also for a worktree
     if (rel !== 'README.md' && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
