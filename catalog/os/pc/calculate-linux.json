@@ -1,0 +1,149 @@
+{
+  "id": "calculate-linux",
+  "name": "Calculate Linux",
+  "shortName": "Calculate",
+  "defaultEdition": "cld",
+  "version": "20261022",
+  "releaseDate": "2026-10-22",
+  "source": "https://mirror.calculate-linux.org/release/",
+  "page": {
+    "description": "Calculate Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / GENTOO-BASED DESKTOP",
+    "intro": "A Gentoo-based desktop with binary packages and a rolling update model, published in five desktop flavours. Pick a flavour, then write the 64-bit image to a stick.",
+    "logo": { "src": "logos/calculate-linux.png", "alt": "Calculate Linux logo", "width": 142, "height": 82 },
+    "pros": [
+      "Gentoo base with binary packages, so updates do not mean compiling everything.",
+      "Five desktop flavours from one build: KDE, Cinnamon, LXQt, MATE and Xfce.",
+      "Rolling updates instead of periodic release upgrades.",
+      "The project's own configuration tools keep the system consistent."
+    ],
+    "cons": [
+      "Only x86_64 images are published.",
+      "The project publishes no separate announcement date; the version is the mirror build date.",
+      "Rolling updates mean you are expected to keep up with them.",
+      "The Commons screenshot shows 9.3, not this build."
+    ],
+    "links": [
+      { "label": "Calculate Linux website", "href": "https://www.calculate-linux.org/" },
+      { "label": "Release mirror", "href": "https://mirror.calculate-linux.org/release/" }
+    ],
+    "previewNote": "A stock screenshot of Calculate Linux Desktop 9.3 from Wikimedia Commons. It is not the 20261022 build and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/calculate-linux/calculate-desktop.webp",
+      "alt": "Calculate Linux Desktop 9.3 with the KDE desktop and a cube workspace",
+      "width": 1600,
+      "height": 1200,
+      "bar": "cld-20261022-x86_64.iso · 20261022",
+      "caption": "Stock screenshot of Calculate Linux Desktop 9.3 · not this build, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Calculate_Linux_Desktop_9.3_cube.png",
+        "license": "CC BY-SA 3.0",
+        "artist": "Calculate Linux project"
+      }
+    },
+    "status": "One path per flavour: the 64-bit ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the mirror build date (2026-10-22); the project publishes no separate announcement.",
+    "footer": [
+      { "label": "Official downloads", "href": "https://mirror.calculate-linux.org/release/" },
+      { "label": "Checksums for this build", "href": "https://mirror.calculate-linux.org/release/20261022/SHA256SUMS" },
+      { "label": "Calculate Linux website", "href": "https://www.calculate-linux.org/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/calculate-linux.png\nCalculate Linux logo by Treize1101, https://commons.wikimedia.org/wiki/File:Calculatelinux-logo.png, CC BY-SA 3.0. PNG because the project's mark is only published as a raster image.",
+      "shots/calculate-linux/calculate-desktop.webp\nCalculate Linux Desktop 9.3 screenshot by the Calculate Linux project, https://commons.wikimedia.org/wiki/File:Calculate_Linux_Desktop_9.3_cube.png, CC BY-SA 3.0. Converted to WebP; this copy under the same licence. Not the 20261022 build."
+    ]
+  },
+  "editions": [
+    {
+      "id": "cld",
+      "name": "Desktop KDE",
+      "description": "The KDE Plasma desktop with the project's applications and configuration tools.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "calculate-linux-cld-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mirror.calculate-linux.org/release/20261022/cld-20261022-x86_64.iso",
+          "sha256": "4ec06284dc24d31eaddc6505d4a809dc83b413a9c7fef0b4fa4dca68db712069",
+          "sha256Url": "https://mirror.calculate-linux.org/release/20261022/SHA256SUMS",
+          "size": 4504682496,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "cldc",
+      "name": "Desktop Cinnamon",
+      "description": "The Cinnamon desktop on the same Gentoo base.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "calculate-linux-cldc-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mirror.calculate-linux.org/release/20261022/cldc-20261022-x86_64.iso",
+          "sha256": "80b62f94064d3782b4a11b7ce11b31fdf28447f30a3c15a9698ce44a7eedb1eb",
+          "sha256Url": "https://mirror.calculate-linux.org/release/20261022/SHA256SUMS",
+          "size": 4219469824,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "cldl",
+      "name": "Desktop LXQt",
+      "description": "The lightweight LXQt desktop, for machines with less memory.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "calculate-linux-cldl-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mirror.calculate-linux.org/release/20261022/cldl-20261022-x86_64.iso",
+          "sha256": "3c7044dc8b8102b05ab5eca0a73b2234e3cbe2720006786c74354b94298d28fb",
+          "sha256Url": "https://mirror.calculate-linux.org/release/20261022/SHA256SUMS",
+          "size": 4413456384,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "cldm",
+      "name": "Desktop MATE",
+      "description": "The classic MATE desktop on the same base.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "calculate-linux-cldm-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mirror.calculate-linux.org/release/20261022/cldm-20261022-x86_64.iso",
+          "sha256": "f937fd221f64b5770195049399ca16e9070d06a60107cf2f1cc110a20ff3bb39",
+          "sha256Url": "https://mirror.calculate-linux.org/release/20261022/SHA256SUMS",
+          "size": 4277141504,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "cldx",
+      "name": "Desktop Xfce",
+      "description": "The Xfce desktop, the smallest of the five flavours.",
+      "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "calculate-linux-cldx-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mirror.calculate-linux.org/release/20261022/cldx-20261022-x86_64.iso",
+          "sha256": "b7a5cebd5a99eca890041562e21456198b9e2a17d667cb0abbe66bf07a392108",
+          "sha256Url": "https://mirror.calculate-linux.org/release/20261022/SHA256SUMS",
+          "size": 4140826624,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://mirror.calculate-linux.org/release/" }
+}
