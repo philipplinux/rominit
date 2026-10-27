@@ -1,0 +1,67 @@
+{
+  "id": "steamos",
+  "name": "SteamOS",
+  "shortName": "SteamOS",
+  "defaultEdition": "recovery",
+  "version": "steamdeck-recovery-4",
+  "releaseDate": "2022-05-15",
+  "source": "https://store.steampowered.com/steamos/",
+  "page": {
+    "description": "SteamOS recovery image for Steam Deck: size, architecture and a SHA-256 computed by ROMinit.",
+    "eyebrow": "OPERATING SYSTEM / STEAM DECK RECOVERY IMAGE",
+    "intro": "Valve's SteamOS image for the Steam Deck, published as a recovery image rather than a generic installer. It restores a Deck; it is not a PC installer for other machines.",
+    "logo": { "src": "logos/steamos.svg", "alt": "Steam logo", "width": 180, "height": 180 },
+    "pros": [
+      "Valve's own image for restoring or reinstalling SteamOS on a Steam Deck.",
+      "Includes the recovery tools and a re-image flow for the internal drive.",
+      "Published as one x86_64 image for the Deck hardware.",
+      "SteamOS is Arch-based and rolls with Steam client updates."
+    ],
+    "cons": [
+      "Not a general-purpose PC installer: it targets Steam Deck hardware.",
+      "Valve publishes no SHA-256, so the hash here is computed by ROMinit.",
+      "The image date is Valve's file date (2022-05-15); Valve publishes no release date.",
+      "Writing the image erases the target drive."
+    ],
+    "links": [
+      { "label": "SteamOS", "href": "https://store.steampowered.com/steamos/" },
+      { "label": "Recovery images", "href": "https://steamdeck-images.steamos.cloud/recovery/" }
+    ],
+    "previewNote": "A stock screenshot of KDE Plasma on a Steam Deck desktop from Wikimedia Commons. It is not the recovery image and not a ROMinit recording: no image was written and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/steamos/steamos-desktop.webp",
+      "alt": "Steam Deck desktop running KDE Plasma 5.23",
+      "width": 1278,
+      "height": 800,
+      "bar": "steamdeck-recovery-4.img.bz2 · SteamOS",
+      "caption": "Stock screenshot of KDE Plasma on Steam Deck · no image written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_5.23_on_Steam_Deck_Desktop_screenshot.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "KDE developers, wallpaper by ruvk"
+      }
+    },
+    "status": "One image: Valve's Steam Deck recovery image, written to a USB stick and used to restore the Deck's internal drive. Writing erases the stick and the re-image step erases the Deck. Its SHA-256 was computed by ROMinit from Valve's official download on 2026-10-27, not published by Valve.",
+    "footer": [
+      { "label": "SteamOS", "href": "https://store.steampowered.com/steamos/" },
+      { "label": "Recovery images", "href": "https://steamdeck-images.steamos.cloud/recovery/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/steamos.svg\nSteam logo from Simple Icons (CC0), https://simpleicons.org; the Steam and SteamOS names belong to Valve Corporation, shown only to identify SteamOS. No endorsement implied.",
+      "shots/steamos/steamos-desktop.webp\nKDE Plasma 5.23 on the Steam Deck desktop, by the KDE developers with a wallpaper by ruvk, https://commons.wikimedia.org/wiki/File:KDE_Plasma_5.23_on_Steam_Deck_Desktop_screenshot.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence."
+    ]
+  },
+  "editions": [
+    {
+      "id": "recovery",
+      "name": "Steam Deck recovery",
+      "description": "Valve's recovery image for the Steam Deck: restores SteamOS and the tools on the internal drive.",
+      "usbNote": "2.6 GB compressed image for Steam Deck hardware. Writing erases the stick; the re-image step erases the Deck.",
+      "images": [
+        { "id": "steamos-recovery-x86_64", "arch": "x86_64", "format": "img.bz2", "url": "https://steamdeck-images.steamos.cloud/recovery/steamdeck-recovery-4.img.bz2", "sha256": "ac9c58fdd319d46120444875172eb56382098634f2075729f51426ba5cb788c6", "sha256Computed": "2026-10-27", "size": 2653795875, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://store.steampowered.com/steamos/" }
+}
