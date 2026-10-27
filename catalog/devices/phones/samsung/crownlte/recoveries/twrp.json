@@ -1,0 +1,51 @@
+{
+  "device": "crownlte",
+  "recovery": {
+    "id": "twrp",
+    "name": "TWRP",
+    "version": "3.7.0_9-0",
+    "project": "https://twrp.me/",
+    "source": "https://twrp.me/samsung/samsunggalaxynote9.html",
+    "vetting": "scraped",
+    "requirements": [
+      "Samsung crownlte Exynos only.",
+      "Unlock the bootloader; use the exact device-specific image.",
+      "The official TWRP device page warns that allowing system modifications can prevent the stock kernel from booting because of dm-verity. Read the device instructions before permitting modifications."
+    ],
+    "imported": "2026-10-27",
+    "imported_from": "catalog/devices/phones/samsung/crownlte/roms/pmos-server.json",
+    "stages": [
+      {
+        "title": "Install TWRP",
+        "section": "tools",
+        "optional": "Skip if TWRP is already installed.",
+        "recipe": "odin",
+        "mode": "download",
+        "confirm": "FLASH TWRP",
+        "warning": "Replaces the recovery partition. Boot straight into TWRP afterwards: a normal boot restores the stock recovery.",
+        "require_pit": [
+          "BOOT",
+          "SYSTEM",
+          "VENDOR",
+          "USERDATA"
+        ],
+        "files": [
+          {
+            "name": "twrp-3.7.0_9-0-crownlte.img",
+            "size": 42801152,
+            "sha256": "7ea8960e5c8df86f07c6d6b3f5b4ab6fa1c533cafd46cd4e2578d32867f154af",
+            "source": "https://dl.twrp.me/crownlte/twrp-3.7.0_9-0-crownlte.img.html"
+          }
+        ],
+        "steps": [
+          [
+            "flash",
+            "RECOVERY",
+            "twrp-3.7.0_9-0-crownlte.img"
+          ]
+        ],
+        "done": "TWRP written. Hold Volume Down + Power until the screen is black, then immediately hold Volume Up + Bixby + Power until TWRP appears."
+      }
+    ]
+  }
+}

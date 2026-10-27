@@ -1,0 +1,94 @@
+{
+  "codename": "crownlte",
+  "vendor": "Samsung",
+  "name": "Galaxy Note9",
+  "series": "Galaxy Note",
+  "family": "Galaxy Note9",
+  "variant": "Note9 · Exynos",
+  "unsupported": [
+    {
+      "name": "Note9 · Snapdragon",
+      "models": [
+        "SM-N960U",
+        "SM-N960U1",
+        "SM-N960W",
+        "SM-N9600",
+        "SCV40",
+        "SC-01L"
+      ],
+      "why": "Qualcomm chip: different kernel, bootloader and partitions"
+    }
+  ],
+  "models": [
+    "SM-N960F",
+    "SM-N960F/DS",
+    "SM-N960N"
+  ],
+  "notes": "Exynos only. Not for the Snapdragon models (SM-N960U/U1/W, SM-N9600, Japanese SCV40/SC-01L).",
+  "detect": {
+    "adb": {
+      "device": "crownlte"
+    }
+  },
+  "modes": {
+    "download": "Power off. Hold Volume Down + Bixby, plug in USB, press Volume Up to enter Download Mode.",
+    "recovery": "Hold Volume Up + Bixby + Power until the TWRP screen appears, or connect with Android running and USB debugging on: ROMinit reboots into TWRP itself. Do not mount system, vendor or data."
+  },
+  "unlock": {
+    "text": "OEM unlocking must be on before anything can be flashed.",
+    "steps": [
+      "Back up everything. Unlocking and the later Format Data erase the phone.",
+      "Tap Build number 7 times to turn on Developer options.",
+      "Settings › Developer options › OEM unlocking: on, and confirm. Exynos Samsungs have no fastboot unlock command; this switch is the unlock.",
+      "Remove your Google and Samsung accounts (Settings › Accounts), so the phone does not ask for them again (FRP) after the wipe.",
+      "Boot Download Mode (Volume Down + Bixby + Power, then Volume Up) and read the small text top left: `FRP LOCK: OFF`, and no `RMM STATE: Prenormal` or `KG STATE: Prenormal`. All clear: go to step 2."
+    ],
+    "pivots": [
+      {
+        "problem": "OEM unlocking is missing from Developer options",
+        "fix": "Samsung hides it for 7 days after setup or a reset. Faster: Settings › General management › Date and time, turn Automatic off and set the date a month back, then Software update › Download updates manually, reboot and look again. Otherwise keep the phone online for 7 days (168 h) without rebooting."
+      },
+      {
+        "problem": "`RMM STATE` or `KG STATE: Prenormal`, or Odin says “Only official released binaries are allowed to be flashed”",
+        "fix": "The phone is in Samsung's 7-day lock. Flash nothing custom yet: boot Android, stay online without rebooting until OEM unlocking appears, then retry."
+      },
+      {
+        "problem": "Soft-locked: “Custom binary blocked by FRP lock”, a bootloop or a black screen",
+        "fix": "Download Mode still works. Get the stock firmware for your exact model and CSC from SamFW, flash BL, AP, CP and CSC with Odin, boot Android, then start this guide again.",
+        "url": "https://samfw.com/"
+      },
+      {
+        "problem": "After a reset the phone asks for the previous Google account",
+        "fix": "That is Google's FRP. Sign in with the account that was on the phone; ROMinit does not bypass it."
+      }
+    ],
+    "hints": [
+      "OEM unlocking only appears after the phone has been online: connect to Wi-Fi for a minute. Right after setup or a reset Samsung can hide it for up to 7 days.",
+      "Charge to at least 50 % and use a data USB cable; charge-only cables never show up.",
+      "Exynos models only. The Snapdragon (US) models cannot be unlocked at all."
+    ]
+  },
+  "recovery": {
+    "text": "Download Mode still works after a bootloop: SamFW has the stock firmware and an Odin-style tool to go back to Android.",
+    "url": "https://samfw.com/"
+  },
+  "hardware": {
+    "soc": "exynos9810",
+    "ram": "6/8 GB RAM",
+    "cpu": "Exynos 9810, 8-core 2.7 GHz",
+    "gpu": "Mali-G72 MP18",
+    "display": "6.4\" 1440×2960",
+    "tags": [
+      "2018",
+      "stock Android 8.1–10",
+      "community Android 15",
+      "microSD",
+      "S Pen"
+    ]
+  },
+  "officialSupport": {
+    "status": "dropped",
+    "until": "2022-09",
+    "source": "https://en.wikipedia.org/wiki/Samsung_Galaxy_Note_9"
+  }
+}
