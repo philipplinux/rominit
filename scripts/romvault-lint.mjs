@@ -13,7 +13,7 @@ const folderType = rel => {
   const [top, a, b, c, d, e] = rel.split('/'), file = rel.split('/').at(-1)?.slice(0, -3);
   if (top === 'devices') return d === 'roms' ? 'rom' : e === undefined && d === `${c}.md` ? 'device' : undefined; // devices/<category>/<vendor>/<codename>/<codename>.md, …/roms/<rom>.md
   if (top === 'vendors') return b === 'lines' ? 'line' : b === 'series' ? 'series' : c === undefined && file === a ? 'vendor' : undefined; // vendors/<vendor>/<vendor>.md, lines/, series/
-  return { categories: 'category', os: 'project', projects: 'project', socs: 'soc', scraping: 'scraping' }[top];
+  return { categories: 'category', os: 'project', socs: 'soc', scraping: 'scraping' }[top];
 };
 /** Pages reached through the net (category → vendor → line → series → device → ROM), so README does not list them. @param {string} rel */
 const inNet = rel => rel.startsWith('devices/') || /^vendors\/[^/]+\/(lines|series)\//.test(rel);
