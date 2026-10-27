@@ -1,0 +1,171 @@
+{
+  "id": "fedora",
+  "name": "Fedora Linux",
+  "shortName": "Fedora",
+  "defaultEdition": "workstation",
+  "version": "44",
+  "releaseDate": "2026-04-28",
+  "requirements": {
+    "summary": "4 GB RAM · 40 GB disk · 4 GB USB",
+    "note": "The download page recommends 40 GB of disk space and 4 GB of RAM for most Fedora variants, and says a 4 GB USB stick is enough for the live image.",
+    "source": "https://fedoraproject.org/workstation/download",
+    "checked": "2026-10-27"
+  },
+  "source": "https://fedoraproject.org/workstation/download",
+  "page": {
+    "description": "Fedora editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / COMMUNITY LINUX",
+    "intro": "Fedora moves fast and ships upstream: GNOME, KDE Plasma and an atomic desktop, all on a six-month release train. Pick an edition, then the architecture of the machine that will run it.",
+    "logo": { "src": "logos/fedora.svg", "alt": "Fedora logo", "width": 180, "height": 180 },
+    "pros": [
+      "Workstation (GNOME) and KDE Plasma editions for both x86_64 and aarch64.",
+      "Silverblue ships the same GNOME desktop as an atomic image that updates in place.",
+      "Two releases are supported at a time, with a new one every six months.",
+      "Each CHECKSUM file is clearsigned, so the digest itself can be checked against Fedora's release key."
+    ],
+    "cons": [
+      "A release lasts about 13 months: skip two and you upgrade or reinstall.",
+      "The download page asks for 40 GB of disk and 4 GB of RAM for most variants.",
+      "Silverblue and the other atomic images install and update as images, not package by package like Workstation.",
+      "Fedora 45 is already in beta, so this page's release ages quickly."
+    ],
+    "links": [
+      { "label": "Fedora website", "href": "https://fedoraproject.org/" },
+      { "label": "Download Workstation", "href": "https://fedoraproject.org/workstation/download" },
+      { "label": "Fedora 44 release notes", "href": "https://docs.fedoraproject.org/en-US/fedora/f44/release-notes/" }
+    ],
+    "previewNote": "A stock screenshot of Fedora 44 Workstation with GNOME, from Wikimedia Commons. Not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/fedora/fedora-workstation.webp",
+      "alt": "Fedora 44 Workstation desktop with the GNOME top bar and application grid",
+      "width": 1600,
+      "height": 900,
+      "bar": "Fedora-Workstation-Live-44-1.7.x86_64.iso · 44",
+      "caption": "Stock screenshot of Fedora 44 Workstation · no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:Fedora_LINUX_44_GNOME.png",
+        "license": "CC BY 4.0",
+        "artist": "Bm069"
+      }
+    },
+    "status": "One official path per edition: the live, atomic or server ISO, written with Fedora Media Writer or dd. A 4 GB stick is enough for the live images. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Official media & CHECKSUM files", "href": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/" },
+      { "label": "Verify a download", "href": "https://fedoraproject.org/security/" },
+      { "label": "Fedora 44 release notes", "href": "https://docs.fedoraproject.org/en-US/fedora/f44/release-notes/" },
+      { "label": "Release lifecycle", "href": "https://docs.fedoraproject.org/en-US/releases/lifecycle/" }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/fedora.svg\nFedora logo from Simple Icons (CC0), https://simpleicons.org; the Fedora name and mark belong to the Fedora Project (Red Hat), shown only to identify Fedora. No endorsement implied.",
+      "shots/fedora/fedora-workstation.webp\nFedora 44 Workstation with GNOME, screenshot by Bm069, https://commons.wikimedia.org/wiki/File:Fedora_LINUX_44_GNOME.png, CC BY 4.0. Resized and converted to WebP; this copy under the same licence."
+    ]
+  },
+  "editions": [
+    {
+      "id": "workstation",
+      "name": "Workstation",
+      "description": "The GNOME desktop Fedora is known for, live and installable from the same ISO.",
+      "usbNote": "4 GB stick or larger. Fedora Media Writer writes the live image; dd works too, and writing erases the stick.",
+      "images": [
+        {
+          "id": "fedora-workstation-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/x86_64/iso/Fedora-Workstation-Live-44-1.7.x86_64.iso",
+          "sha256": "1620295f6a00c27c3208f0c00b8ece4eab1ec69b9002152d97488bf26a426ddf",
+          "size": 2851612672,
+          "usb": true
+        },
+        {
+          "id": "fedora-workstation-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/aarch64/iso/Fedora-Workstation-Live-44-1.7.aarch64.iso",
+          "sha256": "162ba3c552a2d241c7c63ec26777af0255ee1b5a135adc0be986ceed999933ef",
+          "size": 2689781760,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "kde",
+      "name": "KDE Plasma Desktop",
+      "description": "The official KDE edition: Plasma instead of GNOME, live and installable from the same ISO.",
+      "usbNote": "4 GB stick or larger; the live image boots plasma and installs from the same menu.",
+      "images": [
+        {
+          "id": "fedora-kde-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/KDE/x86_64/iso/Fedora-KDE-Desktop-Live-44-1.7.x86_64.iso",
+          "sha256": "c8295961d4c41adbf785a31a17c21a971d3b7415fda72dcad0c11c49577bf03a",
+          "size": 3368683520,
+          "usb": true
+        },
+        {
+          "id": "fedora-kde-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/KDE/aarch64/iso/Fedora-KDE-Desktop-Live-44-1.7.aarch64.iso",
+          "sha256": "61b39df9bb19aff38b7b7c81d7b2a647aa43948b6683c8467091e0edce833a94",
+          "size": 3119904768,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "silverblue",
+      "name": "Silverblue",
+      "description": "The atomic GNOME desktop: the system is an image that updates in place, with container-focused workflows.",
+      "usbNote": "4 GB stick or larger. The ostree installer offers fewer choices than the Workstation one.",
+      "images": [
+        {
+          "id": "fedora-silverblue-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Silverblue/x86_64/iso/Fedora-Silverblue-ostree-x86_64-44-1.7.iso",
+          "sha256": "9ccec9b075a0a4358a7209b2667156aaeeec3a6a3c8d71cada45b57fca9b4682",
+          "size": 3331284992,
+          "usb": true
+        },
+        {
+          "id": "fedora-silverblue-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Silverblue/aarch64/iso/Fedora-Silverblue-ostree-aarch64-44-1.7.iso",
+          "sha256": "0793b987858dba46cb9e0727ad5fa8e819caff055d6d8ca703dff355fb4383cc",
+          "size": 3163932672,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "server",
+      "name": "Server",
+      "description": "The Server DVD: a standard installer with the packages for a server install, no network needed.",
+      "usbNote": "The DVD image is larger than the live ones; use a stick that fits it. Writing erases the stick.",
+      "images": [
+        {
+          "id": "fedora-server-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Server/x86_64/iso/Fedora-Server-dvd-x86_64-44-1.7.iso",
+          "sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+          "size": 3913023488,
+          "usb": true
+        },
+        {
+          "id": "fedora-server-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Server/aarch64/iso/Fedora-Server-dvd-aarch64-44-1.7.iso",
+          "sha256": "ba8372682294d0d76f79427cae1273d36891b192ac9bf0f0f9de4e97a7cbe218",
+          "size": 3662544896,
+          "usb": true
+        }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "summary": "until four weeks after Fedora 46 ships", "source": "https://docs.fedoraproject.org/en-US/releases/lifecycle/" }
+}
