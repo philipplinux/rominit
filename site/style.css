@@ -624,7 +624,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 
 /* OS media */
 .architecture-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0; }
-.architecture-tag { display: inline-block; border: 1px solid var(--line); background: var(--panel-raised); padding: .2rem .45rem; color: var(--teal); font-size: .67rem; white-space: nowrap; }
+.architecture-tag { display: inline-block; border: 1px solid var(--line); background: var(--panel-raised); padding: .2rem .45rem; color: var(--teal); font-size: .67rem; max-width: 100%; }
 .os-entry { margin: .75rem 0 .75rem 1rem; padding: .9rem; border: 1px solid var(--line); }
 .os-title { display: flex; align-items: center; gap: .7rem; }
 .os-title img { object-fit: contain; }
