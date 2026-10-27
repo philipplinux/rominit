@@ -1,0 +1,100 @@
+{
+  "id": "dietpi",
+  "name": "DietPi",
+  "shortName": "DietPi",
+  "defaultEdition": "uefi",
+  "version": "20261022",
+  "releaseDate": "2026-10-22",
+  "source": "https://dietpi.com/",
+  "page": {
+    "description": "DietPi images for x86_64: the two VM installer ISOs, their sizes and publisher SHA-256 files.",
+    "eyebrow": "OPERATING SYSTEM / MINIMAL DEBIAN IMAGE",
+    "intro": "A minimal Debian-based system built for small boards and VMs. DietPi publishes per-board images; for x86_64 the published installers are the two VM ISOs pinned here.",
+    "logo": {
+      "src": "logos/dietpi.svg",
+      "alt": "DietPi logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Very small footprint, Debian based.",
+      "Per-image SHA-256 and signature files published.",
+      "A menu-driven dietpi-config for services and updates.",
+      "The x86_64 VM images are the only PC-shaped media the project ships."
+    ],
+    "cons": [
+      "No general-purpose x86_64 desktop ISO; these are VM installers.",
+      "Most images target single-board computers.",
+      "The version is the build date (2026-10-22).",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "DietPi website",
+        "href": "https://dietpi.com/"
+      },
+      {
+        "label": "Image downloads",
+        "href": "https://dietpi.com/downloads/images/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for DietPi; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One image per firmware type: the UEFI and the BIOS VM installer ISO, written with dd or any image writer. Writing erases the stick; these images are intended for virtual machines. The version is the build date (2026-10-22).",
+    "footer": [
+      {
+        "label": "Official images",
+        "href": "https://dietpi.com/downloads/images/"
+      },
+      {
+        "label": "DietPi website",
+        "href": "https://dietpi.com/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/dietpi.svg\nDietPi logo from Simple Icons (CC0), https://simpleicons.org; the DietPi name and mark belong to the DietPi project, shown only to identify it. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "uefi",
+      "name": "VM installer (UEFI)",
+      "description": "The x86_64 VM installer for UEFI firmware.",
+      "usbNote": "720 MB image. Write it with dd or any image writer; it targets virtual machines.",
+      "images": [
+        {
+          "id": "dietpi-uefi-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dietpi.com/downloads/images/DietPi_VM-UEFI-x86_64-Trixie_Installer.iso",
+          "sha256": "5fb5823150bee886926e7056ce3bb6c615373d78f3a1f739b6639897e39ffb8c",
+          "sha256Url": "https://dietpi.com/downloads/images/DietPi_VM-UEFI-x86_64-Trixie_Installer.iso.sha256",
+          "size": 752877568,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "bios",
+      "name": "VM installer (BIOS)",
+      "description": "The x86_64 VM installer for legacy BIOS firmware.",
+      "usbNote": "715 MB image. Write it with dd or any image writer; it targets virtual machines.",
+      "images": [
+        {
+          "id": "dietpi-bios-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dietpi.com/downloads/images/DietPi_VM-x86_64-Trixie_Installer.iso",
+          "sha256": "2fce1b219bc6e5e13471a235e564cfbde1eb88bda86c3b7a670ba5afa82f6dc0",
+          "sha256Url": "https://dietpi.com/downloads/images/DietPi_VM-x86_64-Trixie_Installer.iso.sha256",
+          "size": 748683264,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://dietpi.com/"
+  }
+}
