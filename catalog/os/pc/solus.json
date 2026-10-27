@@ -1,0 +1,140 @@
+{
+  "id": "solus",
+  "name": "Solus",
+  "shortName": "Solus",
+  "defaultEdition": "budgie",
+  "version": "2026-04-18",
+  "releaseDate": "2026-04-18",
+  "source": "https://getsol.us/",
+  "page": {
+    "description": "Solus 2026-04-18 ISOs: Budgie, GNOME, Plasma and Xfce, with sizes and per-image SHA-256 files.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT LINUX",
+    "intro": "An independent distribution with its own package manager (eopkg) and a curated set of desktops. Four images, one per desktop.",
+    "logo": {
+      "src": "logos/solus.svg",
+      "alt": "Solus logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Independent: not a rebuild of another distribution.",
+      "Four desktop editions from the same build date.",
+      "eopkg with a rolling, curated package set.",
+      "Each image has its own published SHA-256 file."
+    ],
+    "cons": [
+      "Smaller community and package set.",
+      "Rolling updates are expected.",
+      "x86_64 only.",
+      "No screenshot with a reusable licence was confirmed, so the page is logo-only."
+    ],
+    "links": [
+      {
+        "label": "Solus website",
+        "href": "https://getsol.us/"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://getsol.us/download/"
+      },
+      {
+        "label": "ISO host",
+        "href": "https://downloads.getsol.us/isos/2026-04-18/"
+      }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Solus; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One image per desktop, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the build date (2026-04-18).",
+    "footer": [
+      {
+        "label": "Downloads",
+        "href": "https://getsol.us/download/"
+      },
+      {
+        "label": "ISO host",
+        "href": "https://downloads.getsol.us/isos/2026-04-18/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/solus.svg\nSolus logo from Simple Icons (CC0), https://simpleicons.org; the Solus name and mark belong to the Solus project, shown only to identify it. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "budgie",
+      "name": "Budgie",
+      "description": "The Budgie image of the 2026-04-18 build.",
+      "usbNote": "4.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "solus-budgie-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://downloads.getsol.us/isos/2026-04-18/Solus-Budgie-Release-2026-04-18.iso",
+          "sha256": "b99324e51d20d029f35932770a7d0f43dad64dc9bca11ec34a6b83cea603b579",
+          "sha256Url": "https://downloads.getsol.us/isos/2026-04-18/Solus-Budgie-Release-2026-04-18.iso.sha256sum",
+          "size": 4338690048,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "gnome",
+      "name": "GNOME",
+      "description": "The GNOME image of the 2026-04-18 build.",
+      "usbNote": "4.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "solus-gnome-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://downloads.getsol.us/isos/2026-04-18/Solus-GNOME-Release-2026-04-18.iso",
+          "sha256": "059c6718b461775efb67e21d19d3dc13fcead0b43691e9787e704fbfbe61841c",
+          "sha256Url": "https://downloads.getsol.us/isos/2026-04-18/Solus-GNOME-Release-2026-04-18.iso.sha256sum",
+          "size": 4173447168,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "plasma",
+      "name": "Plasma",
+      "description": "The Plasma image of the 2026-04-18 build.",
+      "usbNote": "4.1 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "solus-plasma-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://downloads.getsol.us/isos/2026-04-18/Solus-Plasma-Release-2026-04-18.iso",
+          "sha256": "446975fead7202c3e6d748b1833a62b79fedef26c7a96ca76a848bcc5551ed63",
+          "sha256Url": "https://downloads.getsol.us/isos/2026-04-18/Solus-Plasma-Release-2026-04-18.iso.sha256sum",
+          "size": 4056121344,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "xfce",
+      "name": "Xfce",
+      "description": "The Xfce image of the 2026-04-18 build.",
+      "usbNote": "3.8 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "solus-xfce-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://downloads.getsol.us/isos/2026-04-18/Solus-Xfce-Release-2026-04-18.iso",
+          "sha256": "a3085fa5c0171420e46e1554191fffe66e50dbea70c37e9d6cc4ec79fb557895",
+          "sha256Url": "https://downloads.getsol.us/isos/2026-04-18/Solus-Xfce-Release-2026-04-18.iso.sha256sum",
+          "size": 3804708864,
+          "usb": false
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://getsol.us/"
+  }
+}
