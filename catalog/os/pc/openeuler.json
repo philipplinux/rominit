@@ -2,7 +2,9 @@
   "id": "openeuler",
   "name": "openEuler",
   "shortName": "openEuler",
-  "infoOnly": true,
+  "defaultEdition": "standard",
+  "version": "24.03 LTS SP4",
+  "releaseDate": "2026-06-30",
   "source": "https://www.openeuler.org/en/",
   "page": {
     "description": "openEuler editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
@@ -15,9 +17,9 @@
       "Community and commercial editions available"
     ],
     "cons": [
-      "Download pages are behind a WAF (Huawei Web Application Firewall) — no verifiable direct download URLs accessible without JavaScript",
-      "No checksum values visible on the download-centre pages",
-      "Server-oriented, no desktop edition documented"
+      "The main download pages are behind a JavaScript firewall; images and checksums come from the project's ISO repository instead.",
+      "Server-oriented, with a DevStation desktop build on the innovation line.",
+      "The everything ISO is 27 GB, so most installs use the standard or netinst image."
     ],
     "links": [
       { "label": "openEuler website", "href": "https://www.openeuler.org/en/" },
@@ -25,7 +27,7 @@
       { "label": "Archive", "href": "https://www.openeuler.org/en/download/archive/" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for openEuler; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "info only: download pages require JavaScript interaction behind a WAF. No versioned download URLs could be verified. Check the download centre directly for current LTS or innovation releases.",
+    "status": "Write the standard or netinst ISO to a USB stick or attach it to a virtual machine, then install from it. Installing erases the target disk. The LTS line receives security updates while the innovation line ships newer kernels and desktops.",
     "footer": [
       { "label": "openEuler website", "href": "https://www.openeuler.org/en/" },
       { "label": "Downloads", "href": "https://www.openeuler.org/en/download/" },
@@ -36,6 +38,27 @@
       "logos/openeuler.png\nopenEuler logo, from the openEuler project, https://www.openeuler.org/en/."
     ]
   },
-  "editions": [],
+  "editions": [
+    {
+      "id": "standard",
+      "name": "Standard",
+      "description": "The server and cloud installation DVD with the standard package set.",
+      "usbNote": "4.8 GB ISO. Write it to a USB stick; writing erases the stick.",
+      "images": [
+        { "id": "openeuler-standard-x86_64", "arch": "x86_64", "format": "iso", "url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/x86_64/openEuler-24.03-LTS-SP4-x86_64-dvd.iso", "sha256": "8383d7e9a9c257dc601de4ea51785394cd42aa9e52b6a9fb0f96845b42c4d0f5", "sha256Url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/x86_64/openEuler-24.03-LTS-SP4-x86_64-dvd.iso.sha256sum", "size": 4833935360, "usb": true },
+        { "id": "openeuler-standard-aarch64", "arch": "aarch64", "format": "iso", "url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/aarch64/openEuler-24.03-LTS-SP4-aarch64-dvd.iso", "sha256": "31d3f070f6d2f557d01163c6e7347fa7c6d94769a367adf9dc5f08b8dbb0c4ed", "sha256Url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/aarch64/openEuler-24.03-LTS-SP4-aarch64-dvd.iso.sha256sum", "size": 4828102656, "usb": true }
+      ]
+    },
+    {
+      "id": "netinst",
+      "name": "Network install",
+      "description": "Small image that installs the base system and pulls the rest of the packages from a repository.",
+      "usbNote": "1.4 GB ISO. Write it to a USB stick; writing erases the stick.",
+      "images": [
+        { "id": "openeuler-netinst-x86_64", "arch": "x86_64", "format": "iso", "url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/x86_64/openEuler-24.03-LTS-SP4-netinst-x86_64-dvd.iso", "sha256": "de7ee073c0708e5da88b08bcbdaad27c3f25d302a3507eec4238ca19fc21a396", "sha256Url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/x86_64/openEuler-24.03-LTS-SP4-netinst-x86_64-dvd.iso.sha256sum", "size": 1364197376, "usb": true },
+        { "id": "openeuler-netinst-aarch64", "arch": "aarch64", "format": "iso", "url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/aarch64/openEuler-24.03-LTS-SP4-netinst-aarch64-dvd.iso", "sha256": "5b2295ad7053a7717743616e56098397e06342903926d6a931fa2eb8d78bf9d6", "sha256Url": "https://repo.openeuler.org/openEuler-24.03-LTS-SP4/ISO/aarch64/openEuler-24.03-LTS-SP4-netinst-aarch64-dvd.iso.sha256sum", "size": 1303453696, "usb": true }
+      ]
+    }
+  ],
   "officialSupport": { "status": "ongoing", "source": "https://www.openeuler.org/en/download/" }
 }

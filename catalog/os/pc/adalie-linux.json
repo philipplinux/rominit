@@ -47,7 +47,7 @@
       "description": "The KDE Plasma live image, which can be tried without installing.",
       "usbNote": "1.9 GB image. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "adalie-linux-live-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-live-kde-x86_64-1.0-beta6-20241223.iso", "sha512": "66dc21d2728923a9d72961123eed2f61fd0b5361056d5ba1be564f1f0a7aa6b3bd6b4548c0bed12643e68edace866951336b99ad777a6ba51e828de7f4d41cae", "size": 1926318080, "usb": true }
+        { "id": "adalie-linux-live-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-live-kde-x86_64-1.0-beta6-20241223.iso", "sha512": "66dc21d2728923a9d72961123eed2f61fd0b5361056d5ba1be564f1f0a7aa6b3bd6b4548c0bed12643e68edace866951336b99ad777a6ba51e828de7f4d41cae", "sha512Url": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS", "size": 1926318080, "usb": true }
       ]
     },
     {
@@ -56,7 +56,34 @@
       "description": "The text installer image for a permanent installation.",
       "usbNote": "490 MB image. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "adalie-linux-installer-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-inst-x86_64-1.0-beta6-20241223.iso", "sha512": "3b3285b8d1acd2a8200525ae40e93732c579403fcb3d5f6cc4ef12453ab54a6660352fde2264b27ab52e31e18b1e18e12d7ff3b3b63ec6061c79fc565a9fb69d", "size": 490698752, "usb": true }
+        { "id": "adalie-linux-installer-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-inst-x86_64-1.0-beta6-20241223.iso", "sha512": "3b3285b8d1acd2a8200525ae40e93732c579403fcb3d5f6cc4ef12453ab54a6660352fde2264b27ab52e31e18b1e18e12d7ff3b3b63ec6061c79fc565a9fb69d", "sha512Url": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS", "size": 490698752, "usb": true }
+      ]
+    },
+    {
+      "id": "live-lxqt",
+      "name": "Live LXQt (x86_64)",
+      "description": "The lightweight LXQt live image, which can be tried without installing.",
+      "usbNote": "725 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "adalie-linux-live-lxqt-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-live-lxqt-x86_64-1.0-beta6-20241223.iso", "sha512": "b75bd086aa06c1e1a40e788b7cef05a426dfe8ca8b5d13b9306d4c170af5ee3ae8873b275b4cd357923c9bb7172f8de2cfb367015f9b8b607570b1c6f8cce378", "sha512Url": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS", "size": 725022720, "usb": true }
+      ]
+    },
+    {
+      "id": "live-mate",
+      "name": "Live MATE (x86_64)",
+      "description": "The MATE live image, which can be tried without installing.",
+      "usbNote": "731 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "adalie-linux-live-mate-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-live-mate-x86_64-1.0-beta6-20241223.iso", "sha512": "84d0a886711d9ab0710b0eeb21b1590da64bc6c437fbc3e0e72b08c5b6fd144ba7daa1bc9d8c98c6be8d3b423ae14f97eb9a74a8bfff96afa32b277cb722f464", "sha512Url": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS", "size": 730515456, "usb": true }
+      ]
+    },
+    {
+      "id": "live-xfce",
+      "name": "Live Xfce (x86_64)",
+      "description": "The Xfce live image, which can be tried without installing.",
+      "usbNote": "615 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "adalie-linux-live-xfce-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-live-xfce-x86_64-1.0-beta6-20241223.iso", "sha512": "48e260d95900061f8af224b8138aedc96c08b33a07977321bb2d12a27c47eb5168fa6fa3949555b0591a813cae126f3e43ebf82e3bf63325a9005f3bc45d0338", "sha512Url": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS", "size": 614971392, "usb": true }
       ]
     }
   ],

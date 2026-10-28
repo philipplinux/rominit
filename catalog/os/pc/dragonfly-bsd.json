@@ -45,7 +45,8 @@
       "description": "The only edition; ships a live ISO with installer and a raw .img image for USB.",
       "usbNote": "ISO is ~748 MiB uncompressed. Write the .img with dd on Unix or balenaEtcher/Rufus on Windows.",
       "images": [
-        { "id": "dragonfly-bsd-x86_64-iso", "arch": "x86_64", "format": "iso", "url": "https://mirror-master.dragonflybsd.org/iso-images/dfly-x86_64-6.4.2_REL.iso", "sha256": "972edc4ce9421cba501fbeb2f41dbc7236526441beb113d6204aa62ef0a5d63c", "size": 783974400, "usb": false }
+        { "id": "dragonfly-bsd-x86_64-iso", "arch": "x86_64", "format": "iso", "url": "https://mirror-master.dragonflybsd.org/iso-images/dfly-x86_64-6.4.2_REL.iso", "sha256": "972edc4ce9421cba501fbeb2f41dbc7236526441beb113d6204aa62ef0a5d63c", "size": 783974400, "usb": false },
+        { "id": "dragonfly-bsd-x86_64-img", "arch": "x86_64", "format": "img.bz2", "url": "https://mirror-master.dragonflybsd.org/iso-images/dfly-x86_64-6.4.2_REL.img.bz2", "sha256": "f1c1fb4c2aff3537b4fd03dc47cc2173966cbabf7c37ec4af0f9ab7f3b9a91eb", "sha256Computed": "2026-10-28", "size": 276426319, "usb": true }
       ]
     }
   ],

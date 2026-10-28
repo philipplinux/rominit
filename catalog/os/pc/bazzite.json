@@ -9,7 +9,7 @@
   "page": {
     "description": "Bazzite editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / FEDORA ATOMIC GAMING IMAGE",
-    "intro": "A custom Fedora Atomic image built by Universal Blue for gaming PCs, handhelds and HTPCs. Ten x86_64 images across KDE/GNOME desktops, AMD/Intel/Nvidia GPUs, and Steam Gaming Mode variants. rpm-ostree updates with built-in rollback.",
+    "intro": "A custom Fedora Atomic image built by Universal Blue for gaming PCs, handhelds and HTPCs. Six x86_64 images across KDE/GNOME desktops, AMD/Intel and NVIDIA GPUs, and Steam Gaming Mode variants. rpm-ostree updates with built-in rollback.",
     "logo": { "src": "logos/bazzite.png", "alt": "Bazzite logo", "width": 512, "height": 512 },
     "pros": [
       "Built-in rollback to previous deployment via GRUB or updater",
@@ -70,6 +70,33 @@
       "usbNote": "~10.1 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
       "images": [
         { "id": "bazzite-bazzite-deck-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-deck-stable-live-amd64.iso", "sha256": "fe0b8fbcfeb13972f5bbd3e73f0331ed22d16ceb796a4d15aa41e493236fcfc3", "sha256Url": "https://download.bazzite.gg/bazzite-deck-stable-live-amd64.iso-CHECKSUM", "size": 10111676416, "usb": true }
+      ]
+    },
+    {
+      "id": "desktop-nvidia",
+      "name": "Desktop (KDE Plasma, NVIDIA)",
+      "description": "KDE Plasma desktop with the NVIDIA driver image, without Steam Gaming Mode.",
+      "usbNote": "~9.1 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
+      "images": [
+        { "id": "bazzite-bazzite-nvidia-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-nvidia-stable-live-amd64.iso", "sha256": "f39013c3d111d96aaa322ca24a20749762ac9f2d6b61c9c56f37f691d116d2f4", "sha256Url": "https://download.bazzite.gg/bazzite-nvidia-stable-live-amd64.iso-CHECKSUM", "size": 9123520512, "usb": true }
+      ]
+    },
+    {
+      "id": "desktop-gnome-nvidia",
+      "name": "Desktop GNOME (NVIDIA)",
+      "description": "GNOME desktop with the NVIDIA driver image, without Steam Gaming Mode.",
+      "usbNote": "~7.9 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
+      "images": [
+        { "id": "bazzite-bazzite-gnome-nvidia-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-gnome-nvidia-stable-live-amd64.iso", "sha256": "bf0718374766b57ca8c77822d64baaf1e6f4d1ff4fe559221ce71d9922949656", "sha256Url": "https://download.bazzite.gg/bazzite-gnome-nvidia-stable-live-amd64.iso-CHECKSUM", "size": 7862147072, "usb": true }
+      ]
+    },
+    {
+      "id": "deck-nvidia",
+      "name": "Deck (KDE Plasma + Steam Gaming Mode, NVIDIA)",
+      "description": "Steam Gaming Mode session on KDE Plasma with the NVIDIA driver image, for handhelds and HTPCs.",
+      "usbNote": "~10.8 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
+      "images": [
+        { "id": "bazzite-bazzite-deck-nvidia-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-deck-nvidia-stable-live-amd64.iso", "sha256": "f035118c660b138b83250c9d5d39b03dae12fdd68a72d82d8e7e0f0bd272ed87", "sha256Url": "https://download.bazzite.gg/bazzite-deck-nvidia-stable-live-amd64.iso-CHECKSUM", "size": 10757017600, "usb": true }
       ]
     }
   ],

@@ -41,22 +41,24 @@
   "editions": [
     {
       "id": "security",
-      "name": "Security (standard + tuned)",
-      "description": "Flagship security edition with 700+ pentesting tools. Standard ISO for all amd64 CPUs and tuned ISO for amd64v3 (Haswell+/Zen+) CPUs.",
+      "name": "Security (amd64 + arm64, standard + tuned)",
+      "description": "Flagship security edition with 700+ pentesting tools. amd64 standard and tuned (amd64v3) ISOs, plus an arm64 ISO.",
       "usbNote": "ISO is ~8.68 GB. Write with Etcher, Rufus (DD mode) or dd.",
       "images": [
         { "id": "parrot-os-security-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-security-7.4_amd64.iso", "sha256": "ca241282068701f481d96487dcd1af788bd897cd586ceb38ee16f61e387aa291", "size": 8682078208, "usb": true },
-        { "id": "parrot-os-security-7.4-amd64-tuned", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-security-tuned-7.4_amd64.iso", "sha256": "b4eaafafa6720cd57ed33fc8e913f69b9d6f018ee2a3cc58aa66c298be5aa9c8", "size": 8696252416, "usb": true }
+        { "id": "parrot-os-security-7.4-amd64-tuned", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-security-tuned-7.4_amd64.iso", "sha256": "b4eaafafa6720cd57ed33fc8e913f69b9d6f018ee2a3cc58aa66c298be5aa9c8", "size": 8696252416, "usb": true },
+        { "id": "parrot-os-security-7.4-arm64", "arch": "aarch64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-security-7.4_arm64.iso", "sha256": "b0b717e8824f36f37b61c7dbb1733be7150434b6eb113051760e9aba30369577", "sha256Url": "https://deb.parrot.sh/parrot/iso/7.4/signed-hashes.txt", "size": 8370298880, "usb": true }
       ]
     },
     {
       "id": "home",
-      "name": "Home (standard + tuned)",
-      "description": "Daily-use edition with essential tools. Standard ISO for all amd64 CPUs and tuned ISO for amd64v3 CPUs.",
+      "name": "Home (amd64 + arm64, standard + tuned)",
+      "description": "Daily-use edition with essential tools. amd64 standard and tuned (amd64v3) ISOs, plus an arm64 ISO.",
       "usbNote": "ISO is ~4.17 GB. Write with Etcher, Rufus (DD mode) or dd.",
       "images": [
         { "id": "parrot-os-home-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-home-7.4_amd64.iso", "sha256": "91fc24139e6adca1ea3f8e082f5f1df96a34d8d93eab65c196a7a69300b03ea4", "size": 4165287936, "usb": true },
-        { "id": "parrot-os-home-7.4-amd64-tuned", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-home-tuned-7.4_amd64.iso", "sha256": "d1c32af6f896d4d0261adb84aedca0a6311528854c9d891793dd452ff5ac8983", "size": 4169367552, "usb": true }
+        { "id": "parrot-os-home-7.4-amd64-tuned", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-home-tuned-7.4_amd64.iso", "sha256": "d1c32af6f896d4d0261adb84aedca0a6311528854c9d891793dd452ff5ac8983", "size": 4169367552, "usb": true },
+        { "id": "parrot-os-home-7.4-arm64", "arch": "aarch64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-home-7.4_arm64.iso", "sha256": "590929efab9849d827cda2bfffcec7edf97833b188915975006048339690037c", "sha256Url": "https://deb.parrot.sh/parrot/iso/7.4/signed-hashes.txt", "size": 3856328704, "usb": true }
       ]
     },
     {

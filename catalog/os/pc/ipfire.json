@@ -53,11 +53,12 @@
     },
     {
       "id": "flash",
-      "name": "Flash image (x86_64)",
+      "name": "Flash image (x86_64 + aarch64)",
       "description": "A prebuilt image for USB sticks and small storage; boots straight into the setup.",
-      "usbNote": "512 MB compressed image. Write it with dd or any image writer; writing erases the stick.",
+      "usbNote": "512 MB compressed image per architecture. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "ipfire-flash-x86_64", "arch": "x86_64", "format": "img.xz", "url": "https://downloads.ipfire.org/releases/ipfire-2.x/2.29-core204/ipfire-2.29-core204-x86_64.img.xz", "sha256": "d37feab2ad746ca7ea303c1c6ac652bf9146349e2e47dcd98ce5d115c91a8765", "sha256Computed": "2026-10-28", "size": 536258336, "usb": false }
+        { "id": "ipfire-flash-x86_64", "arch": "x86_64", "format": "img.xz", "url": "https://downloads.ipfire.org/releases/ipfire-2.x/2.29-core204/ipfire-2.29-core204-x86_64.img.xz", "sha256": "d37feab2ad746ca7ea303c1c6ac652bf9146349e2e47dcd98ce5d115c91a8765", "sha256Computed": "2026-10-28", "size": 536258336, "usb": false },
+        { "id": "ipfire-flash-aarch64", "arch": "aarch64", "format": "img.xz", "url": "https://downloads.ipfire.org/releases/ipfire-2.x/2.29-core204/ipfire-2.29-core204-aarch64.img.xz", "sha256": "e61fa860410dd10f841d0b6a4e1a9422fa235cc4be3001f2ddacc0041d81d13c", "sha256Computed": "2026-10-28", "size": 531092908, "usb": false }
       ]
     }
   ],

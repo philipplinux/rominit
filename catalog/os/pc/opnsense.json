@@ -2,7 +2,9 @@
   "id": "opnsense",
   "name": "OPNsense",
   "shortName": "OPNsense",
-  "infoOnly": true,
+  "defaultEdition": "dvd",
+  "version": "26.7",
+  "releaseDate": "2026-07-13",
   "source": "https://opnsense.org/",
   "page": {
     "description": "OPNsense editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
@@ -16,7 +18,7 @@
       "Hardened FreeBSD base with UEFI hybrid images."
     ],
     "cons": [
-      "Publishes images as .iso.bz2 and .img.bz2, which ROMinit does not pin.",
+      "Images ship bzip2-compressed, so the download is larger than a plain ISO.",
       "amd64 only.",
       "No end-of-life date is published for a series.",
       "The installed software upgrades independently of the image version."
@@ -27,7 +29,7 @@
       { "label": "Install guide", "href": "https://docs.opnsense.org/manual/install.html" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for OPNsense; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "OPNsense publishes compressed ISO and disk images: decompress, then write the image to a stick. ROMinit pins no compressed image here; the download page names the current series.",
+    "status": "OPNsense publishes bzip2-compressed ISO and disk images. The DVD ISO is for a disc or a virtual machine; the VGA, serial and nano .img files are written to a USB stick or storage card. Writing any of them to a disk erases it.",
     "footer": [
       { "label": "OPNsense website", "href": "https://opnsense.org/" },
       { "label": "Download", "href": "https://opnsense.org/download/" },
@@ -38,6 +40,43 @@
       "logos/opnsense.svg\nOPNsense logo from Simple Icons (CC0), https://simpleicons.org; the OPNsense name and mark belong to Deciso B.V., shown only to identify OPNsense. No endorsement implied."
     ]
   },
-  "editions": [],
+  "editions": [
+    {
+      "id": "dvd",
+      "name": "DVD installer",
+      "description": "Hybrid installer ISO with the full package set, for a DVD or a virtual machine.",
+      "usbNote": "471 MB bzip2-compressed ISO. Decompress it, then burn the ISO or attach it to a VM.",
+      "images": [
+        { "id": "opnsense-dvd-amd64", "arch": "x86_64", "format": "iso.bz2", "url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-dvd-amd64.iso.bz2", "sha256": "95cafedda6d5b22ce832e249dc2309110fbee19f813ad78cf28bb3d387186bfb", "sha256Url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-checksums-amd64.sha256", "size": 494298945, "usb": false }
+      ]
+    },
+    {
+      "id": "vga",
+      "name": "VGA installer",
+      "description": "Disk image for a USB stick or disk, with VGA console output for a monitor.",
+      "usbNote": "471 MB bzip2-compressed image. Write it to a stick; writing erases the whole device.",
+      "images": [
+        { "id": "opnsense-vga-amd64", "arch": "x86_64", "format": "img.bz2", "url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-vga-amd64.img.bz2", "sha256": "d975ed876e0650f6a5bf30b2e97218c5eaa370bef6597b19f43e22c1b950d3fc", "sha256Url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-checksums-amd64.sha256", "size": 493886640, "usb": true }
+      ]
+    },
+    {
+      "id": "serial",
+      "name": "Serial installer",
+      "description": "Disk image with serial-console output, for headless appliances.",
+      "usbNote": "471 MB bzip2-compressed image. Write it to a stick; writing erases the whole device.",
+      "images": [
+        { "id": "opnsense-serial-amd64", "arch": "x86_64", "format": "img.bz2", "url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-serial-amd64.img.bz2", "sha256": "259b441646f1b0d77075a7281e368fe7f4c980360498ed6bc23740bd83c67e32", "sha256Url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-checksums-amd64.sha256", "size": 493875944, "usb": true }
+      ]
+    },
+    {
+      "id": "nano",
+      "name": "Nano image",
+      "description": "Small disk image for embedded boards and storage cards.",
+      "usbNote": "468 MB bzip2-compressed image. Write it to a stick or card; writing erases the whole device.",
+      "images": [
+        { "id": "opnsense-nano-amd64", "arch": "x86_64", "format": "img.bz2", "url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-nano-amd64.img.bz2", "sha256": "28d5e2f37e40d87468a924e3006ef10e2ddc6de485b85333d9e3958c84d0cb9d", "sha256Url": "https://mirror.ams1.nl.leaseweb.net/opnsense/releases/26.7/OPNsense-26.7-checksums-amd64.sha256", "size": 490849116, "usb": true }
+      ]
+    }
+  ],
   "officialSupport": { "status": "ongoing", "source": "https://opnsense.org/download/" }
 }

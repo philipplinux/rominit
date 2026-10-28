@@ -9,7 +9,7 @@
   "page": {
     "description": "RetroPie for Raspberry Pi 4 and 400: the official 4.8 image, its size and a SHA-256 computed by ROMinit.",
     "eyebrow": "OPERATING SYSTEM / RETRO GAMING IMAGE",
-    "intro": "A Raspberry Pi image that turns the board into an emulation console. This entry covers the official 4.8 image for Pi 4 and 400 only; it is not a PC image.",
+    "intro": "A Raspberry Pi image that turns the board into an emulation console. This entry covers the official 4.8 images for Pi 1/Zero, Pi 2/3/Zero 2 W and Pi 4/400; it is not a PC image.",
     "logo": { "src": "logos/retropie.svg", "alt": "RetroPie logo", "width": 180, "height": 180 },
     "pros": [
       "Emulators, front end and controller setup are preinstalled.",
@@ -28,7 +28,7 @@
       { "label": "4.8 release", "href": "https://github.com/RetroPie/RetroPie-Setup/releases/tag/4.8" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for RetroPie on a Raspberry Pi; the page shows the logo only. No image was written to a card and nothing was booted.",
-    "status": "One image: the official 4.8 build for Raspberry Pi 4 and 400, written to an SD card or USB stick with dd or an image writer. Writing replaces the whole card. Its SHA-256 was computed by ROMinit from the official GitHub download on 2026-10-27, not published by the project.",
+    "status": "One image per board family, written to an SD card or USB stick with dd or an image writer. Writing replaces the whole card. The SHA-256 values were computed by ROMinit from the official GitHub downloads on 2026-10-28, not published by the project.",
     "footer": [
       { "label": "RetroPie downloads", "href": "https://retropie.org.uk/download/" },
       { "label": "4.8 release", "href": "https://github.com/RetroPie/RetroPie-Setup/releases/tag/4.8" }
@@ -46,6 +46,24 @@
       "usbNote": "860 MB compressed image for an SD card or USB stick; writing replaces the whole device.",
       "images": [
         { "id": "retropie-rpi4-armhf", "arch": "armhf", "format": "img.gz", "url": "https://github.com/RetroPie/RetroPie-Setup/releases/download/4.8/retropie-buster-4.8-rpi4_400.img.gz", "sha256": "067e9b995b339ac85f7f2909cd8626328ddda5e593d7c80eeee3e6fbe3f5ef8e", "sha256Computed": "2026-10-27", "size": 900728157, "usb": false }
+      ]
+    },
+    {
+      "id": "rpi1-zero",
+      "name": "Raspberry Pi 1 / Zero",
+      "description": "The official 4.8 image for the original Raspberry Pi and Pi Zero boards.",
+      "usbNote": "847 MB compressed image for an SD card or USB stick; writing replaces the whole device.",
+      "images": [
+        { "id": "retropie-rpi1-zero-armhf", "arch": "armhf", "format": "img.gz", "url": "https://github.com/RetroPie/RetroPie-Setup/releases/download/4.8/retropie-buster-4.8-rpi1_zero.img.gz", "sha256": "b7dd2ab68ba34259b24e2ef09ae442e2bd825506a967d50b05c27c1016aad9f1", "sha256Computed": "2026-10-28", "size": 888455268, "usb": false }
+      ]
+    },
+    {
+      "id": "rpi2-3",
+      "name": "Raspberry Pi 2 / 3 / Zero 2 W",
+      "description": "The official 4.8 image for Raspberry Pi 2, 3 and Zero 2 W boards.",
+      "usbNote": "855 MB compressed image for an SD card or USB stick; writing replaces the whole device.",
+      "images": [
+        { "id": "retropie-rpi2-3-armhf", "arch": "armhf", "format": "img.gz", "url": "https://github.com/RetroPie/RetroPie-Setup/releases/download/4.8/retropie-buster-4.8-rpi2_3_zero2w.img.gz", "sha256": "3c33647e7ef7b0f4b034bf51416b32f56e8b83d0c8cf0d16248d1a8da7c9105f", "sha256Computed": "2026-10-28", "size": 896752019, "usb": false }
       ]
     }
   ],

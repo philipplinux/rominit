@@ -49,6 +49,15 @@
       ]
     },
     {
+      "id": "kde-darkstar",
+      "name": "KDE Plasma DarkStar",
+      "description": "The KDE Plasma edition with the DarkStar theme and its dark application set.",
+      "usbNote": "3.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "pclinuxos-kde-darkstar-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.aarnet.edu.au/pub/pclinuxos/iso/pclinuxos64-kde-darkstar-2026.10.iso", "sha256": "d3f1be4345935b8c5a3447a1eb65a03d9a52045ba887827f59158a572a39c6ba", "sha256Computed": "2026-10-28", "size": 3315597312, "usb": true }
+      ]
+    },
+    {
       "id": "xfce",
       "name": "XFCE",
       "description": "Lightweight edition with the XFCE desktop, ideal for older hardware or resource-conscious users.",

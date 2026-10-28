@@ -2,7 +2,9 @@
   "id": "reactos",
   "name": "ReactOS",
   "shortName": "ReactOS",
-  "infoOnly": true,
+  "defaultEdition": "bootcd",
+  "version": "0.4.16",
+  "releaseDate": "2026-08-29",
   "source": "https://reactos.org/",
   "page": {
     "description": "ReactOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
@@ -17,8 +19,8 @@
     ],
     "cons": [
       "Alpha software: the project warns of corrupted file systems and overwritten partitions.",
-      "The release downloads are ZIP archives containing ReactOS.iso.",
-      "No digest or signature is published for the release artifacts.",
+      "The release download is a ZIP archive containing ReactOS.iso.",
+      "The project publishes no digest or signature for the release artifacts.",
       "32-bit x86 is the practical target."
     ],
     "links": [
@@ -28,7 +30,7 @@
       { "label": "Nightly builds", "href": "https://reactos.org/getbuilds/" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for ReactOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "The release ships as a ZIP containing ReactOS.iso: unzip, then write or burn the ISO. ROMinit pins no archive here, and the project publishes no checksum for its releases.",
+    "status": "The release ships as a ZIP containing ReactOS.iso: unzip, then write the ISO to a stick or burn it to a CD. Installing overwrites the target disk; the project warns that alpha builds can corrupt file systems.",
     "footer": [
       { "label": "ReactOS website", "href": "https://reactos.org/" },
       { "label": "Download", "href": "https://reactos.org/download/" },
@@ -40,6 +42,16 @@
       "logos/reactos.svg\nReactOS logo from Simple Icons (CC0), https://simpleicons.org; the ReactOS name and mark belong to the ReactOS Foundation, shown only to identify ReactOS. No endorsement implied."
     ]
   },
-  "editions": [],
+  "editions": [
+    {
+      "id": "bootcd",
+      "name": "BootCD",
+      "description": "Installer and live CD image for 32-bit x86 PCs, packaged in a ZIP archive.",
+      "usbNote": "189 MB ZIP holding ReactOS-0.4.16-i386.iso. Unzip it, then write the ISO or burn a CD.",
+      "images": [
+        { "id": "reactos-bootcd-x86", "arch": "x86", "format": "zip", "url": "https://sourceforge.net/projects/reactos/files/ReactOS/0.4.16/ReactOS-0.4.16-i386.zip/download", "sha256": "e5851510cf5b79ef51a76b8155dd5ef7faca1155f44d0a1d41c35b77ece4ce2a", "sha256Computed": "2026-10-28", "size": 198087895, "usb": false }
+      ]
+    }
+  ],
   "officialSupport": { "status": "ongoing", "source": "https://reactos.org/download/" }
 }
