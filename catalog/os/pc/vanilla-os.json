@@ -1,0 +1,58 @@
+{
+  "id": "vanilla-os",
+  "name": "Vanilla OS",
+  "shortName": "Vanilla OS",
+  "defaultEdition": "desktop",
+  "version": "3",
+  "releaseDate": "2026-08-24",
+  "source": "https://vanillaos.org/",
+  "page": {
+    "description": "Vanilla OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / IMMUTABLE DESKTOP",
+    "intro": "A desktop Linux distribution built as a simple, ready-to-use system: an immutable core with GNOME, applications installed in tuned containers, and the Apx package tool.",
+    "logo": { "src": "logos/vanilla-os.png", "alt": "Vanilla OS logo", "width": 248, "height": 87 },
+    "pros": [
+      "Immutable base: a bad update rolls back instead of breaking the system.",
+      "GNOME desktop with a plain, guided first-run setup.",
+      "Apx installs Debian, Arch, Fedora or AUR packages in separate containers.",
+      "amd64 and arm64 images are published for every release."
+    ],
+    "cons": [
+      "The container model is unfamiliar if you expect a classic package manager.",
+      "One desktop edition only: no minimal or server image.",
+      "Older releases are explicitly deprecated and receive no fixes.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Vanilla OS website", "href": "https://vanillaos.org/" },
+      { "label": "Downloads", "href": "https://vanillaos.org/download" },
+      { "label": "Release 3 assets", "href": "https://github.com/Vanilla-OS/live-iso/releases/tag/3.0" },
+      { "label": "Blog", "href": "https://vanillaos.org/blog" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Vanilla OS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO for your architecture to a USB stick and boot the live system, then run the installer. Writing erases the stick; the installer partitions or erases the target disk.",
+    "footer": [
+      { "label": "Vanilla OS website", "href": "https://vanillaos.org/" },
+      { "label": "Downloads", "href": "https://vanillaos.org/download" },
+      { "label": "Release 3 assets", "href": "https://github.com/Vanilla-OS/live-iso/releases/tag/3.0" },
+      { "label": "Blog", "href": "https://vanillaos.org/blog" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/vanilla-os.png\nVanilla OS logo, public domain, by the Vanilla OS project, https://commons.wikimedia.org/wiki/File:Vanilla-os-logo-black.png."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop",
+      "description": "The GNOME desktop image with the immutable core and Apx.",
+      "usbNote": "2.1 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "vanilla-os-desktop-x86_64", "arch": "x86_64", "format": "iso", "url": "https://github.com/Vanilla-OS/live-iso/releases/download/3.0/Vanilla-OS-3-stable-amd64.20260828.iso", "sha256": "6b2eafe65801c486d060184e8a0a1638628cd021d891f73280db434b5fdcb982", "sha256Url": "https://github.com/Vanilla-OS/live-iso/releases/download/3.0/Vanilla-OS-3-stable-amd64.20260828.sha256.txt", "size": 2088960000, "usb": true },
+        { "id": "vanilla-os-desktop-aarch64", "arch": "aarch64", "format": "iso", "url": "https://github.com/Vanilla-OS/live-iso/releases/download/3.0/Vanilla-OS-3-stable-arm64.20260828.iso", "sha256": "6304d876e6082d0467026af5c9edf089a93f281cbd391375f1a0b187794050dc", "sha256Url": "https://github.com/Vanilla-OS/live-iso/releases/download/3.0/Vanilla-OS-3-stable-arm64.20260828.sha256.txt", "size": 1957388288, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://vanillaos.org/download" }
+}
