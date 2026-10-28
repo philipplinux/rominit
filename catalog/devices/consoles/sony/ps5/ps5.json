@@ -2487,5 +2487,35 @@
       "checkedDate": "2026-10-21"
     }
   ],
+  "copy": {
+    "entrypoints": {
+      "note": "An entry point is the first way to run community-made code on your console. Different routes use different apps, discs or browser features, and only work on certain firmware versions."
+    },
+    "models": {
+      "note": "Chips show the firmware each layer is documented for by the projects below. Firmware lists have gaps; check your exact version in the route finder. Updating past these versions closes the route."
+    },
+    "finder": {
+      "help": "Pick the model and firmware shown in your console settings. The box below links to every project that lists your model, documented ones first. Open each project’s setup notes for the apps or equipment you need.",
+      "note": "Documented means the project names this model and firmware. \"Firmware not confirmed\" projects list your model without an exact firmware list: check their notes first. These are first steps, not a complete jailbreak setup. All projects remain listed below.",
+      "unconfirmed": "Lists {model}, firmware not confirmed"
+    },
+    "linux": {
+      "title": "Run Linux on your PS5",
+      "note": "Linux turns the console into a desktop-like computer for compatible software and emulators. You need a supported jailbreak route and usually a separate USB drive."
+    },
+    "emulation": {
+      "note": "Emulators let your PS5 play games made for other systems. Some run as PS5 homebrew; others need Linux installed first. The systems and setup needed are listed on each card. Performance varies by game."
+    },
+    "pc": {
+      "title": "Play PS5 games on other devices",
+      "nav": "PS5 games elsewhere",
+      "finder": "PS5 games elsewhere",
+      "link": "Play PS5 games on other devices ↓",
+      "note": "The reverse of the section above: instead of other systems on your PS5, your PS5 games on a computer, such as AnyPS5. These tools convert games you dumped from your own console. Nothing is installed on the PS5, but dumping a game needs a jailbroken console first."
+    },
+    "tools": {
+      "note": "A USB image writer prepares a drive; a payload sender uses an existing loader. Neither is automatically a PS5 firmware flasher."
+    }
+  },
   "officialSupport": {"status": "ongoing", "source": "https://www.playstation.com/en-us/support/hardware/ps5/system-software-info/"}
 }

@@ -862,6 +862,7 @@ a.architecture-tag { text-decoration: none; }
 .console-project-links { display: flex; flex-wrap: wrap; gap: .7rem; font-size: .75rem; }
 
 .console-hero-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 290px); gap: 2rem; align-items: center; }
+.console-hero-body:not(:has(figure)) { grid-template-columns: 1fr; }
 .console-logo { width: 180px; max-width: 100%; height: auto; margin-bottom: 1.2rem; filter: brightness(0) invert(1); }
 .console-photo { margin: 0; text-align: center; }
 .console-photo img { display: block; width: 100%; height: 320px; object-fit: contain; }

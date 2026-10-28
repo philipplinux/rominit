@@ -21,6 +21,11 @@ romvault/
 .claude/skills/mcp-builder
 rominit-files/
 # private research workspace (third-party data, not for publishing); ~/projects/rominit-research links here
-research/
+research/*
+!research/consoles/
+research/consoles/*
+!research/consoles/console-pages-2026-10-28/
+research/consoles/console-pages-2026-10-28/*
+!research/consoles/console-pages-2026-10-28/report.md
 # local work copies (git worktrees: romvault-additions on branch additions, os-catalog on branch os-catalog); catalog/site links let ROMvault links resolve
 work/

@@ -7,6 +7,7 @@ import { build } from 'esbuild';
 import { loadCatalog } from './load-catalog.mjs';
 import { OSES, osPhotoProblems } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
+import { FAMILIES, familyOf } from '../src/consoles/families.js';
 import { EMULATORS } from '../src/emulators/index.js';
 import { GPUS } from '../src/gpus/index.js';
 
@@ -68,10 +69,29 @@ for (const os of OSES) {
 const consoleTemplate = await readFile('site/console.html', 'utf8');
 for (const file of ['console.js', 'style.css']) assert(consoleTemplate.includes(`"./${file}"`), `console.html lacks ${file}`);
 for (const console of CONSOLES) {
+  assert(familyOf(console.id), `${console.id}: not listed in any family hub`);
   let consoleHtml = consoleTemplate;
   for (const file of ['console.js', 'style.css']) consoleHtml = consoleHtml.replace(`"./${file}"`, `"./${file}?v=${await version(file)}"`);
   const stamp = { ID: console.id, NAME: console.name, DESCRIPTION: console.summary };
   await writeFile(`dist/${console.id}.html`, consoleHtml.replace(/__([A-Z]+)__/g, (_, key) => esc(stamp[key])));
+}
+
+// Family hubs: one static page per family, its cards generated from the family list.
+const familyTemplate = await readFile('site/family.html', 'utf8');
+assert(familyTemplate.includes('"./style.css"'), 'family.html lacks style.css');
+assert(new Set(FAMILIES.map(family => family.id)).size === FAMILIES.length, 'duplicate family ids');
+for (const family of FAMILIES) {
+  assert(![...OSES, ...CONSOLES, ...EMULATORS, ...GPUS].some(other => other.id === family.id), `${family.id}: page id already used`);
+  const cards = family.consoles.map(item => {
+    const entry = item.page ? CONSOLES.find(console => console.id === item.page) : null;
+    assert(!item.page || entry, `${family.id}: ${item.page} is not a catalog console`);
+    const year = item.year ?? entry?.releaseYear;
+    const status = item.status ?? entry?.summary ?? 'No ROMinit research page yet';
+    return `<article class="console-variant"><h3>${entry ? `<a href="./${entry.id}.html">${esc(item.name ?? entry.name)}</a>` : esc(item.name)}</h3><p class="field-help">${year ? `${year} · ` : ''}${esc(status)}</p></article>`;
+  }).join('');
+  const familyHtml = familyTemplate.replace('"./style.css"', `"./style.css?v=${await version('style.css')}"`);
+  const stamp = { NAME: esc(family.name), SUMMARY: esc(family.summary), CONSOLES: cards };
+  await writeFile(`dist/${family.id}.html`, familyHtml.replace(/__(NAME|SUMMARY|CONSOLES)__/g, (_, key) => stamp[key]));
 }
 
 // Emulator pages share one template the same way; ids must not collide with console or OS pages.
@@ -97,7 +117,7 @@ for (const gpu of GPUS) {
 }
 
 const notices = OSES.flatMap(os => os.page.credits);
-for (const console of CONSOLES) for (const media of Object.values(console.media)) {
+for (const console of CONSOLES) for (const media of Object.values(console.media ?? {})) {
   assert(existsSync(`site/${media.src}`), `missing ${media.src}`);
   notices.push(`${media.src}\n${media.artist}, ${media.page}, ${media.license}.`);
 }
