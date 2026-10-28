@@ -10,7 +10,12 @@
     "description": "SparkyLinux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / DEBIAN-BASED LINUX",
     "intro": "A Debian-based distribution with a rolling testing base and a set of desktop editions from minimal to full, plus a semi-rolling variant on Debian stable.",
-    "logo": { "src": "logos/sparkylinux.png", "alt": "SparkyLinux logo", "width": 600, "height": 595 },
+    "logo": {
+      "src": "logos/sparkylinux.png",
+      "alt": "SparkyLinux logo",
+      "width": 600,
+      "height": 595
+    },
     "pros": [
       "Debian base with Sparky's own tools and repository on top.",
       "Several desktop editions (KDE, LXQt, Xfce, MATE and more) from one release.",
@@ -24,16 +29,34 @@
       "No screenshot with a reusable licence was confirmed, so this page is logo-only."
     ],
     "links": [
-      { "label": "SparkyLinux website", "href": "https://sparkylinux.org/" },
-      { "label": "Download", "href": "https://sparkylinux.org/download/" },
-      { "label": "Stable downloads", "href": "https://sparkylinux.org/download/stable/" }
+      {
+        "label": "SparkyLinux website",
+        "href": "https://sparkylinux.org/"
+      },
+      {
+        "label": "Download",
+        "href": "https://sparkylinux.org/download/"
+      },
+      {
+        "label": "Stable downloads",
+        "href": "https://sparkylinux.org/download/stable/"
+      }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for SparkyLinux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
     "status": "Write the ISO to a USB stick with dd or any image writer; writing erases the stick. The live session then installs to the chosen disk.",
     "footer": [
-      { "label": "SparkyLinux website", "href": "https://sparkylinux.org/" },
-      { "label": "Download", "href": "https://sparkylinux.org/download/" },
-      { "label": "Stable downloads", "href": "https://sparkylinux.org/download/stable/" }
+      {
+        "label": "SparkyLinux website",
+        "href": "https://sparkylinux.org/"
+      },
+      {
+        "label": "Download",
+        "href": "https://sparkylinux.org/download/"
+      },
+      {
+        "label": "Stable downloads",
+        "href": "https://sparkylinux.org/download/stable/"
+      }
     ],
     "checked": "2026-10-28",
     "credits": [
@@ -47,9 +70,38 @@
       "description": "The KDE Plasma desktop edition.",
       "usbNote": "2.4 GB image. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "sparkylinux-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://archive.org/download/sparkylinux/sparkylinux-8.4-x86_64-kde.iso", "sha256": "17137711fb42236640ac6fe4421fcb3bd15710065fcf75c20807c018f42e3751", "sha256Computed": "2026-10-28", "size": 2535456768, "usb": true }
+        {
+          "id": "sparkylinux-kde-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://archive.org/download/sparkylinux/sparkylinux-8.4-x86_64-kde.iso",
+          "sha256": "020e2cd34a10e90bca94fdeb59fce4654ece32bdc5d43e9b545881437bcc5ace",
+          "sha256Computed": "2026-10-28",
+          "size": 2535456768,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "lxqt",
+      "name": "LXQt",
+      "description": "The LXQt desktop edition, lighter than KDE Plasma.",
+      "usbNote": "2.6 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "sparkylinux-lxqt-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://archive.org/download/sparkylinux/sparkylinux-8.4-x86_64-lxqt.iso",
+          "size": 2318401536,
+          "sha256": "fdb19ae512fde268becb71571816045b15a3a91ea504bfb87d8b4bd2b81ee97e",
+          "usb": true
+        }
       ]
     }
   ],
-  "officialSupport": { "status": "ongoing", "source": "https://sparkylinux.org/" }
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://sparkylinux.org/"
+  }
 }
