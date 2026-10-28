@@ -18,7 +18,7 @@ No ROMvault files were edited. The report records source gaps for follow-up; fin
 
 ## Verification
 
-- `npm test`: 239 passed, 0 failed.
+- `npm test`: 240 passed, 0 failed.
 - `npm run check`: passed.
 - `npm run lint`: passed after creating the ignored local symlink `work/console-pages/romvault -> ../../romvault`; a fresh worktree needs that symlink or `ROMVAULT_DIR` set. No lint rules were changed.
 - `npm run build`: passed; built 4 console families.
