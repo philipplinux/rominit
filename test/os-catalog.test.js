@@ -201,3 +201,9 @@ test('a normal record still needs editions', () => {
   const record = { ...fixtureRecord(), editions: [] };
   assert.match(osRecordProblems(record).join(' '), /needs editions/);
 });
+
+test('download-only formats pass the record check, unknown ones fail', () => {
+  const withFormat = (/** @type {string} */ format) => { const record = fixtureRecord(); record.editions[0].images[0].format = format; return osRecordProblems(record).join(' '); };
+  for (const format of ['zip', 'ova', 'iso.zst', 'iso.bz2', 'iso.xz', 'img.zst']) assert.doesNotMatch(withFormat(format), /format must be/, format);
+  assert.match(withFormat('exe'), /format must be/);
+});

@@ -199,7 +199,8 @@ export const osRecordProblems = os => {
     catch { out.push(`${image.id}: url is not a URL`); }
     out.push(...osImagePinProblems(image));
     if (!Number.isSafeInteger(image.size) || image.size <= 0) out.push(`${image.id}: needs a byte size`);
-    if (!/^(iso|img\.gz|img\.bz2|img\.xz|tar\.gz)$/.test(image.format ?? '')) out.push(`${image.id}: format must be iso, img.gz, img.bz2, img.xz or tar.gz`);
+    // only USB_FORMATS write to USB; the rest are download-and-checksum only
+    if (!/^(iso|iso\.(bz2|xz|zst)|img\.(gz|bz2|xz|zst)|tar\.gz|zip|ova)$/.test(image.format ?? '')) out.push(`${image.id}: format must be iso, iso.bz2, iso.xz, iso.zst, img.gz, img.bz2, img.xz, img.zst, tar.gz, zip or ova`);
     if (typeof image.usb !== 'boolean') out.push(`${image.id}: usb must be a boolean`);
   }
   return out;
