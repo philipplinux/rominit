@@ -45,11 +45,13 @@
   "editions": [
     {
       "id": "installer",
-      "name": "Installer (x86_64)",
-      "description": "The standalone Guix System installer ISO, with the guided text installer and Xfce.",
+      "name": "Installer (x86_64, i686, aarch64)",
+      "description": "The standalone Guix System installer ISO, with the guided text installer and Xfce, for x86_64, i686 and aarch64 machines (the aarch64 image is experimental).",
       "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "guix-system-installer-x86_64", "arch": "x86_64", "format": "iso", "url": "https://ftp.gnu.org/gnu/guix/guix-system-install-1.5.0.x86_64-linux.iso", "sha256": "107e0a8082f03a10b15c1fb9383d2d752c1cdeda41b8db575a15550e1c2d8b4a", "sha256Computed": "2026-10-28", "size": 1188261888, "usb": true }
+        { "id": "guix-system-installer-x86_64", "arch": "x86_64", "format": "iso", "url": "https://ftp.gnu.org/gnu/guix/guix-system-install-1.5.0.x86_64-linux.iso", "sha256": "107e0a8082f03a10b15c1fb9383d2d752c1cdeda41b8db575a15550e1c2d8b4a", "sha256Computed": "2026-10-28", "size": 1188261888, "usb": true },
+        { "id": "guix-system-installer-i686", "arch": "x86", "format": "iso", "url": "https://ftp.gnu.org/gnu/guix/guix-system-install-1.5.0.i686-linux.iso", "sha256": "54b15ecacdcba79eae4d1b60636fe247dbcc45988ef1e2caed6e1e6687b38867", "sha256Computed": "2026-10-28", "size": 1147895808, "usb": true },
+        { "id": "guix-system-installer-aarch64", "arch": "aarch64", "format": "iso", "url": "https://ftp.gnu.org/gnu/guix/guix-system-install-1.5.0.aarch64-linux.iso", "sha256": "350970f7e65547f4420e0e594055219a420cf17d1aba1c572616f825ff983acc", "sha256Computed": "2026-10-28", "size": 1098717184, "usb": true }
       ]
     }
   ],
