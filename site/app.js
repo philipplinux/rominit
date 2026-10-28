@@ -5,6 +5,7 @@ import './header-tuck.js';
 import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
 import { EMULATORS } from '../src/emulators/index.js';
+import { GPUS } from '../src/gpus/index.js';
 import { CATEGORIES, SUPPORT_ROUTE_SECTIONS, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, osLevel, recipes, selectFiles, stepsFor, officialSupportText, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
@@ -964,7 +965,7 @@ function devicePicker(index) {
   // Pick one device category or all categories.
   const requestedCategory = params.get('category');
   const branches = h('div', { className: 'branch-boxes', role: 'radiogroup', ariaLabel: 'Device types' }, ...Object.entries({ all: 'All', ...CATEGORIES }).map(([c, label]) => {
-    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' ? OSES.length + CONSOLES.length + EMULATORS.length : c === 'pc' ? OSES.length : c === 'console' ? CONSOLES.length : c === 'emulator' ? EMULATORS.length : 0);
+    const n = (c === 'all' ? index.length : index.filter(d => d.category === c).length) + (c === 'all' ? OSES.length + CONSOLES.length + EMULATORS.length + GPUS.length : c === 'pc' ? OSES.length : c === 'console' ? CONSOLES.length : c === 'emulator' ? EMULATORS.length : c === 'gpu' ? GPUS.length : 0);
     return h('label', { className: n ? '' : 'none' }, h('input', { type: 'radio', name: 'category', value: c, checked: c === (requestedCategory && Object.hasOwn(CATEGORIES, requestedCategory) ? requestedCategory : 'all'), onchange: () => render() }), h('span', {}, h('strong', { textContent: label }), h('small', { textContent: n ? `${n}` : 'none yet' })));
   }));
   let tested = new Set();
@@ -1004,16 +1005,21 @@ function devicePicker(index) {
       h('p', { className: 'field-help', textContent: `${console.releaseYear} · ${console.manufacturer} · ${console.variants.length} variants${console.officialSupport ? ` · stock firmware ${console.officialSupport.status}` : ''}`})));
     const emulatorHits = on.has('emulator') ? EMULATORS.filter(emulator => words.every(word => `${emulator.name} ${emulator.id} ${emulator.plays.join(' ')} ${emulator.hosts.join(' ')} ${emulator.summary}`.toLowerCase().includes(word))) : [];
     const showEmulators = emulatorHits.length > 0;
+    const gpuHits = on.has('gpu') ? GPUS.filter(gpu => words.every(word => `${gpu.name} ${gpu.id} ${gpu.vendor} ${gpu.series} ${gpu.die} ${gpu.projects.map(p => p.name).join(' ')}`.toLowerCase().includes(word))) : [];
+    const showGpus = gpuHits.length > 0;
+    const gpuEntry = gpuHits.map(gpu => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${gpu.id}`, className: 'os-title', textContent: gpu.name }),
+      h('p', { className: 'field-help', textContent: `${gpu.releaseYear} · ${gpu.series} · ${gpu.die} · ${gpu.projects.length} projects` })));
     const emulatorEntry = emulatorHits.map(emulator => h('article', { className: 'os-entry console-entry' }, h('a', { href: `./${emulator.id}`, className: 'os-title', textContent: emulator.name }),
       h('p', { className: 'field-help', textContent: `Plays ${emulator.plays.map(id => CONSOLES.find(c => c.id === id)?.name ?? id).join(', ')} · on ${emulator.hosts.join(', ')} · ${emulator.version}` })));
-    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs || c === 'console' && showConsoles || c === 'emulator' && showEmulators)).map(([c, label]) => c === 'emulator' && showEmulators
+    list.replaceChildren(...Object.entries(CATEGORIES).filter(([c]) => on.has(c) && (tree[c] || !words.length || c === 'pc' && showOs || c === 'console' && showConsoles || c === 'emulator' && showEmulators || c === 'gpu' && showGpus)).map(([c, label]) => c === 'gpu' && showGpus
+      ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...gpuEntry) : c === 'emulator' && showEmulators
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...emulatorEntry) : c === 'console' && showConsoles
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...consoleEntry, ...(tree[c] ? vendors(tree[c]) : [])) : c === 'pc' && showOs
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...osEntry, ...(tree[c] ? vendors(tree[c]) : [])) : tree[c]
       ? h('details', { className: 'category', open: true }, h('summary', { textContent: label }), ...vendors(tree[c]))
       : h('p', { className: 'category empty' }, h('strong', { textContent: label }), ' · none yet')));
-    if (!hits.length && !showOs && !showConsoles && !showEmulators && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
-    else if (!hits.length && !showOs && !showConsoles && !showEmulators) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
+    if (!hits.length && !showOs && !showConsoles && !showEmulators && !showGpus && matches.length) list.append(h('p', { className: 'empty-files', textContent: `No device at this level. ${matches.length} match at a level further right.` }));
+    else if (!hits.length && !showOs && !showConsoles && !showEmulators && !showGpus) list.append(h('p', { className: 'empty-files', textContent: 'No device matches yet. Searches are logged anonymously, so the devices people look for get added first.' }));
     clearTimeout(logTimer);
     const q = search.value.trim();
     if (q.length >= 2) logTimer = setTimeout(() => fetch('./api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, hits: hits.length }) }).catch(() => {}), 1500);

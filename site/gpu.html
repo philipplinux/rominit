@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-gpu="__ID__">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141311">
+    <meta name="description" content="__DESCRIPTION__">
+    <title>__NAME__ · GPUs · ROMinit</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./gpu.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to __NAME__</a>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="ROMinit home"><span class="wordmark-mark" aria-hidden="true">R</span><span>ROMINIT <span class="wordmark-divider">/</span> GPUS</span></a>
+        <span class="topbar-tag"><span class="live-dot" aria-hidden="true"></span>Research</span>
+        <nav class="sitenav" aria-label="Site"><details class="nav-group"><summary>Devices</summary><nav aria-label="Device categories"><a href="./" data-nav="devices">All devices</a><a href="./?view=brands" data-nav="brands">Brands</a><a href="./?view=projects" data-nav="projects">Projects</a><a href="./?view=popular" data-nav="popular">Popular</a><a href="./?category=tvmedia" data-nav="tvmedia" title="TV media boxes &amp; sticks">TV media</a><a href="./?category=television" data-nav="television">TVs</a><a href="./?category=misc" data-nav="misc" title="Misc &amp; IoT">Misc/IoT</a><a href="./?category=networking" data-nav="networking">Networking</a></nav></details><a href="./?category=pc" data-nav="os">OS</a><a href="./?category=console" data-nav="consoles">Consoles</a><a href="./?category=emulator" data-nav="emulators">Emulators</a><a href="./?category=gpu" data-nav="gpus" aria-current="page">GPUs</a></nav>
+        <div class="topbar-side">
+          <nav class="top-links" aria-label="Tools"><a href="./?view=agents" title="Hosted MCP for your AI agent">MCP</a><a href="./?view=cli" title="rominit command-line tool">CLI</a></nav>
+          <span class="account"><button type="button" class="button button-secondary" popovertarget="signin">Sign in</button><span id="signin" class="signin-pop" popover="auto"><strong>Sign in to ROMinit</strong><small>Loading sign-in options…</small></span></span>
+          <details class="site-menu"><summary aria-label="Menu" title="Menu">☰</summary>
+            <nav aria-label="More"><a href="./?view=sources">Sources &amp; licenses</a><a href="./?view=about">About</a><a href="#submit-request">Submit ticket / Request</a><a href="https://www.buymeacoffee.com/philipplinux">☕ Buy me a coffee</a></nav>
+          </details>
+        </div>
+      </header>
+      <main id="main" class="console-page">
+        <section id="gpu-overview" data-rail-label="0 · Overview" class="flash-card console-hero">
+          <p class="eyebrow">GPU · <span id="gpu-path"></span></p><h1 id="gpu-name">__NAME__</h1>
+          <p id="gpu-summary" class="intro-copy"></p><div id="gpu-meta" class="architecture-tags" aria-label="Card details"></div>
+          <p class="console-warning" role="note">ROMinit links to each project; it has not tested them unless a project says so. Firmware and kernel changes are at your own risk.</p>
+        </section>
+        <section id="gpu-specs-section" data-rail-label="1 · Specs" class="flash-card console-section"><h2>Specs</h2><dl id="gpu-specs" class="console-facts"></dl><p id="gpu-models" class="field-help"></p><p id="gpu-spec-source" class="console-source"></p></section>
+        <div id="gpu-groups"></div>
+        <section id="gpu-pitfalls" data-rail-label="P · Pitfalls" class="flash-card console-section"><h2>Before you start</h2><div id="gpu-warnings"></div></section>
+        <section id="gpu-sources-section" data-rail-label="S · Sources" class="flash-card console-section"><h2>Sources</h2><ul id="gpu-sources" class="console-sources"></ul><p id="gpu-checked" class="field-help"></p></section>
+        <div id="console-report"></div>
+      </main>
+    </div>
+    <noscript><p>Enable JavaScript to view this page.</p></noscript>
+  </body>
+</html>

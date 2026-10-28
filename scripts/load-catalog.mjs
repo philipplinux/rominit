@@ -7,8 +7,8 @@ const json = (/** @type {string} */ path) => JSON.parse(readFileSync(new URL(pat
 const dirs = path => readdirSync(new URL(path, root), { withFileTypes: true }).filter(e => e.isDirectory()).map(e => e.name);
 /** JSON files in a folder, [] when it is missing. @param {string} path */
 const jsonFiles = path => { try { return readdirSync(new URL(path, root)).filter(f => f.endsWith('.json')); } catch { return []; } };
-/** devices/consoles/ holds console families (src/consoles), not flashable devices. */
-const OTHER_DIRS = ['consoles'];
+/** devices/consoles/ and devices/gpus/ hold research pages (src/consoles, src/gpus), not flashable devices. */
+const OTHER_DIRS = ['consoles', 'gpus'];
 
 /** catalog/devices/<folder>/<vendor>/<codename>/: one folder per device, holding <codename>.json, roms/ and recoveries/.
  * @returns {{folder:string, vendor:string, codename:string, path:string}[]} path is relative to catalog/ */

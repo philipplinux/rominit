@@ -932,3 +932,6 @@ body.header-off .progress-rail:has(> .start-over) { top: 120px; } /* Start over 
 .device-guide .console-hero-body:not(:has(figure)) { grid-template-columns: 1fr; }
 
 .nav-group summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+.gpu-fresh { flex: none; padding: .1rem .45rem; border: 1px solid currentColor; font-size: .66rem; letter-spacing: .04em; text-transform: uppercase; }
+.gpu-fresh-active { color: var(--teal); } .gpu-fresh-slow, .gpu-fresh-finished { color: var(--amber); } .gpu-fresh-quiet { color: var(--muted); }
+.console-project .gpu-tested { padding: .6rem; border-left: 2px solid var(--teal); }

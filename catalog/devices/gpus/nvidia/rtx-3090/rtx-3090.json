@@ -1,0 +1,140 @@
+{
+  "id": "rtx-3090",
+  "name": "NVIDIA GeForce RTX 3090",
+  "vendor": "NVIDIA",
+  "line": "GeForce",
+  "series": "GeForce RTX 30",
+  "die": "GA102 (Ampere, SM 8.6)",
+  "releaseYear": 2020,
+  "checkedDate": "2026-10-28",
+  "summary": "Ampere flagship with 24 GB of GDDR6X, still a favourite for local AI because of that memory. Projects you could apply to it: firmware updates, undervolting, open drivers and AI unlocks and deployments tuned for this card.",
+  "officialSupport": {"status": "ongoing", "source": "https://github.com/NVIDIA/open-gpu-kernel-modules", "summary": "in current drivers, no end date announced"},
+  "specs": [
+    ["CUDA cores", "10,496"],
+    ["Boost clock", "1.70 GHz"],
+    ["Memory", "24 GB GDDR6X, 384-bit"],
+    ["Graphics card power", "350 W"],
+    ["Required system power", "750 W"],
+    ["Power connectors", "2x PCIe 8-pin (adapter to 12-pin included)"],
+    ["Launch", "2020-09-24"]
+  ],
+  "specSource": "https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/",
+  "models": "Founders Edition from NVIDIA; partner cards (ASUS, EVGA, Gigabyte, MSI, Zotac and others) set their own connectors, power limits and vBIOS. The RTX 3090 Ti is a different card on the same die.",
+  "groups": {
+    "firmware": "Firmware",
+    "power": "Power and undervolt",
+    "drivers": "Open drivers",
+    "ai": "Local AI"
+  },
+  "projects": [
+    {
+      "name": "gpu-unlock", "group": "ai",
+      "pitch": "GeForce cards run FP16/BF16/TF32 tensor math at half rate; this kernel module removes the cap. Same results, faster: LLM prefill +25-55%, fine-tuning +25-50%, image generation +30-55%. Token generation and gaming do not change.",
+      "suits": "Long prompts, LoRA and fine-tuning, ComfyUI",
+      "risk": "Medium: a kernel module on the boot path, Linux only; remove the kernel option to roll back",
+      "lastUpdate": "2026-10", "updateNote": "commit 2026-10, no tagged release",
+      "tested": "Worked on ROMinit's own 3090 (2026-10-28): the kernel log reported the card unlocked after reboot.",
+      "source": "https://github.com/Zagitta/gpu-unlock"
+    },
+    {
+      "name": "HyperQwen", "group": "ai",
+      "pitch": "A vLLM setup for Qwen3.8-27B on one 24 GB card: 127 tok/s single stream, about 1,035 tok/s across 64 requests, profiles up to 240k context. Benchmarked on a 3090 at 250 W.",
+      "suits": "A private chat or API backend, long documents",
+      "risk": "Low: Docker, about 20 GB of model files",
+      "lastUpdate": "2026-10", "updateNote": "commit 2026-10, no tagged release",
+      "tested": "Ran on ROMinit's own 3090 with gpu-unlock at 240 W: prefill about 27-35% faster than an earlier baseline (not a controlled test).",
+      "source": "https://github.com/syv-ai/qwen38-27b-rtx3090"
+    },
+    {
+      "name": "club-3090", "group": "ai",
+      "pitch": "Community recipes for serving LLMs on 3090/4090/5090 with vLLM, SGLang, llama.cpp and ExLlamaV3, for 1 to 8 cards, behind an OpenAI-compatible API.",
+      "suits": "Picking a known-good config instead of tuning your own",
+      "risk": "Low: Docker; read its CLIFFS doc on long-prompt memory failures",
+      "lastUpdate": "2026-10", "updateNote": "v0.12.0 2026-09, commit 2026-10",
+      "source": "https://github.com/noonghunna/club-3090"
+    },
+    {
+      "name": "NInfer-3090", "group": "ai",
+      "pitch": "Native C++/CUDA engine with 3090-specific kernels and no Python at inference. Reports up to 140 tok/s for Qwen3.8-27B; speaks OpenAI and Anthropic APIs.",
+      "suits": "One model, one card, as fast as possible",
+      "risk": "Low: prebuilt Windows build; Linux is a community build",
+      "lastUpdate": "2026-10", "updateNote": "v0.16.1 2026-10",
+      "source": "https://github.com/Don-Chad/ninfer-3090"
+    },
+    {
+      "name": "llamAmpere", "group": "ai",
+      "pitch": "llama.cpp fork tuned for Ampere: Qwen3.8-27B with 262k context inside 24 GB, about 103 tok/s at 100k depth.",
+      "suits": "Very long context on one card, llama.cpp tooling",
+      "risk": "Low: build from source with CUDA",
+      "lastUpdate": "2026-10", "updateNote": "v0.6 2026-10",
+      "source": "https://github.com/JakeATX/llamAmpere"
+    },
+    {
+      "name": "NVIDIA Resizable BAR update", "group": "firmware",
+      "pitch": "vBIOS update that lets the CPU map all 24 GB of VRAM at once, which some games run faster with. Also needs Above 4G Decoding and ReBAR on in the motherboard firmware.",
+      "suits": "Founders Edition owners; partner cards use their maker's tool",
+      "risk": "Low: official update; never use the Founders Edition file on a partner card",
+      "lastUpdate": "2023-01", "oneOff": true, "updateNote": "one-off 2021 rollout, article updated 2023-01",
+      "source": "https://nvidia.custhelp.com/app/answers/detail/a_id/5165"
+    },
+    {
+      "name": "NVFlash", "group": "firmware",
+      "pitch": "NVIDIA's vBIOS utility for Windows and Linux: back up the card's vBIOS, or write your board maker's official one.",
+      "suits": "Saving a backup before any firmware work, restoring one",
+      "risk": "High: a bad flash leaves no video; keep a second display output for recovery",
+      "lastUpdate": "2025-02", "updateNote": "5.867, 2025-02",
+      "source": "https://www.techpowerup.com/download/nvidia-nvflash/"
+    },
+    {
+      "name": "ReBarUEFI", "group": "firmware",
+      "pitch": "Patches a UEFI driver into an older motherboard's firmware to force Resizable BAR on when the board has no option for it. Makes no RTX 30 claim.",
+      "suits": "Boards whose maker ships no ReBAR update",
+      "risk": "High: modifies motherboard firmware; clearing CMOS recovers a failed boot",
+      "lastUpdate": "2025-12", "updateNote": "release 0.3 2023-03, last commit 2025-12",
+      "source": "https://github.com/xCuri0/ReBarUEFI"
+    },
+    {
+      "name": "LACT", "group": "power",
+      "pitch": "Linux GUI for power cap, clocks, fan curves and V/F-curve undervolting on NVIDIA cards. Less heat and noise at about the same speed.",
+      "suits": "The easiest Linux undervolt",
+      "risk": "Low: needs the NVIDIA driver with CUDA libraries",
+      "lastUpdate": "2026-08", "updateNote": "v0.10.1 2026-08",
+      "source": "https://github.com/ilya-zlobintsev/LACT"
+    },
+    {
+      "name": "MSI Afterburner", "group": "power",
+      "pitch": "Windows overclock and undervolt with a V/F curve, fan curves, OC Scanner auto-tuning and an on-screen monitor. Works with cards from all brands.",
+      "suits": "Windows users",
+      "risk": "Low: download only from msi.com or Guru3D",
+      "lastUpdate": "2026-09", "updateNote": "release 2026-09",
+      "source": "https://www.msi.com/Landing/afterburner/graphics-cards"
+    },
+    {
+      "name": "NVIDIA open kernel modules", "group": "drivers",
+      "pitch": "NVIDIA's open-source kernel driver for Turing and later, with the same user space as the closed driver. Its PCI ID table lists GeForce RTX 30 cards.",
+      "suits": "Linux users who want an open kernel module and keep CUDA",
+      "risk": "Low: remove other NVIDIA kernel modules first",
+      "lastUpdate": "2026-10", "updateNote": "615.78.08 2026-10",
+      "source": "https://github.com/NVIDIA/open-gpu-kernel-modules"
+    },
+    {
+      "name": "NVK (Mesa)", "group": "drivers",
+      "pitch": "Mesa's open Vulkan driver, conformant Vulkan 1.4, Kepler through Blackwell; OpenGL through Zink since Mesa 25.1.",
+      "suits": "A fully open-source desktop; CUDA still needs NVIDIA's driver",
+      "risk": "Low to medium: needs Linux 6.6 or newer and a recent Mesa",
+      "updateNote": "ships with each Mesa release",
+      "source": "https://docs.mesa3d.org/drivers/nvk.html"
+    }
+  ],
+  "warnings": [
+    "A vBIOS is board-specific: never flash one built for another board, including the Founders Edition one.",
+    "Resizable BAR also needs a compatible CPU, motherboard BIOS and UEFI boot.",
+    "gpu-unlock speeds prefill and training, not token generation; at stock power big matrix work gains less than the peak figure."
+  ],
+  "sources": [
+    {"label": "NVIDIA RTX 3090 / 3090 Ti specs", "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/"},
+    {"label": "NVIDIA Resizable BAR on RTX 30", "url": "https://www.nvidia.com/en-us/geforce/news/geforce-rtx-30-series-resizable-bar-support/"},
+    {"label": "NVIDIA launch post", "url": "https://www.nvidia.com/en-us/geforce/news/rtx-3090-out-september-24/"},
+    {"label": "nouveau feature matrix", "url": "https://nouveau.freedesktop.org/FeatureMatrix.html"}
+  ]
+}
