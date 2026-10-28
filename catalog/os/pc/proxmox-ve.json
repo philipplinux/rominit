@@ -1,0 +1,58 @@
+{
+  "id": "proxmox-ve",
+  "name": "Proxmox Virtual Environment",
+  "shortName": "Proxmox VE",
+  "defaultEdition": "ve",
+  "version": "9.2",
+  "releaseDate": "2026-05-21",
+  "source": "https://www.proxmox.com/en/proxmox-virtual-environment",
+  "page": {
+    "description": "Proxmox Virtual Environment editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / VIRTUALISATION",
+    "intro": "A Debian-based virtualisation platform combining KVM virtual machines and LXC containers behind one web interface, with clustering, ZFS and Ceph support.",
+    "logo": { "src": "logos/proxmox-ve.svg", "alt": "Proxmox Virtual Environment logo", "width": 180, "height": 180 },
+    "pros": [
+      "KVM and LXC managed from one web interface.",
+      "Clustering, live migration and HA are built in.",
+      "Debian base, so the usual Linux tools are available.",
+      "Free to install; support and the enterprise repository need a subscription."
+    ],
+    "cons": [
+      "Not a desktop: it is a hypervisor appliance.",
+      "The enterprise repository needs a subscription; the free one has no vendor support.",
+      "Installing erases the target disk.",
+      "The installer offers a beta ZFS setup option with different disk rules."
+    ],
+    "links": [
+      { "label": "Proxmox VE", "href": "https://www.proxmox.com/en/proxmox-virtual-environment" },
+      { "label": "Downloads", "href": "https://www.proxmox.com/en/downloads" },
+      { "label": "ISO directory", "href": "https://enterprise.proxmox.com/iso/" },
+      { "label": "Documentation", "href": "https://pve.proxmox.com/pve-docs/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Proxmox Virtual Environment; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick and boot the installer; it partitions and erases the target disk and installs the hypervisor. Machines and containers are created afterwards from the web interface.",
+    "footer": [
+      { "label": "Proxmox VE", "href": "https://www.proxmox.com/en/proxmox-virtual-environment" },
+      { "label": "Downloads", "href": "https://www.proxmox.com/en/downloads" },
+      { "label": "ISO directory", "href": "https://enterprise.proxmox.com/iso/" },
+      { "label": "Documentation", "href": "https://pve.proxmox.com/pve-docs/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/proxmox-ve.svg\nProxmox logo from Simple Icons (CC0), https://simpleicons.org; the Proxmox name and mark belong to Proxmox Server Solutions GmbH, shown only to identify Proxmox VE. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "ve",
+      "name": "VE installer (amd64, arm64)",
+      "description": "The single installer ISO per architecture; the edition is the hypervisor itself.",
+      "usbNote": "1.7 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "proxmox-ve-ve-amd64", "arch": "x86_64", "format": "iso", "url": "https://enterprise.proxmox.com/iso/proxmox-ve_9.2-1.iso", "sha256": "4e88fe416df9b527624a175f24c9aa07c714d3332afb1ee3dbf3879573ef2c6c", "sha256Url": "https://enterprise.proxmox.com/iso/proxmox-ve_9.2-1.iso.sha256", "size": 1706178560, "usb": true },
+        { "id": "proxmox-ve-ve-arm64", "arch": "aarch64", "format": "iso", "url": "https://enterprise.proxmox.com/iso/proxmox-ve_9.2-1-arm64.iso", "sha256": "b1619dcd1f5b1a6d67d77b59e7e2fa2033174551d1e1b9dc22b2171ec093abbd", "sha256Url": "https://enterprise.proxmox.com/iso/proxmox-ve_9.2-1-arm64.iso.sha256", "size": 1581182976, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.proxmox.com/en/downloads" }
+}

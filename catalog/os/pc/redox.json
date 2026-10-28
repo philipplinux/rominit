@@ -1,0 +1,43 @@
+{
+  "id": "redox",
+  "name": "Redox OS",
+  "shortName": "Redox",
+  "infoOnly": true,
+  "source": "https://www.redox-os.org/",
+  "page": {
+    "description": "Redox OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / RESEARCH UNIX-LIKE",
+    "intro": "A Unix-like operating system written in Rust, with its own kernel and userspace, aiming at a microkernel-inspired design with memory safety throughout.",
+    "logo": { "src": "logos/redox.svg", "alt": "Redox OS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Written in Rust from the kernel up.",
+      "Scheme-like design: drivers and services run in userspace.",
+      "Runs on x86_64 and i686, with daily images between releases.",
+      "Free and open source."
+    ],
+    "cons": [
+      "0.9.0 is from September 2024; daily images carry newer code.",
+      "Hardware support is narrow.",
+      "Media ships as .iso.zst and .img.zst, which ROMinit does not pin.",
+      "A small community compared with mainstream systems."
+    ],
+    "links": [
+      { "label": "Redox website", "href": "https://www.redox-os.org/" },
+      { "label": "Releases", "href": "https://www.redox-os.org/releases/" },
+      { "label": "Download", "href": "https://www.redox-os.org/download/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Redox OS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Redox publishes zstd-compressed livedisk and harddrive images: decompress, then write the image. ROMinit pins no .zst image here.",
+    "footer": [
+      { "label": "Redox website", "href": "https://www.redox-os.org/" },
+      { "label": "Releases", "href": "https://www.redox-os.org/releases/" },
+      { "label": "Download", "href": "https://www.redox-os.org/download/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/redox.svg\nRedox OS logo from Simple Icons (CC0), https://simpleicons.org; the Redox name and mark belong to the Redox OS project, shown only to identify Redox OS. No endorsement implied."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://www.redox-os.org/" }
+}

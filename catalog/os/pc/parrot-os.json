@@ -1,0 +1,100 @@
+{
+  "id": "parrot-os",
+  "name": "Parrot OS",
+  "shortName": "Parrot",
+  "defaultEdition": "security",
+  "version": "7.4",
+  "releaseDate": "2026-10-03",
+  "source": "https://parrotsec.org/",
+  "page": {
+    "description": "Parrot OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "DISTRIBUTION / DEBIAN-BASED SECURITY",
+    "intro": "A Debian-based security and privacy distribution with KDE Plasma, offering Security (700+ pentesting tools), Home (daily use), HTB, LXQt, MATE, Enlightenment spins, LXQt, MATE and Enlightenment desktop spins, plus amd64v3-tuned variants for modern CPUs.",
+    "logo": { "src": "logos/parrot-os.png", "alt": "Parrot OS logo", "width": 512, "height": 512 },
+    "pros": [
+      "SHA-256 checksums published in PGP-clearsigned signed-hashes.txt",
+      "Eight amd64 editions including tuned builds for modern CPUs",
+      "Live mode with optional persistence via mkusb"
+    ],
+    "cons": [
+      "Digests come from the one signed-hashes.txt list, not per-file sidecars",
+      "Tuned images target amd64v3 (Haswell/Excavator+) — incompatible with older CPUs",
+      "Some formats (OVA, QCOW2, VMDK) are VM-only and cannot be written to USB"
+    ],
+    "links": [
+      { "label": "Parrot OS website", "href": "https://parrotsec.org/" },
+      { "label": "Download", "href": "https://parrotsec.org/download/" },
+      { "label": "Signed hashes (7.4)", "href": "https://deb.parrot.sh/parrot/iso/7.4/signed-hashes.txt" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Parrot OS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISOHybrid ISO to USB with Etcher, Rufus (DD mode), or dd. The Calamares installer installs to disk. Live mode available with optional persistent partition.",
+    "footer": [
+      { "label": "Parrot OS website", "href": "https://parrotsec.org/" },
+      { "label": "Download", "href": "https://parrotsec.org/download/" },
+      { "label": "Signed hashes (7.4)", "href": "https://deb.parrot.sh/parrot/iso/7.4/signed-hashes.txt" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/parrot-os.png\nParrot OS logo, GPL, by Manuel Hernandez, https://commons.wikimedia.org/wiki/File:Parrot_OS_logo,_2023.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "security",
+      "name": "Security (standard + tuned)",
+      "description": "Flagship security edition with 700+ pentesting tools. Standard ISO for all amd64 CPUs and tuned ISO for amd64v3 (Haswell+/Zen+) CPUs.",
+      "usbNote": "ISO is ~8.68 GB. Write with Etcher, Rufus (DD mode) or dd.",
+      "images": [
+        { "id": "parrot-os-security-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-security-7.4_amd64.iso", "sha256": "ca241282068701f481d96487dcd1af788bd897cd586ceb38ee16f61e387aa291", "size": 8682078208, "usb": true },
+        { "id": "parrot-os-security-7.4-amd64-tuned", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-security-tuned-7.4_amd64.iso", "sha256": "b4eaafafa6720cd57ed33fc8e913f69b9d6f018ee2a3cc58aa66c298be5aa9c8", "size": 8696252416, "usb": true }
+      ]
+    },
+    {
+      "id": "home",
+      "name": "Home (standard + tuned)",
+      "description": "Daily-use edition with essential tools. Standard ISO for all amd64 CPUs and tuned ISO for amd64v3 CPUs.",
+      "usbNote": "ISO is ~4.17 GB. Write with Etcher, Rufus (DD mode) or dd.",
+      "images": [
+        { "id": "parrot-os-home-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-home-7.4_amd64.iso", "sha256": "91fc24139e6adca1ea3f8e082f5f1df96a34d8d93eab65c196a7a69300b03ea4", "size": 4165287936, "usb": true },
+        { "id": "parrot-os-home-7.4-amd64-tuned", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-home-tuned-7.4_amd64.iso", "sha256": "d1c32af6f896d4d0261adb84aedca0a6311528854c9d891793dd452ff5ac8983", "size": 4169367552, "usb": true }
+      ]
+    },
+    {
+      "id": "htb",
+      "name": "Hack The Box",
+      "description": "CTF and training edition based on the Security edition.",
+      "usbNote": "ISO is ~8.37 GB. Write with Etcher, Rufus (DD mode) or dd.",
+      "images": [
+        { "id": "parrot-os-spin-htb-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-spin-htb-7.4_amd64.iso", "sha256": "723ef327dd17f9513b672b0a89db0664419a90317ba61e8b0a8d857354a0e8b9", "size": 8365111296, "usb": true }
+      ]
+    },
+    {
+      "id": "lxqt",
+      "name": "LXQt spin",
+      "description": "Lightweight LXQt desktop spin.",
+      "usbNote": "ISO is ~2.2 GB. Write with Etcher, Rufus (DD mode) or dd.",
+      "images": [
+        { "id": "parrot-os-spin-lxqt-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-spin-lxqt-7.4_amd64.iso", "sha256": "b720f110827988d786b9970360a92b7188fd2eb022482367d81d215793ce343c", "size": 2195668992, "usb": true }
+      ]
+    },
+    {
+      "id": "mate",
+      "name": "MATE spin",
+      "description": "MATE desktop spin.",
+      "usbNote": "ISO is ~3.7 GB. Write with Etcher, Rufus (DD mode) or dd.",
+      "images": [
+        { "id": "parrot-os-spin-mate-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-spin-mate-7.4_amd64.iso", "sha256": "57ae5527f2dc933616fe17b5b2a3b7936d65475b466de4cf1462bcb197618e32", "size": 3700523008, "usb": true }
+      ]
+    },
+    {
+      "id": "enlightenment",
+      "name": "Enlightenment spin",
+      "description": "Lightweight Enlightenment desktop spin.",
+      "usbNote": "ISO is ~2.63 GB. Write with Etcher, Rufus (DD mode) or dd.",
+      "images": [
+        { "id": "parrot-os-spin-enlightenment-7.4-amd64", "arch": "x86_64", "format": "iso", "url": "https://deb.parrot.sh/parrot/iso/7.4/Parrot-spin-enlightenment-7.4_amd64.iso", "sha256": "ae8765e2caa955de53fb3e64413361cd09d6679ea7fb2f49c07168b2ee2c44cd", "size": 2628878336, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://parrotsec.org/download/" }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "truenas",
+  "name": "TrueNAS",
+  "shortName": "TrueNAS",
+  "defaultEdition": "community",
+  "version": "25.10.7",
+  "releaseDate": "2026-09-02",
+  "source": "https://www.truenas.com/",
+  "page": {
+    "description": "TrueNAS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / NAS",
+    "intro": "iXsystems' storage operating system, installed from its own ISO and managed from a web interface: ZFS pools, shares, snapshots and apps on x86-64 hardware.",
+    "logo": { "src": "logos/truenas.svg", "alt": "TrueNAS logo", "width": 180, "height": 180 },
+    "pros": [
+      "ZFS pools, snapshots and replication built in.",
+      "Web interface for storage, shares, users and apps.",
+      "Community Edition is free; the enterprise appliances share the code base.",
+      "A separate installer ISO, so the OS disk stays independent of the data disks."
+    ],
+    "cons": [
+      "ZFS wants RAM and ECC is often recommended.",
+      "x86-64 only for the Community Edition installer.",
+      "The installer erases the disk it is pointed at.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "TrueNAS website", "href": "https://www.truenas.com/" },
+      { "label": "Download", "href": "https://www.truenas.com/download/" },
+      { "label": "Documentation", "href": "https://www.truenas.com/docs/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for TrueNAS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the installer ISO to a USB stick and boot it; the installer installs to the disk you choose and erases that disk. Pools are created afterwards from the web interface.",
+    "footer": [
+      { "label": "TrueNAS website", "href": "https://www.truenas.com/" },
+      { "label": "Download", "href": "https://www.truenas.com/download/" },
+      { "label": "Documentation", "href": "https://www.truenas.com/docs/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/truenas.svg\nTrueNAS logo from Simple Icons (CC0), https://simpleicons.org; the TrueNAS name and mark belong to iXsystems, shown only to identify TrueNAS. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "community",
+      "name": "Community Edition (x86_64)",
+      "description": "The free Community Edition installer for x86-64 hardware.",
+      "usbNote": "2.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "truenas-community-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.sys.truenas.net/TrueNAS-SCALE-Goldeye/25.10.7/TrueNAS-SCALE-25.10.7.iso", "sha256": "54ce9441ce66966a392e28f63604ca3c2c083d0bec4db7bb5af2f74f7a007c8e", "sha256Url": "https://download.sys.truenas.net/TrueNAS-SCALE-Goldeye/25.10.7/TrueNAS-SCALE-25.10.7.iso.sha256", "size": 2339317760, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.truenas.com/download/" }
+}

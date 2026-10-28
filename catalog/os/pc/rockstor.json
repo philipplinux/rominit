@@ -1,0 +1,54 @@
+{
+  "id": "rockstor",
+  "name": "Rockstor",
+  "shortName": "Rockstor",
+  "defaultEdition": "generic",
+  "version": "5.1.0-0",
+  "releaseDate": "2025-05-30",
+  "source": "https://rockstor.com/",
+  "page": {
+    "description": "Rockstor editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / NAS APPLIANCE",
+    "intro": "An open-source NAS and BTRFS storage platform built on OpenSUSE Leap. Provides a web-based management interface for file sharing, snapshots, and pool management.",
+    "logo": { "src": "logos/rockstor.png", "alt": "Rockstor logo", "width": 700, "height": 120 },
+    "pros": [
+      "Built-in BTRFS snapshot and rollback capabilities",
+      "Web-based management interface",
+      "Multi-architecture support including ARM64 and Raspberry Pi",
+      "Active community on Discourse forum"
+    ],
+    "cons": [
+      "Built on OpenSUSE which has a smaller desktop ecosystem",
+      "Stable release channel lags behind testing/edge by months",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Rockstor", "href": "https://rockstor.com/" },
+      { "label": "Downloads", "href": "https://rockstor.com/dls/index.html" },
+      { "label": "Documentation", "href": "https://rockstor.com/docs/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Rockstor; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd. Boot from the USB and follow the installer. The system installs to the target disk and provides a web management UI at http://<server-ip>:8181.",
+    "footer": [
+      { "label": "Rockstor", "href": "https://rockstor.com/" },
+      { "label": "Downloads", "href": "https://rockstor.com/dls/index.html" },
+      { "label": "Documentation", "href": "https://rockstor.com/docs/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/rockstor.png\nRockstor logo, from the Rockstor project, https://rockstor.com/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "generic",
+      "name": "Generic (OpenSUSE Leap 15.6)",
+      "description": "Stable release built on OpenSUSE Leap 15.6 for x86_64 servers and workstations.",
+      "usbNote": "896 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "rockstor-leap15.6-x86_64", "arch": "x86_64", "format": "iso", "url": "https://rockstor.com/downloads/installer/leap/15.6/x86_64/Rockstor-Leap15.6-generic.x86_64-5.1.0-0.install.iso", "sha256": "b1115c931cd5f0ae2656170574b78ba7e977646a744f768ed13dda80711cc6b0", "sha256Url": "https://rockstor.com/downloads/installer/leap/15.6/x86_64/Rockstor-Leap15.6-generic.x86_64-5.1.0-0.install.iso.sha256", "size": 940294144, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://rockstor.com/dls/index.html" }
+}

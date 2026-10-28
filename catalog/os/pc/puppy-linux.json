@@ -1,0 +1,43 @@
+{
+  "id": "puppy-linux",
+  "name": "Puppy Linux",
+  "shortName": "Puppy",
+  "infoOnly": true,
+  "source": "https://puppylinux.com/",
+  "page": {
+    "description": "Puppy Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DEBIAN-BASED LINUX FAMILY",
+    "intro": "A unique family of lightweight Linux distributions created by Barry Kauler in 2003. Each variant is typically under 1.5 GB, designed to run entirely in RAM for fast performance on older hardware.",
+    "logo": { "src": "logos/puppy-linux.png", "alt": "Puppy Linux logo", "width": 512, "height": 512 },
+    "pros": [
+      "Extremely lightweight – typically under 1.5 GB",
+      "Runs entirely in RAM for exceptional speed",
+      "Multiple variants for different use cases and hardware ages",
+      "Large ecosystem of .pet packages"
+    ],
+    "cons": [
+      "Main website (puppylinux.com) returns HTTP 403 Forbidden",
+      "Official download mirrors (Ibiblio, NLUUG) only contain old pet packages, no current ISOs",
+      "Download collection page (forum.puppylinux.com) requires JavaScript to render – no usable links found via HEAD/GET",
+      "No current ISO download URL could be verified for any Puppy Linux variant",
+      "The main site refuses requests and the mirrors carry only old package sets, so no current ISO can be pinned.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Puppy Linux", "href": "https://puppylinux.com/" },
+      { "label": "Download Collection", "href": "https://forum.puppylinux.com/puppy-linux-collection" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Puppy Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Official website and all known mirrors fail to provide downloadable ISOs. The project appears active (pet packages updated through 2026) but pre-built ISO downloads are inaccessible.",
+    "footer": [
+      { "label": "Puppy Linux", "href": "https://puppylinux.com/" },
+      { "label": "Download Collection", "href": "https://forum.puppylinux.com/puppy-linux-collection" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/puppy-linux.png\nPuppy logo.svg, Attribution, by afgs, puppylinux.com, https://commons.wikimedia.org/wiki/File:Puppy_logo.svg."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://puppylinux.com/" }
+}

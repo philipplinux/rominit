@@ -1,0 +1,73 @@
+{
+  "id": "slitaz",
+  "name": "SliTaz",
+  "shortName": "SliTaz",
+  "defaultEdition": "core-x86_64",
+  "version": "5.1-rc (cooking)",
+  "releaseDate": "2026-10-20",
+  "source": "https://slitaz.org/",
+  "page": {
+    "description": "SliTaz editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT LINUX",
+    "intro": "A minimalist, ultra-lightweight Linux distribution that runs entirely in RAM. Desktop under 70 MB, boots in seconds, and includes a package manager with thousands of packages.",
+    "logo": { "src": "logos/slitaz.png", "alt": "SliTaz logo", "width": 512, "height": 189 },
+    "pros": [
+      "Extremely lightweight – full desktop under 70 MB",
+      "Boots in seconds and runs entirely in RAM",
+      "Thousands of packages available via spk package manager",
+      "Multiple flavors: core, firefox, base, and retro"
+    ],
+    "cons": [
+      "Cooking (development) branch; stable 5.1 release pending",
+      "Checksums only provided as MD5, no SHA-256 available",
+      "Very small download mirrors with limited bandwidth",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "SliTaz", "href": "https://slitaz.org/" },
+      { "label": "Download", "href": "https://slitaz.org/en/get/" },
+      { "label": "Documentation", "href": "https://doc.slitaz.org/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for SliTaz; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd or Rufus. Boot from BIOS or UEFI. The entire system loads into RAM, leaving the USB free for data storage.",
+    "footer": [
+      { "label": "SliTaz", "href": "https://slitaz.org/" },
+      { "label": "Download", "href": "https://slitaz.org/en/get/" },
+      { "label": "Documentation", "href": "https://doc.slitaz.org/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/slitaz.png\nSlitaz-logo.svg, GPL, by SliTaz team, https://commons.wikimedia.org/wiki/File:Slitaz-logo.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "core-x86_64",
+      "name": "Core (x86_64)",
+      "description": "Minimal 64-bit edition with LXTaz desktop – the fastest SliTaz experience.",
+      "usbNote": "66 MB image. Write it with dd or Rufus; writing erases the stick.",
+      "images": [
+        { "id": "slitaz-core-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.slitaz.org/x86_64/cooking/iso/slitaz-core-x86_64-cooking.iso", "sha256": "95ed5d7a6bd9b65277e78cdf0315b58de31c5e5564737116b2ecfa9b072e53ac", "sha256Computed": "2026-10-28", "size": 66295808, "usb": true }
+      ]
+    },
+    {
+      "id": "firefox-x86_64",
+      "name": "Firefox (x86_64)",
+      "description": "Core edition plus Firefox ESR and additional applications for daily use.",
+      "usbNote": "153 MB image. Write it with dd or Rufus; writing erases the stick.",
+      "images": [
+        { "id": "slitaz-firefox-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.slitaz.org/x86_64/cooking/iso/slitaz-firefox-x86_64-cooking.iso", "sha256": "a5470af6d4c07fefbe7736a055714a722fa6b1d9d02c3453f1b0e9f54f3fac32", "sha256Computed": "2026-10-28", "size": 153477120, "usb": true }
+      ]
+    },
+    {
+      "id": "core-i486",
+      "name": "Core (i486)",
+      "description": "32-bit edition for older PCs – same minimal LXTaz desktop on 32-bit hardware.",
+      "usbNote": "48 MB image. Write it with dd or Rufus; writing erases the stick.",
+      "images": [
+        { "id": "slitaz-core-i486", "arch": "i486", "format": "iso", "url": "https://mirror.slitaz.org/i486/cooking/iso/slitaz-core-i486-cooking.iso", "sha256": "76b6b34e571ec1053dcccf43390e3c2d03ecfc160d65302d94d85a7cd428cf14", "sha256Computed": "2026-10-28", "size": 48713728, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://slitaz.org/en/get/" }
+}

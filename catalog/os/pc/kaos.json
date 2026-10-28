@@ -1,0 +1,55 @@
+{
+  "id": "kaos",
+  "name": "KaOS",
+  "shortName": "KaOS",
+  "defaultEdition": "desktop",
+  "version": "2026.09",
+  "releaseDate": "2026-09-12",
+  "source": "https://kaosx.us/",
+  "page": {
+    "description": "KaOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / KDE PLASMA DESKTOP",
+    "intro": "An independent, from-scratch Linux distribution built around Qt and KDE Plasma, with a rolling release, one architecture and, since 2026, the Dinit init system.",
+    "logo": { "src": "logos/kaos.svg", "alt": "KaOS logo", "width": 128, "height": 128 },
+    "pros": [
+      "KDE Plasma and Qt are the whole point, not an add-on.",
+      "Rolling release: an update gives the latest, no reinstall.",
+      "One ISO and one architecture, so there is nothing to choose.",
+      "Built from scratch, without a Debian or Arch base."
+    ],
+    "cons": [
+      "x86_64 only.",
+      "Small repository: packages outside KDE and Qt are limited.",
+      "Dinit replaced systemd in 2026, so older guides do not match.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "KaOS website", "href": "https://kaosx.us/" },
+      { "label": "Downloads", "href": "https://kaosx.us/download/" },
+      { "label": "News", "href": "https://kaosx.us/news/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for KaOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick, boot it and install. Writing erases the stick; the installer partitions or erases the target disk.",
+    "footer": [
+      { "label": "KaOS website", "href": "https://kaosx.us/" },
+      { "label": "Downloads", "href": "https://kaosx.us/download/" },
+      { "label": "News", "href": "https://kaosx.us/news/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/kaos.svg\nKaOS logo, GPL, by the KaOS project, https://commons.wikimedia.org/wiki/File:KaOS_logo_2015.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop (x86_64)",
+      "description": "The single live-and-install ISO with the KDE Plasma desktop.",
+      "usbNote": "4.5 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "kaos-desktop-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.math.princeton.edu/pub/kaoslinux/KaOS-2026.09-x86_64.iso", "sha256": "2db97d2ed70db995b2b40d40f22ce4af804c1bcdede4ce72f7f889f579886a50", "size": 4461391872, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://kaosx.us/download/" }
+}

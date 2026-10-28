@@ -1,0 +1,45 @@
+{
+  "id": "fydeos",
+  "name": "FydeOS",
+  "shortName": "FydeOS",
+  "infoOnly": true,
+  "source": "https://fydeos.io/",
+  "page": {
+    "description": "FydeOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / CHROMIUM OS DESKTOP",
+    "intro": "A Chromium-OS-based desktop system from Fyde Innovations, built on the openFyde project, with Android and Linux app support and separate PC builds per graphics generation.",
+    "logo": { "src": "logos/fydeos.svg", "alt": "FydeOS logo", "width": 110, "height": 34 },
+    "pros": [
+      "Chromium OS base with Android and Linux app support.",
+      "PC builds split by GPU generation, so older Intel machines are covered.",
+      "Also ships for single-board computers and virtual machines.",
+      "Free for personal use."
+    ],
+    "cons": [
+      "PC images ship as ZIP archives containing raw .bin disk images.",
+      "Some models need the vendor's own recovery or firmware steps.",
+      "The system is tied to the FydeOS account and store for Android apps.",
+      "ROMinit pins no image here, because the current media is a ZIP archive."
+    ],
+    "links": [
+      { "label": "FydeOS website", "href": "https://fydeos.io/" },
+      { "label": "Downloads", "href": "https://fydeos.io/download/" },
+      { "label": "Intel Modern build", "href": "https://fydeos.io/download/pc/intel-iris/" },
+      { "label": "openFyde", "href": "https://openfyde.io/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for FydeOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "FydeOS for PC is published as a ZIP holding a raw disk image; unzip, rename the .bin to .img if the writer asks, and write it to a stick. ROMinit pins no archive here.",
+    "footer": [
+      { "label": "FydeOS website", "href": "https://fydeos.io/" },
+      { "label": "Downloads", "href": "https://fydeos.io/download/" },
+      { "label": "Intel Modern build", "href": "https://fydeos.io/download/pc/intel-iris/" },
+      { "label": "openFyde", "href": "https://openfyde.io/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/fydeos.svg\nFydeOS logo, public domain, by Fyde Innovations, https://commons.wikimedia.org/wiki/File:FydeOS_Logo.svg."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://fydeos.io/download/" }
+}

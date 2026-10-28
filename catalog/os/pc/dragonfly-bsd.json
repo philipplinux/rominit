@@ -1,0 +1,53 @@
+{
+  "id": "dragonfly-bsd",
+  "name": "DragonFly BSD",
+  "shortName": "DragonFly",
+  "defaultEdition": "standard",
+  "version": "6.4.2",
+  "releaseDate": "2025-05-09",
+  "source": "https://www.dragonflybsd.org/",
+  "page": {
+    "description": "DragonFly BSD editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT BSD",
+    "intro": "A BSD-derived operating system with its own kernel, HAMMER2 filesystem and DPorts package tree, distributed for x86-64 as live ISO and USB .img images.",
+    "logo": { "src": "logos/dragonfly-bsd.png", "alt": "DragonFly BSD logo", "width": 180, "height": 180 },
+    "pros": [
+      "ISO and raw .img media, both compressed and uncompressed",
+      "DPorts package tree with recent FreeBSD base",
+      "64-bit only simplifies hardware requirements"
+    ],
+    "cons": [
+      "MD5 is the only published digest — weak for authenticity",
+      "No GUI release ships — Xorg and desktop must be installed from packages",
+      "Release from May 2025 with no newer version confirmed"
+    ],
+    "links": [
+      { "label": "DragonFly BSD website", "href": "https://www.dragonflybsd.org/" },
+      { "label": "Downloads", "href": "https://www.dragonflybsd.org/download/" },
+      { "label": "Releases", "href": "https://www.dragonflybsd.org/releases/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for DragonFly BSD; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO or .img image to a USB drive with dd; writing erases the stick. Boot the ISO to run the installer at the console (log in as installer).",
+    "footer": [
+      { "label": "DragonFly BSD website", "href": "https://www.dragonflybsd.org/" },
+      { "label": "Downloads", "href": "https://www.dragonflybsd.org/download/" },
+      { "label": "Releases", "href": "https://www.dragonflybsd.org/releases/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/dragonfly-bsd.png\nDragonFly BSD logo, (c) DragonFly project, from https://www.dragonflybsd.org/images/small_logo.png. No reusable licence confirmed; publisher-site logo used because Wikimedia Commons has none."
+    ]
+  },
+  "editions": [
+    {
+      "id": "standard",
+      "name": "Standard (ISO + IMG)",
+      "description": "The only edition; ships a live ISO with installer and a raw .img image for USB.",
+      "usbNote": "ISO is ~748 MiB uncompressed. Write the .img with dd on Unix or balenaEtcher/Rufus on Windows.",
+      "images": [
+        { "id": "dragonfly-bsd-x86_64-iso", "arch": "x86_64", "format": "iso", "url": "https://mirror-master.dragonflybsd.org/iso-images/dfly-x86_64-6.4.2_REL.iso", "sha256": "972edc4ce9421cba501fbeb2f41dbc7236526441beb113d6204aa62ef0a5d63c", "size": 783974400, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.dragonflybsd.org/releases/" }
+}

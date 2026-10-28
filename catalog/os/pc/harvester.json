@@ -1,0 +1,42 @@
+{
+  "id": "harvester",
+  "name": "Harvester",
+  "shortName": "Harvester",
+  "infoOnly": true,
+  "source": "https://harvesterhci.io/",
+  "page": {
+    "description": "Harvester editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / HYPERCONVERGED INFRASTRUCTURE",
+    "intro": "An open-source hyperconverged infrastructure solution built on Linux, KVM, and Kubernetes for running cloud-native workloads and VMs on bare-metal servers.",
+    "logo": { "src": "logos/harvester.svg", "alt": "Harvester logo", "width": 180, "height": 180 },
+    "pros": [
+      "100% open-source with no license fees for HCI",
+      "Built on proven stack: Linux, KVM, Kubernetes, KubeVirt, Longhorn",
+      "Single-pane management for both VMs and container workloads",
+      "Active development by Rancher/SUSE with regular releases"
+    ],
+    "cons": [
+      "ISO images exceed 6 GB and no publisher SHA-256 digest is available; integrity cannot be verified at download time",
+      "No version or release date: editions omitted per policy for images >6 GB without a publisher digest",
+      "Requires bare-metal hardware with sufficient resources for hypervisor and VM workloads",
+      "The installer ISO is 7.7 GiB and the release publishes no checksum, so ROMinit lists it without pinned images.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Harvester website", "href": "https://harvesterhci.io/" },
+      { "label": "GitHub releases", "href": "https://github.com/harvester/harvester/releases" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Harvester; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "ISOs downloadable from releases.rancher.com but exceed 6 GB with no publisher checksum; omitted from editions per policy.",
+    "footer": [
+      { "label": "Harvester website", "href": "https://harvesterhci.io/" },
+      { "label": "GitHub releases", "href": "https://github.com/harvester/harvester/releases" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/harvester.svg\nHarvester logo, from the Harvester project, https://harvesterhci.io/."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://harvesterhci.io/docs/latest/installation/" }
+}

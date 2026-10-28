@@ -1,0 +1,41 @@
+{
+  "id": "openeuler",
+  "name": "openEuler",
+  "shortName": "openEuler",
+  "infoOnly": true,
+  "source": "https://www.openeuler.org/en/",
+  "page": {
+    "description": "openEuler editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / COMMUNITY LINUX",
+    "intro": "A free and open source Linux distribution for server, cloud, and edge workloads, with Long Term Support and innovation release lines for x86, AArch64 and RISC-V.",
+    "logo": { "src": "logos/openeuler.png", "alt": "openEuler logo", "width": 512, "height": 96 },
+    "pros": [
+      "LTS versions carry years-long support windows",
+      "Multiple architectures: x86, AArch64/Arm, RISC-V",
+      "Community and commercial editions available"
+    ],
+    "cons": [
+      "Download pages are behind a WAF (Huawei Web Application Firewall) — no verifiable direct download URLs accessible without JavaScript",
+      "No checksum values visible on the download-centre pages",
+      "Server-oriented, no desktop edition documented"
+    ],
+    "links": [
+      { "label": "openEuler website", "href": "https://www.openeuler.org/en/" },
+      { "label": "Downloads", "href": "https://www.openeuler.org/en/download/" },
+      { "label": "Archive", "href": "https://www.openeuler.org/en/download/archive/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for openEuler; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "info only: download pages require JavaScript interaction behind a WAF. No versioned download URLs could be verified. Check the download centre directly for current LTS or innovation releases.",
+    "footer": [
+      { "label": "openEuler website", "href": "https://www.openeuler.org/en/" },
+      { "label": "Downloads", "href": "https://www.openeuler.org/en/download/" },
+      { "label": "Archive", "href": "https://www.openeuler.org/en/download/archive/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/openeuler.png\nopenEuler logo, from the openEuler project, https://www.openeuler.org/en/."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://www.openeuler.org/en/download/" }
+}

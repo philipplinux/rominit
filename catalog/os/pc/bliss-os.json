@@ -1,0 +1,55 @@
+{
+  "id": "bliss-os",
+  "name": "Bliss OS",
+  "shortName": "Bliss OS",
+  "defaultEdition": "gapps",
+  "version": "16.9.7",
+  "releaseDate": "2024-10-11",
+  "source": "https://blissos.org/",
+  "page": {
+    "description": "Bliss OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ANDROID FOR PC",
+    "intro": "An Android build for x86 PCs: Android 12 with the Play Store in the GApps image, keyboard and mouse support, and a desktop-style launcher instead of a phone UI.",
+    "logo": { "src": "logos/bliss-os.png", "alt": "Bliss OS logo", "width": 512, "height": 512 },
+    "pros": [
+      "Runs Android apps and games on ordinary x86_64 PCs and laptops.",
+      "Play Store included in the GApps image, so apps install normally.",
+      "Boots from a USB stick or installs to disk alongside another system.",
+      "Kernel tuned for desktop hardware, with Wi-Fi, sound and touchpad support."
+    ],
+    "cons": [
+      "Android on PC is a compatibility project: not every app or device works.",
+      "The publisher lists MD5 only, so the SHA-256 here was computed by ROMinit.",
+      "Safety-net and Play Integrity checks fail on most hardware.",
+      "The 16.x line is from 2024; the project's newer builds sit in a separate repository."
+    ],
+    "links": [
+      { "label": "Bliss OS website", "href": "https://blissos.org/" },
+      { "label": "SourceForge downloads", "href": "https://sourceforge.net/projects/blissos-x86/files/Official/BlissOS16/" },
+      { "label": "Documentation", "href": "https://docs.blissos.org/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Bliss OS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd or any image writer; writing erases the stick. The installer then creates a partition or installs into an existing one.",
+    "footer": [
+      { "label": "Bliss OS website", "href": "https://blissos.org/" },
+      { "label": "SourceForge downloads", "href": "https://sourceforge.net/projects/blissos-x86/files/Official/BlissOS16/" },
+      { "label": "Documentation", "href": "https://docs.blissos.org/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/bliss-os.png\nBliss OS logo, from the Bliss OS project, https://blissos.org/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "gapps",
+      "name": "Android 12 (GApps)",
+      "description": "The main image, with Google apps and the Play Store included.",
+      "usbNote": "2.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "bliss-os-gapps-x86_64", "arch": "x86_64", "format": "iso", "url": "https://sourceforge.net/projects/blissos-x86/files/Official/BlissOS16/Gapps/Generic/Bliss-v16.9.7-x86_64-OFFICIAL-gapps-20241011.iso/download", "sha256": "17137711fb42236640ac6fe4421fcb3bd15710065fcf75c20807c018f42e3751", "size": 2429550592, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://blissos.org/" }
+}

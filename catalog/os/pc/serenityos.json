@@ -1,0 +1,44 @@
+{
+  "id": "serenityos",
+  "name": "SerenityOS",
+  "shortName": "Serenity",
+  "infoOnly": true,
+  "source": "https://serenityos.org/",
+  "page": {
+    "description": "SerenityOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT UNIX-LIKE",
+    "intro": "A love letter to '90s user interfaces with a custom Unix-like core. A graphical Unix-like operating system for desktop computers built from scratch, featuring a modern 64-bit kernel with pre-emptive multi-threading.",
+    "logo": { "src": "logos/serenityos.png", "alt": "SerenityOS logo", "width": 512, "height": 512 },
+    "pros": [
+      "Built entirely from scratch – no inherited code",
+      "Modern 64-bit kernel with full POSIX compatibility",
+      "Hundreds of ports of popular open-source software available",
+      "Active Discord community and regular YouTube development updates"
+    ],
+    "cons": [
+      "No pre-built ISO or image files are distributed – project is build-from-source only",
+      "GitHub repository has no releases or tags; no nightly builds found",
+      "Requires compiling the entire system from source code (several hours on typical hardware)",
+      "Build-from-source project with no published images or release tags, so this page lists no images.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "SerenityOS", "href": "https://serenityos.org/" },
+      { "label": "GitHub", "href": "https://github.com/SerenityOS/serenity" },
+      { "label": "Man Pages", "href": "https://man.serenityos.org" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for SerenityOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Pre-built images not available. The project requires building from source: clone the GitHub repository, follow the Build Instructions in the README, and compile the entire system. No installer or disk image is distributed.",
+    "footer": [
+      { "label": "SerenityOS", "href": "https://serenityos.org/" },
+      { "label": "GitHub", "href": "https://github.com/SerenityOS/serenity" },
+      { "label": "Man Pages", "href": "https://man.serenityos.org" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/serenityos.png\nLadyBall-SerenityOS.png, CC BY 4.0, by Katalin Kult, https://commons.wikimedia.org/wiki/File:LadyBall-SerenityOS.png."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://github.com/SerenityOS/serenity/blob/master/README.md" }
+}

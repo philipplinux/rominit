@@ -1,0 +1,59 @@
+{
+  "id": "chimeraos",
+  "name": "ChimeraOS",
+  "shortName": "Chimera",
+  "defaultEdition": "desktop",
+  "version": "49-1",
+  "releaseDate": "2025-07-26",
+  "source": "https://chimeraos.org/",
+  "page": {
+    "description": "ChimeraOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED GAMING",
+    "intro": "A Steam Big Picture-based couch-gaming OS that turns a PC or handheld into a console-like Steam machine. Arch-based with a read-only btrfs root, A/B frzr updates, and one installer ISO for every supported device.",
+    "logo": { "src": "logos/chimeraos.svg", "alt": "ChimeraOS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Single x86_64 installer works on all 27+ supported devices",
+      "A/B read-only root with frzr snapshot updates",
+      "Controller-first Steam Big Picture session out of the box",
+      "Proton, GE Proton, and gamescope built in"
+    ],
+    "cons": [
+      "UEFI only — no legacy BIOS support",
+      "Secure Boot must be disabled",
+      "pacman is disabled by default; changes are overwritten on update",
+      "NVIDIA support requires GTX 16 series or newer"
+    ],
+    "links": [
+      { "label": "ChimeraOS website", "href": "https://chimeraos.org/" },
+      { "label": "Download", "href": "https://chimeraos.org/download/" },
+      { "label": "Wiki", "href": "https://github.com/ChimeraOS/chimeraos/wiki" },
+      { "label": "GitHub releases", "href": "https://github.com/ChimeraOS/chimeraos/releases" },
+      { "label": "Install media releases", "href": "https://github.com/ChimeraOS/install-media/releases" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for ChimeraOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the installer ISO to a USB stick with Etcher, boot UEFI, and follow the installer. After first boot the system updates itself via frzr A/B btrfs snapshots. The target disk is owned by ChimeraOS; dual booting is not supported.",
+    "footer": [
+      { "label": "ChimeraOS website", "href": "https://chimeraos.org/" },
+      { "label": "Download", "href": "https://chimeraos.org/download/" },
+      { "label": "Wiki", "href": "https://github.com/ChimeraOS/chimeraos/wiki" },
+      { "label": "GitHub releases", "href": "https://github.com/ChimeraOS/chimeraos/releases" },
+      { "label": "Install media releases", "href": "https://github.com/ChimeraOS/install-media/releases" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/chimeraos.svg\nChimeraOS logo, from the ChimeraOS project, https://chimeraos.org/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop (Gaming)",
+      "description": "Steam Big Picture gaming session with gamescope, Proton, and a read-only btrfs root. One ISO works on all 27+ supported devices including handhelds, mini PCs, and desktops.",
+      "usbNote": "915 MB ISO. Write with Etcher or dd; writing erases the USB stick. UEFI boot only.",
+      "images": [
+        { "id": "chimeraos-x86_64", "arch": "x86_64", "format": "iso", "url": "https://github.com/ChimeraOS/install-media/releases/download/2025-02-13_7e927cf/chimeraos-2025.02.13-x86_64.iso", "sha256": "e9914e59f6cd817548742d5934c85fc85f53822261e3d478d2c690e10ce2689a", "sha256Url": "https://github.com/ChimeraOS/install-media/releases/download/2025-02-13_7e927cf/sha256sum.txt", "size": 915693568, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://chimeraos.org/download/" }
+}

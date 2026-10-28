@@ -1,0 +1,51 @@
+{
+  "id": "omnios",
+  "name": "OmniOS CE",
+  "shortName": "OmniOS",
+  "defaultEdition": "stable",
+  "version": "r151058",
+  "releaseDate": "2026-05-04",
+  "source": "https://omnios.org/",
+  "page": {
+    "description": "OmniOS CE editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ILLUMOS SERVER",
+    "intro": "An illumos-based (OpenSolaris-derived) server operating system with KYSTY minimalist philosophy, released for x86-64 as ISO, USB-DD, cloud, and ZFS archive images.",
+    "logo": { "src": "logos/omnios.png", "alt": "OmniOS CE logo", "width": 512, "height": 512 },
+    "pros": [
+      "SHA-256 sidecar files published for every artifact",
+      "ZFS boot environments with BEADM rollback",
+      "Support schedule published: 1-year stable, 3-year LTS"
+    ],
+    "cons": [
+      "Server-only, no desktop edition",
+      "grub bootloader unsupported as of r151054 — must use native loader",
+      "`reboot now` breaks boot on the native loader"
+    ],
+    "links": [
+      { "label": "OmniOS website", "href": "https://omnios.org/" },
+      { "label": "Downloads", "href": "https://omnios.org/download" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for OmniOS CE; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO or usb-dd image to USB with dd. Boot from CD/USB/PXE. Installer dialogue creates rpool; select T for text installer.",
+    "footer": [
+      { "label": "OmniOS website", "href": "https://omnios.org/" },
+      { "label": "Downloads", "href": "https://omnios.org/download" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/omnios.png\nOmniOS logo, from the OmniOS project, https://omnios.org/favicon-512.png."
+    ]
+  },
+  "editions": [
+    {
+      "id": "stable",
+      "name": "Stable (r151058)",
+      "description": "Current stable release: server ISO and USB-DD images for x86-64.",
+      "usbNote": "ISO is ~300 MiB. Write with dd.",
+      "images": [
+        { "id": "omnios-r151058-iso", "arch": "x86_64", "format": "iso", "url": "https://downloads.omnios.org/media/stable/omnios-r151058.iso", "sha256": "13ea7c4950ceddba969599893fca3aaaee98c07f7952529143111d18cc4a25d3", "sha256Url": "https://downloads.omnios.org/media/stable/omnios-r151058.iso.sha256", "size": 315449344, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://omnios.org/schedule" }
+}

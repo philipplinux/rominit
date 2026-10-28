@@ -1,0 +1,43 @@
+{
+  "id": "whonix",
+  "name": "Whonix",
+  "shortName": "Whonix",
+  "infoOnly": true,
+  "source": "https://www.whonix.org/",
+  "page": {
+    "description": "Whonix editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ANONYMITY DESKTOP",
+    "intro": "A Debian-based anonymity system built as two virtual machines, a gateway and a workstation, that routes all traffic through Tor and isolates the browser from the host.",
+    "logo": { "src": "logos/whonix.png", "alt": "Whonix logo", "width": 585, "height": 215 },
+    "pros": [
+      "All traffic is forced through Tor by a separate gateway VM.",
+      "The workstation cannot learn the host's IP address by design.",
+      "Runs on VirtualBox, KVM and as a Qubes OS template.",
+      "Free, open source and Debian-based."
+    ],
+    "cons": [
+      "It is a virtual-machine system: no plain USB install image is published.",
+      "Two VMs need more RAM than a single desktop.",
+      "Intel/AMD 64-bit only.",
+      "ROMinit pins no image here, because the media is an OVA appliance."
+    ],
+    "links": [
+      { "label": "Whonix website", "href": "https://www.whonix.org/" },
+      { "label": "Documentation", "href": "https://www.whonix.org/wiki/Whonix" },
+      { "label": "Downloads", "href": "https://www.whonix.org/wiki/Download" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Whonix; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Whonix is distributed as virtual-machine appliances (OVA) for VirtualBox and KVM and as Qubes templates, not as a bootable USB image. ROMinit therefore only points at the project's own pages.",
+    "footer": [
+      { "label": "Whonix website", "href": "https://www.whonix.org/" },
+      { "label": "Documentation", "href": "https://www.whonix.org/wiki/Whonix" },
+      { "label": "Downloads", "href": "https://www.whonix.org/wiki/Download" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/whonix.png\nWhonix logo, GPLv3, by the Whonix project, https://commons.wikimedia.org/wiki/File:Whonix_Logo.png."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://www.whonix.org/wiki/Download" }
+}

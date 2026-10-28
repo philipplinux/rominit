@@ -1,0 +1,43 @@
+{
+  "id": "xcp-ng",
+  "name": "XCP-ng",
+  "shortName": "XCP-ng",
+  "infoOnly": true,
+  "source": "https://xcp-ng.org/",
+  "page": {
+    "description": "XCP-ng editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / HYPERVISOR",
+    "intro": "A free, open-source fork of XenServer: a bare-metal hypervisor with pools, live migration and shared storage, administered from Xen Orchestra or the command line.",
+    "logo": { "src": "logos/xcp-ng.png", "alt": "XCP-ng logo", "width": 180, "height": 30 },
+    "pros": [
+      "Free hypervisor with the enterprise features of its upstream (pools, live migration, snapshots).",
+      "Managed from Xen Orchestra, including a web UI.",
+      "Compatible with the XenAPI tooling built for XenServer.",
+      "Long-lived 8.x line with security updates."
+    ],
+    "cons": [
+      "The public mirror publishes only upgrade-only ISOs; the fresh-install ISO is not offered there, so no image can be pinned.",
+      "Management normally means running Xen Orchestra as a separate appliance.",
+      "Hardware compatibility is narrower than on a general-purpose Linux.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "XCP-ng website", "href": "https://xcp-ng.org/" },
+      { "label": "Installation guide", "href": "https://docs.xcp-ng.org/install/" },
+      { "label": "ISO mirror", "href": "https://repo.vates.tech/xcp-ng/isos/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for XCP-ng; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Install from the ISO that XCP-ng publishes for the release, then manage the host from Xen Orchestra. Installing erases the target disk.",
+    "footer": [
+      { "label": "XCP-ng website", "href": "https://xcp-ng.org/" },
+      { "label": "Installation guide", "href": "https://docs.xcp-ng.org/install/" },
+      { "label": "ISO mirror", "href": "https://repo.vates.tech/xcp-ng/isos/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/xcp-ng.png\nXCP-ng logo, from the XCP-ng project, https://xcp-ng.org/."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://xcp-ng.org/" }
+}

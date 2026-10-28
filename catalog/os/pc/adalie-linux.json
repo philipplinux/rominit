@@ -1,0 +1,64 @@
+{
+  "id": "adalie-linux",
+  "name": "Adélie Linux",
+  "shortName": "Adélie",
+  "defaultEdition": "live-kde",
+  "version": "1.0-beta6",
+  "releaseDate": "2024-12-23",
+  "source": "https://www.adelielinux.org/",
+  "page": {
+    "description": "Adélie Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT LINUX",
+    "intro": "An independent Linux distribution built on musl libc and Alpine's apk package tools, aimed at small and older machines with a choice of KDE, MATE, LXQt or Xfce desktops.",
+    "logo": { "src": "logos/adalie-linux.png", "alt": "Adélie Linux logo", "width": 512, "height": 315 },
+    "pros": [
+      "musl libc and apk packages make it small and quick to install.",
+      "Desktop and installer images for x86_64, aarch64, armv7, ppc and ppc64.",
+      "Published SHA-512 sums for every image in one signed list.",
+      "Runs well on older, low-memory hardware."
+    ],
+    "cons": [
+      "Still a beta: 1.0-beta6 is the current download.",
+      "Small package set and community compared with mainstream distributions.",
+      "musl means some prebuilt Linux software will not run.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Adélie Linux website", "href": "https://www.adelielinux.org/" },
+      { "label": "Download", "href": "https://www.adelielinux.org/download/" },
+      { "label": "SHA-512 sums", "href": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Adélie Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the live or installer ISO to a USB stick with dd or any image writer; writing erases the stick. These are beta images, so expect rough edges.",
+    "footer": [
+      { "label": "Adélie Linux website", "href": "https://www.adelielinux.org/" },
+      { "label": "Download", "href": "https://www.adelielinux.org/download/" },
+      { "label": "SHA-512 sums", "href": "https://distfiles.adelielinux.org/adelie/current/iso/SHA512SUMS" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/adalie-linux.png\nAdelie.png, GPL, by Adélie Linux and Contributors, https://commons.wikimedia.org/wiki/File:Adelie.png."
+    ]
+  },
+  "editions": [
+    {
+      "id": "live-kde",
+      "name": "Live KDE (x86_64)",
+      "description": "The KDE Plasma live image, which can be tried without installing.",
+      "usbNote": "1.9 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "adalie-linux-live-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-live-kde-x86_64-1.0-beta6-20241223.iso", "sha512": "66dc21d2728923a9d72961123eed2f61fd0b5361056d5ba1be564f1f0a7aa6b3bd6b4548c0bed12643e68edace866951336b99ad777a6ba51e828de7f4d41cae", "size": 1926318080, "usb": true }
+      ]
+    },
+    {
+      "id": "installer",
+      "name": "Installer (x86_64)",
+      "description": "The text installer image for a permanent installation.",
+      "usbNote": "490 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "adalie-linux-installer-x86_64", "arch": "x86_64", "format": "iso", "url": "https://distfiles.adelielinux.org/adelie/current/iso/adelie-inst-x86_64-1.0-beta6-20241223.iso", "sha512": "3b3285b8d1acd2a8200525ae40e93732c579403fcb3d5f6cc4ef12453ab54a6660352fde2264b27ab52e31e18b1e18e12d7ff3b3b63ec6061c79fc565a9fb69d", "size": 490698752, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.adelielinux.org/" }
+}

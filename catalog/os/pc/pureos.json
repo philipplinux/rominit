@@ -1,0 +1,62 @@
+{
+  "id": "pureos",
+  "name": "PureOS",
+  "shortName": "PureOS",
+  "defaultEdition": "gnome",
+  "version": "11",
+  "releaseDate": "2026-05-15",
+  "source": "https://pureos.net/",
+  "page": {
+    "description": "PureOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT LINUX",
+    "intro": "A fully auditable, privacy-respecting Linux distribution developed by Purism. Built on Debian, it ships with only free software and supports hardware convergence between desktop and mobile.",
+    "logo": { "src": "logos/pureos.png", "alt": "PureOS logo", "width": 512, "height": 431 },
+    "pros": [
+      "Fully free software, no proprietary blobs",
+      "Hardware convergence support for Librem devices",
+      "Independently auditable security model",
+      "Active development with regular updates"
+    ],
+    "cons": [
+      "Tied to the Purism ecosystem for full hardware support",
+      "Limited hardware compatibility outside Librem devices",
+      "Smaller software selection than mainstream distros",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "PureOS", "href": "https://pureos.net/" },
+      { "label": "Download", "href": "https://pureos.net/download/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for PureOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with BalenaEtcher; select the image, choose the USB drive, and click Flash. Boot from the USB and follow the installation wizard.",
+    "footer": [
+      { "label": "PureOS", "href": "https://pureos.net/" },
+      { "label": "Download", "href": "https://pureos.net/download/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/pureos.png\nPureOSlogo.svg, CC BY-SA 4.0, by Original: PureOS developers Vector: Ezarate, https://commons.wikimedia.org/wiki/File:PureOSlogo.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "gnome",
+      "name": "GNOME (Crimson)",
+      "description": "The primary PureOS edition with GNOME desktop, designed for daily use on Purism's Crimson hardware.",
+      "usbNote": "2.1 GB image. Write it with Etcher or dd; writing erases the stick.",
+      "images": [
+        { "id": "pureos-gnome-x86_64", "arch": "x86_64", "format": "iso", "url": "https://storage.puri.sm/pureos/images/crimson/2026.05/gnome/pureos-11-gnome-live-20260515_amd64.iso", "sha256": "2d27e60b22ffa5a336118817dc4b24a27faa303261768d3634ea4d5ec83b6365", "size": 2061582336, "usb": true }
+      ]
+    },
+    {
+      "id": "plasma",
+      "name": "KDE Plasma",
+      "description": "PureOS with the KDE Plasma desktop as an alternative to GNOME.",
+      "usbNote": "2.4 GB image. Write it with Etcher or dd; writing erases the stick.",
+      "images": [
+        { "id": "pureos-plasma-x86_64", "arch": "x86_64", "format": "iso", "url": "https://storage.puri.sm/pureos/images/crimson/2026.05/plasma/pureos-11-plasma-live-20260515_amd64.iso", "sha256": "48bc16adb4043eeede800f19fb017a4f0211ac64927957ff4fc71fc9440b66e4", "size": 2475753472, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://pureos.net/download/" }
+}

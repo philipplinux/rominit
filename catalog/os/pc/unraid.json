@@ -1,0 +1,45 @@
+{
+  "id": "unraid",
+  "name": "Unraid",
+  "shortName": "Unraid",
+  "infoOnly": true,
+  "source": "https://unraid.net/",
+  "page": {
+    "description": "Unraid editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / NAS",
+    "intro": "A storage-focused NAS system that boots from a USB flash device and pools mixed-size disks without RAID, with Docker containers and virtual machines on top.",
+    "logo": { "src": "logos/unraid.svg", "alt": "Unraid logo", "width": 180, "height": 180 },
+    "pros": [
+      "Mixed disk sizes in one array; a failed disk only loses its own data.",
+      "Boots from a USB flash device, leaving all internal disks for storage.",
+      "Docker and virtual machines managed from the web interface.",
+      "Wide community app catalogue."
+    ],
+    "cons": [
+      "Requires a licence for the array after the trial.",
+      "The release images are ZIP archives and carry MD5 sums only.",
+      "The boot device is the licence dongle: lose it and the licence is re-registered.",
+      "ROMinit pins no image here."
+    ],
+    "links": [
+      { "label": "Unraid website", "href": "https://unraid.net/" },
+      { "label": "Version archive", "href": "https://docs.unraid.net/unraid-os/download_list/" },
+      { "label": "Installer guide", "href": "https://docs.unraid.net/unraid-os/getting-started/set-up-unraid/use-the-unraid-installer/" },
+      { "label": "Release types", "href": "https://docs.unraid.net/unraid-os/updating-unraid/release-types/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Unraid; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Unraid is written to a USB flash device with its own USB creator or by unpacking the release ZIP. The release channel publishes MD5 sums only, so ROMinit pins nothing.",
+    "footer": [
+      { "label": "Unraid website", "href": "https://unraid.net/" },
+      { "label": "Version archive", "href": "https://docs.unraid.net/unraid-os/download_list/" },
+      { "label": "Installer guide", "href": "https://docs.unraid.net/unraid-os/getting-started/set-up-unraid/use-the-unraid-installer/" },
+      { "label": "Release types", "href": "https://docs.unraid.net/unraid-os/updating-unraid/release-types/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/unraid.svg\nUnraid logo from Simple Icons (CC0), https://simpleicons.org; the Unraid name and mark belong to Lime Technology, shown only to identify Unraid. No endorsement implied."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://docs.unraid.net/unraid-os/updating-unraid/release-types/" }
+}

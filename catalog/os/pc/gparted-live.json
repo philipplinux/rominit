@@ -1,0 +1,55 @@
+{
+  "id": "gparted-live",
+  "name": "GParted Live",
+  "shortName": "GParted Live",
+  "defaultEdition": "amd64",
+  "version": "1.8.1-3",
+  "releaseDate": "2026-04-04",
+  "source": "https://gparted.org/",
+  "page": {
+    "description": "GParted Live editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / PARTITION EDITOR",
+    "intro": "A small live system built around GParted: boot it from a USB stick to create, resize, move, check and copy partitions on a disk that is not mounted.",
+    "logo": { "src": "logos/gparted-live.png", "alt": "GParted Live logo", "width": 512, "height": 512 },
+    "pros": [
+      "The standard tool for resizing and moving partitions from outside the installed system.",
+      "Runs from a USB stick or CD without installing anything.",
+      "Supports ext2/3/4, Btrfs, XFS, FAT, NTFS and more.",
+      "Small download, around 650 MB."
+    ],
+    "cons": [
+      "A single-purpose tool, not a desktop system.",
+      "The publisher lists MD5 only, so the SHA-256 here was computed by ROMinit.",
+      "Repartitioning can destroy data; a backup is required first.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "GParted website", "href": "https://gparted.org/" },
+      { "label": "Download", "href": "https://gparted.org/download.php" },
+      { "label": "Live CD downloads (SourceForge)", "href": "https://sourceforge.net/projects/gparted/files/gparted-live-stable/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for GParted Live; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd or any image writer; writing erases the stick. Boot from it and GParted starts automatically. Repartitioning the wrong disk destroys its data.",
+    "footer": [
+      { "label": "GParted website", "href": "https://gparted.org/" },
+      { "label": "Download", "href": "https://gparted.org/download.php" },
+      { "label": "Live CD downloads (SourceForge)", "href": "https://sourceforge.net/projects/gparted/files/gparted-live-stable/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/gparted-live.png\nScalable gparted.svg, GPLv2, by Sebastian Kraft, https://commons.wikimedia.org/wiki/File:Scalable_gparted.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "amd64",
+      "name": "Live image (amd64)",
+      "description": "The 64-bit live image with GParted and its support tools.",
+      "usbNote": "619 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "gparted-live-amd64-x86_64", "arch": "x86_64", "format": "iso", "url": "https://downloads.sourceforge.net/project/gparted/gparted-live-stable/1.8.1-3/gparted-live-1.8.1-3-amd64.iso", "sha256": "3f66b2e10b8bb2c573ed6cdd3a9b54fd0a8e7690634ab6b15c3c8f517992d1a1", "sha256Computed": "2026-10-28", "size": 649068544, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://gparted.org/" }
+}

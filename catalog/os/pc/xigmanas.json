@@ -1,0 +1,64 @@
+{
+  "id": "xigmanas",
+  "name": "XigmaNAS",
+  "shortName": "XigmaNAS",
+  "defaultEdition": "livecd",
+  "version": "14.3.0.5.10566",
+  "releaseDate": "2025-10-28",
+  "source": "https://www.xigmanas.com/",
+  "page": {
+    "description": "XigmaNAS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / NAS APPLIANCE",
+    "intro": "A FreeBSD-based network-attached-storage system, derived from FreeNAS: web administration, ZFS, SMB/NFS/AFP shares and plugins, installed from a live image.",
+    "logo": { "src": "logos/xigmanas.png", "alt": "XigmaNAS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Web interface for disks, shares, users and services.",
+      "ZFS with snapshots and scrubs from the admin UI.",
+      "Runs on modest x86_64 hardware, with a small live image.",
+      "Long-standing FreeBSD base with a clear upgrade path."
+    ],
+    "cons": [
+      "A storage appliance, not a desktop system.",
+      "The publisher lists MD5 only, so the SHA-256 values here were computed by ROMinit.",
+      "Plugins and some features are community-maintained.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "XigmaNAS website", "href": "https://www.xigmanas.com/" },
+      { "label": "Download", "href": "https://www.xigmanas.com/download/" },
+      { "label": "SourceForge files", "href": "https://sourceforge.net/projects/xigmanas/files/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for XigmaNAS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the live ISO to a USB stick with dd or any image writer, or the embedded image to a USB stick or SD card; writing erases the device. Installation then configures the target boot device.",
+    "footer": [
+      { "label": "XigmaNAS website", "href": "https://www.xigmanas.com/" },
+      { "label": "Download", "href": "https://www.xigmanas.com/download/" },
+      { "label": "SourceForge files", "href": "https://sourceforge.net/projects/xigmanas/files/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/xigmanas.png\nXigmaNAS logo, from the XigmaNAS project, https://www.xigmanas.com/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "livecd",
+      "name": "Live CD (x64)",
+      "description": "The full live system with the installer, run from a CD or USB stick.",
+      "usbNote": "685 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "xigmanas-livecd-x86_64", "arch": "x86_64", "format": "iso", "url": "https://downloads.sourceforge.net/project/xigmanas/XigmaNAS-14.3.0.5/14.3.0.5.10566/XigmaNAS-x64-LiveCD-14.3.0.5.10566.iso", "sha256": "e22089dcf74443415854e5368de1bc7f3248d8a5f77efa4698faaeb7adbf8a51", "sha256Computed": "2026-10-28", "size": 718329856, "usb": true }
+      ]
+    },
+    {
+      "id": "embedded",
+      "name": "Embedded image (x64)",
+      "description": "A prebuilt image for USB sticks and small SSDs, without the live CD environment.",
+      "usbNote": "282 MB compressed image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "xigmanas-embedded-x86_64", "arch": "x86_64", "format": "img.xz", "url": "https://downloads.sourceforge.net/project/xigmanas/XigmaNAS-14.3.0.5/14.3.0.5.10566/XigmaNAS-x64-embedded-14.3.0.5.10566.img.xz", "sha256": "37750964bd0d11ba962ed94eef9c2db362c56c99042ffde39c49c24d2efbc7ea", "sha256Computed": "2026-10-28", "size": 296193144, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.xigmanas.com/" }
+}

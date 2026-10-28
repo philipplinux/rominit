@@ -1,0 +1,47 @@
+{
+  "id": "biglinux",
+  "name": "BigLinux",
+  "shortName": "BigLinux",
+  "infoOnly": true,
+  "version": "2026-10-03",
+  "releaseDate": "2026-10-03",
+  "source": "https://www.biglinux.com.br/",
+  "page": {
+    "description": "BigLinux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / BRAZILIAN COMMUNITY LINUX",
+    "intro": "A Brazilian community Linux distribution shipping x86_64 live/install ISOs with KDE Plasma. Three kernel variants for hardware compatibility. Rolling/dated build model — no fixed release-number scheme.",
+    "logo": { "src": "logos/biglinux.png", "alt": "BigLinux logo", "width": 645, "height": 439 },
+    "pros": [
+      "Three kernel variants (6.12, 6.18 recommended, 7.2 TKG) for broad hardware support",
+      "KDE Plasma 6 desktop fully customised for gaming and daily use",
+      "Publisher publishes per-image MD5 checksums",
+      "Brazilian community project since 2004"
+    ],
+    "cons": [
+      "MD5 is the only published digest — not cryptographically strong",
+      "No SHA-256 or GPG signature",
+      "Download version list is JavaScript-driven on the main page",
+      "No EOL or support-window date published",
+      "The publisher lists MD5 only, and each ISO is 5.1 GiB, so no SHA-256 is offered here.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "BigLinux download", "href": "https://www.biglinux.com.br/pt-br/download/" },
+      { "label": "Download host (static)", "href": "https://iso.biglinux.com.br/downloads.html" },
+      { "label": "About BigLinux", "href": "https://www.biglinux.com.br/pt-br/about/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for BigLinux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write any of the three kernel variant ISOs to a USB stick (≥8 GB) with Ventoy, Etcher or UNetbootin. Boot from the stick and use the graphical installer. On some hardware Secure Boot may need disabling.",
+    "footer": [
+      { "label": "BigLinux download", "href": "https://www.biglinux.com.br/pt-br/download/" },
+      { "label": "Download host (static)", "href": "https://iso.biglinux.com.br/downloads.html" },
+      { "label": "About BigLinux", "href": "https://www.biglinux.com.br/pt-br/about/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/biglinux.png\nBigLinux logo, Public domain, by Bruno Gonçalves and volunteers, https://commons.wikimedia.org/wiki/File:BigLinux_logo.webp."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://www.biglinux.com.br/pt-br/download/" }
+}

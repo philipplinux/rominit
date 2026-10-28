@@ -1,0 +1,65 @@
+{
+  "id": "ipfire",
+  "name": "IPFire",
+  "shortName": "IPFire",
+  "defaultEdition": "iso",
+  "version": "2.29-core204",
+  "releaseDate": "2026-10-14",
+  "source": "https://www.ipfire.org/",
+  "page": {
+    "description": "IPFire editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FIREWALL AND ROUTER",
+    "intro": "A hardened Linux firewall distribution for a dedicated box: stateful firewall, intrusion prevention, VPN server and a web admin interface, installed from one image.",
+    "logo": { "src": "logos/ipfire.png", "alt": "IPFire logo", "width": 394, "height": 512 },
+    "pros": [
+      "Purpose-built firewall: IPS, VPN (IPsec and OpenVPN), proxy and DNS in one admin UI.",
+      "Small install (around 700 MB) that runs on modest x86_64 or ARM hardware.",
+      "Regular core updates on a published schedule.",
+      "Separate flash image for ARM boards and SD cards."
+    ],
+    "cons": [
+      "Not a desktop or general-purpose system: it is an appliance OS.",
+      "The publisher ships BLAKE2 sidecars only, so the SHA-256 values here were computed by ROMinit.",
+      "Requires at least two network interfaces for a useful router setup.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "IPFire website", "href": "https://www.ipfire.org/" },
+      { "label": "Download", "href": "https://www.ipfire.org/download" },
+      { "label": "Documentation", "href": "https://wiki.ipfire.org/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for IPFire; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick or the .img.xz to an SD card with dd or any image writer; writing erases the whole device. The installer then sets up the network interfaces and partitions the disk.",
+    "footer": [
+      { "label": "IPFire website", "href": "https://www.ipfire.org/" },
+      { "label": "Download", "href": "https://www.ipfire.org/download" },
+      { "label": "Documentation", "href": "https://wiki.ipfire.org/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/ipfire.png\nIPFire logo, from the IPFire project, https://www.ipfire.org/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "iso",
+      "name": "Installer ISO",
+      "description": "The full installer for bare metal, virtual machines and optical media.",
+      "usbNote": "671 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ipfire-iso-x86_64", "arch": "x86_64", "format": "iso", "url": "https://downloads.ipfire.org/releases/ipfire-2.x/2.29-core204/ipfire-2.29-core204-x86_64.iso", "sha256": "1932479ca0022bf151030d4aacbbe98d29030730546b06a87d13b306c3b47c9d", "sha256Computed": "2026-10-28", "size": 703594496, "usb": true },
+        { "id": "ipfire-iso-aarch64", "arch": "aarch64", "format": "iso", "url": "https://downloads.ipfire.org/releases/ipfire-2.x/2.29-core204/ipfire-2.29-core204-aarch64.iso", "sha256": "dcd9cb7ab77b1fa786927f7d1de4327623308832fe7b968f33bd4e2f353425d5", "sha256Computed": "2026-10-28", "size": 643082240, "usb": true }
+      ]
+    },
+    {
+      "id": "flash",
+      "name": "Flash image (x86_64)",
+      "description": "A prebuilt image for USB sticks and small storage; boots straight into the setup.",
+      "usbNote": "512 MB compressed image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ipfire-flash-x86_64", "arch": "x86_64", "format": "img.xz", "url": "https://downloads.ipfire.org/releases/ipfire-2.x/2.29-core204/ipfire-2.29-core204-x86_64.img.xz", "sha256": "d37feab2ad746ca7ea303c1c6ac652bf9146349e2e47dcd98ce5d115c91a8765", "sha256Computed": "2026-10-28", "size": 536258336, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.ipfire.org/download" }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "pearos",
+  "name": "pearOS",
+  "shortName": "pearOS",
+  "infoOnly": true,
+  "source": "https://pearos.net/",
+  "page": {
+    "description": "pearOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DEBIAN-BASED LINUX",
+    "intro": "A Debian-based Linux distribution focused on simplicity and ease of use, originally created by Adrien Beraud.",
+    "logo": { "src": "logos/pearos.png", "alt": "pearOS logo", "width": 175, "height": 261 },
+    "pros": [
+      "Clean, minimalist desktop experience",
+      "Debian-based with access to Debian packages",
+      "Lightweight and fast"
+    ],
+    "cons": [
+      "Official website (pearos.net) returns HTTP 404 – project appears abandoned or moved",
+      "SourceForge project exists but contains no ISO download files (only a PNG image)",
+      "No active download source could be verified for any edition or ISO format",
+      "The project site no longer resolves and no ISO is published, so this page lists no images.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "pearOS (archived)", "href": "https://pearos.net/" },
+      { "label": "SourceForge", "href": "https://sourceforge.net/projects/pearos/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for pearOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Project website is unreachable (404) and no download files are available on any known mirror.",
+    "footer": [
+      { "label": "pearOS (archived)", "href": "https://pearos.net/" },
+      { "label": "SourceForge", "href": "https://sourceforge.net/projects/pearos/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/pearos.png\nPearOS logo.png, CC BY-SA 4.0, by HackZy01, https://commons.wikimedia.org/wiki/File:PearOS_logo.png."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "dropped", "source": "https://pearos.net/" }
+}

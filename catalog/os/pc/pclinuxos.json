@@ -1,0 +1,71 @@
+{
+  "id": "pclinuxos",
+  "name": "PCLinuxOS",
+  "shortName": "PCLinuxOS",
+  "defaultEdition": "kde",
+  "version": "2026.10",
+  "releaseDate": "2026-10-06",
+  "source": "https://www.pclinuxos.com/",
+  "page": {
+    "description": "PCLinuxOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / INDEPENDENT LINUX",
+    "intro": "A user-friendly, out-of-the-box Linux distribution with excellent hardware support and a powerful package manager. Comes with a wide range of desktop applications pre-installed.",
+    "logo": { "src": "logos/pclinuxos.png", "alt": "PCLinuxOS logo", "width": 512, "height": 512 },
+    "pros": [
+      "Works out of the box with most hardware",
+      "Excellent package management with Synaptic and apt",
+      "Multiple desktop flavors available",
+      "Tools like Addlocale and Mylivecd for customization"
+    ],
+    "cons": [
+      "Main website behind Cloudflare challenge, difficult to access programmatically",
+      "Large ISO sizes (3–4 GB)",
+      "Smaller community compared to Debian or Ubuntu",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "PCLinuxOS", "href": "https://www.pclinuxos.com/" },
+      { "label": "Distrowatch", "href": "https://distrowatch.com/table.php?distribution=pclinuxos" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for PCLinuxOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO image to a USB stick with dd, Rufus, or BalenaEtcher; writing erases the stick. Boot from BIOS/UEFI and follow the graphical installer.",
+    "footer": [
+      { "label": "PCLinuxOS", "href": "https://www.pclinuxos.com/" },
+      { "label": "Distrowatch", "href": "https://distrowatch.com/table.php?distribution=pclinuxos" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/pclinuxos.png\nPCLinuxOS-icon.svg, GPL, by PCLinuxOS, https://commons.wikimedia.org/wiki/File:PCLinuxOS-icon.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "kde",
+      "name": "KDE Plasma",
+      "description": "The flagship edition with the modern KDE Plasma desktop, featuring the DarkStar theme option.",
+      "usbNote": "4.0 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "pclinuxos-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.aarnet.edu.au/pub/pclinuxos/iso/pclinuxos64-kde-2026.10.iso", "sha256": "1b684612ac51fc69f6a36433a0858fe3c090c61d4d6dafd35d963a7a876cf31a", "sha256Computed": "2026-10-28", "size": 4301258752, "usb": true }
+      ]
+    },
+    {
+      "id": "xfce",
+      "name": "XFCE",
+      "description": "Lightweight edition with the XFCE desktop, ideal for older hardware or resource-conscious users.",
+      "usbNote": "3.5 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "pclinuxos-xfce-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.aarnet.edu.au/pub/pclinuxos/iso/pclinuxos64-XFCE-2026.10.iso", "sha256": "eaba7b4dafb133961adb5295fff1169549a46d7ff79052f30f36748fad3a3cf6", "sha256Computed": "2026-10-28", "size": 3710910464, "usb": true }
+      ]
+    },
+    {
+      "id": "mate",
+      "name": "MATE",
+      "description": "Classic desktop edition with the MATE environment, offering a traditional desktop experience.",
+      "usbNote": "3.6 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "pclinuxos-mate-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.aarnet.edu.au/pub/pclinuxos/iso/pclinuxos64-MATE-2026.10.iso", "sha256": "cbf2534c9e6a2f177974bff6ab8a4da29cac1af8f4ac1be14fbe1d8e1f77eba8", "sha256Computed": "2026-10-28", "size": 3882876928, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.pclinuxos.com/" }
+}

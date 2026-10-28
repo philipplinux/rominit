@@ -1,0 +1,77 @@
+{
+  "id": "bazzite",
+  "name": "Bazzite",
+  "shortName": "Bazzite",
+  "defaultEdition": "desktop-amd-intel",
+  "version": "44.20261012.1",
+  "releaseDate": "2026-10-13",
+  "source": "https://bazzite.gg/",
+  "page": {
+    "description": "Bazzite editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FEDORA ATOMIC GAMING IMAGE",
+    "intro": "A custom Fedora Atomic image built by Universal Blue for gaming PCs, handhelds and HTPCs. Ten x86_64 images across KDE/GNOME desktops, AMD/Intel/Nvidia GPUs, and Steam Gaming Mode variants. rpm-ostree updates with built-in rollback.",
+    "logo": { "src": "logos/bazzite.png", "alt": "Bazzite logo", "width": 512, "height": 512 },
+    "pros": [
+      "Built-in rollback to previous deployment via GRUB or updater",
+      "Preinstalled Steam, Lutris, Waydroid, and gaming stack",
+      "Secure Boot support with Universal Blue key enrolment",
+      "Full Nvidia driver support split: legacy (Pascal/Maxwell/Volta) and open (Turing+)"
+    ],
+    "cons": [
+      "UEFI only — CSM/Legacy boot unsupported",
+      "Nvidia in Steam Gaming Mode and on HTPCs is beta",
+      "Kepler and older Nvidia GPUs unsupported",
+      "Live installer has automatic partitioning only; manual partitioning needs the legacy ISO"
+    ],
+    "links": [
+      { "label": "Bazzite image picker", "href": "https://bazzite.gg/#image-picker" },
+      { "label": "Download host", "href": "https://download.bazzite.gg/" },
+      { "label": "Installation guide", "href": "https://docs.bazzite.gg/General/Installation_Guide/install-guide/" },
+      { "label": "FAQ", "href": "https://docs.bazzite.gg/General/FAQ/" },
+      { "label": "GitHub releases", "href": "https://github.com/ublue-os/bazzite/releases" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Bazzite; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the live installer ISO to a 16 GB+ bootable medium with Fedora Media Writer, Rufus or Ventoy. Boot UEFI and follow the installer. The selected drive is wiped during installation. Secure Boot requires enrolling Universal Blue's key first.",
+    "footer": [
+      { "label": "Bazzite image picker", "href": "https://bazzite.gg/#image-picker" },
+      { "label": "Download host", "href": "https://download.bazzite.gg/" },
+      { "label": "Installation guide", "href": "https://docs.bazzite.gg/General/Installation_Guide/install-guide/" },
+      { "label": "FAQ", "href": "https://docs.bazzite.gg/General/FAQ/" },
+      { "label": "GitHub releases", "href": "https://github.com/ublue-os/bazzite/releases" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/bazzite.png\nBazzite Logo.svg, CC BY-SA 4.0, by TryhardSoccermom12345, https://commons.wikimedia.org/wiki/File:Bazzite_Logo.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop-amd-intel",
+      "name": "Desktop (KDE Plasma, AMD/Intel)",
+      "description": "KDE Plasma desktop for AMD and Intel graphics without Steam Gaming Mode.",
+      "usbNote": "~8.4 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
+      "images": [
+        { "id": "bazzite-bazzite-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-stable-live-amd64.iso", "sha256": "82ff3b4080e66d53f5807bead4b443671c921f18fdef8b260415075578599356", "sha256Url": "https://download.bazzite.gg/bazzite-stable-live-amd64.iso-CHECKSUM", "size": 8423129088, "usb": true }
+      ]
+    },
+    {
+      "id": "desktop-gnome-amd-intel",
+      "name": "Desktop GNOME (AMD/Intel)",
+      "description": "GNOME desktop for AMD and Intel graphics without Steam Gaming Mode.",
+      "usbNote": "~7.2 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
+      "images": [
+        { "id": "bazzite-bazzite-gnome-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-gnome-stable-live-amd64.iso", "sha256": "bad88bd80f3e146bd213250869c67bc5971d8e35d8e4024543630a31cde5ff4a", "sha256Url": "https://download.bazzite.gg/bazzite-gnome-stable-live-amd64.iso-CHECKSUM", "size": 7161833472, "usb": true }
+      ]
+    },
+    {
+      "id": "deck-amd-intel",
+      "name": "Deck (KDE Plasma + Steam Gaming Mode, AMD/Intel)",
+      "description": "Steam Gaming Mode session on KDE Plasma, optimised for handhelds and HTPCs with AMD or Intel Arc graphics.",
+      "usbNote": "~10.1 GB ISO. Write with Fedora Media Writer (recommended), Rufus or Ventoy.",
+      "images": [
+        { "id": "bazzite-bazzite-deck-stable-live-amd64", "arch": "x86_64", "format": "iso", "url": "https://download.bazzite.gg/bazzite-deck-stable-live-amd64.iso", "sha256": "fe0b8fbcfeb13972f5bbd3e73f0331ed22d16ceb796a4d15aa41e493236fcfc3", "sha256Url": "https://download.bazzite.gg/bazzite-deck-stable-live-amd64.iso-CHECKSUM", "size": 10111676416, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://bazzite.gg/" }
+}

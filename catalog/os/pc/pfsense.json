@@ -1,0 +1,45 @@
+{
+  "id": "pfsense",
+  "name": "pfSense",
+  "shortName": "pfSense",
+  "infoOnly": true,
+  "source": "https://www.pfsense.org/",
+  "page": {
+    "description": "pfSense editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FIREWALL AND ROUTER",
+    "intro": "Netgate's FreeBSD-based firewall and router, published in two trains: the open-source Community Edition (CE) and the commercial pfSense Plus. The installed system is chosen at install time, not baked into the media.",
+    "logo": { "src": "logos/pfsense.svg", "alt": "pfSense logo", "width": 180, "height": 180 },
+    "pros": [
+      "Full firewall, VPN, routing and traffic shaping in one web interface.",
+      "FreeBSD base with a long security record.",
+      "CE is open source; Plus adds commercial features and support.",
+      "Widely documented and deployed."
+    ],
+    "cons": [
+      "Current media sizes are not published and the commercial installer sits behind a store checkout.",
+      "The CE download paths published by name returned 404 when checked.",
+      "No end-of-life dates are published; support state is an icon in a table.",
+      "ROMinit pins no image here."
+    ],
+    "links": [
+      { "label": "pfSense website", "href": "https://www.pfsense.org/" },
+      { "label": "Download", "href": "https://www.pfsense.org/download/" },
+      { "label": "Versions and support", "href": "https://docs.netgate.com/pfsense/en/latest/releases/versions.html" },
+      { "label": "Writing an installation image", "href": "https://docs.netgate.com/reference/create-flash-media.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for pfSense; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Netgate distributes the installer images itself: Plus images come from its store, and the CE file names on the download page resolve through the same funnel. This page is a signpost; ROMinit pins nothing.",
+    "footer": [
+      { "label": "pfSense website", "href": "https://www.pfsense.org/" },
+      { "label": "Download", "href": "https://www.pfsense.org/download/" },
+      { "label": "Versions and support", "href": "https://docs.netgate.com/pfsense/en/latest/releases/versions.html" },
+      { "label": "Writing an installation image", "href": "https://docs.netgate.com/reference/create-flash-media.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/pfsense.svg\npfSense logo from Simple Icons (CC0), https://simpleicons.org; the pfSense name and mark belong to Netgate, shown only to identify pfSense. No endorsement implied."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://docs.netgate.com/pfsense/en/latest/releases/versions.html" }
+}

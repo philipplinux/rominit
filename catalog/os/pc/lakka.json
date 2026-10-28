@@ -1,0 +1,82 @@
+{
+  "id": "lakka",
+  "name": "Lakka",
+  "shortName": "Lakka",
+  "defaultEdition": "generic",
+  "version": "6.1",
+  "releaseDate": "2026-02-21",
+  "source": "https://www.lakka.tv/",
+  "page": {
+    "description": "Lakka editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / RETRO-GAMING",
+    "intro": "A lightweight retro-gaming system built on LibreELEC and RetroArch: write one image to a stick, boot it, and play with a gamepad from a TV-style interface.",
+    "logo": { "src": "logos/lakka.png", "alt": "Lakka logo", "width": 100, "height": 100 },
+    "pros": [
+      "Turns a spare PC into a retro console in one write.",
+      "RetroArch with hundreds of cores, configured in one interface.",
+      "Four x86 images, so AMD, Intel and nVidia GPUs are covered.",
+      "Small download compared with a full desktop."
+    ],
+    "cons": [
+      "An appliance, not a desktop: the publisher does not support virtualisation or dual boot.",
+      "It may not work on a given PC's hardware.",
+      "USB images only: there are no CD or DVD images.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Lakka website", "href": "https://www.lakka.tv/" },
+      { "label": "PC downloads", "href": "https://www.lakka.tv/get/linux/generic/" },
+      { "label": "Documentation", "href": "https://www.lakka.tv/doc/Home/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Lakka; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the .img.gz to a USB stick or SD card with an image writer; writing erases the whole device. The system then runs from, or installs to, that device.",
+    "footer": [
+      { "label": "Lakka website", "href": "https://www.lakka.tv/" },
+      { "label": "PC downloads", "href": "https://www.lakka.tv/get/linux/generic/" },
+      { "label": "Documentation", "href": "https://www.lakka.tv/doc/Home/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/lakka.png\nLakka logo, from the Lakka website (lakka.tv), by the Lakka project, https://www.lakka.tv/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "generic",
+      "name": "Generic (AMD/Intel GPU)",
+      "description": "The 64-bit GBM image for AMD and Intel graphics.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "lakka-generic-x86_64", "arch": "x86_64", "format": "img.gz", "url": "https://le.builds.lakka.tv/Generic.x86_64/Lakka-Generic.x86_64-6.1.img.gz", "sha256": "44bfccddd5a1d7efa95e52b8be0306a96fffd30a66511cc5e171970d2b5dfa4f", "sha256Url": "https://le.builds.lakka.tv/Generic.x86_64/Lakka-Generic.x86_64-6.1.img.gz.sha256", "size": 1200507213, "usb": true }
+      ]
+    },
+    {
+      "id": "generic-32bit",
+      "name": "Generic (32-bit)",
+      "description": "The 32-bit image for older x86 machines.",
+      "usbNote": "1.1 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "lakka-generic-32bit-x86", "arch": "x86", "format": "img.gz", "url": "https://le.builds.lakka.tv/Generic.i386/Lakka-Generic.i386-6.1.img.gz", "sha256": "5df643f9a504fce4be1e6f9f3bb1b3a92a532396afaff2f5b7472420e6f0647e", "sha256Url": "https://le.builds.lakka.tv/Generic.i386/Lakka-Generic.i386-6.1.img.gz.sha256", "size": 1109959336, "usb": true }
+      ]
+    },
+    {
+      "id": "x11",
+      "name": "X11 (AMD/Intel/nVidia)",
+      "description": "The image that runs RetroArch on X.org, for machines that need the legacy driver path.",
+      "usbNote": "1.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "lakka-x11-x86_64", "arch": "x86_64", "format": "img.gz", "url": "https://le.builds.lakka.tv/x11.x86_64/Lakka-x11.x86_64-6.1.img.gz", "sha256": "cc139235344142f0f30f4f667128fea6f54077425ce8b81cbbdac7a9cb4bb9d7", "sha256Url": "https://le.builds.lakka.tv/x11.x86_64/Lakka-x11.x86_64-6.1.img.gz.sha256", "size": 1390355478, "usb": true }
+      ]
+    },
+    {
+      "id": "wayland",
+      "name": "Wayland (AMD/Intel/nVidia)",
+      "description": "The image that runs RetroArch on Wayland.",
+      "usbNote": "1.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "lakka-wayland-x86_64", "arch": "x86_64", "format": "img.gz", "url": "https://le.builds.lakka.tv/wayland.x86_64/Lakka-wayland.x86_64-6.1.img.gz", "sha256": "dcf5e38e37a5230f8f26a78f6e88550fdf88fec54fabc347574b5c7993b0767d", "sha256Url": "https://le.builds.lakka.tv/wayland.x86_64/Lakka-wayland.x86_64-6.1.img.gz.sha256", "size": 1377722695, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.lakka.tv/get/linux/generic/" }
+}

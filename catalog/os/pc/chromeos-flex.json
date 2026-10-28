@@ -1,0 +1,43 @@
+{
+  "id": "chromeos-flex",
+  "name": "ChromeOS Flex",
+  "shortName": "ChromeOS Flex",
+  "infoOnly": true,
+  "source": "https://chromeos.google/products/chromeos-flex/",
+  "page": {
+    "description": "ChromeOS Flex editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / CLOUD-FIRST DESKTOP",
+    "intro": "Google's ChromeOS build for ordinary PCs and Macs: a browser-first desktop that is installed from a USB stick prepared with Google's own recovery utility rather than from a downloadable ISO.",
+    "logo": { "src": "logos/chromeos-flex.png", "alt": "ChromeOS Flex logo", "width": 512, "height": 109 },
+    "pros": [
+      "Runs ChromeOS on generic x86_64 hardware instead of a Chromebook.",
+      "Managed through the Google Admin console like other ChromeOS devices.",
+      "Fast boot and automatic background updates.",
+      "Free, and boots from the same account as other ChromeOS devices."
+    ],
+    "cons": [
+      "No direct ISO: the image is written only by the Chromebook Recovery Utility, so ROMinit cannot pin or prepare it.",
+      "Certified hardware list is limited; unsupported machines lose sound, Wi-Fi or graphics.",
+      "Installing replaces the existing system on the target disk.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "ChromeOS Flex", "href": "https://chromeos.google/products/chromeos-flex/" },
+      { "label": "Certified models", "href": "https://support.google.com/chromeosflex/answer/11513094" },
+      { "label": "Install guide", "href": "https://support.google.com/chromeosflex/answer/11541914" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for ChromeOS Flex; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Google's flow: install the Chromebook Recovery Utility extension, let it download the image for your model, write it to a USB stick, then boot the target PC from it. The utility writes and erases the stick; installing ChromeOS Flex erases the target disk.",
+    "footer": [
+      { "label": "ChromeOS Flex", "href": "https://chromeos.google/products/chromeos-flex/" },
+      { "label": "Certified models", "href": "https://support.google.com/chromeosflex/answer/11513094" },
+      { "label": "Install guide", "href": "https://support.google.com/chromeosflex/answer/11541914" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/chromeos-flex.png\nChromeOS Logo.svg, Public domain, by Google, https://commons.wikimedia.org/wiki/File:ChromeOS_Logo.svg."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://chromeos.google/products/chromeos-flex/" }
+}

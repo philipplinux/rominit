@@ -1,0 +1,53 @@
+{
+  "id": "flatcar-container-linux",
+  "name": "Flatcar Container Linux",
+  "shortName": "Flatcar",
+  "defaultEdition": "iso",
+  "version": "4757.2.2",
+  "releaseDate": "2026-10-21",
+  "source": "https://www.flatcar.org/",
+  "page": {
+    "description": "Flatcar Container Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / CONTAINER INFRASTRUCTURE",
+    "intro": "An immutable, minimal Linux distribution designed exclusively for running container workloads on bare metal and in cloud environments. No package manager, no filesystem drift, automated atomic updates via Google-style update mechanism.",
+    "logo": { "src": "logos/flatcar-container-linux.svg", "alt": "Flatcar Container Linux logo", "width": 180, "height": 180 },
+    "pros": [
+      "Immutability eliminates configuration drift; filesystem is read-only",
+      "Automated, atomic, canary-style updates with rollback support",
+      "Minimal attack surface with only container runtime tools",
+      "Proven at scale by companies like Adobe (18,000+ nodes), Giant Swarm, Equinix"
+    ],
+    "cons": [
+      "No traditional desktop or general-purpose use; containers only",
+      "No package manager — software must be baked into custom images or delivered as containers",
+      "No signed ISO image available; only container tarball and raw disk images are shipped",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Flatcar website", "href": "https://www.flatcar.org/" },
+      { "label": "Documentation", "href": "https://www.flatcar.org/docs/latest/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Flatcar Container Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the container tarball to a target and boot from an ignition config, or deploy via cloud-init with an Ignition user-data file. Not a traditional bootable USB image.",
+    "footer": [
+      { "label": "Flatcar website", "href": "https://www.flatcar.org/" },
+      { "label": "Documentation", "href": "https://www.flatcar.org/docs/latest/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/flatcar-container-linux.svg\nFlatcar Container Linux logo, from the Flatcar project, https://www.flatcar.org/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "iso",
+      "name": "Live ISO (amd64)",
+      "description": "A bootable ISO that installs or runs Flatcar from a USB stick.",
+      "usbNote": "477 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "flatcar-container-linux-iso-x86_64", "arch": "x86_64", "format": "iso", "url": "https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_iso_image.iso", "sha512": "5dbe3c878698f1dcc599df11104a697f42e1d50315a23bd1315def29153f22fc4440543264ed7fef89dad94bdb5cbf7352190b4a8ac0445cc296d3c59e591718", "size": 500170752, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.flatcar.org/docs/latest/" }
+}

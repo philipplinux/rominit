@@ -1,0 +1,45 @@
+{
+  "id": "freedos",
+  "name": "FreeDOS",
+  "shortName": "FreeDOS",
+  "infoOnly": true,
+  "source": "https://www.freedos.org/",
+  "page": {
+    "description": "FreeDOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DOS",
+    "intro": "An open-source, MS-DOS-compatible operating system for PCs, still released and still able to run DOS programs and games on real hardware or in a virtual machine.",
+    "logo": { "src": "logos/freedos.svg", "alt": "FreeDOS logo", "width": 565, "height": 96 },
+    "pros": [
+      "Runs DOS programs and games on period hardware and in virtual machines.",
+      "Free, open source and actively maintained, with monthly test builds.",
+      "Media for CD, USB, floppy and virtual machines.",
+      "A 20 MB disk is enough for a plain installation."
+    ],
+    "cons": [
+      "Needs BIOS or UEFI in Legacy mode: no native UEFI and no Secure Boot.",
+      "The USB and CD media ship as ZIP archives, so ROMinit pins no image.",
+      "The kernel is still the 1.3 one; a new kernel is only in test builds.",
+      "Single-tasking DOS: no memory protection and no modern drivers."
+    ],
+    "links": [
+      { "label": "FreeDOS website", "href": "https://www.freedos.org/" },
+      { "label": "Downloads", "href": "https://www.freedos.org/download/" },
+      { "label": "Release announcement", "href": "https://www.freedos.org/download/announce.html" },
+      { "label": "Checksums", "href": "https://www.freedos.org/download/verify.txt" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for FreeDOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "The project publishes its media as ZIP archives containing the bootable images: unzip first, then write the contained image. ROMinit does not pin an archive here; the download page names which package fits CD, USB or floppy.",
+    "footer": [
+      { "label": "FreeDOS website", "href": "https://www.freedos.org/" },
+      { "label": "Downloads", "href": "https://www.freedos.org/download/" },
+      { "label": "Release announcement", "href": "https://www.freedos.org/download/announce.html" },
+      { "label": "Checksums", "href": "https://www.freedos.org/download/verify.txt" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/freedos.svg\nFreeDOS logo, CC BY 2.5, by Bas Snabilie and Jim Hall (FreeDOS project), https://commons.wikimedia.org/wiki/File:FreeDOS_logo4_2010.svg."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://www.freedos.org/download/" }
+}

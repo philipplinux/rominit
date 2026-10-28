@@ -1,0 +1,55 @@
+{
+  "id": "endeavouros",
+  "name": "EndeavourOS",
+  "shortName": "EndeavourOS",
+  "defaultEdition": "desktop",
+  "version": "Titan-Nova 2026.08.15",
+  "releaseDate": "2026-08-15",
+  "source": "https://endeavouros.com/",
+  "page": {
+    "description": "EndeavourOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ARCH-BASED DESKTOP",
+    "intro": "An Arch Linux-based desktop with a graphical installer, a small set of preconfigured tools and the Arch repositories, so a rolling system can be installed in minutes.",
+    "logo": { "src": "logos/endeavouros.svg", "alt": "EndeavourOS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Arch Linux with a graphical installer and a working desktop after first boot.",
+      "Rolling release, with the Arch repositories unchanged.",
+      "Several desktop choices at install time, not one fixed ISO.",
+      "Small default package set: little to remove."
+    ],
+    "cons": [
+      "Rolling updates need attention, as on any Arch system.",
+      "No LTS branch and no versioned support window.",
+      "x86_64 only for the main ISO.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "EndeavourOS website", "href": "https://endeavouros.com/" },
+      { "label": "Downloads", "href": "https://endeavouros.com/download/" },
+      { "label": "News", "href": "https://endeavouros.com/news/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for EndeavourOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick, boot it and use the graphical installer. Writing erases the stick; the installer partitions or erases the target disk.",
+    "footer": [
+      { "label": "EndeavourOS website", "href": "https://endeavouros.com/" },
+      { "label": "Downloads", "href": "https://endeavouros.com/download/" },
+      { "label": "News", "href": "https://endeavouros.com/news/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/endeavouros.svg\nEndeavourOS logo from Simple Icons (CC0), https://simpleicons.org; the EndeavourOS name and mark belong to the EndeavourOS project, shown only to identify EndeavourOS. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop (x86_64)",
+      "description": "The live ISO with the graphical installer and the desktop choices.",
+      "usbNote": "3.9 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "endeavouros-desktop-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.alpix.eu/endeavouros/iso/EndeavourOS_Titan-Nova-2026.08.15.iso", "sha512": "3f83bd745e9d5d518bdf6fc9a24092fb5347da449a6e109c6572bf999097b8b548c4cf1848fdfb3c7c2823f558c3f5b51a127060d9c5b81b9ad89b4041bee7fa", "sha512Url": "https://mirror.alpix.eu/endeavouros/iso/EndeavourOS_Titan-Nova-2026.08.15.iso.sha512sum", "size": 3898638336, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://endeavouros.com/download/" }
+}

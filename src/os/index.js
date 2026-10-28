@@ -1,6 +1,65 @@
 // OS data lives in catalog/os/<pc|mobile|network>/<id>.json: official release metadata, reviewed and pinned by hand (sha256/size/url), not a live download-page scrape.
 // Add an OS: write its JSON in catalog/os/<pc|mobile|network>/, import it below and add it to OSES (test/os-catalog.test.js fails on a JSON missing here; the browser and Workers bundles cannot read the folder); the build writes dist/<id>.html from site/os.html.
 import alpineJson from '../../catalog/os/pc/alpine.json' with { type: 'json' };
+import slitazJson from '../../catalog/os/pc/slitaz.json' with { type: 'json' };
+import q4osJson from '../../catalog/os/pc/q4os.json' with { type: 'json' };
+import pclinuxosJson from '../../catalog/os/pc/pclinuxos.json' with { type: 'json' };
+import blissOsJson from '../../catalog/os/pc/bliss-os.json' with { type: 'json' };
+import xcpNgJson from '../../catalog/os/pc/xcp-ng.json' with { type: 'json' };
+import harvesterJson from '../../catalog/os/pc/harvester.json' with { type: 'json' };
+import flatcarContainerLinuxJson from '../../catalog/os/pc/flatcar-container-linux.json' with { type: 'json' };
+import serenityosJson from '../../catalog/os/pc/serenityos.json' with { type: 'json' };
+import puppyLinuxJson from '../../catalog/os/pc/puppy-linux.json' with { type: 'json' };
+import pearosJson from '../../catalog/os/pc/pearos.json' with { type: 'json' };
+import rockstorJson from '../../catalog/os/pc/rockstor.json' with { type: 'json' };
+import pureosJson from '../../catalog/os/pc/pureos.json' with { type: 'json' };
+import sparkylinuxJson from '../../catalog/os/pc/sparkylinux.json' with { type: 'json' };
+import xigmanasJson from '../../catalog/os/pc/xigmanas.json' with { type: 'json' };
+import universalBlueJson from '../../catalog/os/pc/universal-blue.json' with { type: 'json' };
+import gpartedLiveJson from '../../catalog/os/pc/gparted-live.json' with { type: 'json' };
+import biglinuxJson from '../../catalog/os/pc/biglinux.json' with { type: 'json' };
+import elementaryOsJson from '../../catalog/os/pc/elementary-os.json' with { type: 'json' };
+import endlessOsJson from '../../catalog/os/pc/endless-os.json' with { type: 'json' };
+import chimeraosJson from '../../catalog/os/pc/chimeraos.json' with { type: 'json' };
+import bazziteJson from '../../catalog/os/pc/bazzite.json' with { type: 'json' };
+import chromeosFlexJson from '../../catalog/os/pc/chromeos-flex.json' with { type: 'json' };
+import adalieLinuxJson from '../../catalog/os/pc/adalie-linux.json' with { type: 'json' };
+import ventoyJson from '../../catalog/os/pc/ventoy.json' with { type: 'json' };
+import rescuezillaJson from '../../catalog/os/pc/rescuezilla.json' with { type: 'json' };
+import ultramarineLinuxJson from '../../catalog/os/pc/ultramarine-linux.json' with { type: 'json' };
+import ipfireJson from '../../catalog/os/pc/ipfire.json' with { type: 'json' };
+import trisquelJson from '../../catalog/os/pc/trisquel.json' with { type: 'json' };
+import guixSystemJson from '../../catalog/os/pc/guix-system.json' with { type: 'json' };
+import dragonflyBsdJson from '../../catalog/os/pc/dragonfly-bsd.json' with { type: 'json' };
+import parrotOsJson from '../../catalog/os/pc/parrot-os.json' with { type: 'json' };
+import omniosJson from '../../catalog/os/pc/omnios.json' with { type: 'json' };
+import midnightbsdJson from '../../catalog/os/pc/midnightbsd.json' with { type: 'json' };
+import openeulerJson from '../../catalog/os/pc/openeuler.json' with { type: 'json' };
+import nomadbsdJson from '../../catalog/os/pc/nomadbsd.json' with { type: 'json' };
+import lakkaJson from '../../catalog/os/pc/lakka.json' with { type: 'json' };
+import proxmoxVeJson from '../../catalog/os/pc/proxmox-ve.json' with { type: 'json' };
+import redoxJson from '../../catalog/os/pc/redox.json' with { type: 'json' };
+import unraidJson from '../../catalog/os/pc/unraid.json' with { type: 'json' };
+import talosLinuxJson from '../../catalog/os/pc/talos-linux.json' with { type: 'json' };
+import truenasJson from '../../catalog/os/pc/truenas.json' with { type: 'json' };
+import reactosJson from '../../catalog/os/pc/reactos.json' with { type: 'json' };
+import opnsenseJson from '../../catalog/os/pc/opnsense.json' with { type: 'json' };
+import pfsenseJson from '../../catalog/os/pc/pfsense.json' with { type: 'json' };
+import slackwareJson from '../../catalog/os/pc/slackware.json' with { type: 'json' };
+import openmediavaultJson from '../../catalog/os/pc/openmediavault.json' with { type: 'json' };
+import endeavourosJson from '../../catalog/os/pc/endeavouros.json' with { type: 'json' };
+import vanillaOsJson from '../../catalog/os/pc/vanilla-os.json' with { type: 'json' };
+import fydeosJson from '../../catalog/os/pc/fydeos.json' with { type: 'json' };
+import whonixJson from '../../catalog/os/pc/whonix.json' with { type: 'json' };
+import systemrescueJson from '../../catalog/os/pc/systemrescue.json' with { type: 'json' };
+import libreelecJson from '../../catalog/os/pc/libreelec.json' with { type: 'json' };
+import windowsJson from '../../catalog/os/pc/windows.json' with { type: 'json' };
+import vyosJson from '../../catalog/os/pc/vyos.json' with { type: 'json' };
+import kaosJson from '../../catalog/os/pc/kaos.json' with { type: 'json' };
+import openwrtJson from '../../catalog/os/pc/openwrt.json' with { type: 'json' };
+import freedosJson from '../../catalog/os/pc/freedos.json' with { type: 'json' };
+import androidX86Json from '../../catalog/os/pc/android-x86.json' with { type: 'json' };
+import batoceraJson from '../../catalog/os/pc/batocera.json' with { type: 'json' };
 import omarchyJson from '../../catalog/os/pc/omarchy.json' with { type: 'json' };
 import almalinuxJson from '../../catalog/os/pc/almalinux.json' with { type: 'json' };
 import antiXJson from '../../catalog/os/pc/anti-x.json' with { type: 'json' };
@@ -32,7 +91,6 @@ import mxLinuxJson from '../../catalog/os/pc/mx-linux.json' with { type: 'json' 
 import nobaraJson from '../../catalog/os/pc/nobara.json' with { type: 'json' };
 import openbsdJson from '../../catalog/os/pc/openbsd.json' with { type: 'json' };
 import openindianaJson from '../../catalog/os/pc/openindiana.json' with { type: 'json' };
-import opensuseLeapJson from '../../catalog/os/pc/opensuse-leap.json' with { type: 'json' };
 import netbsdJson from '../../catalog/os/pc/netbsd.json' with { type: 'json' };
 import nixosJson from '../../catalog/os/pc/nixos.json' with { type: 'json' };
 import oracleLinuxJson from '../../catalog/os/pc/oracle-linux.json' with { type: 'json' };
@@ -48,7 +106,7 @@ import solusJson from '../../catalog/os/pc/solus.json' with { type: 'json' };
 import steamosJson from '../../catalog/os/pc/steamos.json' with { type: 'json' };
 import tailsJson from '../../catalog/os/pc/tails.json' with { type: 'json' };
 import ubuntuJson from '../../catalog/os/pc/ubuntu.json' with { type: 'json' };
-import ubuntu2610Json from '../../catalog/os/pc/ubuntu-26-10.json' with { type: 'json' };
+import opensuseJson from '../../catalog/os/pc/opensuse.json' with { type: 'json' };
 import voidLinuxJson from '../../catalog/os/pc/void-linux.json' with { type: 'json' };
 import zorinOsJson from '../../catalog/os/pc/zorin-os.json' with { type: 'json' };
 
@@ -63,7 +121,7 @@ export const USB_FORMATS = ['iso', 'img.gz', 'img.bz2', 'img.xz'];
 /** @typedef {{ id: string, name: string, shortName: string, defaultEdition: string, version: string, releaseDate: string, requirements?: { summary: string, note?: string, source: string, checked: string }, kernel?: { version: string, line: string, updates?: string, checked: string, source: string }, source: string, officialSupport: { status: string, until?: string, source: string }, page: OsPage, editions: OsEdition[], infoOnly?: boolean }} Os */
 
 /** Every OS page, in the order the site lists them. @type {Os[]} */
-export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (almalinuxJson), /** @type {Os} */ (antiXJson), /** @type {Os} */ (archLinuxJson), /** @type {Os} */ (bodhiLinuxJson), /** @type {Os} */ (cachyosJson), /** @type {Os} */ (armbianJson), /** @type {Os} */ (artixJson), /** @type {Os} */ (calculateLinuxJson), /** @type {Os} */ (centosStreamJson), /** @type {Os} */ (clonezillaJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (deepinJson), /** @type {Os} */ (devuanJson), /** @type {Os} */ (dietpiJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (freebsdJson), /** @type {Os} */ (garudaLinuxJson), /** @type {Os} */ (gentooJson), /** @type {Os} */ (ghostbsdJson), /** @type {Os} */ (haikuJson), /** @type {Os} */ (kaliLinuxJson), /** @type {Os} */ (linuxLiteJson), /** @type {Os} */ (linuxMintJson), /** @type {Os} */ (mageiaJson), /** @type {Os} */ (macosJson), /** @type {Os} */ (manjaroJson), /** @type {Os} */ (mxLinuxJson), /** @type {Os} */ (nobaraJson), /** @type {Os} */ (openbsdJson), /** @type {Os} */ (openindianaJson), /** @type {Os} */ (opensuseLeapJson), /** @type {Os} */ (netbsdJson), /** @type {Os} */ (nixosJson), /** @type {Os} */ (oracleLinuxJson), /** @type {Os} */ (peppermintOsJson), /** @type {Os} */ (popOsJson), /** @type {Os} */ (rhelJson), /** @type {Os} */ (raspberryPiOsJson), /** @type {Os} */ (retropieJson), /** @type {Os} */ (qubesOsJson), /** @type {Os} */ (rockyLinuxJson), /** @type {Os} */ (slesJson), /** @type {Os} */ (solusJson), /** @type {Os} */ (steamosJson), /** @type {Os} */ (tailsJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (ubuntu2610Json), /** @type {Os} */ (voidLinuxJson), /** @type {Os} */ (zorinOsJson)];
+export const OSES = [/** @type {Os} */ (alpineJson), /** @type {Os} */ (omarchyJson), /** @type {Os} */ (almalinuxJson), /** @type {Os} */ (antiXJson), /** @type {Os} */ (archLinuxJson), /** @type {Os} */ (bodhiLinuxJson), /** @type {Os} */ (cachyosJson), /** @type {Os} */ (armbianJson), /** @type {Os} */ (artixJson), /** @type {Os} */ (calculateLinuxJson), /** @type {Os} */ (centosStreamJson), /** @type {Os} */ (clonezillaJson), /** @type {Os} */ (debianJson), /** @type {Os} */ (deepinJson), /** @type {Os} */ (devuanJson), /** @type {Os} */ (dietpiJson), /** @type {Os} */ (fedoraJson), /** @type {Os} */ (freebsdJson), /** @type {Os} */ (garudaLinuxJson), /** @type {Os} */ (gentooJson), /** @type {Os} */ (ghostbsdJson), /** @type {Os} */ (haikuJson), /** @type {Os} */ (kaliLinuxJson), /** @type {Os} */ (linuxLiteJson), /** @type {Os} */ (linuxMintJson), /** @type {Os} */ (mageiaJson), /** @type {Os} */ (macosJson), /** @type {Os} */ (manjaroJson), /** @type {Os} */ (mxLinuxJson), /** @type {Os} */ (nobaraJson), /** @type {Os} */ (openbsdJson), /** @type {Os} */ (openindianaJson), /** @type {Os} */ (netbsdJson), /** @type {Os} */ (nixosJson), /** @type {Os} */ (oracleLinuxJson), /** @type {Os} */ (peppermintOsJson), /** @type {Os} */ (popOsJson), /** @type {Os} */ (rhelJson), /** @type {Os} */ (raspberryPiOsJson), /** @type {Os} */ (retropieJson), /** @type {Os} */ (qubesOsJson), /** @type {Os} */ (rockyLinuxJson), /** @type {Os} */ (slesJson), /** @type {Os} */ (solusJson), /** @type {Os} */ (steamosJson), /** @type {Os} */ (tailsJson), /** @type {Os} */ (ubuntuJson), /** @type {Os} */ (opensuseJson), /** @type {Os} */ (voidLinuxJson), /** @type {Os} */ (zorinOsJson), /** @type {Os} */ (batoceraJson), /** @type {Os} */ (androidX86Json), /** @type {Os} */ (freedosJson), /** @type {Os} */ (openwrtJson), /** @type {Os} */ (kaosJson), /** @type {Os} */ (vyosJson), /** @type {Os} */ (windowsJson), /** @type {Os} */ (libreelecJson), /** @type {Os} */ (systemrescueJson), /** @type {Os} */ (whonixJson), /** @type {Os} */ (fydeosJson), /** @type {Os} */ (vanillaOsJson), /** @type {Os} */ (endeavourosJson), /** @type {Os} */ (openmediavaultJson), /** @type {Os} */ (slackwareJson), /** @type {Os} */ (pfsenseJson), /** @type {Os} */ (opnsenseJson), /** @type {Os} */ (reactosJson), /** @type {Os} */ (truenasJson), /** @type {Os} */ (talosLinuxJson), /** @type {Os} */ (unraidJson), /** @type {Os} */ (redoxJson), /** @type {Os} */ (proxmoxVeJson), /** @type {Os} */ (lakkaJson), /** @type {Os} */ (nomadbsdJson), /** @type {Os} */ (openeulerJson), /** @type {Os} */ (midnightbsdJson), /** @type {Os} */ (omniosJson), /** @type {Os} */ (parrotOsJson), /** @type {Os} */ (dragonflyBsdJson), /** @type {Os} */ (guixSystemJson), /** @type {Os} */ (trisquelJson), /** @type {Os} */ (ipfireJson), /** @type {Os} */ (ultramarineLinuxJson), /** @type {Os} */ (rescuezillaJson), /** @type {Os} */ (ventoyJson), /** @type {Os} */ (adalieLinuxJson), /** @type {Os} */ (chromeosFlexJson), /** @type {Os} */ (bazziteJson), /** @type {Os} */ (chimeraosJson), /** @type {Os} */ (endlessOsJson), /** @type {Os} */ (elementaryOsJson), /** @type {Os} */ (biglinuxJson), /** @type {Os} */ (gpartedLiveJson), /** @type {Os} */ (universalBlueJson), /** @type {Os} */ (xigmanasJson), /** @type {Os} */ (sparkylinuxJson), /** @type {Os} */ (pureosJson), /** @type {Os} */ (rockstorJson), /** @type {Os} */ (pearosJson), /** @type {Os} */ (puppyLinuxJson), /** @type {Os} */ (serenityosJson), /** @type {Os} */ (flatcarContainerLinuxJson), /** @type {Os} */ (harvesterJson), /** @type {Os} */ (xcpNgJson), /** @type {Os} */ (blissOsJson), /** @type {Os} */ (pclinuxosJson), /** @type {Os} */ (q4osJson), /** @type {Os} */ (slitazJson)];
 
 /** CPU architecture to family label. */
 export const ARCH_FAMILY = { x86: "x86", x86_64: "x86", aarch64: "ARM", armv7: "ARM", armhf: "ARM", loongarch64: "LoongArch", ppc64le: "PowerPC", riscv64: "RISC-V", s390x: "IBM Z" };

@@ -1,0 +1,42 @@
+{
+  "id": "nomadbsd",
+  "name": "NomadBSD",
+  "shortName": "NomadBSD",
+  "infoOnly": true,
+  "version": "141R-20240711",
+  "releaseDate": "2024-07-11",
+  "source": "https://nomadbsd.org/",
+  "page": {
+    "description": "NomadBSD editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FREEBSD LIVE USB",
+    "intro": "A persistent live FreeBSD system designed to run entirely from a USB flash drive with automatic hardware detection — no ISO, raw disk image only.",
+    "logo": { "src": "logos/nomadbsd.png", "alt": "NomadBSD logo", "width": 180, "height": 180 },
+    "pros": [
+      "SHA-256 checksums published per image via sidecar files",
+      "Persistent filesystem survives reboots",
+      "No installation needed — run directly from USB"
+    ],
+    "cons": [
+      "Media ships as .img.lzma, which ROMinit does not pin",
+      "No ISO at all — tools that expect ISO files do not apply",
+      "Release from July 2024 (over two years old)",
+      "4.7 GiB uncompressed requires at least a 5 GB USB drive"
+    ],
+    "links": [
+      { "label": "NomadBSD website", "href": "https://nomadbsd.org/" },
+      { "label": "Download", "href": "https://nomadbsd.org/download.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for NomadBSD; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Decompress with xzcat then write the raw .img to USB with dd; writing erases the whole device. The USB is the system — no install step.",
+    "footer": [
+      { "label": "NomadBSD website", "href": "https://nomadbsd.org/" },
+      { "label": "Download", "href": "https://nomadbsd.org/download.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/nomadbsd.png\nNomadBSD logo, (c) NomadBSD project, from https://nomadbsd.org/NomadBSD_BrownLogo.png. No reusable licence confirmed; publisher-site logo used because Wikimedia Commons has none."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://nomadbsd.org/" }
+}

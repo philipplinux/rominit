@@ -1,0 +1,54 @@
+{
+  "id": "midnightbsd",
+  "name": "MidnightBSD",
+  "shortName": "MidnightBSD",
+  "defaultEdition": "desktop",
+  "version": "4.0.8",
+  "releaseDate": "2026-09-28",
+  "source": "https://www.midnightbsd.org/",
+  "page": {
+    "description": "MidnightBSD editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FREEBSD-DERIVED",
+    "intro": "A FreeBSD-derived desktop operating system with Xfce as the default (and only) desktop, released for amd64 and i386 with bootonly ISO, disc1 ISO, and USB memstick images.",
+    "logo": { "src": "logos/midnightbsd.png", "alt": "MidnightBSD logo", "width": 128, "height": 128 },
+    "pros": [
+      "SHA-256 checksums published per release in CHECKSUM.SHA256",
+      "Both amd64 and i386 images available",
+      "Xfce desktop with mport graphical package manager"
+    ],
+    "cons": [
+      "No handbook, install guide, or documentation site (all return 404)",
+      "Jurisdiction restriction prohibits use in California and Brazil",
+      "Release directory has no separate rescue or live image"
+    ],
+    "links": [
+      { "label": "MidnightBSD website", "href": "https://www.midnightbsd.org/" },
+      { "label": "Downloads", "href": "https://www.midnightbsd.org/download/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for MidnightBSD; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write bootonly or disc1 ISO to USB with dd; write memstick/mini-memstick images with dd. The installer uses FreeBSD bsdinstall.",
+    "footer": [
+      { "label": "MidnightBSD website", "href": "https://www.midnightbsd.org/" },
+      { "label": "Downloads", "href": "https://www.midnightbsd.org/download/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/midnightbsd.png\nMidnightBSD logo, from the MidnightBSD project, https://www.midnightbsd.org/art/logo/MidnightBSDLogo128x128.png."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop (amd64 + i386)",
+      "description": "Single edition with Xfce desktop; bootonly ISO, full disc1 ISO, USB memstick, and mini-memstick images per architecture.",
+      "usbNote": "Use dd or balenaEtcher to write images. Memstick images are designed for USB media.",
+      "images": [
+        { "id": "midnightbsd-amd64-bootonly", "arch": "x86_64", "format": "iso", "url": "https://discovery.midnightbsd.org/ftp/releases/amd64/ISO-IMAGES/4.0.8/MidnightBSD-4.0.8--amd64-bootonly.iso", "sha256": "6c7a02a14eefe3f543161e5b127246285cfe5d22dc2141778ec6c611e916b09b", "sha256Url": "https://discovery.midnightbsd.org/ftp/releases/amd64/ISO-IMAGES/4.0.8/CHECKSUM.SHA256", "size": 405313536, "usb": false },
+        { "id": "midnightbsd-amd64-disc1", "arch": "x86_64", "format": "iso", "url": "https://discovery.midnightbsd.org/ftp/releases/amd64/ISO-IMAGES/4.0.8/MidnightBSD-4.0.8--amd64-disc1.iso", "sha256": "6c7a02a14eefe3f543161e5b127246285cfe5d22dc2141778ec6c611e916b09b", "sha256Url": "https://discovery.midnightbsd.org/ftp/releases/amd64/ISO-IMAGES/4.0.8/CHECKSUM.SHA256", "size": 1068308480, "usb": false },
+        { "id": "midnightbsd-i386-bootonly", "arch": "x86", "format": "iso", "url": "https://discovery.midnightbsd.org/ftp/releases/i386/ISO-IMAGES/4.0.8/MidnightBSD-4.0.8--i386-bootonly.iso", "sha256": "98fbd3a2f2358f9662f427020779586a61e28dd24f0d38d4045a2095a6872349", "sha256Url": "https://discovery.midnightbsd.org/ftp/releases/i386/ISO-IMAGES/4.0.8/CHECKSUM.SHA256", "size": 330745856, "usb": false },
+        { "id": "midnightbsd-i386-disc1", "arch": "x86", "format": "iso", "url": "https://discovery.midnightbsd.org/ftp/releases/i386/ISO-IMAGES/4.0.8/MidnightBSD-4.0.8--i386-disc1.iso", "sha256": "98fbd3a2f2358f9662f427020779586a61e28dd24f0d38d4045a2095a6872349", "sha256Url": "https://discovery.midnightbsd.org/ftp/releases/i386/ISO-IMAGES/4.0.8/CHECKSUM.SHA256", "size": 836933632, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.midnightbsd.org/" }
+}
