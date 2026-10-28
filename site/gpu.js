@@ -18,6 +18,7 @@ byId('gpu-summary').textContent = info.summary;
 byId('gpu-meta').replaceChildren(...[`Released ${info.releaseYear}`, info.die].map(text => h('span', { className: 'architecture-tag', textContent: text })),
   h('a', { className: 'architecture-tag', href: info.officialSupport.source, target: '_blank', rel: 'noopener noreferrer', textContent: officialSupportText(info.officialSupport, 'NVIDIA driver') }));
 byId('gpu-specs').replaceChildren(...info.specs.map(([label, value]) => h('div', {}, h('dt', { textContent: label }), h('dd', { textContent: value }))));
+byId('gpu-specs-hint').textContent = info.specs.filter(([label]) => /^(Memory|Graphics card power)$/.test(label)).map(([, value]) => value).join(' · ');
 byId('gpu-models').textContent = info.models;
 byId('gpu-spec-source').append(external(info.specSource, 'Specs from NVIDIA'));
 

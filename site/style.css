@@ -533,15 +533,15 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .fetch-all { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
 /* Progress rail: a fixed scrollbar in the left gutter with section milestones. The gutter is (100vw - 1160px) / 2;
  * the rail sits mid-gutter but leaves 30px before the cards; labels and +/- only where the gutter is wide enough. */
-.progress-rail { --dot: 26px; --gutter: max(80px, (100vw - 1160px) / 2); position: fixed; top: 78px; bottom: 40px; left: max(40px, min(var(--gutter) - 170px, var(--gutter) / 2 - 40px)); z-index: 5; width: var(--dot); margin-left: calc(var(--dot) / -2); }
+.progress-rail { --dot: 22px; --gutter: max(80px, (100vw - 1160px) / 2); position: fixed; top: 78px; bottom: 40px; left: max(40px, min(var(--gutter) - 170px, var(--gutter) / 2 - 40px)); z-index: 5; width: var(--dot); margin-left: calc(var(--dot) / -2); }
 /* The rail box is one dot wide and everything centres on it with 50% / translate, so zoom rounding can't push dots off the line. */
 .progress-rail::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: var(--line); }
 .rail-fill { position: absolute; top: 0; left: 50%; width: 2px; transform: translateX(-50%); background: var(--teal); }
-.rail-thumb { position: absolute; left: 50%; width: 8px; transform: translateX(-50%); min-height: 12px; border-radius: 4px; background: rgb(236 228 212 / 35%); }
+.rail-thumb { position: absolute; left: 50%; width: 4px; transform: translateX(-50%); min-height: 12px; border-radius: 2px; background: rgb(230 195 154 / 30%); }
 .rail-mark { position: absolute; left: 0; display: flex; align-items: center; transform: translateY(-50%); }
 .rail-mark a { display: flex; align-items: center; gap: .6rem; color: var(--muted); text-decoration: none; }
-.rail-mark b { display: grid; place-items: center; width: var(--dot); height: var(--dot); border: 2px solid var(--line); border-radius: 50%; background: var(--bg); font-size: .78rem; line-height: 1; }
-.rail-mark small { width: 105px; font-size: .7rem; line-height: 1.25; } /* wraps inside the gutter instead of running into the cards */
+.rail-mark b { display: grid; place-items: center; width: var(--dot); height: var(--dot); border: 1.5px solid var(--line); border-radius: 50%; background: var(--bg); font-size: .7rem; line-height: 1; transition: border-color .15s, color .15s; }
+.rail-mark small { width: 105px; font-size: .68rem; line-height: 1.3; letter-spacing: .02em; transition: color .15s; } /* wraps inside the gutter instead of running into the cards */
 .rail-fold { position: absolute; right: calc(100% + 6px); width: 18px; height: 18px; padding: 0; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--muted); font: inherit; font-size: .8rem; line-height: 1; cursor: pointer; }
 .rail-fold:hover { border-color: var(--amber); color: var(--amber); }
 .rail-mark.done a { color: var(--teal); }
@@ -554,7 +554,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .rail-mark[data-num="R"] b { border-color: #f2c200; background: repeating-linear-gradient(-45deg, rgb(242 194 0 / 35%) 0 4px, var(--bg) 4px 8px); color: #f2c200; }
 .rail-mark[data-num="T"] a { color: #f0a29b; }
 .rail-mark[data-num="T"] b { border-color: #e8706a; background: rgb(226 90 80 / 15%); color: #f0a29b; }
-.rail-mark a:hover b { border-color: #ece4d4; }
+.rail-mark a:hover b, .rail-mark a:hover small { border-color: #ece4d4; color: #ece4d4; }
 @media (max-width: 1279px) { .progress-rail { left: calc(var(--gutter) / 2); } .rail-mark small, .rail-fold { display: none; } .progress-rail > .start-over { padding: .3rem; } .progress-rail > .start-over small { display: none; } }
 @media (max-width: 820px) { .progress-rail { display: none; } }
 .progress-rail > .start-over { position: absolute; top: -62px; left: 50%; transform: translateX(-50%); padding: .3rem .45rem; border: 1px solid var(--amber); border-radius: 6px; background: rgb(230 195 154 / 10%); color: var(--amber); font-weight: 700; }
@@ -690,7 +690,7 @@ p.rate-label { margin: .3rem 0 .5rem; }
 .host-pick select { font-size: .7rem; padding: .2rem .4rem; }
 .topbar-side .account { margin: 0; }
 .topbar-side .button, .topbar-side .site-menu summary, .top-links a { height: 30px; min-height: 0; padding: 0 .7rem; display: inline-grid; place-items: center; font-size: .66rem; letter-spacing: .1em; }
-.site-menu summary { width: 30px; padding: 0; }
+.site-menu:not(.user-menu) summary { width: 30px; padding: 0; }
 .site-menu nav { left: auto; right: 0; }
 .nav-group { position: relative; }
 .nav-group summary { padding: .3rem 0; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; list-style: none; letter-spacing: .1em; text-transform: uppercase; font-size: .7rem; white-space: nowrap; }
@@ -827,6 +827,10 @@ a.architecture-tag { text-decoration: none; }
 .console-facts > div { display: grid; grid-template-columns: minmax(7rem, .55fr) 1fr; gap: .6rem; border-top: 1px solid var(--line); padding: .6rem 0; font-size: .74rem; }
 .console-facts dt { color: var(--muted); }
 .console-facts dd { margin: 0; overflow-wrap: anywhere; }
+.gpu-specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); column-gap: 1.5rem; margin-top: .7rem; }
+.gpu-specs { grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); }
+.gpu-specs > div { grid-template-columns: 1fr; align-content: start; gap: .15rem; padding: .45rem 0; font-size: .72rem; }
+.gpu-specs-hint { margin-left: .6rem; color: var(--muted); font-weight: 400; font-size: .72rem; }
 .console-variant-spec { color: var(--muted); }
 .console-firmware { margin: .1rem 0 .4rem; color: var(--amber); font-size: 1.25rem; font-weight: 700; }
 .console-source { margin: .6rem 0 0; font-size: .72rem; }
@@ -873,7 +877,7 @@ a.architecture-tag { text-decoration: none; }
 .console-project-details > summary { cursor: pointer; color: var(--muted); }
 @media (max-width: 700px) { .console-hero-body { grid-template-columns: 1fr; } .console-photo { max-width: 220px; margin-inline: auto; } .console-photo img { height: 240px; } }
 
-.rail-mark.current a b { outline: 2px solid var(--amber, #e8ba65); outline-offset: 3px; }
+.rail-mark.current a b { border-color: var(--amber, #e8ba65); color: var(--amber, #e8ba65); box-shadow: 0 0 0 3px rgb(230 195 154 / 18%); }
 .rail-mark.current a small { color: var(--amber, #e8ba65); }
 .console-matches { padding: 16px; border: 1px solid #a5854c; border-radius: 8px; background: #29231a; }
 .console-match-link { display: inline-block; padding: .15rem .5rem; border: 1px solid var(--line); border-radius: 4px; font-size: .75rem; font-weight: 700; text-decoration: none; }
