@@ -93,6 +93,20 @@ test('every console project kind has a section on the page', () => {
     assert(known.has(project.kind), `${entry.id}: ${project.name} uses kind "${project.kind}" with no page section`);
 });
 
+test('console projects are console-specific and cite a source the page lists', () => {
+  const host = /** @param {string} url */ url => { try { return new URL(url).host; } catch { return `bad url ${url}`; } };
+  const seen = new Map();
+  for (const entry of CONSOLES) {
+    const declared = new Set((entry.sources ?? []).map(source => host(source.url)));
+    for (const project of entry.homebrew) {
+      const key = project.name.toLowerCase();
+      assert(!seen.has(key), `${entry.id}: ${project.name} is also listed for ${seen.get(key)}; check its source before reusing a project on another console`);
+      seen.set(key, entry.id);
+      assert(declared.has(host(project.source)), `${entry.id}: ${project.name} cites ${host(project.source)}, which is not in this console's sources list`);
+    }
+  }
+});
+
 test('highlight links target a section this console actually shows', () => {
   const sections = new Map(CONSOLE_SECTIONS.map(([name, kinds]) => [name, kinds]));
   const always = ['community', 'source'];
