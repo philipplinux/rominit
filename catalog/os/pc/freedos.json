@@ -2,7 +2,9 @@
   "id": "freedos",
   "name": "FreeDOS",
   "shortName": "FreeDOS",
-  "infoOnly": true,
+  "defaultEdition": "livecd",
+  "version": "1.4",
+  "releaseDate": "2025-04-05",
   "source": "https://www.freedos.org/",
   "page": {
     "description": "FreeDOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
@@ -17,7 +19,7 @@
     ],
     "cons": [
       "Needs BIOS or UEFI in Legacy mode: no native UEFI and no Secure Boot.",
-      "The USB and CD media ship as ZIP archives, so ROMinit pins no image.",
+      "The media ship as ZIP archives: unzip before writing the contained image.",
       "The kernel is still the 1.3 one; a new kernel is only in test builds.",
       "Single-tasking DOS: no memory protection and no modern drivers."
     ],
@@ -28,7 +30,7 @@
       { "label": "Checksums", "href": "https://www.freedos.org/download/verify.txt" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for FreeDOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "The project publishes its media as ZIP archives containing the bootable images: unzip first, then write the contained image. ROMinit does not pin an archive here; the download page names which package fits CD, USB or floppy.",
+    "status": "The project publishes its media as ZIP archives containing the bootable images. Unzip a package, then write the contained image to a USB stick or burn it to a CD. Writing an image erases the target device.",
     "footer": [
       { "label": "FreeDOS website", "href": "https://www.freedos.org/" },
       { "label": "Downloads", "href": "https://www.freedos.org/download/" },
@@ -40,6 +42,61 @@
       "logos/freedos.svg\nFreeDOS logo, CC BY 2.5, by Bas Snabilie and Jim Hall (FreeDOS project), https://commons.wikimedia.org/wiki/File:FreeDOS_logo4_2010.svg."
     ]
   },
-  "editions": [],
+  "editions": [
+    {
+      "id": "livecd",
+      "name": "LiveCD",
+      "description": "Complete user-based DOS system with standard programs, applications, drivers and games.",
+      "usbNote": "294 MB ZIP holding the LiveCD image. Unzip it, then write the image or burn a CD.",
+      "images": [
+        { "id": "freedos-livecd-x86_64", "arch": "x86_64", "format": "zip", "url": "https://download.freedos.org/1.4/FD14-LiveCD.zip", "sha256": "2020ff6bb681967fd6eff8f51ad2e5cd5ab4421165948cef4246e4f7fcaf6339", "sha256Url": "https://www.freedos.org/download/verify.txt", "size": 293950337, "usb": false }
+      ]
+    },
+    {
+      "id": "legacycd",
+      "name": "LegacyCD",
+      "description": "The same FreeDOS 1.4 installation with the older boot method, for machines that cannot boot the LiveCD.",
+      "usbNote": "274 MB ZIP holding the LegacyCD image. Unzip it, then write the image or burn a CD.",
+      "images": [
+        { "id": "freedos-legacycd-x86_64", "arch": "x86_64", "format": "zip", "url": "https://download.freedos.org/1.4/FD14-LegacyCD.zip", "sha256": "715b01754b8f5fd24cceb32d023f46aa9456c582c594d7d5fbe34787e1c773d4", "sha256Url": "https://www.freedos.org/download/verify.txt", "size": 274386388, "usb": false }
+      ]
+    },
+    {
+      "id": "fullusb",
+      "name": "FullUSB",
+      "description": "Complete installation packaged as a bootable USB image.",
+      "usbNote": "669 MB ZIP holding the full USB image. Unzip it, then write the image to a stick.",
+      "images": [
+        { "id": "freedos-fullusb-x86_64", "arch": "x86_64", "format": "zip", "url": "https://download.freedos.org/1.4/FD14-FullUSB.zip", "sha256": "cd440cd165f5a8a184870cb615f525af182660c15f9bcf1e9d198ca19cedcaff", "sha256Url": "https://www.freedos.org/download/verify.txt", "size": 668803454, "usb": false }
+      ]
+    },
+    {
+      "id": "liteusb",
+      "name": "LiteUSB",
+      "description": "Minimal bootable USB image without the larger application and game sets.",
+      "usbNote": "18 MB ZIP holding the lite USB image. Unzip it, then write the image to a stick.",
+      "images": [
+        { "id": "freedos-liteusb-x86_64", "arch": "x86_64", "format": "zip", "url": "https://download.freedos.org/1.4/FD14-LiteUSB.zip", "sha256": "857dcd2ebf9d3d094320154db5fb5b830acba6fb98f981a95a0ca7ab3350338b", "sha256Url": "https://www.freedos.org/download/verify.txt", "size": 17671175, "usb": false }
+      ]
+    },
+    {
+      "id": "bonuscd",
+      "name": "BonusCD",
+      "description": "Development tools, editors, boot tools, OpenGEM and extra utilities on a separate CD image.",
+      "usbNote": "402 MB ZIP holding the BonusCD image. Unzip it, then burn a CD or write the image.",
+      "images": [
+        { "id": "freedos-bonuscd-x86_64", "arch": "x86_64", "format": "zip", "url": "https://download.freedos.org/1.4/FD14-BonusCD.zip", "sha256": "59ef3c2a3011862f408f2f5dba725c08532674b99f0e16451e06cb6de73defa8", "sha256Url": "https://www.freedos.org/download/verify.txt", "size": 402121793, "usb": false }
+      ]
+    },
+    {
+      "id": "floppy",
+      "name": "Floppy edition",
+      "description": "Floppy-only edition for original IBM PC, XT and AT machines, in 720 kB, 1.2 MB and 1.44 MB versions.",
+      "usbNote": "24 MB ZIP holding the floppy images. Unzip it and write the images to floppy disks.",
+      "images": [
+        { "id": "freedos-floppy-x86", "arch": "x86", "format": "zip", "url": "https://download.freedos.org/1.4/FD14-FloppyEdition.zip", "sha256": "45b1fa7c52dd996c3bfa5e352ffcd410781b952a6ad629f15a4c9ec4bbaefc5a", "sha256Url": "https://www.freedos.org/download/verify.txt", "size": 23624258, "usb": false }
+      ]
+    }
+  ],
   "officialSupport": { "status": "ongoing", "source": "https://www.freedos.org/download/" }
 }
