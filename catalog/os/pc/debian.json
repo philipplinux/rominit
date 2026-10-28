@@ -11,13 +11,24 @@
     "source": "https://www.debian.org/releases/trixie/amd64/ch03s04.en.html",
     "checked": "2026-10-27"
   },
-  "kernel": { "version": "6.12", "line": "LTS", "updates": "6.12.113", "checked": "2026-10-27", "source": "https://packages.debian.org/trixie/linux-image-amd64" },
+  "kernel": {
+    "version": "6.12",
+    "line": "LTS",
+    "updates": "6.12.113",
+    "checked": "2026-10-27",
+    "source": "https://packages.debian.org/trixie/linux-image-amd64"
+  },
   "source": "https://www.debian.org/download",
   "page": {
     "description": "Debian editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / COMMUNITY LINUX",
     "intro": "The community distribution everything else is built on, and the base under Ubuntu and Mint. Pick the small netinst image or the offline DVD, then the architecture of the machine that will run it.",
-    "logo": { "src": "logos/debian.svg", "alt": "Debian logo", "width": 180, "height": 180 },
+    "logo": {
+      "src": "logos/debian.svg",
+      "alt": "Debian logo",
+      "width": 180,
+      "height": 180
+    },
     "pros": [
       "Installer images for amd64, arm64, armhf, ppc64el, riscv64 and s390x in one release.",
       "No desktop is forced: GNOME, KDE Plasma, Xfce and the rest are chosen during installation.",
@@ -31,9 +42,18 @@
       "Every point release changes the file names and digests this page pins."
     ],
     "links": [
-      { "label": "Debian website", "href": "https://www.debian.org/" },
-      { "label": "Download Debian", "href": "https://www.debian.org/download" },
-      { "label": "Trixie release notes", "href": "https://www.debian.org/releases/trixie/release-notes/" }
+      {
+        "label": "Debian website",
+        "href": "https://www.debian.org/"
+      },
+      {
+        "label": "Download Debian",
+        "href": "https://www.debian.org/download"
+      },
+      {
+        "label": "Trixie release notes",
+        "href": "https://www.debian.org/releases/trixie/release-notes/"
+      }
     ],
     "previewNote": "A stock screenshot of Debian 13 with GNOME, from Wikimedia Commons. Not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
     "shot": {
@@ -51,10 +71,22 @@
     },
     "status": "One official path per image: netinst or DVD, written with GNOME Disks, dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
     "footer": [
-      { "label": "Official downloads", "href": "https://www.debian.org/distrib/" },
-      { "label": "Checksums & signing keys", "href": "https://www.debian.org/CD/verify" },
-      { "label": "Trixie release notes", "href": "https://www.debian.org/releases/trixie/release-notes/" },
-      { "label": "Installation guide", "href": "https://www.debian.org/releases/trixie/installmanual" }
+      {
+        "label": "Official downloads",
+        "href": "https://www.debian.org/distrib/"
+      },
+      {
+        "label": "Checksums & signing keys",
+        "href": "https://www.debian.org/CD/verify"
+      },
+      {
+        "label": "Trixie release notes",
+        "href": "https://www.debian.org/releases/trixie/release-notes/"
+      },
+      {
+        "label": "Installation guide",
+        "href": "https://www.debian.org/releases/trixie/installmanual"
+      }
     ],
     "checked": "2026-10-27",
     "credits": [
@@ -148,7 +180,65 @@
           "usb": true
         }
       ]
+    },
+    {
+      "id": "live-gnome",
+      "name": "GNOME (live)",
+      "description": "GNOME live image with the installer, bootable straight from the stick.",
+      "usbNote": "3.1 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "debian-live-gnome-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0-live/amd64/iso-hybrid/debian-live-13.7.0-amd64-gnome.iso",
+          "size": 3804708864,
+          "sha256": "e94859a83b305cae5125dc9c6080ced040c59d099ea7381e7f300fd1dba87a17",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0-live/amd64/iso-hybrid/SHA256SUMS",
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "live-kde",
+      "name": "KDE Plasma (live)",
+      "description": "KDE Plasma live image with the installer, bootable straight from the stick.",
+      "usbNote": "3.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "debian-live-kde-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0-live/amd64/iso-hybrid/debian-live-13.7.0-amd64-kde.iso",
+          "size": 4186112000,
+          "sha256": "37dedc921f50325665c75829597126b3eeb70ff5cd8c511a7230ace09ae939be",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0-live/amd64/iso-hybrid/SHA256SUMS",
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "live-xfce",
+      "name": "Xfce (live)",
+      "description": "Xfce live image with the installer, bootable straight from the stick.",
+      "usbNote": "3.0 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "debian-live-xfce-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.debian.org/debian-cd/13.7.0-live/amd64/iso-hybrid/debian-live-13.7.0-amd64-xfce.iso",
+          "size": 3826974720,
+          "sha256": "379fcf159fa72a2ed8e3b74f4047df6061bc65adf5217e3d194e41a26fdb85e4",
+          "sha256Url": "https://cdimage.debian.org/debian-cd/13.7.0-live/amd64/iso-hybrid/SHA256SUMS",
+          "usb": true
+        }
+      ]
     }
   ],
-  "officialSupport": { "status": "ongoing", "until": "2028-08", "source": "https://www.debian.org/releases/trixie/" }
+  "officialSupport": {
+    "status": "ongoing",
+    "until": "2028-08",
+    "source": "https://www.debian.org/releases/trixie/"
+  }
 }
