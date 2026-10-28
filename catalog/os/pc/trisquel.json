@@ -1,0 +1,66 @@
+{
+  "id": "trisquel",
+  "name": "Trisquel",
+  "shortName": "Trisquel",
+  "defaultEdition": "desktop",
+  "version": "12.0",
+  "releaseDate": "2026-04-07",
+  "source": "https://trisquel.info/",
+  "page": {
+    "description": "Trisquel editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FULLY FREE GNU/LINUX",
+    "intro": "A fully free GNU/Linux distribution based on Ubuntu LTS, with all non-free firmware, drivers and applications removed. It ships a GNOME desktop (Trisquel) and a KDE edition (Triskel).",
+    "logo": { "src": "logos/trisquel.png", "alt": "Trisquel logo", "width": 512, "height": 112 },
+    "pros": [
+      "A free-software-only archive: no proprietary blobs or firmware.",
+      "Based on Ubuntu LTS, so the package base is familiar and well documented.",
+      "Two desktops from the same release: GNOME and KDE (Triskel).",
+      "Long-lived base with security updates from the Trisquel archive."
+    ],
+    "cons": [
+      "Only amd64 images in 12.0; no 32-bit or ARM media.",
+      "No proprietary Wi-Fi or graphics firmware, so some hardware will not work.",
+      "Smaller community and package set than Ubuntu.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Trisquel website", "href": "https://trisquel.info/" },
+      { "label": "Download", "href": "https://trisquel.info/en/download" },
+      { "label": "12.0 release announcement", "href": "https://trisquel.info/en/trisquel-120-ecne-release-announcement" },
+      { "label": "CD image mirror", "href": "https://cdimage.trisquel.info/trisquel-images/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Trisquel; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Two live installer images, written to a USB stick with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the 12.0 \"Ecne\" release.",
+    "footer": [
+      { "label": "Trisquel website", "href": "https://trisquel.info/" },
+      { "label": "Download", "href": "https://trisquel.info/en/download" },
+      { "label": "12.0 release announcement", "href": "https://trisquel.info/en/trisquel-120-ecne-release-announcement" },
+      { "label": "CD image mirror", "href": "https://cdimage.trisquel.info/trisquel-images/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/trisquel.png\nTrisquel-logo.svg, Public domain, by Rubén Rodríguez Pérez, https://commons.wikimedia.org/wiki/File:Trisquel-logo.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Trisquel (GNOME)",
+      "description": "The main edition with the GNOME desktop and the live installer.",
+      "usbNote": "3.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "trisquel-desktop-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdimage.trisquel.info/trisquel-images/trisquel_12.0_amd64.iso", "sha256": "ff5a24ef41101868c01389fc215dad72de9874c50e3049e666cd4202f8232235", "sha256Url": "https://cdimage.trisquel.info/trisquel-images/trisquel_12.0_amd64.iso.sha256", "size": 3650289664, "usb": true }
+      ]
+    },
+    {
+      "id": "triskel",
+      "name": "Triskel (KDE)",
+      "description": "The KDE Plasma edition of the same release.",
+      "usbNote": "2.7 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "trisquel-triskel-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdimage.trisquel.info/trisquel-images/triskel_12.0_amd64.iso", "sha256": "3cf04d207568071df58b0a9b05d01c6719f05c85c2d7e9b0ce318352a8536a1c", "sha256Url": "https://cdimage.trisquel.info/trisquel-images/triskel_12.0_amd64.iso.sha256", "size": 2857697280, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://trisquel.info/en/trisquel-120-ecne-release-announcement" }
+}
