@@ -128,8 +128,8 @@
         "UEFI 'Auto UMA' VRAM setting can crash games — set VRAM to 4 GB or 8 GB in the BIOS.",
         "Changing AC power can leave TDP stuck; suspend with SMT disabled may be broken.",
         "The LED ring stays at maximum brightness outside Windows because the firmware controls it.",
-        "Held Steam/QAM button chords do not work; nothing maps M1/M2 or the Armoury Crate key in firmware.",
-        "Duplicate drives in Steam Gaming Mode are a display bug — do not format them."
+        "Held Steam/QAM button chords do not work.",
+        "Storage may show duplicate drives in Steam Gaming Mode."
       ],
       "links": [
         {

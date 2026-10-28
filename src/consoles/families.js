@@ -32,8 +32,7 @@ export const FAMILIES = [
     name: 'Anbernic',
     summary: 'Anbernic’s retro handhelds, where the operating system lives on an SD card.',
     consoles: [
-      { name: 'RG35XX family', page: 'rg35xx', status: 'Linux-based custom firmware on the SD card' },
-      { name: 'RG35XX H' },
+      { name: 'RG35XX family (incl. RG35XX H)', page: 'rg35xx', status: 'Linux-based custom firmware on the SD card' },
       { name: 'RG405' },
       { name: 'RG505' },
       { name: 'RG556' }
@@ -44,8 +43,7 @@ export const FAMILIES = [
     name: 'ASUS ROG Ally',
     summary: 'ASUS’s Windows handhelds: ROG Ally, Ally X and Xbox Ally.',
     consoles: [
-      { name: 'ROG Ally', year: 2023, page: 'rog-ally', status: 'Windows handheld; SteamOS and Bazzite alternatives' },
-      { name: 'ROG Ally X', year: 2024, page: 'rog-ally', status: 'Covered on the ROG Ally research page' },
+      { name: 'ROG Ally and Ally X', year: 2023, page: 'rog-ally', status: 'Windows handhelds; SteamOS and Bazzite alternatives' },
       { name: 'Xbox Ally' }
     ]
   }
