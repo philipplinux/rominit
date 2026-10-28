@@ -1,0 +1,64 @@
+{
+  "id": "rescuezilla",
+  "name": "Rescuezilla",
+  "shortName": "Rescuezilla",
+  "defaultEdition": "noble",
+  "version": "2.6.2",
+  "releaseDate": "2026-05-16",
+  "source": "https://rescuezilla.com/",
+  "page": {
+    "description": "Rescuezilla editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / BACKUP AND RECOVERY",
+    "intro": "A clonezilla-compatible disk-imaging live system with a graphical interface: back up, restore and clone whole disks and partitions, including images made by Clonezilla.",
+    "logo": { "src": "logos/rescuezilla.png", "alt": "Rescuezilla logo", "width": 460, "height": 460 },
+    "pros": [
+      "Graphical front end over partclone, no command line needed.",
+      "Reads and writes Clonezilla images, so existing backups stay usable.",
+      "Runs from a live USB without installing anything.",
+      "SHA-256 checksums are published with each ISO."
+    ],
+    "cons": [
+      "Backup and recovery only: it is not a desktop system.",
+      "Four Ubuntu-base variants are offered, which is easy to misread.",
+      "Restoring to a different disk size needs care with partition layout.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Rescuezilla website", "href": "https://rescuezilla.com/" },
+      { "label": "Download", "href": "https://rescuezilla.com/download" },
+      { "label": "2.6.2 release", "href": "https://github.com/rescuezilla/rescuezilla/releases/tag/2.6.2" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Rescuezilla; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write one ISO to a USB stick with dd or any image writer; writing erases the stick. The system runs from the stick and writes images to another drive.",
+    "footer": [
+      { "label": "Rescuezilla website", "href": "https://rescuezilla.com/" },
+      { "label": "Download", "href": "https://rescuezilla.com/download" },
+      { "label": "2.6.2 release", "href": "https://github.com/rescuezilla/rescuezilla/releases/tag/2.6.2" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/rescuezilla.png\nRescuezilla logo, from the Rescuezilla project, https://github.com/rescuezilla."
+    ]
+  },
+  "editions": [
+    {
+      "id": "noble",
+      "name": "64-bit (Ubuntu 24.04 base)",
+      "description": "The current release build, on the Ubuntu 24.04 LTS base.",
+      "usbNote": "1.5 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "rescuezilla-noble-x86_64", "arch": "x86_64", "format": "iso", "url": "https://github.com/rescuezilla/rescuezilla/releases/download/2.6.2/rescuezilla-2.6.2-64bit.noble.iso", "sha256": "285db0af83213e2297490ca1cfd74ecd607c3b0a2f1d14e11a8412c0b71eea50", "size": 1594339328, "usb": true }
+      ]
+    },
+    {
+      "id": "resolute",
+      "name": "64-bit (Ubuntu 26.04 base)",
+      "description": "The newest-base build, for hardware that needs a newer kernel.",
+      "usbNote": "1.6 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "rescuezilla-resolute-x86_64", "arch": "x86_64", "format": "iso", "url": "https://github.com/rescuezilla/rescuezilla/releases/download/2.6.2/rescuezilla-2.6.2-64bit.resolute.iso", "sha256": "20dfdad31d3da56b8dd3978159721f19071916f65e123003a850fdecec85ae3f", "size": 1722134528, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://rescuezilla.com/" }
+}
