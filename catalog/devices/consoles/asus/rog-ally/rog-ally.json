@@ -1,0 +1,388 @@
+{
+  "id": "rog-ally",
+  "name": "ASUS ROG Ally family",
+  "manufacturer": "ASUS",
+  "releaseYear": 2023,
+  "models": [
+    {
+      "id": "ally-rc71l",
+      "name": "ROG Ally (2023)"
+    },
+    {
+      "id": "ally-rc71l-z1",
+      "name": "ROG Ally (2023), Ryzen Z1"
+    },
+    {
+      "id": "ally-x-rc72la",
+      "name": "ROG Ally X (2024)"
+    }
+  ],
+  "summary": "Windows 11 handheld PCs with AMD Ryzen Z1-series chips. They run Windows natively and support third-party Linux distros (SteamOS, Bazzite, ChimeraOS) as full OS replacements; back to stock is ASUS Cloud Recovery.",
+  "specs": {
+    "cpu": "AMD Ryzen Z1 Extreme (Zen 4, 8C/16T, up to 5.10 GHz) on 2023 launch and Ally X; 6C/12T Z1 variant on later 2023 Ally",
+    "gpu": "AMD Radeon RDNA 3 — 12 CUs up to 2.7 GHz (8.6 TFLOPS) on Z1 Extreme and Ally X; 4 CUs up to 2.5 GHz (2.8 TFLOPS) on the Z1 SKU",
+    "memory": "16 GB LPDDR5-6400 (2023 Ally) or 24 GB LPDDR5 (Ally X)",
+    "storage": "PCIe 4.0 NVMe SSD — 512 GB M.2 2230 (2023 Ally) or 1 TB M.2 2280 (Ally X)"
+  },
+  "variants": [
+    {
+      "model": "ROG Ally (2023)",
+      "region": "Worldwide",
+      "releaseYear": 2023,
+      "storage": "512 GB M.2 2230 PCIe 4.0 NVMe",
+      "notes": "SKU RC71L-ALLY.Z1X_512. Launch model with Ryzen Z1 Extreme (8C/16T, 12-CU RDNA 3). BIOS/EC files and Cloud Recovery key off model code RC71L."
+    },
+    {
+      "model": "ROG Ally (2023), Ryzen Z1",
+      "region": "Worldwide",
+      "releaseYear": 2023,
+      "storage": "512 GB M.2 2230 PCIe 4.0 NVMe",
+      "notes": "SKU RC71L-ALLY.Z1_512. Announced 2023-09-18. Same chassis, display, RAM, and storage as the Z1 Extreme but with a 6C/12T Ryzen Z1 and a 4-CU GPU (2.8 TFLOPS). BIOS/EC files and Cloud Recovery key off model code RC71L."
+    },
+    {
+      "model": "ROG Ally X (2024)",
+      "region": "Worldwide",
+      "releaseYear": 2024,
+      "storage": "1 TB M.2 2280 PCIe 4.0 NVMe",
+      "notes": "SKU RC72LA-ALLYX.Z1X. Redesigned chassis with 24 GB LPDDR5 soldered RAM, 80 Wh battery, USB4, and no XG Mobile port. Ryzen Z1 Extreme only. BIOS/EC files and Cloud Recovery key off model code RC72LA."
+    }
+  ],
+  "firmware": {
+    "version": "BIOS and EC versions updated by ASUS periodically",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-2023/helpdesk_bios/"
+  },
+  "homebrew": [
+    {
+      "name": "SteamOS (Valve)",
+      "kind": "os",
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1",
+        "ally-x-rc72la"
+      ],
+      "firmware": "General experimental support for AMD-powered handhelds; Valve's SteamOS Support Beta column covers these devices. Not on the official 'Powered by SteamOS' list.",
+      "summary": "SteamOS can be installed as a full OS replacement on both the 2023 Ally (both chip variants) and Ally X. It requires disabling Secure Boot and re-imaging the internal SSD, which erases Windows and the ASUS recovery partition.",
+      "source": "https://help.steampowered.com/en/faqs/view/65B4-2AA3-5F37-4227",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1",
+            "ally-x-rc72la"
+            ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Valve's SteamOS Support Beta column lists these AMD handhelds. Steam Support may have limited ability to troubleshoot hardware outside the Powered-by list."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Ally model with an AMD APU.",
+        "Secure Boot must be disabled in the UEFI BIOS.",
+        "A USB drive for the installer and an internet connection for the download."
+      ],
+      "warnings": [
+        "Installing SteamOS replaces Windows entirely; the internal SSD is re-imaged.",
+        "Steam Support may not fully troubleshoot non-Deck hardware."
+      ],
+      "links": [
+        {
+          "label": "SteamOS installation and repair guide",
+          "url": "https://help.steampowered.com/en/faqs/view/65B4-2AA3-5F37-4227"
+        }
+      ]
+    },
+    {
+      "name": "Bazzite (AGSA)",
+      "kind": "os",
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1",
+        "ally-x-rc72la"
+      ],
+      "firmware": "Linux-based; installed as a full OS replacement. Known issues per model are documented by Bazzite.",
+      "summary": "A Bazzite distribution tailored for handhelds, based on Fedora Atomic. Replaces Windows on the internal SSD. Documents specific known issues for both the 2023 Ally and Ally X.",
+      "source": "https://docs.bazzite.gg/Handheld_and_HTPC_edition/Handheld_Wiki/ASUS_ROG_Ally/",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1",
+            "ally-x-rc72la"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Bazzite documents the Ally and Ally X explicitly. The page warns it may be outdated."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Ally model with an AMD APU.",
+        "Secure Boot handling per Bazzite's installation guide."
+      ],
+      "warnings": [
+        "Two audio devices share one volume; quiet audio usually means one is low.",
+        "Garbled microphone input is fixed by setting input volume to 10–15%.",
+        "UEFI 'Auto UMA' VRAM setting can crash games — set VRAM to 4 GB or 8 GB in the BIOS.",
+        "Changing AC power can leave TDP stuck; suspend with SMT disabled may be broken.",
+        "The LED ring stays at maximum brightness outside Windows because the firmware controls it.",
+        "Held Steam/QAM button chords do not work.",
+        "Storage may show duplicate drives in Steam Gaming Mode."
+      ],
+      "links": [
+        {
+          "label": "Bazzite ASUS handhelds page",
+          "url": "https://docs.bazzite.gg/Handheld_and_HTPC_edition/Handheld_Wiki/ASUS_ROG_Ally/"
+        }
+      ]
+    },
+    {
+      "name": "ChimeraOS",
+      "kind": "os",
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1"
+      ],
+      "firmware": "Linux-based; installed as a full OS replacement. Only the original 2023 Ally is listed; the Ally X has no dedicated row.",
+      "summary": "ChimeraOS publishes a ROG Ally hardware compatibility table. The fingerprint reader, gyro, and TDP control via the Chimera app do not work.",
+      "source": "https://chimeraos.org/hardware/",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Speakers, touch, orientation, headphone jack, Bluetooth, Wi-Fi, gamepad, volume, extra buttons, suspend/resume, microSD, and video/audio out work; fingerprint reader and gyro do not; TDP control via the Chimera app does not."
+        },
+        {
+          "models": [
+            "ally-x-rc72la"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "ChimeraOS publishes a generic 'ROG Ally' row but not an Ally X row; treat that row as the 2023 Ally's status until ChimeraOS names the X."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Ally model with an AMD APU.",
+        "A USB drive for the installer."
+      ],
+      "warnings": [
+        "The Ally X has no dedicated ChimeraOS row; use the generic ROG Ally row at your discretion.",
+        "Fingerprint reader and gyro do not work under Linux."
+      ],
+      "links": [
+        {
+          "label": "ChimeraOS hardware compatibility",
+          "url": "https://chimeraos.org/hardware/"
+        }
+      ]
+    },
+    {
+      "name": "ASUS Cloud Recovery",
+      "kind": "recovery",
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1",
+        "ally-x-rc72la"
+      ],
+      "firmware": "Runs inside the UEFI BIOS and restores the factory Windows image to the internal storage device.",
+      "summary": "ASUS Cloud Recovery reinstalls the factory Windows image from ASUS servers. It erases all data on the storage device regardless of partitions. Requires LAN or Wi-Fi and a correct BIOS clock.",
+      "source": "https://rog.asus.com/support/faq/1050478/",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1",
+            "ally-x-rc72la"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "On the ROG Ally, the Y button goes straight to Cloud Recovery from the UEFI BIOS. On the Ally X, enter BIOS with F2 and navigate to Advanced › ASUS Cloud Recovery."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "LAN or Wi-Fi connectivity.",
+        "A correct BIOS clock — a wrong time can make Cloud Recovery unavailable."
+      ],
+      "warnings": [
+        "Cloud Recovery 'will restore the storage device where the OS is stored to its original state, which means that all data on the storage device will be erased, regardless of whether you partition the storage device or not' (ASUS FAQ)."
+      ],
+      "links": [
+        {
+          "label": "ASUS Cloud Recovery FAQ",
+          "url": "https://rog.asus.com/support/faq/1050478/"
+        },
+        {
+          "label": "Cloud Recovery in UEFI BIOS",
+          "url": "https://rog.asus.com/support/faq/1048106/"
+        }
+      ]
+    },
+    {
+      "name": "ASUS BIOS / EC update",
+      "kind": "tool",
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1",
+        "ally-x-rc72la"
+      ],
+      "firmware": "BIOS and EC files are per model on ASUS support pages; the list is client-side rendered and changes over time.",
+      "summary": "ASUS publishes BIOS and EC updates for each Ally model on its support page. These updates run from within Windows or the UEFI and modify the firmware layer, not the OS.",
+      "source": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-2023/helpdesk_download/",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1",
+            "ally-x-rc72la"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Download pages are client-side rendered; exact file names and versions at the time of checking are noted in each model's ROMvault page."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The correct model page on ASUS support — RC71L for the 2023 Ally, RC72LA for the Ally X."
+      ],
+      "warnings": [
+        "BIOS/EC packages for one model are not compatible with the other. Always use the files from the correct model's support page."
+      ],
+      "links": [
+        {
+          "label": "ROG Ally (2023) BIOS downloads",
+          "url": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-2023/helpdesk_bios/"
+        },
+        {
+          "label": "ROG Ally (2023) full support/downloads",
+          "url": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-2023/helpdesk_download/"
+        },
+        {
+          "label": "ROG Ally X (2024) support/downloads",
+          "url": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-x-2024/helpdesk_download/"
+        }
+      ]
+    },
+    {
+      "name": "No firmware rollback method documented",
+      "kind": "rollback",
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1",
+        "ally-x-rc72la"
+      ],
+      "firmware": "No verified method to downgrade ASUS BIOS/EC or to revert to an earlier Windows image without Cloud Recovery.",
+      "summary": "ASUS does not publish a BIOS rollback procedure for the Ally or Ally X. Cloud Recovery restores the factory image (including its original Windows version) but requires a network connection and erases all data. No offline downgrade file is provided.",
+      "source": "https://rog.asus.com/support/faq/1050478/",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1",
+            "ally-x-rc72la"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No BIOS/EC downgrade tool or offline recovery image is published by ASUS. Cloud Recovery always produces the latest factory image available on ASUS servers."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "Do not assume a BIOS downgrade is possible — it is not documented by ASUS."
+      ],
+      "links": [
+        {
+          "label": "ASUS Cloud Recovery FAQ",
+          "url": "https://rog.asus.com/support/faq/1050478/"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "ASUS ROG Ally (2023) tech specs",
+      "url": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-2023/spec/"
+    },
+    {
+      "label": "ASUS ROG Ally X (2024) tech specs",
+      "url": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-x-2024/spec/"
+    },
+    {
+      "label": "ASUS press release — ROG Ally with Ryzen Z1 (2023-09-18)",
+      "url": "https://press.asus.com/news/press-releases/rog-ally-amd-ryzen-z1-processor/"
+    },
+    {
+      "label": "ASUS — Z1 vs Z1 Extreme comparison",
+      "url": "https://rog.asus.com/articles/rog-ally/rog-ally-z1-vs-z1-extreme-performance--features-compared/"
+    },
+    {
+      "label": "ASUS Cloud Recovery FAQ",
+      "url": "https://rog.asus.com/support/faq/1050478/"
+    },
+    {
+      "label": "ASUS — Cloud Recovery in UEFI BIOS",
+      "url": "https://rog.asus.com/support/faq/1048106/"
+    },
+    {
+      "label": "Valve — SteamOS installation and repair",
+      "url": "https://help.steampowered.com/en/faqs/view/65B4-2AA3-5F37-4227"
+    },
+    {
+      "label": "Bazzite — ASUS handhelds",
+      "url": "https://docs.bazzite.gg/Handheld_and_HTPC_edition/Handheld_Wiki/ASUS_ROG_Ally/"
+    },
+    {
+      "label": "ChimeraOS — hardware compatibility",
+      "url": "https://chimeraos.org/hardware/"
+    }
+  ],
+  "highlights": [
+    {
+      "title": "Linux OS alternatives",
+      "name": "Bazzite / SteamOS",
+      "firmware": "Full OS replacement — Windows and recovery partitions are erased",
+      "summary": "Bazzite and SteamOS can replace Windows entirely on both the 2023 Ally and Ally X. They require Secure Boot handling and re-image the internal SSD.",
+      "source": "https://help.steampowered.com/en/faqs/view/65B4-2AA3-5F37-4227",
+      "checkedDate": "2026-10-28",
+      "target": "console-os-section"
+    },
+    {
+      "title": "Back to stock",
+      "name": "ASUS Cloud Recovery",
+      "firmware": "Restores factory Windows; erases all data on the internal drive",
+      "summary": "Cloud Recovery reinstalls the factory Windows image from ASUS servers. It requires a network connection and a correct BIOS clock. The Y button on the ROG Ally opens it directly from the UEFI BIOS.",
+      "source": "https://rog.asus.com/support/faq/1048106/",
+      "checkedDate": "2026-10-28",
+      "target": "console-recovery-section"
+    }
+  ],
+  "communities": [
+    {
+      "name": "r/ASUSROGAlly",
+      "url": "https://www.reddit.com/r/ASUSROGAlly/",
+      "description": "Community discussion for the ROG Ally lineup — reviews, troubleshooting, Linux installs, and Linux distro support.",
+      "source": "https://www.reddit.com/r/ASUSROGAlly/",
+      "checkedDate": "2026-10-28"
+    },
+    {
+      "name": "Bazzite community",
+      "url": "https://discord.gg/bazzite",
+      "description": "Bazzite project support and discussion, including Ally-specific channels.",
+      "source": "https://docs.bazzite.gg/",
+      "checkedDate": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "summary": "Product security updates; current source covers Ally X only (end of life expected 2028)",
+    "source": "https://rog.asus.com/gaming-handhelds/rog-ally/rog-ally-x-2024/spec/"
+  }
+}

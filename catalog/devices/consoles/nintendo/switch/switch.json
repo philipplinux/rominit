@@ -1,0 +1,349 @@
+{
+  "id": "switch",
+  "name": "Nintendo Switch family",
+  "manufacturer": "Nintendo",
+  "releaseYear": 2017,
+  "models": [
+    {
+      "id": "erista-unpatched",
+      "name": "Switch (original, unpatched Erista)"
+    },
+    {
+      "id": "erista-mariko",
+      "name": "Switch (Mariko revision)"
+    },
+    {
+      "id": "lite",
+      "name": "Switch Lite"
+    },
+    {
+      "id": "oled",
+      "name": "Switch OLED Model"
+    }
+  ],
+  "summary": "Explore Nintendo Switch family hardware and firmware-specific routes into homebrew across the original Erista, the Mariko revision, Lite and OLED.",
+  "specs": {
+    "cpu": "Custom NVIDIA Tegra X1: 4× Arm Cortex-A57 + 4× Cortex-A53 (Erista) or Mariko silicon (Mariko, Lite, OLED)",
+    "gpu": "NVIDIA custom GPU (Maxwell-based, 256 CUDA cores)",
+    "memory": "4 GB LPDDR4",
+    "storage": "32 GB eMMC (original, Mariko, Lite) or 64 GB eMMC (OLED); microSD card slot up to 2 TB",
+    "display": "6.2\" LCD, 1280×720 (original, Mariko); 5.5\" LCD, 1280×720 (Lite); 7.0\" OLED, 1280×720 (OLED)",
+    "video-out": "HDMI up to 1080p via dock (not available on Lite)"
+  },
+  "variants": [
+    {
+      "model": "Switch (original, unpatched Erista)",
+      "region": "Worldwide",
+      "releaseYear": 2017,
+      "storage": "32 GB eMMC",
+      "notes": "HAC-001 motherboard with HAC-CPU-01/10/20 boards. Unpatched units accept the RCM payload on every firmware via a short between pins 10 and 11 of the X9 connector in recovery mode (fusee-gelee). Patched Erista units (same model code, different serial range) have the bug fixed and require a modchip."
+    },
+    {
+      "model": "Switch (Mariko revision)",
+      "region": "Worldwide",
+      "releaseYear": 2019,
+      "storage": "32 GB eMMC",
+      "notes": "HAC-001(-01) motherboard with HAD-CPU-10 board (Mariko silicon). The boot chain bug is patched; a modchip is required for any unofficial code."
+    },
+    {
+      "model": "Switch Lite",
+      "region": "Worldwide",
+      "releaseYear": 2019,
+      "storage": "32 GB eMMC",
+      "notes": "HDH-001 motherboard with HDH-CPU-02 board. Handheld-only; no TV output, no detachable Joy-Con. Mariko silicon, patched boot chain. Modchip required."
+    },
+    {
+      "model": "Switch OLED Model",
+      "region": "Worldwide",
+      "releaseYear": 2021,
+      "storage": "64 GB eMMC",
+      "notes": "HEG-001 motherboard with HEG-CPU-01 board. 7\" OLED screen, wider kickstand, LAN port in dock. Mariko silicon, patched boot chain. Modchip required."
+    }
+  ],
+  "firmware": {
+    "version": "23.0.0",
+    "shortVersion": "23.0",
+    "checkedDate": "2026-10-28",
+    "source": "https://github.com/Atmosphere-NX/Atmosphere/releases"
+  },
+  "homebrew": [
+    {
+      "name": "Atmosphère",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "One firmware line per release; 1.12.1 targets services introduced in firmware 23.0.0",
+      "summary": "Custom firmware for the Switch. It replaces the stock kernel (exosphere), provides a homebrew launcher (hbl/hbmenu), and includes fs/dns MITM capabilities. Update CFW and firmware together — never firmware alone.",
+      "source": "https://github.com/Atmosphere-NX/Atmosphere",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Atmosphère bundles a specific CFW release for each firmware line; 1.12.1 (2026-10-16) targets firmware 23.0.0. The project does not publish a model-specific matrix; it is designed to run on any Switch that can load the payload, which requires either RCM (unpatched Erista) or a modchip (patched Erista, Mariko, Lite, OLED)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An exploitable entry point: fusee-gelee via RCM on unpatched Erista, or a modchip on patched Erista / Mariko / Lite / OLED.",
+        "Atmosphere payload loaded through hekate (or modchip firmware) before first boot."
+      ],
+      "warnings": [
+        "Updating system firmware without updating Atmosphère first can leave the console unable to boot CFW until a matching release ships."
+      ],
+      "links": [
+        {
+          "label": "Atmosphere releases",
+          "url": "https://github.com/Atmosphere-NX/Atmosphere/releases"
+        }
+      ]
+    },
+    {
+      "name": "hekate",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Every firmware; it is a bootloader, not an exploit",
+      "summary": "Bootloader, partition manager and backup tool. Boots Atmosphère (sysNAND or emuMMC), stock firmware, Android and Linux, and manages SD/eMMC partitions. It does not provide the exploit — it runs after one.",
+      "source": "https://github.com/CTCaer/hekate",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "hekate runs on every Switch model and firmware; it does not bypass the signed boot chain on its own. A payload must be delivered via RCM (unpatched Erista) or a modchip to launch hekate first."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An exploit payload (fusee-gelee via RCM or modchip) to boot hekate initially.",
+        "At least one NAND backup (with hekate) before first CFW write."
+      ],
+      "warnings": [
+        "A corrupted boot0/boot1 requires hardware-level recovery; there is no consumer unbrick tool."
+      ],
+      "links": [
+        {
+          "label": "hekate releases",
+          "url": "https://github.com/CTCaer/hekate/releases"
+        }
+      ]
+    },
+    {
+      "name": "fusee-gelee (RCM payload)",
+      "models": [
+        "erista-unpatched"
+      ],
+      "firmware": "Every firmware; closed on all patched models",
+      "summary": "A payload that exploits a boot-ROM bug (recovery mode) to load unsigned code over USB. It works on unpatched Erista consoles on every firmware version. All other Switch models have the bug fixed.",
+      "source": "https://github.com/Atmosphere-NX/Atmosphere/blob/master/payloads/",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The community guide states fusee-gelee works on all firmware versions for unpatched Erista. The bug is in the Tegra X1 boot ROM, not in system firmware. Patched Erista, Mariko, Lite and OLED cannot use it."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An unpatched Erista Switch (HAC-001 with early board revision).",
+        "A way to enter RCM (jig or grounded pin on X9 connector pins 10–11).",
+        "A PC or phone running a payload sender (e.g. TegraRcmGUI)."
+      ],
+      "warnings": [
+        "Patched Erista, Mariko, Lite and OLED consoles have the RCM bug fixed; no software route exists without a modchip."
+      ],
+      "links": [
+        {
+          "label": "Switch homebrew guide — before starting",
+          "url": "https://switch.homebrew.guide/gettingstarted/beforestarting.html"
+        }
+      ]
+    },
+    {
+      "name": "Spacecraft-NX (modchip firmware)",
+      "models": [
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Every firmware; modchip-dependent",
+      "summary": "Open-source firmware for SX Core/Lite-compatible hardware glitch chips. Glitches the boot chain at power-on to run a payload. Does not boot Horizon on its own and cannot pirate games.",
+      "source": "https://github.com/Spacecraft-NX/firmware",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "For patched Erista, Mariko, Lite and OLED consoles. RCM-only payloads do not work on these chips; Spacecraft-NX payloads must support the specific silicon."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A modchip soldered to the Switch motherboard.",
+        "A PC connected via USB to flash the chip firmware."
+      ],
+      "warnings": [
+        "A bad modchip install or corrupted boot0/boot1 requires hardware-level recovery."
+      ],
+      "links": [
+        {
+          "label": "Spacecraft-NX firmware",
+          "url": "https://github.com/Spacecraft-NX/firmware"
+        }
+      ]
+    },
+    {
+      "name": "switchroot Linux 4 Switch",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Depends on bootloader; not a standalone firmware path",
+      "summary": "Ubuntu and Fedora Linux images for the Switch, installed to SD or eMMC and booted through hekate. The wiki lists Ubuntu 18.04, 22.04, 24.04 and Fedora 39/41/42 with separate install guides.",
+      "source": "https://wiki.switchroot.org/wiki/linux",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Linux replaces the boot target, not the exploit. hekate must still be launched from RCM or modchip first. The wiki lists images for all Switch models."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "hekate already running on the console.",
+        "A microSD card with sufficient space for the Linux image."
+      ],
+      "warnings": [
+        "Partitioning the SD card for Linux erases it."
+      ],
+      "links": [
+        {
+          "label": "switchroot wiki — Linux",
+          "url": "https://wiki.switchroot.org/wiki/linux"
+        }
+      ]
+    },
+    {
+      "name": "switchroot Android",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Depends on bootloader; not a standalone firmware path",
+      "summary": "LineageOS-based Android builds for the Switch. The current build targets all models; an older Android 10 build was v1-only.",
+      "source": "https://switchroot.org/",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Current build claims all Switch models. Android 10 was documented for v1 (unpatched Erista) only. Read the model line on the download page before flashing."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "hekate already running on the console.",
+        "A microSD card with sufficient space for the Android image."
+      ],
+      "warnings": [
+        "Partitioning the SD card for Android erases it."
+      ],
+      "links": [
+        {
+          "label": "switchroot — Android download",
+          "url": "https://switchroot.org/"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Nintendo Switch technical specifications",
+      "url": "https://www.nintendo.com/us/gaming-systems/switch/tech-specs/"
+    },
+    {
+      "label": "switchbrew Hardware — motherboard codes",
+      "url": "https://switchbrew.org/wiki/Hardware"
+    },
+    {
+      "label": "Atmosphere releases",
+      "url": "https://github.com/Atmosphere-NX/Atmosphere/releases"
+    },
+    {
+      "label": "hekate",
+      "url": "https://github.com/CTCaer/hekate"
+    },
+    {
+      "label": "Spacecraft-NX modchip firmware",
+      "url": "https://github.com/Spacecraft-NX/firmware"
+    },
+    {
+      "label": "switchroot wiki — Linux",
+      "url": "https://wiki.switchroot.org/wiki/linux"
+    },
+    {
+      "label": "switchroot — Android download",
+      "url": "https://switchroot.org/"
+    },
+    {
+      "label": "Switch homebrew guide",
+      "url": "https://switch.homebrew.guide/"
+    },
+    {
+      "label": "Nintendo system update information",
+      "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/22525"
+    }
+  ],
+  "media": {},
+  "highlights": [],
+  "communities": [],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/22525"
+  }
+}

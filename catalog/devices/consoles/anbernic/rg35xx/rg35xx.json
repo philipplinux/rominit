@@ -1,0 +1,401 @@
+{
+  "id": "rg35xx",
+  "name": "Anbernic RG35XX family (H700)",
+  "family": "anbernic",
+  "manufacturer": "Anbernic",
+  "models": [
+    { "id": "rg35xx-h", "name": "RG35XX H" },
+    { "id": "rg35xx-plus", "name": "RG35XX Plus" },
+    { "id": "rg35xx-2024", "name": "RG35XX 2024" },
+    { "id": "rg35xx-sp", "name": "RG35XX SP" },
+    { "id": "rg35xx-pro", "name": "RG35XX Pro" },
+    { "id": "rg28xx", "name": "RG28XX" },
+    { "id": "rg34xx", "name": "RG34XX" },
+    { "id": "rg34xx-sp", "name": "RG34XX SP" },
+    { "id": "rg40xx-h", "name": "RG40XX H" },
+    { "id": "rg40xx-v", "name": "RG40XX V" },
+    { "id": "rg-cubexx", "name": "RG CubeXX" }
+  ],
+  "summary": "Anbernic's Allwinner H700 handhelds whose operating system lives on an SD card. KNULLI, ROCKNIX and spruceOS each ship a separate image per model; the stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "specs": {
+    "cpu": "Allwinner H700, 4x Arm Cortex-A53 (1.5 GHz vendor claim; ROCKNIX runs 1.4 GHz with a 1.5 GHz overclock option)",
+    "gpu": "Mali-G31 MP2 (dual-core)",
+    "memory": "1 GB LPDDR4 (documented for the RG35XX H; KNULLI and ROCKNIX list the same H700 for the sibling models)",
+    "storage": "SD card only on the documented model (ROCKNIX lists no eMMC); dual TF slots up to 512 GB",
+    "media": "3.5-inch IPS, 640x480 on the RG35XX H; screen sizes for sibling models are not sourced here"
+  },
+  "variants": [
+    {
+      "model": "RG35XX H",
+      "region": "Worldwide",
+      "storage": "16 GB or 64 GB TF card by SKU; dual TF slots up to 512 GB (vendor states both 16 GB and 64 GB)",
+      "notes": "Horizontal shell in Black, Purple Translucent and White Translucent. Sold with a 16 GB card in the shop while the spec box says 64 GB; ROCKNIX lists no eMMC, so the card is the system.",
+      "specs": {
+        "cpu": "Allwinner H700, 4x Arm Cortex-A53, 1.5 GHz vendor claim",
+        "gpu": "Mali-G31 MP2, dual-core",
+        "memory": "1 GB LPDDR4",
+        "storage": "SD card only, no eMMC; dual TF slots up to 512 GB",
+        "media": "3.5-inch IPS, 640x480, OCA full lamination"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Per model; latest builds are served from Anbernic's System Update index (2026-05 builds for RG35XX H, RG35XX SP, RG28XX and RG40XX H; 2026-01 post for RG35XX Pro, RG34XX, RG40XX V and RG CubeXX).",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://anbernic.com/pages/system-update"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "KNULLI",
+      "kind": "os",
+      "models": [
+        "rg35xx-h",
+        "rg35xx-plus",
+        "rg35xx-2024",
+        "rg35xx-sp",
+        "rg28xx",
+        "rg34xx",
+        "rg40xx-h",
+        "rg40xx-v",
+        "rg-cubexx"
+      ],
+      "firmware": "Per-model image (knulli-h700-<model>); boots from SD card with no stock-firmware dependency.",
+      "summary": "Batocera-based retro gaming OS for Allwinner H700 handhelds. It boots from a prepared SD card and leaves the stock card untouched.",
+      "source": "https://knulli.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "rg35xx-h",
+            "rg35xx-plus",
+            "rg35xx-2024",
+            "rg35xx-sp",
+            "rg28xx",
+            "rg34xx",
+            "rg40xx-h",
+            "rg40xx-v",
+            "rg-cubexx"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "KNULLI publishes a dedicated H700 image for each of these models. The RG35XX 2024 reuses the rg35xx-plus image."
+        },
+        {
+          "models": [
+            "rg35xx-pro",
+            "rg34xx-sp"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "KNULLI's device table does not name these models (checked 2026-10-28)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Anbernic H700 model from KNULLI's device table.",
+        "A good-quality SD card; a second card is safer than reusing the stock card.",
+        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher, Raspberry Pi Imager or dd).",
+        "7-Zip to extract the image; do not format the Linux partitions that Windows cannot read."
+      ],
+      "warnings": [
+        "KNULLI ships a separate image per model; an rg35xx-h image does not boot an RG35XX SP or Plus.",
+        "Revised H700 units exist; KNULLI's Scarab release notes newly supported revised H700 devices in the RG XX series.",
+        "Never let Windows format the partitions it cannot read after writing the image."
+      ],
+      "links": [
+        {
+          "label": "KNULLI supported devices",
+          "url": "https://knulli.org/devices/"
+        },
+        {
+          "label": "KNULLI install guide",
+          "url": "https://knulli.org/play/install/"
+        }
+      ]
+    },
+    {
+      "name": "ROCKNIX",
+      "kind": "os",
+      "models": [
+        "rg35xx-h",
+        "rg35xx-plus",
+        "rg35xx-2024",
+        "rg35xx-sp",
+        "rg35xx-pro",
+        "rg28xx",
+        "rg34xx",
+        "rg40xx-h",
+        "rg40xx-v",
+        "rg-cubexx"
+      ],
+      "firmware": "Per-model H700 image; mainline Linux with Panfrost, boots from SD card.",
+      "summary": "Mainline-Linux retro gaming OS with Panfrost graphics for the Allwinner H700 models. It boots from SD card and leaves internal storage untouched.",
+      "source": "https://rocknix.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "rg35xx-h",
+            "rg35xx-plus",
+            "rg35xx-2024",
+            "rg35xx-sp",
+            "rg35xx-pro",
+            "rg28xx",
+            "rg34xx",
+            "rg40xx-h",
+            "rg40xx-v",
+            "rg-cubexx"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "ROCKNIX lists these models as separate device pages. The RG35XX 2024 is covered by the Plus entry."
+        },
+        {
+          "models": [
+            "rg34xx-sp"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "ROCKNIX's device index does not list the RG34XX SP (checked 2026-10-28)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Anbernic H700 model from ROCKNIX's device index.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher, Raspberry Pi Imager or dd).",
+        "Do not format the Linux partitions that Windows cannot read."
+      ],
+      "warnings": [
+        "ROCKNIX ships a separate image per model; cross-flashing does not boot.",
+        "Revised H700 units may need a newer ROCKNIX release.",
+        "Never let Windows format the partitions it cannot read after writing the image."
+      ],
+      "links": [
+        {
+          "label": "ROCKNIX device index",
+          "url": "https://rocknix.org/devices/"
+        },
+        {
+          "label": "ROCKNIX install guide",
+          "url": "https://rocknix.org/play/install/"
+        },
+        {
+          "label": "ROCKNIX: RG35XX H",
+          "url": "https://rocknix.org/devices/anbernic/rg35xx-h/"
+        }
+      ]
+    },
+    {
+      "name": "spruceOS",
+      "kind": "os",
+      "models": [
+        "rg35xx-h",
+        "rg35xx-plus",
+        "rg35xx-sp",
+        "rg35xx-pro",
+        "rg28xx",
+        "rg34xx",
+        "rg34xx-sp",
+        "rg40xx-h",
+        "rg40xx-v",
+        "rg-cubexx"
+      ],
+      "firmware": "Frontend on top of the vendor OS; needs a 'BaseOS' TF1 image on this family.",
+      "summary": "Frontend and game launcher that runs on top of Anbernic's stock OS. On the XX models it needs a prepared BaseOS image on the first card.",
+      "source": "https://raw.githubusercontent.com/wiki/spruceUI/spruceOS/Supported-Devices.md",
+      "compatibility": [
+        {
+          "models": [
+            "rg35xx-h",
+            "rg35xx-plus",
+            "rg35xx-sp",
+            "rg35xx-pro",
+            "rg28xx",
+            "rg34xx",
+            "rg34xx-sp",
+            "rg40xx-h",
+            "rg40xx-v",
+            "rg-cubexx"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "spruceOS lists these models and requires a BaseOS TF1 image for them."
+        },
+        {
+          "models": [
+            "rg35xx-2024"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "spruceOS's supported-device list does not name the RG35XX 2024 (checked 2026-10-28)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Anbernic model from spruceOS's supported-device list.",
+        "A FAT32 SD card.",
+        "The spruceOS archive extracted to the card (no image write for devices that do not need a BaseOS image).",
+        "A BaseOS TF1 image where spruceOS requires one."
+      ],
+      "warnings": [
+        "spruceOS keeps the stock OS underneath by design; it is not a full OS replacement.",
+        "The 'RG SP' row in spruceOS's list is not placed in this family by any other source checked here."
+      ],
+      "links": [
+        {
+          "label": "spruceOS supported devices",
+          "url": "https://raw.githubusercontent.com/wiki/spruceUI/spruceOS/Supported-Devices.md"
+        },
+        {
+          "label": "spruceOS repository",
+          "url": "https://github.com/spruceUI/spruceOS"
+        }
+      ]
+    },
+    {
+      "name": "Anbernic stock firmware",
+      "kind": "recovery",
+      "models": [
+        "rg35xx-h",
+        "rg35xx-plus",
+        "rg35xx-2024",
+        "rg35xx-sp",
+        "rg35xx-pro",
+        "rg28xx",
+        "rg34xx",
+        "rg34xx-sp",
+        "rg40xx-h",
+        "rg40xx-v",
+        "rg-cubexx"
+      ],
+      "firmware": "Per-model image stamped YYMMDD; latest builds from Anbernic's System Update index.",
+      "summary": "Anbernic's own Linux OS image, written to the first SD card. It restores the factory system; nothing inside the device is overwritten.",
+      "source": "https://anbernic.com/pages/system-update",
+      "compatibility": [
+        {
+          "models": [
+            "rg35xx-h",
+            "rg35xx-plus",
+            "rg35xx-2024",
+            "rg35xx-sp",
+            "rg35xx-pro",
+            "rg28xx",
+            "rg34xx",
+            "rg34xx-sp",
+            "rg40xx-h",
+            "rg40xx-v",
+            "rg-cubexx"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Vendor image per model; the version string is a build stamp (for example RG35XXH-V1.2.4-EN16GB-260526), not a firmware version."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Download the image for the exact model from Anbernic's System Update page.",
+        "Unzip the download with 7-Zip.",
+        "Format the TF1 card FAT32 with Rufus.",
+        "Write the image and boot.",
+        "A PC, card reader and network connection, as Anbernic assumes."
+      ],
+      "warnings": [
+        "The wrong model image does not boot, and the models look alike.",
+        "On RG35XX Plus and RG35XX 2024, the vendor notes that after installing the OS on the 16 GB version the SD card cannot be expanded and ROMs cannot be installed on it.",
+        "No documented downgrade path; going back means writing an older vendor image.",
+        "Stock version strings are build-stamped and easy to misread as dates."
+      ],
+      "links": [
+        {
+          "label": "Anbernic System Update index",
+          "url": "https://anbernic.com/pages/system-update"
+        },
+        {
+          "label": "Anbernic: how to flash the RG35XX 2024 firmware",
+          "url": "https://support.anbernic.com/support/solutions/articles/150000180321-how-do-i-flash-the-firmware-for-rg35xx-2024-"
+        },
+        {
+          "label": "Anbernic firmware update post (2026-01-04)",
+          "url": "https://anbernic.com/blogs/news/firmware-update-251225"
+        }
+      ]
+    }
+  ],
+  "highlights": [
+    {
+      "title": "Custom firmware",
+      "name": "KNULLI / ROCKNIX / spruceOS",
+      "firmware": "Runs from SD card; no internal flash or bootloader unlock",
+      "summary": "Three community operating systems boot from a prepared SD card on the H700 models. Each publishes a separate image per model, so the model suffix matters.",
+      "source": "https://knulli.org/devices/",
+      "checkedDate": "2026-10-28",
+      "target": "console-os-section"
+    },
+    {
+      "title": "Back to stock",
+      "name": "Anbernic stock firmware",
+      "firmware": "Per-model image from Anbernic's System Update index",
+      "summary": "Writing Anbernic's own image to the first SD card restores the factory system. Nothing inside the device is overwritten.",
+      "source": "https://anbernic.com/pages/system-update",
+      "checkedDate": "2026-10-28",
+      "target": "console-recovery-section"
+    }
+  ],
+  "communities": [],
+  "sources": [
+    {
+      "label": "Anbernic: RG35XX H product page",
+      "url": "https://anbernic.com/products/rg35xx-h"
+    },
+    {
+      "label": "Anbernic: System Update index",
+      "url": "https://anbernic.com/pages/system-update"
+    },
+    {
+      "label": "Anbernic: firmware update post (2026-01-04)",
+      "url": "https://anbernic.com/blogs/news/firmware-update-251225"
+    },
+    {
+      "label": "Anbernic support: how to flash the RG35XX 2024 firmware",
+      "url": "https://support.anbernic.com/support/solutions/articles/150000180321-how-do-i-flash-the-firmware-for-rg35xx-2024-"
+    },
+    {
+      "label": "KNULLI: supported devices",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "KNULLI: install guide",
+      "url": "https://knulli.org/play/install/"
+    },
+    {
+      "label": "ROCKNIX: device index",
+      "url": "https://rocknix.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: RG35XX H",
+      "url": "https://rocknix.org/devices/anbernic/rg35xx-h/"
+    },
+    {
+      "label": "spruceOS: supported devices",
+      "url": "https://raw.githubusercontent.com/wiki/spruceUI/spruceOS/Supported-Devices.md"
+    }
+  ],
+  "copy": {
+    "os": {
+      "title": "Custom firmware on SD card",
+      "nav": "Custom firmware",
+      "finder": "Custom firmware",
+      "note": "These projects replace or sit on top of the stock OS on an SD card. The device boots whatever card is inserted; no bootloader unlock is involved."
+    },
+    "recovery": {
+      "title": "Restore the official system software",
+      "nav": "Back to stock",
+      "finder": "Back to stock",
+      "note": "Use Anbernic's per-model image to rebuild the stock card. A full write replaces the card's contents."
+    },
+    "tools": {
+      "note": "An image writer prepares the card; none of these is a firmware flasher for the device itself."
+    }
+  }
+}
