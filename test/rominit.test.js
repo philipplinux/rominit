@@ -688,6 +688,16 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('ROMvault index.json is current and every net page has its parent', { skip: !existsSync(new URL('../romvault/index.json', import.meta.url)) && 'private ROMvault checkout missing' }, async () => {
+  const { readFileSync } = await import('node:fs');
+  const { index } = await import('../scripts/romvault-net.mjs');
+  const built = index(new URL('../romvault', import.meta.url).pathname);
+  assert.deepEqual(JSON.parse(readFileSync(new URL('../romvault/index.json', import.meta.url), 'utf8')), built, 'stale: run node scripts/romvault-net.mjs index');
+  const up = (/** @type {string} */ rel) => [rel, ...(built.pages[rel].parent ? up(built.pages[rel].parent) : [])];
+  assert.equal(up(built.catalog.starlte).at(-1), 'categories/phones.md');
+  assert.deepEqual(Object.entries(built.pages).filter(([rel, p]) => !p.parent && ['device', 'series', 'line', 'vendor', 'rom'].includes(p.type)).map(([rel]) => rel), []);
+});
+
 test('sources page lists every dependency', async () => {
   const { readFile } = await import('node:fs/promises');
   const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));

@@ -1,7 +1,8 @@
 // ROMvault net: `tree` prints category › vendor › line › series › device › ROM from the pages' own links;
 // `fix` hangs every catalog device into that tree (and every device page with `soc:` onto its socs/ page), creating missing pages as stubs and adding the missing
 // up/down links, README entries and log.md lines. Stubs stay lint-red (no sources yet) until someone researches them.
-// Usage: node scripts/romvault-net.mjs tree | fix [--agent "Claude Code"]
+// `index` writes romvault/index.json (the net as data, for agents without search).
+// Usage: node scripts/romvault-net.mjs tree | index | fix [--agent "Claude Code"]
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -143,12 +144,31 @@ export function tree(vault) {
   return out.join('\n') + (lost.length ? `\n\nNot in the tree (run fix): ${lost.join(', ')}` : '');
 }
 
+/** The net as data for agents without search (CLI, MCP): every page with its type, catalog id, parent, children and
+ * sideways links, plus `catalog` → page lookup. Built from paths, frontmatter and links; never edited by hand. @param {string} vault */
+export function index(vault) {
+  const v = open(vault), UP = Object.fromEntries(Object.entries(DOWN).map(([parent, child]) => [child, parent]));
+  const type = (/** @type {string} */ rel) => frontmatter(v.text(rel))?.type;
+  const all = v.folder('.').map(rel => rel.replace(/^\.\//, '')).filter(rel => !/^(skills|logs)\//.test(rel) && !['AGENTS.md', 'README.md', 'log.md'].includes(rel));
+  const pages = /** @type {Record<string, any>} */ ({}), catalog = /** @type {Record<string, string>} */ ({});
+  for (const rel of all) {
+    const fm = frontmatter(v.text(rel)) ?? {}, t = fm.type;
+    const out = [...new Set(v.links(rel).filter(l => l.endsWith('.md') && v.has(l)))];
+    const parent = out.find(l => UP[t] && type(l) === UP[t]) ?? null;
+    pages[rel] = { type: t, title: fm.title, ...(fm.catalog && { catalog: fm.catalog }), ...(fm.soc && { soc: fm.soc }), tags: fm.tags ?? [],
+      parent, children: out.filter(l => DOWN[t] && type(l) === DOWN[t]), related: out.filter(l => l !== parent && !(DOWN[t] && type(l) === DOWN[t])) };
+    if (fm.catalog && ['device', 'rom'].includes(t)) catalog[t === 'rom' ? `${basename(dirname(dirname(rel)))}/${basename(rel, '.md')}` : fm.catalog] = rel;
+  }
+  return { about: 'ROMvault net: parent/children follow category › vendor › line › series › device › ROM; catalog maps a catalog device id (or <device>/<rom>) to its page.', catalog, pages };
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const [cmd, ...rest] = process.argv.slice(2), vault = join(ROOT, 'romvault');
   if (cmd === 'tree') console.log(tree(vault));
+  else if (cmd === 'index') { writeFileSync(join(vault, 'index.json'), JSON.stringify(index(vault), null, 1) + '\n'); console.log('wrote romvault/index.json'); }
   else if (cmd === 'fix') {
     const agent = rest[rest.indexOf('--agent') + 1] ?? 'script';
     const { create, update } = fix(vault, rest.includes('--agent') ? agent : 'script');
     console.log(`created ${create.size}: ${[...create].join(', ') || '–'}\nupdated ${update.size}: ${[...update].join(', ') || '–'}\nnext: node scripts/romvault-lint.mjs`);
-  } else { console.log('usage: node scripts/romvault-net.mjs tree | fix [--agent "<name>"]'); process.exitCode = 2; }
+  } else { console.log('usage: node scripts/romvault-net.mjs tree | index | fix [--agent "<name>"]'); process.exitCode = 2; }
 }
