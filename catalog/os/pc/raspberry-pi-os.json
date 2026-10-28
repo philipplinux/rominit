@@ -73,6 +73,24 @@
           "usb": false
         }
       ]
+    },
+    {
+      "id": "lite",
+      "name": "Lite (arm64)",
+      "description": "The headless build without a desktop, for servers and kiosks.",
+      "usbNote": "1.1 GB compressed image. Write it to an SD card with dd, Raspberry Pi Imager or any image writer; writing erases the card.",
+      "images": [
+        {
+          "id": "raspberry-pi-os-lite-arm64",
+          "arch": "aarch64",
+          "format": "img.xz",
+          "url": "https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2026-10-06/2026-10-06-raspios-trixie-arm64-lite.img.xz",
+          "size": 550466056,
+          "sha256": "483db18a48da399b5b7022ffae9a07bc6d99daab30e593aedac09b69ff422843",
+          "digestUrl": "https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2026-10-06/2026-10-06-raspios-trixie-arm64-lite.img.xz.sha256",
+          "usb": false
+        }
+      ]
     }
   ],
   "officialSupport": {
