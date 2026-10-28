@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { CONSOLES, consoleCompatibility } from '../src/consoles/index.js';
 import { FAMILIES } from '../src/consoles/families.js';
 import { CONSOLE_SECTIONS, consoleCopy } from '../src/consoles/labels.js';
@@ -123,6 +123,8 @@ test('highlight links target a section this console actually shows', () => {
 });
 
 test('console copy stays generic to its console and keeps the PS5 wording', () => {
+  const defaults = consoleCopy({ manufacturer: 'Maker' });
+  for (const [key, text] of Object.entries(defaults)) assert(!/PS5|PlayStation|Sony/.test(text), `default copy ${key} names PlayStation or Sony`);
   for (const entry of CONSOLES) {
     const copy = consoleCopy(entry);
     for (const [key, text] of Object.entries(copy)) {
@@ -135,6 +137,15 @@ test('console copy stays generic to its console and keeps the PS5 wording', () =
   assert.equal(copy['pc.title'], 'Play PS5 games on other devices');
   assert.equal(copy['pc.nav'], 'PS5 games elsewhere');
   assert.equal(copy['linux.title'], 'Run Linux on your PS5');
+});
+
+test('console template has a default for every copy hook and no console-specific wording', () => {
+  const template = readFileSync(new URL('../site/console.html', import.meta.url), 'utf8');
+  const hooks = [...template.matchAll(/data-copy="([^"]+)"/g)].map(match => match[1]);
+  const defaults = new Set(Object.keys(consoleCopy({ manufacturer: 'Maker' })));
+  assert(hooks.length >= 20, 'console.html lost its copy hooks');
+  for (const hook of hooks) assert(defaults.has(hook), `data-copy="${hook}" has no default copy`);
+  assert(!/PS5|PlayStation|Sony/.test(template), 'console.html contains PS5/PlayStation/Sony wording');
 });
 
 test('emulator pages are sourced, link a known console and are linked back from it', async () => {

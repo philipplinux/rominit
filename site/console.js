@@ -28,7 +28,11 @@ if (!info) {
   byId('console-name').textContent = info.name;
   byId('console-summary').textContent = info.summary;
   const copy = consoleCopy(info);
-  for (const element of document.querySelectorAll('[data-copy]')) element.textContent = copy[/** @type {HTMLElement} */ (element).dataset.copy];
+  // Copy fills any [data-copy] hook from the catalog; an unknown hook is left alone rather than printing "undefined".
+  for (const element of document.querySelectorAll('[data-copy]')) {
+    const value = copy[/** @type {HTMLElement} */ (element).dataset.copy];
+    if (value != null) element.textContent = value;
+  }
   // The rail repeats the on-page jump wording, so a retitled section keeps its number and reads the same everywhere.
   for (const [name, key] of Object.entries({ entrypoints: 'entrypoints.finder', kernel: 'kernel.finder', linux: 'linux.finder', os: 'os.finder', apps: 'apps.finder', emulation: 'emulation.finder', pc: 'pc.finder', rollback: 'rollback.finder', recovery: 'recovery.finder', tools: 'tools.finder' })) {
     const element = byId(`console-${name}-section`);
