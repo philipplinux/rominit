@@ -5,7 +5,7 @@ import './header-tuck.js';
 import { OSES, ARCH_FAMILY, osArchitectures } from '../src/os/index.js';
 import { CONSOLES } from '../src/consoles/index.js';
 import { EMULATORS } from '../src/emulators/index.js';
-import { CATEGORIES, SUPPORT_ROUTE_SECTIONS, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, recipes, selectFiles, stepsFor, officialSupportText, unlockStage } from '../src/catalog.js';
+import { CATEGORIES, SUPPORT_ROUTE_SECTIONS, FEATURES, FEATURE_GROUPS, INCLUDES, LEVELS, ORIGINS, STATUSES, USES, VETTING, assertConsent, completeness, deviceLevel, osLevel, recipes, selectFiles, stepsFor, officialSupportText, unlockStage } from '../src/catalog.js';
 import { connect, rebootFromAndroid } from '../src/protocols/usb.js';
 import { validateUsbEnvironment } from '../src/usb-environment.js';
 import { redact, summarize, traced } from '../src/debug.js';
@@ -958,7 +958,7 @@ function stageCard(device, stage, n, count, key) {
 /** @param {any[]} index */
 function devicePicker(index) {
   const search = h('input', { className: 'confirmation-input', type: 'search', placeholder: 'Search vendor, name, model or codename', autofocus: true, value: params.get('q') ?? '' });
-  // Five levels, best first; the pick shows that level and every better one. Default includes every level for now.
+  // Levels best first; the pick shows that level and every better one. Default stops before Retired (discontinued OSes).
   const levels = Object.keys(LEVELS), level = h('div', { className: 'level-toggle', role: 'radiogroup', ariaLabel: 'Show phones up to' }, ...levels.map(l =>
     h('label', {}, h('input', { type: 'radio', name: 'level', value: l, checked: l === 'placeholder', onchange: () => render() }), h('span', { textContent: LEVELS[l] }))));
   // Pick one device category or all categories.
@@ -993,10 +993,10 @@ function devicePicker(index) {
         ...sorted(families).map(([family, devices]) => h('div', { className: 'family' }, h('strong', { textContent: family }),
           h('ul', { className: 'selected-files' }, ...devices.sort((x, y) => x.variant.localeCompare(y.variant)).map(deviceLink), ...devices.flatMap(unsupportedItems))))))));
     // OS pages (catalog/os) sit at the top of the PC category, matched by name, id and architecture.
-    const osHits = on.has('pc') ? OSES.filter(os => words.every(word => `${os.name} ${os.id} ${osArchitectures(os).map(arch => `${arch} ${ARCH_FAMILY[arch] ?? ''}`).join(' ')}`.toLowerCase().includes(word))) : [];
+    const osHits = on.has('pc') ? OSES.filter(os => (!osLevel(os) || levels.indexOf(osLevel(os)) <= upTo) && words.every(word => `${os.name} ${os.id} ${osArchitectures(os).map(arch => `${arch} ${ARCH_FAMILY[arch] ?? ''}`).join(' ')}`.toLowerCase().includes(word))) : [];
     const showOs = osHits.length > 0;
     const osEntry = osHits.map(os => h('article', { className: 'os-entry' }, h('a', { href: `./${os.id}`, className: 'os-title' }, h('img', { src: `./${os.page.logo.src}`, alt: '', width: 40, height: 40 }), h('strong', { textContent: os.name })),
-      h('p', { className: 'field-help', textContent: `${os.editions.length} editions · ${os.version}` }),
+      h('p', { className: 'field-help', textContent: `${os.editions.length} editions · ${os.version}${osLevel(os) ? ' · retired, no new releases' : ''}` }),
       h('div', { className: 'architecture-tags', ariaLabel: 'Architectures' }, ...[...new Set(osArchitectures(os).map(arch => ARCH_FAMILY[arch] ?? arch))].map(name => h('span', { className: 'architecture-tag', textContent: name })))));
     const consoleHits = on.has('console') ? CONSOLES.filter(console => words.every(word => `${console.name} ${console.id} ${console.manufacturer} ${console.summary} ${console.variants.map(v => v.model).join(' ')}`.toLowerCase().includes(word))) : [];
     const showConsoles = consoleHits.length > 0;

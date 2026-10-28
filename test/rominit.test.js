@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import test from 'node:test';
 import { loadCatalog } from '../scripts/load-catalog.mjs';
-import { CATEGORIES, CATEGORY_DIRS, FEATURES, USES, assertConsent, completeness, deviceLevel, problems, recipes, selectFiles, stagesProblems, stepsFor, unlockStage } from '../src/catalog.js';
+import { CATEGORIES, CATEGORY_DIRS, FEATURES, USES, assertConsent, completeness, deviceLevel, osLevel, problems, recipes, selectFiles, stagesProblems, stepsFor, unlockStage } from '../src/catalog.js';
 import { checksum, verifyPins } from '../src/hash.js';
 
 const sha = (/** @type {string} */ text) => createHash('sha256').update(text).digest('hex');
@@ -59,6 +59,8 @@ test('search level: approved phone test, then curated, scraped with recipe, supp
   assert.equal(deviceLevel(rom({ vetting: 'scraped', external: false }), tested), 'untested');
   assert.equal(deviceLevel({ codename: 's', supportOnly: true, roms: [] }, tested), 'supported');
   assert.equal(deviceLevel(rom({ vetting: 'scraped', external: true }), tested), 'placeholder');
+  assert.equal(osLevel({ officialSupport: { status: 'dropped' } }), 'retired');
+  assert.equal(osLevel({ officialSupport: { status: 'ongoing' } }), null);
 });
 
 test('validator rejects bad entries', () => {

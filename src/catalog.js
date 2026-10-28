@@ -37,7 +37,9 @@ const isHttpsUrl = value => {
   catch { return false; }
 };
 /** Search levels, best first: an approved ROMinit phone test, a curated ROM, a scraped ROM with a recipe, support-only (no recipe), only link-only ROMs. */
-export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder' };
+export const LEVELS = { tested: 'Tested', approved: 'Approved', untested: 'Untested (with recipe)', supported: 'Supported (no recipe)', placeholder: 'Placeholder', retired: 'Retired' };
+/** Retired holds discontinued OS families (publisher stopped releasing); devices never land there. @param {any} os */
+export const osLevel = (os) => os.officialSupport?.status === 'dropped' ? 'retired' : null;
 /** A phone's best level. @param {any} d index entry @param {Set<string>} tested codenames with an approved phone test @returns {keyof LEVELS} */
 export const deviceLevel = (d, tested) => tested.has(d.codename) ? 'tested' : d.supportOnly ? 'supported'
   : d.roms.some((/** @type {any} */ r) => r.vetting === 'curated') ? 'approved' : d.roms.some((/** @type {any} */ r) => !r.external) ? 'untested' : 'placeholder';
