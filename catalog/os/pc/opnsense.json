@@ -1,0 +1,43 @@
+{
+  "id": "opnsense",
+  "name": "OPNsense",
+  "shortName": "OPNsense",
+  "infoOnly": true,
+  "source": "https://opnsense.org/",
+  "page": {
+    "description": "OPNsense editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FIREWALL AND ROUTER",
+    "intro": "A FreeBSD-based firewall and routing platform with a web interface, released as a community edition twice a year, with a paid business edition on top.",
+    "logo": { "src": "logos/opnsense.svg", "alt": "OPNsense logo", "width": 180, "height": 180 },
+    "pros": [
+      "Web interface for firewalling, VPN, routing and reporting.",
+      "Twice-yearly image releases with frequent software point updates.",
+      "Community edition is free; the business edition is a subscription.",
+      "Hardened FreeBSD base with UEFI hybrid images."
+    ],
+    "cons": [
+      "Publishes images as .iso.bz2 and .img.bz2, which ROMinit does not pin.",
+      "amd64 only.",
+      "No end-of-life date is published for a series.",
+      "The installed software upgrades independently of the image version."
+    ],
+    "links": [
+      { "label": "OPNsense website", "href": "https://opnsense.org/" },
+      { "label": "Download", "href": "https://opnsense.org/download/" },
+      { "label": "Install guide", "href": "https://docs.opnsense.org/manual/install.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for OPNsense; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "OPNsense publishes compressed ISO and disk images: decompress, then write the image to a stick. ROMinit pins no compressed image here; the download page names the current series.",
+    "footer": [
+      { "label": "OPNsense website", "href": "https://opnsense.org/" },
+      { "label": "Download", "href": "https://opnsense.org/download/" },
+      { "label": "Install guide", "href": "https://docs.opnsense.org/manual/install.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/opnsense.svg\nOPNsense logo from Simple Icons (CC0), https://simpleicons.org; the OPNsense name and mark belong to Deciso B.V., shown only to identify OPNsense. No endorsement implied."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://opnsense.org/download/" }
+}
