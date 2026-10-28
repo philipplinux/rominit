@@ -1,0 +1,71 @@
+{
+  "id": "q4os",
+  "name": "Q4OS",
+  "shortName": "Q4OS",
+  "defaultEdition": "plasma",
+  "version": "6.10",
+  "releaseDate": "2026-10-08",
+  "source": "https://www.q4os.org/",
+  "page": {
+    "description": "Q4OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DEBIAN-BASED LINUX",
+    "intro": "A lightweight, Debian-based desktop operating system offering both the advanced Plasma and the efficient Trinity desktop environments. Features unique tools like Desktop Profiler and Lookswitcher.",
+    "logo": { "src": "logos/q4os.png", "alt": "Q4OS logo", "width": 512, "height": 188 },
+    "pros": [
+      "Rock-stable Debian foundation with five years of LTS support",
+      "Choice of Plasma or Trinity desktop, installable side-by-side",
+      "Extremely lightweight; runs well on 6-year-old hardware",
+      "Exclusive Windows installer for easy dual-boot alongside Windows"
+    ],
+    "cons": [
+      "Donation page is presented before direct download links",
+      "Plasma edition has grown larger, no longer contains Trinity packages by default",
+      "Smaller community and fewer third-party resources",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Q4OS", "href": "https://www.q4os.org/" },
+      { "label": "Downloads", "href": "https://www.q4os.org/downloads1.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Q4OS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd, Rufus, or BalenaEtcher. Alternatively, use the Q4OS Imager tool or the Windows installer for dual-boot setups.",
+    "footer": [
+      { "label": "Q4OS", "href": "https://www.q4os.org/" },
+      { "label": "Downloads", "href": "https://www.q4os.org/downloads1.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/q4os.png\nQ4OS logo.svg, Public domain, by Dexxor (vectorization), https://commons.wikimedia.org/wiki/File:Q4OS_logo.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "plasma",
+      "name": "Plasma Desktop",
+      "description": "The primary edition with KDE Plasma 6 desktop, featuring the stock Debian look or Q4OS Debonaire theme.",
+      "usbNote": "1.9 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "q4os-plasma-x86_64", "arch": "x86_64", "format": "iso", "url": "https://sourceforge.net/projects/q4os/files/stable/q4os-6.10-x64.r2.iso/download", "sha256": "1df141eaa342bbfd0092791a60f1ae9cf5230e8ebb472f87fcb463203e3eb95d", "sha256Computed": "2026-10-28", "size": 1851392000, "usb": true }
+      ]
+    },
+    {
+      "id": "trinity",
+      "name": "Trinity Desktop",
+      "description": "Lightweight edition with the efficient Trinity desktop, ideal for older or resource-constrained hardware.",
+      "usbNote": "1.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "q4os-trinity-x86_64", "arch": "x86_64", "format": "iso", "url": "https://sourceforge.net/projects/q4os/files/stable/q4os-6.10-x64-tde.r2.iso/download", "sha256": "12db3725ab50a349e9d5afdb95dc4995e957418de9ef09f46414b64e5ee3424b", "sha256Computed": "2026-10-28", "size": 1478656000, "usb": true }
+      ]
+    },
+    {
+      "id": "instcd",
+      "name": "Install CD (Trinity)",
+      "description": "Minimal install CD for older machines, Trinity desktop, suitable for systems with limited storage.",
+      "usbNote": "1.0 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "q4os-instcd-x86_64", "arch": "x86_64", "format": "iso", "url": "https://sourceforge.net/projects/q4os/files/stable/q4os-6.10-x64-instcd.r1.iso/download", "sha256": "9d7457fb20660e5df3cccbb2a20675574e62c5fd99f32be068e8df7a7291f9aa", "sha256Computed": "2026-10-28", "size": 1097564160, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.q4os.org/downloads1.html" }
+}
