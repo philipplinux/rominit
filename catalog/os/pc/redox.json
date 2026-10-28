@@ -2,7 +2,9 @@
   "id": "redox",
   "name": "Redox OS",
   "shortName": "Redox",
-  "infoOnly": true,
+  "defaultEdition": "desktop",
+  "version": "0.9.0",
+  "releaseDate": "2024-09-07",
   "source": "https://www.redox-os.org/",
   "page": {
     "description": "Redox OS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
@@ -18,7 +20,7 @@
     "cons": [
       "0.9.0 is from September 2024; daily images carry newer code.",
       "Hardware support is narrow.",
-      "Media ships as .iso.zst and .img.zst, which ROMinit does not pin.",
+      "Media ships zstd-compressed, so decompress before writing it.",
       "A small community compared with mainstream systems."
     ],
     "links": [
@@ -27,7 +29,7 @@
       { "label": "Download", "href": "https://www.redox-os.org/download/" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for Redox OS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "Redox publishes zstd-compressed livedisk and harddrive images: decompress, then write the image. ROMinit pins no .zst image here.",
+    "status": "Redox publishes zstd-compressed livedisk and harddrive images. Decompress an image with zstd, then write it to a stick or a virtual disk; writing erases the target device.",
     "footer": [
       { "label": "Redox website", "href": "https://www.redox-os.org/" },
       { "label": "Releases", "href": "https://www.redox-os.org/releases/" },
@@ -38,6 +40,37 @@
       "logos/redox.svg\nRedox OS logo from Simple Icons (CC0), https://simpleicons.org; the Redox name and mark belong to the Redox OS project, shown only to identify Redox OS. No endorsement implied."
     ]
   },
-  "editions": [],
+  "editions": [
+    {
+      "id": "desktop",
+      "name": "Desktop",
+      "description": "The desktop image, with the Redox Orbital desktop and the core applications.",
+      "usbNote": "115 MB zstd-compressed ISO for x86_64, 115 MB for i686. Decompress it, then write it to a stick.",
+      "images": [
+        { "id": "redox-desktop-x86_64", "arch": "x86_64", "format": "iso.zst", "url": "https://static.redox-os.org/releases/0.9.0/x86_64/redox_desktop_x86_64_2024-09-07_1225_livedisk.iso.zst", "sha256": "0b63f7e138c7b0ad08e1d7f4c4779b20427673a01fe25603b93659605e029bc9", "sha256Url": "https://static.redox-os.org/releases/0.9.0/x86_64/SHA256SUM", "size": 120804843, "usb": false },
+        { "id": "redox-desktop-i686", "arch": "x86", "format": "iso.zst", "url": "https://static.redox-os.org/releases/0.9.0/i686/redox_desktop_i686_2024-09-07_1225_livedisk.iso.zst", "sha256": "6eb44b01c671a8b8d869d0026a51a007230d28e060ba6a1e989e135b5a2e1db8", "sha256Url": "https://static.redox-os.org/releases/0.9.0/i686/SHA256SUM", "size": 120829636, "usb": false }
+      ]
+    },
+    {
+      "id": "server",
+      "name": "Server",
+      "description": "A smaller image with the server tooling and no desktop.",
+      "usbNote": "70 MB zstd-compressed ISO. Decompress it, then write it to a stick.",
+      "images": [
+        { "id": "redox-server-x86_64", "arch": "x86_64", "format": "iso.zst", "url": "https://static.redox-os.org/releases/0.9.0/x86_64/redox_server_x86_64_2024-09-07_1225_livedisk.iso.zst", "sha256": "a73c3783a72a15eba8dd85dee941298cdd34e125a37008a3bcc7227b5f073e93", "sha256Url": "https://static.redox-os.org/releases/0.9.0/x86_64/SHA256SUM", "size": 70108737, "usb": false },
+        { "id": "redox-server-i686", "arch": "x86", "format": "iso.zst", "url": "https://static.redox-os.org/releases/0.9.0/i686/redox_server_i686_2024-09-07_1225_livedisk.iso.zst", "sha256": "522cfc5045c48eb662bb41fab995a1e0baf3270de657356c8f7eb9e1662af182", "sha256Url": "https://static.redox-os.org/releases/0.9.0/i686/SHA256SUM", "size": 67546519, "usb": false }
+      ]
+    },
+    {
+      "id": "demo",
+      "name": "Demo",
+      "description": "A demonstration image with sample applications and less of the desktop tooling.",
+      "usbNote": "344 MB zstd-compressed ISO for x86_64, 170 MB for i686. Decompress it, then write it to a stick.",
+      "images": [
+        { "id": "redox-demo-x86_64", "arch": "x86_64", "format": "iso.zst", "url": "https://static.redox-os.org/releases/0.9.0/x86_64/redox_demo_x86_64_2024-09-07_1225_livedisk.iso.zst", "sha256": "8a333ad7fedc653c0b4e8e0346f499d7c326dfd3270ce3abb6528c8f65f06527", "sha256Url": "https://static.redox-os.org/releases/0.9.0/x86_64/SHA256SUM", "size": 361097036, "usb": false },
+        { "id": "redox-demo-i686", "arch": "x86", "format": "iso.zst", "url": "https://static.redox-os.org/releases/0.9.0/i686/redox_demo_i686_2024-09-07_1225_livedisk.iso.zst", "sha256": "5b654765df46ba75ce06ce92e8ec362c96aaf1f014a9dd49aba7fda7fdb93608", "sha256Url": "https://static.redox-os.org/releases/0.9.0/i686/SHA256SUM", "size": 178681078, "usb": false }
+      ]
+    }
+  ],
   "officialSupport": { "status": "ongoing", "source": "https://www.redox-os.org/" }
 }
