@@ -2,7 +2,9 @@
   "id": "whonix",
   "name": "Whonix",
   "shortName": "Whonix",
-  "infoOnly": true,
+  "defaultEdition": "lxqt",
+  "version": "18.2.4.2",
+  "releaseDate": "2026-10-21",
   "source": "https://www.whonix.org/",
   "page": {
     "description": "Whonix editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
@@ -19,7 +21,7 @@
       "It is a virtual-machine system: no plain USB install image is published.",
       "Two VMs need more RAM than a single desktop.",
       "Intel/AMD 64-bit only.",
-      "ROMinit pins no image here, because the media is an OVA appliance."
+      "The OVA appliances are for hypervisors, not for writing to a USB stick."
     ],
     "links": [
       { "label": "Whonix website", "href": "https://www.whonix.org/" },
@@ -27,7 +29,7 @@
       { "label": "Downloads", "href": "https://www.whonix.org/wiki/Download" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for Whonix; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "Whonix is distributed as virtual-machine appliances (OVA) for VirtualBox and KVM and as Qubes templates, not as a bootable USB image. ROMinit therefore only points at the project's own pages.",
+    "status": "Whonix ships as virtual-machine appliances (OVA) for VirtualBox and KVM, and as Qubes templates. Import the OVA in the hypervisor; there is no USB install image. ROMinit pins the OVA files for download and checksum only.",
     "footer": [
       { "label": "Whonix website", "href": "https://www.whonix.org/" },
       { "label": "Documentation", "href": "https://www.whonix.org/wiki/Whonix" },
@@ -38,6 +40,25 @@
       "logos/whonix.png\nWhonix logo, GPLv3, by the Whonix project, https://commons.wikimedia.org/wiki/File:Whonix_Logo.png."
     ]
   },
-  "editions": [],
+  "editions": [
+    {
+      "id": "lxqt",
+      "name": "LXQt",
+      "description": "The full Whonix desktop appliance, with the LXQt workstation and the gateway VM.",
+      "usbNote": "2.5 GiB OVA appliance. Import it in VirtualBox or KVM; it is not written to a USB stick.",
+      "images": [
+        { "id": "whonix-lxqt-x86_64", "arch": "x86_64", "format": "ova", "url": "https://download.whonix.org/ova/18.2.4.2/Whonix-LXQt-18.2.4.2.Intel_AMD64.ova", "sha512": "85bda962f7f31920ed19d84db55814469b0f006086cff2c924531921dcebc3f5c44842fdd07fc214d9f32fda44af13a7266866a143c6865d6c4c6519dae5a7fb", "sha512Url": "https://download.whonix.org/ova/18.2.4.2/Whonix-LXQt-18.2.4.2.Intel_AMD64.ova.sha512sums", "size": 2669475840, "usb": false }
+      ]
+    },
+    {
+      "id": "cli",
+      "name": "CLI",
+      "description": "Command-line appliance without a desktop, for hosts that only need the Tor gateway and a terminal.",
+      "usbNote": "1.3 GiB OVA appliance. Import it in VirtualBox or KVM; it is not written to a USB stick.",
+      "images": [
+        { "id": "whonix-cli-x86_64", "arch": "x86_64", "format": "ova", "url": "https://download.whonix.org/ova/18.2.4.2/Whonix-CLI-18.2.4.2.Intel_AMD64.ova", "sha512": "da34fd22af4517f8b018af8ee632fc1641c03eac4a2da6a4b8ad0f693b65a10b90a14c8561e54fa6cf4af46531ee21dc1af617266f097c48a214179f58f2d417", "sha512Url": "https://download.whonix.org/ova/18.2.4.2/Whonix-CLI-18.2.4.2.Intel_AMD64.ova.sha512sums", "size": 1307473920, "usb": false }
+      ]
+    }
+  ],
   "officialSupport": { "status": "ongoing", "source": "https://www.whonix.org/wiki/Download" }
 }
