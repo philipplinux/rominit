@@ -20,8 +20,12 @@ const folderType = rel => {
 /** Pages reached through the net (category → vendor → line → series → device → ROM), so README does not list them. @param {string} rel */
 const inNet = rel => rel.startsWith('devices/') || /^vendors\/[^/]+\/(lines|series)\//.test(rel) || (rel.startsWith('os/') && folderType(rel) === 'project');
 /** Parent folders of the net above the device. */
+/** Net level of a vendor/category page, for the one-up rule. @param {string} r */
+const netLevel = r => r.startsWith('categories/') ? 'category' : /^vendors\/[^/]+\/lines\//.test(r) ? 'line' : /^vendors\/[^/]+\/series\//.test(r) ? 'series' : /^vendors\/([^/]+)\/\1\.md$/.test(r) ? 'vendor' : null;
+/** One link up: net levels a page's `## Links` must not skip to (its parent lists the rest). */
+const SKIP_UP = { rom: ['series', 'line', 'vendor', 'category'], device: ['line', 'vendor', 'category'], series: ['vendor', 'category'], line: ['category'] };
 const UP_PAGE = { series: (/** @type {string} */ r) => /^vendors\/[^/]+\/lines\//.test(r), line: (/** @type {string} */ r) => /^vendors\/([^/]+)\/\1\.md$/.test(r), vendor: (/** @type {string} */ r) => r.startsWith('categories/') };
-const MAX_LINES = 200;
+const MAX_LINES = 300; // raised from 200 (2026-10-28): OS pages were being squeezed to fit
 const CLASSES = ['phone', 'tablet', 'tvmedia', 'television', 'misc', 'networking', 'console', 'pc']; // catalog device.category values
 
 /** @param {string} dir @returns {string[]} */
@@ -97,6 +101,11 @@ export function lint(vault = VAULT) {
     if (archive) { if (!linksTo(join(vault, 'log.md'), file)) say(file, 'not on the "Older entries:" line of log.md'); }
     else if (rel !== 'README.md' && !inNet(rel) && !readme.includes(`](${rel})`)) say(file, 'not listed in README.md');
     if (['rom', 'device', 'series'].includes(fm.type) && !/\n## Links\n/.test(text)) say(file, 'missing "## Links"');
+    const skip = SKIP_UP[/** @type {keyof typeof SKIP_UP} */ (fm.type)], linksPart = text.split('\n## Links\n')[1]?.split('\n## ')[0] ?? '';
+    if (skip) for (const m of linksPart.matchAll(/\]\(([^)#\s]+)/g)) {
+      const to = relative(vault, resolve(dirname(file), decodeURI(m[1])));
+      if (skip.includes(netLevel(to) ?? '')) say(file, `## Links skips up to ${to}: link only the direct parent (AGENTS.md › Signposts)`);
+    }
     if (fm.type === 'device' && fm.soc) { // sideways: device ↔ socs/<soc>.md, so devices sharing a chip find each other
       const soc = join(vault, 'socs', `${fm.soc}.md`);
       if (!pages.has(soc)) say(file, `soc: ${fm.soc} has no socs/${fm.soc}.md (run scripts/romvault-net.mjs fix)`);

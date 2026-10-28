@@ -679,6 +679,8 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
     const otherPage = join(vault, 'devices/phones/google/cheetah/cheetah.md'), otherText = readFileSync(otherPage, 'utf8');
     writeFileSync(otherPage, unreviewed(otherText));
     assert.ok(lint(vault).some(p => p.includes('missing reviewed')), 'one page with reviewed makes the field required for the rest');
+    writeFileSync(otherPage, otherText.replace('\n## Links\n', '\n## Links\n- Vendor: [Google](../../../../vendors/google/google.md)\n'));
+    assert.ok(lint(vault).some(p => p.includes('cheetah.md: ## Links skips up to vendors/google/google.md')), 'device links only its series');
     writeFileSync(otherPage, otherText);
     writeFileSync(tabletPage, tabletText);
     assert.match(tree(vault), /Google Pixel 7 {2}\(vendors\/google\/series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\) {2}\[\w+ · \d+ turns · reviewed .+ · .+\]/);
