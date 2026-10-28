@@ -1,0 +1,55 @@
+{
+  "id": "talos-linux",
+  "name": "Talos Linux",
+  "shortName": "Talos",
+  "defaultEdition": "metal",
+  "version": "1.14.5",
+  "releaseDate": "2026-10-26",
+  "source": "https://www.talos.dev/",
+  "page": {
+    "description": "Talos Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / KUBERNETES",
+    "intro": "An immutable Linux built only to run Kubernetes: no SSH, no shell and no package manager, with every change applied through an API and a machine configuration.",
+    "logo": { "src": "logos/talos-linux.svg", "alt": "Talos Linux logo", "width": 180, "height": 180 },
+    "pros": [
+      "Minimal, immutable image with nothing but the Kubernetes stack.",
+      "The whole node is managed by API and declarative machine config.",
+      "amd64 and arm64 metal images for ISO and raw-disk installs.",
+      "Upgrades are image swaps, so nodes are reproducible."
+    ],
+    "cons": [
+      "No shell and no SSH: a broken config means reinstalling or fixing from outside.",
+      "Only useful for Kubernetes.",
+      "The ISO installs to disk, erasing the target.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Talos website", "href": "https://www.talos.dev/" },
+      { "label": "Release v1.14.5", "href": "https://github.com/siderolabs/talos/releases/tag/v1.14.5" },
+      { "label": "Documentation", "href": "https://www.talos.dev/latest/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Talos Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Boot the metal ISO and apply a machine configuration generated with talosctl; the node installs to the chosen disk and reboots into the installed system.",
+    "footer": [
+      { "label": "Talos website", "href": "https://www.talos.dev/" },
+      { "label": "Release v1.14.5", "href": "https://github.com/siderolabs/talos/releases/tag/v1.14.5" },
+      { "label": "Documentation", "href": "https://www.talos.dev/latest/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/talos-linux.svg\nTalos logo from Simple Icons (CC0), https://simpleicons.org; the Talos name and mark belong to Sidero Labs, shown only to identify Talos Linux. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "metal",
+      "name": "Bare metal (amd64)",
+      "description": "The metal ISO that boots and installs the node to disk.",
+      "usbNote": "347 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "talos-linux-metal-amd64", "arch": "x86_64", "format": "iso", "url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/metal-amd64.iso", "sha256": "8c36de2d10f180767c132f903a7e6bafbb7afae668aa06db15d5e7fa7faf4324", "sha256Url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/sha256sum.txt", "size": 364195840, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://github.com/siderolabs/talos/releases" }
+}
