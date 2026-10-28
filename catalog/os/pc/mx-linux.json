@@ -10,7 +10,12 @@
     "description": "MX Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / DEBIAN-BASED DESKTOP",
     "intro": "A Debian stable desktop with its own tools, published in three editions. Pick Xfce, Fluxbox or KDE, then write the 64-bit image to a stick.",
-    "logo": { "src": "logos/mx-linux.svg", "alt": "MX Linux logo", "width": 298, "height": 270 },
+    "logo": {
+      "src": "logos/mx-linux.svg",
+      "alt": "MX Linux logo",
+      "width": 298,
+      "height": 270
+    },
     "pros": [
       "Debian stable base with MX's own configuration tools.",
       "Three editions: Xfce, Fluxbox and KDE Plasma.",
@@ -24,8 +29,14 @@
       "x86_64 only for these images."
     ],
     "links": [
-      { "label": "MX Linux website", "href": "https://mxlinux.org/" },
-      { "label": "Downloads", "href": "https://mxlinux.org/download-links/" }
+      {
+        "label": "MX Linux website",
+        "href": "https://mxlinux.org/"
+      },
+      {
+        "label": "Downloads",
+        "href": "https://mxlinux.org/download-links/"
+      }
     ],
     "previewNote": "A stock screenshot of MX Linux 18.3 from Wikimedia Commons. It is not 25.3 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
     "shot": {
@@ -43,8 +54,14 @@
     },
     "status": "One path per edition: the 64-bit ISO, written with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The release date is the official mirror's file date (2026-09-20); the project's own announcement was unreachable for this check.",
     "footer": [
-      { "label": "Official downloads", "href": "https://mxlinux.org/download-links/" },
-      { "label": "MX Linux website", "href": "https://mxlinux.org/" }
+      {
+        "label": "Official downloads",
+        "href": "https://mxlinux.org/download-links/"
+      },
+      {
+        "label": "MX Linux website",
+        "href": "https://mxlinux.org/"
+      }
     ],
     "checked": "2026-10-27",
     "credits": [
@@ -59,7 +76,16 @@
       "description": "The Xfce edition, the project's main desktop.",
       "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "mx-linux-xfce-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Xfce/MX-25.3_Xfce_x64.iso", "sha256": "25b5ce20caeee1b0e50507291df5ac8a8211b1b9999d8dd7416da9b66ed9fbf9", "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Xfce/MX-25.3_Xfce_x64.iso.sha256", "size": 2927624192, "usb": false }
+        {
+          "id": "mx-linux-xfce-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Xfce/MX-25.3_Xfce_x64.iso",
+          "sha256": "25b5ce20caeee1b0e50507291df5ac8a8211b1b9999d8dd7416da9b66ed9fbf9",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Xfce/MX-25.3_Xfce_x64.iso.sha256",
+          "size": 2927624192,
+          "usb": false
+        }
       ]
     },
     {
@@ -68,7 +94,16 @@
       "description": "The lightweight Fluxbox edition, for older or slower machines.",
       "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "mx-linux-fluxbox-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Fluxbox/MX-25.3_fluxbox_x64.iso", "sha256": "01f24095bc417fbf0edcaa0d0d8ef18bb75f5dfa53c525cc71adab4b8d41f51a", "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Fluxbox/MX-25.3_fluxbox_x64.iso.sha256", "size": 2302672896, "usb": false }
+        {
+          "id": "mx-linux-fluxbox-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Fluxbox/MX-25.3_fluxbox_x64.iso",
+          "sha256": "01f24095bc417fbf0edcaa0d0d8ef18bb75f5dfa53c525cc71adab4b8d41f51a",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/Fluxbox/MX-25.3_fluxbox_x64.iso.sha256",
+          "size": 2302672896,
+          "usb": false
+        }
       ]
     },
     {
@@ -77,9 +112,39 @@
       "description": "The KDE Plasma edition with the full Plasma desktop.",
       "usbNote": "x86_64 only. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "mx-linux-kde-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/KDE/MX-25.3_KDE_x64.iso", "sha256": "03cb49ebe8b1af0d630a622bddfc4d8cbefd256755663a49c1214933610ccc2a", "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/KDE/MX-25.3_KDE_x64.iso.sha256", "size": 3646947328, "usb": false }
+        {
+          "id": "mx-linux-kde-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/KDE/MX-25.3_KDE_x64.iso",
+          "sha256": "03cb49ebe8b1af0d630a622bddfc4d8cbefd256755663a49c1214933610ccc2a",
+          "sha256Url": "https://mxlinux.mirror.liquidtelecom.com/isos/MX/Final/KDE/MX-25.3_KDE_x64.iso.sha256",
+          "size": 3646947328,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "xfce-ahs",
+      "name": "Xfce (AHS)",
+      "description": "The Xfce edition with the Advanced Hardware Support kernel and graphics stack for newer machines.",
+      "usbNote": "3.0 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "mx-linux-xfce-ahs-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://sourceforge.net/projects/mx-linux/files/Final/Xfce/MX-25.3_Xfce_ahs_x64.iso/download",
+          "size": 3188719616,
+          "sha256": "475bcbd9c3f38acffc7909da52803f4d5b57fc39bc8205ddf97264f0f10523ed",
+          "digestUrl": "https://sourceforge.net/projects/mx-linux/files/Final/Xfce/MX-25.3_Xfce_ahs_x64.iso.sha256",
+          "usb": true
+        }
       ]
     }
   ],
-  "officialSupport": { "status": "ongoing", "source": "https://mxlinux.org/" }
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://mxlinux.org/"
+  }
 }
