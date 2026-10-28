@@ -1,0 +1,66 @@
+{
+  "id": "android-x86",
+  "name": "Android-x86",
+  "shortName": "Android-x86",
+  "defaultEdition": "standard",
+  "version": "9.0-r2",
+  "releaseDate": "2020-03-25",
+  "source": "https://www.android-x86.org/",
+  "page": {
+    "description": "Android-x86 editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ANDROID FOR PC",
+    "intro": "The Android-x86 project's port of Android Pie to ordinary PC hardware, shipped as live-and-installable ISO images for 64-bit and legacy 32-bit machines.",
+    "logo": { "src": "logos/android-x86.png", "alt": "Android-x86 logo", "width": 365, "height": 365 },
+    "pros": [
+      "Runs Android apps on a PC without a virtual machine.",
+      "Boots live from the stick before anything is installed.",
+      "The 64-bit image supports UEFI and Secure Boot.",
+      "Two architectures: modern 64-bit PCs and older 32-bit BIOS machines."
+    ],
+    "cons": [
+      "The 9.0 line is unmaintained: no security fixes since 2020.",
+      "Android on a desktop needs workarounds for Play services and drivers.",
+      "No 32-bit UEFI, so very old tablets stay out.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Android-x86 website", "href": "https://www.android-x86.org/" },
+      { "label": "Downloads", "href": "https://www.android-x86.org/download.html" },
+      { "label": "Release note 9.0-r2", "href": "https://www.android-x86.org/releases/releasenote-9-0-r2.html" },
+      { "label": "Installation howto", "href": "https://www.android-x86.org/installhowto.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Android-x86; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick and boot it live, or use the installer on the stick to install to a disk or partition; the installer's automatic option erases the whole disk.",
+    "footer": [
+      { "label": "Android-x86 website", "href": "https://www.android-x86.org/" },
+      { "label": "Downloads", "href": "https://www.android-x86.org/download.html" },
+      { "label": "Release note 9.0-r2", "href": "https://www.android-x86.org/releases/releasenote-9-0-r2.html" },
+      { "label": "Installation howto", "href": "https://www.android-x86.org/installhowto.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/android-x86.png\nAndroid-x86 logo, Apache License 2.0, by the Android-x86 Project, https://commons.wikimedia.org/wiki/File:Android-x86.png."
+    ]
+  },
+  "editions": [
+    {
+      "id": "standard",
+      "name": "Standard (64-bit)",
+      "description": "The 64-bit Android 9 image on the 4.19 LTS kernel, for most modern PCs.",
+      "usbNote": "921 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "android-x86-standard-x86_64", "arch": "x86_64", "format": "iso", "url": "https://downloads.sourceforge.net/project/android-x86/Release%209.0/android-x86_64-9.0-r2.iso", "sha256": "f7eb8fc56f29ad5432335dc054183acf086c539f3990f0b6e9ff58bd6df4604e", "sha256Computed": "2026-10-28", "size": 965738496, "usb": true }
+      ]
+    },
+    {
+      "id": "legacy-32bit",
+      "name": "Legacy (32-bit)",
+      "description": "The 32-bit image for older machines with a legacy BIOS.",
+      "usbNote": "726 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "android-x86-legacy-32bit-x86", "arch": "x86", "format": "iso", "url": "https://downloads.sourceforge.net/project/android-x86/Release%209.0/android-x86-9.0-r2.iso", "sha256": "91cedb534ba095a0c9b3eceede4147967fd27beea9bba640776f787dc3555021", "sha256Computed": "2026-10-28", "size": 761266176, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "dropped", "source": "https://www.android-x86.org/changelog.html" }
+}
