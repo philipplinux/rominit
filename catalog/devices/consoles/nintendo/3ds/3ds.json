@@ -174,7 +174,7 @@
         "new-3ds-xl",
         "new-2ds-xl"
       ],
-      "firmware": "11.4.0 through 11.17.0; upstream says any region, adding that not every region was tested",
+      "firmware": "11.4.0 through 11.17.0; upstream says any region, but not all regions have been tested",
       "summary": "Starts boot9strap from a prepared SD card through a System Settings flaw, with no game and no extra hardware. The guide sends Old 3DS, Old 3DS XL and Old 2DS consoles on 11.17.0-50 here.",
       "source": "https://3ds.hacks.guide/installing-boot9strap-(mset9)",
       "kind": "entrypoint",
@@ -204,7 +204,7 @@
             "11.17"
           ],
           "status": "documented",
-          "note": "Upstream MSET9 lists 11.4–11.17 and any region with the qualifier \"probably, haven't tested them all\", so no region is individually verified. The guide's picker falls back to MSET9 on every model when the version-specific method does not apply."
+          "note": "Upstream lists 11.4–11.17 and says any region, but explicitly notes not all regions have been tested; this is not a region-by-region verified compatibility claim."
         }
       ],
       "checkedDate": "2026-10-28",
