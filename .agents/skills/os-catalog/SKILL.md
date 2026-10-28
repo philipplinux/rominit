@@ -23,12 +23,12 @@ Adding an OS and rechecking one are the same checklist: an add starts from an em
 3. **Pins** for each image, in order of preference:
    - publisher digest: `sha256` + `sha256Url` (or `sha512` + `sha512Url`) copied from the publisher's checksum file;
    - no publisher digest: download it from the publisher URL, hash it, set `sha256` + `sha256Computed: "<YYYY-MM-DD>"`.
-   Checksum files come as `<hash>  <file>`, `SHA256 (file) = <hash>` or `# SHA256 HASH` blocks; multi-file sidecars must be matched by filename. MD5-only publishers: mirror `*.allsums.txt` (archive.org, SourceForge) often carry a SHA-256. Never a hash from an unrelated third party. Prefer versioned URLs over "latest" names. `size` from HEAD Content-Length. Formats: see the `format` check in `osRecordProblems`; only `USB_FORMATS` write to USB, the rest (zip, ova, iso.zst, ...) are download-only with `usb: false`. `usb: true` only when the publisher documents writing that image to USB.
+   Checksum files come as `<hash>  <file>`, `SHA256 (file) = <hash>` or `# SHA256 HASH` blocks; multi-file sidecars and multi-algorithm pages (`CHECKSUMS.TXT`, `verify.txt`) must be matched by filename. No checksum file but the sum printed in the download page body (FydeOS): that page is a valid `sha256Url`. Checksum files can sit outside the ISO directory (per-file `.sha256sum`, a mirror path). MD5-only publishers: mirror `*.allsums.txt` (archive.org, SourceForge) often carry a SHA-256. Never a hash from an unrelated third party. Prefer versioned URLs over "latest" names. `size` from HEAD Content-Length. Formats: see the `format` check in `osRecordProblems`; only `USB_FORMATS` write to USB, the rest (zip, ova, iso.zst, ...) are download-only with `usb: false`. `usb: true` only when the publisher documents writing that image to USB.
 4. **Facts**: requirements, kernel, officialSupport (status, `until`), each with source URL and `checked` date.
 5. **Page**: description, eyebrow, intro, pros, cons, status, links, footer, checked, credits. Plain language.
 6. **Logo** (required): `site/logos/<id>.svg` from Simple Icons (CC0) or Wikimedia Commons with its licence; credit it and add a notice line in `scripts/build.mjs`.
 7. **Screenshot** (optional): Wikimedia Commons (CC0, CC BY, CC BY-SA, GPL-family), else a publisher screenshot (`license: "Publisher screenshot"`), saved under `site/shots/<id>/`, WebP preferred. None found: ship logo-only.
-8. Gated downloads (RHEL, SLES, ...): `infoOnly: true`, no editions, links required.
+8. Gated downloads (RHEL, SLES, ...) or installer-app-only downloads (pfSense, Unraid): `infoOnly: true`, no editions, links required, the blocker named on the page. Recheck info-only records every sweep: a blocker can lift (new accepted format, a published checksum).
 9. New entry: import it in `src/os/index.js` and add it to `OSES`.
 
 ## Gates
