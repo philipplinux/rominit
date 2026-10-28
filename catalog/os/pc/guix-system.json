@@ -1,0 +1,57 @@
+{
+  "id": "guix-system",
+  "name": "Guix System",
+  "shortName": "Guix",
+  "defaultEdition": "installer",
+  "version": "1.5.0",
+  "releaseDate": "2026-01-23",
+  "source": "https://guix.gnu.org/",
+  "page": {
+    "description": "Guix System editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / DECLARATIVE LINUX",
+    "intro": "The GNU project's standalone system built from the Guix package manager: the whole machine is described in one Scheme file, with transactional upgrades and rollbacks, Linux-libre and the GNU Shepherd init system.",
+    "logo": { "src": "logos/guix-system.png", "alt": "Guix System logo", "width": 512, "height": 384 },
+    "pros": [
+      "The system is declared in one configuration file and rebuilt from it.",
+      "Transactional upgrades: every generation can be rolled back at boot.",
+      "Fully free-software distribution, with reproducible builds.",
+      "Guix also installs on top of another Linux as a package manager."
+    ],
+    "cons": [
+      "Scheme configuration is a real learning curve.",
+      "Only hardware with free-software drivers and firmware is supported.",
+      "No checksum file: release artifacts carry detached OpenPGP signatures instead.",
+      "The aarch64 image is experimental and UEFI-only."
+    ],
+    "links": [
+      { "label": "Guix website", "href": "https://guix.gnu.org/" },
+      { "label": "Download", "href": "https://guix.gnu.org/en/download/" },
+      { "label": "1.5.0 release", "href": "https://guix.gnu.org/en/blog/2026/gnu-guix-1.5.0-released/" },
+      { "label": "Installation manual", "href": "https://guix.gnu.org/manual/1.5.0/en/html_node/USB-Stick-and-DVD-Installation.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Guix System; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd and boot it: the guided installer partitions and formats the target disk, and everything already on that disk is deleted.",
+    "footer": [
+      { "label": "Guix website", "href": "https://guix.gnu.org/" },
+      { "label": "Download", "href": "https://guix.gnu.org/en/download/" },
+      { "label": "1.5.0 release", "href": "https://guix.gnu.org/en/blog/2026/gnu-guix-1.5.0-released/" },
+      { "label": "Installation manual", "href": "https://guix.gnu.org/manual/1.5.0/en/html_node/USB-Stick-and-DVD-Installation.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/guix-system.png\nGuix-logo.svg, GFDL 1.3, by Nikita Karetnikov, https://commons.wikimedia.org/wiki/File:Guix-logo.svg."
+    ]
+  },
+  "editions": [
+    {
+      "id": "installer",
+      "name": "Installer (x86_64)",
+      "description": "The standalone Guix System installer ISO, with the guided text installer and Xfce.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "guix-system-installer-x86_64", "arch": "x86_64", "format": "iso", "url": "https://ftp.gnu.org/gnu/guix/guix-system-install-1.5.0.x86_64-linux.iso", "sha256": "107e0a8082f03a10b15c1fb9383d2d752c1cdeda41b8db575a15550e1c2d8b4a", "sha256Computed": "2026-10-28", "size": 1188261888, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://guix.gnu.org/en/download/" }
+}
