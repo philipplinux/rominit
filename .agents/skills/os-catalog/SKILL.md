@@ -16,12 +16,14 @@ Adding an OS and rechecking one are the same checklist: an add starts from an em
 
 ## Checklist per OS
 
-1. **Version**: current stable release and date from the publisher's release page.
+1. **Version**: current stable release and date from the publisher's release page. JS-only download pages (Zorin, Manjaro, Nobara, CachyOS, Pop!_OS, antiX): use the mirror or `/releases/`, `/iso/` directory listings instead.
 2. **Editions**: every main edition the publisher ships, per architecture: desktops, spins, flavours, handheld, server or minimal. Compare against the publisher's download page, not just ROMvault. Image ids: `<id>-<edition>-<arch>`.
+   - **One record per family.** ROMvault release or edition pages (`ubuntu-26-10`, `opensuse-leap`, `pfsense-ce-plus`) become editions of the family record, never records of their own. A fold gets its own commit: `OS catalog: <family> as one record (<folded ids>)`.
+   - Publisher "current" directories drift per edition: compare dates per edition and leave out a stale one rather than mixing snapshots in one record.
 3. **Pins** for each image, in order of preference:
    - publisher digest: `sha256` + `sha256Url` (or `sha512` + `sha512Url`) copied from the publisher's checksum file;
    - no publisher digest: download it from the publisher URL, hash it, set `sha256` + `sha256Computed: "<YYYY-MM-DD>"`.
-   Never a hash from a third party. Prefer versioned URLs over "latest" names. `size` from HEAD Content-Length. `usb: true` only when the publisher documents writing that image to USB.
+   Checksum files come as `<hash>  <file>`, `SHA256 (file) = <hash>` or `# SHA256 HASH` blocks; multi-file sidecars must be matched by filename. MD5-only publishers: mirror `*.allsums.txt` (archive.org, SourceForge) often carry a SHA-256. Never a hash from an unrelated third party. Prefer versioned URLs over "latest" names. `size` from HEAD Content-Length. Formats: see the `format` check in `osRecordProblems`; only `USB_FORMATS` write to USB, the rest (zip, ova, iso.zst, ...) are download-only with `usb: false`. `usb: true` only when the publisher documents writing that image to USB.
 4. **Facts**: requirements, kernel, officialSupport (status, `until`), each with source URL and `checked` date.
 5. **Page**: description, eyebrow, intro, pros, cons, status, links, footer, checked, credits. Plain language.
 6. **Logo** (required): `site/logos/<id>.svg` from Simple Icons (CC0) or Wikimedia Commons with its licence; credit it and add a notice line in `scripts/build.mjs`.
@@ -31,7 +33,7 @@ Adding an OS and rechecking one are the same checklist: an add starts from an em
 
 ## Gates
 
-`node --test test/os-catalog.test.js`, `npm run check`, `npm run build`, `npm test`: all pass before the commit. One commit per OS: `OS catalog: <name> <version> (<editions>)`; a recheck: `OS catalog: <name> recheck (<what changed>)`.
+Per commit: `node --test test/os-catalog.test.js test/media.test.js` and `npm run check`, and confirm every `page.logo.src` file exists (tsc and the unit tests miss a missing logo; `npm run build` catches it). All four gates (`npm run build`, `npm test` too) every 5 commits and before stopping. Wikimedia rate-limits bursts (429): send a User-Agent and pause. One commit per OS: `OS catalog: <name> <version> (<editions>)`; a recheck: `OS catalog: <name> recheck (<what changed>)`.
 
 ## Never
 
