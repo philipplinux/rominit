@@ -16,7 +16,12 @@
     "description": "Fedora editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / COMMUNITY LINUX",
     "intro": "Fedora moves fast and ships upstream: GNOME, KDE Plasma and an atomic desktop, all on a six-month release train. Pick an edition, then the architecture of the machine that will run it.",
-    "logo": { "src": "logos/fedora.svg", "alt": "Fedora logo", "width": 180, "height": 180 },
+    "logo": {
+      "src": "logos/fedora.svg",
+      "alt": "Fedora logo",
+      "width": 180,
+      "height": 180
+    },
     "pros": [
       "Workstation (GNOME) and KDE Plasma editions for both x86_64 and aarch64.",
       "Silverblue ships the same GNOME desktop as an atomic image that updates in place.",
@@ -30,9 +35,18 @@
       "Fedora 45 is already in beta, so this page's release ages quickly."
     ],
     "links": [
-      { "label": "Fedora website", "href": "https://fedoraproject.org/" },
-      { "label": "Download Workstation", "href": "https://fedoraproject.org/workstation/download" },
-      { "label": "Fedora 44 release notes", "href": "https://docs.fedoraproject.org/en-US/fedora/f44/release-notes/" }
+      {
+        "label": "Fedora website",
+        "href": "https://fedoraproject.org/"
+      },
+      {
+        "label": "Download Workstation",
+        "href": "https://fedoraproject.org/workstation/download"
+      },
+      {
+        "label": "Fedora 44 release notes",
+        "href": "https://docs.fedoraproject.org/en-US/fedora/f44/release-notes/"
+      }
     ],
     "previewNote": "A stock screenshot of Fedora 44 Workstation with GNOME, from Wikimedia Commons. Not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
     "shot": {
@@ -50,10 +64,22 @@
     },
     "status": "One official path per edition: the live, atomic or server ISO, written with Fedora Media Writer or dd. A 4 GB stick is enough for the live images. Writing erases the stick; the installer then partitions or erases the target disk.",
     "footer": [
-      { "label": "Official media & CHECKSUM files", "href": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/" },
-      { "label": "Verify a download", "href": "https://fedoraproject.org/security/" },
-      { "label": "Fedora 44 release notes", "href": "https://docs.fedoraproject.org/en-US/fedora/f44/release-notes/" },
-      { "label": "Release lifecycle", "href": "https://docs.fedoraproject.org/en-US/releases/lifecycle/" }
+      {
+        "label": "Official media & CHECKSUM files",
+        "href": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/"
+      },
+      {
+        "label": "Verify a download",
+        "href": "https://fedoraproject.org/security/"
+      },
+      {
+        "label": "Fedora 44 release notes",
+        "href": "https://docs.fedoraproject.org/en-US/fedora/f44/release-notes/"
+      },
+      {
+        "label": "Release lifecycle",
+        "href": "https://docs.fedoraproject.org/en-US/releases/lifecycle/"
+      }
     ],
     "checked": "2026-10-27",
     "credits": [
@@ -173,7 +199,65 @@
           "usb": true
         }
       ]
+    },
+    {
+      "id": "cinnamon",
+      "name": "Cinnamon",
+      "description": "Cinnamon spin of Fedora 44, with that desktop's package set on the live image.",
+      "usbNote": "2.6 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "fedora-cinnamon-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Spins/x86_64/iso/Fedora-Cinnamon-Live-44-1.7.x86_64.iso",
+          "size": 3263983616,
+          "sha256": "fa2dc8d20357d0bd4443b724617498802d3ed772e2f154d3d3690e711595a74b",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Spins/x86_64/iso/Fedora-Spins-44-1.7-x86_64-CHECKSUM",
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "xfce",
+      "name": "Xfce",
+      "description": "Xfce spin of Fedora 44, with that desktop's package set on the live image.",
+      "usbNote": "2.3 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "fedora-xfce-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Spins/x86_64/iso/Fedora-Xfce-Live-44-1.7.x86_64.iso",
+          "size": 2928986112,
+          "sha256": "55ea8cb52ac16e62f436e37f9fdb4e978d7b9f75814a9d42e8b69d05e3b496ad",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Spins/x86_64/iso/Fedora-Spins-44-1.7-x86_64-CHECKSUM",
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "budgie",
+      "name": "Budgie",
+      "description": "Budgie spin of Fedora 44, with that desktop's package set on the live image.",
+      "usbNote": "2.5 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "fedora-budgie-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Spins/x86_64/iso/Fedora-Budgie-Live-44-1.7.x86_64.iso",
+          "size": 3084500992,
+          "sha256": "b6298c8a99530b8a923f43b2bf6fa89065465dee9a00cb6952b10eea45f43592",
+          "sha256Url": "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Spins/x86_64/iso/Fedora-Spins-44-1.7-x86_64-CHECKSUM",
+          "usb": true
+        }
+      ]
     }
   ],
-  "officialSupport": { "status": "ongoing", "summary": "until four weeks after Fedora 46 ships", "source": "https://docs.fedoraproject.org/en-US/releases/lifecycle/" }
+  "officialSupport": {
+    "status": "ongoing",
+    "summary": "until four weeks after Fedora 46 ships",
+    "source": "https://docs.fedoraproject.org/en-US/releases/lifecycle/"
+  }
 }
