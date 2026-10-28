@@ -1,0 +1,55 @@
+{
+  "id": "universal-blue",
+  "name": "Universal Blue",
+  "shortName": "uBlue",
+  "defaultEdition": "bluefin",
+  "version": "stable-20261027",
+  "releaseDate": "2026-10-27",
+  "source": "https://universal-blue.org/",
+  "page": {
+    "description": "Universal Blue editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ATOMIC FEDORA DESKTOP",
+    "intro": "A family of atomic Fedora desktop images built with bootc: Bluefin (GNOME), Aurora (KDE) and the gaming variant Bazzite. The system image is updated as a whole, with rollback to the previous deployment.",
+    "logo": { "src": "logos/universal-blue.svg", "alt": "Universal Blue logo", "width": 180, "height": 180 },
+    "pros": [
+      "Atomic image updates: a failed update can be rolled back at boot.",
+      "Fedora base with codecs, drivers and Flatpak set up from the first boot.",
+      "Several images (Bluefin GNOME, Aurora KDE) from the same build system.",
+      "Rebuilt on a frequent schedule, with signed images."
+    ],
+    "cons": [
+      "Not a traditional package-by-package install: changes belong in containers or layers.",
+      "The Bazzite image has its own catalog entry; this page covers Bluefin.",
+      "The project publishes no SHA-256 list, so the digest here was computed by ROMinit.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Universal Blue website", "href": "https://universal-blue.org/" },
+      { "label": "Bluefin", "href": "https://projectbluefin.io/" },
+      { "label": "Images", "href": "https://download.projectbluefin.io/bluefin-stable-x86_64.iso" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Universal Blue; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the ISO to a USB stick with dd or any image writer; writing erases the stick, and the installer then erases the target disk and deploys the image.",
+    "footer": [
+      { "label": "Universal Blue website", "href": "https://universal-blue.org/" },
+      { "label": "Bluefin", "href": "https://projectbluefin.io/" },
+      { "label": "Images", "href": "https://download.projectbluefin.io/bluefin-stable-x86_64.iso" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/universal-blue.svg\nUniversal Blue logo, from the Universal Blue project, https://universal-blue.org/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "bluefin",
+      "name": "Bluefin (GNOME)",
+      "description": "The GNOME desktop image, built from the current stable Fedora base.",
+      "usbNote": "5.6 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "universal-blue-bluefin-x86_64", "arch": "x86_64", "format": "iso", "url": "https://download.projectbluefin.io/bluefin-stable-x86_64.iso", "sha256": "fd4c3357b93e24c40bda882da8632f3791994dc7f3d4b3dde5e5cb668e726b28", "sha256Computed": "2026-10-28", "size": 5572845568, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://universal-blue.org/" }
+}
