@@ -1,0 +1,45 @@
+{
+  "id": "windows",
+  "name": "Windows",
+  "shortName": "Windows",
+  "infoOnly": true,
+  "source": "https://www.microsoft.com/windows/",
+  "page": {
+    "description": "Windows editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / COMMERCIAL DESKTOP",
+    "intro": "Microsoft's commercial desktop and server operating system, in current use as Windows 11 on PCs and Windows Server 2025 on servers. Microsoft publishes the media through its own download pages and its licensing channels.",
+    "logo": { "src": "logos/windows.svg", "alt": "Windows logo", "width": 180, "height": 180 },
+    "pros": [
+      "The widest hardware and commercial software support of any desktop OS.",
+      "Windows 11 is a free upgrade for eligible Windows 10 devices.",
+      "Long servicing timelines with monthly security updates.",
+      "Server editions share the code base with the desktop."
+    ],
+    "cons": [
+      "A licence is required; the ISO download needs a Microsoft account or an EULA step.",
+      "Windows 11 requires UEFI, Secure Boot capability and TPM 2.0.",
+      "Windows 10 reached the end of support on 14 October 2025.",
+      "ROMinit pins no image here: Microsoft distributes the media itself."
+    ],
+    "links": [
+      { "label": "Windows", "href": "https://www.microsoft.com/windows/" },
+      { "label": "Windows 11 download", "href": "https://www.microsoft.com/software-download/windows11" },
+      { "label": "Windows Server 2025", "href": "https://www.microsoft.com/windows-server" },
+      { "label": "Lifecycle", "href": "https://learn.microsoft.com/lifecycle/products/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Windows; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Microsoft provides the installation media as an ISO or through its own media creation tool, and the download is gated behind a Microsoft account or licence step. This page is a signpost to Microsoft's pages; ROMinit pins nothing and offers no USB path.",
+    "footer": [
+      { "label": "Windows", "href": "https://www.microsoft.com/windows/" },
+      { "label": "Windows 11 download", "href": "https://www.microsoft.com/software-download/windows11" },
+      { "label": "Windows Server 2025", "href": "https://www.microsoft.com/windows-server" },
+      { "label": "Lifecycle", "href": "https://learn.microsoft.com/lifecycle/products/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/windows.svg\nWindows logo, public domain (text logo), by Microsoft, https://commons.wikimedia.org/wiki/File:Windows_logo_-_2021_(Black).svg; the Windows name and mark belong to Microsoft, shown only to identify Windows. No endorsement implied."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://learn.microsoft.com/lifecycle/products/" }
+}

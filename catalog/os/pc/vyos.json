@@ -1,0 +1,45 @@
+{
+  "id": "vyos",
+  "name": "VyOS",
+  "shortName": "VyOS",
+  "infoOnly": true,
+  "source": "https://vyos.net/",
+  "page": {
+    "description": "VyOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ROUTER AND FIREWALL",
+    "intro": "An open-source router and firewall operating system built on Debian, configured entirely from a command-line interface and updated image by image.",
+    "logo": { "src": "logos/vyos.svg", "alt": "VyOS logo", "width": 64, "height": 64 },
+    "pros": [
+      "One CLI configures routing, firewalling, VPN and NAT.",
+      "Each version installs as its own image, so rollback is a reboot.",
+      "Three channels: rolling, Stream previews and LTS releases.",
+      "Runs on x86_64 hardware and common hypervisors."
+    ],
+    "cons": [
+      "LTS images are distributed through the subscriber Support Portal.",
+      "Rolling and Stream builds are previews, not stable releases.",
+      "No desktop: it is a network appliance OS.",
+      "ROMinit pins no image here, because the LTS media is gated."
+    ],
+    "links": [
+      { "label": "VyOS website", "href": "https://vyos.net/" },
+      { "label": "Get VyOS", "href": "https://vyos.net/get/" },
+      { "label": "Release status", "href": "https://vyos.net/status/" },
+      { "label": "Stream builds", "href": "https://vyos.net/get/stream/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for VyOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "VyOS is installed by writing its ISO to a USB stick or by running it as a VM image. The 1.5.1 LTS images come from the subscriber Support Portal; the public channels are rolling and Stream previews, so ROMinit does not pin a file.",
+    "footer": [
+      { "label": "VyOS website", "href": "https://vyos.net/" },
+      { "label": "Get VyOS", "href": "https://vyos.net/get/" },
+      { "label": "Release status", "href": "https://vyos.net/status/" },
+      { "label": "Stream builds", "href": "https://vyos.net/get/stream/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/vyos.svg\nVyOS logo, public domain, by the VyOS project, https://commons.wikimedia.org/wiki/File:VyOS_logo.svg."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://vyos.net/status/" }
+}
