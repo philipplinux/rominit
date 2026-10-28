@@ -67,6 +67,16 @@
       "images": [
         { "id": "slitaz-core-i486", "arch": "i486", "format": "iso", "url": "https://mirror.slitaz.org/i486/cooking/iso/slitaz-core-i486-cooking.iso", "sha256": "76b6b34e571ec1053dcccf43390e3c2d03ecfc160d65302d94d85a7cd428cf14", "sha256Computed": "2026-10-28", "size": 48713728, "usb": true }
       ]
+    },
+    {
+      "id": "base",
+      "name": "Base",
+      "description": "Text-mode system without a graphical server, for servers, rescue work or very old machines.",
+      "usbNote": "28 MB (x86_64) or 18 MB (i486) image. Write it with dd or Rufus; writing erases the stick.",
+      "images": [
+        { "id": "slitaz-base-x86_64", "arch": "x86_64", "format": "iso", "url": "https://mirror.slitaz.org/x86_64/cooking/iso/slitaz-base-x86_64-cooking.iso", "sha256": "30d490117616f2845d4a913f8b4ee8eef54e4b4b5fcbc8e5067dcf15addab21c", "sha256Computed": "2026-10-28", "size": 28491776, "usb": true },
+        { "id": "slitaz-base-i486", "arch": "i486", "format": "iso", "url": "https://mirror.slitaz.org/i486/cooking/iso/slitaz-base-i486-cooking.iso", "sha256": "3523d52c54cc21b57bdef7047c0dadef3e37f9346cd392e5282aaf4f87af2441", "sha256Computed": "2026-10-28", "size": 18259968, "usb": true }
+      ]
     }
   ],
   "officialSupport": { "status": "ongoing", "source": "https://slitaz.org/en/get/" }
