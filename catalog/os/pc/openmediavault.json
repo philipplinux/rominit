@@ -1,0 +1,55 @@
+{
+  "id": "openmediavault",
+  "name": "openmediavault",
+  "shortName": "OMV",
+  "defaultEdition": "installer",
+  "version": "8.3.1",
+  "releaseDate": "2026-06-06",
+  "source": "https://www.openmediavault.org/",
+  "page": {
+    "description": "openmediavault editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / NAS",
+    "intro": "A Debian-based network-attached-storage system: a small installer that turns a PC into a file server with a web interface for shares, RAID, users and services.",
+    "logo": { "src": "logos/openmediavault.svg", "alt": "openmediavault logo", "width": 180, "height": 180 },
+    "pros": [
+      "Turns ordinary x86-64 hardware into a NAS.",
+      "Web interface for shares, disks, RAID and users.",
+      "Debian 13 underneath, with APT for extra packages.",
+      "Plugin model keeps the base small."
+    ],
+    "cons": [
+      "Not a desktop: it is administered from the browser.",
+      "AMD64 ISO installer only; ARM boards use a Debian base image.",
+      "The installer ISO and the installed package versions differ.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "openmediavault website", "href": "https://www.openmediavault.org/" },
+      { "label": "ISO downloads", "href": "https://sourceforge.net/projects/openmediavault/files/iso/8.3.1/" },
+      { "label": "Installation guide", "href": "https://docs.openmediavault.org/en/8.x/installation/via_iso.html" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for openmediavault; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the AMD64 ISO to a USB stick and install it on the machine that should become the NAS. Writing erases the stick; the installer erases the target disk.",
+    "footer": [
+      { "label": "openmediavault website", "href": "https://www.openmediavault.org/" },
+      { "label": "ISO downloads", "href": "https://sourceforge.net/projects/openmediavault/files/iso/8.3.1/" },
+      { "label": "Installation guide", "href": "https://docs.openmediavault.org/en/8.x/installation/via_iso.html" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/openmediavault.svg\nopenmediavault logo from Simple Icons (CC0), https://simpleicons.org; the openmediavault name and mark belong to the openmediavault project, shown only to identify openmediavault. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "installer",
+      "name": "ISO installer (amd64)",
+      "description": "The Debian-based installer image for amd64 machines.",
+      "usbNote": "1.2 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "openmediavault-installer-amd64", "arch": "x86_64", "format": "iso", "url": "https://downloads.sourceforge.net/project/openmediavault/iso/8.3.1/openmediavault_8.3.1-amd64.iso", "sha256": "5ada7dea09dbb10365b6f245515e71c79c5398d8f8f1acda675ee6d8b572d2e5", "sha256Url": "https://downloads.sourceforge.net/project/openmediavault/iso/8.3.1/openmediavault_8.3.1-amd64.iso.sha256", "size": 1244774400, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://docs.openmediavault.org/en/8.x/installation/via_iso.html" }
+}
