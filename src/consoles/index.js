@@ -1,7 +1,19 @@
 // Console entries are research records; they do not define flash recipes or downloadable artifacts.
+import ps2 from '../../catalog/devices/consoles/sony/ps2/ps2.json' with { type: 'json' };
+import psp from '../../catalog/devices/consoles/sony/psp/psp.json' with { type: 'json' };
+import ps3 from '../../catalog/devices/consoles/sony/ps3/ps3.json' with { type: 'json' };
+import vita from '../../catalog/devices/consoles/sony/vita/vita.json' with { type: 'json' };
+import ps4 from '../../catalog/devices/consoles/sony/ps4/ps4.json' with { type: 'json' };
 import ps5 from '../../catalog/devices/consoles/sony/ps5/ps5.json' with { type: 'json' };
+import ds from '../../catalog/devices/consoles/nintendo/ds/ds.json' with { type: 'json' };
+import wii from '../../catalog/devices/consoles/nintendo/wii/wii.json' with { type: 'json' };
+import nintendo3ds from '../../catalog/devices/consoles/nintendo/3ds/3ds.json' with { type: 'json' };
+import wiiU from '../../catalog/devices/consoles/nintendo/wii-u/wii-u.json' with { type: 'json' };
 import switchConsole from '../../catalog/devices/consoles/nintendo/switch/switch.json' with { type: 'json' };
 import rg35xx from '../../catalog/devices/consoles/anbernic/rg35xx/rg35xx.json' with { type: 'json' };
+import rg405 from '../../catalog/devices/consoles/anbernic/rg405/rg405.json' with { type: 'json' };
+import rg505 from '../../catalog/devices/consoles/anbernic/rg505/rg505.json' with { type: 'json' };
+import rg556 from '../../catalog/devices/consoles/anbernic/rg556/rg556.json' with { type: 'json' };
 import rogAlly from '../../catalog/devices/consoles/asus/rog-ally/rog-ally.json' with { type: 'json' };
 
 /** One project claim on a console page.
@@ -48,7 +60,7 @@ import rogAlly from '../../catalog/devices/consoles/asus/rog-ally/rog-ally.json'
 
 /** Console families with a ROMinit research page.
  * @type {ConsoleEntry[]} */
-export const CONSOLES = [ps5, switchConsole, rg35xx, rogAlly];
+export const CONSOLES = [ps2, psp, ps3, vita, ps4, ps5, ds, wii, nintendo3ds, wiiU, switchConsole, rg35xx, rg405, rg505, rg556, rogAlly];
 
 /** Evaluate only explicit project claims; an unlisted firmware never inherits support from a range.
  * @param {{compatibility: {models: string[], supportedFirmware: string[], status: string}[]}} project

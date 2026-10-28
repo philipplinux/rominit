@@ -1,0 +1,443 @@
+{
+  "id": "ps3",
+  "name": "Sony PlayStation 3 family",
+  "manufacturer": "Sony",
+  "releaseYear": 2006,
+  "models": [
+    {
+      "id": "phat",
+      "name": "PS3 (phat)"
+    },
+    {
+      "id": "slim",
+      "name": "PS3 Slim"
+    },
+    {
+      "id": "super-slim",
+      "name": "PS3 Super Slim"
+    }
+  ],
+  "summary": "Explore PS3 phat, Slim and Super Slim hardware and the two non-interchangeable routes into homebrew: HEN on official or hybrid firmware, and CFW on CFW-capable consoles.",
+  "specs": {
+    "cpu": "Cell Broadband Engine: 1 PPE + 8 SPE (7 usable for games)",
+    "gpu": "RSX (Reality Synthesizer)",
+    "memory": "256 MB XDR main memory + 256 MB GDDR3 graphics memory",
+    "storage": "Removable 2.5-inch SATA hard drive, 20 GB to 500 GB depending on model",
+    "media": "Blu-ray drive on all models; Super Slim uses a manual disc lid"
+  },
+  "variants": [
+    {
+      "model": "PS3 (phat)",
+      "region": "Worldwide",
+      "releaseYear": 2006,
+      "storage": "20 GB to 80 GB on early models; later phats up to 160 GB",
+      "notes": "CECHAxx through CECHQxx model groups (2006-2009). CECHA/B/C/E retain PlayStation 2 hardware or partial compatibility; later phats drop it. Expansion bay for a hard drive and network adapter on early models.",
+      "specs": {
+        "cpu": "Cell Broadband Engine",
+        "gpu": "RSX",
+        "memory": "256 MB XDR + 256 MB GDDR3",
+        "media": "Blu-ray drive; HDMI and AV multi-out"
+      }
+    },
+    {
+      "model": "PS3 Slim",
+      "region": "Worldwide",
+      "releaseYear": 2009,
+      "storage": "120 GB to 320 GB depending on SKU",
+      "notes": "CECH-20xx through CECH-30xx model groups (2009-2012). Smaller, cooler case; no PlayStation 2 support.",
+      "specs": {
+        "cpu": "Cell Broadband Engine",
+        "gpu": "RSX",
+        "memory": "256 MB XDR + 256 MB GDDR3",
+        "media": "Blu-ray drive; HDMI output"
+      }
+    },
+    {
+      "model": "PS3 Super Slim",
+      "region": "Worldwide",
+      "releaseYear": 2012,
+      "storage": "250 GB or 500 GB depending on SKU",
+      "notes": "CECH-40xx through CECH-43xx model groups (2012-2013). Top-loading disc lid, smallest case, no PlayStation 2 support.",
+      "specs": {
+        "cpu": "Cell Broadband Engine",
+        "gpu": "RSX",
+        "memory": "256 MB XDR + 256 MB GDDR3",
+        "media": "Blu-ray drive with manual lid; HDMI output"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "4.93",
+    "shortVersion": "4.93",
+    "checkedDate": "2026-10-28",
+    "source": "https://www.playstation.com/en-us/support/hardware/ps3/system-software/"
+  },
+  "homebrew": [
+    {
+      "name": "PS3HEN",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "CEX OFW 4.80-4.82, DEX OFW 4.82, CEX HFW 4.83.1-4.93.1, DEX HFW 4.84.2",
+      "summary": "Homebrew ENabler for PS3. It adds homebrew and plugin support without replacing the system firmware; on 4.83 and newer it needs the matching hybrid firmware (HFW) installed first.",
+      "source": "https://github.com/PS3Xploit/PS3HEN",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [
+            "4.80",
+            "4.81",
+            "4.82"
+          ],
+          "status": "documented",
+          "note": "CEX official firmware 4.80, 4.81 and 4.82. PS3HEN separately lists DEX OFW 4.82; this list covers CEX only."
+        },
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [
+            "4.83.1",
+            "4.84.2",
+            "4.85.1",
+            "4.86.1",
+            "4.87.1",
+            "4.88.1",
+            "4.89.1",
+            "4.90.1",
+            "4.91.1",
+            "4.92.1",
+            "4.93.1"
+          ],
+          "status": "documented",
+          "note": "CEX hybrid firmware builds listed by PS3HEN; install the matching HFW before HEN. PS3HEN separately lists a DEX HFW 4.84.2 build, which this CEX list does not cover."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "PS3 on one of the listed official or hybrid firmware builds.",
+        "For 4.83 and newer, the matching HFW image installed first.",
+        "The PS3HEN package and a USB drive for the install files."
+      ],
+      "warnings": [
+        "HEN is not permanent: it is lost on reboot and must be re-enabled.",
+        "HEN and CFW steps are not interchangeable; do not mix the two guides.",
+        "PS3HEN says CFWs can be used for testing but are not recommended with HEN."
+      ],
+      "links": [
+        {
+          "label": "PS3HEN repository",
+          "url": "https://github.com/PS3Xploit/PS3HEN"
+        }
+      ]
+    },
+    {
+      "name": "HFW (hybrid firmware)",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "Community CEX hybrid images for 4.83.1-4.93.1, credited to Joonie, habib and littlebalup in PS3HEN's list",
+      "summary": "Hybrid firmware that keeps the official base but adds the hooks PS3HEN needs on 4.83 and newer. It is a prerequisite for HEN on those versions, not a full custom firmware.",
+      "source": "https://github.com/PS3Xploit/PS3HEN",
+      "kind": "os",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [
+            "4.83.1",
+            "4.84.2",
+            "4.85.1",
+            "4.86.1",
+            "4.87.1",
+            "4.88.1",
+            "4.89.1",
+            "4.90.1",
+            "4.91.1",
+            "4.92.1",
+            "4.93.1"
+          ],
+          "status": "documented",
+          "note": "CEX HFW builds listed by PS3HEN. Install the exact matching version; arbitrary hybrid images are not supported."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A CEX console on a compatible base firmware.",
+        "The exact HFW image matching the PS3HEN list."
+      ],
+      "warnings": [
+        "HFW is still a signed base with patches; it is not CFW and does not provide permanent custom firmware features.",
+        "Installing any firmware image can fail; follow the project's instructions."
+      ],
+      "links": [
+        {
+          "label": "PS3HEN support list",
+          "url": "https://github.com/PS3Xploit/PS3HEN"
+        }
+      ]
+    },
+    {
+      "name": "CFW (custom firmware, e.g. Evilnat Cobra 4.93)",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "Console-specific; Evilnat publishes 4.93 Cobra builds under 8.5/4.93/EVILNAT",
+      "summary": "A modified system firmware installed permanently on CFW-capable consoles. Whether a console can take CFW depends on its model and boot flash; the psdevwiki CFW list and per-model pages are the reference.",
+      "source": "https://github.com/xXEvilnatXx/Cobra-PS3",
+      "kind": "os",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No single verified CFW compatibility matrix is claimed. CFW capability is per console and boot flash; psdevwiki documents the CFW list, model pages and hardware flashers."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A CFW-capable console.",
+        "A verified NAND/NOR backup before any flash.",
+        "For many phat consoles, a hardware flasher and soldering work."
+      ],
+      "warnings": [
+        "A failed or mismatched CFW flash can brick the console.",
+        "Installing CFW on a phat usually needs a hardware flasher.",
+        "CFW and HEN steps are not interchangeable."
+      ],
+      "links": [
+        {
+          "label": "Evilnat Cobra-PS3 repository",
+          "url": "https://github.com/xXEvilnatXx/Cobra-PS3"
+        },
+        {
+          "label": "psdevwiki: PS3 wiki",
+          "url": "https://www.psdevwiki.com/ps3/Main_Page"
+        }
+      ]
+    },
+    {
+      "name": "Hardware flashers (NAND/NOR)",
+      "models": [
+        "phat"
+      ],
+      "firmware": "Reads and writes the boot flash; not a firmware version",
+      "summary": "Tools for reading and writing the PS3 boot flash. psdevwiki documents flasher models and the downgrading-with-hardware-flasher procedure; soldering and a verified backup are prerequisites.",
+      "source": "https://www.psdevwiki.com/ps3/Main_Page",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": [
+            "phat"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Hardware flashing is documented for phat consoles; exact model and flasher compatibility must be checked against psdevwiki."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible flasher for the console's flash chip.",
+        "Soldering equipment and a verified NAND/NOR backup."
+      ],
+      "warnings": [
+        "A bad flash can brick the console without a backup.",
+        "Remarrying a replaced Blu-ray drive is a separate hardware-service task."
+      ],
+      "links": [
+        {
+          "label": "psdevwiki: PS3 wiki",
+          "url": "https://www.psdevwiki.com/ps3/Main_Page"
+        }
+      ]
+    },
+    {
+      "name": "OtherOS / OtherOS++ (Linux)",
+      "models": [
+        "phat"
+      ],
+      "firmware": "Official OtherOS ended with a 2010 firmware update; OtherOS++ is a CFW-side patch",
+      "summary": "Sony's official OtherOS let early phat consoles boot Linux. Community OtherOS++ restores a Linux-capable boot on CFW-capable consoles only; it is not a supported or current install path.",
+      "source": "https://www.psdevwiki.com/ps3/Main_Page",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "phat"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Official OtherOS was on early phat consoles only. Community OtherOS++ requires a CFW-capable console."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A CFW-capable phat console.",
+        "A Linux distribution and storage prepared per the community guide."
+      ],
+      "warnings": [
+        "Official OtherOS was removed by a firmware update in 2010.",
+        "OtherOS++ is a community patch, not a supported Linux distribution."
+      ],
+      "links": [
+        {
+          "label": "psdevwiki: PS3 wiki",
+          "url": "https://www.psdevwiki.com/ps3/Main_Page"
+        }
+      ]
+    },
+    {
+      "name": "webMAN MOD / MultiMAN-class managers",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "Follows the HEN or CFW route's own version; no exact firmware matrix verified",
+      "summary": "Community game and file managers for a jailbroken PS3. They run on top of HEN or CFW and have no verified firmware matrix of their own.",
+      "source": "https://www.psdevwiki.com/ps3/Main_Page",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No exact firmware or model matrix verified; compatibility follows the HEN or CFW route used."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A jailbroken PS3 with HEN or CFW running."
+      ],
+      "warnings": [
+        "These managers depend on the underlying jailbreak; their features vary by route."
+      ],
+      "links": [
+        {
+          "label": "psdevwiki: PS3 wiki",
+          "url": "https://www.psdevwiki.com/ps3/Main_Page"
+        }
+      ]
+    },
+    {
+      "name": "Sony PS3 system software update and reinstall",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "Latest official system software: 4.93",
+      "summary": "Sony's official instructions for updating or reinstalling PS3 system software. Reinstalling removes HEN and CFW and does not downgrade.",
+      "source": "https://www.playstation.com/en-us/support/hardware/ps3/system-software/",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [
+            "4.93"
+          ],
+          "status": "documented",
+          "note": "Official PS3 recovery and update track shared by the whole family; reinstall does not accept older firmware."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "FAT32 USB drive with the PS3 update PUP in the documented folder; use Recovery Mode as Sony documents."
+      ],
+      "warnings": [
+        "Reinstalling PS3 system software removes HEN and CFW.",
+        "Reinstalling does not downgrade the console.",
+        "Sony's 4.93 update renews the Blu-ray player encryption key."
+      ],
+      "links": [
+        {
+          "label": "Sony PS3 system software",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps3/system-software/"
+        }
+      ]
+    },
+    {
+      "name": "PS3 firmware rollback status - no verified general method",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "No general rollback firmware support established",
+      "summary": "Records the documented PS3 downgrade limit: Sony's tools are forward-only. HFW and CFW are separate routes; neither is a general rollback to an arbitrary older firmware.",
+      "source": "https://www.playstation.com/en-us/support/hardware/ps3/system-software/",
+      "kind": "rollback",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No PS3 model-specific rollback method was verified; Sony's update and reinstall paths do not accept older firmware."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "An archived older PUP is not a downgrade method.",
+        "Reinstalling does not downgrade.",
+        "Hardware flashing is a soldered intervention, not a user rollback."
+      ],
+      "links": [
+        {
+          "label": "Sony PS3 system software",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps3/system-software/"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sony PS3 system software",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps3/system-software/"
+    },
+    {
+      "label": "PS3HEN repository",
+      "url": "https://github.com/PS3Xploit/PS3HEN"
+    },
+    {
+      "label": "psdevwiki: PS3 wiki",
+      "url": "https://www.psdevwiki.com/ps3/Main_Page"
+    },
+    {
+      "label": "Evilnat Cobra-PS3 repository",
+      "url": "https://github.com/xXEvilnatXx/Cobra-PS3"
+    }
+  ]
+}

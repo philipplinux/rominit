@@ -62,6 +62,9 @@ if (!info) {
   if (!info.highlights?.length) byId('console-latest').hidden = true;
   if (!info.communities?.length) byId('console-community-section').hidden = true;
   const firmware = info.firmware;
+  // A regional shortVersion ("5.5.6U / 5.5.5E") splits into its numbers; a single value stays as written ("V1.18").
+  const shortParts = String(firmware.shortVersion ?? '').split('/').map(part => part.trim()).filter(Boolean);
+  const latestVersions = shortParts.length > 1 ? shortParts.map(part => part.match(/\d+(?:\.\d+)+/)?.[0] ?? part) : shortParts;
   byId('console-firmware').textContent = firmware.version ?? 'not verified';
   byId('console-firmware-checked').textContent = firmware.checkedDate ? `checked ${firmware.checkedDate}` : 'needs a dated check';
   const firmwareSource = external(firmware.source, 'source ↗');
@@ -76,7 +79,8 @@ if (!info) {
     const versionsFor = test => [...new Set(info.homebrew.filter(test).flatMap(project => project.compatibility
       .filter(rule => rule.status === 'documented' && rule.models.includes(model.id)).flatMap(rule => rule.supportedFirmware)))].sort(byVersion);
     const entry = versionsFor(layers[0][1]);
-    const verdict = entry.includes(firmware.shortVersion) ? ['yes', `Open on current firmware ${firmware.shortVersion}`] : entry.length ? ['older', `Older firmware only · not ${firmware.shortVersion}`] : ['none', 'No documented entry point'];
+    // shortVersion may state one number per region ("5.5.6U / 5.5.5E"); any of them being documented makes the console current.
+    const verdict = latestVersions.some(version => entry.includes(version)) ? ['yes', `Open on current firmware ${firmware.shortVersion}`] : entry.length ? ['older', `Older firmware only · not ${firmware.shortVersion}`] : ['none', 'No documented entry point'];
     return h('article', { className: 'console-variant' },
       h('h3', { textContent: `${model.name}${variant?.releaseYear ? ` · ${variant?.releaseYear}` : ''}` }),
       h('p', { className: `console-jb-verdict console-jb-${verdict[0]}`, textContent: verdict[1] }),
@@ -93,7 +97,7 @@ if (!info) {
   const modelSelect = /** @type {HTMLSelectElement} */ (byId('console-model'));
   modelSelect.append(...info.models.map(model => h('option', { value: model.id, textContent: model.name })));
   const firmwareSelect = /** @type {HTMLSelectElement} */ (byId('console-installed-firmware'));
-  const versions = [...new Set([firmware.shortVersion, ...(info.firmwareOptions ?? []),
+  const versions = [...new Set([...latestVersions, ...(info.firmwareOptions ?? []),
     ...info.homebrew.flatMap(project => project.compatibility.flatMap(rule => rule.supportedFirmware))])].filter(Boolean).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
   firmwareSelect.append(...versions.map(version => h('option', { value: version, textContent: version })), h('option', { value: 'unlisted', textContent: 'Other / unlisted firmware' }));
   const params = new URLSearchParams(location.search);

@@ -159,7 +159,7 @@
         "basic",
         "deluxe"
       ],
-      "firmware": "5.5.5 and 5.5.6 per upstream (5.5.6 U, 5.5.5 E, 5.5.5 J); the guide says any console on its region's latest version",
+      "firmware": "The region's latest version: 5.5.6 U, 5.5.5 E, 5.5.5 J (Aroma's README names 5.5.5/5.5.6 without splitting it by region)",
       "summary": "The current homebrew environment: modules, plugins, WUHB homebrew and region-free patches, started by EnvironmentLoader. It replaces Tiramisu, and old .elf homebrew plus the old Homebrew Launcher do not work under it.",
       "source": "https://github.com/wiiu-env/Aroma",
       "kind": "payload/app",

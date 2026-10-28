@@ -1,0 +1,68 @@
+{
+  "id": "rg505",
+  "name": "Anbernic RG505",
+  "manufacturer": "Anbernic",
+  "releaseYear": null,
+  "family": "anbernic",
+  "models": [
+    {
+      "id": "rg505",
+      "name": "RG505",
+      "notes": "Single model; colours grey, turquoise, yellow"
+    }
+  ],
+  "summary": "Anbernic's 4.95-inch OLED Android handheld on the Unisoc T618, positioned for PSP-era content at native 960×544 pixel-to-pixel resolution. Running Android 12 (V1.22) with documented vendor upgrade path. No Linux custom firmware exists for this chip from the community projects tracked here. No third-party OS warning on the vendor page (unlike the RG405).",
+  "specs": {
+    "cpu": "Unisoc Tiger T618, 64-bit octa-core: 2× Cortex-A75 @2.0 GHz + 6× Cortex-A55 @2.0 GHz",
+    "gpu": "Mali G52 @850 MHz",
+    "memory": "4 GB LPDDR4X",
+    "storage": "128 GB high-speed eMMC 5.1 HS400, TF up to 512 GB",
+    "media": "4.95-inch OLED touch display, 960×544, PSP pixel-to-pixel, 2× rendering resolution support"
+  },
+  "variants": [
+    {
+      "model": "RG505",
+      "region": "Worldwide",
+      "releaseYear": null,
+      "storage": "128 GB eMMC 5.1 HS400, TF up to 512 GB",
+      "notes": "Single model available in grey, turquoise, and yellow. OLED panel sized for PSP pixel-to-pixel output. Battery life claimed 8 hours, ~2.5 h charge. Hall sticks, six-axis gyro, vibration motor, 3.5 mm jack. No one-way-door warning on vendor page.",
+      "specs": {
+        "cpu": "Unisoc Tiger T618, 2×A75 @2.0 GHz + 6×A55 @2.0 GHz",
+        "gpu": "Mali G52 @850 MHz",
+        "memory": "4 GB LPDDR4X",
+        "storage": "128 GB eMMC 5.1 HS400, TF up to 512 GB",
+        "media": "4.95\" OLED touch, 960×544, PSP pixel-to-pixel",
+        "battery": "5000 mAh, 8 h claimed, ~2.5 h charge",
+        "wireless": "Wi-Fi 802.11a/b/g/n/ac (2.4/5 GHz), Bluetooth 5.0"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Android 12, system version V1.22",
+    "shortVersion": "V1.22",
+    "checkedDate": "2026-10-28",
+    "source": "https://anbernic.com/products/rg505"
+  },
+  "firmwareOptions": [],
+  "homebrew": [],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "Anbernic: RG505 product page (specs, V1.22 upgrade guide)",
+      "url": "https://anbernic.com/products/rg505"
+    },
+    {
+      "label": "Anbernic: System Update index (RG505 Android 12 V1.22)",
+      "url": "https://anbernic.com/pages/system-update"
+    },
+    {
+      "label": "KNULLI: supported devices (no T618 Anbernic device listed)",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: device index (no T618 Anbernic device listed)",
+      "url": "https://rocknix.org/devices/"
+    }
+  ]
+}

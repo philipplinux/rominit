@@ -1,0 +1,155 @@
+{
+  "id": "ps2",
+  "name": "Sony PlayStation 2 family",
+  "manufacturer": "Sony",
+  "releaseYear": 2000,
+  "models": [
+    {
+      "id": "fat",
+      "name": "PS2 (fat)"
+    },
+    {
+      "id": "slim",
+      "name": "PS2 Slim"
+    }
+  ],
+  "summary": "Explore PS2 fat and slim hardware and homebrew entry points: FreeMcBoot on memory card or hard drive for fat models, and FreeDVDBoot on all slims.",
+  "specs": {
+    "cpu": "Emotion Engine (MIPS-based)",
+    "gpu": "Graphics Synthesizer",
+    "memory": "32 MB RDRAM main memory + 4 MB embedded video memory",
+    "storage": "8 MB memory card; hard drive in the fat models' expansion bay",
+    "media": "DVD-ROM and CD-ROM"
+  },
+  "variants": [
+    {
+      "model": "PS2 (fat)",
+      "region": "Worldwide",
+      "releaseYear": 2000,
+      "storage": "Internal HDD via expansion bay (network adapter required)",
+      "notes": "SCPH-10000 through SCPH-55000 and SCPH-3000x/3500x/37000/390xx groups. Expansion bay for a hard drive and network adapter; early 10000-series use a PC-card-style expansion."
+    },
+    {
+      "model": "PS2 Slim",
+      "region": "Worldwide",
+      "releaseYear": 2004,
+      "storage": "No internal HDD; 8 MB memory card",
+      "notes": "SCPH-700xx through 900xx groups. Internal power supply, no expansion bay; Ethernet built in."
+    }
+  ],
+  "firmware": {
+    "version": "N/A (BIOS fixed per model; no online updates)",
+    "shortVersion": "N/A",
+    "checkedDate": "2026-10-28",
+    "source": "https://www.psdevwiki.com/ps2/Main_Page"
+  },
+  "homebrew": [
+    {
+      "name": "FreeMcBoot / FreeHDBoot (FMCB/FHDB)",
+      "models": [
+        "fat",
+        "slim"
+      ],
+      "firmware": "Every model; memory-card route works on all PS2; hard-drive route requires a fat model with network adapter and HDD",
+      "summary": "An installer that puts a boot loader on a memory card (FMCB) or on a hard drive (FHDB), so homebrew starts with the console. The installer is freely available from the community.",
+      "source": "https://www.psdevwiki.com/ps2/FreeMCBoot/FreeHDBoot",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "fat",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Memory-card boot works on all PS2 models. The installer version current on psdevwiki is v1.9x, upgraded from the original v1.8C."
+        },
+        {
+          "models": [
+            "fat"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Hard-drive booting (FHDB) requires the network adapter and an installed HDD; slims have no expansion bay."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A memory card for FMCB; or a network adapter and IDE HDD for FHDB (fat models only)."
+      ],
+      "warnings": [
+        "Memory cards are old; failing cards can corrupt the FMCB install. Keep a spare card and a backup of the FMCB install."
+      ],
+      "links": [
+        {
+          "label": "psdevwiki: FreeMCBoot / FreeHDBoot",
+          "url": "https://www.psdevwiki.com/ps2/FreeMCBoot/FreeHDBoot"
+        }
+      ]
+    },
+    {
+      "name": "FreeDVDBoot",
+      "models": [
+        "fat",
+        "slim"
+      ],
+      "firmware": "Slim: all models supported; fat: version-specific (DVD Player versions 2.10, 2.12, 3.04; Sony patched the exploit in 2.14)",
+      "summary": "A DVD-player exploit that lets a burned DVD boot homebrew on an unmodified console. All PS2 Slim and Bravia TV units are supported per upstream; a phat needs the ISO matching its DVD Player version.",
+      "source": "https://github.com/CTurt/FreeDVDBoot",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream states every PS2 Slim and Bravia TV unit is supported, with no per-version ISO needed."
+        },
+        {
+          "models": [
+            "fat"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream lists DVD Player versions 2.10, 2.12 and 3.04 as supported on fat models, with a note that Sony patched the exploit in 2.14."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A DVD drive on the console and a computer with a disc burner.",
+        "Console language set to English (the exploit is language-dependent).",
+        "A DVD-R disc; rewritable media puts more strain on the laser."
+      ],
+      "warnings": [
+        "Burn at the lowest speed and finalise the disc; failing to do so may cause read errors.",
+        "Console must be set to English language; other languages change memory contents and break the exploit."
+      ],
+      "links": [
+        {
+          "label": "FreeDVDBoot (upstream)",
+          "url": "https://github.com/CTurt/FreeDVDBoot"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "psdevwiki: PS2 SKU Models",
+      "url": "https://www.psdevwiki.com/ps2/SKU_Models"
+    },
+    {
+      "label": "psdevwiki: FreeMCBoot / FreeHDBoot",
+      "url": "https://www.psdevwiki.com/ps2/FreeMCBoot/FreeHDBoot"
+    },
+    {
+      "label": "FreeDVDBoot (upstream)",
+      "url": "https://github.com/CTurt/FreeDVDBoot"
+    }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "until": "2013-01",
+    "source": "https://en.wikipedia.org/wiki/PlayStation_2"
+  }
+}

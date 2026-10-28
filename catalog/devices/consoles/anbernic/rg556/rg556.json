@@ -1,0 +1,69 @@
+{
+  "id": "rg556",
+  "name": "Anbernic RG556",
+  "manufacturer": "Anbernic",
+  "releaseYear": null,
+  "family": "anbernic",
+  "models": [
+    {
+      "id": "rg556",
+      "name": "RG556",
+      "notes": "Single model; black or translucent blue"
+    }
+  ],
+  "summary": "Anbernic's top-end Android handheld as of 2026-10: Unisoc T820 (6 nm) with 8 GB RAM, UFS 2.2 storage, active cooling (fan + heat pipe), and a 5.48-inch AMOLED panel at 1080×1920 with USB-C DisplayPort 1080p out. Running Android 13. No Linux custom firmware exists for the T820 from community projects. Vendor publishes Android 13 builds via FOTA and System Update index.",
+  "specs": {
+    "cpu": "Unisoc T820, 6 nm: 1× Cortex-A76 @2.7 GHz + 3× Cortex-A76 @2.3 GHz + 4× Cortex-A55 @2.1 GHz",
+    "gpu": "Quad-core Mali-G57 @850 MHz",
+    "memory": "8 GB LPDDR4X",
+    "storage": "128 GB UFS 2.2, TF up to 2 TB",
+    "media": "5.48-inch AMOLED, OCA full fit, 1080×1920, USB-C DisplayPort 1080p out"
+  },
+  "variants": [
+    {
+      "model": "RG556",
+      "region": "Worldwide",
+      "releaseYear": null,
+      "storage": "128 GB UFS 2.2, TF up to 2 TB",
+      "notes": "Single model available in black or translucent blue. UFS 2.2 and 8 GB RAM make it the fastest Anbernic Android device documented here. Active cooling with fan plus heat pipe. Hall joystick, Hall triggers, six-axis gyro, vibration motor, joystick light control. Battery claimed 8 hours, 5 V/2 A, ~3.5 h charge. DisplayPort over USB-C at 1080p — a vendor feature claim, not a desktop-mode guarantee.",
+      "specs": {
+        "cpu": "Unisoc T820, 6 nm, 1×A76 @2.7 GHz + 3×A76 @2.3 GHz + 4×A55 @2.1 GHz",
+        "gpu": "Quad-core Mali-G57 @850 MHz",
+        "memory": "8 GB LPDDR4X",
+        "storage": "128 GB UFS 2.2, TF up to 2 TB",
+        "media": "5.48\" AMOLED, OCA full fit, 1080×1920, USB-C DisplayPort 1080p out",
+        "battery": "5500 mAh polymer lithium, 8 h claimed, 5 V/2 A, ~3.5 h charge",
+        "wireless": "Wi-Fi 802.11a/b/g/n/ac (2.4/5 GHz), Bluetooth 5.0",
+        "cooling": "Fan plus heat pipe"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Android 13; System Update index marks V1.12 as Official Latest, with V1.16 listed separately",
+    "shortVersion": "V1.12",
+    "checkedDate": "2026-10-28",
+    "source": "https://anbernic.com/pages/system-update"
+  },
+  "firmwareOptions": [],
+  "homebrew": [],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "Anbernic: RG556 product page (T820 specs, Android 13)",
+      "url": "https://anbernic.com/products/rg556"
+    },
+    {
+      "label": "Anbernic: System Update index (RG556 V1.12 Official Latest; V1.16 listed separately)",
+      "url": "https://anbernic.com/pages/system-update"
+    },
+    {
+      "label": "KNULLI: supported devices (no T820 Anbernic device listed)",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: device index (no T820 Anbernic device listed)",
+      "url": "https://rocknix.org/devices/"
+    }
+  ]
+}

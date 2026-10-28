@@ -87,6 +87,21 @@ test('console pages belong to family hubs, which only link catalog pages', () =>
   }
 });
 
+test('the twelve researched console pages are registered and linked from exactly one hub', () => {
+  const expected = ['ps2', 'psp', 'ps3', 'vita', 'ps4', 'ds', 'wii', '3ds', 'wii-u', 'rg405', 'rg505', 'rg556'];
+  for (const id of expected) {
+    assert(CONSOLES.some(entry => entry.id === id), `${id} is not registered in CONSOLES`);
+    assert.equal(FAMILIES.filter(family => family.consoles.some(item => item.page === id)).length, 1, `${id} must appear in exactly one family hub`);
+  }
+});
+
+test('Wii U regional shortVersion still splits into one number per region', () => {
+  const wiiu = CONSOLES.find(entry => entry.id === 'wii-u');
+  // Same split as site/console.js: "5.5.6U / 5.5.5E / 5.5.5J" -> ["5.5.6", "5.5.5", "5.5.5"].
+  const versions = wiiu.firmware.shortVersion.split('/').map(part => part.trim().match(/\d+(?:\.\d+)+/)?.[0] ?? part.trim());
+  assert.deepEqual(versions, ['5.5.6', '5.5.5', '5.5.5']);
+});
+
 test('every console project kind has a section on the page', () => {
   const known = new Set(CONSOLE_SECTIONS.flatMap(([, kinds]) => kinds));
   for (const entry of CONSOLES) for (const project of entry.homebrew)

@@ -1,0 +1,304 @@
+{
+  "id": "ds",
+  "name": "Nintendo DS family",
+  "manufacturer": "Nintendo",
+  "releaseYear": 2004,
+  "models": [
+    { "id": "ds-phat", "name": "Nintendo DS (original)" },
+    { "id": "ds-lite", "name": "Nintendo DS Lite" },
+    { "id": "dsi", "name": "Nintendo DSi" },
+    { "id": "dsi-xl", "name": "Nintendo DSi XL" }
+  ],
+  "summary": "Explore Nintendo DS family hardware and the split between flashcard-based homebrew on DS/DS Lite and firmware-independent Memory Pit on every DSi.",
+  "specs": {
+    "cpu": "ARM9 at 67 MHz plus ARM7 at 33 MHz (DS/DS Lite); ARM9 at 133 MHz plus ARM7 at 33 MHz (DSi/DSi XL)",
+    "memory": "4 MB (DS/DS Lite); 16 MB (DSi/DSi XL)",
+    "storage": "None internal on DS/DS Lite; SD card slot and internal system memory on DSi/DSi XL",
+    "media": "DS game cards and GBA cards on DS/DS Lite; DS game cards and SD card on DSi/DSi XL",
+    "display": "Two 3.0-inch 256x192 LCDs (DS/DS Lite); two 3.25-inch (XL: 4.2-inch) 256x192 LCDs (DSi/DSi XL)"
+  },
+  "variants": [
+    {
+      "model": "Nintendo DS (original)",
+      "region": "Worldwide",
+      "releaseYear": 2004,
+      "storage": "DS game cards; GBA slot",
+      "notes": "Model code NTR-001. Backlit 3.0-inch screens. No updatable system menu and no software-only exploit; entry is a slot-1 flashcard.",
+      "specs": {
+        "cpu": "ARM9 at 67 MHz, ARM7 at 33 MHz",
+        "memory": "4 MB",
+        "storage": "DS game cards and GBA cards; no internal storage",
+        "media": "DS game cards, GBA cards",
+        "display": "Two 3.0-inch 256x192 LCDs"
+      }
+    },
+    {
+      "model": "Nintendo DS Lite",
+      "region": "Worldwide",
+      "releaseYear": 2006,
+      "storage": "DS game cards; GBA slot",
+      "notes": "Model code USG-001. Four screen brightness levels. No updatable system menu; entry is a slot-1 flashcard.",
+      "specs": {
+        "cpu": "ARM9 at 67 MHz, ARM7 at 33 MHz",
+        "memory": "4 MB",
+        "storage": "DS game cards and GBA cards; no internal storage",
+        "media": "DS game cards, GBA cards",
+        "display": "Two 3.0-inch 256x192 LCDs"
+      }
+    },
+    {
+      "model": "Nintendo DSi",
+      "region": "Worldwide",
+      "releaseYear": 2008,
+      "storage": "DS game cards; SD card; no GBA slot",
+      "notes": "Model code TWL-001. Launched 2008-11 in Japan and 2009 elsewhere. DSi games are region-locked; DS games are not. GBA play is emulation (GBARunner2).",
+      "specs": {
+        "cpu": "ARM9 at 133 MHz, ARM7 at 33 MHz",
+        "memory": "16 MB",
+        "storage": "SD card slot plus internal system memory",
+        "media": "DS game cards, SD card",
+        "display": "Two 3.25-inch 256x192 LCDs"
+      }
+    },
+    {
+      "model": "Nintendo DSi XL",
+      "region": "Worldwide",
+      "releaseYear": 2009,
+      "storage": "DS game cards; SD card; no GBA slot",
+      "notes": "Model code UTL-001. Launched 2009-11 in Japan and 2010 elsewhere. Larger screens; same homebrew route as DSi.",
+      "specs": {
+        "cpu": "ARM9 at 133 MHz, ARM7 at 33 MHz",
+        "memory": "16 MB",
+        "storage": "SD card slot plus internal system memory",
+        "media": "DS game cards, SD card",
+        "display": "Two 4.2-inch 256x192 LCDs"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "DS and DS Lite: no updatable system menu; DSi: last version 1.4.5U on the US support page (2012-12-11). Last versions for other regions are not confirmed by that source.",
+    "shortVersion": "1.4.5U (US)",
+    "checkedDate": "2026-10-28",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/4514"
+  },
+  "homebrew": [
+    {
+      "name": "Slot-1 flashcard (R4-class kernel)",
+      "models": ["ds-phat", "ds-lite"],
+      "firmware": "No system firmware; boots from cartridge",
+      "summary": "A DS/DS Lite entry point that boots a kernel from a microSD card inserted in a slot-1 flashcard. There is no software-only exploit for these models.",
+      "source": "https://wiki.ds-homebrew.com/",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["ds-phat", "ds-lite"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The DS and DS Lite have no updatable system menu and no software exploit; the flashcard is the entry point. Later DSi firmware and 3DS firmware block many cards, so a card that works on a DS Lite may not boot on a DSi."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible slot-1 flashcard and microSD card.",
+        "A kernel or menu image for the specific card."
+      ],
+      "warnings": [
+        "Later DSi firmware and all 3DS firmware block many DS flashcards.",
+        "A DS Lite flashcard route is not a DSi route."
+      ],
+      "links": [
+        { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" }
+      ]
+    },
+    {
+      "name": "Memory Pit",
+      "models": ["dsi", "dsi-xl"],
+      "firmware": "All DSi firmware versions",
+      "summary": "The main entry point for DSi homebrew. It runs on every DSi console regardless of firmware version or region and needs an SD card.",
+      "source": "https://dsi.cfw.guide/",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The DSi guide states homebrew runs on all DSi consoles regardless of firmware version or region; Memory Pit is the guide's main entry point."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A Nintendo DSi or DSi XL.",
+        "An SD card with the Memory Pit payload and homebrew.",
+        "The DSi Camera application to trigger the exploit."
+      ],
+      "warnings": [
+        "Only the minimal brick risk comes from installing Unlaunch; Memory Pit itself is an entry point."
+      ],
+      "links": [
+        { "label": "DSi Guide", "url": "https://dsi.cfw.guide/" }
+      ]
+    },
+    {
+      "name": "Unlaunch",
+      "models": ["dsi", "dsi-xl"],
+      "firmware": "All DSi firmware versions",
+      "summary": "Installs a boot-stage menu on the DSi so homebrew can be launched before the stock menu. It is the permanent option after an entry point.",
+      "source": "https://dsi.cfw.guide/",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The DSi guide documents Unlaunch installation and uninstallation; the guide states homebrew runs on all DSi consoles regardless of firmware version or region."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A working Memory Pit or other DSi entry point.",
+        "A NAND backup before installation."
+      ],
+      "warnings": [
+        "Unlaunch and NAND writes are the risky steps; a failed NAND restore needs a hardmod.",
+        "Keep an untouched NAND backup before installing."
+      ],
+      "links": [
+        { "label": "DSi Guide", "url": "https://dsi.cfw.guide/" }
+      ]
+    },
+    {
+      "name": "hiyaCFW",
+      "models": ["dsi", "dsi-xl"],
+      "firmware": "All DSi firmware versions",
+      "summary": "An SD-card-based custom firmware menu for the DSi, booted through Unlaunch. It redirects the system NAND to the SD card.",
+      "source": "https://wiki.ds-homebrew.com/",
+      "kind": "os",
+      "compatibility": [
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Documented by the DS-Homebrew Wiki; requires Unlaunch and an SD card. No exact DSi firmware list is published because the DSi route is firmware-independent."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Unlaunch installed on the DSi.",
+        "A compatible SD card formatted as required by hiyaCFW."
+      ],
+      "warnings": [
+        "SD card size and format matter; a wrong format is the usual failed install.",
+        "Removing hiyaCFW means deleting SD-card content; the stock menu is untouched by an SD-only setup."
+      ],
+      "links": [
+        { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" }
+      ]
+    },
+    {
+      "name": "TWiLight Menu++",
+      "models": ["ds-phat", "ds-lite", "dsi", "dsi-xl"],
+      "firmware": "DSi firmware-independent; DS/DS Lite use a flashcard kernel",
+      "summary": "An open-source DSi Menu replacement that launches DS, DSi and GBA games. It targets DSi, 3DS and DS flashcards.",
+      "source": "https://github.com/DS-Homebrew/TWiLightMenu",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "TWiLight Menu++ targets DSi and launches DS, DSi and GBA games; the DSi route is firmware-independent."
+        },
+        {
+          "models": ["ds-phat", "ds-lite"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "On DS/DS Lite, TWiLight Menu++ runs from a slot-1 flashcard kernel rather than from an installed exploit."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A DSi with Unlaunch or a DS/DS Lite flashcard kernel.",
+        "An SD card formatted for TWiLight Menu++."
+      ],
+      "warnings": [
+        "SD card size and format matter for TWiLight Menu++.",
+        "Do not mix DS-mode and 3DS-mode instructions."
+      ],
+      "links": [
+        { "label": "TWiLight Menu++", "url": "https://github.com/DS-Homebrew/TWiLightMenu" }
+      ]
+    },
+    {
+      "name": "nds-bootstrap",
+      "models": ["dsi", "dsi-xl"],
+      "firmware": "All DSi firmware versions",
+      "summary": "Loads DS games from an SD card on DSi (and 3DS) without a flashcart. DS games are region-free.",
+      "source": "https://wiki.ds-homebrew.com/",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Documented by the DS-Homebrew Wiki; the DSi route is firmware-independent."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A DSi with Unlaunch or hiyaCFW.",
+        "nds-bootstrap installed to the SD card."
+      ],
+      "warnings": [
+        "DSi games are region-locked; DS games are region-free."
+      ],
+      "links": [
+        { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" }
+      ]
+    },
+    {
+      "name": "GBARunner2",
+      "models": ["dsi", "dsi-xl"],
+      "firmware": "All DSi firmware versions",
+      "summary": "Runs Game Boy Advance games on DSi and 3DS. On DSi there is no GBA slot, so this is emulation rather than native play.",
+      "source": "https://wiki.ds-homebrew.com/",
+      "kind": "emulation",
+      "runtime": "native",
+      "systems": "Game Boy Advance",
+      "compatibility": [
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Documented by the DS-Homebrew Wiki; the DSi route is firmware-independent."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A DSi with Unlaunch or hiyaCFW.",
+        "GBARunner2 installed to the SD card and GBA ROM dumps supplied by the user."
+      ],
+      "warnings": [
+        "No GBA slot on DSi/DSi XL, so compatibility is limited by emulation.",
+        "No games or BIOS files are bundled; use your own legally obtained dumps."
+      ],
+      "links": [
+        { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "DSi Guide", "url": "https://dsi.cfw.guide/" },
+    { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" },
+    { "label": "TWiLight Menu++", "url": "https://github.com/DS-Homebrew/TWiLightMenu" },
+    { "label": "Nintendo DSi system software updates", "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/4514" }
+  ],
+  "media": {},
+  "highlights": [],
+  "communities": [],
+  "officialSupport": {
+    "status": "dropped",
+    "until": "2012-12",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/4514",
+    "summary": "DSi system software updates ended at 1.4.5U on the US support page; last versions for other regions are not stated there"
+  }
+}

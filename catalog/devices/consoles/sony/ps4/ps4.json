@@ -1,0 +1,414 @@
+{
+  "id": "ps4",
+  "name": "Sony PlayStation 4 family",
+  "manufacturer": "Sony",
+  "releaseYear": 2013,
+  "models": [
+    {
+      "id": "original",
+      "name": "PS4 (original)"
+    },
+    {
+      "id": "slim",
+      "name": "PS4 Slim"
+    },
+    {
+      "id": "pro",
+      "name": "PS4 Pro"
+    }
+  ],
+  "summary": "Explore PS4 family hardware and firmware-specific routes into homebrew across the original, Slim and Pro models.",
+  "specs": {
+    "cpu": "AMD semi-custom x86-64 APU; die marks differ by model group",
+    "gpu": "AMD Radeon-based GPU; 4K output on Pro only",
+    "memory": "8 GB GDDR5 unified memory",
+    "storage": "Internal 2.5-inch SATA hard drive, 500 GB on launch models; user-replaceable",
+    "media": "Blu-ray drive on all models; no UHD Blu-ray on any PS4"
+  },
+  "variants": [
+    {
+      "model": "PS4 (original)",
+      "region": "Worldwide",
+      "releaseYear": 2013,
+      "storage": "500 GB HDD on launch models; larger options followed",
+      "notes": "CUH-10xx, CUH-11xx and CUH-12xx model groups. Launch model with a glossy/split case; no HDR at launch.",
+      "specs": {
+        "cpu": "AMD semi-custom x86-64 APU (Aeolia southbridge)",
+        "gpu": "AMD Radeon-based GPU",
+        "memory": "8 GB GDDR5",
+        "media": "Blu-ray drive; HDMI 1080p output"
+      }
+    },
+    {
+      "model": "PS4 Slim",
+      "region": "Worldwide",
+      "releaseYear": 2016,
+      "storage": "500 GB or 1 TB HDD depending on SKU",
+      "notes": "CUH-20xx, CUH-21xx and CUH-22xx model groups. Smaller case with no optical audio port.",
+      "specs": {
+        "cpu": "AMD semi-custom x86-64 APU (Belize / Belize2 southbridge)",
+        "gpu": "AMD Radeon-based GPU",
+        "memory": "8 GB GDDR5",
+        "media": "Blu-ray drive; HDMI 1080p output"
+      }
+    },
+    {
+      "model": "PS4 Pro",
+      "region": "Worldwide",
+      "releaseYear": 2016,
+      "storage": "1 TB HDD on launch models",
+      "notes": "CUH-70xx, CUH-71xx and CUH-72xx model groups. Mid-generation performance model; later 72xx SKUs use the Baikal southbridge.",
+      "specs": {
+        "cpu": "AMD semi-custom x86-64 APU (Belize2 / Baikal southbridge)",
+        "gpu": "AMD Radeon-based GPU with 4K output",
+        "memory": "8 GB GDDR5",
+        "media": "Blu-ray drive; HDMI 4K output"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "14.00",
+    "shortVersion": "14.00",
+    "checkedDate": "2026-10-28",
+    "source": "https://fus01.ps4.update.playstation.net/update/ps4/list/us/ps4-updatelist.xml"
+  },
+  "homebrew": [
+    {
+      "name": "PPPwn",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Kernel RCE for PS4 up to FW 11.00 with an exact supported-version list. The README says it only prints PPPwned and that enabler payloads must be adapted separately.",
+      "summary": "A PC-driven PPPoE kernel exploit entry point for PS4. It runs from a computer with an Ethernet port and only covers the firmware revisions listed below.",
+      "source": "https://github.com/TheOfficialFloW/PPPwn",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "7.00",
+            "7.01",
+            "7.02",
+            "7.50",
+            "7.51",
+            "7.55",
+            "8.00",
+            "8.01",
+            "8.03",
+            "8.50",
+            "8.52",
+            "9.00",
+            "9.03",
+            "9.04",
+            "9.50",
+            "9.51",
+            "9.60",
+            "10.00",
+            "10.01",
+            "10.50",
+            "10.70",
+            "10.71",
+            "11.00"
+          ],
+          "status": "documented",
+          "note": "These exact revisions are listed upstream. No separate model-specific list is published; southbridge differences matter for later payloads rather than for this entry exploit."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "PS4 on one of the listed firmware revisions.",
+        "A PC with an Ethernet port (a USB Ethernet adapter works) and a PPPoE connection configured on the console.",
+        "An adapted payload such as GoldHEN or another homebrew enabler; PPPwn itself only prints PPPwned."
+      ],
+      "warnings": [
+        "Updating past 11.00 removes this route; Sony provides no official downgrade.",
+        "Online use of a modified console risks an account or console ban.",
+        "Third-party payloads can crash the console."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/TheOfficialFloW/PPPwn"
+        }
+      ]
+    },
+    {
+      "name": "GoldHEN",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Upstream publishes no supported-firmware list; the PPPwn entry-exploit list is the practical boundary.",
+      "summary": "The homebrew enabler payload for PS4. It provides plugins, rest-mode support, external HDD support, internal pkg installation, debug settings and servers, among other features.",
+      "source": "https://github.com/GoldHEN/GoldHEN",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "GoldHEN's README documents features and warns about third-party payloads, but publishes no firmware matrix. Compatibility follows the entry exploit used to load it."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A working PS4 entry exploit and payload loader.",
+        "GoldHEN payload matching the console's firmware and model group."
+      ],
+      "warnings": [
+        "GoldHEN's README warns that third-party payloads can be harmful or crash the console.",
+        "Source code is not public; keep payloads to upstream releases.",
+        "Rest Mode may need USB power for payloads that must survive a resume."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/GoldHEN/GoldHEN"
+        }
+      ]
+    },
+    {
+      "name": "PS4 Linux (ps4-linux-loader)",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "kexec Linux payloads for FW 5.05 through 13.52 across Aeolia, Belize/Belize2 and Baikal; FW 14.00 is marked with a question mark upstream.",
+      "summary": "kexec-based Linux payloads for PS4. The host works with GoldHEN's PayLoader and boots a separate Linux kernel from /data/linux/boot or a USB drive.",
+      "source": "https://github.com/ps4-linux/ps4-linux-loader",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "5.05",
+            "6.72",
+            "7.00",
+            "7.01",
+            "7.02",
+            "7.50",
+            "7.51",
+            "7.55",
+            "8.00",
+            "8.01",
+            "8.03",
+            "8.50",
+            "8.52",
+            "9.00",
+            "9.03",
+            "9.04",
+            "9.50",
+            "9.51",
+            "9.60",
+            "10.00",
+            "10.01",
+            "10.50",
+            "10.70",
+            "10.71",
+            "11.00",
+            "11.02",
+            "11.50",
+            "11.52",
+            "12.00",
+            "12.02",
+            "12.50",
+            "12.52",
+            "13.00",
+            "13.02",
+            "13.04",
+            "13.50",
+            "13.52"
+          ],
+          "status": "documented",
+          "note": "These exact revisions are listed upstream. A payload still needs a working entry exploit first, so the practical ceiling is the lower of the exploit and Linux lists."
+        },
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "14.00"
+          ],
+          "status": "unverified",
+          "note": "Upstream marks FW 14.00 with a question mark; not confirmed as working."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A working entry exploit and GoldHEN's PayLoader.",
+        "Linux kernel (bzImage) and initramfs.cpio.gz placed in /data/linux/boot or /user/system/boot, or on a USB drive.",
+        "A PS4 model whose southbridge is covered (Aeolia, Belize/Belize2 or Baikal)."
+      ],
+      "warnings": [
+        "Linux is not the console OS; PS4 games do not run under it.",
+        "A 13.00 console appears in the Linux list but not in PPPwn's supported versions.",
+        "A black screen can result from an outdated kernel; use an up-to-date guide.",
+        "Updating past a supported firmware removes the entry exploit even if a Linux payload exists."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/ps4-linux/ps4-linux-loader"
+        },
+        {
+          "label": "Linux setup guide (DionKill)",
+          "url": "https://dionkill.github.io/ps4-linux-tutorial/"
+        }
+      ]
+    },
+    {
+      "name": "Sony PS4 system software update and reinstall",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Latest official system software: 14.00. Update and reinstallation files are different.",
+      "summary": "Sony's official instructions for updating a PS4 from USB or reinstalling system software in Safe Mode. Reinstalling erases console data and does not provide an older-firmware selector.",
+      "source": "https://www.playstation.com/en-us/support/hardware/ps4/system-software/",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "14.00"
+          ],
+          "status": "documented",
+          "note": "Official PS4 recovery and update track shared by the whole family; reinstall does not accept older firmware."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "FAT32- or exFAT-formatted USB drive with the PS4 update file in the documented folder; use Safe Mode as Sony documents."
+      ],
+      "warnings": [
+        "Sony's Safe Mode reinstall deletes all PS4 data.",
+        "Update and reinstallation PUPs are different files and are not interchangeable.",
+        "Reinstalling does not downgrade the console."
+      ],
+      "links": [
+        {
+          "label": "Sony PS4 system software info",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps4/system-software-info/"
+        }
+      ]
+    },
+    {
+      "name": "PS4 firmware rollback status — no verified general method",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "No general rollback firmware support established",
+      "summary": "Records the documented PS4 downgrade limit: Sony's tools are forward-only and no general rollback method is documented. This is a status reference, not a downgrade tool.",
+      "source": "https://www.playstation.com/en-us/support/hardware/ps4/system-software/",
+      "kind": "rollback",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No PS4 model-specific rollback method was verified; Sony's update and reinstall paths do not accept older firmware."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "An archived older PUP is not a downgrade method.",
+        "Safe Mode reinstall erases console data and does not downgrade.",
+        "Any isolated rollback claim needs independent, reproducible confirmation before being treated as usable."
+      ],
+      "links": [
+        {
+          "label": "Sony PS4 system software",
+          "url": "https://www.playstation.com/en-us/support/hardware/ps4/system-software/"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "psdevwiki: PS4 SKU Models",
+      "url": "https://www.psdevwiki.com/ps4/SKU_Models"
+    },
+    {
+      "label": "psdevwiki: PS4 Hardware Info",
+      "url": "https://www.psdevwiki.com/ps4/Hardware_Info"
+    },
+    {
+      "label": "PPPwn",
+      "url": "https://github.com/TheOfficialFloW/PPPwn"
+    },
+    {
+      "label": "Sony PS4 update list (XML)",
+      "url": "https://fus01.ps4.update.playstation.net/update/ps4/list/us/ps4-updatelist.xml"
+    },
+    {
+      "label": "GoldHEN",
+      "url": "https://github.com/GoldHEN/GoldHEN"
+    },
+    {
+      "label": "ps4-linux-loader",
+      "url": "https://github.com/ps4-linux/ps4-linux-loader"
+    },
+    {
+      "label": "Sony PS4 system software",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps4/system-software/"
+    },
+    {
+      "label": "Sony PS4 system software info",
+      "url": "https://www.playstation.com/en-us/support/hardware/ps4/system-software-info/"
+    }
+  ],
+  "highlights": [
+    {
+      "title": "Latest entry exploit",
+      "name": "PPPwn",
+      "firmware": "Up to firmware 11.00 (exact version list)",
+      "summary": "PPPwn is a PC-driven PPPoE kernel exploit for PS4. It only covers the exact firmware revisions listed and prints PPPwned unless an adapted payload is used.",
+      "source": "https://github.com/TheOfficialFloW/PPPwn",
+      "checkedDate": "2026-10-28",
+      "target": "console-entrypoints-section"
+    },
+    {
+      "title": "Latest Linux port",
+      "name": "ps4-linux-loader",
+      "firmware": "5.05-13.52; 14.00 unconfirmed",
+      "summary": "PS4 Linux boots a separate Linux kernel via kexec on supported firmware and southbridges. A working entry exploit is still required first.",
+      "source": "https://github.com/ps4-linux/ps4-linux-loader",
+      "checkedDate": "2026-10-28",
+      "target": "console-linux-section"
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.playstation.com/en-us/support/hardware/ps4/system-software/"
+  }
+}

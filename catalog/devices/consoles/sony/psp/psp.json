@@ -1,0 +1,283 @@
+{
+  "id": "psp",
+  "name": "Sony PlayStation Portable family",
+  "manufacturer": "Sony",
+  "releaseYear": 2004,
+  "models": [
+    {
+      "id": "1000",
+      "name": "PSP-1000 (original)"
+    },
+    {
+      "id": "2000",
+      "name": "PSP-2000 (Slim & Lite)"
+    },
+    {
+      "id": "3000",
+      "name": "PSP-3000"
+    },
+    {
+      "id": "go",
+      "name": "PSP Go (N1000)"
+    },
+    {
+      "id": "street",
+      "name": "PSP Street (E1000)"
+    }
+  ],
+  "summary": "Explore PSP family hardware and homebrew routes: ARK custom firmware installs from official 6.60/6.61 on every model, with CustomIPL for a permanent boot-time install.",
+  "specs": {
+    "cpu": "MIPS R4000-based at up to 333 MHz",
+    "gpu": "Custom GPU (MPEG-0/1/2 decoder, VU0/VU1 vector units)",
+    "memory": "32 MB (PSP-1000) / 64 MB (PSP-2000, 3000, Go, Street)",
+    "storage": "Memory Stick Duo (Memory Stick Micro on the Go); 16 GB internal on the Go",
+    "media": "UMD drive (all except the PSP Go)"
+  },
+  "variants": [
+    {
+      "model": "PSP-1000 (original)",
+      "region": "Worldwide",
+      "releaseYear": 2004,
+      "storage": "16384 KB internal flash + Memory Stick Duo slot",
+      "notes": "Heavier; no TV output. Pandora Battery recovery is available on this model only."
+    },
+    {
+      "model": "PSP-2000 (Slim & Lite)",
+      "region": "Worldwide",
+      "releaseYear": 2007,
+      "storage": "Same flash as 1000 + Memory Stick Duo slot",
+      "notes": "Slimmer form factor; TV output added; more RAM."
+    },
+    {
+      "model": "PSP-3000",
+      "region": "Worldwide",
+      "releaseYear": 2008,
+      "storage": "Same flash as 2000 + Memory Stick Duo slot",
+      "notes": "Brighter screen; built-in microphone; same flash layout as 2000."
+    },
+    {
+      "model": "PSP Go (N1000)",
+      "region": "Worldwide",
+      "releaseYear": 2009,
+      "storage": "16 GB internal storage; Memory Stick Micro slot",
+      "notes": "Slider design; no UMD drive; Bluetooth instead of Wi-Fi."
+    },
+    {
+      "model": "PSP Street (E1000)",
+      "region": "Europe",
+      "releaseYear": 2011,
+      "storage": "Memory Stick Duo slot",
+      "notes": "Budget model for Europe; mono speaker; no Wi-Fi."
+    }
+  ],
+  "firmware": {
+    "version": "6.61",
+    "shortVersion": "6.61",
+    "checkedDate": "2026-10-28",
+    "source": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio"
+  },
+  "homebrew": [
+    {
+      "name": "ARK-5 (via FasterARK)",
+      "models": [
+        "1000",
+        "2000",
+        "3000",
+        "go",
+        "street"
+      ],
+      "firmware": "Official System Software 6.60 or 6.61 (6.60TT and 6.60DT also supported)",
+      "summary": "Next-generation custom firmware for PSP and Vita's ePSP. FasterARK installs from official 6.60/6.61 and provides the CFW plus plugin management, XMB integration, and overclocking.",
+      "source": "https://github.com/PSP-Arkfive/FasterARK",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "1000",
+            "2000",
+            "3000",
+            "go",
+            "street"
+          ],
+          "supportedFirmware": [
+            "6.60",
+            "6.60DT",
+            "6.60TT",
+            "6.61"
+          ],
+          "status": "documented",
+          "note": "Upstream states official 6.60/6.61 (including TT and DT variants) are the install range; claims every retail PSP model."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "PSP on official System Software 6.60 or 6.61; update if necessary via Sony's update.",
+        "A Memory Stick Duo (or Memory Stick Micro on the Go) with extracted FasterARK package."
+      ],
+      "warnings": [
+        "ARK-4 is archived; use FasterARK/ARK-5 instead.",
+        "Fake or failing Memory Sticks are a common cause of failed installations."
+      ],
+      "links": [
+        {
+          "label": "FasterARK (installer)",
+          "url": "https://github.com/PSP-Arkfive/FasterARK"
+        },
+        {
+          "label": "ARK-5 (CFW source)",
+          "url": "https://github.com/PSP-Arkfive/ARK-5"
+        }
+      ]
+    },
+    {
+      "name": "CustomIPL",
+      "models": [
+        "1000",
+        "2000",
+        "3000",
+        "go",
+        "street"
+      ],
+      "firmware": "Every firmware; requires a prior ARK-5 install via FasterARK",
+      "summary": "Patches the IPL so the custom firmware loads on cold-boot, turning ARK into a permanent CFW instead of live CFW (which needs the loader after every power-off/reboot).",
+      "source": "https://github.com/PSP-Arkfive/CustomIPL",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "1000",
+            "2000",
+            "3000",
+            "go",
+            "street"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Installed after FasterARK works; upstream states it allows CFW to be loaded from cold-boot on all retail models."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "ARK-5 already installed via FasterARK."
+      ],
+      "warnings": [
+        "A failed CustomIPL install can require DC10 or a Pandora Battery recovery."
+      ],
+      "links": [
+        {
+          "label": "CustomIPL (upstream)",
+          "url": "https://github.com/PSP-Arkfive/CustomIPL"
+        }
+      ]
+    },
+    {
+      "name": "DC10 (Despertar del Cementerio)",
+      "models": [
+        "1000",
+        "2000",
+        "3000",
+        "go",
+        "street"
+      ],
+      "firmware": "Installs 6.61 with or without ARK; works on all retail models",
+      "summary": "ARK's ultimate recovery tool. It reinstalls 6.61 (with or without ARK), backs up and restores NAND and IDStorage, and can permanently change the UMD region. Requires a boot method to start.",
+      "source": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "1000",
+            "2000",
+            "3000",
+            "go",
+            "street"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Shipped in the Full variant of FasterARK; upstream says it works on all retail PSP models."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The 6.61 firmware renamed to 661.PBP (or 661GO.PBP on a Go) on the Memory Stick.",
+        "A boot method: Pandora Battery (PSP-1000 only), Baryon Sweeper, or New cIPL with L held."
+      ],
+      "warnings": [
+        "Not a universal unbrick by itself — requires one of the boot methods listed above.",
+        "Pandora Battery is only available on the PSP-1000."
+      ],
+      "links": [
+        {
+          "label": "DC10 (upstream)",
+          "url": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio"
+        }
+      ]
+    },
+    {
+      "name": "Pandora Battery (PSP-1000 only)",
+      "models": [
+        "1000"
+      ],
+      "firmware": "Every firmware; hardware-mod based",
+      "summary": "A modified battery that forces a PSP-1000 into service mode when paired with a magic Memory Stick, enabling DC10 access on a bricked console.",
+      "source": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "1000"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Only works on PSP-1000; all other PSP models lack the service-mode entry path."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A PSP-1000 console.",
+        "A modified battery prepared outside the console.",
+        "A magic Memory Stick with DC10."
+      ],
+      "warnings": [
+        "Old batteries are 15+ years; a swollen battery is a safety hazard."
+      ],
+      "links": [
+        {
+          "label": "DC10 prerequisites",
+          "url": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "psdevwiki: PSP SKU Models",
+      "url": "https://www.psdevwiki.com/psp/SKU_Models"
+    },
+    {
+      "label": "psdevwiki: PSP Hardware",
+      "url": "https://www.psdevwiki.com/psp/Hardware"
+    },
+    {
+      "label": "FasterARK (installer)",
+      "url": "https://github.com/PSP-Arkfive/FasterARK"
+    },
+    {
+      "label": "CustomIPL (permanent CFW)",
+      "url": "https://github.com/PSP-Arkfive/CustomIPL"
+    },
+    {
+      "label": "DC10 (recovery tool)",
+      "url": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio"
+    },
+    {
+      "label": "ARK-5 (CFW source)",
+      "url": "https://github.com/PSP-Arkfive/ARK-5"
+    }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "until": "2015-01",
+    "source": "https://www.psdevwiki.com/psp/Official_Firmware_(OFW)"
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "id": "wii",
+  "name": "Nintendo Wii family",
+  "manufacturer": "Nintendo",
+  "releaseYear": 2006,
+  "models": [
+    { "id": "wii", "name": "Nintendo Wii (original)" },
+    { "id": "family-edition", "name": "Wii Family Edition" },
+    { "id": "wii-mini", "name": "Wii mini" }
+  ],
+  "summary": "Explore Nintendo Wii family hardware and the model-dependent routes into homebrew: Wilbrand on SD-capable consoles and BlueBomb on the Wii mini, all ending at the HackMii installer.",
+  "specs": {
+    "cpu": "IBM Broadway PowerPC 750-based, 729 MHz",
+    "gpu": "ATI Hollywood, up to 480p",
+    "memory": "88 MB total (24 MB main + 64 MB graphics)",
+    "storage": "512 MB internal flash; SD card for expansion",
+    "media": "Wii 12 cm optical discs; GameCube 8 cm discs on the original model",
+    "display": "Up to 480p via component or AV"
+  },
+  "variants": [
+    {
+      "model": "Nintendo Wii (original)",
+      "region": "Worldwide",
+      "releaseYear": 2006,
+      "storage": "512 MB internal flash; SD card",
+      "notes": "Model code RVL-001. GameCube controller and memory-card ports. SD and USB exploit path (Wilbrand).",
+      "specs": {
+        "cpu": "IBM Broadway, 729 MHz",
+        "gpu": "ATI Hollywood, 480p output",
+        "memory": "88 MB total",
+        "storage": "512 MB internal flash; SD card",
+        "media": "Wii and GameCube discs",
+        "display": "Up to 480p"
+      }
+    },
+    {
+      "model": "Wii Family Edition",
+      "region": "Worldwide",
+      "storage": "512 MB internal flash; SD card",
+      "notes": "Model code RVL-101. Horizontal-only case; no GameCube ports. SD and USB exploit path (Wilbrand).",
+      "specs": {
+        "cpu": "IBM Broadway, 729 MHz",
+        "gpu": "ATI Hollywood, 480p output",
+        "memory": "88 MB total",
+        "storage": "512 MB internal flash; SD card",
+        "media": "Wii discs",
+        "display": "Up to 480p"
+      }
+    },
+    {
+      "model": "Wii mini",
+      "region": "Worldwide",
+      "storage": "512 MB internal flash; USB only (no SD slot)",
+      "notes": "Model code RVL-201. No GameCube ports and no SD slot. Bluetooth exploit (BlueBomb) is the only entry.",
+      "specs": {
+        "cpu": "IBM Broadway, 729 MHz",
+        "gpu": "ATI Hollywood, 480p output",
+        "memory": "88 MB total",
+        "storage": "512 MB internal flash; USB only",
+        "media": "Wii discs",
+        "display": "Up to 480p"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Wii Menu 4.3 (last release, 2010-09-07)",
+    "shortVersion": "4.3",
+    "checkedDate": "2026-10-28",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/2522"
+  },
+  "homebrew": [
+    {
+      "name": "Wilbrand",
+      "models": ["wii", "family-edition"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "An SD-card exploit for Wii Menu 4.3 that leads to the HackMii installer. Requires the SD slot, so it does not apply to the Wii mini.",
+      "source": "https://wii.hacks.guide/get-started",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "The guide marks the Wii and Family Edition as SD and USB capable; Wilbrand is the SD route for 4.3."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A Wii or Wii Family Edition with an SD slot.",
+        "An SD card prepared with Wilbrand.",
+        "A computer to run the exploit tool."
+      ],
+      "warnings": [
+        "The Wii mini has no SD slot, so Wilbrand does not apply to it."
+      ],
+      "links": [
+        { "label": "Wii Hacks Guide: Get Started", "url": "https://wii.hacks.guide/get-started" }
+      ]
+    },
+    {
+      "name": "BlueBomb",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "A Bluetooth exploit used for the Wii mini and usable on original Wiis. The console must be close to the computer running it.",
+      "source": "https://wii.hacks.guide/bluebomb",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition", "wii-mini"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "BlueBomb is the only entry for the Wii mini and also works on original Wiis; it needs Bluetooth proximity."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A Bluetooth adapter on the computer running the exploit.",
+        "The console within Bluetooth range.",
+        "Wii Menu 4.3 on the console."
+      ],
+      "warnings": [
+        "BlueBomb is the only Wii mini entry; do not plan a mini mod around a disc or SD exploit."
+      ],
+      "links": [
+        { "label": "Wii Hacks Guide: BlueBomb", "url": "https://wii.hacks.guide/bluebomb" }
+      ]
+    },
+    {
+      "name": "HackMii installer",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "The shared installer that all Wii and Wii mini routes end at. It installs the Homebrew Channel and, where supported, BootMii.",
+      "source": "https://wii.hacks.guide/get-started",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition", "wii-mini"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "Every Wii and Wii mini route ends at the HackMii installer, which checks the console before writing."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A working Wilbrand or BlueBomb entry point.",
+        "An SD card or USB drive as required by the route."
+      ],
+      "warnings": [
+        "The installer decides whether BootMii-boot2 is available on a given revision."
+      ],
+      "links": [
+        { "label": "Wii Hacks Guide: Get Started", "url": "https://wii.hacks.guide/get-started" }
+      ]
+    },
+    {
+      "name": "Homebrew Channel",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "The launcher installed by the HackMii installer. It runs homebrew from SD or USB using the apps folder layout.",
+      "source": "https://wii.hacks.guide/",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition", "wii-mini"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "Installed by the HackMii installer on all three models; storage support follows the model (SD and USB, or USB only)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The HackMii installer completed successfully.",
+        "Homebrew placed in the apps folder on SD or USB."
+      ],
+      "warnings": [
+        "Storage support is model-dependent: the Wii mini has no SD slot."
+      ],
+      "links": [
+        { "label": "Wii Hacks Guide", "url": "https://wii.hacks.guide/" }
+      ]
+    },
+    {
+      "name": "BootMii",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "NAND backup and restore environment installed by the HackMii installer. BootMii-boot2 runs on every boot where the console supports it; BootMii-IOS runs from the Homebrew Channel.",
+      "source": "https://wiibrew.org/wiki/BootMii",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition", "wii-mini"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "BootMii-boot2 availability varies by revision; the HackMii installer decides what a console supports. BootMii-IOS is the fallback where boot2 is unavailable."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The HackMii installer completed successfully.",
+        "A supported BootMii form for the console revision."
+      ],
+      "warnings": [
+        "BootMii-boot2 is not universal; do not promise it on every revision.",
+        "A NAND restore needs a usable BootMii."
+      ],
+      "links": [
+        { "label": "WiiBrew: BootMii", "url": "https://wiibrew.org/wiki/BootMii" }
+      ]
+    },
+    {
+      "name": "Priiloader",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "An optional pre-menu launcher that can autoboot homebrew and recover a menu that no longer starts. It is a homebrew-level recovery, not a NAND restore.",
+      "source": "https://wii.hacks.guide/",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition", "wii-mini"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Priiloader is installed from the Homebrew Channel; it only helps if it was installed before the failure."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The Homebrew Channel running.",
+        "Priiloader installed before the failure it is meant to recover from."
+      ],
+      "warnings": [
+        "Priiloader only works if it was installed before the failure."
+      ],
+      "links": [
+        { "label": "Wii Hacks Guide", "url": "https://wii.hacks.guide/" }
+      ]
+    },
+    {
+      "name": "d2x cIOS",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3",
+      "summary": "Patched IOS installed by the guide so USB loaders work. Wrong base slots are a brick risk.",
+      "source": "https://wii.hacks.guide/",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition", "wii-mini"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Installed by the guide for USB loaders; exact model and firmware support is not published beyond the guide's 4.3 path."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The Homebrew Channel running.",
+        "The guide's d2x installation steps followed exactly."
+      ],
+      "warnings": [
+        "cIOS installs can break the console; use the guide's region-matched bases.",
+        "USB loaders need cIOS, but the menu works before cIOSes are installed."
+      ],
+      "links": [
+        { "label": "Wii Hacks Guide", "url": "https://wii.hacks.guide/" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "Nintendo Wii system menu update history", "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/2522" },
+    { "label": "Wii Hacks Guide", "url": "https://wii.hacks.guide/" },
+    { "label": "Wii Hacks Guide: Get Started", "url": "https://wii.hacks.guide/get-started" },
+    { "label": "Wii Hacks Guide: BlueBomb", "url": "https://wii.hacks.guide/bluebomb" },
+    { "label": "WiiBrew: BootMii", "url": "https://wiibrew.org/wiki/BootMii" }
+  ],
+  "media": {},
+  "highlights": [],
+  "communities": [],
+  "officialSupport": {
+    "status": "dropped",
+    "until": "2010-09",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/2522",
+    "summary": "Wii Menu updates ended at 4.3"
+  }
+}

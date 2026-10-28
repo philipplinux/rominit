@@ -1,0 +1,549 @@
+{
+  "id": "vita",
+  "name": "Sony PlayStation Vita family",
+  "manufacturer": "Sony",
+  "releaseYear": 2011,
+  "models": [
+    {
+      "id": "pch1000",
+      "name": "PS Vita (PCH-1000)"
+    },
+    {
+      "id": "pch2000",
+      "name": "PS Vita Slim (PCH-2000)"
+    },
+    {
+      "id": "pstv",
+      "name": "PlayStation TV (PSTV)"
+    }
+  ],
+  "summary": "Explore PS Vita OLED, Slim and PSTV hardware and the firmware-limited routes into homebrew: HENlo on 3.65/3.68/3.74, then Ensō on 3.60 or 3.65, subject to the factory-firmware floor.",
+  "specs": {
+    "cpu": "Quad-core ARM Cortex-A9 MPCore",
+    "gpu": "SGX543MP4+ (PowerVR)",
+    "memory": "512 MB main RAM + 128 MB VRAM",
+    "storage": "Proprietary Vita memory card; 1 GB internal storage on PCH-2000",
+    "media": "PS Vita game cards"
+  },
+  "variants": [
+    {
+      "model": "PS Vita (PCH-1000)",
+      "region": "Worldwide",
+      "releaseYear": 2011,
+      "storage": "Proprietary Vita memory card only; no usable internal storage for games",
+      "notes": "PCH-1000 OLED model (2011 Japan, 2012 West). PCH-1100 is the 3G variant. h-encore² requires a memory card on this model.",
+      "specs": {
+        "cpu": "Quad-core ARM Cortex-A9 MPCore",
+        "gpu": "PowerVR SGX543MP4+",
+        "memory": "512 MB + 128 MB VRAM",
+        "media": "5-inch 960x544 OLED; PS Vita game cards; Wi-Fi, 3G on PCH-1100"
+      }
+    },
+    {
+      "model": "PS Vita Slim (PCH-2000)",
+      "region": "Worldwide",
+      "releaseYear": 2013,
+      "storage": "1 GB internal storage plus memory card",
+      "notes": "PCH-2000 LCD model (2013). Lighter body with micro-USB charging. Internal storage can hold the jailbreak files without a memory card.",
+      "specs": {
+        "cpu": "Quad-core ARM Cortex-A9 MPCore",
+        "gpu": "PowerVR SGX543MP4+",
+        "memory": "512 MB + 128 MB VRAM",
+        "media": "5-inch 960x544 LCD; PS Vita game cards; Wi-Fi"
+      }
+    },
+    {
+      "model": "PlayStation TV (PSTV)",
+      "region": "Worldwide",
+      "releaseYear": 2013,
+      "storage": "Memory card",
+      "notes": "PSTV (2013-2014). TV-output variant with no screen or battery; runs Vita software subject to a title whitelist.",
+      "specs": {
+        "cpu": "Quad-core ARM Cortex-A9 MPCore",
+        "gpu": "PowerVR SGX543MP4+",
+        "memory": "512 MB + 128 MB VRAM",
+        "media": "HDMI output; PS Vita game cards; Wi-Fi"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "3.74",
+    "shortVersion": "3.74",
+    "checkedDate": "2026-10-28",
+    "source": "https://www.playstation.com/en-us/support/hardware/psvita/system-software/"
+  },
+  "homebrew": [
+    {
+      "name": "HENlo",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "3.65, 3.68 and 3.74",
+      "summary": "Current userland entry in the Vita Hacks Guide. It is not persistent, needs an internet connection on the console, and installs HENkaku and VitaDeploy.",
+      "source": "https://vita.hacks.guide/using-henlo",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [
+            "3.65",
+            "3.68",
+            "3.74"
+          ],
+          "status": "documented",
+          "note": "HENlo is compatible with these firmware versions. It does not remain installed after a reboot."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "PS Vita or PSTV on firmware 3.65, 3.68 or 3.74.",
+        "An internet connection on the console.",
+        "A PSN-linked account is not required for HENlo."
+      ],
+      "warnings": [
+        "HENlo is not persistent; re-run it after every cold boot unless Ensō is installed.",
+        "Do not let the console sleep during the 3.65 install."
+      ],
+      "links": [
+        {
+          "label": "Using HENlo",
+          "url": "https://vita.hacks.guide/using-henlo"
+        }
+      ]
+    },
+    {
+      "name": "Ensō (HENkaku Ensō)",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Installed on 3.60 or 3.65; the current flow installs 3.65",
+      "summary": "Permanent boot-time CFW for Vita. The guide's current flow reaches it through HENlo and VitaDeploy's Quick 3.65 Install; manual install pages cover 3.60 and 3.65.",
+      "source": "https://github.com/henkaku/enso",
+      "kind": "kernel",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [
+            "3.60",
+            "3.65"
+          ],
+          "status": "documented",
+          "note": "Ensō is installed on 3.60 or 3.65. The current flow installs 3.65; manual pages cover both."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A jailbroken console with HENkaku or VitaDeploy.",
+        "For the current flow, HENlo on 3.65/3.68/3.74 followed by VitaDeploy's Quick 3.65 Install."
+      ],
+      "warnings": [
+        "The guide calls the mod permanent and says there is no recovery if it fails.",
+        "Upstream warns that a bad install can perma-brick the console unless an eMMC dump was taken first.",
+        "Factory firmware above 3.65 blocks the downgrade to 3.60/3.65."
+      ],
+      "links": [
+        {
+          "label": "Installing Ensō",
+          "url": "https://vita.hacks.guide/installing-enso"
+        },
+        {
+          "label": "Ensō source",
+          "url": "https://github.com/henkaku/enso"
+        }
+      ]
+    },
+    {
+      "name": "VitaDeploy",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Toolbox for jailbroken Vitas; installs 3.60/3.65/3.68 and 3.65 + Ensō",
+      "summary": "Setup toolbox bundling VitaShell, sd2vita mount/format, firmware updater/downgrader, taiHEN setup, internal-memory unlock and app installs.",
+      "source": "https://github.com/SKGleba/VitaDeploy",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Runs on a jailbroken console; no separate firmware matrix published beyond the firmware presets it downloads."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A jailbroken Vita or PSTV.",
+        "Internet access for the 3.65 quick install."
+      ],
+      "warnings": [
+        "Do not let the console sleep during the 3.65 install.",
+        "Answer No to the internal-memory transfer prompt on reboot, per the guide."
+      ],
+      "links": [
+        {
+          "label": "VitaDeploy repository",
+          "url": "https://github.com/SKGleba/VitaDeploy"
+        }
+      ]
+    },
+    {
+      "name": "modoru",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Requires HENkaku or h-encore on 3.60-3.74; floor is the factory firmware",
+      "summary": "Downgrader for Vita. It can go down only to the firmware the console shipped with; devices whose factory firmware is above 3.65 cannot reach 3.60/3.65 for Ensō.",
+      "source": "https://github.com/TheOfficialFloW/modoru",
+      "kind": "rollback",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Requires HENkaku or h-encore on 3.60-3.74. The floor is the factory firmware; a device with factory firmware above 3.65 cannot be downgraded to 3.60/3.65."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "HENkaku or h-encore running on 3.60-3.74.",
+        "Memory card or internal storage, battery at least 50%, plugins disabled."
+      ],
+      "warnings": [
+        "Downgrading below the factory firmware is not possible.",
+        "Memory-card failures are a common cause of broken installs."
+      ],
+      "links": [
+        {
+          "label": "modoru repository",
+          "url": "https://github.com/TheOfficialFloW/modoru"
+        }
+      ]
+    },
+    {
+      "name": "h-encore²",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "3.65-3.74",
+      "summary": "Historical jailbreak for Vita. Superseded in the current guide by HENlo, but still documented with its own firmware range.",
+      "source": "https://github.com/TheOfficialFloW/h-encore-2",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream states support for firmware 3.65-3.74. On a phat OLED a memory card is mandatory; a PSN-linked account and about 270 MB free space are required."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "PS Vita or PSTV on firmware 3.65-3.74.",
+        "On phat OLED models, a Vita memory card.",
+        "A PSN-linked account and about 270 MB free space."
+      ],
+      "warnings": [
+        "Superseded by HENlo in the current guide.",
+        "Memory cards are discontinued and expensive."
+      ],
+      "links": [
+        {
+          "label": "h-encore² repository",
+          "url": "https://github.com/TheOfficialFloW/h-encore-2"
+        }
+      ]
+    },
+    {
+      "name": "h-encore",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "3.65, 3.67 and 3.68",
+      "summary": "Legacy jailbreak for Vita. Listed for completeness; not the recommended route.",
+      "source": "https://github.com/TheOfficialFloW/h-encore",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [
+            "3.65",
+            "3.67",
+            "3.68"
+          ],
+          "status": "documented",
+          "note": "Legacy jailbreak; upstream states these exact versions."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "PS Vita or PSTV on firmware 3.65, 3.67 or 3.68."
+      ],
+      "warnings": [
+        "Legacy route; follow the guide's current flow instead."
+      ],
+      "links": [
+        {
+          "label": "h-encore repository",
+          "url": "https://github.com/TheOfficialFloW/h-encore"
+        }
+      ]
+    },
+    {
+      "name": "taiHEN",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Plugin framework set up by HENkaku or VitaDeploy; no firmware-specific list",
+      "summary": "Plugin framework for Vita. Plugins load at boot once configured through HENkaku or VitaDeploy.",
+      "source": "https://vita.hacks.guide/",
+      "kind": "kernel",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Set up by HENkaku or VitaDeploy; firmware support follows the jailbreak route used."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A jailbroken console with HENkaku or VitaDeploy."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "Vita Hacks Guide",
+          "url": "https://vita.hacks.guide/"
+        }
+      ]
+    },
+    {
+      "name": "VitaShell",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "File manager installed with VitaDeploy; no firmware-specific list",
+      "summary": "The usual file manager for moving files onto a jailbroken Vita.",
+      "source": "https://github.com/SKGleba/VitaDeploy",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Application prerequisites are documented; firmware support follows the jailbreak route used."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A jailbroken Vita or PSTV."
+      ],
+      "warnings": [],
+      "links": [
+        {
+          "label": "VitaDeploy repository",
+          "url": "https://github.com/SKGleba/VitaDeploy"
+        }
+      ]
+    },
+    {
+      "name": "sd2vita",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "MicroSD adapter mount and format support in VitaDeploy",
+      "summary": "Mounts a microSD card through an sd2vita adapter. VitaDeploy provides mount and format support; an adapter and microSD card are needed.",
+      "source": "https://github.com/SKGleba/VitaDeploy",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Hardware adapter and mount; firmware support follows the jailbreak route used."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An sd2vita adapter and a microSD card.",
+        "VitaDeploy for mount and format."
+      ],
+      "warnings": [
+        "Back up before formatting or repointing the storage mount."
+      ],
+      "links": [
+        {
+          "label": "VitaDeploy repository",
+          "url": "https://github.com/SKGleba/VitaDeploy"
+        }
+      ]
+    },
+    {
+      "name": "Sony PS Vita system software update and reinstall",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Latest official system software: 3.74",
+      "summary": "Sony's official instructions for updating or reinstalling Vita system software in Safe Mode. Reinstalling requires the official PUP and a memory card.",
+      "source": "https://www.playstation.com/en-us/support/hardware/psvita/system-software/",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [
+            "3.74"
+          ],
+          "status": "documented",
+          "note": "Official Vita recovery and update track shared by the whole family; reinstall does not accept older firmware."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Official PUP and a memory card; use Safe Mode as Sony documents."
+      ],
+      "warnings": [
+        "Safe Mode reinstall erases console data.",
+        "Reinstalling does not downgrade the console."
+      ],
+      "links": [
+        {
+          "label": "Sony PS Vita system software",
+          "url": "https://www.playstation.com/en-us/support/hardware/psvita/system-software/"
+        }
+      ]
+    },
+    {
+      "name": "Vita firmware downgrade status - factory firmware floor",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "No downgrade below the console's factory firmware",
+      "summary": "Records the documented Vita downgrade limit: modoru can only reach the factory firmware, so a console manufactured above 3.65 cannot reach 3.60/3.65 for Ensō.",
+      "source": "https://github.com/TheOfficialFloW/modoru",
+      "kind": "rollback",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "modoru can only reach the factory firmware. A device with factory firmware above 3.65 cannot be downgraded to 3.60/3.65."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "Check the factory firmware before buying a used console for CFW.",
+        "An archived older PUP is not a downgrade method."
+      ],
+      "links": [
+        {
+          "label": "modoru repository",
+          "url": "https://github.com/TheOfficialFloW/modoru"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sony PS Vita system software",
+      "url": "https://www.playstation.com/en-us/support/hardware/psvita/system-software/"
+    },
+    {
+      "label": "Vita Hacks Guide",
+      "url": "https://vita.hacks.guide/"
+    },
+    {
+      "label": "h-encore² repository",
+      "url": "https://github.com/TheOfficialFloW/h-encore-2"
+    },
+    {
+      "label": "h-encore repository",
+      "url": "https://github.com/TheOfficialFloW/h-encore"
+    },
+    {
+      "label": "Ensō source",
+      "url": "https://github.com/henkaku/enso"
+    },
+    {
+      "label": "VitaDeploy repository",
+      "url": "https://github.com/SKGleba/VitaDeploy"
+    },
+    {
+      "label": "modoru repository",
+      "url": "https://github.com/TheOfficialFloW/modoru"
+    },
+    {
+      "label": "psdevwiki: Vita Hardware",
+      "url": "https://www.psdevwiki.com/vita/Hardware"
+    },
+    {
+      "label": "psdevwiki: Vita SKU Models",
+      "url": "https://www.psdevwiki.com/vita/SKU_Models"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "rg405",
+  "name": "Anbernic RG405 family",
+  "manufacturer": "Anbernic",
+  "releaseYear": null,
+  "family": "anbernic",
+  "models": [
+    {
+      "id": "rg405m",
+      "name": "RG405M",
+      "notes": "CNC aluminium shell, horizontal layout, black or grey"
+    },
+    {
+      "id": "rg405v",
+      "name": "RG405V",
+      "notes": "Plastic shell, vertical layout; T618 platform with its own vendor spec sheet"
+    }
+  ],
+  "summary": "Anbernic's 4-inch Unisoc T618 Android handhelds — RG405M (CNC aluminium, horizontal) and RG405V (plastic, vertical) — running Android 12. Each model's own vendor page carries the NOTICE that third-party OS installation is a one-way street: no flashing back to the official OS, and the warranty becomes invalid. No Linux custom firmware exists for this chip from the community projects tracked here.",
+  "specs": {
+    "cpu": "Unisoc Tiger T618, 64-bit octa-core: 2× Cortex-A75 @2.0 GHz + 6× Cortex-A55 @2.0 GHz",
+    "gpu": "Mali G52 @850 MHz",
+    "memory": "4 GB LPDDR4X @1866 MHz",
+    "storage": "128 GB eMMC; TF card expansion up to 2 TB (vendor claim)",
+    "media": "4-inch IPS touch display, 640×480"
+  },
+  "variants": [
+    {
+      "model": "RG405M",
+      "region": "Worldwide",
+      "releaseYear": null,
+      "storage": "128 GB eMMC",
+      "notes": "CNC aluminium shell in black or grey. Horizontal layout with hall sticks, six-axis gyro, vibration motor, 3.5 mm jack. Battery life claimed 7 hours, ~2 h charge. The vendor product page carries the one-way-door warning: third-party OS cannot be uninstalled and warranty becomes invalid.",
+      "specs": {
+        "cpu": "Unisoc Tiger T618, 2×A75 @2.0 GHz + 6×A55 @2.0 GHz",
+        "gpu": "Mali G52 @850 MHz",
+        "memory": "4 GB LPDDR4X @1866 MHz",
+        "storage": "128 GB eMMC, TF up to 2 TB",
+        "media": "4\" IPS touch, 640×480",
+        "battery": "4500 mAh, 7 h claimed, ~2 h charge",
+        "wireless": "Wi-Fi 802.11a/b/g/n/ac (2.4/5 GHz), Bluetooth 5.0"
+      }
+    },
+    {
+      "model": "RG405V",
+      "region": "Worldwide",
+      "releaseYear": null,
+      "storage": "128 GB eMMC, TF up to 2 TB",
+      "notes": "Plastic shell, vertical orientation, in wood grain, transparent purple or grey. The RG405V product page publishes its own spec sheet and its own NOTICE that the official OS cannot be restored once a third-party OS is installed, voiding the warranty.",
+      "specs": {
+        "cpu": "Unisoc Tiger T618, 64-bit octa-core: 2×A75 @2.0 GHz + 6×A55 @2.0 GHz",
+        "gpu": "Mali G52 @850 MHz",
+        "memory": "4 GB LPDDR4X @1866 MHz",
+        "storage": "128 GB eMMC, TF up to 2 TB",
+        "media": "4\" IPS touch, 640×480",
+        "battery": "5500 mAh, 9 h claimed, 3 h charge",
+        "wireless": "Wi-Fi 802.11a/b/g/n/ac (2.4/5 GHz), Bluetooth 5.0",
+        "cooling": "Fan with automatic heat dissipation"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Android 12, system version V1.18",
+    "shortVersion": "V1.18",
+    "checkedDate": "2026-10-28",
+    "source": "https://anbernic.com/products/rg405m"
+  },
+  "firmwareOptions": [],
+  "homebrew": [],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "Anbernic: RG405M product page (specs, V1.18, one-way-door warning)",
+      "url": "https://anbernic.com/products/rg405m"
+    },
+    {
+      "label": "Anbernic: RG405V product page (spec sheet, Android 12, own NOTICE)",
+      "url": "https://anbernic.com/products/rg405v"
+    },
+    {
+      "label": "Anbernic: System Update index (no RG405 entry)",
+      "url": "https://anbernic.com/pages/system-update"
+    },
+    {
+      "label": "KNULLI: supported devices (no T618 Anbernic device listed)",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: device index (no T618 Anbernic device listed)",
+      "url": "https://rocknix.org/devices/"
+    }
+  ]
+}
