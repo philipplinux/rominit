@@ -9,7 +9,7 @@
   "page": {
     "description": "Ultramarine Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / FEDORA-BASED LINUX",
-    "intro": "A Fedora-based desktop distribution from the Fyra Labs project, with extra multimedia codecs and drivers preinstalled, and a choice of Budgie, GNOME or KDE Plasma.",
+    "intro": "A Fedora-based desktop distribution from the Fyra Labs project, with extra multimedia codecs and drivers preinstalled, and a choice of Budgie, GNOME, KDE Plasma or Xfce.",
     "logo": { "src": "logos/ultramarine-linux.png", "alt": "Ultramarine Linux logo", "width": 180, "height": 180 },
     "pros": [
       "Fedora base with multimedia codecs included from the first boot.",
@@ -69,6 +69,16 @@
       "images": [
         { "id": "ultramarine-linux-plasma-x86_64", "arch": "x86_64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-x86_64.iso", "sha256": "3926d8715275fe9606df7f2b11275ba25de0902c7ab032121f1b0db2a87c2ae6", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-x86_64.iso.sha256sum", "size": 4064980992, "usb": true },
         { "id": "ultramarine-linux-plasma-aarch64", "arch": "aarch64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-aarch64.iso", "sha256": "aca51264d1e0dd7d302663c9d94d997802a4e39d804afa4f322f6194c6406da8", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-aarch64.iso.sha256sum", "size": 3980357632, "usb": true }
+      ]
+    },
+    {
+      "id": "xfce",
+      "name": "Xfce",
+      "description": "The lightweight Xfce desktop edition.",
+      "usbNote": "3.8 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ultramarine-linux-xfce-x86_64", "arch": "x86_64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-xfce-44-live-anaconda-x86_64.iso", "sha256": "315a12375bddce97c8b0e4b36e42732e52adf461c921ce54f07205bb51571dfe", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-xfce-44-live-anaconda-x86_64.iso.sha256sum", "size": 3779608576, "usb": true },
+        { "id": "ultramarine-linux-xfce-aarch64", "arch": "aarch64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-xfce-44-live-anaconda-aarch64.iso", "sha256": "e5f3c7d001720555b2a50b24ea7333ba0be0d5ab156ac493e66ead37699783e6", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-xfce-44-live-anaconda-aarch64.iso.sha256sum", "size": 3689701376, "usb": true }
       ]
     }
   ],
