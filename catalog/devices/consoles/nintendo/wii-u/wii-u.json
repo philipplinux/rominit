@@ -1,0 +1,598 @@
+{
+  "id": "wii-u",
+  "name": "Nintendo Wii U",
+  "family": "nintendo",
+  "manufacturer": "Nintendo",
+  "releaseYear": 2012,
+  "models": [
+    {
+      "id": "basic",
+      "name": "Wii U Basic"
+    },
+    {
+      "id": "deluxe",
+      "name": "Wii U Deluxe / Premium"
+    }
+  ],
+  "summary": "Explore Wii U hardware and the routes into Aroma custom firmware, from the browser exploit to the optional ISFShax coldboot install, on Basic and Deluxe consoles.",
+  "specs": {
+    "cpu": "IBM Espresso, 3 PowerPC 750-based cores at 1.243 GHz",
+    "gpu": "AMD Latte (Radeon-based) at 550 MHz, HDMI output up to 1080p",
+    "memory": "2 GB DDR3 for games and system, plus 32 MB MEM1",
+    "storage": "8 GB (Basic) or 32 GB (Deluxe/Premium) internal flash; external USB storage supported",
+    "display": "TV output up to 1080p; GamePad with a 6.2 in 854×480 resistive touchscreen",
+    "media": "Wii U 25 GB optical discs; Wii discs in the same drive"
+  },
+  "variants": [
+    {
+      "model": "Wii U Basic",
+      "region": "Worldwide",
+      "releaseYear": 2012,
+      "storage": "8 GB internal flash; USB expansion",
+      "notes": "WUP-001. White console with one GamePad; the basic set omits the stands and charging cradle. Same hardware generation as the Deluxe, so the homebrew routes are identical.",
+      "specs": {
+        "cpu": "IBM Espresso, 3 cores at 1.243 GHz",
+        "memory": "2 GB DDR3 plus 32 MB MEM1",
+        "storage": "8 GB eMMC NAND; external USB storage supported"
+      }
+    },
+    {
+      "model": "Wii U Deluxe / Premium",
+      "region": "Worldwide",
+      "releaseYear": 2012,
+      "storage": "32 GB internal flash; USB expansion",
+      "notes": "WUP-101. Black console; the original set adds stands, a charging cradle and a pack-in game, and later bundles change the contents but not the hardware. The extra storage matters because Wii U games and updates are large.",
+      "specs": {
+        "cpu": "IBM Espresso, 3 cores at 1.243 GHz",
+        "memory": "2 GB DDR3 plus 32 MB MEM1",
+        "storage": "32 GB eMMC NAND; external USB storage supported"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "5.5.6 U (North America) / 5.5.5 E (Europe) / 5.5.5 J (Japan)",
+    "shortVersion": "5.5.6",
+    "checkedDate": "2026-10-28",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/3070"
+  },
+  "firmwareOptions": [
+    "5.0.0",
+    "5.1.0",
+    "5.2.0",
+    "5.3.0",
+    "5.3.1",
+    "5.5.0",
+    "5.5.1",
+    "5.5.2",
+    "5.5.3",
+    "5.5.5",
+    "5.5.6"
+  ],
+  "homebrew": [
+    {
+      "name": "Wii U browser exploit",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "The region's latest version or below: 5.5.6 U, 5.5.5 E, 5.5.5 J",
+      "summary": "Runs a payload from the console's Internet Browser, which is how the current guide starts a stock console. It needs internet access and a console at or below its region's latest system version.",
+      "source": "https://wiiu.hacks.guide/aroma/browser-exploit",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [
+            "5.0.0",
+            "5.1.0",
+            "5.2.0",
+            "5.3.0",
+            "5.3.1",
+            "5.5.0",
+            "5.5.1",
+            "5.5.2",
+            "5.5.3",
+            "5.5.5",
+            "5.5.6"
+          ],
+          "status": "documented",
+          "note": "The guide states it works on all Wii U consoles in all regions on the latest firmware for the region or below: 5.5.6 U in North America, 5.5.5 E in Europe, 5.5.5 J in Japan. Both models are the same hardware generation, so the route does not split by model."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A Wii U with internet access and its Internet Browser.",
+        "An SD card prepared with the Aroma payload files.",
+        "The console at its region's latest system version or below."
+      ],
+      "warnings": [
+        "Hold B while the exploit page loads to reach the EnvironmentLoader menu, as the guide instructs; releasing early lands in the wrong menu.",
+        "If the console freezes on a white screen, reboot it, reset the browser's save data and retry.",
+        "Do not follow this route on a console that already has CBHC, Haxchi or Indexiine; the guide requires uninstalling those first."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://wiiu.hacks.guide/aroma/browser-exploit"
+        },
+        {
+          "label": "Guide: SD preparation",
+          "url": "https://wiiu.hacks.guide/aroma/sd-preparation"
+        }
+      ]
+    },
+    {
+      "name": "PayloadLoader (Health and Safety autoboot)",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Any version; installed from a browser-exploit session and not tied to one firmware",
+      "summary": "Installs the payload loader onto the Health and Safety Information app, so the SD-card environment can start without the browser. The guide installs it after taking a NAND backup.",
+      "source": "https://github.com/wiiu-env/PayloadLoaderInstaller",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Installed through the browser exploit and then started by launching the Health and Safety Information app. Upstream publishes an installer rather than a firmware matrix."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A NAND backup already taken with the guide's dumper.",
+        "A browser-exploit session on the same console to run the installer."
+      ],
+      "warnings": [
+        "A factory reset does not remove the injected PayloadLoader; use the guide's uninstall page instead.",
+        "Uninstalling it is the documented way back to a stock boot."
+      ],
+      "links": [
+        {
+          "label": "Guide: installing PayloadLoader",
+          "url": "https://wiiu.hacks.guide/aroma/installing-payloadloader"
+        },
+        {
+          "label": "Guide: uninstall PayloadLoader",
+          "url": "https://wiiu.hacks.guide/uninstall-payloadloader"
+        }
+      ]
+    },
+    {
+      "name": "Aroma",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "5.5.5 and 5.5.6 per upstream (5.5.6 U, 5.5.5 E, 5.5.5 J); the guide says any console on its region's latest version",
+      "summary": "The current homebrew environment: modules, plugins, WUHB homebrew and region-free patches, started by EnvironmentLoader. It replaces Tiramisu, and old .elf homebrew plus the old Homebrew Launcher do not work under it.",
+      "source": "https://github.com/wiiu-env/Aroma",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [
+            "5.5.5",
+            "5.5.6"
+          ],
+          "status": "documented",
+          "note": "Aroma's README lists compatibility with the latest firmware (5.5.5/5.5.6), which is 5.5.6 U in North America and 5.5.5 E or 5.5.5 J elsewhere; it also states a persistent entrypoint with installer and coldboot option, and support for existing entrypoints such as the browser exploit."
+        },
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [
+            "5.0.0",
+            "5.1.0",
+            "5.2.0",
+            "5.3.0",
+            "5.3.1",
+            "5.5.0",
+            "5.5.1",
+            "5.5.2",
+            "5.5.3"
+          ],
+          "status": "unverified",
+          "note": "The guide says homebrew and CFW work on the latest version or below, but Aroma's own README only names 5.5.5/5.5.6; treat older versions as untested for Aroma itself."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "EnvironmentLoader and the Aroma files on the SD card, as the guide's SD preparation step lays out.",
+        "PayloadLoader or the browser exploit to start the environment."
+      ],
+      "warnings": [
+        "The guide calls Aroma a beta release; not every upstream feature has been tested.",
+        "Old .elf homebrew and the Homebrew Launcher no longer work under Aroma; Tiramisu remains for those.",
+        "Aroma and Tiramisu are alternatives, not layers; follow one guide end to end.",
+        "Boot behaviour depends on the SD card being FAT32; the guide warns not to label the card \"wiiu\"."
+      ],
+      "links": [
+        {
+          "label": "Guide: Aroma",
+          "url": "https://wiiu.hacks.guide/aroma/getting-started"
+        },
+        {
+          "label": "Upstream environment",
+          "url": "https://github.com/wiiu-env/Aroma"
+        }
+      ]
+    },
+    {
+      "name": "EnvironmentLoader",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Any version; runs after an entry exploit",
+      "summary": "The menu that lists the environments on the SD card under sd:/wiiu/environments/ and starts the selected one. Holding X on the GamePad while it loads forces the menu open.",
+      "source": "https://github.com/wiiu-env/EnvironmentLoader",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream documents the SD layout and the X-for-menu behaviour rather than a firmware matrix; it is a payload started by another exploit."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An entry exploit to run the payload.",
+        "At least one environment directory on the SD card."
+      ],
+      "warnings": [
+        "Setup payloads must not call exit, and they run in filename order; a bad module can stop the boot chain."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/wiiu-env/EnvironmentLoader"
+        }
+      ]
+    },
+    {
+      "name": "ISFShax (coldboot boot1)",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Any version; installed from an existing homebrew entry and runs before IOSU",
+      "summary": "A coldboot boot1 exploit that installs into the SLC and loads a stage-2 payload (minute_minute) before IOSU. It allows early patches, brick repair and coldbooting other environments, at the cost of a permanent, risky NAND write.",
+      "source": "https://github.com/isfshax/isfshax",
+      "kind": "kernel",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream publishes no firmware matrix; ISFShax is installed from an existing entry and loads before IOSU. The setup guide treats it as a permanent change to the SLC."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A full SLC backup and a tested way to restore it (de_Fuse or an SLC hardmod) before installing.",
+        "An existing way to run the installer; the setup guide uses Haxchi as entry or Aroma with wafel_installer."
+      ],
+      "warnings": [
+        "A broken ISFS superblock write can brick the console; only use a superblock that has been tested and confirmed working.",
+        "The stage-2 payload tries the SD card, then the SLC, then an IOSU fallback; a missing SD payload is recoverable, a bad SLC write is not.",
+        "Restoring an SLC backup taken before the install removes ISFShax.",
+        "A boot1 update from Nintendo would brick a console with ISFShax, so boot1 updates are blocked by a plugin while it is installed."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/isfshax/isfshax"
+        },
+        {
+          "label": "Setup guide (GBAtemp)",
+          "url": "https://gbatemp.net/threads/how-to-set-up-isfshax-stroopwafel.642258/"
+        },
+        {
+          "label": "Hacks Guide Wiki: ISFShax",
+          "url": "https://wiki.hacks.guide/wiki/Wii_U:ISFShax"
+        }
+      ]
+    },
+    {
+      "name": "Tiramisu",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Any version; legacy environment",
+      "summary": "The previous environment: Mocha plus the Homebrew Launcher and an autoboot menu. Upstream calls it a legacy environment, and the current guide moves users to Aroma instead.",
+      "source": "https://github.com/wiiu-env/Tiramisu",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream describes Tiramisu as a modular legacy environment loaded by EnvironmentLoader; it does not publish a firmware matrix."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "EnvironmentLoader on the SD card.",
+        "The Tiramisu setup modules and Homebrew Launcher files placed as upstream describes."
+      ],
+      "warnings": [
+        "Some homebrew still needs Tiramisu, but upstream labels it legacy and the guide recommends Aroma.",
+        "Do not run Tiramisu and Aroma as layers; pick one environment per setup."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/wiiu-env/Tiramisu"
+        }
+      ]
+    },
+    {
+      "name": "Haxchi, CBHC and Indexiine (legacy launchers)",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Any version; legacy launchers the current guide removes",
+      "summary": "Older userland CFW launchers that the current guide uninstalls before an Aroma setup. CBHC in particular writes to a system title, so its removal is a documented procedure rather than deleting files.",
+      "source": "https://wiiu.hacks.guide/faq",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The guide documents removal, not installation: CBHC, Haxchi and Indexiine users are told to uninstall before following the Aroma guide."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Read the guide's uninstall page for the launcher already installed."
+      ],
+      "warnings": [
+        "Do not install Aroma over CBHC, Haxchi or Indexiine; uninstall the old launcher first.",
+        "Deleting CBHC files instead of following the uninstall page can leave the console unable to boot."
+      ],
+      "links": [
+        {
+          "label": "Guide: uninstall CBHC",
+          "url": "https://wiiu.hacks.guide/uninstall-cbhc"
+        },
+        {
+          "label": "Guide: uninstall Indexiine",
+          "url": "https://wiiu.hacks.guide/uninstall-indexiine"
+        }
+      ]
+    },
+    {
+      "name": "NAND backup (nanddumper)",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Any version; run from the browser-exploit session",
+      "summary": "Dumps the console's NAND to the SD card before PayloadLoader or any deeper change. The guide has the backup taken before the installer writes to the system.",
+      "source": "https://wiiu.hacks.guide/aroma/nand-backup",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The guide runs the dumper from the browser exploit and treats the resulting backup as the recovery baseline; it does not publish a firmware matrix."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An SD card large enough to hold the console's NAND dump.",
+        "The browser-exploit session that starts the dumper."
+      ],
+      "warnings": [
+        "The backup is only useful together with a way to restore it; keep a copy off the console.",
+        "A backup belongs to the console it came from and does not transfer to another Wii U."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://wiiu.hacks.guide/aroma/nand-backup"
+        }
+      ]
+    },
+    {
+      "name": "Nintendo Wii U system update",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Latest: 5.5.6 U (North America), 5.5.5 E (Europe), 5.5.5 J (Japan)",
+      "summary": "Nintendo's own system update, which installs the current release and can repair system software on a console that still boots. It removes homebrew and cannot repair a bad boot1 write.",
+      "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/3070",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [
+            "5.5.6"
+          ],
+          "status": "documented",
+          "note": "Nintendo's US update history lists 5.5.6 U above 5.5.5 U, and Nintendo Japan lists 5.5.5 J as the current version; the guide describes 5.5.6 as North America's latest and 5.5.5 for all other regions. The official path installs the current release only."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A console that still boots far enough to reach System Settings or the update prompt.",
+        "Internet access, or Nintendo's documented update method."
+      ],
+      "warnings": [
+        "There is no vendor downgrade; the update path installs the current release.",
+        "An update or system repair removes homebrew and does not repair a bad boot1 write."
+      ],
+      "links": [
+        {
+          "label": "Nintendo Wii U system update history",
+          "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/3070"
+        }
+      ]
+    },
+    {
+      "kind": "rollback",
+      "name": "Wii U firmware rollback status — no verified general method",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "No general rollback method documented; Nintendo ships updates forward-only (final: 5.5.6 U, 5.5.5 E, 5.5.5 J)",
+      "summary": "Records the Wii U limit: Nintendo publishes no downgrade and delivers updates forward-only, so an older system version is not an official option. Community NAND tools are repair paths for one console.",
+      "source": "https://wiiu.hacks.guide/faq",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No model-specific rollback method was verified; the guide and Nintendo's update history describe updates only."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "NAND tools such as minute, de_Fuse and ISFShax are recovery tools, not a version selector.",
+        "A restored NAND backup belongs to the console it came from."
+      ],
+      "links": [
+        {
+          "label": "Nintendo Wii U system update history",
+          "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/3070"
+        },
+        {
+          "label": "Wii U Hacks Guide — FAQ",
+          "url": "https://wiiu.hacks.guide/faq"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Nintendo Wii U system update history",
+      "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/3070"
+    },
+    {
+      "label": "Nintendo Japan Wii U system version history (5.5.5 J)",
+      "url": "https://support.nintendo.com/jp/wiiu/system_update/changelog.html"
+    },
+    {
+      "label": "Wii U Hacks Guide",
+      "url": "https://wiiu.hacks.guide/"
+    },
+    {
+      "label": "Wii U Hacks Guide — FAQ",
+      "url": "https://wiiu.hacks.guide/faq"
+    },
+    {
+      "label": "Wii U Hacks Guide — Browser Exploit",
+      "url": "https://wiiu.hacks.guide/aroma/browser-exploit"
+    },
+    {
+      "label": "Wii U Hacks Guide — NAND backup",
+      "url": "https://wiiu.hacks.guide/aroma/nand-backup"
+    },
+    {
+      "label": "Wii U Hacks Guide — Aroma",
+      "url": "https://wiiu.hacks.guide/aroma/getting-started"
+    },
+    {
+      "label": "Wii U Hacks Guide — uninstall PayloadLoader",
+      "url": "https://wiiu.hacks.guide/uninstall-payloadloader"
+    },
+    {
+      "label": "Wii U Hacks Guide — uninstall CBHC",
+      "url": "https://wiiu.hacks.guide/uninstall-cbhc"
+    },
+    {
+      "label": "WiiUBrew Hardware",
+      "url": "https://wiiubrew.org/wiki/Hardware"
+    },
+    {
+      "label": "WiiUBrew GamePad",
+      "url": "https://wiiubrew.org/wiki/GamePad"
+    },
+    {
+      "label": "Aroma environment",
+      "url": "https://github.com/wiiu-env/Aroma"
+    },
+    {
+      "label": "EnvironmentLoader",
+      "url": "https://github.com/wiiu-env/EnvironmentLoader"
+    },
+    {
+      "label": "Tiramisu environment",
+      "url": "https://github.com/wiiu-env/Tiramisu"
+    },
+    {
+      "label": "PayloadLoader installer",
+      "url": "https://github.com/wiiu-env/PayloadLoaderInstaller"
+    },
+    {
+      "label": "ISFShax",
+      "url": "https://github.com/isfshax/isfshax"
+    },
+    {
+      "label": "ISFShax setup guide",
+      "url": "https://gbatemp.net/threads/how-to-set-up-isfshax-stroopwafel.642258/"
+    },
+    {
+      "label": "Hacks Guide Wiki: ISFShax",
+      "url": "https://wiki.hacks.guide/wiki/Wii_U:ISFShax"
+    }
+  ],
+  "media": {},
+  "highlights": [],
+  "communities": [
+    {
+      "name": "Nintendo Homebrew Discord",
+      "url": "https://discord.gg/MWxPgEp",
+      "description": "Wii U assistance channel linked from the Wii U Hacks Guide, in English.",
+      "source": "https://wiiu.hacks.guide/",
+      "checkedDate": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "source": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/3070",
+    "summary": "Nintendo discontinued the Wii U; the final releases are 5.5.6 U, 5.5.5 E and 5.5.5 J"
+  }
+}

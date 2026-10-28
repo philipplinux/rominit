@@ -1,0 +1,1075 @@
+{
+  "id": "3ds",
+  "name": "Nintendo 3DS family",
+  "family": "nintendo",
+  "manufacturer": "Nintendo",
+  "releaseYear": 2011,
+  "models": [
+    {
+      "id": "3ds",
+      "name": "Nintendo 3DS"
+    },
+    {
+      "id": "3ds-xl",
+      "name": "Nintendo 3DS XL"
+    },
+    {
+      "id": "2ds",
+      "name": "Nintendo 2DS"
+    },
+    {
+      "id": "new-3ds",
+      "name": "New Nintendo 3DS"
+    },
+    {
+      "id": "new-3ds-xl",
+      "name": "New Nintendo 3DS XL"
+    },
+    {
+      "id": "new-2ds-xl",
+      "name": "New Nintendo 2DS XL"
+    }
+  ],
+  "summary": "Explore 3DS family hardware and the model-and-version-specific routes into boot9strap and Luma3DS across 3DS, 3DS XL, 2DS, New 3DS, New 3DS XL and New 2DS XL.",
+  "specs": {
+    "cpu": "ARM11 MPCore at 268 MHz (Old models); New models can also run at 804 MHz for applications flagged for it",
+    "gpu": "DMP PICA at 268 MHz",
+    "memory": "128 MB FCRAM (Old models); 256 MB FCRAM (New models)",
+    "storage": "SD card slot on 3DS, 3DS XL and 2DS; microSD behind the back plate on New models",
+    "display": "Top 800×240 with 3D on 3DS, 3DS XL, New 3DS and New 3DS XL; bottom 320×240 touchscreen",
+    "media": "Nintendo 3DS game cards and Nintendo DS game cards"
+  },
+  "variants": [
+    {
+      "model": "Nintendo 3DS",
+      "region": "Worldwide",
+      "releaseYear": 2011,
+      "storage": "SD card slot; a 2 GB card shipped in the box, SDHC supported",
+      "notes": "CTR-001. Original clamshell with a 3D top screen and CPU CTR. The guide treats it as an Old model, so the latest version routes to MSET9.",
+      "specs": {
+        "cpu": "ARM11 MPCore at 268 MHz",
+        "memory": "128 MB FCRAM",
+        "display": "3.53 in 800×240 top screen with 3D; 3.00 in 320×240 bottom screen"
+      }
+    },
+    {
+      "model": "Nintendo 3DS XL",
+      "region": "Worldwide",
+      "releaseYear": 2012,
+      "storage": "SD card slot",
+      "notes": "SPR-001. Larger screens in the same body class and CPU CTR A; same homebrew endpoint and Old-model entry rules as the 3DS.",
+      "specs": {
+        "cpu": "ARM11 MPCore at 268 MHz",
+        "memory": "128 MB FCRAM",
+        "display": "4.88 in 800×240 top screen with 3D; 4.18 in 320×240 bottom screen"
+      }
+    },
+    {
+      "model": "Nintendo 2DS",
+      "region": "Worldwide",
+      "releaseYear": 2013,
+      "storage": "SD card slot",
+      "notes": "FTR-001. Fixed slate body, no 3D and a mono speaker; CPU CTR B. Old-model rules apply, and safe mode plus the sleep switch make it the easiest console for the ntrboot route.",
+      "specs": {
+        "cpu": "ARM11 MPCore at 268 MHz",
+        "memory": "128 MB FCRAM",
+        "display": "3.53 in 800×240 top screen without 3D; 3.00 in 320×240 bottom screen"
+      }
+    },
+    {
+      "model": "New Nintendo 3DS",
+      "region": "Worldwide",
+      "releaseYear": 2014,
+      "storage": "microSD card behind the back plate",
+      "notes": "KTR-001. CPU LGR A, 256 MB FCRAM, C-stick, NFC and face-tracking 3D. New-model rules apply; on 11.15.0 and newer the guide uses super-skaterhax instead of MSET9.",
+      "specs": {
+        "cpu": "ARM11 MPCore at 268 MHz, up to 804 MHz for flagged applications",
+        "memory": "256 MB FCRAM",
+        "display": "3.88 in 800×240 top screen with 3D; 3.33 in 320×240 bottom screen"
+      }
+    },
+    {
+      "model": "New Nintendo 3DS XL",
+      "region": "Worldwide",
+      "releaseYear": 2014,
+      "storage": "microSD card behind the back plate",
+      "notes": "RED-001. Same New-model hardware in the XL body; the microSD sits behind the back plate, so plan the card swap before starting.",
+      "specs": {
+        "cpu": "ARM11 MPCore at 268 MHz, up to 804 MHz for flagged applications",
+        "memory": "256 MB FCRAM",
+        "display": "4.88 in 800×240 top screen with 3D; 4.18 in 320×240 bottom screen"
+      }
+    },
+    {
+      "model": "New Nintendo 2DS XL",
+      "region": "Worldwide",
+      "releaseYear": 2017,
+      "storage": "microSD card behind the back plate",
+      "notes": "JAN-001. New-model hardware without 3D; it takes the same entry methods as the New 3DS and New 3DS XL, and its screen size is not stated by the hardware reference used here.",
+      "specs": {
+        "cpu": "ARM11 MPCore at 268 MHz, up to 804 MHz for flagged applications",
+        "memory": "256 MB FCRAM",
+        "display": "4.88 in top screen without 3D; 4.18 in 320×240 bottom screen (3dbrew marks the top size with a question mark)"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "11.17.0-50",
+    "shortVersion": "11.17",
+    "checkedDate": "2026-10-28",
+    "source": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html"
+  },
+  "firmwareOptions": [
+    "1.0",
+    "2.0",
+    "3.0",
+    "4.0",
+    "5.0",
+    "6.0",
+    "7.0",
+    "8.0",
+    "9.0",
+    "9.2",
+    "9.3",
+    "9.4",
+    "9.5",
+    "9.6",
+    "9.7",
+    "9.8",
+    "9.9",
+    "10.0",
+    "10.1",
+    "10.2",
+    "10.3",
+    "10.4",
+    "10.5",
+    "10.6",
+    "10.7",
+    "11.0",
+    "11.1",
+    "11.2",
+    "11.3",
+    "11.4",
+    "11.5",
+    "11.6",
+    "11.7",
+    "11.8",
+    "11.9",
+    "11.11",
+    "11.12",
+    "11.13",
+    "11.14",
+    "11.15",
+    "11.16",
+    "11.17"
+  ],
+  "homebrew": [
+    {
+      "name": "MSET9",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "11.4.0 through 11.17.0, all regions per upstream; the guide uses it for Old 3DS/2DS on the latest version",
+      "summary": "Starts boot9strap from a prepared SD card through a System Settings flaw, with no game and no extra hardware. The guide sends Old 3DS, Old 3DS XL and Old 2DS consoles on 11.17.0-50 here.",
+      "source": "https://3ds.hacks.guide/installing-boot9strap-(mset9)",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "11.4",
+            "11.5",
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.9",
+            "11.11",
+            "11.12",
+            "11.13",
+            "11.14",
+            "11.15",
+            "11.16",
+            "11.17"
+          ],
+          "status": "documented",
+          "note": "Upstream MSET9 lists 11.4–11.17 and any region, adding that not every region was tested. The guide's picker falls back to MSET9 on every model when the version-specific method does not apply."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "System version 11.4.0 through 11.17.0.",
+        "A Windows, macOS, Linux or SteamOS computer, an Android/ChromeOS device, or an iPhone/iPad that can write to the SD card and run the MSET9 installer.",
+        "A full copy of the SD card's contents: the setup hides existing user data until the page is complete."
+      ],
+      "warnings": [
+        "The exploit writes to NAND during the boot9strap install; completing the guide's cleanup matters, or installed titles and System Settings can start to misbehave.",
+        "An Android phone used as an SD card adapter through MTP does not work; the guide sends that case to its Play Store page."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/installing-boot9strap-(mset9)"
+        },
+        {
+          "label": "Upstream MSET9",
+          "url": "https://github.com/zoogie/MSET9"
+        }
+      ]
+    },
+    {
+      "name": "super-skaterhax",
+      "models": [
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "New models on 11.15.0 and newer; the guide only routes USA, EUR and KOR, and KOR stops at 11.16",
+      "summary": "A browser exploit that starts the Homebrew Launcher on New-model consoles on the latest versions. It is known to be unreliable and may need several attempts before it takes.",
+      "source": "https://3ds.hacks.guide/installing-boot9strap-(super-skaterhax)",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "11.15",
+            "11.16",
+            "11.17"
+          ],
+          "status": "documented",
+          "note": "The page states New models on version 11.15.0 and above in all regions, then notes the exploit is inconsistent. The guide's picker additionally limits it to USA/EUR/KOR because the JPN browser path fails with error 032-0420, and KOR has no 11.17."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A New Nintendo 3DS, New Nintendo 3DS XL or New Nintendo 2DS XL.",
+        "System version 11.15.0 or newer in a region the guide routes to this method.",
+        "An SD card, a device that can write to it, and temporary region plus date/time changes on the console."
+      ],
+      "warnings": [
+        "The guide calls the exploit inconsistent and says to retry up to ten times, then switch to MSET9.",
+        "If an Old 3DS reaches this page it only shows the word \"Text\": that console needs MSET9 instead.",
+        "Do not infer support from the 11.15.0 floor alone: the guide's region table is part of the limit."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/installing-boot9strap-(super-skaterhax)"
+        },
+        {
+          "label": "Upstream super-skaterhax",
+          "url": "https://github.com/zoogie/super-skaterhax"
+        }
+      ]
+    },
+    {
+      "name": "SSLoth-Browser",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "11.4.0 through 11.13.0; the guide routes USA, EUR and KOR, and records the JPN browser path as broken",
+      "summary": "Bypasses the browser's version check so an older browser exploit can run, then loads universal-otherapp. It covers the versions between Soundhax and safecerthax for consoles whose browser is still usable.",
+      "source": "https://3ds.hacks.guide/installing-boot9strap-(ssloth-browser)",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "11.4",
+            "11.5",
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.9",
+            "11.11",
+            "11.12",
+            "11.13"
+          ],
+          "status": "documented",
+          "note": "The page states SSLoth lets users on 11.13.0 and below bypass the browser check for new-browserhax or old-browserhax, compatible with 11.4.0 through 11.13.0 in all regions. The guide's picker only routes versions with a matching NVer and marks JPN broken as of 2026-04; MSET9 covers these versions everywhere."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "System version 11.4.0 through 11.13.0 with the NVer the guide's table lists for the region.",
+        "A working Internet Browser on the console.",
+        "SD card, a computer, universal-otherapp and the browser payloads the guide links."
+      ],
+      "warnings": [
+        "The route depends on the console's region and exact NVer; a mismatch sends the browser check back and the exploit fails.",
+        "The same versions can be done with MSET9, which is not region-limited in the guide."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/installing-boot9strap-(ssloth-browser)"
+        }
+      ]
+    },
+    {
+      "name": "safecerthax",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds"
+      ],
+      "firmware": "1.0.0 through 11.14.0, all regions, Old models only",
+      "summary": "Uses the console's safe mode and a prepared SD card to install boot9strap on Old 3DS and 2DS consoles up to 11.14.0. The guide checks the shoulder buttons first because the method needs the camera shortcut.",
+      "source": "https://3ds.hacks.guide/installing-boot9strap-(safecerthax)",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds"
+          ],
+          "supportedFirmware": [
+            "1.0",
+            "2.0",
+            "3.0",
+            "4.0",
+            "5.0",
+            "6.0",
+            "7.0",
+            "8.0",
+            "9.0",
+                    "9.2",
+            "9.3",
+            "9.4",
+            "9.5",
+            "9.6",
+            "9.7",
+            "9.8",
+            "9.9",
+            "10.0",
+            "10.1",
+            "10.2",
+            "10.3",
+            "10.4",
+            "10.5",
+            "10.6",
+            "10.7",
+            "11.0",
+            "11.1",
+            "11.2",
+            "11.3",
+            "11.4",
+            "11.5",
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.9",
+            "11.11",
+            "11.12",
+            "11.13",
+            "11.14"
+          ],
+          "status": "documented",
+          "note": "The page states safecerthax works on all Old 3DS and Old 2DS consoles in all regions from 1.0.0 through 11.14.0 and explicitly does not work on New models."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An Old Nintendo 3DS, 3DS XL or 2DS.",
+        "System version 1.0.0 through 11.14.0.",
+        "Working shoulder buttons: the guide opens the camera with L+R first and stops if it does not appear.",
+        "SD card and a computer."
+      ],
+      "warnings": [
+        "A console whose L+R camera shortcut does not work cannot use this method; the guide sends it to MSET9."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/installing-boot9strap-(safecerthax)"
+        }
+      ]
+    },
+    {
+      "name": "Soundhax",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "1.0.0 through 11.3.0, all regions",
+      "summary": "Plays a crafted audio file in the 3DS Sound app to launch universal-otherapp. It is the original route and still the documented one for consoles that never went past 11.3.0.",
+      "source": "https://3ds.hacks.guide/installing-boot9strap-(soundhax)",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "1.0",
+            "2.0",
+            "3.0",
+            "4.0",
+            "5.0",
+            "6.0",
+            "7.0",
+            "8.0",
+            "9.0",
+                    "9.2",
+            "9.3",
+            "9.4",
+            "9.5",
+            "9.6",
+            "9.7",
+            "9.8",
+            "9.9",
+            "10.0",
+            "10.1",
+            "10.2",
+            "10.3",
+            "10.4",
+            "10.5",
+            "10.6",
+            "10.7",
+            "11.0",
+            "11.1",
+            "11.2",
+            "11.3"
+          ],
+          "status": "documented",
+          "note": "The page states Soundhax with universal-otherapp is compatible with versions 1.0.0 through 11.3.0 in all regions."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "System version 1.0.0 through 11.3.0.",
+        "The Soundhax .m4a file for the console's region, model and version.",
+        "SD card, a computer and universal-otherapp."
+      ],
+      "warnings": [
+        "The audio file is built per region, model and version; a mismatched file does not launch."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/installing-boot9strap-(soundhax)"
+        }
+      ]
+    },
+    {
+      "name": "ntrboot",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Every system version; needs a compatible DS flashcart",
+      "summary": "Boots a recovery-mode cartridge before the console's system software loads, so it installs boot9strap on any version and also recovers a console that no longer starts. It is the hardware fallback for the whole family.",
+      "source": "https://3ds.hacks.guide/ntrboot",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "1.0",
+            "2.0",
+            "3.0",
+            "4.0",
+            "5.0",
+            "6.0",
+            "7.0",
+            "8.0",
+            "9.0",
+                    "9.2",
+            "9.3",
+            "9.4",
+            "9.5",
+            "9.6",
+            "9.7",
+            "9.8",
+            "9.9",
+            "10.0",
+            "10.1",
+            "10.2",
+            "10.3",
+            "10.4",
+            "10.5",
+            "10.6",
+            "10.7",
+            "11.0",
+            "11.1",
+            "11.2",
+            "11.3",
+            "11.4",
+            "11.5",
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.9",
+            "11.11",
+            "11.12",
+            "11.13",
+            "11.14",
+            "11.15",
+            "11.16",
+            "11.17"
+          ],
+          "status": "documented",
+          "note": "The page describes ntrboot as working on all 3DS family consoles because it runs before any other part of the operating system. It needs an ntrboot-compatible DS flashcart and a magnet, except on the Old 2DS, which uses its sleep switch."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible DS flashcart flashed with ntrboot.",
+        "A magnet strong enough to put the console into sleep mode (the Old 2DS uses its sleep switch instead).",
+        "SD card with the SafeB9SInstaller and boot9strap files."
+      ],
+      "warnings": [
+        "The guide recommends having the flashcart and magnet ready before you need them, because ntrboot is also the recovery route for a console that no longer boots."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/ntrboot"
+        }
+      ]
+    },
+    {
+      "name": "Hardmod (boot9strap install)",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Every system version that has a matching FIRM file; requires soldering",
+      "summary": "Dumps the NAND through a soldered connection, installs boot9strap into the image and writes it back. It is the last resort for a console that cannot boot and for versions with no software route.",
+      "source": "https://3ds.hacks.guide/installing-boot9strap-(hardmod)",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "1.0",
+            "2.0",
+            "3.0",
+            "4.0",
+            "5.0",
+            "6.0",
+            "7.0",
+            "8.0",
+            "9.0",
+                    "9.2",
+            "9.3",
+            "9.4",
+            "9.5",
+            "9.6",
+            "9.7",
+            "9.8",
+            "9.9",
+            "10.0",
+            "10.1",
+            "10.2",
+            "10.3",
+            "10.4",
+            "10.5",
+            "10.6",
+            "10.7",
+            "11.0",
+            "11.1",
+            "11.2",
+            "11.3",
+            "11.4",
+            "11.5",
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.9",
+            "11.11",
+            "11.12",
+            "11.13",
+            "11.14",
+            "11.15",
+            "11.16",
+            "11.17"
+          ],
+          "status": "documented",
+          "note": "The page states this works on New 3DS, New 2DS, Old 3DS and Old 2DS on all versions that have a corresponding .firm file, and it builds on the FIRM partitions known-plaintext exploit."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A soldered NAND access (hardmod) and a NAND dump from it.",
+        "The .firm file matching the console model and system version.",
+        "hardmod-b9s-installer on Windows, macOS or Linux."
+      ],
+      "warnings": [
+        "Soldering and a full NAND dump are required; a mistake here can make the console unrecoverable.",
+        "Keep the untouched NAND dump: it is the only way back if the modified image fails."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/installing-boot9strap-(hardmod)"
+        }
+      ]
+    },
+    {
+      "name": "Luma3DS",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Every system version; requires boot9strap and is not itself an entry point",
+      "summary": "The custom firmware that patches the 3DS at boot, after boot9strap has been installed. It also provides the Select-at-boot configuration menu and the region-free behaviour the guide relies on.",
+      "source": "https://github.com/LumaTeam/Luma3DS/releases",
+      "kind": "kernel",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "1.0",
+            "2.0",
+            "3.0",
+            "4.0",
+            "5.0",
+            "6.0",
+            "7.0",
+            "8.0",
+            "9.0",
+                    "9.2",
+            "9.3",
+            "9.4",
+            "9.5",
+            "9.6",
+            "9.7",
+            "9.8",
+            "9.9",
+            "10.0",
+            "10.1",
+            "10.2",
+            "10.3",
+            "10.4",
+            "10.5",
+            "10.6",
+            "10.7",
+            "11.0",
+            "11.1",
+            "11.2",
+            "11.3",
+            "11.4",
+            "11.5",
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.9",
+            "11.11",
+            "11.12",
+            "11.13",
+            "11.14",
+            "11.15",
+            "11.16",
+            "11.17"
+          ],
+          "status": "documented",
+          "note": "Luma3DS loads from boot9strap before the system menu, so it is not tied to one system version; the version list here is the family's supported system versions, not a per-release matrix. v13.4 is the current release."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "boot9strap already installed through one of the entry methods.",
+        "The current Luma3DS files copied to the SD card root."
+      ],
+      "warnings": [
+        "Do not install a second CFW or loader over boot9strap; the guide's CFW check exists to catch that case.",
+        "A system update does not remove boot9strap once installed, but the initial install still needs a version-appropriate entry."
+      ],
+      "links": [
+        {
+          "label": "Releases",
+          "url": "https://github.com/LumaTeam/Luma3DS/releases"
+        }
+      ]
+    },
+    {
+      "name": "GodMode9",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Requires boot9strap or Luma3DS; not firmware-specific",
+      "summary": "The file manager the guide uses for NAND and save backups, title dumps and the CTRTransfer procedure. It runs with system-level access, so it can change things a normal app cannot.",
+      "source": "https://github.com/d0k3/GodMode9",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Loads from boot9strap or Luma3DS on any installed system version; it is not an entry point and has no firmware list of its own."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A console with boot9strap installed.",
+        "The GodMode9 files on the SD card."
+      ],
+      "warnings": [
+        "Use it for backups and dumps; writing system titles casually can brick the console."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/d0k3/GodMode9"
+        }
+      ]
+    },
+    {
+      "name": "Universal-Updater",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Requires Luma3DS; no firmware list of its own",
+      "summary": "A homebrew app store that runs on the console and installs other homebrew over Wi-Fi. The guide says homebrew internet access still works after the Nintendo Network shutdown.",
+      "source": "https://github.com/Universal-Team/Universal-Updater",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Runs on any console with the guide's Luma3DS setup; its own project does not publish a system-version matrix."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A console with Luma3DS set up.",
+        "Wi-Fi access on the console."
+      ],
+      "warnings": [
+        "Installing homebrew is the same trust decision as on any platform; check the source before installing."
+      ],
+      "links": [
+        {
+          "label": "Upstream repository",
+          "url": "https://github.com/Universal-Team/Universal-Updater"
+        }
+      ]
+    },
+    {
+      "name": "Nintendo 3DS system update",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Latest official release: 11.17.0-50",
+      "summary": "Nintendo's own update path for a 3DS that still boots, including Recovery Mode (L+R+Up+A at power-on). It installs the current release only and is not a route back to an older version.",
+      "source": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [
+            "11.17"
+          ],
+          "status": "documented",
+          "note": "Nintendo's update page lists 11.17.0-50 as the newest 3DS system software; the official path installs the current release, not a version chosen by the user."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A console that still reaches the HOME Menu or Recovery Mode (L+R+Up+A at power-on).",
+        "Internet access, or Nintendo's documented update method."
+      ],
+      "warnings": [
+        "The update path cannot install an older version; it is not a downgrade route.",
+        "Do not update in the middle of a homebrew setup; finish the guide's steps first."
+      ],
+      "links": [
+        {
+          "label": "Nintendo 3DS update information",
+          "url": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html"
+        }
+      ]
+    },
+    {
+      "name": "CTRTransfer",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Installs an 11.15.0 image; requires boot9strap and Luma3DS first",
+      "summary": "Writes an 11.15.0 system image for the console's model and region with GodMode9, then reinstalls tickets. The guide documents it as an add-on repair step for a console that already has custom firmware.",
+      "source": "https://3ds.hacks.guide/ctrtransfer",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The page installs an 11.15.0 CTRTransfer image and assumes Luma3DS and boot9strap are already installed; it does not publish a per-version support list."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "boot9strap and Luma3DS already installed.",
+        "GodMode9, FBI, faketik, ctrtransfer.gm9 and the 11.15.0 image for the console's model and region.",
+        "A NAND backup taken before the transfer."
+      ],
+      "warnings": [
+        "The transfer resets system settings (username, country, language); installed games and their saves are kept.",
+        "CTRTransfer images are distributed by torrent; verify what you download.",
+        "This is a repair step, not a supported way to pick an older system version."
+      ],
+      "links": [
+        {
+          "label": "Guide page",
+          "url": "https://3ds.hacks.guide/ctrtransfer"
+        }
+      ]
+    },
+    {
+      "kind": "rollback",
+      "name": "3DS firmware rollback status — no verified general method",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "No general rollback method documented; Nintendo ships updates forward-only",
+      "summary": "Records the documented 3DS limit: Nintendo's update page offers only the current release, so an older system version is not an official option. NAND restores and CTRTransfer are repair paths for one console, not a version selector.",
+      "source": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "No model-specific rollback method was verified; the official update page lists only the newest release."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "A NAND backup restored through GodMode9 or ntrboot belongs to that console; it is recovery, not a version selector.",
+        "CTRTransfer installs an 11.15.0 image and is documented as a repair/add-on, not as a general downgrade."
+      ],
+      "links": [
+        {
+          "label": "Nintendo 3DS update information",
+          "url": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html"
+        },
+        {
+          "label": "Guide: CTRTransfer",
+          "url": "https://3ds.hacks.guide/ctrtransfer"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Nintendo 3DS system update information",
+      "url": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html"
+    },
+    {
+      "label": "3DS Hacks Guide — Get Started",
+      "url": "https://3ds.hacks.guide/get-started"
+    },
+    {
+      "label": "3DS Hacks Guide — FAQ",
+      "url": "https://3ds.hacks.guide/faq"
+    },
+    {
+      "label": "3DS Hacks Guide — MSET9",
+      "url": "https://3ds.hacks.guide/installing-boot9strap-(mset9)"
+    },
+    {
+      "label": "3DS Hacks Guide — super-skaterhax",
+      "url": "https://3ds.hacks.guide/installing-boot9strap-(super-skaterhax)"
+    },
+    {
+      "label": "3DS Hacks Guide — SSLoth-Browser",
+      "url": "https://3ds.hacks.guide/installing-boot9strap-(ssloth-browser)"
+    },
+    {
+      "label": "3DS Hacks Guide — safecerthax",
+      "url": "https://3ds.hacks.guide/installing-boot9strap-(safecerthax)"
+    },
+    {
+      "label": "3DS Hacks Guide — Soundhax",
+      "url": "https://3ds.hacks.guide/installing-boot9strap-(soundhax)"
+    },
+    {
+      "label": "3DS Hacks Guide — ntrboot",
+      "url": "https://3ds.hacks.guide/ntrboot"
+    },
+    {
+      "label": "3DS Hacks Guide — Hardmod",
+      "url": "https://3ds.hacks.guide/installing-boot9strap-(hardmod)"
+    },
+    {
+      "label": "3DS Hacks Guide — CTRTransfer",
+      "url": "https://3ds.hacks.guide/ctrtransfer"
+    },
+    {
+      "label": "3dbrew Hardware",
+      "url": "https://www.3dbrew.org/wiki/Hardware"
+    },
+    {
+      "label": "3dbrew 11.17.0-50 release notes",
+      "url": "https://www.3dbrew.org/wiki/11.17.0-50"
+    },
+    {
+      "label": "Luma3DS releases",
+      "url": "https://github.com/LumaTeam/Luma3DS/releases"
+    },
+    {
+      "label": "GodMode9",
+      "url": "https://github.com/d0k3/GodMode9"
+    },
+    {
+      "label": "Universal-Updater",
+      "url": "https://github.com/Universal-Team/Universal-Updater"
+    },
+    {
+      "label": "MSET9 upstream",
+      "url": "https://github.com/zoogie/MSET9"
+    },
+    {
+      "label": "super-skaterhax upstream",
+      "url": "https://github.com/zoogie/super-skaterhax"
+    }
+  ],
+  "media": {},
+  "highlights": [],
+  "communities": [
+    {
+      "name": "Nintendo Homebrew Discord",
+      "url": "https://discord.gg/MWxPgEp",
+      "description": "Guide support for 3DS homebrew, in English, linked from the 3DS Hacks Guide.",
+      "source": "https://3ds.hacks.guide/get-started",
+      "checkedDate": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "source": "https://www.nintendo.com/en-gb/Support/Legacy-system/Latest-system-update-information-241709.html",
+    "summary": "Nintendo ended 3DS updates; 11.17.0-50 (2023-05) is the last system software"
+  }
+}
