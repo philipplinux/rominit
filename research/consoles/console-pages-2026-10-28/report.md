@@ -18,10 +18,11 @@ No ROMvault files were edited. The report records source gaps for follow-up; fin
 
 ## Verification
 
-- `npm test`: 240 passed, 0 failed.
+- `npm test`: 242 passed, 0 failed (latest run after template and media assertions).
 - `npm run check`: passed.
 - `npm run lint`: passed after creating the ignored local symlink `work/console-pages/romvault -> ../../romvault`; a fresh worktree needs that symlink or `ROMVAULT_DIR` set. No lint rules were changed.
 - `npm run build`: passed; built 4 console families.
+- Latest verification commit `ee14038` also asserts variant/model and media wiring; the family page backlink explains the small desktop/mobile screenshot deltas.
 - `git diff --check`: passed.
 - PS5 before/after comparison (Playwright against baseline/current `dist/`): detailed artifacts at `/tmp/opencode/ps5-render/README.md`. Desktop 1440×900: 193 of 14,729,760 pixels differ (0.0013%), confined to the added “PlayStation family” tag; section offsets and finder text are unchanged. Mobile 390×844: the added tag wraps, increasing page height by 31 px and shifting following content. This is the intentional new family backlink; the remaining differences match that change. The renderer reported no page errors.
 
