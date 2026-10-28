@@ -80,7 +80,7 @@
         "slim",
         "super-slim"
       ],
-      "firmware": "CEX OFW 4.80-4.82, DEX OFW 4.82, CEX HFW 4.83.1-4.93.1, DEX HFW 4.84.2",
+      "firmware": "PS3HEN v3.6.0 Supported Firmwares (checked 2026-10-28): CEX OFW 4.80-4.82, DEX OFW 4.82, CEX HFW 4.83.1-4.93.1, DEX HFW 4.84.2",
       "summary": "Homebrew ENabler for PS3. It adds homebrew and plugin support without replacing the system firmware; on 4.83 and newer it needs the matching hybrid firmware (HFW) installed first.",
       "source": "https://github.com/PS3Xploit/PS3HEN",
       "kind": "entrypoint",

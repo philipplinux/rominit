@@ -174,7 +174,7 @@
         "new-3ds-xl",
         "new-2ds-xl"
       ],
-      "firmware": "11.4.0 through 11.17.0; upstream says any region, but not all regions have been tested",
+      "firmware": "11.4.0 through 11.17.0; upstream says any region (\"probably, haven't tested them all\"). Checked 2026-10-28: https://github.com/zoogie/MSET9",
       "summary": "Starts boot9strap from a prepared SD card through a System Settings flaw, with no game and no extra hardware. The guide sends Old 3DS, Old 3DS XL and Old 2DS consoles on 11.17.0-50 here.",
       "source": "https://3ds.hacks.guide/installing-boot9strap-(mset9)",
       "kind": "entrypoint",
@@ -204,7 +204,7 @@
             "11.17"
           ],
           "status": "documented",
-          "note": "Upstream lists 11.4–11.17 and says any region, but explicitly notes not all regions have been tested; this is not a region-by-region verified compatibility claim."
+          "note": "Upstream says \"3ds 11.4-11.17, any region (probably, haven't tested them all)\"; this is any-region guidance, not a region-by-region verified compatibility claim. Checked 2026-10-28: https://github.com/zoogie/MSET9"
         }
       ],
       "checkedDate": "2026-10-28",
@@ -313,7 +313,7 @@
             "11.13"
           ],
           "status": "documented",
-          "note": "The page states SSLoth lets users on 11.13.0 and below bypass the browser check for new-browserhax or old-browserhax, compatible with 11.4.0 through 11.13.0 in all regions. The guide's picker only routes versions with a matching NVer and marks JPN broken as of 2026-04; MSET9 covers these versions everywhere."
+          "note": "The page states SSLoth lets users on 11.13.0 and below bypass the browser check for new-browserhax or old-browserhax, compatible with 11.4.0 through 11.13.0 in all regions. The guide's picker only routes versions with a matching NVer and marks JPN broken as of 2026-04; the guide routes these versions to MSET9."
         }
       ],
       "checkedDate": "2026-10-28",
