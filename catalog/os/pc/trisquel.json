@@ -9,7 +9,7 @@
   "page": {
     "description": "Trisquel editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
     "eyebrow": "OPERATING SYSTEM / FULLY FREE GNU/LINUX",
-    "intro": "A fully free GNU/Linux distribution based on Ubuntu LTS, with all non-free firmware, drivers and applications removed. It ships a GNOME desktop (Trisquel) and a KDE edition (Triskel).",
+    "intro": "A fully free GNU/Linux distribution based on Ubuntu LTS, with all non-free firmware, drivers and applications removed. It ships GNOME (Trisquel), KDE (Triskel), LXDE (Mini) and Sugar TOAST editions, plus a network installer.",
     "logo": { "src": "logos/trisquel.png", "alt": "Trisquel logo", "width": 512, "height": 112 },
     "pros": [
       "A free-software-only archive: no proprietary blobs or firmware.",
@@ -30,7 +30,7 @@
       { "label": "CD image mirror", "href": "https://cdimage.trisquel.info/trisquel-images/" }
     ],
     "previewNote": "No screenshot with a reusable licence was confirmed for Trisquel; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
-    "status": "Two live installer images, written to a USB stick with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the 12.0 \"Ecne\" release.",
+    "status": "Four live installer images (GNOME, KDE, LXDE, Sugar) plus a network installer, written to a USB stick with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk. The version is the 12.0 \"Ecne\" release.",
     "footer": [
       { "label": "Trisquel website", "href": "https://trisquel.info/" },
       { "label": "Download", "href": "https://trisquel.info/en/download" },
@@ -59,6 +59,33 @@
       "usbNote": "2.7 GB image. Write it with dd or any image writer; writing erases the stick.",
       "images": [
         { "id": "trisquel-triskel-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdimage.trisquel.info/trisquel-images/triskel_12.0_amd64.iso", "sha256": "3cf04d207568071df58b0a9b05d01c6719f05c85c2d7e9b0ce318352a8536a1c", "sha256Url": "https://cdimage.trisquel.info/trisquel-images/triskel_12.0_amd64.iso.sha256", "size": 2857697280, "usb": true }
+      ]
+    },
+    {
+      "id": "mini",
+      "name": "Trisquel Mini (LXDE)",
+      "description": "The lightweight LXDE edition for older machines.",
+      "usbNote": "1.9 GB live image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "trisquel-mini-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdimage.trisquel.info/trisquel-images/trisquel-mini_12.0_amd64.iso", "sha256": "827fb486afb195a6f16cc013273eaaeb5931ecd0a01c0b4d81b3c2fbc0886bb5", "sha256Url": "https://cdimage.trisquel.info/trisquel-images/trisquel-mini_12.0_amd64.iso.sha256", "size": 1990639616, "usb": true }
+      ]
+    },
+    {
+      "id": "sugar",
+      "name": "Trisquel Sugar TOAST",
+      "description": "The Sugar learning environment edition.",
+      "usbNote": "1.5 GB live image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "trisquel-sugar-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdimage.trisquel.info/trisquel-images/trisquel-sugar_12.0_amd64.iso", "sha256": "cd0a2fc6c719019485473e0e4d3ef5dee2e5641e624ceaf1afe1e3752fdf1d6f", "sha256Url": "https://cdimage.trisquel.info/trisquel-images/trisquel-sugar_12.0_amd64.iso.sha256", "size": 1569357824, "usb": true }
+      ]
+    },
+    {
+      "id": "netinst",
+      "name": "NetInstall",
+      "description": "A small text-based network installer that fetches packages during installation.",
+      "usbNote": "79 MB CD image; a network connection is required.",
+      "images": [
+        { "id": "trisquel-netinst-x86_64", "arch": "x86_64", "format": "iso", "url": "https://cdimage.trisquel.info/trisquel-images/trisquel-netinst_12.0_amd64.iso", "sha256": "3c3599b56b4f09780cd27c75402fb443fdce32b48b0ef9fe28e47add00d00bab", "sha256Url": "https://cdimage.trisquel.info/trisquel-images/trisquel-netinst_12.0_amd64.iso.sha256", "size": 82837504, "usb": false }
       ]
     }
   ],
