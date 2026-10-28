@@ -14,7 +14,7 @@ const folderType = rel => {
   const [top, a, b, c, d, e] = rel.split('/'), file = rel.split('/').at(-1)?.slice(0, -3);
   if (top === 'devices') return d === 'roms' ? 'rom' : e === undefined && d === `${c}.md` ? 'device' : undefined; // devices/<category>/<vendor>/<codename>/<codename>.md, …/roms/<rom>.md
   if (top === 'vendors') return b === 'lines' ? 'line' : b === 'series' ? 'series' : c === undefined && file === a ? 'vendor' : undefined; // vendors/<vendor>/<vendor>.md, lines/, series/
-  if (top === 'os') return b === `${a}.md` ? 'index' : 'project'; // os/<group>/<group>.md lists the group's OS pages
+  if (top === 'os') return b === `${a}-os.md` ? 'index' : 'project'; // os/<group>/<group>-os.md lists the group's OS pages
   return { categories: 'category', socs: 'soc', scraping: 'scraping' }[top];
 };
 /** Pages reached through the net (category → vendor → line → series → device → ROM), so README does not list them. @param {string} rel */
@@ -159,7 +159,7 @@ export function lint(vault = VAULT) {
         if (!linksTo(os, device)) say(os, `does not list ${relative(vault, device)} (its ROM ${rel} links here; run scripts/romvault-net.mjs fix)`);
     }
     if (rel.startsWith('os/') && fm.type === 'project') { // OS → group page up, and something in the group links down to it
-      const group = join(vault, 'os', rel.split('/')[1], `${rel.split('/')[1]}.md`);
+      const group = join(vault, 'os', rel.split('/')[1], `${rel.split('/')[1]}-os.md`);
       if (!linksTo(file, group)) say(file, `does not link up to ${relative(vault, group)}`);
       if (![...pages.keys()].some(f => f !== file && dirname(f) === dirname(file) && linksTo(f, file))) say(file, `not listed by ${relative(vault, group)} or a sibling OS page`);
     }
