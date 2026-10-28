@@ -43,11 +43,12 @@
   "editions": [
     {
       "id": "metal",
-      "name": "Bare metal (amd64)",
-      "description": "The metal ISO that boots and installs the node to disk.",
-      "usbNote": "347 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "name": "Bare metal",
+      "description": "The metal ISO that boots and installs the node to disk, for amd64 and arm64 machines.",
+      "usbNote": "347 MB (amd64) or 216 MB (arm64) image. Write it with dd or any image writer; writing erases the stick.",
       "images": [
-        { "id": "talos-linux-metal-amd64", "arch": "x86_64", "format": "iso", "url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/metal-amd64.iso", "sha256": "8c36de2d10f180767c132f903a7e6bafbb7afae668aa06db15d5e7fa7faf4324", "sha256Url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/sha256sum.txt", "size": 364195840, "usb": true }
+        { "id": "talos-linux-metal-amd64", "arch": "x86_64", "format": "iso", "url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/metal-amd64.iso", "sha256": "8c36de2d10f180767c132f903a7e6bafbb7afae668aa06db15d5e7fa7faf4324", "sha256Url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/sha256sum.txt", "size": 364195840, "usb": true },
+        { "id": "talos-linux-metal-arm64", "arch": "aarch64", "format": "iso", "url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/metal-arm64.iso", "sha256": "1b1d3b3d49d326da941cab967ffb92e927fa11c2893f5e5da8224dff255306cc", "sha256Url": "https://github.com/siderolabs/talos/releases/download/v1.14.5/sha256sum.txt", "size": 226799616, "usb": true }
       ]
     }
   ],
