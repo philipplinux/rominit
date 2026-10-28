@@ -75,6 +75,7 @@
           "format": "iso",
           "url": "https://iso.omarchy.org/omarchy-4.0.6.iso",
           "sha256": "b542db5fecc37395d9af6654a8146ebed225f275ae4d5a6fcf432e40afe7bb88",
+          "sha256Url": "https://iso.omarchy.org/omarchy-4.0.6.iso.sha256",
           "size": 6448529408,
           "usb": true
         }
