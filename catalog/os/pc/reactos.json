@@ -1,0 +1,45 @@
+{
+  "id": "reactos",
+  "name": "ReactOS",
+  "shortName": "ReactOS",
+  "infoOnly": true,
+  "source": "https://reactos.org/",
+  "page": {
+    "description": "ReactOS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / WINDOWS-COMPATIBLE",
+    "intro": "An open-source operating system that reimplements the Windows NT architecture and runs Windows applications and drivers, still labelled alpha by its own project.",
+    "logo": { "src": "logos/reactos.svg", "alt": "ReactOS logo", "width": 180, "height": 180 },
+    "pros": [
+      "Runs Windows binaries and drivers without Windows.",
+      "Free and open source, with its own kernel and Win32 subsystem.",
+      "Installable from CD or a live USB route.",
+      "Actively developed, with nightly builds."
+    ],
+    "cons": [
+      "Alpha software: the project warns of corrupted file systems and overwritten partitions.",
+      "The release downloads are ZIP archives containing ReactOS.iso.",
+      "No digest or signature is published for the release artifacts.",
+      "32-bit x86 is the practical target."
+    ],
+    "links": [
+      { "label": "ReactOS website", "href": "https://reactos.org/" },
+      { "label": "Download", "href": "https://reactos.org/download/" },
+      { "label": "Release announcement", "href": "https://reactos.org/project-news/reactos-0416-released/" },
+      { "label": "Nightly builds", "href": "https://reactos.org/getbuilds/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for ReactOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "The release ships as a ZIP containing ReactOS.iso: unzip, then write or burn the ISO. ROMinit pins no archive here, and the project publishes no checksum for its releases.",
+    "footer": [
+      { "label": "ReactOS website", "href": "https://reactos.org/" },
+      { "label": "Download", "href": "https://reactos.org/download/" },
+      { "label": "Release announcement", "href": "https://reactos.org/project-news/reactos-0416-released/" },
+      { "label": "Nightly builds", "href": "https://reactos.org/getbuilds/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/reactos.svg\nReactOS logo from Simple Icons (CC0), https://simpleicons.org; the ReactOS name and mark belong to the ReactOS Foundation, shown only to identify ReactOS. No endorsement implied."
+    ]
+  },
+  "editions": [],
+  "officialSupport": { "status": "ongoing", "source": "https://reactos.org/download/" }
+}
