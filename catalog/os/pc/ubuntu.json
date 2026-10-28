@@ -11,29 +11,52 @@
     "source": "https://documentation.ubuntu.com/release-notes/26.04/",
     "checked": "2026-10-27"
   },
-  "kernel": { "version": "7.0", "line": "Ubuntu", "checked": "2026-10-27", "source": "https://ubuntu.com/download/desktop" },
+  "kernel": {
+    "version": "7.0",
+    "line": "Ubuntu",
+    "checked": "2026-10-27",
+    "source": "https://ubuntu.com/download/desktop"
+  },
   "source": "https://ubuntu.com/download/desktop",
   "page": {
-    "description": "Ubuntu LTS editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "description": "Ubuntu editions and architectures: the 26.04 LTS and the 26.10 interim, compared side by side, with official images and a ROMinit USB walkthrough.",
     "eyebrow": "OPERATING SYSTEM / UBUNTU LTS",
-    "intro": "Canonical's long-term-support release, on a five-year security clock. Pick Desktop or Server, then the architecture of the machine that will run it.",
-    "logo": { "src": "logos/ubuntu.svg", "alt": "Ubuntu logo", "width": 180, "height": 180 },
+    "intro": "Canonical's releases on one page: the 26.04.1 LTS with five years of security updates, and the 26.10 interim with GNOME 51 and Linux 7.3 on a nine-month clock. Pick a release, then Desktop or Server and the architecture.",
+    "logo": {
+      "src": "logos/ubuntu.svg",
+      "alt": "Ubuntu logo",
+      "width": 180,
+      "height": 180
+    },
     "pros": [
-      "Five years of free security updates: the LTS is supported until April 2031.",
-      "GNOME 50 desktop and Linux 7.0 on the same 26.04.1 media.",
-      "Server images for amd64, arm64, ppc64el, s390x and RISC-V in the same release.",
-      "One installer family and one set of release notes for desktop and server."
+      "Five years of free security updates on the 26.04.1 LTS, until April 2031.",
+      "The 26.10 interim brings GNOME 51 and Linux 7.3, including an amd64v3 desktop build.",
+      "Server images for amd64, arm64, ppc64el, s390x and RISC-V in both releases.",
+      "One installer family and one set of release notes per release."
     ],
     "cons": [
       "Desktop wants 6 GB RAM and 25 GB of free disk; below that Canonical recommends Xubuntu or Lubuntu.",
-      "The 26.10 interim brings newer kernels and graphics support, but only nine months of updates; it has its own page.",
+      "The 26.10 interim is supported for nine months only, until July 2027.",
       "The erase-disk option takes the entire selected drive; keeping another system means manual partitioning.",
-      "Writing the stick erases it, and the running system's own disk appears in the same device list."
+      "Writing the stick erases it, and the running system’s own disk appears in the same device list."
     ],
     "links": [
-      { "label": "Ubuntu website", "href": "https://ubuntu.com/" },
-      { "label": "Download Desktop", "href": "https://ubuntu.com/download/desktop" },
-      { "label": "26.04 release notes", "href": "https://documentation.ubuntu.com/release-notes/26.04/" }
+      {
+        "label": "Ubuntu website",
+        "href": "https://ubuntu.com/"
+      },
+      {
+        "label": "Download Desktop",
+        "href": "https://ubuntu.com/download/desktop"
+      },
+      {
+        "label": "26.04 release notes",
+        "href": "https://documentation.ubuntu.com/release-notes/26.04/"
+      },
+      {
+        "label": "26.10 release notes",
+        "href": "https://documentation.ubuntu.com/release-notes/26.10/"
+      }
     ],
     "previewNote": "A stock screenshot of Ubuntu 16.04 with the Unity desktop from Wikimedia Commons. It is not 26.04 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
     "shot": {
@@ -49,12 +72,20 @@
         "artist": "Rprpr"
       }
     },
-    "status": "Two official paths: the Desktop and Server ISOs, written to an 8 GB or larger stick with Disks, Startup Disk Creator or dd. Writing erases the stick; the installer's erase-disk option erases the target disk. This is the five-year choice; the newer 26.10 interim has its own page.",
+    "status": "Two official paths, written to an 8 GB or larger stick with Disks, Startup Disk Creator or dd: the 26.04.1 LTS for five years of updates, or the 26.10 interim for the newest desktop. Writing erases the stick; the installer’s erase-disk option erases the target disk.",
     "footer": [
-      { "label": "Official downloads & checksums", "href": "https://releases.ubuntu.com/26.04.1/" },
-      { "label": "Release notes", "href": "https://documentation.ubuntu.com/release-notes/26.04/" },
-      { "label": "Ubuntu 26.10 (interim)", "href": "./ubuntu-26-10" },
-      { "label": "Create a bootable USB stick", "href": "https://documentation.ubuntu.com/desktop/en/latest/how-to/create-a-bootable-usb-stick/" }
+      {
+        "label": "Official downloads & checksums",
+        "href": "https://releases.ubuntu.com/26.04.1/"
+      },
+      {
+        "label": "26.10 downloads & checksums",
+        "href": "https://releases.ubuntu.com/26.10/"
+      },
+      {
+        "label": "Create a bootable USB stick",
+        "href": "https://documentation.ubuntu.com/desktop/en/latest/how-to/create-a-bootable-usb-stick/"
+      }
     ],
     "checked": "2026-10-27",
     "credits": [
@@ -65,7 +96,7 @@
   "editions": [
     {
       "id": "desktop",
-      "name": "Desktop",
+      "name": "Desktop (26.04.1 LTS)",
       "description": "The GNOME desktop Canonical ships, with the installer on the same ISO: try it live, then install or repartition.",
       "usbNote": "8 GB stick or larger. Disks (Restore Disk Image), Startup Disk Creator or dd; writing erases the stick.",
       "images": [
@@ -93,7 +124,7 @@
     },
     {
       "id": "server",
-      "name": "Server",
+      "name": "Server (26.04.1 LTS)",
       "description": "The same release without a desktop: the live server installer for machines that are administered over SSH or a console.",
       "usbNote": "Bootable on amd64 and arm64. The ppc64el, s390x and RISC-V images target their own firmware and hypervisors, not a PC USB stick.",
       "images": [
@@ -148,7 +179,125 @@
           "usb": false
         }
       ]
+    },
+    {
+      "id": "desktop-2610",
+      "name": "Desktop (26.10)",
+      "description": "The GNOME desktop Canonical ships, with the installer on the same ISO: try it live, then install or repartition.",
+      "usbNote": "8 GB stick or larger. Disks (Restore Disk Image), Startup Disk Creator or dd; writing erases the stick.",
+      "images": [
+        {
+          "id": "ubuntu-26-10-desktop-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://releases.ubuntu.com/26.10/ubuntu-26.10-desktop-amd64.iso",
+          "sha256": "19efc38dde60055b192526bfbba075ac1da23992f1b006ddd41cbd30db0d9b0c",
+          "sha256Url": "https://releases.ubuntu.com/26.10/SHA256SUMS",
+          "size": 6615449600,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-26-10-desktop-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-desktop-arm64.iso",
+          "sha256": "9242a38c47eb53a5beb153c249d4843e4366f8955e9b972663e4ab7989311e9f",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 4601491456,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-26-10-desktop-riscv64",
+          "arch": "riscv64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-desktop-riscv64.iso",
+          "sha256": "8c5468de2a51c5e8972782bfa8dc9328ff30e658e461848b7abbbb78473d0f3a",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 4275437568,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "desktop-2610-v3",
+      "name": "Desktop 26.10 amd64v3",
+      "description": "The same desktop built with x86-64-v3 (AVX2) instructions, for Intel and AMD processors new enough to run them.",
+      "usbNote": "8 GB stick or larger. For x86-64-v3 CPUs only; older machines need the plain amd64 image.",
+      "images": [
+        {
+          "id": "ubuntu-26-10-desktop-v3-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-desktop-amd64v3.iso",
+          "sha256": "16c9d9122160d901c78d0528cad4556c778701039ea2879b89483d4fd0c0d10b",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 6298435584,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "server-2610",
+      "name": "Server (26.10)",
+      "description": "The same release without a desktop: the live server installer for machines that are administered over SSH or a console.",
+      "usbNote": "Bootable on amd64 and arm64. The ppc64el, s390x and RISC-V images target their own firmware and hypervisors, not a PC USB stick.",
+      "images": [
+        {
+          "id": "ubuntu-26-10-server-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://releases.ubuntu.com/26.10/ubuntu-26.10-live-server-amd64.iso",
+          "sha256": "c8e9d797f718404bdb1e282f8466fe6f5f2e9f03c814bdf11b31326d45200929",
+          "sha256Url": "https://releases.ubuntu.com/26.10/SHA256SUMS",
+          "size": 2897321984,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-26-10-server-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-live-server-arm64.iso",
+          "sha256": "45fec674fbce001b46447747a6d36964de3d2da2a5fbe2ece111b72dd769b4de",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 3075813376,
+          "usb": true
+        },
+        {
+          "id": "ubuntu-26-10-server-ppc64le",
+          "arch": "ppc64le",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-live-server-ppc64el.iso",
+          "sha256": "03591f291b1182b38af4fa8149023e060a1687e5241c317a729ad5d149f30dc7",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 1699563520,
+          "usb": false
+        },
+        {
+          "id": "ubuntu-26-10-server-s390x",
+          "arch": "s390x",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-live-server-s390x.iso",
+          "sha256": "accd896f17d764727107fed9f8d5d78c51b8b6d79800f08002b754ecd53e0651",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 754274304,
+          "usb": false
+        },
+        {
+          "id": "ubuntu-26-10-server-riscv64",
+          "arch": "riscv64",
+          "format": "iso",
+          "url": "https://cdimage.ubuntu.com/releases/26.10/release/ubuntu-26.10-live-server-riscv64.iso",
+          "sha256": "181e573016df4ee8b39efc4b91370f3062bab4edc24f36612cb0b3dcab6d03f8",
+          "sha256Url": "https://cdimage.ubuntu.com/releases/26.10/release/SHA256SUMS",
+          "size": 1744175104,
+          "usb": false
+        }
+      ]
     }
   ],
-  "officialSupport": { "status": "ongoing", "until": "2031-04", "source": "https://documentation.ubuntu.com/release-notes/26.04/" }
+  "officialSupport": {
+    "status": "ongoing",
+    "until": "2031-04",
+    "source": "https://documentation.ubuntu.com/release-notes/26.04/"
+  }
 }

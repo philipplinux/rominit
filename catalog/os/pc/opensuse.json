@@ -1,0 +1,151 @@
+{
+  "id": "opensuse",
+  "name": "openSUSE",
+  "shortName": "openSUSE",
+  "defaultEdition": "leap-offline",
+  "version": "16.0",
+  "releaseDate": "2025-10-01",
+  "source": "https://get.opensuse.org/",
+  "page": {
+    "description": "openSUSE editions and architectures: the Leap 16.0 fixed release and the Tumbleweed rolling snapshot, with official images and a ROMinit USB walkthrough.",
+    "eyebrow": "OPERATING SYSTEM / ENTERPRISE-BASED AND ROLLING LINUX",
+    "intro": "Two openSUSE tracks on one page: Leap, the fixed release built from SUSE’s enterprise code base and supported for years, and Tumbleweed, the rolling snapshot tested release by release. Pick the track, then an image.",
+    "logo": {
+      "src": "logos/opensuse-leap.svg",
+      "alt": "openSUSE logo",
+      "width": 180,
+      "height": 180
+    },
+    "pros": [
+      "Leap is a slow-moving release with long support; Tumbleweed rolls with tested snapshots.",
+      "YaST and zypper cover installation, updates and system configuration on both tracks.",
+      "Btrfs snapshots and rollback by default in recent releases.",
+      "Installers for x86_64, with aarch64 and i686 media on Tumbleweed."
+    ],
+    "cons": [
+      "Newer software arrives later than on Tumbleweed, and Tumbleweed expects regular maintenance.",
+      "Tumbleweed has no long support window; Leap is the fixed-release sibling.",
+      "Leap media ships SHA-512 only and Tumbleweed’s screenshots are not 16.0, so coverage differs per track.",
+      "The offline images are several gigabytes; the network installer needs a working connection."
+    ],
+    "links": [
+      {
+        "label": "openSUSE downloads",
+        "href": "https://get.opensuse.org/"
+      },
+      {
+        "label": "Leap 16.0",
+        "href": "https://get.opensuse.org/leap/"
+      },
+      {
+        "label": "Tumbleweed",
+        "href": "https://get.opensuse.org/tumbleweed/"
+      }
+    ],
+    "previewNote": "A stock screenshot of openSUSE Leap 15.4 with GNOME from Wikimedia Commons. It is not 16.0 and not a ROMinit recording: no image was written to a USB stick and nothing was booted for this page.",
+    "shot": {
+      "src": "shots/opensuse-leap/leap-desktop.webp",
+      "alt": "openSUSE Leap 15.4 GNOME desktop with the activities overview",
+      "width": 1600,
+      "height": 900,
+      "bar": "Leap-16.0-offline-installer-x86_64.install.iso · 16.0",
+      "caption": "Stock screenshot of openSUSE Leap 15.4 · not 16.0, no USB written, no boot tested.",
+      "photo": {
+        "page": "https://commons.wikimedia.org/wiki/File:OpenSUSE_Leap_15.4_GNOME_Desktop_en.png",
+        "license": "CC BY-SA 4.0",
+        "artist": "Diego Carvalho"
+      }
+    },
+    "status": "Write the Leap offline installer or a Tumbleweed image to a USB stick and boot it; the installer partitions the target disk. Writing erases the stick, and the install erases the chosen partitions. Leap media is published with SHA-512, so ROMinit offers the download but not USB preparation for it.",
+    "footer": [
+      {
+        "label": "Official downloads",
+        "href": "https://get.opensuse.org/"
+      },
+      {
+        "label": "Tumbleweed ISO directory",
+        "href": "https://download.opensuse.org/tumbleweed/iso/"
+      },
+      {
+        "label": "Installation guide",
+        "href": "https://doc.opensuse.org/documentation/tumbleweed/startup/installation/"
+      }
+    ],
+    "checked": "2026-10-27",
+    "credits": [
+      "logos/opensuse-leap.svg\nopenSUSE logo from Simple Icons (CC0), https://simpleicons.org; the openSUSE name and mark belong to SUSE, shown only to identify openSUSE. No endorsement implied.",
+      "shots/opensuse-leap/leap-desktop.webp\nopenSUSE Leap 15.4 GNOME desktop by Diego Carvalho, https://commons.wikimedia.org/wiki/File:OpenSUSE_Leap_15.4_GNOME_Desktop_en.png, CC BY-SA 4.0. Converted to WebP; this copy under the same licence. Not a 16.0 screenshot.",
+      "logos/opensuse-tumbleweed.svg\nopenSUSE logo from Simple Icons (CC0), https://simpleicons.org; the openSUSE name and mark belong to SUSE, shown only to identify openSUSE Tumbleweed. No endorsement implied."
+    ]
+  },
+  "editions": [
+    {
+      "id": "leap-offline",
+      "name": "Leap 16.0 offline installer",
+      "description": "The full installation image, carrying the packages needed to install without a network.",
+      "usbNote": "4.5 GB image: use a stick that fits it. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "opensuse-leap-offline-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-x86_64.install.iso",
+          "sha512": "94411793a1878b3558211c8bbe4f3823c3c5212cc2dd9f9e4532a18be7eddd3be14db5a3bb47a2f36dd957e190ea706cd45af16bce218dfc00f71e64a8469971",
+          "sha512Url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-x86_64.install.iso.sha512",
+          "size": 4538236928,
+          "usb": false
+        },
+        {
+          "id": "opensuse-leap-offline-aarch64",
+          "arch": "aarch64",
+          "format": "iso",
+          "url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-aarch64.install.iso",
+          "sha512": "a6328f07434875bd62ab57400829429ad0a908a0b2085a2323faf657bd7fecc6e1b7852531e562302a57e861c90b92935085d8352ebfa7d33a2cda5b96e577d4",
+          "sha512Url": "https://download.opensuse.org/distribution/leap/16.0/offline/Leap-16.0-offline-installer-aarch64.install.iso.sha512",
+          "size": 4642045952,
+          "usb": false
+        }
+      ]
+    },
+    {
+      "id": "tumbleweed-offline",
+      "name": "Offline DVD (x86_64)",
+      "description": "The full offline installer with the complete package set.",
+      "usbNote": "4.7 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        {
+          "id": "opensuse-tumbleweed-offline-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20261026-Media.iso",
+          "sha256": "b9422cb5640b4bd1a124c769749f1024f608149ef2747228bcbcce98bf9f97c6",
+          "sha256Url": "https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20261026-Media.iso.sha256",
+          "size": 4697620480,
+          "usb": true
+        }
+      ]
+    },
+    {
+      "id": "tumbleweed-network",
+      "name": "Network installer (x86_64)",
+      "description": "A small installer that downloads packages during installation.",
+      "usbNote": "418 MB image. Write it with dd or any image writer; writing erases the stick, and the install needs a network connection.",
+      "images": [
+        {
+          "id": "opensuse-tumbleweed-network-x86_64",
+          "arch": "x86_64",
+          "format": "iso",
+          "url": "https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-NET-x86_64-Snapshot20261026-Media.iso",
+          "sha256": "66d51f826debd5938a245417b4f676a21000cb4ce0c6b1b35b5bc01e57867f7a",
+          "sha256Url": "https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-NET-x86_64-Snapshot20261026-Media.iso.sha256",
+          "size": 418381824,
+          "usb": true
+        }
+      ]
+    }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://get.opensuse.org/leap/"
+  }
+}
