@@ -1,0 +1,76 @@
+{
+  "id": "ultramarine-linux",
+  "name": "Ultramarine Linux",
+  "shortName": "Ultramarine",
+  "defaultEdition": "gnome",
+  "version": "44",
+  "releaseDate": "2026-07-18",
+  "source": "https://ultramarine-linux.org/",
+  "page": {
+    "description": "Ultramarine Linux editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FEDORA-BASED LINUX",
+    "intro": "A Fedora-based desktop distribution from the Fyra Labs project, with extra multimedia codecs and drivers preinstalled, and a choice of Budgie, GNOME or KDE Plasma.",
+    "logo": { "src": "logos/ultramarine-linux.png", "alt": "Ultramarine Linux logo", "width": 180, "height": 180 },
+    "pros": [
+      "Fedora base with multimedia codecs included from the first boot.",
+      "Three desktops (Budgie, GNOME, Plasma) on x86_64 and aarch64 in one release.",
+      "Per-file SHA-256 sidecars published next to every image.",
+      "Uses the Anaconda installer, so Fedora documentation mostly applies."
+    ],
+    "cons": [
+      "Smaller community than Fedora itself.",
+      "Anaconda is heavier than a live-installer flow for a quick try.",
+      "Release numbering follows upstream Fedora, so upgrades come often.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Ultramarine website", "href": "https://ultramarine-linux.org/" },
+      { "label": "Download", "href": "https://ultramarine-linux.org/download/" },
+      { "label": "Image directory (44)", "href": "https://images.fyralabs.com/isos/ultramarine/44/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Ultramarine Linux; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "One Anaconda ISO per desktop and architecture, written to a USB stick with dd or any image writer. Writing erases the stick; the installer then partitions or erases the target disk.",
+    "footer": [
+      { "label": "Ultramarine website", "href": "https://ultramarine-linux.org/" },
+      { "label": "Download", "href": "https://ultramarine-linux.org/download/" },
+      { "label": "Image directory (44)", "href": "https://images.fyralabs.com/isos/ultramarine/44/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/ultramarine-linux.png\nUltramarine Linux logo, from the Ultramarine project, https://ultramarine-linux.org/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "gnome",
+      "name": "GNOME",
+      "description": "The stock GNOME desktop with Ultramarine's preinstalled extras.",
+      "usbNote": "3.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ultramarine-linux-gnome-x86_64", "arch": "x86_64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-gnome-44-live-anaconda-x86_64.iso", "sha256": "c9b0da5145f74ee76261dae12617fb5d89cd6c358ffdbd0dde3a01a4e3806865", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-gnome-44-live-anaconda-x86_64.iso.sha256sum", "size": 3601850368, "usb": true },
+        { "id": "ultramarine-linux-gnome-aarch64", "arch": "aarch64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-gnome-44-live-anaconda-aarch64.iso", "sha256": "6d72ac59a57f2f5dbdc3a3d1b6deaa1a4f3b6cb9111e7d8491f4fd9ae67cda60", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-gnome-44-live-anaconda-aarch64.iso.sha256sum", "size": 3514173440, "usb": true }
+      ]
+    },
+    {
+      "id": "budgie",
+      "name": "Budgie",
+      "description": "The Budgie desktop edition.",
+      "usbNote": "3.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ultramarine-linux-budgie-x86_64", "arch": "x86_64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-budgie-44-live-anaconda-x86_64.iso", "sha256": "f813becc30dd5d968be5ef1c66136e97c5ea5fba29ca7bd2bedefc50f648a4d7", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-budgie-44-live-anaconda-x86_64.iso.sha256sum", "size": 3618031616, "usb": true },
+        { "id": "ultramarine-linux-budgie-aarch64", "arch": "aarch64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-budgie-44-live-anaconda-aarch64.iso", "sha256": "370c51c21778c16e97a289cb52489c317b496b8a49d672baa25b8034bf8ce706", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-budgie-44-live-anaconda-aarch64.iso.sha256sum", "size": 3537545216, "usb": true }
+      ]
+    },
+    {
+      "id": "plasma",
+      "name": "KDE Plasma",
+      "description": "The KDE Plasma edition.",
+      "usbNote": "3.4 GB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ultramarine-linux-plasma-x86_64", "arch": "x86_64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-x86_64.iso", "sha256": "3926d8715275fe9606df7f2b11275ba25de0902c7ab032121f1b0db2a87c2ae6", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-x86_64.iso.sha256sum", "size": 4064980992, "usb": true },
+        { "id": "ultramarine-linux-plasma-aarch64", "arch": "aarch64", "format": "iso", "url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-aarch64.iso", "sha256": "aca51264d1e0dd7d302663c9d94d997802a4e39d804afa4f322f6194c6406da8", "sha256Url": "https://images.fyralabs.com/isos/ultramarine/44/ultramarine-plasma-44-live-anaconda-aarch64.iso.sha256sum", "size": 3980357632, "usb": true }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://ultramarine-linux.org/" }
+}
