@@ -1,0 +1,64 @@
+{
+  "id": "ventoy",
+  "name": "Ventoy",
+  "shortName": "Ventoy",
+  "defaultEdition": "livecd",
+  "version": "1.1.18",
+  "releaseDate": "2026-10-09",
+  "source": "https://www.ventoy.net/",
+  "page": {
+    "description": "Ventoy editions and architectures: compare, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / BOOTABLE USB TOOL",
+    "intro": "A tool that turns one USB stick into a boot menu for image files: copy ISO, WIM, IMG and VHD files onto it and Ventoy boots them directly, without rewriting the stick for each one.",
+    "logo": { "src": "logos/ventoy.png", "alt": "Ventoy logo", "width": 180, "height": 180 },
+    "pros": [
+      "Many images on one stick, each booted from a menu without reflashing.",
+      "Images are plain files, so adding or removing one is a file copy.",
+      "UEFI and legacy BIOS boot, on x86 and ARM64 builds.",
+      "Free and open source, with signed releases and a published SHA-256 list."
+    ],
+    "cons": [
+      "It is a boot loader, not an operating system of its own.",
+      "Secure Boot needs the project's key enrolled once (MOK).",
+      "Some images boot only with extra settings or a different Ventoy mode.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "Ventoy website", "href": "https://www.ventoy.net/" },
+      { "label": "Download", "href": "https://www.ventoy.net/en/download.html" },
+      { "label": "1.1.18 release", "href": "https://github.com/ventoy/Ventoy/releases/tag/v1.1.18" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for Ventoy; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Install Ventoy to a USB stick once (from the Linux archive or the live CD), then copy image files onto it. Installing erases the whole stick; copying images afterwards does not.",
+    "footer": [
+      { "label": "Ventoy website", "href": "https://www.ventoy.net/" },
+      { "label": "Download", "href": "https://www.ventoy.net/en/download.html" },
+      { "label": "1.1.18 release", "href": "https://github.com/ventoy/Ventoy/releases/tag/v1.1.18" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/ventoy.png\nVentoy logo, from the Ventoy project, https://www.ventoy.net/."
+    ]
+  },
+  "editions": [
+    {
+      "id": "livecd",
+      "name": "Live CD image",
+      "description": "A bootable image of the Ventoy installer, for machines where running the Linux archive is not practical.",
+      "usbNote": "187 MB image. Write it with dd or any image writer; writing erases the stick.",
+      "images": [
+        { "id": "ventoy-livecd-x86_64", "arch": "x86_64", "format": "iso", "url": "https://github.com/ventoy/Ventoy/releases/download/v1.1.18/ventoy-1.1.18-livecd.iso", "sha256": "ee3917bd5a9973c0b2f8f3ef85048bf68ae089ec88f5561ad78b6ad308b51ab5", "size": 195989504, "usb": true }
+      ]
+    },
+    {
+      "id": "linux",
+      "name": "Linux installer archive",
+      "description": "The installer for Linux, run from an unpacked archive to write Ventoy to a stick.",
+      "usbNote": "20 MB archive. Unpack it and run Ventoy2Disk.sh against the target stick; writing erases the stick.",
+      "images": [
+        { "id": "ventoy-linux-x86_64", "arch": "x86_64", "format": "tar.gz", "url": "https://github.com/ventoy/Ventoy/releases/download/v1.1.18/ventoy-1.1.18-linux.tar.gz", "sha256": "d86ff9de63d94c8b8f1f6b14d23c55af4b88e8207bf2893890892a6a97b1ad54", "size": 20320548, "usb": false }
+      ]
+    }
+  ],
+  "officialSupport": { "status": "ongoing", "source": "https://www.ventoy.net/" }
+}
