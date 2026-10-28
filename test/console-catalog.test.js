@@ -139,6 +139,16 @@ test('console copy stays generic to its console and keeps the PS5 wording', () =
   assert.equal(copy['linux.title'], 'Run Linux on your PS5');
 });
 
+test('console templates map models to their variants and media files', () => {
+  for (const entry of CONSOLES) {
+    for (const variant of entry.variants) assert(entry.models.some(model => model.name === variant.model), `${entry.id}: variant "${variant.model}" matches no models[].name, so its specs never render`);
+    for (const media of Object.values(entry.media ?? {})) {
+      assert(existsSync(new URL(`../site/${media.src}`, import.meta.url)), `${entry.id}: missing site/${media.src}`);
+      assert(media.alt && media.page && media.artist && media.license && media.width > 0 && media.height > 0, `${entry.id}: ${media.src} needs alt, page, artist, license and size`);
+    }
+  }
+});
+
 test('console template has a default for every copy hook and no console-specific wording', () => {
   const template = readFileSync(new URL('../site/console.html', import.meta.url), 'utf8');
   const hooks = [...template.matchAll(/data-copy="([^"]+)"/g)].map(match => match[1]);
