@@ -20,6 +20,7 @@
       "Media ships as .img.lzma, which ROMinit does not pin",
       "No ISO at all — tools that expect ISO files do not apply",
       "Release from July 2024 (over two years old)",
+      "No release or release news since July 2024: the publisher still lists 141R-20240711 as current.",
       "4.7 GiB uncompressed requires at least a 5 GB USB drive"
     ],
     "links": [
@@ -38,5 +39,5 @@
     ]
   },
   "editions": [],
-  "officialSupport": { "status": "ongoing", "source": "https://nomadbsd.org/" }
+  "officialSupport": { "status": "dropped", "source": "https://nomadbsd.org/" }
 }

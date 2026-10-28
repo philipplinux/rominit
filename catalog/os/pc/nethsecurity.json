@@ -1,0 +1,63 @@
+{
+  "id": "nethsecurity",
+  "name": "NethSecurity",
+  "shortName": "NethSecurity",
+  "defaultEdition": "x86-64",
+  "version": "8.8.0",
+  "releaseDate": "2026-07-29",
+  "source": "https://www.nethsecurity.org/",
+  "page": {
+    "description": "NethSecurity 8.8.0 for x86-64: compare the combined EFI disk image, download the official image, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / FIREWALL",
+    "intro": "An open-source Linux firewall built on OpenWrt by the Nethesis/NethServer project, managed from a web interface and shipped as one raw disk image for x86-64 machines.",
+    "logo": { "src": "logos/nethsecurity.svg", "alt": "NethSecurity logo", "width": 180, "height": 25 },
+    "pros": [
+      "Per-release SHA-256 sums and a CycloneDX SBOM are published next to the image.",
+      "One image covers bare metal, USB install and virtual machines.",
+      "Firewall, MultiWAN, VPN and threat protection in a web UI on top of OpenWrt.",
+      "The publisher labels each release supported, limited or end of life."
+    ],
+    "cons": [
+      "x86-64 only: no ARM or router-board images.",
+      "A useful setup needs two network interfaces.",
+      "Writing the image under Windows is not recommended by the publisher.",
+      "No screenshot with a reusable licence was confirmed, so this page is logo-only."
+    ],
+    "links": [
+      { "label": "NethSecurity website", "href": "https://www.nethsecurity.org/" },
+      { "label": "Download and checksums", "href": "https://docs.nethsecurity.org/docs/administrator-manual/installation/download" },
+      { "label": "Installation", "href": "https://docs.nethsecurity.org/docs/administrator-manual/installation/install" },
+      { "label": "Source code", "href": "https://github.com/NethServer/nethsecurity" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for NethSecurity; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "Write the .img.gz to a USB stick or straight to the target disk with dd; boot it and run ns-install to install onto the internal disk. Writing erases the target device, and the default LAN address 192.168.1.1 can collide with an existing network.",
+    "footer": [
+      { "label": "NethSecurity website", "href": "https://www.nethsecurity.org/" },
+      { "label": "Download and checksums", "href": "https://docs.nethsecurity.org/docs/administrator-manual/installation/download" },
+      { "label": "Installation", "href": "https://docs.nethsecurity.org/docs/administrator-manual/installation/install" },
+      { "label": "Source code", "href": "https://github.com/NethServer/nethsecurity" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/nethsecurity.svg\nNethSecurity wordmark, from the project's documentation site, https://docs.nethsecurity.org/img/logo.svg; the mark belongs to Nethesis Srl and the NethSecurity contributors, shown only to name the product."
+    ]
+  },
+  "editions": [
+    {
+      "id": "x86-64",
+      "name": "x86-64 combined EFI image",
+      "description": "Raw disk image with the combined EFI layout for bare metal and virtual machines.",
+      "usbNote": "83 MB gzipped image. Write it with dd or any image writer; the publisher documents both a direct disk write and a bootable USB stick.",
+      "images": [
+        { "id": "nethsecurity-x86-64", "arch": "x86_64", "format": "img.gz", "url": "https://updates.nethsecurity.nethserver.org/stable/8.8.0/targets/x86/64/nethsecurity-8.8.0-x86-64-generic-squashfs-combined-efi.img.gz", "sha256": "2d552b6b425ea92bd276a6ed4200afabe7b31e6b7a6c9a4a087a62ac4d481ed5", "sha256Url": "https://updates.nethsecurity.nethserver.org/stable/8.8.0/targets/x86/64/sha256sums", "size": 86620379, "usb": true }
+      ]
+    }
+  ],
+  "requirements": {
+    "summary": "1 GB RAM · 1 GB disk · 2 NICs",
+    "note": "Recommended: 2 vCPU, 2 GB RAM, and an extra disk for logs and persistent data.",
+    "source": "https://docs.nethsecurity.org/docs/administrator-manual/installation/system_requirements",
+    "checked": "2026-10-28"
+  },
+  "officialSupport": { "status": "ongoing", "source": "https://nethsecurity.org/subscription" }
+}

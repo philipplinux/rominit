@@ -1,0 +1,77 @@
+{
+  "id": "mikrotik-routeros",
+  "name": "MikroTik RouterOS",
+  "shortName": "RouterOS",
+  "defaultEdition": "x86-iso",
+  "version": "7.25",
+  "releaseDate": "2026-10-22",
+  "source": "https://mikrotik.com/",
+  "page": {
+    "description": "MikroTik RouterOS 7.25 editions and architectures: compare CHR virtual images and the x86 install ISO, download official images, or prepare a USB with ROMinit CLI.",
+    "eyebrow": "OPERATING SYSTEM / ROUTER OS",
+    "intro": "MikroTik's Linux-based router OS, shipped on its own RouterBOARD hardware and installable on a PC (x86) or as a virtual machine image (CHR).",
+    "logo": { "src": "logos/mikrotik-routeros.svg", "alt": "MikroTik logo", "width": 180, "height": 180 },
+    "pros": [
+      "One OS for routing, firewall, VPN, hotspot and wireless, configured from WinBox, WebFig or the CLI.",
+      "The x86 ISO turns an ordinary PC into a router; CHR images cover VMware, VirtualBox, Hyper-V and Proxmox.",
+      "The publisher publishes CHR images in five hypervisor formats, not just a raw disk.",
+      "Devices keep receiving updates for as long as their RAM allows, including long-discontinued models."
+    ],
+    "cons": [
+      "Proprietary: x86 and CHR installs run a 24-hour free trial and then need a licence key.",
+      "MikroTik publishes no checksum file for these images, so the SHA-256 values here were computed by ROMinit.",
+      "The download page is a JavaScript app; version discovery has to go through the update channel or the file host.",
+      "SwOS, the OS on MikroTik switches, is a separate product: this record covers RouterOS only."
+    ],
+    "links": [
+      { "label": "MikroTik software", "href": "https://mikrotik.com/software" },
+      { "label": "Downloads", "href": "https://mikrotik.com/download" },
+      { "label": "x86 installation", "href": "https://manual.mikrotik.com/docs/getting-started/installation-and-upgrade/install/x86-installation" },
+      { "label": "CHR installation", "href": "https://manual.mikrotik.com/docs/getting-started/installation-and-upgrade/install/chr-installation/" }
+    ],
+    "previewNote": "No screenshot with a reusable licence was confirmed for RouterOS; the page shows the logo only. No image was written to a USB stick and nothing was booted.",
+    "status": "For x86, write the ISO to a USB stick with dd or Rufus, boot it and press \"i\" to install onto the machine's disk. For CHR, attach the disk image to a virtual machine and boot it. Both installs start on a 24-hour trial and need a licence key afterwards.",
+    "footer": [
+      { "label": "MikroTik software", "href": "https://mikrotik.com/software" },
+      { "label": "Downloads", "href": "https://mikrotik.com/download" },
+      { "label": "x86 installation", "href": "https://manual.mikrotik.com/docs/getting-started/installation-and-upgrade/install/x86-installation" },
+      { "label": "CHR installation", "href": "https://manual.mikrotik.com/docs/getting-started/installation-and-upgrade/install/chr-installation/" }
+    ],
+    "checked": "2026-10-28",
+    "credits": [
+      "logos/mikrotik-routeros.svg\nMikroTik logo from Simple Icons (CC0), https://simpleicons.org; the mark belongs to MikroTik, shown only to name the product."
+    ]
+  },
+  "editions": [
+    {
+      "id": "x86-iso",
+      "name": "x86 install ISO",
+      "description": "Bootable installer for a PC: RouterOS is written to the machine's own disk.",
+      "usbNote": "68 MB image. The publisher documents writing it to a USB stick with dd or Rufus and booting from it.",
+      "images": [
+        { "id": "mikrotik-routeros-x86-iso", "arch": "x86_64", "format": "iso", "url": "https://download.mikrotik.com/routeros/7.25/mikrotik-7.25.iso", "sha256": "82409ad1778ac6f3d5e461bf78358181f620003a97c88ea6cfea68d9193fcd38", "sha256Computed": "2026-10-28", "size": 71581696, "usb": true }
+      ]
+    },
+    {
+      "id": "chr",
+      "name": "CHR virtual images",
+      "description": "Cloud Hosted Router disk images for hypervisors; CHR runs on x86_64 virtual machines.",
+      "usbNote": "44 MB archive per format. These are virtual disk images for hypervisors, not images for writing to a USB stick.",
+      "images": [
+        { "id": "mikrotik-routeros-chr-img", "arch": "x86_64", "format": "zip", "url": "https://download.mikrotik.com/routeros/7.25/chr-7.25.img.zip", "sha256": "6b981288350de2a2c7a3218bd820ab702633b8cd6cd339f2bb34dda1f1a2550e", "sha256Computed": "2026-10-28", "size": 45409915, "usb": false },
+        { "id": "mikrotik-routeros-chr-ova", "arch": "x86_64", "format": "ova", "url": "https://download.mikrotik.com/routeros/7.25/chr-7.25.ova", "sha256": "54112cdd42ce8250cfe1e1fda24e1d9907915efec048d8bac8ea0fba4b73e406", "sha256Computed": "2026-10-28", "size": 45752320, "usb": false },
+        { "id": "mikrotik-routeros-chr-vmdk", "arch": "x86_64", "format": "zip", "url": "https://download.mikrotik.com/routeros/7.25/chr-7.25.vmdk.zip", "sha256": "fb913daa3283c75bd4ee971bfd43e85e1a5aabf6977756bc59e58c7995f42109", "sha256Computed": "2026-10-28", "size": 45318620, "usb": false },
+        { "id": "mikrotik-routeros-chr-vdi", "arch": "x86_64", "format": "zip", "url": "https://download.mikrotik.com/routeros/7.25/chr-7.25.vdi.zip", "sha256": "d65e8cbfa1d6f310e7586ab7c7ceccfaf03d880cbcb25f0dd7a6f859bf3b04ec", "sha256Computed": "2026-10-28", "size": 45328101, "usb": false },
+        { "id": "mikrotik-routeros-chr-vhdx", "arch": "x86_64", "format": "zip", "url": "https://download.mikrotik.com/routeros/7.25/chr-7.25.vhdx.zip", "sha256": "08c78703f98c4b6b08070f8fb1324071f819a64fdee835d9b79704f25f7bf9cc", "sha256Computed": "2026-10-28", "size": 45361712, "usb": false }
+      ]
+    }
+  ],
+  "requirements": {
+    "summary": "64 MB RAM · 64 MB storage · supported NIC",
+    "note": "x86 installs need an x86 or ARM CPU, a storage medium and network cards the Linux kernel supports. CHR runs on x86_64 virtual machines with 256 MB RAM and 128 MB disk at the minimum.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/software-specifications/",
+    "checked": "2026-10-28"
+  },
+  "kernel": { "version": "5.6.3", "line": "RouterOS 7 branch", "checked": "2026-10-28", "source": "https://manual.mikrotik.com/docs/getting-started/software-specifications/" },
+  "officialSupport": { "status": "ongoing", "source": "https://mikrotik.com/software" }
+}
