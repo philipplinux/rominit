@@ -11,7 +11,7 @@
       "notes": "Grouped by spruceOS as 'Mini v1-4'; four model revisions share the same form factor and hardware"
     }
   ],
-  "summary": "Miyoo's pocket-sized Linux handheld. spruceOS groups Mini revisions v1–4 under a single supported entry with 'Stable' status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
+  "summary": "Miyoo's pocket-sized handheld. spruceOS groups Mini revisions v1–4 under a single supported entry with 'Stable' status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
   "specs": {
     "cpu": "not sourced",
     "gpu": "not sourced",
@@ -24,12 +24,12 @@
       "model": "Mini v1–4",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Pocket-sized Miyoo device. spruceOS groups Mini revisions v1–4 under one supported entry ('Stable'). Four documented model revisions share the same form factor. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
+      "notes": "Pocket-sized Miyoo device. spruceOS groups Mini revisions v1–4 under one supported entry ('Stable'). spruceOS lists the Miyoo Mini Plus as a separate Stable entry from Mini v1-4; OnionOS covers both Mini and Mini+. This record covers Mini v1-4 only. Four documented model revisions share the same form factor. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
       "specs": {}
     }
   ],
   "firmware": {
-    "version": "Linux (stock OS)",
+    "version": "Miyoo stock OS",
     "shortVersion": "varies",
     "checkedDate": "2026-10-28",
     "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
@@ -42,7 +42,7 @@
       "models": [
         "mini-v1-4"
       ],
-      "firmware": "Custom Python-based frontend on top of stock Linux OS.",
+      "firmware": "Custom Python-based frontend on top of the Miyoo stock OS.",
       "summary": "Custom frontend that runs on top of the stock OS on supported Miyoo devices.",
       "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
       "compatibility": [

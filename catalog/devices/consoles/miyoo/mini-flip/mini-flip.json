@@ -8,10 +8,10 @@
     {
       "id": "mini-flip",
       "name": "Mini Flip",
-      "notes": "Single model; clamshell form factor, Linux-based"
+      "notes": "Single model; clamshell form factor"
     }
   ],
-  "summary": "Miyoo's clamshell-form-factor Linux handheld. spruceOS lists it with 'Stable' support status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
+  "summary": "Miyoo's clamshell-form-factor handheld. spruceOS lists it with 'Stable' support status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
   "specs": {
     "cpu": "not sourced",
     "gpu": "not sourced",
@@ -29,7 +29,7 @@
     }
   ],
   "firmware": {
-    "version": "Linux (stock OS)",
+    "version": "Miyoo stock OS",
     "shortVersion": "varies",
     "checkedDate": "2026-10-28",
     "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
@@ -42,7 +42,7 @@
       "models": [
         "mini-flip"
       ],
-      "firmware": "Custom Python-based frontend on top of stock Linux OS.",
+      "firmware": "Custom Python-based frontend on top of the Miyoo stock OS.",
       "summary": "Custom frontend that runs on top of the stock OS on supported Miyoo devices.",
       "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
       "compatibility": [

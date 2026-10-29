@@ -8,10 +8,10 @@
     {
       "id": "a30",
       "name": "A30",
-      "notes": "Single model; Android-based Miyoo device"
+      "notes": "Single model"
     }
   ],
-  "summary": "Miyoo's Android-based handheld. spruceOS lists it with 'Stable' support. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
+  "summary": "Miyoo's handheld (stock OS type not stated at the cited sources). spruceOS lists it with 'Stable' support. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
   "specs": {
     "cpu": "not sourced",
     "gpu": "not sourced",
@@ -24,12 +24,12 @@
       "model": "A30",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Android-based Miyoo device. spruceOS reports 'Stable' compatibility. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). No hardware specifications sourced from verified vendor or community pages at the time of check.",
+      "notes": "Miyoo device. spruceOS reports 'Stable' compatibility. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). No hardware specifications sourced from verified vendor or community pages at the time of check.",
       "specs": {}
     }
   ],
   "firmware": {
-    "version": "Android (stock OS)",
+    "version": "Miyoo stock OS",
     "shortVersion": "varies",
     "checkedDate": "2026-10-28",
     "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
@@ -42,7 +42,7 @@
       "models": [
         "a30"
       ],
-      "firmware": "Custom Python-based frontend on top of stock Android OS.",
+      "firmware": "Custom Python-based frontend on top of the Miyoo stock OS.",
       "summary": "Custom frontend that runs on top of the stock OS on supported Miyoo devices.",
       "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
       "compatibility": [

@@ -82,25 +82,25 @@ export const FAMILIES = [
     name: 'GoRetroid',
     summary: 'GoRetroid\'s Android handhelds with KNULLI dual-boot support.',
     consoles: [
-      { name: 'Retroid Pocket 5', page: 'retroid-pocket-5', status: 'Snapdragon 865; KNULLI dual-boot from SD card' },
-      { name: 'Retroid Pocket Mini', page: 'retroid-pocket-mini', status: 'Snapdragon 865; KNULLI dual-boot from SD card' }
+      { name: 'Retroid Pocket 5', page: 'retroid-pocket-5', status: 'Snapdragon 865; KNULLI dual-boot from SD card (early release)' },
+      { name: 'Retroid Pocket Mini', page: 'retroid-pocket-mini', status: 'Snapdragon 865; KNULLI dual-boot from SD card (early release)' }
     ]
   },
   {
     id: 'miyoo',
     name: 'Miyoo',
-    summary: 'Miyoo\'s Linux and Android handhelds; spruceOS frontend and KNULLI SD-card support.',
+    summary: 'Miyoo\'s handhelds; spruceOS frontend and KNULLI SD-card support.',
     consoles: [
-      { name: 'A30', page: 'a30', status: 'Android handheld; spruceOS supported (checked 2026-10-28)' },
-      { name: 'Flip', page: 'flip', status: 'RK3566; requires GammaLoader patch for SD boot' },
+      { name: 'A30', page: 'a30', status: 'spruceOS supported (checked 2026-10-28)' },
+      { name: 'Flip', page: 'flip', status: 'RK3566; KNULLI needs a GammaLoader patch of the stock firmware first (per KNULLI)' },
       { name: 'Mini v1–4', page: 'mini', status: 'spruceOS supported (checked 2026-10-28)' },
-      { name: 'Mini Flip', page: 'mini-flip', status: 'Android handheld; spruceOS supported (checked 2026-10-28)' }
+      { name: 'Mini Flip', page: 'mini-flip', status: 'spruceOS supported (checked 2026-10-28)' }
     ]
   },
   {
     id: 'powkiddy',
     name: 'Powkiddy',
-    summary: 'Powkiddy\'s RK3566/A133 Android/Linux handhelds; KNULLI and ROCKNIX SD-card support.',
+    summary: 'Powkiddy\'s RK3566/A133 handhelds; KNULLI and ROCKNIX SD-card support.',
     consoles: [
       { name: 'RGB30', page: 'rgb30', status: 'RK3566; 4" square display; KNULLI/ROCKNIX on SD card' },
       { name: 'X55', page: 'x55', status: 'RK3566; 5.5" display; KNULLI/ROCKNIX on SD card' }
@@ -109,10 +109,10 @@ export const FAMILIES = [
   {
     id: 'trimui',
     name: 'TriMUI',
-    summary: 'TriMUI\'s A133 Linux handhelds; KNULLI, spruceOS and ROCKNIX support.',
+    summary: 'TriMUI\'s A133 handhelds; KNULLI and spruceOS support.',
     consoles: [
-      { name: 'Brick', page: 'brick', status: 'Allwinner A133P; KNULLI/ROCKNIX/spruceOS' },
-      { name: 'Smart Pro', page: 'smart-pro', status: 'Allwinner A133P; KNULLI/ROCKNIX/spruceOS' }
+      { name: 'Brick', page: 'brick', status: 'Allwinner A133P; KNULLI/spruceOS' },
+      { name: 'Smart Pro', page: 'smart-pro', status: 'Allwinner A133P; KNULLI/spruceOS' }
     ]
   }
 ];

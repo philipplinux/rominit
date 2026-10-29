@@ -47,7 +47,7 @@
       ],
       "firmware": "Prepared SD card image; boots by holding Volume Up at power-on.",
       "summary": "Batocera-based retro gaming OS for the Retroid Pocket Mini. Dual-boot with Android — boot KNULLI from SD card with Volume Up held, return to Android by removing the card.",
-      "source": "https://knulli.org/devices/",
+      "source": "https://knulli.org/devices/goretroid/retroid-pocket-mini/",
       "compatibility": [
         {
           "models": [
@@ -55,7 +55,7 @@
           ],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "The Retroid Pocket Mini boots both Android and Linux. KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
+          "note": "The Retroid Pocket Mini boots both Android and Linux. KNULLI release 20260511 lists it under 'Early releases' (builds provided as is; most features working, work still to be done). KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
         }
       ],
       "checkedDate": "2026-10-28",
@@ -70,7 +70,7 @@
       "links": [
         {
           "label": "KNULLI: Retroid Pocket Mini",
-          "url": "https://knulli.org/devices/"
+          "url": "https://knulli.org/devices/goretroid/retroid-pocket-mini/"
         },
         {
           "label": "KNULLI Quick Start Guide",
@@ -84,7 +84,11 @@
   "sources": [
     {
       "label": "KNULLI: Retroid Pocket Mini",
-      "url": "https://knulli.org/devices/"
+      "url": "https://knulli.org/devices/goretroid/retroid-pocket-mini/"
+    },
+    {
+      "label": "KNULLI: release 20260511 (Early releases: Retroid Pocket 5, Flip2, Mini, Mini V2)",
+      "url": "https://github.com/knulli-cfw/knulli-linux/releases/tag/20260511"
     }
   ]
 }

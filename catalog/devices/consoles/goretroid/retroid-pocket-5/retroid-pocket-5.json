@@ -55,7 +55,7 @@
           ],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "The Retroid Pocket 5 boots both Android and Linux. KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
+          "note": "The Retroid Pocket 5 boots both Android and Linux. KNULLI release 20260511 lists it under 'Early releases' (builds provided as is; most features working, work still to be done). KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
         }
       ],
       "checkedDate": "2026-10-28",
@@ -85,6 +85,10 @@
     {
       "label": "KNULLI: Retroid Pocket 5",
       "url": "https://knulli.org/devices/goretroid/retroid-pocket-5/"
+    },
+    {
+      "label": "KNULLI: release 20260511 (Early releases: Retroid Pocket 5, Flip2, Mini, Mini V2)",
+      "url": "https://github.com/knulli-cfw/knulli-linux/releases/tag/20260511"
     }
   ]
 }

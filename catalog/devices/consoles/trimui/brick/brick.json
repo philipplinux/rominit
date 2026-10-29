@@ -11,7 +11,7 @@
       "notes": "Single model; 3.2\" 1024×768 square display"
     }
   ],
-  "summary": "TriMUI's compact 3.2-inch A133P-based Android/Linux handheld with a 1024×768 square IPS display. Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "summary": "TriMUI's compact 3.2-inch A133P-based handheld with a 1024×768 square IPS display. KNULLI boots from a prepared SD card while the TrimUI stock OS stays installed on the device; remove the card to boot stock again.",
   "specs": {
     "cpu": "Allwinner A133P (A133+), 1.8 GHz",
     "gpu": "Imagination PowerVR GE8300, 660 MHz",
@@ -38,10 +38,10 @@
     }
   ],
   "firmware": {
-    "version": "Linux (stock); TriMUI UI",
+    "version": "TrimUI stock firmware (1.1.1, 2025-11-26 latest release)",
     "shortVersion": "varies",
     "checkedDate": "2026-10-28",
-    "source": "https://powkiddy.com/products/trimui-brick-handheld-game-console"
+    "source": "https://github.com/trimui/firmware_brick"
   },
   "firmwareOptions": [],
   "homebrew": [
@@ -51,9 +51,9 @@
       "models": [
         "brick"
       ],
-      "firmware": "Per-model image (knulli-a133-trimui-brick); boots from SD card with no stock-firmware dependency.",
+      "firmware": "Per-model image (knulli-a133-trimui-brick); boots from SD card.",
       "summary": "Retro gaming OS for the TriMUI Brick based on Allwinner A133. Boots from a prepared SD card.",
-      "source": "https://knulli.org/devices/",
+      "source": "https://knulli.org/devices/trimui/brick/",
       "compatibility": [
         {
           "models": [
@@ -76,47 +76,12 @@
       ],
       "links": [
         {
-          "label": "KNULLI supported devices",
-          "url": "https://knulli.org/devices/"
+          "label": "KNULLI: TrimUI Brick",
+          "url": "https://knulli.org/devices/trimui/brick/"
         },
         {
           "label": "KNULLI A133 firmware extraction",
           "url": "https://knulli.org/guides/firmware-extraction/A133-firmware-extract/"
-        }
-      ]
-    },
-    {
-      "name": "ROCKNIX",
-      "kind": "os",
-      "models": [
-        "brick"
-      ],
-      "firmware": "Per-model A133 image; boots from SD card.",
-      "summary": "Mainline-Linux retro gaming OS for the TriMUI Brick. Boots from SD card.",
-      "source": "https://rocknix.org/devices/",
-      "compatibility": [
-        {
-          "models": [
-            "brick"
-          ],
-          "supportedFirmware": [],
-          "status": "documented",
-          "note": "ROCKNIX lists the Brick as a supported Allwinner A133 device."
-        }
-      ],
-      "checkedDate": "2026-10-28",
-      "requirements": [
-        "A compatible TriMUI Brick unit.",
-        "A good-quality SD card.",
-        "A computer with an SD card reader and an image writer."
-      ],
-      "warnings": [
-        "ROCKNIX ships a separate image per model; cross-flashing does not boot."
-      ],
-      "links": [
-        {
-          "label": "ROCKNIX device index",
-          "url": "https://rocknix.org/devices/"
         }
       ]
     },
@@ -159,16 +124,16 @@
   "communities": [],
   "sources": [
     {
+      "label": "TrimUI: Brick firmware releases (TG3040)",
+      "url": "https://github.com/trimui/firmware_brick"
+    },
+    {
       "label": "Powkiddy: TriMUI Brick product page (A133P specs, 3.2\" 1024×768, 8 GB eMMC, 3000 mAh)",
       "url": "https://powkiddy.com/products/trimui-brick-handheld-game-console"
     },
     {
       "label": "KNULLI: TriMUI Brick",
-      "url": "https://knulli.org/devices/"
-    },
-    {
-      "label": "ROCKNIX: device index",
-      "url": "https://rocknix.org/devices/"
+      "url": "https://knulli.org/devices/trimui/brick/"
     },
     {
       "label": "spruceOS: supported devices",

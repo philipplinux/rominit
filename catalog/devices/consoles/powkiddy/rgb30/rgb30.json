@@ -11,7 +11,7 @@
       "notes": "Single model; vertical (clamshell-like) form factor, dual TF card slots"
     }
   ],
-  "summary": "Powkiddy's 4-inch RK3566-based Android/Linux handheld with a square 720×720 vertical display and dual TF-card design (TF1 for OS, TF2 for games). Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "summary": "Powkiddy's 4-inch RK3566-based handheld with a square 720×720 vertical display and dual TF-card design (TF1 for OS, TF2 for games). Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
   "specs": {
     "cpu": "ARM quad-core 1.8 GHz (vendor: RK3566)",
     "gpu": "Mali-G52",
@@ -38,7 +38,7 @@
     }
   ],
   "firmware": {
-    "version": "Android (stock; system on TF card)",
+    "version": "Powkiddy stock firmware (system on TF card; Powkiddy lists 'a variety of open source linux')",
     "shortVersion": "varies",
     "checkedDate": "2026-10-28",
     "source": "https://powkiddy.com/products/pre-sale-powkiddy-rgb30-rk3566-handheld-game-console-built-in-wifi"
@@ -161,8 +161,8 @@
       "models": [
         "rgb30"
       ],
-      "firmware": "Stock Android on TF card; restore by writing the stock image.",
-      "summary": "Powkiddy's own Android OS image on the TF card. Restoring the stock card restores the factory system.",
+      "firmware": "Stock system on TF card; restore by writing the stock image.",
+      "summary": "Powkiddy's own OS image on the TF card. Restoring the stock card restores the factory system.",
       "source": "https://powkiddy.com/products/pre-sale-powkiddy-rgb30-rk3566-handheld-game-console-built-in-wifi",
       "compatibility": [
         {
