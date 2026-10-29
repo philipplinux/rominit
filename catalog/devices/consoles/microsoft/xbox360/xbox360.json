@@ -8,7 +8,7 @@
     { "id": "slim", "name": "Xbox 360 S (slim)" },
     { "id": "e", "name": "Xbox 360 E" }
   ],
-  "summary": "Explore Xbox 360 hardware in its three body styles and many motherboard revisions. Homebrew eligibility is decided by both the board revision and the dashboard/kernel version: JTAG on old kernels, RGH on fat and slim boards, and Bad Update (software-only) on any model at dashboard 2.0.17559.",
+  "summary": "Explore Xbox 360 hardware in its three body styles and many motherboard revisions. Homebrew eligibility is decided by both the board revision and the dashboard/kernel version: JTAG on old kernels, RGH on fat and slim boards (and 360 E Stingray boards with a postfix adapter, not Barracuda/Winchester), and Bad Update (software-only) on any model at dashboard 2.0.17559.",
   "specs": {
     "cpu": "IBM PowerPC triple-core (Xenon Waternoose on first boards; later revisions on smaller processes)",
     "gpu": "ATI Xenos with embedded eDRAM",
@@ -51,7 +51,7 @@
       "region": "Worldwide",
       "releaseYear": 2013,
       "storage": "250 GB or 4 GB/500 GB depending on SKU",
-      "notes": "Board revision and hack compatibility not verified at a fetchable primary source; Bad Update is confirmed on Winchester consoles by its author.",
+      "notes": "Two board revisions: Stingray (Corona-like) and Barracuda (Winchester). ConsoleMods: Stingray boards can use RGH with a postfix adapter; Barracuda boards are not compatible with RGH at all. Bad Update is confirmed on Winchester consoles by its author.",
       "specs": {
         "cpu": "IBM triple-core",
         "gpu": "ATI GPU",
@@ -64,7 +64,7 @@
   "firmware": {
     "version": "2.0.17559 (latest; Microsoft no longer ships new 360 dashboards)",
     "shortVersion": "2.0.17559",
-    "checkedDate": "2026-10-28",
+    "checkedDate": "2026-10-29",
     "source": "https://github.com/grimdoomer/Xbox360BadUpdate"
   },
   "homebrew": [
@@ -83,7 +83,7 @@
           "note": "The exploit author states it works at dashboard 17559 and confirms Winchester consoles; free60 states any 360 model on 17559. Does not work on Xbox One or Series."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "Dashboard 2.0.17559 on the console.",
         "A supported game (Rock Band Blitz trial or full game) or an exploited Avatar, a FAT32 USB stick and an unsigned default.xex."
@@ -99,31 +99,90 @@
       ]
     },
     {
+      "name": "FreeMyXe",
+      "models": ["phat", "slim", "e"],
+      "firmware": "2.0.17559 only, inside a Bad Update session",
+      "summary": "A lightweight patch set applied at runtime by Bad Update: it patches the kernel and hypervisor with xeBuild-derived patches, lets homebrew reach the hypervisor and CPU key, and can launch XeLL or an unsigned default.xex. Non-persistent.",
+      "source": "https://github.com/FreeMyXe/FreeMyXe",
+      "kind": "kernel",
+      "access": "hypervisor",
+      "compatibility": [
+        {
+          "models": ["phat", "slim", "e"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "Runs after the Bad Update exploit at dashboard 2.0.17559; the README names XeUnshackle as the fuller alternative."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Bad Update session on dashboard 2.0.17559 and the FreeMyXe payload on USB."
+      ],
+      "warnings": [
+        "Non-persistent; power-off returns the console to stock.",
+        "The README warns not to flash a modified NAND or write to flash — that bricks the console."
+      ],
+      "links": [
+        { "label": "FreeMyXe", "url": "https://github.com/FreeMyXe/FreeMyXe" },
+        { "label": "XeUnshackle (fuller alternative)", "url": "https://github.com/Byrom90/XeUnshackle" }
+      ]
+    },
+    {
+      "name": "XeUnshackle",
+      "models": ["phat", "slim", "e"],
+      "firmware": "2.0.17559 only, inside a Bad Update session",
+      "summary": "A Bad Update payload that applies a full xeBuild-derived hypervisor and kernel patch set, loads DashLaunch's launch.xex, and displays or dumps the CPU key, DVD key and 1BL. Non-persistent.",
+      "source": "https://github.com/Byrom90/XeUnshackle",
+      "kind": "kernel",
+      "access": "hypervisor",
+      "compatibility": [
+        {
+          "models": ["phat", "slim", "e"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "README: designed for Xbox360BadUpdate, which works on any 360 model at dashboard 2.0.17559, including Winchester."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Bad Update session on dashboard 2.0.17559 and the XeUnshackle payload on USB."
+      ],
+      "warnings": [
+        "Non-persistent; power-off returns the console to stock.",
+        "README: back up the NAND first and never flash a modified NAND or replace files in flash — that bricks the console."
+      ],
+      "links": [
+        { "label": "XeUnshackle", "url": "https://github.com/Byrom90/XeUnshackle" },
+        { "label": "Xbox360BadUpdate (required exploit)", "url": "https://github.com/grimdoomer/Xbox360BadUpdate" }
+      ]
+    },
+    {
       "name": "RGH family (Reset Glitch Hack)",
       "models": ["phat", "slim"],
       "firmware": "Dashboard-version limits per RGH variant not verified at a fetchable primary source",
-      "summary": "A permanent boot-time glitch mod: a reset pulse sent while the CPU is slowed makes the bootloader hash check pass so a custom bootloader runs. free60 documents the method for fat consoles (glitching CB) and slim consoles (glitching CB_A, unpatchable). Requires a glitch chip (CPLD), NAND programmer and soldering. Variant names (RGH1.2, RGH2, RGH3, EXT_CLK) and their board and dashboard limits are not covered by free60 and are not stated here.",
+      "summary": "A permanent boot-time glitch mod: a reset pulse sent while the CPU is slowed makes the bootloader hash check pass so a custom bootloader runs. free60 documents the method for fat consoles (glitching CB) and slim consoles (glitching CB_A, unpatchable), and says the custom CD loads the base kernel from NAND, patches it and runs it. Requires a glitch chip (CPLD), NAND programmer and soldering. ConsoleMods covers the later variant names and the 360 E split: Stingray boards need a postfix adapter, Barracuda (Winchester) boards are not RGH-compatible.",
       "source": "https://free60.org/Hacks/Reset_Glitch_Hack/",
       "kind": "hardmod",
+      "opens": ["kernel"],
       "compatibility": [
         {
           "models": ["phat"],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "free60 documents the fat-console glitch (CB stage). Per-board support beyond that is not verified."
+          "note": "free60 documents the fat-console glitch (CB stage); ConsoleMods lists the later variants and their board limits."
         },
         {
           "models": ["slim"],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "free60 documents the slim-console glitch (CB_A stage, unpatchable). Per-board support and 360 E support are not verified."
+          "note": "free60 documents the slim-console glitch (CB_A stage, unpatchable). ConsoleMods: Trinity and Corona are supported; Waitsburg needs a postfix adapter."
         }
       ],
-      "checkedDate": "2026-10-28",
       "requirements": [
         "A NAND dump (dumped twice and compared) before any work.",
         "Glitch chip (CPLD), NAND programmer and soldering equipment."
       ],
+      "checkedDate": "2026-10-29",
       "warnings": [
         "A bad install can leave the console unbootable until the chip is removed and the NAND restored.",
         "Soldering a glitch chip is not reversible by software."
@@ -136,21 +195,21 @@
     {
       "name": "JTAG (SMC hack)",
       "models": ["phat"],
-      "firmware": "Dashboard limit not verified at a fetchable primary source; board must be unpatched",
-      "summary": "A permanent boot-time exploit that runs homebrew via an old (4532) kernel on phat consoles with an unpatched CB (free60). Patched at CB level on Jasper V4.1 and later.",
+      "firmware": "2.0.7371 or lower; some Jasper, Tonasket and refurbished Xenon units have a patched CB even on 7371 (ConsoleMods)",
+      "summary": "A permanent boot-time exploit that runs homebrew via an old (4532) kernel on phat consoles with an unpatched CB (free60). Patched at CB level on Jasper V4.1 and later; ConsoleMods puts the dashboard limit at 2.0.7371 or lower and warns that some Jasper, Tonasket and refurbished Xenon consoles were patched even on 7371.",
       "source": "https://free60.org/Hacks/SMC_Hack/",
       "kind": "hardmod",
       "compatibility": [
         {
           "models": ["phat"],
-          "supportedFirmware": [],
+          "supportedFirmware": ["2.0.7371"],
           "status": "documented",
-          "note": "free60 lists Jasper V4.1 as patched on CB level. Dump the NAND and check the CB before assuming a console is JTAG-able."
+          "note": "free60 lists Jasper V4.1 as patched on CB level. ConsoleMods: 2.0.7371 or lower, but some Jasper, Tonasket and refurbished Xenon units have a patched CB even on 7371. Dump the NAND and check the CB before assuming a console is JTAG-able."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
-        "An unpatched CB (free60: Jasper V4.1 and later are patched).",
+        "An unpatched CB and a dashboard at 2.0.7371 or lower (ConsoleMods; free60: Jasper V4.1 and later are patched on CB level).",
         "A NAND dump to verify the CB state."
       ],
       "warnings": [
@@ -182,7 +241,7 @@
           "note": "Only Trinity boards support Peer Pressure. Corona and Waitsburg do not."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "Dashboard 2.0.17559 on a phat or a Trinity slim."
       ],
@@ -197,7 +256,7 @@
       "name": "Linux (free60 distributions)",
       "models": ["phat", "slim"],
       "firmware": "Requires a modded console with XeLL; no firmware-specific limit",
-      "summary": "An archive of 2007–2012-era Linux distributions (Debian, Ubuntu, Arch POWER) and the LibXenon toolchain from free60. Booting any of it needs a hacked console. These images are not maintained current distributions.",
+      "summary": "An archive of Linux distributions from free60: Debian (etch through sid), Ubuntu 7.10 and 11.10, a LiveCD, and Gentoo (2025). Booting any of it needs a hacked console with XeLL; the older images are not maintained current distributions.",
       "source": "https://free60.org/Linux/Distros/",
       "kind": "linux",
       "compatibility": [
@@ -208,7 +267,7 @@
           "note": "Historical archive; booting requires XeLL and a modded console."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A modded Xbox 360 with XeLL installed."
       ],
@@ -217,6 +276,154 @@
       ],
       "links": [
         { "label": "free60: Linux distros", "url": "https://free60.org/Linux/Distros/" }
+      ]
+    },
+    {
+      "name": "XeLL (Xenon Linux Loader)",
+      "models": ["phat", "slim", "e"],
+      "firmware": "Loaded by a hack; no firmware version of its own",
+      "summary": "A second-stage bootloader run by a hack: it catches the CPU threads, loads an ELF file from CD or over TFTP, and launches it. It is made to boot Linux and carries a flat device tree, but can also load libXenon homebrew.",
+      "source": "https://github.com/Free60Project/xell",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["phat", "slim"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "free60: XeLL is booted by the SMC (JTAG) or reset glitch hack; neither page lists model or firmware limits for XeLL itself."
+        },
+        {
+          "models": ["e"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "free60 Bad Update guide: FreeMyXe can launch XeLL Reloaded on a 360 at dashboard 2.0.17559; Bad Update is confirmed on Winchester."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A console with a working hack that can load XeLL (SMC/JTAG, RGH, or Bad Update with FreeMyXe)."
+      ],
+      "warnings": [
+        "XeLL is a loader, not an entry point; it does nothing on a stock console."
+      ],
+      "links": [
+        { "label": "XeLL source (Free60Project)", "url": "https://github.com/Free60Project/xell" },
+        { "label": "free60: XeLL", "url": "https://free60.org/Homebrew/Tools/XeLL/" },
+        { "label": "free60: Bad Update guide (launches XeLL Reloaded)", "url": "https://free60.org/Hacks/Bad_Update_Hack/" }
+      ]
+    },
+    {
+      "name": "Aurora",
+      "models": ["phat", "slim"],
+      "firmware": "Requires a hacked console; no firmware version of its own",
+      "summary": "A custom replacement dashboard built around a coverflow game launcher, with skins, cover and title-update downloads, categories, FTP and a plugin system. It launches as Aurora.xex, or as the default dashboard through DashLaunch.",
+      "source": "https://consolemods.org/wiki/Xbox_360:Aurora",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["phat", "slim"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "ConsoleMods documents the install on a hacked 360 and says to launch Aurora.xex or set it as the default dashboard with DashLaunch; it lists no model or firmware limits."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A hacked console that can run unsigned .xex files; DashLaunch is only needed to make Aurora the default dashboard."
+      ],
+      "warnings": [
+        "Aurora is a dashboard, not an entry point; it needs an existing hack that runs unsigned code."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Aurora", "url": "https://consolemods.org/wiki/Xbox_360:Aurora" },
+        { "label": "Aurora official site (XboxUnity)", "url": "https://phoenix.xboxunity.net/" },
+        { "label": "ConsoleMods: DashLaunch", "url": "https://consolemods.org/wiki/Xbox_360:DashLaunch" }
+      ]
+    },
+    {
+      "name": "Freestyle Dash (FSD)",
+      "models": ["phat", "slim"],
+      "firmware": "Requires a hacked console; no firmware version of its own",
+      "summary": "A customizable replacement dashboard by Team FSD that scans and categorizes Xbox 360, XBLA and original Xbox games, launches homebrew, downloads cover art and runs plugins. The last official release is FSD3 Rev 755; ConsoleMods links a patched build that fixes its stability issues.",
+      "source": "https://consolemods.org/wiki/Xbox_360:Freestyle_Dash",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["phat", "slim"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "ConsoleMods documents FSD as a replacement dashboard and links the FSD3 release; it lists no model or firmware limits."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A hacked console that can run unsigned .xex files."
+      ],
+      "warnings": [
+        "FSD is a dashboard, not an entry point; it needs an existing hack that runs unsigned code."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Freestyle Dash", "url": "https://consolemods.org/wiki/Xbox_360:Freestyle_Dash" },
+        { "label": "FSD 2 source (XboxUnity)", "url": "https://github.com/XboxUnity/freestyledash" }
+      ]
+    },
+    {
+      "name": "XeXMenu",
+      "models": ["phat", "slim", "e"],
+      "firmware": "Runs on a hacked console; no firmware version of its own",
+      "summary": "A dashboard and file manager for modified 360s, usually the first dashboard installed because its installer appears under My Games in the official dash. Version 1.2 only adds skins over 1.1, and it is less featured than Aurora or Freestyle Dash.",
+      "source": "https://consolemods.org/wiki/Xbox_360:XeXmenu",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["phat", "slim"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "ConsoleMods: XeXMenu is a dashboard for JTAG/RGH consoles; the page lists no model or firmware limits."
+        },
+        {
+          "models": ["e"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "FreeMyXe README: Bad Update can launch homebrew such as XeXMenu; Bad Update works on any 360 model at 2.0.17559, including Winchester."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A hacked console that can run unsigned .xex files."
+      ],
+      "warnings": [
+        "XeXMenu is a dashboard, not an entry point; it needs an existing hack that runs unsigned code."
+      ],
+      "links": [
+        { "label": "ConsoleMods: XeXMenu", "url": "https://consolemods.org/wiki/Xbox_360:XeXmenu" },
+        { "label": "FreeMyXe (launches XeXMenu under Bad Update)", "url": "https://github.com/FreeMyXe/FreeMyXe" }
+      ]
+    },
+    {
+      "name": "J-Runner with Extras",
+      "models": ["phat", "slim", "e"],
+      "firmware": "Reads and writes the NAND; not a firmware version",
+      "summary": "Windows application for RGH/JTAG work, described by its project as \"The Ultimate RGH/JTAG App\": NAND reading and writing, glitch-chip programming and image building. It is a desktop tool, not a route into the console by itself.",
+      "source": "https://github.com/Octal450/J-Runner-with-Extras",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": ["phat", "slim", "e"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Desktop tool for RGH/JTAG consoles; it does not add an entry point of its own."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "An x86 Windows PC (Vista SP2 or later) with .NET Framework 4.5.2, a USB 2.0 port for the hardware device, and a NAND programmer or flasher supported by the tool."
+      ],
+      "warnings": [
+        "NAND writes are destructive; keep verified backups and never flash an image you did not build for this console."
+      ],
+      "links": [
+        { "label": "J-Runner with Extras (Octal450)", "url": "https://github.com/Octal450/J-Runner-with-Extras" }
       ]
     },
     {
@@ -251,10 +458,18 @@
     { "label": "ConsoleMods: Xbox 360 Getting Started", "url": "https://consolemods.org/wiki/Xbox_360:Getting_Started" },
     { "label": "ConsoleMods: Xbox 360 Motherboard Information", "url": "https://consolemods.org/wiki/Xbox_360:Motherboard_Information" },
     { "label": "ConsoleMods: Bad Update", "url": "https://consolemods.org/wiki/Xbox_360:Bad_Update" },
+    { "label": "ConsoleMods: Aurora", "url": "https://consolemods.org/wiki/Xbox_360:Aurora" },
+    { "label": "ConsoleMods: Freestyle Dash", "url": "https://consolemods.org/wiki/Xbox_360:Freestyle_Dash" },
+    { "label": "ConsoleMods: XeXMenu", "url": "https://consolemods.org/wiki/Xbox_360:XeXmenu" },
     { "label": "Xbox360BadUpdate (exploit author)", "url": "https://github.com/grimdoomer/Xbox360BadUpdate" },
+    { "label": "FreeMyXe (kernel and hypervisor patches)", "url": "https://github.com/FreeMyXe/FreeMyXe" },
+    { "label": "XeUnshackle (fuller Bad Update patch set)", "url": "https://github.com/Byrom90/XeUnshackle" },
+    { "label": "XeLL (Free60Project source)", "url": "https://github.com/Free60Project/xell" },
+    { "label": "J-Runner with Extras (Octal450)", "url": "https://github.com/Octal450/J-Runner-with-Extras" },
     { "label": "free60: Bad Update Hack", "url": "https://free60.org/Hacks/Bad_Update_Hack/" },
     { "label": "free60: SMC Hack (JTAG)", "url": "https://free60.org/Hacks/SMC_Hack/" },
     { "label": "free60: Reset Glitch Hack", "url": "https://free60.org/Hacks/Reset_Glitch_Hack/" },
+    { "label": "free60: XeLL", "url": "https://free60.org/Homebrew/Tools/XeLL/" },
     { "label": "free60: Linux distros", "url": "https://free60.org/Linux/Distros/" },
     { "label": "free60 wiki", "url": "https://free60.org/" }
   ],

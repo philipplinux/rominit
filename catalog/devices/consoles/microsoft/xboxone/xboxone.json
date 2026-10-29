@@ -95,6 +95,38 @@
       ]
     },
     {
+      "name": "RetroArch",
+      "models": ["original", "one-s", "one-x"],
+      "firmware": "Requires Developer Mode; runs as a UWP app on any system-software version",
+      "summary": "The libretro frontend packaged as a UWP app, running emulator cores for many classic systems. RetroArch's download page states that Xbox One/Series use requires Developer Mode.",
+      "source": "https://www.retroarch.com/?page=platforms",
+      "kind": "emulation",
+      "runtime": "UWP app in Developer Mode",
+      "availability": "Free download from retroarch.com; runs only in Developer Mode.",
+      "systems": "Many classic systems via libretro cores",
+      "compatibility": [
+        {
+          "models": ["original", "one-s", "one-x"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Developer Mode is the documented requirement; the download page states it for Xbox One/Series."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "Developer Mode enabled on the console.",
+        "The RetroArch UWP package, plus your own game files and BIOS files."
+      ],
+      "warnings": [
+        "Developer Mode is required and costs a one-time Microsoft fee; there is no official Retail build.",
+        "No games or BIOS files are bundled."
+      ],
+      "links": [
+        { "label": "RetroArch: download (Xbox One/Series)", "url": "https://www.retroarch.com/?page=platforms" },
+        { "label": "RetroArch source", "url": "https://github.com/libretro/RetroArch" }
+      ]
+    },
+    {
       "name": "Security research (privilege escalation, browser issues)",
       "models": ["original", "one-s", "one-x"],
       "firmware": "Varies; no confirmed user route",
@@ -148,7 +180,9 @@
   "sources": [
     { "label": "ConsoleMods: Xbox One hub", "url": "https://consolemods.org/wiki/Xbox_One" },
     { "label": "Microsoft: Xbox Developer Mode activation", "url": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation" },
-    { "label": "Xbox One Research Wiki", "url": "https://xboxoneresearch.github.io/wiki/" }
+    { "label": "Xbox One Research Wiki", "url": "https://xboxoneresearch.github.io/wiki/" },
+    { "label": "RetroArch: download (Xbox One/Series)", "url": "https://www.retroarch.com/?page=platforms" },
+    { "label": "RetroArch source", "url": "https://github.com/libretro/RetroArch" }
   ],
   "officialSupport": {
     "status": "ongoing",

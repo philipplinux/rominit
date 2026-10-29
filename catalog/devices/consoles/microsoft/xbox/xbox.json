@@ -148,6 +148,32 @@
       ]
     },
     {
+      "name": "OpenXenium",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "All versions; loads a custom BIOS instead of the stock one",
+      "summary": "An open-source recreation of the Xenium modchip in GPL VHDL. It loads custom BIOS files such as Cromwell and its derivatives without modifying the onboard TSOP flash or softmodding, and provides EEPROM backup and hard-drive tools.",
+      "source": "https://github.com/Team-Resurgent/OpenXeniumV2",
+      "kind": "hardmod",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The project README says it loads custom BIOS files without modifying the onboard TSOP flash or softmodding, so it does not depend on the revision."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "An OpenXenium board (or the parts and CPLD to build one) and soldering equipment."
+      ],
+      "warnings": [
+        "Soldering work on the LPC header; back up the EEPROM before any drive work."
+      ],
+      "links": [
+        { "label": "OpenXenium (Team Resurgent)", "url": "https://github.com/Team-Resurgent/OpenXeniumV2" }
+      ]
+    },
+    {
       "name": "TSOP flash",
       "models": ["1.0", "1.2-1.4"],
       "firmware": "All versions except 1.6; writes a modified BIOS to the TSOP chip",
@@ -201,6 +227,32 @@
       ]
     },
     {
+      "name": "XBMC4Gamers",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "Requires a modified Xbox that can run a replacement dashboard",
+      "summary": "A dashboard front end built on XBMC4Xbox: a skin plus Python scripts for per-profile saves, artwork and game launching. The README's install step copies the built folder to the console over FTP.",
+      "source": "https://github.com/Rocky5/XBMC4Gamers",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Installed over FTP on a modified Xbox; the README gives no revision limit."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A modified Xbox with FTP access."
+      ],
+      "warnings": [
+        "It replaces the dashboard; keep the previous dashboard files so the change can be undone."
+      ],
+      "links": [
+        { "label": "XBMC4Gamers (Rocky5)", "url": "https://github.com/Rocky5/XBMC4Gamers" }
+      ]
+    },
+    {
       "name": "Xbox system software update and reinstall",
       "models": ["1.0", "1.2-1.4", "1.6"],
       "firmware": "The Microsoft Dashboard from the hard drive; no version ceiling for softmods",
@@ -225,8 +277,21 @@
       ]
     }
   ],
+  "communities": [
+    {
+      "name": "Insignia",
+      "url": "https://insignia.live/",
+      "description": "A free replacement for Microsoft's original Xbox Live servers: online multiplayer, leaderboards and friends for 213 supported games. Stock consoles can register through a one-time, non-permanent exploit; modded consoles run the Setup Assistant as homebrew.",
+      "source": "https://insignia.live/guide/connect",
+      "checkedDate": "2026-10-29"
+    }
+  ],
   "sources": [
     { "label": "ConsoleMods: Xbox hub", "url": "https://consolemods.org/wiki/Xbox" },
+    { "label": "OpenXenium (Team Resurgent)", "url": "https://github.com/Team-Resurgent/OpenXeniumV2" },
+    { "label": "XBMC4Gamers (Rocky5)", "url": "https://github.com/Rocky5/XBMC4Gamers" },
+    { "label": "Insignia", "url": "https://insignia.live/" },
+    { "label": "Insignia: Connect guide", "url": "https://insignia.live/guide/connect" },
     { "label": "ConsoleMods: Xbox Getting Started", "url": "https://consolemods.org/wiki/Xbox:Getting_Started" },
     { "label": "xboxdevwiki: Hardware Revisions", "url": "https://xboxdevwiki.net/Hardware_Revisions" },
     { "label": "xboxdevwiki: CPU", "url": "https://xboxdevwiki.net/CPU" },

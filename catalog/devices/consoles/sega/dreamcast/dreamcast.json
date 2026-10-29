@@ -118,7 +118,7 @@
       "firmware": "Requires a MIL-CD-bootable disc or a hacked console",
       "summary": "The homebrew minimal operating system most Dreamcast software uses. It supports most of the hardware but is not a multitasking OS.",
       "source": "https://segaretro.org/Dreamcast",
-      "kind": "linux",
+      "kind": "os",
       "compatibility": [
         {
           "models": ["jp", "asia", "na", "pal"],
@@ -127,7 +127,7 @@
           "note": "Most Dreamcast homebrew games, emulators and tools are built on KallistiOS."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A MIL-CD-bootable disc or an already-hacked console."
       ],
@@ -136,6 +136,32 @@
       ],
       "links": [
         { "label": "Sega Retro: Dreamcast", "url": "https://segaretro.org/Dreamcast" }
+      ]
+    },
+    {
+      "name": "DreamShell",
+      "models": ["jp", "asia", "na", "pal"],
+      "firmware": "No firmware update; boots from CD-R (MIL-CD) or a supported SD/IDE adapter",
+      "summary": "An operating system for the Dreamcast built on the KallistiOS kernel, with a modular XML/Lua interface, drivers for storage and network devices, and an ISO loader that emulates BIOS calls to run disc images.",
+      "source": "https://github.com/DC-SWAT/DreamShell",
+      "kind": "os",
+      "compatibility": [
+        {
+          "models": ["jp", "asia", "na", "pal"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The project builds for CD-R and storage-adapter boot and states no model limit; a late revision without MIL-CD needs the adapter route."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A DreamShell build for your boot method: a CD-R image or a supported SD/IDE adapter."
+      ],
+      "warnings": [
+        "CD-R booting depends on the unit retaining MIL-CD support; the storage-adapter route needs the matching hardware."
+      ],
+      "links": [
+        { "label": "DreamShell (DC-SWAT)", "url": "https://github.com/DC-SWAT/DreamShell" }
       ]
     },
     {
@@ -189,8 +215,19 @@
       ]
     }
   ],
+  "communities": [
+    {
+      "name": "DreamPi",
+      "url": "https://github.com/Kazade/dreampi",
+      "description": "Raspberry Pi software that bridges the Dreamcast's built-in dial-up modem to Ethernet or Wi-Fi through a compatible USB voice modem, bringing compatible games and browsers back online without a dial-up ISP. It runs on all Raspberry Pi models except the Pi 5.",
+      "source": "https://github.com/Kazade/dreampi",
+      "checkedDate": "2026-10-29"
+    }
+  ],
   "sources": [
     { "label": "Sega Retro: Dreamcast", "url": "https://segaretro.org/Dreamcast" },
+    { "label": "DreamShell (DC-SWAT)", "url": "https://github.com/DC-SWAT/DreamShell" },
+    { "label": "DreamPi (Kazade)", "url": "https://github.com/Kazade/dreampi" },
     { "label": "Sega Retro: Dreamcast Technical specifications", "url": "https://segaretro.org/Sega_Dreamcast/Technical_specifications" },
     { "label": "dreamcast.wiki: MIL-CD", "url": "https://dreamcast.wiki/MIL-CD" },
     { "label": "dreamcast.wiki", "url": "https://dreamcast.wiki/" }
