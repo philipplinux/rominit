@@ -14,7 +14,7 @@
   "summary": "Powkiddy's 5.5-inch RK3566-based Android/Linux handheld with a 1280×720 landscape IPS display. Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
   "specs": {
     "cpu": "Rockchip RK3566 Quad-core ARM Cortex-A55, 1.8 GHz",
-    "gpu": "ARM Mali-G52 (KNULLI: Mali / Rockchip BSP 4.19)",
+    "gpu": "Mali-G52",
     "memory": "1 GB LPDDR4X",
     "storage": "16 GB built-in; TF card expansion up to 256 GB",
     "media": "5.5-inch IPS RGB, 1280×720"

@@ -11,7 +11,7 @@
       "notes": "Single model; Android-based handheld"
     }
   ],
-  "summary": "AYN's Android-based handheld. AYN official site (ayn.cc) was unreachable at time of check (DNS failure). No hardware specifications sourced from verified vendor pages. KNULLI and spruceOS supported-device tables do not list this device.",
+  "summary": "AYN's Android-based handheld. KNULLI's supported-device table does not list this device (checked 2026-10-28).",
   "specs": {
     "cpu": "not sourced",
     "gpu": "not sourced",
@@ -24,18 +24,32 @@
       "model": "Odin 2",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Android-based AYN handheld. AYN official site (ayn.cc) was unreachable at time of check (DNS failure). No hardware specifications sourced from verified vendor pages. Not listed in KNULLI or spruceOS supported-device tables (checked 2026-10-28).",
+      "notes": "Android-based AYN handheld. Not listed in KNULLI's supported-device table (checked 2026-10-28).",
       "specs": {}
     }
   ],
   "firmware": {
     "version": "Android (stock OS)",
     "shortVersion": "varies",
-    "checkedDate": "2026-10-28"
+    "checkedDate": "2026-10-28",
+    "source": "https://www.ayntec.com/collections/odin"
   },
   "firmwareOptions": [],
   "homebrew": [],
   "highlights": [],
   "communities": [],
-  "sources": []
+  "sources": [
+    {
+      "label": "AYN: Odin collection (current Odin / Thor line-up)",
+      "url": "https://www.ayntec.com/collections/odin"
+    },
+    {
+      "label": "ROCKNIX: AYN Odin 2 (SM8550, mainline Linux)",
+      "url": "https://rocknix.org/devices/ayn/odin2/"
+    },
+    {
+      "label": "KNULLI: supported devices (no AYN device listed)",
+      "url": "https://knulli.org/devices/"
+    }
+  ]
 }

@@ -14,7 +14,7 @@
   "summary": "Powkiddy's 4-inch RK3566-based Android/Linux handheld with a square 720×720 vertical display and dual TF-card design (TF1 for OS, TF2 for games). Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
   "specs": {
     "cpu": "ARM quad-core 1.8 GHz (vendor: RK3566)",
-    "gpu": "Mali-G52 (KNULLI: Mali / Rockchip BSP 4.19)",
+    "gpu": "Mali-G52",
     "memory": "1 GB LPDDR4",
     "storage": "TF card only (TF1 for OS, TF2 for games); TF1 supports 16–256 GB, TF2 supports 16–256 GB",
     "media": "4.0-inch OCA full-fit LCD, 720×720"
@@ -68,7 +68,7 @@
       "requirements": [
         "A compatible Powkiddy RGB30 unit.",
         "A good-quality SD card.",
-        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher, balenaEtcher or dd)."
+        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher or dd)."
       ],
       "warnings": [
         "KNULLI ships a separate image per model; cross-flashing does not boot.",

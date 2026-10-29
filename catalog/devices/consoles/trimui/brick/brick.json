@@ -1,7 +1,7 @@
 {
   "id": "brick",
-  "name": "TriMUI Brick",
-  "manufacturer": "TriMUI",
+  "name": "TrimUI Brick",
+  "manufacturer": "TrimUI",
   "releaseYear": null,
   "family": "trimui",
   "models": [
@@ -11,7 +11,7 @@
       "notes": "Single model; 3.2\" 1024×768 square display"
     }
   ],
-  "summary": "TriMUI's compact 3.2-inch A133P-based Android/Linux handheld with a 1024×768 square IPS display. Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "summary": "TrimUI's compact 3.2-inch A133P-based Android/Linux handheld with a 1024×768 square IPS display. Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
   "specs": {
     "cpu": "Allwinner A133P (A133+), 1.8 GHz",
     "gpu": "Imagination PowerVR GE8300, 660 MHz",
@@ -38,7 +38,7 @@
     }
   ],
   "firmware": {
-    "version": "Linux (stock); Trimnui UI",
+    "version": "Linux (stock); TrimUI UI",
     "shortVersion": "varies",
     "checkedDate": "2026-10-28",
     "source": "https://powkiddy.com/products/trimui-brick-handheld-game-console"
@@ -52,7 +52,7 @@
         "brick"
       ],
       "firmware": "Per-model image (knulli-a133-trimui-brick); boots from SD card with no stock-firmware dependency.",
-      "summary": "Retro gaming OS for the TriMUI Brick based on Allwinner A133. Boots from a prepared SD card.",
+      "summary": "Retro gaming OS for the TrimUI Brick based on Allwinner A133. Boots from a prepared SD card.",
       "source": "https://knulli.org/devices/",
       "compatibility": [
         {
@@ -66,7 +66,7 @@
       ],
       "checkedDate": "2026-10-28",
       "requirements": [
-        "A compatible TriMUI Brick unit.",
+        "A compatible TrimUI Brick unit.",
         "A good-quality SD card.",
         "A computer with an SD card reader and an image writer."
       ],
@@ -92,7 +92,7 @@
         "brick"
       ],
       "firmware": "Per-model A133 image; boots from SD card.",
-      "summary": "Mainline-Linux retro gaming OS for the TriMUI Brick. Boots from SD card.",
+      "summary": "Mainline-Linux retro gaming OS for the TrimUI Brick. Boots from SD card.",
       "source": "https://rocknix.org/devices/",
       "compatibility": [
         {
@@ -106,7 +106,7 @@
       ],
       "checkedDate": "2026-10-28",
       "requirements": [
-        "A compatible TriMUI Brick unit.",
+        "A compatible TrimUI Brick unit.",
         "A good-quality SD card.",
         "A computer with an SD card reader and an image writer."
       ],
@@ -127,7 +127,7 @@
         "brick"
       ],
       "firmware": "Frontend on top of the stock OS.",
-      "summary": "Custom Python-based frontend that runs on top of the stock OS on supported TriMUI devices.",
+      "summary": "Custom Python-based frontend that runs on top of the stock OS on supported TrimUI devices.",
       "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
       "compatibility": [
         {
@@ -141,7 +141,7 @@
       ],
       "checkedDate": "2026-10-28",
       "requirements": [
-        "A compatible TriMUI Brick unit.",
+        "A compatible TrimUI Brick unit.",
         "A new branded microSD card from a reputable source (do NOT use the stock card)."
       ],
       "warnings": [
@@ -159,7 +159,7 @@
   "communities": [],
   "sources": [
     {
-      "label": "Powkiddy: Trimui Brick product page (A133P specs, 3.2\" 1024×768, 8 GB eMMC, 3000 mAh)",
+      "label": "Powkiddy: TrimUI Brick product page (A133P specs, 3.2\" 1024×768, 8 GB eMMC, 3000 mAh)",
       "url": "https://powkiddy.com/products/trimui-brick-handheld-game-console"
     },
     {

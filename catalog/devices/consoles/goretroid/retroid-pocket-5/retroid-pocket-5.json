@@ -47,7 +47,7 @@
       ],
       "firmware": "Prepared SD card image; boots by holding Volume Up at power-on.",
       "summary": "Batocera-based retro gaming OS for the Retroid Pocket 5. Dual-boot with Android — boot KNULLI from SD card with Volume Up held, return to Android by removing the card.",
-      "source": "https://knulli.org/devices/",
+      "source": "https://knulli.org/devices/goretroid/retroid-pocket-5/",
       "compatibility": [
         {
           "models": [
@@ -62,7 +62,7 @@
       "requirements": [
         "A compatible Retroid Pocket 5 unit.",
         "A good-quality SD card (SanDisk, Lexar, etc.).",
-        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher, balenaEtcher or dd)."
+        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher or dd)."
       ],
       "warnings": [
         "Hold Volume Up at power-on to boot KNULLI; remove the SD card and boot normally to return to Android."
@@ -70,7 +70,7 @@
       "links": [
         {
           "label": "KNULLI: Retroid Pocket 5",
-          "url": "https://knulli.org/devices/"
+          "url": "https://knulli.org/devices/goretroid/retroid-pocket-5/"
         },
         {
           "label": "KNULLI Quick Start Guide",
@@ -84,7 +84,7 @@
   "sources": [
     {
       "label": "KNULLI: Retroid Pocket 5",
-      "url": "https://knulli.org/devices/"
+      "url": "https://knulli.org/devices/goretroid/retroid-pocket-5/"
     }
   ]
 }

@@ -62,7 +62,7 @@
       "requirements": [
         "A compatible Retroid Pocket Mini unit.",
         "A good-quality SD card (SanDisk, Lexar, etc.).",
-        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher, balenaEtcher or dd)."
+        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher or dd)."
       ],
       "warnings": [
         "Hold Volume Up at power-on to boot KNULLI; remove the SD card and boot normally to return to Android."
