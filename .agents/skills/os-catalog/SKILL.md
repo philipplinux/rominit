@@ -37,7 +37,7 @@ Per commit: `node --test test/os-catalog.test.js test/media.test.js` and `npm ru
 
 ## Never
 
-Invent a checksum, size or date; add a flash recipe or claim an install was tested; push or merge (the owner does); take any value from `research/**/s9-*` (free-model S9 scraping, guidance only: re-check at the publisher).
+Invent a checksum, size or date; add a flash recipe or claim an install was tested; push or merge (the owner does); pin any value from `research/**/s9-*` (free-model S9 scraping) without re-checking it at the publisher.
 
 ## Report
 
