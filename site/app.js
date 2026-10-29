@@ -129,7 +129,7 @@ function favoriteButton(key) {
   return button;
 }
 /** The maker's stock OS updates, linked to the source: green while ongoing, red once dropped. @param {any} s */
-const officialSupportRow = s => s && h('p', { className: 'rating' }, h('a', { className: `feature ${s.status === 'ongoing' ? 'works' : 'broken'}`, href: s.source, target: '_blank', rel: 'noopener noreferrer', textContent: officialSupportText(s, 'Stock OS: maker') }));
+const officialSupportRow = s => s && h('p', { className: 'rating' }, h('a', { className: `feature ${s.status === 'ongoing' ? 'works' : s.status === 'unknown' ? 'untested' : 'broken'}`, href: s.source, target: '_blank', rel: 'noopener noreferrer', textContent: officialSupportText(s, 'Stock OS: maker') }));
 /** Community projects that keep the phone alive, separate from the maker: each ROM's project and support state, or the Nura listing on support-only pages. @param {any} device */
 const communityRow = device => {
   const items = device.supportOnly ? [[device.supportLabel ? `${device.supportLabel}: listed` : 'Nura postmarketOS community: listed', 'works', device.supportUrl]]

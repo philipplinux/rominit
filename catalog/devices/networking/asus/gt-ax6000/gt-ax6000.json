@@ -1,0 +1,49 @@
+{
+  "codename": "gt-ax6000",
+  "vendor": "ASUS",
+  "name": "ROG GT-AX6000",
+  "series": "ROG Rapture Wi-Fi 6",
+  "family": "ROG Rapture Wi-Fi 6",
+  "variant": "GT-AX6000",
+  "models": [
+    "GT-AX6000"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://www.asuswrt-merlin.net/about",
+  "supportLabel": "AsusWrt-Merlin supported devices",
+  "notes": "This support-only entry covers ROG GT-AX6000 (GT-AX6000). It summarizes the ASUS stock firmware and AsusWrt-Merlin support listed for this model. No firmware was flashed.",
+  "hardware": {
+    "cpu": "2.0 GHz quad-core",
+    "ram": "1 GB RAM",
+    "gpu": "Not specified.",
+    "display": "Not specified.",
+    "storage": "256 MB flash",
+    "source": "https://rog.asus.com/networking/rog-rapture-gt-ax6000-model/spec/",
+    "note": "Wi-Fi: Dual-band AX6000: 2.4 GHz 4x4 up to 1148 Mbps, 5 GHz 4x4 up to 4804 Mbps; Ports: 1× 2.5G WAN/LAN, 1× 2.5G LAN, 4× Gigabit LAN, 1× USB 3.2 Gen 1, 1× USB 2.0; Antennas: 4 external; SoC is not named in the product specification."
+  },
+  "software": {
+    "os": "ASUS stock firmware",
+    "latestFirmware": "3.0.0.6.102_37437",
+    "released": "2026-10-20",
+    "checked": "2026-10-28",
+    "source": "https://www.asus.com/uk/supportonly/gt-ax6000/helpdesk_bios/"
+  },
+  "supportRoutes": [
+    {
+      "section": "projects",
+      "name": "AsusWrt-Merlin",
+      "kind": "Community firmware",
+      "description": "AsusWrt-Merlin 3006.102.9_0 (2026-09-23) is listed for this model. Check the supported-device list for the model and any hardware-revision distinctions.",
+      "requirements": [
+        "Confirm the exact model and any hardware revision against the linked supported-device list; similar model names can use different firmware."
+      ],
+      "url": "https://www.asuswrt-merlin.net/about",
+      "checked": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "unknown",
+    "summary": "support status not stated",
+    "source": "https://www.asus.com/uk/supportonly/gt-ax6000/helpdesk_bios/"
+  }
+}

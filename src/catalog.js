@@ -25,13 +25,20 @@ export const CATEGORIES = { phone: 'Phones', tablet: 'Tablets', tvmedia: 'TV med
 export const CATEGORY_DIRS = { phones: 'phone', tablets: 'tablet', tvmedia: 'tvmedia', televisions: 'television', misc: 'misc', networking: 'networking' };
 export const SUPPORT_ROUTE_SECTIONS = { os: 'Operating systems', apps: 'Apps', root: 'Root', 'custom-os': 'Custom OS', recovery: 'Recovery', tools: 'Manufacturer tools', projects: 'Community projects', discussion: 'Discussion' };
 export const SUPPORT = ['active', 'maintenance', 'abandoned'];
-/** The maker's own updates for the stock OS: still coming, or over (the stock OS is obsolete). `until` is the promised end or the last update. */
-export const OFFICIAL_SUPPORT = ['ongoing', 'dropped'];
-/** First-party updates only (community projects never count; no current maker statement = dropped). Same field on devices, consoles, OS releases and emulators. @param {any} s officialSupport @returns {string[]} */
-export const officialSupportProblems = s => OFFICIAL_SUPPORT.includes(s?.status) && /^\d{4}(-\d{2})?$/.test(s.until ?? '0000') && s.source?.startsWith('https://') && (s.summary === undefined || (typeof s.summary === 'string' && s.summary.length <= 120)) ? []
-  : [`officialSupport needs status (${OFFICIAL_SUPPORT.join('/')}), until (YYYY or YYYY-MM, optional) and an https source`];
-/** "Stock OS: maker updates until 2031-10". @param {any} s @param {string} who whose updates */
-export const officialSupportText = (s, who) => `${who} updates ${s.summary ?? (s.status === 'dropped' ? `ended${s.until ? ` ${s.until}` : ''}, no more fixes` : s.until ? `until ${s.until}` : 'ongoing, no end date announced')}`;
+/** The maker's own updates for the stock OS: ongoing, dropped, or not established by the source. `until` is the promised end or last update. */
+export const OFFICIAL_SUPPORT = ['ongoing', 'dropped', 'unknown'];
+/** First-party updates only (community projects never count). Unknown needs a sourced summary and no invented date. @param {any} s officialSupport @returns {string[]} */
+export const officialSupportProblems = s => {
+  if (!s || typeof s !== 'object') return ['officialSupport must be an object'];
+  const dated = ['ongoing', 'dropped'].includes(s?.status) && /^\d{4}(-\d{2})?$/.test(s.until ?? '0000');
+  const unknown = s?.status === 'unknown' && s.until === undefined && typeof s.summary === 'string' && !!s.summary.trim();
+  const summary = s.summary === undefined || (typeof s.summary === 'string' && s.summary.length <= 120);
+  return (dated || unknown) && s.source?.startsWith('https://') && summary ? []
+    : ['officialSupport needs ongoing/dropped with until (YYYY or YYYY-MM), or unknown with a summary and no until; all require an https source'];
+};
+/** "Stock OS: maker updates until 2031-10" or an explicit unknown. @param {any} s @param {string} who whose updates */
+export const officialSupportText = (s, who) => s.status === 'unknown' ? `${who}: ${s.summary}`
+  : `${who} updates ${s.summary ?? (s.status === 'dropped' ? `ended${s.until ? ` ${s.until}` : ''}, no more fixes` : s.until ? `until ${s.until}` : 'ongoing, no end date announced')}`;
 const isHttpsUrl = value => {
   try { const url = new URL(value); return url.protocol === 'https:' && !!url.hostname; }
   catch { return false; }

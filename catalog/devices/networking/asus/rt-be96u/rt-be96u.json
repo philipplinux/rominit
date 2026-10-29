@@ -1,0 +1,80 @@
+{
+  "codename": "rt-be96u",
+  "vendor": "ASUS",
+  "name": "ASUS RT-BE96U",
+  "series": "RT Wi-Fi 7",
+  "family": "RT Wi-Fi 7",
+  "variant": "RT-BE96U",
+  "models": [
+    "RT-BE96U"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://www.asuswrt-merlin.net/about",
+  "supportLabel": "AsusWrt-Merlin community firmware support",
+  "notes": "This support-only entry covers ASUS RT-BE96U (RT-BE96U). It summarizes the ASUS stock firmware and AsusWrt-Merlin support listed for this model. No firmware was flashed.",
+  "software": {
+    "os": "ASUS stock firmware",
+    "latestFirmware": "3.0.0.6.102_39435",
+    "released": "2026-10-22",
+    "checked": "2026-10-28",
+    "source": "https://www.asus.com/uk/supportonly/rt-be96u/helpdesk_bios/"
+  },
+  "ownership": {
+    "label": "AsusWrt-Merlin community firmware",
+    "details": "AsusWrt-Merlin stable 3006.102.9_0 (2026-09-23) is listed for RT-BE96U.",
+    "source": "https://www.asuswrt-merlin.net/about"
+  },
+  "supportRoutes": [
+    {
+      "section": "custom-os",
+      "name": "AsusWrt-Merlin",
+      "kind": "Stable community firmware",
+      "description": "AsusWrt-Merlin stable 3006.102.9_0 (2026-09-23) is listed for RT-BE96U.",
+      "requirements": [
+        "Upload the model-matched image through the ASUS firmware upgrade page in the router web UI.",
+        "Reboot the router before flashing; low memory may cause an image rejection.",
+        "On ASUS stock 3.0.0.6.102_37000 or newer, the first Merlin flash may need the documented downgrade check over SSH."
+      ],
+      "url": "https://www.asuswrt-merlin.net/download",
+      "checked": "2026-10-28"
+    },
+    {
+      "section": "recovery",
+      "name": "ASUS stock firmware",
+      "kind": "Official release and rollback reference",
+      "description": "ASUS lists 3.0.0.6.102_39435 dated 2026-10-22 for RT-BE96U on its model support page.",
+      "requirements": [
+        "Match RT-BE96U exactly and check the model support page before downloading.",
+        "ASUS demonstrates Firmware Restoration separately as its rescue-mode route."
+      ],
+      "url": "https://www.asus.com/uk/supportonly/rt-be96u/helpdesk_bios/",
+      "checked": "2026-10-28"
+    },
+    {
+      "section": "recovery",
+      "name": "Firmware Restoration",
+      "kind": "ASUS rescue-mode recovery utility",
+      "description": "ASUS documents Firmware Restoration for rescue mode. Its FAQ demonstrates the procedure on an RT-AC68U, so its LED timing is not confirmed for this model.",
+      "requirements": [
+        "Unzip the stock firmware before using the utility; it cannot upload an archive.",
+        "Use a wired PC with the documented static IP, enter rescue mode by holding Reset while powering on, then restore the stock image."
+      ],
+      "url": "https://www.asus.com/support/faq/1000814/",
+      "checked": "2026-10-28"
+    }
+  ],
+  "hardware": {
+    "cpu": "2.6 GHz quad-core",
+    "ram": "2 GB",
+    "gpu": "Not specified",
+    "display": "Not specified",
+    "storage": "256 MB flash",
+    "source": "https://www.asus.com/us/networking-iot-servers/wifi-routers/asus-wifi-routers/rt-be96u/techspec/",
+    "note": "ASUS does not name the SoC on the spec page."
+  },
+  "officialSupport": {
+    "status": "unknown",
+    "summary": "support status not stated",
+    "source": "https://www.asus.com/uk/supportonly/rt-be96u/helpdesk_bios/"
+  }
+}

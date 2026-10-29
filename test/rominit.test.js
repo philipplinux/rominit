@@ -23,7 +23,7 @@ test('real catalog validates', () => {
   assert.deepEqual(errors, []);
   for (const codename of ['hero2lte', 'laurel_sprout', 'star2lte', 'starlte', 'oriole']) assert.ok(devices.some(d => d.codename === codename), codename);
   const supportOnly = devices.filter(d => d.supportOnly);
-  assert.equal(supportOnly.length, 27);
+  assert.equal(supportOnly.length, 49);
   assert.ok(supportOnly.every(d => !d.roms.length && d.supportUrl.startsWith('https://')));
   // Link-only ROMs: the publisher's installer flashes; no stages allowed next to it.
   const external = device('oriole');

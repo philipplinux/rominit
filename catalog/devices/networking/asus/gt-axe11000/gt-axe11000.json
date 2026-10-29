@@ -1,0 +1,49 @@
+{
+  "codename": "gt-axe11000",
+  "vendor": "ASUS",
+  "name": "ROG GT-AXE11000",
+  "series": "ROG Rapture Wi-Fi 6",
+  "family": "ROG Rapture Wi-Fi 6",
+  "variant": "GT-AXE11000",
+  "models": [
+    "GT-AXE11000"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://www.asuswrt-merlin.net/about",
+  "supportLabel": "AsusWrt-Merlin supported devices",
+  "notes": "This support-only entry covers ROG GT-AXE11000 (GT-AXE11000). It summarizes the ASUS stock firmware and AsusWrt-Merlin support listed for this model. No firmware was flashed.",
+  "hardware": {
+    "cpu": "1.8 GHz quad-core",
+    "ram": "1 GB RAM",
+    "gpu": "Not specified.",
+    "display": "Not specified.",
+    "storage": "256 MB flash",
+    "source": "https://www.asus.com/microsite/better-WiFi-for-SMB/ROG-Rapture-GT-AXE11000_datasheet.pdf",
+    "note": "Wi-Fi: Tri-band WiFi 6E: 2.4 GHz, 5 GHz and 6 GHz each 4x4, up to 1148 + 4804 + 4804 Mbps; Ports: 1× Gigabit WAN, 4× Gigabit LAN, 1× 2.5G/1G multi-gig WAN/LAN, 2× USB 3.2 Gen 1; Antennas: 8 external, non-detachable; SoC is not named in the product specification."
+  },
+  "software": {
+    "os": "ASUS stock firmware",
+    "latestFirmware": "3.0.0.4.388_24059",
+    "released": "2026-10-22",
+    "checked": "2026-10-28",
+    "source": "https://www.asus.com/uk/supportonly/gt-axe11000/helpdesk_bios/"
+  },
+  "supportRoutes": [
+    {
+      "section": "projects",
+      "name": "AsusWrt-Merlin",
+      "kind": "Community firmware",
+      "description": "AsusWrt-Merlin 3004.388.12_2 (2026-08-20) is listed for this model. Check the supported-device list for the model and any hardware-revision distinctions.",
+      "requirements": [
+        "Confirm the exact model and any hardware revision against the linked supported-device list; similar model names can use different firmware."
+      ],
+      "url": "https://www.asuswrt-merlin.net/about",
+      "checked": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "unknown",
+    "summary": "support status not stated",
+    "source": "https://www.asus.com/uk/supportonly/gt-axe11000/helpdesk_bios/"
+  }
+}

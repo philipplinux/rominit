@@ -1,0 +1,49 @@
+{
+  "codename": "rt-ax86u",
+  "vendor": "ASUS",
+  "name": "RT-AX86U",
+  "series": "RT Wi-Fi 6",
+  "family": "RT Wi-Fi 6",
+  "variant": "RT-AX86U",
+  "models": [
+    "RT-AX86U"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://www.asuswrt-merlin.net/about",
+  "supportLabel": "AsusWrt-Merlin supported devices",
+  "notes": "This support-only entry covers RT-AX86U (RT-AX86U). It summarizes the ASUS stock firmware and AsusWrt-Merlin support listed for this model. No firmware was flashed.",
+  "hardware": {
+    "cpu": "1.8 GHz quad-core",
+    "ram": "1 GB RAM",
+    "gpu": "Not specified.",
+    "display": "Not specified.",
+    "storage": "256 MB flash",
+    "source": "https://www.asus.com/us/networking-iot-servers/wifi-routers/asus-wifi-routers/rt-ax86u/techspec/",
+    "note": "Wi-Fi: AX5700: 2.4 GHz 3x3 up to 861 Mbps, 5 GHz 4x4 up to 4804 Mbps; Ports: 1 WAN, 4 LAN, one configurable 2.5 GbE WAN/LAN port, 2 USB 3.2 Gen 1; SoC is not named in the product specification."
+  },
+  "software": {
+    "os": "ASUS stock firmware",
+    "latestFirmware": "3.0.0.4.388_24437",
+    "released": "2026-10-22",
+    "checked": "2026-10-28",
+    "source": "https://www.asus.com/uk/supportonly/rt-ax86u/helpdesk_bios/"
+  },
+  "supportRoutes": [
+    {
+      "section": "projects",
+      "name": "AsusWrt-Merlin",
+      "kind": "Community firmware",
+      "description": "AsusWrt-Merlin 3004.388.12_2 (2026-08-20) is listed for this model. Check the supported-device list for the model and any hardware-revision distinctions.",
+      "requirements": [
+        "Confirm the exact model and any hardware revision against the linked supported-device list; similar model names can use different firmware."
+      ],
+      "url": "https://www.asuswrt-merlin.net/about",
+      "checked": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "unknown",
+    "summary": "support status not stated",
+    "source": "https://www.asus.com/uk/supportonly/rt-ax86u/helpdesk_bios/"
+  }
+}

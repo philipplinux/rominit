@@ -1,0 +1,72 @@
+{
+  "codename": "rt-be7200",
+  "vendor": "ASUS",
+  "name": "ASUS RT-BE7200",
+  "series": "RT Wi-Fi 7",
+  "family": "RT Wi-Fi 7",
+  "variant": "RT-BE7200",
+  "models": [
+    "RT-BE7200"
+  ],
+  "supportOnly": true,
+  "supportUrl": "https://www.asuswrt-merlin.net/about",
+  "supportLabel": "AsusWrt-Merlin community firmware support",
+  "notes": "ASUS publishes stock firmware for the RT-BE7200, but its page has no hardware table; do not copy the RT-BE88U hardware specs. Merlin uses the RT-BE88U image for this model.",
+  "software": {
+    "os": "ASUS stock firmware",
+    "latestFirmware": "3.0.0.6.102_39451",
+    "released": "2026-10-21",
+    "checked": "2026-10-28",
+    "source": "https://www.asus.com/us/supportonly/rt-be7200/helpdesk_bios/"
+  },
+  "ownership": {
+    "label": "AsusWrt-Merlin community firmware",
+    "details": "AsusWrt-Merlin 3006.102.9_0 (2026-09-23) supports the RT-BE7200 through the RT-BE88U image; no RT-BE7200-named file exists.",
+    "source": "https://www.asuswrt-merlin.net/about"
+  },
+  "supportRoutes": [
+    {
+      "section": "custom-os",
+      "name": "AsusWrt-Merlin",
+      "kind": "Stable community firmware",
+      "description": "AsusWrt-Merlin 3006.102.9_0 (2026-09-23) supports the RT-BE7200 through the RT-BE88U image; no RT-BE7200-named file exists.",
+      "requirements": [
+        "Use the RT-BE88U Merlin image that the project lists for the RT-BE7200; upload it through the router web UI.",
+        "Reboot the router before flashing; low memory may cause an image rejection.",
+        "On ASUS stock 3.0.0.6.102_37000 or newer, the first Merlin flash may need the documented downgrade check over SSH.",
+        "No RT-BE7200-named Merlin file exists; the RT-BE88U image is shared, while stock firmware is separate."
+      ],
+      "url": "https://www.asuswrt-merlin.net/download",
+      "checked": "2026-10-28"
+    },
+    {
+      "section": "recovery",
+      "name": "ASUS stock firmware",
+      "kind": "Official release and rollback reference",
+      "description": "ASUS lists 3.0.0.6.102_39451 dated 2026-10-21 for RT-BE7200 on its model support page.",
+      "requirements": [
+        "Match RT-BE7200 exactly and check the model support page before downloading.",
+        "ASUS demonstrates Firmware Restoration separately as its rescue-mode route."
+      ],
+      "url": "https://www.asus.com/us/supportonly/rt-be7200/helpdesk_bios/",
+      "checked": "2026-10-28"
+    },
+    {
+      "section": "recovery",
+      "name": "Firmware Restoration",
+      "kind": "ASUS rescue-mode recovery utility",
+      "description": "ASUS documents Firmware Restoration for rescue mode. Its FAQ demonstrates the procedure on an RT-AC68U, so its LED timing is not confirmed for this model.",
+      "requirements": [
+        "Unzip the stock firmware before using the utility; it cannot upload an archive.",
+        "Use a wired PC with the documented static IP, enter rescue mode by holding Reset while powering on, then restore the stock image."
+      ],
+      "url": "https://www.asus.com/support/faq/1000814/",
+      "checked": "2026-10-28"
+    }
+  ],
+  "officialSupport": {
+    "status": "unknown",
+    "summary": "support status not stated",
+    "source": "https://www.asus.com/us/supportonly/rt-be7200/helpdesk_bios/"
+  }
+}
