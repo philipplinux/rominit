@@ -11,7 +11,7 @@
       "notes": "Single model; clamshell form factor"
     }
   ],
-  "summary": "Miyoo's clamshell-form-factor handheld. spruceOS lists it with 'Stable' support status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
+  "summary": "Miyoo's clamshell-form-factor handheld. spruceOS lists it with 'Stable' support status; Koriki supports Mini Flip models and MinUI lists it as 'Legacy'. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-29).",
   "specs": {
     "cpu": "not sourced",
     "gpu": "not sourced",
@@ -24,14 +24,14 @@
       "model": "Mini Flip",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Clamshell Miyoo device. spruceOS reports 'Stable' compatibility. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
+      "notes": "Clamshell Miyoo device. spruceOS reports 'Stable' compatibility; Koriki supports Mini Flip models; MinUI lists it as 'Legacy'. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
       "specs": {}
     }
   ],
   "firmware": {
     "version": "Miyoo stock OS",
     "shortVersion": "varies",
-    "checkedDate": "2026-10-28",
+    "checkedDate": "2026-10-29",
     "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
   },
   "firmwareOptions": [],
@@ -52,10 +52,10 @@
           ],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "spruceOS lists the Miyoo Mini Flip with 'Stable' support status (checked 2026-10-28)."
+          "note": "spruceOS lists the Miyoo Mini Flip with 'Stable' support status (checked 2026-10-29)."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Miyoo Mini Flip unit.",
         "A new branded microSD card (do NOT use the stock card)."
@@ -69,6 +69,74 @@
           "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
         }
       ]
+    },
+    {
+      "name": "Koriki",
+      "kind": "os",
+      "models": [
+        "mini-flip"
+      ],
+      "firmware": "Custom firmware written to a microSD card; one card boots all supported Miyoo Mini family models.",
+      "summary": "Custom firmware for the Miyoo Mini family, with Mini Flip-specific lid-sensor and headphone handling.",
+      "source": "https://github.com/Rparadise-Team/Koriki/releases",
+      "compatibility": [
+        {
+          "models": [
+            "mini-flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Koriki's release notes name Mini Flip models (pause for lid-sensor issues, headphone detection) and describe one microSD card that auto-detects the device model (checked 2026-10-29)."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A compatible Miyoo Mini Flip unit.",
+        "A new branded microSD card (do NOT use the stock card)."
+      ],
+      "warnings": [
+        "Koriki is installed on a microSD card; keep the stock card untouched so the device can return to stock."
+      ],
+      "links": [
+        {
+          "label": "Koriki releases",
+          "url": "https://github.com/Rparadise-Team/Koriki/releases"
+        }
+      ]
+    },
+    {
+      "name": "MinUI",
+      "kind": "os",
+      "models": [
+        "mini-flip"
+      ],
+      "firmware": "Custom launcher and libretro frontend on an SD card.",
+      "summary": "Focused custom launcher and libretro frontend; its supported-devices table lists the Miyoo Mini Flip as 'Legacy'.",
+      "source": "https://github.com/shauninman/MinUI",
+      "compatibility": [
+        {
+          "models": [
+            "mini-flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "MinUI's supported-devices table lists 'Miyoo Mini Flip' (added MinUI-20251023-0) with status 'Legacy' (checked 2026-10-29)."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A compatible Miyoo Mini Flip unit.",
+        "A new branded microSD card (do NOT use the stock card)."
+      ],
+      "warnings": [
+        "MinUI marks the Mini Flip's support as 'Legacy', meaning it will be retired in a future update."
+      ],
+      "links": [
+        {
+          "label": "MinUI supported devices",
+          "url": "https://github.com/shauninman/MinUI"
+        }
+      ]
     }
   ],
   "highlights": [],
@@ -77,6 +145,14 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "Koriki: releases",
+      "url": "https://github.com/Rparadise-Team/Koriki/releases"
+    },
+    {
+      "label": "MinUI: supported devices",
+      "url": "https://github.com/shauninman/MinUI"
     }
   ]
 }

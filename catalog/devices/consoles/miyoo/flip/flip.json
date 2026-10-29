@@ -11,7 +11,7 @@
       "notes": "Single model; RK3566, requires GammaLoader patch for SD boot"
     }
   ],
-  "summary": "Miyoo's RK3566-based handheld. KNULLI states it cannot boot an OS from the SD slot by default: the stock firmware must be patched with GammaLoader first. After patching, the primary SD card slot is on the right side.",
+  "summary": "Miyoo's RK3566-based handheld. KNULLI states it cannot boot an OS from the SD slot by default: the stock firmware must be patched with GammaLoader first. After patching, the primary SD card slot is on the right side. MinUI also lists the Flip, with 'Legacy' support, and installs from the stock OS app loader.",
   "specs": {
     "cpu": "Rockchip RK3566",
     "gpu": "Mali-G52 (RK3566)",
@@ -24,7 +24,7 @@
       "model": "Flip",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "RK3566 SoC. KNULLI: install GammaLoader (Gamma Bootloader Installer app on the stock OS) before KNULLI so the device can boot from SD; the stock OS stays intact and still works. After patching, the primary SD card slot is on the right side. KNULLI interface: Emulation Station.",
+      "notes": "RK3566 SoC. KNULLI: install GammaLoader (Gamma Bootloader Installer app on the stock OS) before KNULLI so the device can boot from SD; the stock OS stays intact and still works. After patching, the primary SD card slot is on the right side. KNULLI interface: Emulation Station. MinUI lists the Flip as 'Legacy' and installs from the stock OS app loader.",
       "specs": {
         "cpu": "Rockchip RK3566"
       }
@@ -85,6 +85,42 @@
       ]
     },
     {
+      "name": "MinUI",
+      "kind": "os",
+      "models": [
+        "flip"
+      ],
+      "firmware": "Custom launcher and libretro frontend on an SD card; installed from the stock OS app loader.",
+      "summary": "Focused custom launcher and libretro frontend; its supported-devices table lists the Miyoo Flip as 'Legacy'.",
+      "source": "https://github.com/shauninman/MinUI",
+      "compatibility": [
+        {
+          "models": [
+            "flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "MinUI's supported-devices table lists 'Miyoo Flip' (added MinUI-20250111-0) with status 'Legacy' (checked 2026-10-29)."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A compatible Miyoo Flip unit.",
+        "A new branded microSD card formatted to FAT32.",
+        "MinUI.zip and the miyoo355 folder from a MinUI release."
+      ],
+      "warnings": [
+        "MinUI marks the Flip's support as 'Legacy', meaning it will be retired in a future update.",
+        "MinUI's install instructions put the card in the right slot (beneath the power button) and do not mention GammaLoader; only the KNULLI route documents the GammaLoader patch."
+      ],
+      "links": [
+        {
+          "label": "MinUI supported devices",
+          "url": "https://github.com/shauninman/MinUI"
+        }
+      ]
+    },
+    {
       "name": "spruceOS",
       "kind": "os",
       "models": [
@@ -129,6 +165,10 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "MinUI: supported devices",
+      "url": "https://github.com/shauninman/MinUI"
     },
     {
       "label": "KNULLI: releases (Scarab 2026-05-11, knulli-rk3568-miyoo-flip)",

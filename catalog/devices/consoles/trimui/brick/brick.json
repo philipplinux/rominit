@@ -11,7 +11,8 @@
       "notes": "Single model; 3.2\" 1024×768 square display"
     }
   ],
-  "summary": "TriMUI's compact 3.2-inch A133P-based handheld with a 1024×768 square IPS display. KNULLI boots from a prepared SD card while the TrimUI stock OS stays installed on the device; remove the card to boot stock again.",
+  "summary": "TriMUI's compact 3.2-inch A133P-based handheld with a 1024×768 square IPS display. KNULLI and muOS boot from a prepared SD card while the TrimUI stock OS stays installed on the device; remove the card to boot stock again.",
+  "openByDesign": "KNULLI and muOS boot from an SD card; the stock OS returns when the card is removed",
   "specs": {
     "cpu": "Allwinner A133P (A133+), 1.8 GHz",
     "gpu": "Imagination PowerVR GE8300, 660 MHz",
@@ -64,7 +65,7 @@
           "note": "KNULLI publishes an A133 image for the Brick with Allwinner BSP and pvrsrvkm GL driver."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible TriMUI Brick unit.",
         "A good-quality SD card.",
@@ -82,6 +83,45 @@
         {
           "label": "KNULLI A133 firmware extraction",
           "url": "https://knulli.org/guides/firmware-extraction/A133-firmware-extract/"
+        }
+      ]
+    },
+    {
+      "name": "muOS (MustardOS)",
+      "kind": "os",
+      "models": [
+        "brick"
+      ],
+      "firmware": "Per-model A133 image (muOS 2606.0 Andromeda); written to an SD card with an image writer.",
+      "summary": "Lightweight Linux OS (MustardOS frontend plus RetroArch cores) for the TrimUI Brick. The image is written to an SD card; the stock system is untouched.",
+      "source": "https://muos.dev/devices",
+      "compatibility": [
+        {
+          "models": [
+            "brick"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "muOS 2606.0 lists the TrimUI Brick (and Brick Pro) on its supported-devices page."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A TrimUI Brick from muOS's supported-devices page.",
+        "An SD card of 16 GB or larger.",
+        "A computer with an SD card reader and an image writer that reads .img.gz files."
+      ],
+      "warnings": [
+        "muOS writes a whole-disk image; the target card is erased."
+      ],
+      "links": [
+        {
+          "label": "muOS: supported devices",
+          "url": "https://muos.dev/devices"
+        },
+        {
+          "label": "muOS: install guide",
+          "url": "https://muos.dev/installation/install"
         }
       ]
     },
@@ -104,7 +144,7 @@
           "note": "spruceOS lists the TriMUI Brick with 'Stable' support status."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible TriMUI Brick unit.",
         "A new branded microSD card from a reputable source (do NOT use the stock card)."
@@ -138,6 +178,10 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "muOS: supported devices",
+      "url": "https://muos.dev/devices"
     }
   ]
 }

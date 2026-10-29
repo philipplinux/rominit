@@ -11,7 +11,8 @@
       "notes": "Single model; large 4.96\" square display"
     }
   ],
-  "summary": "TriMUI's 4.96-inch A133P-based handheld with a fully laminated square IPS display. Stock firmware is TrimUI's own OS; KNULLI's guide uses ADB on the stock OS to pull files for joystick calibration. KNULLI and spruceOS support available.",
+  "summary": "TriMUI's 4.96-inch A133P-based handheld with a fully laminated square IPS display. Stock firmware is TrimUI's own OS; KNULLI's guide uses ADB on the stock OS to pull files for joystick calibration. KNULLI, muOS and spruceOS support available.",
+  "openByDesign": "KNULLI and muOS boot from an SD card; the stock OS returns when the card is removed",
   "specs": {
     "cpu": "Allwinner A133P (A133+), 1.8 GHz",
     "gpu": "Imagination PowerVR GE8300",
@@ -64,7 +65,7 @@
           "note": "KNULLI publishes an A133 image for the Smart Pro with Allwinner BSP and pvrsrvkm GL driver. Joystick calibration via stock OS is required in some cases."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible TriMUI Smart Pro unit.",
         "A good-quality SD card.",
@@ -87,6 +88,45 @@
       ]
     },
     {
+      "name": "muOS (MustardOS)",
+      "kind": "os",
+      "models": [
+        "smart-pro"
+      ],
+      "firmware": "Per-model A133 image (muOS 2606.0 Andromeda); written to an SD card with an image writer.",
+      "summary": "Lightweight Linux OS (MustardOS frontend plus RetroArch cores) for the TrimUI Smart Pro. The image is written to an SD card; the stock system is untouched.",
+      "source": "https://muos.dev/devices",
+      "compatibility": [
+        {
+          "models": [
+            "smart-pro"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "muOS 2606.0 lists the TrimUI Smart Pro on its supported-devices page."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A TrimUI Smart Pro from muOS's supported-devices page.",
+        "An SD card of 16 GB or larger.",
+        "A computer with an SD card reader and an image writer that reads .img.gz files."
+      ],
+      "warnings": [
+        "muOS writes a whole-disk image; the target card is erased."
+      ],
+      "links": [
+        {
+          "label": "muOS: supported devices",
+          "url": "https://muos.dev/devices"
+        },
+        {
+          "label": "muOS: install guide",
+          "url": "https://muos.dev/installation/install"
+        }
+      ]
+    },
+    {
       "name": "spruceOS",
       "kind": "os",
       "models": [
@@ -105,7 +145,7 @@
           "note": "spruceOS lists the TriMUI Smart Pro with 'Stable' support status."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible TriMUI Smart Pro unit.",
         "A new branded microSD card (do NOT use the stock card)."
@@ -139,6 +179,10 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "muOS: supported devices",
+      "url": "https://muos.dev/devices"
     }
   ]
 }

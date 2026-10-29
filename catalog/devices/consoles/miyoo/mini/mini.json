@@ -24,14 +24,14 @@
       "model": "Mini v1–4",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Pocket-sized Miyoo device. spruceOS groups Mini revisions v1–4 under one supported entry ('Stable'). spruceOS lists the Miyoo Mini Plus as a separate Stable entry from Mini v1-4; OnionOS covers both Mini and Mini+. This record covers Mini v1-4 only. Four documented model revisions share the same form factor. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
+      "notes": "Pocket-sized Miyoo device. spruceOS groups Mini revisions v1–4 under one supported entry ('Stable'). spruceOS lists the Miyoo Mini Plus as a separate Stable entry from Mini v1-4; Onion's installation page covers both Mini (MM) and Mini+ (MMP) and calls Onion a frontend on the SD card, with the firmware as the backend inside the device. This record covers Mini v1-4 only. Four documented model revisions share the same form factor. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
       "specs": {}
     }
   ],
   "firmware": {
     "version": "Miyoo stock OS",
     "shortVersion": "varies",
-    "checkedDate": "2026-10-28",
+    "checkedDate": "2026-10-29",
     "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
   },
   "firmwareOptions": [],
@@ -70,6 +70,121 @@
           "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
         }
       ]
+    },
+    {
+      "name": "OnionOS",
+      "kind": "os",
+      "models": [
+        "mini-v1-4"
+      ],
+      "firmware": "Frontend on the SD card, not a firmware replacement: Onion's installation page calls the firmware the backend inside the device. Requires stock firmware 20220419**** or newer (for Onion v3.10 and above).",
+      "summary": "Community frontend for the Miyoo Mini that runs from the SD card on top of the stock firmware.",
+      "source": "https://onionui.github.io/docs/installation",
+      "compatibility": [
+        {
+          "models": [
+            "mini-v1-4"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Onion's installation page names the Miyoo Mini (MM) and requires at least firmware 20220419**** for Onion v3.10 and above. The page gives example versions, not an exhaustive tested matrix, so no exact firmware list is claimed here; it marks 20231027 as only for MM v4."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Miyoo Mini (MM) with stock firmware 20220419**** or newer.",
+        "A branded SD card formatted FAT32, not exFAT.",
+        "The Onion release zip extracted, with its folders copied to the SD card root."
+      ],
+      "warnings": [
+        "Onion is a frontend, not a full OS replacement; it runs on the stock firmware, which must already meet the minimum version.",
+        "Devices on firmware 20221216**** or 20221224**** ('The Boya Incident') need the community patch first.",
+        "The SD card included with the Miyoo Mini is known to be slow and can ruin the experience or data; use a reputable brand."
+      ],
+      "links": [
+        {
+          "label": "Onion: installation and firmware check",
+          "url": "https://onionui.github.io/docs/installation"
+        },
+        {
+          "label": "Onion: fresh install",
+          "url": "https://onionui.github.io/docs/installation/fresh"
+        }
+      ]
+    },
+    {
+      "name": "Koriki",
+      "kind": "os",
+      "models": [
+        "mini-v1-4"
+      ],
+      "firmware": "SD-card software compilation that runs over the stock firmware; release v1.7.0 states compatibility with Miyoo Mini v1, v2, v3 and v4.",
+      "summary": "SimpleMenu-based software compilation installed on the microSD card over the stock firmware.",
+      "source": "https://github.com/Rparadise-Team/Koriki",
+      "compatibility": [
+        {
+          "models": [
+            "mini-v1-4"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Koriki's README says it runs over stock firmware; its v1.7.0 release notes list the Miyoo Mini v1, v2, v3 and v4 as compatible, with one card auto-detecting the model."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Miyoo Mini v1, v2, v3 or v4.",
+        "A microSD card formatted FAT32 with 32K clusters.",
+        "For a new install: Koriki_vx.x.x.img.gz written with balenaEtcher or Rufus, or Koriki_vx.x.x_full.zip unzipped to the card root."
+      ],
+      "warnings": [
+        "Koriki runs over the stock firmware rather than replacing it."
+      ],
+      "links": [
+        {
+          "label": "Koriki repository",
+          "url": "https://github.com/Rparadise-Team/Koriki"
+        },
+        {
+          "label": "Koriki releases and install notes",
+          "url": "https://github.com/Rparadise-Team/Koriki/releases"
+        }
+      ]
+    },
+    {
+      "name": "MinUI",
+      "kind": "os",
+      "models": [
+        "mini-v1-4"
+      ],
+      "firmware": "Custom launcher and libretro frontend on a single SD card; the supported-devices table lists Miyoo Mini with Legacy status.",
+      "summary": "Minimal launcher and libretro frontend distributed for a single SD card across several handhelds.",
+      "source": "https://github.com/shauninman/MinUI",
+      "compatibility": [
+        {
+          "models": [
+            "mini-v1-4"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "MinUI's supported-devices table lists Miyoo Mini (added MinUI-20230922b-2) with Legacy status, which the page defines as 'will be retired in a future update'."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Miyoo Mini listed in MinUI's supported-devices table.",
+        "A microSD card; MinUI describes one card compatible with multiple listed devices."
+      ],
+      "warnings": [
+        "MinUI marks Miyoo Mini as Legacy; the page says Legacy devices will be retired in a future update.",
+        "MinUI describes itself as a launcher and libretro frontend, not a full OS image."
+      ],
+      "links": [
+        {
+          "label": "MinUI repository and supported devices",
+          "url": "https://github.com/shauninman/MinUI"
+        }
+      ]
     }
   ],
   "highlights": [],
@@ -78,6 +193,18 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "Onion: installation and firmware check",
+      "url": "https://onionui.github.io/docs/installation"
+    },
+    {
+      "label": "Koriki repository",
+      "url": "https://github.com/Rparadise-Team/Koriki"
+    },
+    {
+      "label": "MinUI repository and supported devices",
+      "url": "https://github.com/shauninman/MinUI"
     }
   ]
 }
