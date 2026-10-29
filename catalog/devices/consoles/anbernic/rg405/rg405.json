@@ -16,7 +16,7 @@
       "notes": "Plastic shell, vertical layout; T618 platform with its own vendor spec sheet"
     }
   ],
-  "summary": "Anbernic's 4-inch Unisoc T618 Android handhelds — RG405M (CNC aluminium, horizontal) and RG405V (plastic, vertical) — running Android 12. Each model's own vendor page carries the NOTICE that third-party OS installation is a one-way street: no flashing back to the official OS, and the warranty becomes invalid. No Linux custom firmware exists for this chip from the community projects tracked here.",
+  "summary": "Anbernic's 4-inch Unisoc T618 Android handhelds — RG405M (CNC aluminium, horizontal) and RG405V (plastic, vertical) — running Android 12. Each model's own vendor page carries the NOTICE that third-party OS installation is a one-way street: no flashing back to the official OS, and the warranty becomes invalid. GammaOS Next (a LineageOS-based Android build) publishes a T618 image; no Linux custom firmware exists for this chip from the community projects tracked here.",
   "specs": {
     "cpu": "Unisoc Tiger T618, 64-bit octa-core: 2× Cortex-A75 @2.0 GHz + 6× Cortex-A55 @2.0 GHz",
     "gpu": "Mali G52 @850 MHz",
@@ -66,7 +66,53 @@
     "source": "https://anbernic.com/products/rg405m"
   },
   "firmwareOptions": [],
-  "homebrew": [],
+  "homebrew": [
+    {
+      "name": "GammaOS Next",
+      "kind": "os",
+      "models": [
+        "rg405m",
+        "rg405v"
+      ],
+      "firmware": "Android 14 (LineageOS 21) image, Full or Lite; v1.1 for the T618 devices, flashed over fastbootd.",
+      "summary": "LineageOS-based Android replacement for Anbernic T618 handhelds. Fresh install only, flashed over fastbootd after unlocking the bootloader; the device is wiped.",
+      "source": "https://github.com/TheGammaSqueeze/GammaOSNext",
+      "compatibility": [
+        {
+          "models": [
+            "rg405m",
+            "rg405v"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "GammaOS Next lists 'Anbernic RG405M / RG405V / RG505' with a separate v1.1 image per model and edition. Its installation wiki states there is no upgrade path from GammaOS v1.5.1 or stock, that installing wipes the device, and that the bootloader must be unlocked first (Chrome subut-rehost or unisoc-unlock), then the image flashed from fastbootd."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Windows, macOS or Linux PC with ADB and fastboot platform tools.",
+        "Unisoc USB drivers on Windows (shipped in the release as UnisocDrivers/DPInst64.exe).",
+        "USB debugging enabled in the stock Android developer options; remove any microSD card before entering fastboot.",
+        "7-Zip for the split .7z.001/.002/... release archives.",
+        "The GammaOS Next Patreon password while the release is still Patreon-locked (public after 60 days)."
+      ],
+      "warnings": [
+        "Unlocking the bootloader factory-resets the device, and installing GammaOS Next wipes it again.",
+        "Fresh install only: the wiki states there is no upgrade path from GammaOS v1.5.1 (Android 12) or stock.",
+        "This is an Android replacement, not a Linux port; it does not remove Anbernic's one-way-door notice for third-party OS installation."
+      ],
+      "links": [
+        {
+          "label": "GammaOS Next: T618 release (v1.1)",
+          "url": "https://github.com/TheGammaSqueeze/GammaOSNext/releases/tag/v.1.1.0-ANBERNICT618"
+        },
+        {
+          "label": "GammaOS Next: installation guide",
+          "url": "https://github.com/TheGammaSqueeze/GammaOSNext/wiki/GammaOS-Next-Installation"
+        }
+      ]
+    }
+  ],
   "highlights": [],
   "communities": [],
   "sources": [
@@ -89,6 +135,14 @@
     {
       "label": "ROCKNIX: device index (no T618 Anbernic device listed)",
       "url": "https://rocknix.org/devices/"
+    },
+    {
+      "label": "GammaOS Next: LineageOS-based Android for Anbernic T618 devices",
+      "url": "https://github.com/TheGammaSqueeze/GammaOSNext"
+    },
+    {
+      "label": "GammaOS Next: installation guide (bootloader unlock, fastbootd, wipe)",
+      "url": "https://github.com/TheGammaSqueeze/GammaOSNext/wiki/GammaOS-Next-Installation"
     }
   ]
 }

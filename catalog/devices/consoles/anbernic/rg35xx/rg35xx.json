@@ -16,7 +16,8 @@
     { "id": "rg40xx-v", "name": "RG40XX V" },
     { "id": "rg-cubexx", "name": "RG CubeXX" }
   ],
-  "summary": "Anbernic's Allwinner H700 handhelds whose operating system lives on an SD card. KNULLI, ROCKNIX and spruceOS each ship a separate image per model; the stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "summary": "Anbernic's Allwinner H700 handhelds whose operating system lives on an SD card. KNULLI, ROCKNIX, muOS and spruceOS each ship a separate image per model; the stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "openByDesign": "the OS lives on the SD card, so any H700 model boots a card written with another system",
   "specs": {
     "cpu": "Allwinner H700, 4x Arm Cortex-A53 (1.5 GHz vendor claim; ROCKNIX runs 1.4 GHz with a 1.5 GHz overclock option)",
     "gpu": "Mali-G31 MP2 (dual-core)",
@@ -88,10 +89,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "KNULLI's device table does not name these models (checked 2026-10-28)."
+          "note": "KNULLI's device table does not name these models (checked 2026-10-29)."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Anbernic H700 model from KNULLI's device table.",
         "A good-quality SD card; a second card is safer than reusing the stock card.",
@@ -156,10 +157,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "ROCKNIX's device index does not list the RG34XX SP (checked 2026-10-28)."
+          "note": "ROCKNIX's device index does not list the RG34XX SP (checked 2026-10-29)."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Anbernic H700 model from ROCKNIX's device index.",
         "A good-quality SD card.",
@@ -183,6 +184,66 @@
         {
           "label": "ROCKNIX: RG35XX H",
           "url": "https://rocknix.org/devices/anbernic/rg35xx-h/"
+        }
+      ]
+    },
+    {
+      "name": "muOS (MustardOS)",
+      "kind": "os",
+      "models": [
+        "rg35xx-h",
+        "rg35xx-plus",
+        "rg35xx-2024",
+        "rg35xx-sp",
+        "rg35xx-pro",
+        "rg28xx",
+        "rg34xx",
+        "rg34xx-sp",
+        "rg40xx-h",
+        "rg40xx-v",
+        "rg-cubexx"
+      ],
+      "firmware": "Per-model H700 image (muOS 2606.0 Andromeda); written to an SD card with an image writer.",
+      "summary": "Lightweight Linux OS (MustardOS frontend plus RetroArch cores) for H700 handhelds. The image is written to an SD card; the stock card is untouched.",
+      "source": "https://muos.dev/devices",
+      "compatibility": [
+        {
+          "models": [
+            "rg35xx-h",
+            "rg35xx-plus",
+            "rg35xx-2024",
+            "rg35xx-sp",
+            "rg35xx-pro",
+            "rg28xx",
+            "rg34xx",
+            "rg34xx-sp",
+            "rg40xx-h",
+            "rg40xx-v",
+            "rg-cubexx"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "muOS 2606.0 lists these H700 models on its supported-devices page; it labels the RG28XX and RG34XX rows 'RG28XX H' and 'RG34XX H'."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A compatible Anbernic H700 model from muOS's supported-devices page.",
+        "An SD card of 16 GB or larger.",
+        "A computer with an SD card reader and an image writer that reads .img.gz files."
+      ],
+      "warnings": [
+        "muOS writes a whole-disk image; the target card is erased.",
+        "muOS ships a separate image per model; cross-flashing does not boot."
+      ],
+      "links": [
+        {
+          "label": "muOS: supported devices",
+          "url": "https://muos.dev/devices"
+        },
+        {
+          "label": "muOS: install guide",
+          "url": "https://muos.dev/installation/install"
         }
       ]
     },
@@ -228,10 +289,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "spruceOS's supported-device list does not name the RG35XX 2024 (checked 2026-10-28)."
+          "note": "spruceOS's supported-device list does not name the RG35XX 2024 (checked 2026-10-29)."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Anbernic model from spruceOS's supported-device list.",
         "A FAT32 SD card.",
@@ -250,6 +311,41 @@
         {
           "label": "spruceOS repository",
           "url": "https://github.com/spruceUI/spruceOS"
+        }
+      ]
+    },
+    {
+      "name": "Batocera.linux",
+      "kind": "os",
+      "models": [
+        "rg40xx-v"
+      ],
+      "firmware": "SD card image (Batocera 43.1 handheld build); written to an SD card.",
+      "summary": "Batocera.linux's own handheld build, the upstream project ROCKNIX and KNULLI derive from. Written to an SD card.",
+      "source": "https://batocera.org/download",
+      "compatibility": [
+        {
+          "models": [
+            "rg40xx-v"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Batocera 43.1 lists 'RG40XX V (original panel)' only; the other H700 models in this record are not on its handheld list. The page gives the download only, not install steps."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A device from Batocera's handheld download list.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "The listed build is for the RG40XX V with the original panel; check the panel before writing."
+      ],
+      "links": [
+        {
+          "label": "Batocera: handheld downloads",
+          "url": "https://batocera.org/download"
         }
       ]
     },
@@ -325,11 +421,11 @@
   "highlights": [
     {
       "title": "Custom firmware",
-      "name": "KNULLI / ROCKNIX / spruceOS",
+      "name": "KNULLI / ROCKNIX / muOS / spruceOS",
       "firmware": "Runs from SD card; no internal flash or bootloader unlock",
-      "summary": "Three community operating systems boot from a prepared SD card on the H700 models. Each publishes a separate image per model, so the model suffix matters.",
+      "summary": "Four community operating systems boot from a prepared SD card on the H700 models. Each publishes a separate image per model, so the model suffix matters.",
       "source": "https://knulli.org/devices/",
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "target": "console-os-section"
     },
     {
@@ -379,6 +475,18 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://raw.githubusercontent.com/wiki/spruceUI/spruceOS/Supported-Devices.md"
+    },
+    {
+      "label": "muOS: supported devices",
+      "url": "https://muos.dev/devices"
+    },
+    {
+      "label": "muOS: install guide",
+      "url": "https://muos.dev/installation/install"
+    },
+    {
+      "label": "Batocera: handheld downloads (43.1, lists RG40XX V original panel)",
+      "url": "https://batocera.org/download"
     }
   ],
   "copy": {

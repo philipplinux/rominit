@@ -11,7 +11,7 @@
       "notes": "Single model; black or translucent blue"
     }
   ],
-  "summary": "Anbernic's top-end Android handheld as of 2026-10: Unisoc T820 (6 nm) with 8 GB RAM, UFS 2.2 storage, active cooling (fan + heat pipe), and a 5.48-inch AMOLED panel at 1080×1920 with USB-C DisplayPort 1080p out. Running Android 13. No Linux custom firmware exists for the T820 from community projects. Vendor publishes Android 13 builds via FOTA and System Update index.",
+  "summary": "Anbernic's top-end Android handheld as of 2026-10: Unisoc T820 (6 nm) with 8 GB RAM, UFS 2.2 storage, active cooling (fan + heat pipe), and a 5.48-inch AMOLED panel at 1080×1920 with USB-C DisplayPort 1080p out. Running Android 13. GammaOS Next (a LineageOS-based Android build) publishes a T820 image; no Linux custom firmware exists for the T820 from community projects. Vendor publishes Android 13 builds via FOTA and System Update index.",
   "specs": {
     "cpu": "Unisoc T820, 6 nm: 1× Cortex-A76 @2.7 GHz + 3× Cortex-A76 @2.3 GHz + 4× Cortex-A55 @2.1 GHz",
     "gpu": "Quad-core Mali-G57 @850 MHz",
@@ -45,7 +45,50 @@
     "source": "https://anbernic.com/pages/system-update"
   },
   "firmwareOptions": [],
-  "homebrew": [],
+  "homebrew": [
+    {
+      "name": "GammaOS Next",
+      "kind": "os",
+      "models": [
+        "rg556"
+      ],
+      "firmware": "Android 13/14 (LineageOS 20/21) image, Full or Lite; v1.2 for the RG556, flashed with UnisocTools/SPRD on Windows.",
+      "summary": "LineageOS-based Android replacement for Anbernic T820 handhelds. Fresh install only, flashed from Windows with UnisocTools after unlocking the bootloader; the device is wiped.",
+      "source": "https://github.com/TheGammaSqueeze/GammaOSNext",
+      "compatibility": [
+        {
+          "models": [
+            "rg556"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "GammaOS Next lists the Anbernic RG556 with its own v1.2 image. Its installation wiki groups the RG556 with the T820 devices and requires Windows: Unisoc USB drivers, the bootloader unlock script (which factory-resets the device), then the .pac image flashed with the SPRD/ResearchDownload tool."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Windows PC: the wiki's RG556 path uses UnisocTools and ResearchDownload.exe.",
+        "Unisoc/Spreadtrum USB drivers (UnisocDrivers/DPInst64.exe in the release).",
+        "7-Zip for the split .7z.001/.002/... release archives.",
+        "The GammaOS Next Patreon password while the release is still Patreon-locked (public after 60 days)."
+      ],
+      "warnings": [
+        "Unlocking the bootloader factory-resets the device, and installing GammaOS Next wipes it again.",
+        "Fresh install only; the wiki documents no upgrade path from the stock Anbernic Android build.",
+        "This is an Android replacement, not a Linux port for the T820."
+      ],
+      "links": [
+        {
+          "label": "GammaOS Next: releases",
+          "url": "https://github.com/TheGammaSqueeze/GammaOSNext/releases"
+        },
+        {
+          "label": "GammaOS Next: installation guide",
+          "url": "https://github.com/TheGammaSqueeze/GammaOSNext/wiki/GammaOS-Next-Installation"
+        }
+      ]
+    }
+  ],
   "highlights": [],
   "communities": [],
   "sources": [
@@ -64,6 +107,14 @@
     {
       "label": "ROCKNIX: device index (no T820 Anbernic device listed)",
       "url": "https://rocknix.org/devices/"
+    },
+    {
+      "label": "GammaOS Next: LineageOS-based Android, RG556 v1.2",
+      "url": "https://github.com/TheGammaSqueeze/GammaOSNext"
+    },
+    {
+      "label": "GammaOS Next: installation guide (T820 bootloader unlock, UnisocTools flash)",
+      "url": "https://github.com/TheGammaSqueeze/GammaOSNext/wiki/GammaOS-Next-Installation"
     }
   ]
 }

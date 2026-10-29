@@ -18,6 +18,7 @@
     }
   ],
   "summary": "Windows 11 handheld PCs with AMD Ryzen Z1-series chips. They run Windows natively and support third-party Linux distros (SteamOS, Bazzite, ChimeraOS) as full OS replacements; back to stock is ASUS Cloud Recovery.",
+  "openByDesign": "a PC: ASUS lets you switch Secure Boot off in the BIOS, so operating systems that do not support it can boot",
   "specs": {
     "cpu": "AMD Ryzen Z1 Extreme (Zen 4, 8C/16T, up to 5.10 GHz) on 2023 launch and Ally X; 6C/12T Z1 variant on later 2023 Ally",
     "gpu": "AMD Radeon RDNA 3 — 12 CUs up to 2.7 GHz (8.6 TFLOPS) on Z1 Extreme and Ally X; 4 CUs up to 2.5 GHz (2.8 TFLOPS) on the Z1 SKU",
@@ -57,6 +58,7 @@
     {
       "name": "SteamOS (Valve)",
       "kind": "os",
+      "opens": ["linux"],
       "models": [
         "ally-rc71l",
         "ally-rc71l-z1",
@@ -77,7 +79,7 @@
           "note": "Valve's SteamOS Support Beta column lists these AMD handhelds. Steam Support may have limited ability to troubleshoot hardware outside the Powered-by list."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Ally model with an AMD APU.",
         "Secure Boot must be disabled in the UEFI BIOS.",
@@ -97,6 +99,7 @@
     {
       "name": "Bazzite (AGSA)",
       "kind": "os",
+      "opens": ["linux"],
       "models": [
         "ally-rc71l",
         "ally-rc71l-z1",
@@ -117,7 +120,7 @@
           "note": "Bazzite documents the Ally and Ally X explicitly. The page warns it may be outdated."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Ally model with an AMD APU.",
         "Secure Boot handling per Bazzite's installation guide."
@@ -180,6 +183,44 @@
         {
           "label": "ChimeraOS hardware compatibility",
           "url": "https://chimeraos.org/hardware/"
+        }
+      ]
+    },
+    {
+      "name": "Batocera.linux",
+      "kind": "os",
+      "opens": ["linux"],
+      "models": [
+        "ally-rc71l",
+        "ally-rc71l-z1",
+        "ally-x-rc72la"
+      ],
+      "firmware": "Linux-based; Batocera 43.1 publishes a handheld image for the ROG Ally and Ally X.",
+      "summary": "Batocera.linux's own handheld build for the ROG Ally and Ally X. The download page provides the image only, not install steps.",
+      "source": "https://batocera.org/download",
+      "compatibility": [
+        {
+          "models": [
+            "ally-rc71l",
+            "ally-rc71l-z1",
+            "ally-x-rc72la"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Batocera 43.1's handheld download list names 'ROG Ally' and 'ROG Ally X'; it does not name the Ryzen Z1 SKU separately. The page gives the download only, not install steps."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A device from Batocera's handheld download list."
+      ],
+      "warnings": [
+        "Batocera publishes a separate image per device; check the exact row before writing."
+      ],
+      "links": [
+        {
+          "label": "Batocera: handheld downloads",
+          "url": "https://batocera.org/download"
         }
       ]
     },
@@ -332,8 +373,16 @@
       "url": "https://rog.asus.com/support/faq/1048106/"
     },
     {
+      "label": "ASUS — how to enable/disable Secure Boot (Gaming Handheld)",
+      "url": "https://rog.asus.com/support/faq/1050047/"
+    },
+    {
       "label": "Valve — SteamOS installation and repair",
       "url": "https://help.steampowered.com/en/faqs/view/65B4-2AA3-5F37-4227"
+    },
+    {
+      "label": "Valve — SteamOS overview (Linux-based)",
+      "url": "https://store.steampowered.com/steamos"
     },
     {
       "label": "Bazzite — ASUS handhelds",
@@ -342,6 +391,10 @@
     {
       "label": "ChimeraOS — hardware compatibility",
       "url": "https://chimeraos.org/hardware/"
+    },
+    {
+      "label": "Batocera — handheld downloads",
+      "url": "https://batocera.org/download"
     }
   ],
   "highlights": [
