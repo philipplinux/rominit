@@ -65,7 +65,7 @@ function open(vault) {
     if (log) writeFileSync(abs('log.md'), readFileSync(abs('log.md'), 'utf8').trimEnd() + '\n' + log);
     return changed;
   };
-  return { text, has, title, links, folder, create, join: join2, index, save, today, addItem, href };
+  return { text, has, title, links, folder, create, set, join: join2, index, save, today, addItem, href };
 }
 
 const page = (/** @type {Record<string, string>} */ fm, /** @type {string} */ about, /** @type {string[]} */ sections) =>
@@ -111,6 +111,25 @@ export function fix(vault, agent = 'script') {
     const device = `${dirname(dirname(rom))}/${basename(dirname(dirname(rom)))}.md`;
     for (const os of v.links(rom).filter(l => l.startsWith('os/') && v.has(l) && frontmatter(v.text(l))?.type === 'project'))
       if (v.has(device) && !v.links(os).includes(device)) v.addItem(os, 'Devices in ROMvault', `- [${v.title(device)}](${v.href(os, device)})`);
+  }
+  // Group each OS page's `## Devices in ROMvault` under `### <Vendor>` (vendor = devices/<category>/<vendor>/), sorted.
+  for (const os of v.folder('os')) {
+    const lines = v.text(os).split('\n'), at = lines.indexOf('## Devices in ROMvault');
+    if (at < 0) continue;
+    let end = lines.findIndex((l, i) => i > at && l.startsWith('## '));
+    if (end < 0) end = lines.length;
+    const items = lines.slice(at + 1, end).filter(l => l.startsWith('- '));
+    if (items.some(l => !/^- \[[^\]]+\]\([^)]+\)/.test(l))) continue; // hand-written notes in the list: leave it alone
+    /** @type {Map<string, string[]>} */
+    const byVendor = new Map();
+    for (const item of items) {
+      const dir = relative(vault, resolve(dirname(join(vault, os)), decodeURI(item.match(/\]\(([^)]+)\)/)?.[1] ?? ''))).split('/')[2];
+      const name = v.title(`vendors/${dir}/${dir}.md`);
+      byVendor.set(name, [...byVendor.get(name) ?? [], item]);
+    }
+    const body = [...byVendor].sort(([a], [b]) => a.localeCompare(b)).flatMap(([name, list]) => [`### ${name}`, ...list.sort((a, b) => a.localeCompare(b, "en", { numeric: true })), '']);
+    const next = [...lines.slice(0, at + 1), ...body, ...lines.slice(end)].join('\n');
+    if (next !== v.text(os)) v.set(os, next);
   }
   return v.save(agent);
 }

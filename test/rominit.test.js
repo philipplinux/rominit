@@ -668,6 +668,7 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
     const created = fix(vault, 'test').create;
     assert.ok(created.has('vendors/google/series/google-pixel-7.md') && created.has('socs/sdm670.md'));
     assert.deepEqual(lint(vault), []);
+    assert.match(readFileSync(pmos, 'utf8'), /## Devices in ROMvault\n### Fairphone\n- \[Fairphone 4 \(fairphone-fp4\)\]/, 'OS device list is grouped by vendor');
     const tabletPage = join(vault, 'devices/tablets/google/tangorpro/tangorpro.md');
     const tabletText = readFileSync(tabletPage, 'utf8');
     writeFileSync(tabletPage, tabletText.replace('tags: [tablet,', 'tags: [phone,'));
