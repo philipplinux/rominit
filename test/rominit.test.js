@@ -688,6 +688,14 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
     writeFileSync(ps5Series, ps5Text.replace('\n## Links\n', '\n## Links\n- Homebrew: [PS5 homebrew](../../../devices/consoles/sony/ps5/ps5-homebrew.md)\n'));
     assert.ok(lint(vault).some(p => p.includes('sony-playstation-5.md: links devices/consoles/sony/ps5/ps5-homebrew.md: device topic pages')), 'topic pages hang under their device only');
     writeFileSync(ps5Series, ps5Text);
+    const twrp = join(vault, 'os/mobile/twrp.md'), twrpText = readFileSync(twrp, 'utf8');
+    writeFileSync(twrp, twrpText.replace('\n## Links\n', '\n## Links\n- Vendor: [Samsung](../../vendors/samsung/samsung.md)\n'));
+    assert.ok(lint(vault).some(p => p.includes('twrp.md: links vendors/samsung/samsung.md: OS pages link devices, not vendors')), 'OS pages reach vendors through their device list');
+    writeFileSync(twrp, twrpText);
+    const pcOs = join(vault, 'os/pc/pc-os.md'), pcOsText = readFileSync(pcOs, 'utf8');
+    writeFileSync(pcOs, `${pcOsText}\n- [Debian stable](debian-stable.md)\n`);
+    assert.ok(lint(vault).some(p => p.includes('pc-os.md: lists os/pc/debian-stable.md: a release child is listed by its OS page only')), 'release children hang under their OS');
+    writeFileSync(pcOs, pcOsText);
     assert.match(tree(vault), /Google Pixel 7 {2}\(vendors\/google\/series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\) {2}\[\w+ · \d+ turns · reviewed .+ · .+\]/);
     assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');
   } finally { rmSync(dir, { recursive: true, force: true }); }

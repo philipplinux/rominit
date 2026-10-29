@@ -176,6 +176,10 @@ export function lint(vault = VAULT) {
       const parentOs = [...pages.keys()].some(f => f !== file && f !== group && dirname(f) === dirname(file) && linksTo(f, file) && linksTo(file, f));
       if (!linksTo(file, group) && !parentOs) say(file, `does not link up to ${relative(vault, group)} or its parent OS page`);
       if (![...pages.keys()].some(f => f !== file && dirname(f) === dirname(file) && linksTo(f, file))) say(file, `not listed by ${relative(vault, group)} or a sibling OS page`);
+      const ownOs = [...pages.keys()].some(f => dirname(f) === dirname(file) && basename(file).startsWith(basename(f, '.md') + '-') && linksTo(f, file) && linksTo(file, f)); // <os>-<release>.md under <os>.md
+      if (ownOs && linksTo(group, file)) say(group, `lists ${rel}: a release child is listed by its OS page only`);
+      // OS pages reach vendors through their grouped device list (### <Vendor>), never with a vendor link
+      for (const v of new Set(links(file).filter(f => /^vendors\/([^/]+)\/\1\.md$/.test(relative(vault, f))))) say(file, `links ${relative(vault, v)}: OS pages link devices, not vendors`);
     }
     const up = UP_PAGE[/** @type {keyof typeof UP_PAGE} */ (fm.type)];
     if (up) {
