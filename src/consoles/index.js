@@ -51,6 +51,7 @@ import trimuiSmartPro from '../../catalog/devices/consoles/trimui/smart-pro/smar
  * @property {string} [runtime]
  * @property {string} [systems]
  * @property {string} [access]
+ * @property {string[]} [opens] Layers (LAYERS keys) this project opens beyond its kind, e.g. a hardmod that gives kernel and hypervisor code
  */
 
 /** A console family research record. Optional fields are the ones a page can live without.
@@ -73,6 +74,7 @@ import trimuiSmartPro from '../../catalog/devices/consoles/trimui/smart-pro/smar
  * @property {{name: string, url: string, description: string, source: string, checkedDate: string}[]} [communities]
  * @property {{status: string, until?: string, source: string, summary?: string}} [officialSupport]
  * @property {Record<string, Record<string, string>>} [copy]
+ * @property {string} [openByDesign] Why every model is open without an exploit, e.g. "boots other OSes from SD"
  */
 
 /** Console families with a ROMinit research page.
@@ -98,4 +100,37 @@ export function consoleCompatibility(project, model, firmware) {
     return model ? 'Documented by project' : 'Documented for listed models';
   if (!rules.length || rules.some(rule => !rule.supportedFirmware.length || rule.status === 'unverified' && (!firmware || rule.supportedFirmware.includes(firmware)))) return 'Unverified';
   return 'Not listed as supported';
+}
+
+const byVersion = (/** @type {string} */ a, /** @type {string} */ b) => a.localeCompare(b, undefined, { numeric: true });
+/** Layers a model can be opened to. A project counts for its kind, or for a layer it lists in `opens`. */
+export const LAYERS = /** @type {[string, string, (p: ConsoleProject) => boolean][]} */ ([
+  ['code', 'Unofficial code', p => p.kind === 'entrypoint' || p.kind === 'hardmod'], ['kernel', 'Kernel', p => p.kind === 'kernel'],
+  ['hypervisor', 'Hypervisor', p => p.access === 'hypervisor'], ['linux', 'Linux', p => p.kind === 'linux']]);
+
+/** How open one model is, per layer, from the projects' claims only. A documented rule with no firmware list holds on any firmware.
+ * @param {ConsoleEntry} info @param {string} modelId @param {string[]} latest current firmware numbers */
+export function modelOpenness(info, modelId, latest) {
+  const layers = LAYERS.map(([key, label, test]) => {
+    const rules = info.homebrew.filter(p => test(p) || /** @type {any} */ p.opens?.includes(key))
+      .flatMap(p => p.compatibility.filter(r => r.models.includes(modelId)).map(r => ({ ...r, hardmod: p.kind === 'hardmod' })));
+    const documented = rules.filter(r => r.status === 'documented'), any = documented.filter(r => !r.supportedFirmware.length);
+    return { key, label, versions: [...new Set(documented.flatMap(r => r.supportedFirmware))].sort(byVersion),
+      anySoft: any.some(r => !r.hardmod), anyHard: any.some(r => r.hardmod), unverified: rules.some(r => r.status === 'unverified') };
+  });
+  const code = layers[0], current = latest.some(v => code.versions.includes(v));
+  const verdict = info.openByDesign ? ['yes', `Open by design · ${info.openByDesign}`]
+    : current ? ['yes', `Open on current firmware ${latest.join(' / ')}`]
+    : code.anySoft ? ['yes', 'Open on any firmware']
+    : code.versions.length ? ['older', `Older firmware only · not ${latest.join(' / ')}${code.anyHard ? '; any firmware via hardmod' : ''}`]
+    : code.anyHard ? ['older', 'Open via hardmod on any firmware'] : ['none', 'No documented entry point'];
+  return { verdict, layers: layers.map(layer => {
+    const short = layer.versions.length < 3 ? layer.versions.join(', ') : `up to ${layer.versions.at(-1)}`;
+    const parts = [short, layer.anySoft && 'any firmware', layer.anyHard && 'via hardmod'].filter(Boolean);
+    // A deeper layer only counts where this model also has an entry point on that firmware (or one on any firmware).
+    const reachable = layer === code || info.openByDesign || code.anySoft || code.anyHard || layer.versions.some(v => code.versions.includes(v)) || ((layer.anySoft || layer.anyHard) && code.versions.length);
+    const state = !parts.length ? (layer.unverified ? 'unverified' : 'none') : reachable ? 'ok' : 'stranded';
+    return { label: layer.label, state, text: state === 'none' ? '–' : state === 'unverified' ? '?' : state === 'stranded' ? 'no entry point yet' : parts.join(' · '),
+      title: state === 'unverified' ? 'Claimed by a project but not verified' : state === 'stranded' ? `Documented for ${parts.join(', ')}, but no entry point is documented for this model there` : '' };
+  }) };
 }

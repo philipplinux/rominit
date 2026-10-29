@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { CONSOLES, consoleCompatibility } from '../src/consoles/index.js';
+import { CONSOLES, consoleCompatibility, modelOpenness, LAYERS } from '../src/consoles/index.js';
 import { FAMILIES } from '../src/consoles/families.js';
 import { CONSOLE_SECTIONS, consoleCopy } from '../src/consoles/labels.js';
 import { officialSupportProblems } from '../src/catalog.js';
@@ -183,4 +183,22 @@ test('emulator pages are sourced, link a known console and are linked back from 
     assert(emulator.links.every(link => link.url.startsWith('https://')));
     for (const id of emulator.plays) assert(CONSOLES.find(c => c.id === id).homebrew.some(project => project.page === emulator.id), `${id} does not link ${emulator.id}`);
   }
+});
+
+test('model openness counts firmware-free routes, hardmods, opens and unverified claims', () => {
+  const rule = (status, supportedFirmware = []) => ({ models: ['m'], supportedFirmware, status });
+  const info = { homebrew: [
+    { kind: 'hardmod', opens: ['kernel', 'hypervisor'], compatibility: [rule('documented')] },
+    { kind: 'entrypoint', compatibility: [rule('documented', ['1.0'])] },
+    { kind: 'linux', compatibility: [rule('unverified')] }] };
+  const { verdict, layers } = modelOpenness(/** @type {any} */ (info), 'm', ['2.0']);
+  assert.deepEqual(verdict, ['older', 'Older firmware only · not 2.0; any firmware via hardmod']);
+  assert.deepEqual(layers.map(l => `${l.label} ${l.text}`), ['Unofficial code 1.0 · via hardmod', 'Kernel via hardmod', 'Hypervisor via hardmod', 'Linux ?']);
+  assert.equal(modelOpenness(/** @type {any} */ ({ openByDesign: 'boots from SD', homebrew: [] }), 'm', []).verdict[0], 'yes');
+});
+
+test('project opens lists only known layers', () => {
+  const keys = new Set(LAYERS.map(([key]) => key));
+  for (const entry of CONSOLES) for (const project of entry.homebrew) for (const layer of project.opens ?? [])
+    assert(keys.has(layer), `${entry.id}: ${project.name} opens unknown layer "${layer}"`);
 });

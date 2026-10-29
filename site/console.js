@@ -1,5 +1,5 @@
 import { progressRail } from './progress-rail.js';
-import { CONSOLES, consoleCompatibility } from '../src/consoles/index.js';
+import { CONSOLES, consoleCompatibility, modelOpenness } from '../src/consoles/index.js';
 import { CONSOLE_SECTIONS, consoleCopy } from '../src/consoles/labels.js';
 import { familyOf } from '../src/consoles/families.js';
 import { h } from './dom.js';
@@ -70,25 +70,14 @@ if (!info) {
   const firmwareSource = external(firmware.source, 'source ↗');
   if (firmwareSource) byId('console-firmware-source').append(firmwareSource);
 
-  // How open each model is, per layer, derived from the projects' documented firmware lists, never typed by hand.
-  const layers = [['Unofficial code', project => project.kind === 'entrypoint'], ['Kernel', project => project.kind === 'kernel'],
-    ['Hypervisor', project => project.access === 'hypervisor'], ['Linux', project => project.kind === 'linux']];
-  const byVersion = (a, b) => a.localeCompare(b, undefined, { numeric: true });
+  // How open each model is, per layer, derived from the projects' claims, never typed by hand.
   byId('console-models').replaceChildren(...info.models.map(model => {
     const variant = info.variants?.find(v => v.model === model.name);
-    const versionsFor = test => [...new Set(info.homebrew.filter(test).flatMap(project => project.compatibility
-      .filter(rule => rule.status === 'documented' && rule.models.includes(model.id)).flatMap(rule => rule.supportedFirmware)))].sort(byVersion);
-    const entry = versionsFor(layers[0][1]);
-    // shortVersion may state one number per region ("5.5.6U / 5.5.5E"); any of them being documented makes the console current.
-    const verdict = latestVersions.some(version => entry.includes(version)) ? ['yes', `Open on current firmware ${firmware.shortVersion}`] : entry.length ? ['older', `Older firmware only · not ${firmware.shortVersion}`] : ['none', 'No documented entry point'];
+    const { verdict, layers } = modelOpenness(info, model.id, latestVersions);
     return h('article', { className: 'console-variant' },
       h('h3', { textContent: `${model.name}${variant?.releaseYear ? ` · ${variant?.releaseYear}` : ''}` }),
       h('p', { className: `console-jb-verdict console-jb-${verdict[0]}`, textContent: verdict[1] }),
-      h('div', {}, ...layers.map(([label, test]) => { const list = versionsFor(test);
-        // A deeper layer only counts where this model also has a documented entry point on that firmware.
-        const stranded = list.length && test !== layers[0][1] && !list.some(version => entry.includes(version));
-        return h('span', { className: `console-jb-layer${!list.length ? ' console-jb-none' : stranded ? ' console-jb-older' : ''}`, title: stranded ? `Documented for ${list.join(', ')}, but no entry point is documented for this model on those versions` : '',
-          textContent: `${label} ${!list.length ? '–' : stranded ? 'no entry point yet' : list.length < 3 ? list.join(', ') : `up to ${list.at(-1)}`}` }); })),
+      h('div', {}, ...layers.map(layer => h('span', { className: `console-jb-layer${{ none: ' console-jb-none', unverified: ' console-jb-older', stranded: ' console-jb-older', ok: '' }[layer.state]}`, title: layer.title, textContent: `${layer.label} ${layer.text}` }))),
       h('details', { className: 'console-project-details' }, h('summary', { textContent: 'Hardware specs' }),
         h('dl', { className: 'console-facts' }, ...factRows({ storage: variant?.storage, ...variant?.specs }, { storage: 'Storage', ...facts }))),
       variant?.notes ? h('details', { className: 'console-project-details' }, h('summary', { textContent: 'Model numbers & notes' }), h('p', { textContent: `${variant?.region ? `${variant?.region}. ` : ''}${variant?.notes}` })) : null);
