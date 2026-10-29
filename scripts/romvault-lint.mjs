@@ -145,9 +145,16 @@ export function lint(vault = VAULT) {
       else if (month && !line.startsWith(`## [${month}-`)) say(file, `entry from another month "${line.slice(0, 60)}"`);
     }
   }
+  const isOs = (/** @type {string} */ f) => relative(vault, f).startsWith('os/');
   for (const [file, text] of pages) {
     const rel = relative(vault, file);
     const fm = frontmatter(text) ?? {};
+    // OS links come from ROM pages, or from a device page without a ROM page for that OS; vendor/line/series pages never carry them.
+    if (rel.startsWith('vendors/')) for (const o of new Set(links(file).filter(isOs))) say(file, `links ${relative(vault, o)}: OS pages are linked from device or ROM pages only`);
+    if (fm.type === 'device') {
+      const viaRoms = new Set([...pages.keys()].filter(f => f.startsWith(join(dirname(file), 'roms') + '/')).flatMap(links));
+      for (const o of new Set(links(file).filter(f => isOs(f) && viaRoms.has(f)))) say(file, `links ${relative(vault, o)}, which its ROM page already links`);
+    }
     if (fm.type === 'rom') {
       const folder = dirname(dirname(file)), codename = basename(folder); // devices/…/<codename>/roms/<rom>.md
       const device = join(folder, `${codename}.md`);
