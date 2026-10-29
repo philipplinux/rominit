@@ -315,7 +315,7 @@
     },
     {
       "name": "DSLinux",
-      "models": ["ds-phat", "ds-lite", "dsi", "dsi-xl"],
+      "models": ["ds-phat", "ds-lite"],
       "firmware": "DS and DS Lite are supported; the project says newer models such as DSi and 3DS might work in DS-compatibility mode.",
       "summary": "A port of Linux to the Nintendo DS and DS Lite, with a shell and text-mode applications. It also runs on some DS emulators.",
       "source": "https://www.dslinux.org/",

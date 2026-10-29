@@ -519,9 +519,9 @@
         "basic",
         "deluxe"
       ],
-      "firmware": "Install guide assumes Cafe OS homebrew (Aroma) and states no model or firmware limit.",
-      "summary": "A Linux port for the Wii U that exposes the console hardware from a normal Linux environment. Distributions include Adélie, ArchPOWER, Debian and Gentoo, booted through petitboot.",
-      "source": "https://gitlab.com/linux-wiiu/linux-wiiu",
+      "firmware": "The project states no model or firmware limit.",
+      "summary": "A Linux port for the Wii U that exposes the console hardware from a normal Linux environment. The project site links Adélie, ArchPOWER, Debian and Gentoo builds.",
+      "source": "https://linux-wiiu.org/",
       "kind": "linux",
       "compatibility": [
         {
@@ -531,7 +531,7 @@
           ],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "Install guide targets the Wii U with Aroma homebrew and gives no model or firmware restriction."
+          "note": "The project site and kernel repo give no model or firmware restriction."
         }
       ],
       "checkedDate": "2026-10-29",
@@ -640,6 +640,10 @@
     {
       "label": "linux-wiiu",
       "url": "https://gitlab.com/linux-wiiu/linux-wiiu"
+    },
+    {
+      "label": "linux-wiiu project site",
+      "url": "https://linux-wiiu.org/"
     }
   ],
   "media": {},

@@ -248,7 +248,7 @@
     },
     {
       "name": "d2x cIOS",
-      "models": ["wii", "family-edition", "wii-mini"],
+      "models": ["wii", "family-edition"],
       "firmware": "Installed from the Homebrew Channel on Wii Menu 4.3; the project says not to use it on the Wii Mini.",
       "summary": "Patched IOS installed by the guide so USB loaders work. Wrong base slots are a brick risk.",
       "source": "https://github.com/davebaol/d2x-cios",
@@ -259,12 +259,6 @@
           "supportedFirmware": ["4.3"],
           "status": "documented",
           "note": "Installed through the Homebrew Channel on the current Wii Menu; README describes it as a custom IOS."
-        },
-        {
-          "models": ["wii-mini"],
-          "supportedFirmware": [],
-          "status": "unverified",
-          "note": "README says do not use d2x cIOS on the Wii Mini."
         }
       ],
       "checkedDate": "2026-10-29",
@@ -281,7 +275,6 @@
         { "label": "Releases", "url": "https://github.com/davebaol/d2x-cios/releases" },
         { "label": "Wiki", "url": "https://github.com/davebaol/d2x-cios/wiki" }
       ],
-      "opens": ["kernel"],
       "availability": "Open source; releases published by the project."
     },
     {

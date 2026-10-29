@@ -101,6 +101,7 @@
     {
       "name": "FreeMyXe",
       "models": ["phat", "slim", "e"],
+      "opens": ["kernel", "hypervisor"],
       "firmware": "2.0.17559 only, inside a Bad Update session",
       "summary": "A lightweight patch set applied at runtime by Bad Update: it patches the kernel and hypervisor with xeBuild-derived patches, lets homebrew reach the hypervisor and CPU key, and can launch XeLL or an unsigned default.xex. Non-persistent.",
       "source": "https://github.com/FreeMyXe/FreeMyXe",
