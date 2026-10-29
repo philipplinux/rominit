@@ -163,7 +163,7 @@ export function index(vault) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const [cmd, ...rest] = process.argv.slice(2), vault = join(ROOT, 'romvault');
+  const [cmd, ...rest] = process.argv.slice(2), vault = process.env.ROMVAULT_DIR ? resolve(process.env.ROMVAULT_DIR) : join(ROOT, 'romvault'); // ROMVAULT_DIR: a worktree, as in romvault-lint
   if (cmd === 'tree') console.log(tree(vault));
   else if (cmd === 'index') { writeFileSync(join(vault, 'index.json'), JSON.stringify(index(vault), null, 1) + '\n'); console.log('wrote romvault/index.json'); }
   else if (cmd === 'fix') {
