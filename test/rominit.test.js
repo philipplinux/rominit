@@ -700,6 +700,7 @@ test('ROMvault index.json is current and every net page has its parent', { skip:
   assert.deepEqual(JSON.parse(readFileSync(new URL('../romvault/index.json', import.meta.url), 'utf8')), built, 'stale: run node scripts/romvault-net.mjs index');
   const up = (/** @type {string} */ rel) => [rel, ...(built.pages[rel].parent ? up(built.pages[rel].parent) : [])];
   assert.equal(up(built.catalog.starlte).at(-1), 'categories/phones.md');
+  assert.deepEqual(up('os/pc/arch-linux-rolling.md'), ['os/pc/arch-linux-rolling.md', 'os/pc/arch-linux.md', 'os/pc/pc-os.md', 'categories/os.md'], 'OS tree: release › OS › group › category');
   assert.deepEqual(Object.entries(built.pages).filter(([rel, p]) => !p.parent && ['device', 'series', 'line', 'vendor', 'rom'].includes(p.type)).map(([rel]) => rel), []);
 });
 

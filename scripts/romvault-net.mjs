@@ -178,7 +178,25 @@ export function index(vault) {
       parent, children: out.filter(l => DOWN[t] && type(l) === DOWN[t]), related: out.filter(l => l !== parent && !(DOWN[t] && type(l) === DOWN[t])) };
     if (fm.catalog && ['device', 'rom'].includes(t)) catalog[t === 'rom' ? `${basename(dirname(dirname(rel)))}/${basename(rel, '.md')}` : fm.catalog] = rel;
   }
-  return { about: 'ROMvault net: parent/children follow category › vendor › line › series › device › ROM; catalog maps a catalog device id (or <device>/<rom>) to its page.', catalog, pages };
+  // OS tree: categories/os.md › os/<group>/<group>-os.md › OS page (listed on the hub) › release/channel child (mutual link with its OS).
+  const hubOf = (/** @type {string} */ rel) => `${dirname(rel)}/${basename(dirname(rel))}-os.md`;
+  const linked = (/** @type {string} */ a, /** @type {string} */ b) => pages[a]?.related.includes(b) || pages[a]?.children.includes(b);
+  const move = (/** @type {string} */ child, /** @type {string} */ parent) => {
+    const c = pages[child], p = pages[parent];
+    c.related = c.related.filter((/** @type {string} */ l) => l !== parent); c.parent = parent;
+    p.related = p.related.filter((/** @type {string} */ l) => l !== child); p.children.push(child);
+  };
+  for (const hub of Object.keys(pages).filter(r => /^os\/[^/]+\/[^/]+\.md$/.test(r) && r === hubOf(r))) {
+    if (pages['categories/os.md'] && linked(hub, 'categories/os.md')) move(hub, 'categories/os.md');
+    // breadth-first from the hub: a page hangs under the first already-placed page in its folder that it links both ways
+    const placed = new Set([hub]), folderPages = Object.keys(pages).filter(q => q !== hub && dirname(q) === dirname(hub));
+    for (let level = [hub]; level.length;) {
+      const next = [];
+      for (const parent of level) for (const q of folderPages) if (!placed.has(q) && linked(parent, q) && linked(q, parent)) { move(q, parent); placed.add(q); next.push(q); }
+      level = next;
+    }
+  }
+  return { about: 'ROMvault net: parent/children follow category › vendor › line › series › device › ROM, and categories/os.md › OS group › OS › release; catalog maps a catalog device id (or <device>/<rom>) to its page.', catalog, pages };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
