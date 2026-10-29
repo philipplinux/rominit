@@ -1,7 +1,7 @@
 {
   "id": "smart-pro",
-  "name": "TrimUI Smart Pro",
-  "manufacturer": "TrimUI",
+  "name": "TriMUI Smart Pro",
+  "manufacturer": "TriMUI",
   "releaseYear": null,
   "family": "trimui",
   "models": [
@@ -11,7 +11,7 @@
       "notes": "Single model; large 4.96\" square display"
     }
   ],
-  "summary": "TrimUI's 4.96-inch A133P-based Android handheld with a fully laminated square IPS display. Runs Android stock OS with ADB access for calibration and customization. KNULLI and spruceOS support available.",
+  "summary": "TriMUI's 4.96-inch A133P-based Android handheld with a fully laminated square IPS display. Runs Android stock OS with ADB access for calibration and customization. KNULLI and spruceOS support available.",
   "specs": {
     "cpu": "Allwinner A133P (A133+), 1.8 GHz",
     "gpu": "Imagination PowerVR GE8300",
@@ -52,7 +52,7 @@
         "smart-pro"
       ],
       "firmware": "Per-model image (knulli-a133-trimui-smart-pro); boots from SD card. Requires Joystick calibration via stock OS ADB pull + KNULLI overlay/custom.sh.",
-      "summary": "Retro gaming OS for the TrimUI Smart Pro based on Allwinner A133. Boots from a prepared SD card.",
+      "summary": "Retro gaming OS for the TriMUI Smart Pro based on Allwinner A133. Boots from a prepared SD card.",
       "source": "https://knulli.org/devices/",
       "compatibility": [
         {
@@ -66,7 +66,7 @@
       ],
       "checkedDate": "2026-10-28",
       "requirements": [
-        "A compatible TrimUI Smart Pro unit.",
+        "A compatible TriMUI Smart Pro unit.",
         "A good-quality SD card.",
         "A computer with an SD card reader and an image writer.",
         "ADB platform tools for joystick calibration (required in rare cases)."
@@ -77,7 +77,7 @@
       ],
       "links": [
         {
-          "label": "KNULLI: TrimUI Smart Pro",
+          "label": "KNULLI: TriMUI Smart Pro",
           "url": "https://knulli.org/devices/"
         },
         {
@@ -93,7 +93,7 @@
         "smart-pro"
       ],
       "firmware": "Per-model A133 image; boots from SD card.",
-      "summary": "Mainline-Linux retro gaming OS for the TrimUI Smart Pro. Boots from SD card.",
+      "summary": "Mainline-Linux retro gaming OS for the TriMUI Smart Pro. Boots from SD card.",
       "source": "https://rocknix.org/devices/",
       "compatibility": [
         {
@@ -107,7 +107,7 @@
       ],
       "checkedDate": "2026-10-28",
       "requirements": [
-        "A compatible TrimUI Smart Pro unit.",
+        "A compatible TriMUI Smart Pro unit.",
         "A good-quality SD card.",
         "A computer with an SD card reader and an image writer."
       ],
@@ -128,7 +128,7 @@
         "smart-pro"
       ],
       "firmware": "Frontend on top of the stock OS.",
-      "summary": "Custom Python-based frontend that runs on top of the stock OS on supported TrimUI devices.",
+      "summary": "Custom Python-based frontend that runs on top of the stock OS on supported TriMUI devices.",
       "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
       "compatibility": [
         {
@@ -137,12 +137,12 @@
           ],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "spruceOS lists the TrimUI Smart Pro with 'Stable' support status."
+          "note": "spruceOS lists the TriMUI Smart Pro with 'Stable' support status."
         }
       ],
       "checkedDate": "2026-10-28",
       "requirements": [
-        "A compatible TrimUI Smart Pro unit.",
+        "A compatible TriMUI Smart Pro unit.",
         "A new branded microSD card (do NOT use the stock card)."
       ],
       "warnings": [
@@ -160,11 +160,11 @@
   "communities": [],
   "sources": [
     {
-      "label": "Powkiddy: TrimUI Smart Pro product page (A133P, 4.96\" IPS fully laminated, 4000 mAh)",
+      "label": "Powkiddy: TriMUI Smart Pro product page (A133P, 4.96\" IPS fully laminated, 4000 mAh)",
       "url": "https://powkiddy.com/products/pre-sale-trimui-smart-pro-console"
     },
     {
-      "label": "KNULLI: TrimUI Smart Pro",
+      "label": "KNULLI: TriMUI Smart Pro",
       "url": "https://knulli.org/devices/"
     },
     {
