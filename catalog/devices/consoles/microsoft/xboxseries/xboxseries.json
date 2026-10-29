@@ -1,0 +1,145 @@
+{
+  "id": "xboxseries",
+  "name": "Microsoft Xbox Series X|S family",
+  "manufacturer": "Microsoft",
+  "releaseYear": 2020,
+  "models": [
+    { "id": "series-x", "name": "Xbox Series X" },
+    { "id": "series-s", "name": "Xbox Series S" }
+  ],
+  "summary": "Explore the current Xbox generation — Series X (disc, 1–2 TB) and Series S (all-digital, 512 GB–1 TB). Same system software, same Developer Mode path, no public retail exploit documented.",
+  "specs": {
+    "cpu": "8 cores at 3.8 GHz (3.6 GHz with SMT), custom Zen 2",
+    "gpu": "RDNA 2 — 12 TFLOPS / 52 CUs at 1.825 GHz (Series X); 4 TFLOPS / 20 CUs at 1.565 GHz (Series S)",
+    "memory": "16 GB GDDR6, 320-bit bus (Series X); 10 GB GDDR6, 128-bit bus (Series S)",
+    "storage": "Custom NVMe SSD, 2.4 GB/s raw — 1 TB or 2 TB (Series X); 512 GB or 1 TB (Series S)",
+    "media": "4K UHD Blu-ray (Series X disc model); digital-only editions exist on Series X; Series S is all-digital",
+    "display": "True 4K up to 120 fps, up to 8K HDR (Series X); 1440p up to 120 fps (Series S)"
+  },
+  "variants": [
+    {
+      "model": "Xbox Series X",
+      "region": "Worldwide",
+      "releaseYear": 2020,
+      "storage": "1 TB or 2 TB custom NVMe SSD",
+      "notes": "Launch 2020-11-10. 12 TFLOPS GPU, 16 GB GDDR6, true 4K gaming. Disc drive on the Carbon Black model; digital-only editions also exist. Special editions change storage and finish, not the SoC.",
+      "specs": {
+        "cpu": "Zen 2, 8 cores at 3.8 GHz",
+        "gpu": "RDNA 2, 12 TFLOPS, 52 CUs",
+        "memory": "16 GB GDDR6, 320-bit (10 GB at 560 GB/s, 6 GB at 336 GB/s)",
+        "storage": "1 TB / 2 TB NVMe SSD",
+        "media": "4K UHD Blu-ray"
+      }
+    },
+    {
+      "model": "Xbox Series S",
+      "region": "Worldwide",
+      "releaseYear": 2020,
+      "storage": "512 GB or 1 TB custom NVMe SSD",
+      "notes": "Launch 2020-11-10. All-digital, 4 TFLOPS GPU, 10 GB GDDR6, targets 1440p. No disc drive.",
+      "specs": {
+        "cpu": "Zen 2, 8 cores at 3.8 GHz",
+        "gpu": "RDNA 2, 4 TFLOPS, 20 CUs",
+        "memory": "10 GB GDDR6, 128-bit (8 GB at 224 GB/s, 2 GB at 56 GB/s)",
+        "storage": "512 GB / 1 TB NVMe SSD",
+        "media": "Digital only"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Microsoft system software, updated online; shared with Xbox One",
+    "shortVersion": "Dynamic (per console)",
+    "checkedDate": "2026-10-28",
+    "source": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation"
+  },
+  "homebrew": [
+    {
+      "name": "Developer Mode",
+      "models": ["series-x", "series-s"],
+      "firmware": "All firmware versions; entered through the Dev Mode app",
+      "summary": "Microsoft's sanctioned development environment for retail Xbox Series X|S consoles. It runs UWP apps including homebrew apps and emulators packaged for the console. Needs a Microsoft account and the Dev Mode activation; it does not give kernel-level control of the retail OS.",
+      "source": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["series-x", "series-s"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Both models share the same system software and Developer Mode activation per Microsoft."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A Microsoft account and the Dev Mode app from the store."
+      ],
+      "warnings": [
+        "Developer Mode is not a jailbreak. It has documented limits and needs a Microsoft account."
+      ],
+      "links": [
+        { "label": "Microsoft: Developer Mode activation", "url": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation" }
+      ]
+    },
+    {
+      "name": "Security research (privilege escalation, browser issues)",
+      "models": ["series-x", "series-s"],
+      "firmware": "Varies; no confirmed user route",
+      "summary": "Security research catalogued by the Xbox One Research Wiki is applicable in principle to this generation. No public retail exploit or boot-chain modification is documented.",
+      "source": "https://xboxoneresearch.github.io/wiki/",
+      "kind": "research",
+      "compatibility": [
+        {
+          "models": ["series-x", "series-s"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "The 360's Bad Update page explicitly excludes Xbox One/Series. No RGH/JTAG-class exploit page for this generation."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "Not a user route. No custom firmware or boot-chain modification is documented for this generation."
+      ],
+      "links": [
+        { "label": "Xbox One Research Wiki", "url": "https://xboxoneresearch.github.io/wiki/" }
+      ]
+    },
+    {
+      "name": "Xbox Series offline system update (OSU)",
+      "models": ["series-x", "series-s"],
+      "firmware": "Latest official system software",
+      "summary": "Microsoft's USB-based update and recovery for a console that will not boot. Reinstalls the system software. Series S has no disc drive — disc-based recovery is not possible on it.",
+      "source": "https://www.xbox.com/en-US/consoles/xbox-series-x",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": ["series-x", "series-s"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Official recovery track shared by the whole family."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "USB drive with the official OSU file."
+      ],
+      "warnings": [
+        "Leave Developer Mode: switch back to Retail Mode and remove the Dev Mode storage; the console returns to a normal retail state."
+      ],
+      "links": [
+        { "label": "Xbox: Series X specs", "url": "https://www.xbox.com/en-US/consoles/xbox-series-x" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "Xbox: Series X tech specs", "url": "https://www.xbox.com/en-US/consoles/xbox-series-x" },
+    { "label": "Xbox: Series S tech specs", "url": "https://www.xbox.com/en-US/consoles/xbox-series-s" },
+    { "label": "Xbox Wire: Series X|S launch", "url": "https://news.xbox.com/en-us/2020/09/09/xbox-series-x-and-xbox-series-s-launching-november-10/" },
+    { "label": "Microsoft: Developer Mode activation", "url": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation" },
+    { "label": "Xbox One Research Wiki", "url": "https://xboxoneresearch.github.io/wiki/" }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation",
+    "summary": "Xbox Series X|S remains the current generation; Developer Mode is active for both models."
+  }
+}

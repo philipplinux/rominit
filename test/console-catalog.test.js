@@ -74,7 +74,7 @@ test('PS5 overview has credited local assets and separates emulation readiness f
 });
 
 test('console pages belong to family hubs, which only link catalog pages', () => {
-  assert.deepEqual(FAMILIES.map(family => family.id), ['playstation', 'nintendo', 'anbernic', 'asus-rog-ally', 'ayn', 'goretroid', 'miyoo', 'powkiddy', 'trimui']);
+  assert.deepEqual(FAMILIES.map(family => family.id), ['playstation', 'nintendo', 'microsoft', 'sega', 'anbernic', 'asus-rog-ally', 'ayn', 'goretroid', 'miyoo', 'powkiddy', 'trimui']);
   for (const entry of CONSOLES) assert.equal(FAMILIES.filter(family => family.consoles.some(item => item.page === entry.id)).length, 1, `${entry.id} must appear in exactly one family hub`);
   for (const entry of CONSOLES) if (entry.family) assert.equal(entry.family, FAMILIES.find(family => family.consoles.some(item => item.page === entry.id))?.id, `${entry.id}: optional family field must match its hub`);
   for (const family of FAMILIES) {
@@ -89,6 +89,7 @@ test('console pages belong to family hubs, which only link catalog pages', () =>
 
 test('the researched console pages are registered and linked from exactly one hub', () => {
   const expected = ['ps2', 'psp', 'ps3', 'vita', 'ps4', 'ds', 'wii', '3ds', 'wii-u', 'rg405', 'rg505', 'rg556',
+    'xbox', 'xbox360', 'xboxone', 'xboxseries', 'dreamcast',
     'odin-2', 'thor',
     'retroid-pocket-5', 'retroid-pocket-mini',
     'a30', 'flip', 'mini', 'mini-flip',

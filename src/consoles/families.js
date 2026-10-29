@@ -30,6 +30,25 @@ export const FAMILIES = [
     ]
   },
   {
+    id: 'microsoft',
+    name: 'Microsoft',
+    summary: 'Microsoft\'s Xbox generations, from the original Xbox to Series X|S.',
+    consoles: [
+      { name: 'Xbox', year: 2001, page: 'xbox', status: research },
+      { name: 'Xbox 360', year: 2005, page: 'xbox360', status: research },
+      { name: 'Xbox One', year: 2013, page: 'xboxone', status: research },
+      { name: 'Xbox Series X|S', year: 2020, page: 'xboxseries', status: research }
+    ]
+  },
+  {
+    id: 'sega',
+    name: 'Sega',
+    summary: 'Sega\'s last home console, the Dreamcast.',
+    consoles: [
+      { name: 'Dreamcast', year: 1998, page: 'dreamcast', status: research }
+    ]
+  },
+  {
     id: 'anbernic',
     name: 'Anbernic',
     summary: 'Anbernic\'s retro handhelds, where the operating system lives on an SD card.',

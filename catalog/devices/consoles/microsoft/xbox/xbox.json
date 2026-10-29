@@ -1,0 +1,242 @@
+{
+  "id": "xbox",
+  "name": "Microsoft Xbox family",
+  "manufacturer": "Microsoft",
+  "releaseYear": 2001,
+  "models": [
+    { "id": "1.0", "name": "Xbox (revision 1.0–1.1)" },
+    { "id": "1.2-1.4", "name": "Xbox (revision 1.2–1.4)" },
+    { "id": "1.6", "name": "Xbox (revision 1.6)" }
+  ],
+  "summary": "Explore the original Xbox hardware revisions and five homebrew routes into the console: ENDGAME softmod is the easiest and safest entry; TSOP flashing gives a permanent BIOS mod on everything except revision 1.6, where only softmod or a modchip is possible.",
+  "specs": {
+    "cpu": "Intel Pentium III (Coppermine) at 733 MHz, 128 KB L2 cache",
+    "gpu": "NVIDIA NV2A (NV20 family) with integrated northbridge",
+    "memory": "64 MB DDR",
+    "storage": "8 GB or 10 GB internal IDE hard drive, locked to the console via EEPROM key",
+    "media": "DVD-ROM; DVD playback requires the official playback kit dongle",
+    "display": "Composite/component output; 480p, 720p and 1080i on supported software",
+    "network": "10/100 Ethernet (built-in)"
+  },
+  "variants": [
+    {
+      "model": "Xbox (revision 1.0–1.1)",
+      "region": "Worldwide",
+      "releaseYear": 2001,
+      "storage": "8 GB IDE HDD",
+      "notes": "First retail boards. TSOP flash possible (1 MB TSOP). Softmod works on all revisions.",
+      "specs": {
+        "cpu": "Intel Pentium III, 733 MHz",
+        "gpu": "NVIDIA NV2A",
+        "memory": "64 MB DDR",
+        "storage": "8 GB IDE HDD",
+        "tsop": "1 MB TSOP — flashable"
+      }
+    },
+    {
+      "model": "Xbox (revision 1.2–1.4)",
+      "region": "Worldwide",
+      "releaseYear": 2003,
+      "storage": "8 GB or 10 GB IDE HDD",
+      "notes": "XBLADE board layout. 256 KB TSOP, ATX power connector, Samsung D-die RAM. TSOP flash possible but requires a DVD-R. Revision 1.5 is unconfirmed: reported sightings turned out to be 1.4 boards.",
+      "specs": {
+        "cpu": "Intel Pentium III, 733 MHz",
+        "gpu": "NVIDIA NV2A",
+        "memory": "64 MB DDR",
+        "storage": "8 GB / 10 GB IDE HDD",
+        "tsop": "256 KB TSOP — flashable"
+      }
+    },
+    {
+      "model": "Xbox (revision 1.6)",
+      "region": "Worldwide",
+      "releaseYear": 2004,
+      "storage": "8 GB or 10 GB IDE HDD",
+      "notes": "Later boards with different video encoder and power section. TSOP flashing is impossible; use a softmod or a modchip instead.",
+      "specs": {
+        "cpu": "Intel Pentium III, 733 MHz",
+        "gpu": "NVIDIA NV2A",
+        "memory": "64 MB DDR",
+        "storage": "8 GB / 10 GB IDE HDD",
+        "tsop": "Not flashable"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Microsoft Dashboard — no vendor update path; version varies by HDD contents and game disc installs",
+    "shortVersion": "N/A",
+    "checkedDate": "2026-10-28",
+    "source": "https://consolemods.org/wiki/Xbox"
+  },
+  "homebrew": [
+    {
+      "name": "ENDGAME (Xbox Softmodding Tool)",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "All versions; no dashboard limit",
+      "summary": "ConsoleMods calls this the easiest and safest softmod route. It needs an Xbox-to-USB adapter and a USB flash drive or Android device — no game disc is required.",
+      "source": "https://consolemods.org/wiki/Xbox:Getting_Started",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Works on all retail revisions per ConsoleMods; 1.6 boards skip TSOP and go straight to softmod."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "An Xbox-to-USB adapter and a compatible USB flash drive or Android device."
+      ],
+      "warnings": [
+        "Back up the EEPROM before any drive work; the EEPROM holds the HDD key."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox Getting Started", "url": "https://consolemods.org/wiki/Xbox:Getting_Started" }
+      ]
+    },
+    {
+      "name": "Game-save exploit",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "All versions; requires one of six specific games",
+      "summary": "An older softmod entry that uses a save-file exploit in one of six specific games plus an Xbox-to-USB adapter. Predates ENDGAME.",
+      "source": "https://consolemods.org/wiki/Xbox:Getting_Started",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Only works with one of six specific game saves. ENDGAME is preferred as it needs no disc."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "One of the six supported game saves, an Xbox-to-USB adapter and a USB drive."
+      ],
+      "warnings": [
+        "ENDGAME is now the recommended route; this exploit is documented mainly for completeness."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox Getting Started", "url": "https://consolemods.org/wiki/Xbox:Getting_Started" }
+      ]
+    },
+    {
+      "name": "Modchip",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "All versions; replaces the BIOS",
+      "summary": "A modchip replaces the stock BIOS and boots the modded dashboard directly. Works even with a dead locked drive. Some chips are solderless and suited to specific revisions.",
+      "source": "https://consolemods.org/wiki/Xbox",
+      "kind": "hardmod",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "All revisions take a modchip, though some chip models are revision-specific. 1.6 boards require a modchip since TSOP flash is impossible."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A modchip for the target revision, soldering equipment (or a solderless chip model)."
+      ],
+      "warnings": [
+        "Soldering intervention; a bad install can brick the console without an EEPROM backup."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox", "url": "https://consolemods.org/wiki/Xbox" }
+      ]
+    },
+    {
+      "name": "TSOP flash",
+      "models": ["1.0", "1.2-1.4"],
+      "firmware": "All versions except 1.6; writes a modified BIOS to the TSOP chip",
+      "summary": "Reflashes the TSOP chip with a modified BIOS, functionally equivalent to a modchip. Needs soldering and a DVD-R, or a working exploit or already-installed softmod.",
+      "source": "https://consolemods.org/wiki/Xbox:Getting_Started",
+      "kind": "hardmod",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Revision 1.6 boards cannot be TSOP-flashed — ConsoleMods states this explicitly."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Soldering equipment, a TSOP programmer, and a DVD-R; or a working exploit/softmod."
+      ],
+      "warnings": [
+        "Impossible on revision 1.6 — use softmod or modchip instead.",
+        "A bad TSOP write needs a modchip or an external programmer to recover."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox Getting Started", "url": "https://consolemods.org/wiki/Xbox:Getting_Started" }
+      ]
+    },
+    {
+      "name": "Linux (Xbox Linux)",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "Requires a modded console; no dashboard-specific limit",
+      "summary": "A work-in-progress CD-installable Linux distribution. It is research, not a maintained general-purpose install — blocking issues remain.",
+      "source": "https://xboxdevwiki.net/Linux",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Xboxdevwiki lists blocking issues; it is not a turnkey distribution."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A modded Xbox and a blank CD for the installer."
+      ],
+      "warnings": [
+        "Linux is unfinished; xboxdevwiki documents known blocking issues."
+      ],
+      "links": [
+        { "label": "xboxdevwiki: Xbox Linux", "url": "https://xboxdevwiki.net/Linux" }
+      ]
+    },
+    {
+      "name": "Xbox system software update and reinstall",
+      "models": ["1.0", "1.2-1.4", "1.6"],
+      "firmware": "The Microsoft Dashboard from the hard drive; no version ceiling for softmods",
+      "summary": "A stock Xbox loads its dashboard from the hard drive. The console updated from game discs while Xbox Live ran; a stock console stays on whatever dashboard it has.",
+      "source": "https://consolemods.org/wiki/Xbox",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": ["1.0", "1.2-1.4", "1.6"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "No vendor update path today. Modded consoles usually boot an alternative dashboard instead."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "A softmod can be removed by restoring the original dashboard files and EEPROM."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox", "url": "https://consolemods.org/wiki/Xbox" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "ConsoleMods: Xbox hub", "url": "https://consolemods.org/wiki/Xbox" },
+    { "label": "ConsoleMods: Xbox Getting Started", "url": "https://consolemods.org/wiki/Xbox:Getting_Started" },
+    { "label": "xboxdevwiki: Hardware Revisions", "url": "https://xboxdevwiki.net/Hardware_Revisions" },
+    { "label": "xboxdevwiki: CPU", "url": "https://xboxdevwiki.net/CPU" },
+    { "label": "xboxdevwiki: NV2A", "url": "https://xboxdevwiki.net/NV2A" },
+    { "label": "xboxdevwiki: Memory", "url": "https://xboxdevwiki.net/Memory" },
+    { "label": "xboxdevwiki: Xbox Linux", "url": "https://xboxdevwiki.net/Linux" }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "source": "https://consolemods.org/wiki/Xbox",
+    "summary": "The Xbox generation is discontinued; Microsoft no longer provides hardware or system-software support."
+  }
+}

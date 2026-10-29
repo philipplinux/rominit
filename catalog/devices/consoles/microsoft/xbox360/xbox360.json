@@ -1,0 +1,261 @@
+{
+  "id": "xbox360",
+  "name": "Microsoft Xbox 360 family",
+  "manufacturer": "Microsoft",
+  "releaseYear": 2005,
+  "models": [
+    { "id": "phat", "name": "Xbox 360 (original / phat)" },
+    { "id": "slim", "name": "Xbox 360 S (slim)" },
+    { "id": "e", "name": "Xbox 360 E" }
+  ],
+  "summary": "Explore Xbox 360 hardware in its three body styles and many motherboard revisions. Homebrew eligibility is decided by both the board revision and the dashboard/kernel version: JTAG on old kernels, RGH on most newer boards, and Bad Update (software-only) on any model at dashboard 2.0.17559.",
+  "specs": {
+    "cpu": "IBM PowerPC triple-core (Xenon Waternoose on first boards; later revisions on smaller processes)",
+    "gpu": "ATI Xenos with embedded eDRAM",
+    "memory": "512 MB GDDR3",
+    "storage": "Detachable hard drive, model-dependent; memory units; USB storage on later dashboards",
+    "media": "DVD drive (HD-DVD via external add-on); no Blu-ray",
+    "display": "Up to 1080p; HDMI on Zephyr and later and on S/E models"
+  },
+  "variants": [
+    {
+      "model": "Xbox 360 (original / phat)",
+      "region": "Worldwide",
+      "releaseYear": 2005,
+      "storage": "20 GB to 120 GB hard drive; 4 GB memory unit on some bundles",
+      "notes": "Board revisions: Xenon, Elpis (refurbished Xenon), Zephyr, Falcon, Jasper, Tonasket. JTAG only on 2.0.7371 or lower with an unpatched CB. RGH works on all phats. Postfix Adapter not needed on phats.",
+      "specs": {
+        "cpu": "IBM Waternoose (90 nm), triple-core",
+        "gpu": "ATI Y1 (90 nm) with 10 MB eDRAM",
+        "memory": "512 MB GDDR3",
+        "storage": "20–120 GB HDD",
+        "hdmi": "Zephyr and later; not Xenon or Elpis"
+      }
+    },
+    {
+      "model": "Xbox 360 S (slim)",
+      "region": "Worldwide",
+      "releaseYear": 2010,
+      "storage": "4 GB to 250 GB depending on SKU",
+      "notes": "Board revisions: Trinity, Corona, Waitsburg. RGH is the only permanent mod. Peer Pressure works on Trinity only. Waitsburg needs a Postfix Adapter for RGH.",
+      "specs": {
+        "cpu": "IBM triple-core (smaller process)",
+        "gpu": "ATI GPU (smaller process)",
+        "memory": "512 MB GDDR3",
+        "storage": "4–250 GB",
+        "hdmi": "Yes (built-in)"
+      }
+    },
+    {
+      "model": "Xbox 360 E",
+      "region": "Worldwide",
+      "releaseYear": 2013,
+      "storage": "250 GB or 4 GB/500 GB depending on SKU",
+      "notes": "Board revisions: Stingray, Barracuda (Winchester). Stingray: RGH with Postfix Adapter. Winchester boards are not compatible with RGH at all — CPU changes block entry points.",
+      "specs": {
+        "cpu": "IBM triple-core",
+        "gpu": "ATI GPU",
+        "memory": "512 MB GDDR3",
+        "storage": "250 GB or 4 GB/500 GB",
+        "hdmi": "Yes (built-in)"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "2.0.17559 (latest; Microsoft no longer ships new 360 dashboards)",
+    "shortVersion": "2.0.17559",
+    "checkedDate": "2026-10-28",
+    "source": "https://consolemods.org/wiki/Xbox_360:Bad_Update"
+  },
+  "homebrew": [
+    {
+      "name": "Bad Update",
+      "models": ["phat", "slim", "e"],
+      "firmware": "2.0.17559 only",
+      "summary": "A hypervisor exploit for every 360 model running dashboard 2.0.17559. It enters through a supported game or an exploited Avatar and is paired with FreeMyXe or XeUnshackle to run XEX content. Non-persistent — power-off returns the console to stock.",
+      "source": "https://consolemods.org/wiki/Xbox_360:Bad_Update",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["phat", "slim", "e"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "ConsoleMods states the exploit works on all 360 models at dashboard 2.0.17559. Does not work on Xbox One or Series."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Dashboard 2.0.17559 on the console.",
+        "A supported game (e.g. Rock Band Blitz trial) or an exploited Avatar."
+      ],
+      "warnings": [
+        "Non-persistent — code execution is lost at power-off.",
+        "Only works at dashboard 2.0.17559; a different dashboard does not have the exploit."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Bad Update", "url": "https://consolemods.org/wiki/Xbox_360:Bad_Update" }
+      ]
+    },
+    {
+      "name": "RGH family (Reset Glitch Hack)",
+      "models": ["phat", "slim"],
+      "firmware": "All versions except 2.0.17559-only software entry; RGH1 ≤2.0.14699; RGH1.2/RGH2/RGH3/EXT_CLK above",
+      "summary": "A permanent boot-time glitch mod. The method depends on the board and dashboard: RGH1 for 2.0.14699 and lower; RGH1.2/RGH2/RGH3/EXT_CLK above. S-RGH, EXT_CLK and Project Mufas are variants for Xenon, Zephyr and special cases. Requires a glitch chip, NAND programmer and soldering.",
+      "source": "https://free60.org/Hacks/Reset_Glitch_Hack/",
+      "kind": "hardmod",
+      "compatibility": [
+        {
+          "models": ["phat"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "All phat revisions (Xenon, Elpis, Zephyr, Falcon, Jasper, Tonasket) can take RGH. Xenon/Zephyr support RGH3/EXT_CLK. A NAND dump and CPU key are prerequisites."
+        },
+        {
+          "models": ["slim"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Trinity and Corona slims can take RGH. Waitsburg requires a Postfix Adapter. No RGH on 360 E."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A NAND dump and CPU key before any work.",
+        "Glitch chip, NAND programmer and soldering equipment.",
+        "For Waitsburg and Stingray boards: a Postfix Adapter."
+      ],
+      "warnings": [
+        "A bad install can leave the console unbootable until the chip is removed and the NAND restored.",
+        "Soldering a glitch chip is not reversible by software."
+      ],
+      "links": [
+        { "label": "free60: Reset Glitch Hack", "url": "https://free60.org/Hacks/Reset_Glitch_Hack/" },
+        { "label": "ConsoleMods: Xbox 360 Getting Started", "url": "https://consolemods.org/wiki/Xbox_360:Getting_Started" }
+      ]
+    },
+    {
+      "name": "JTAG (SMC hack)",
+      "models": ["phat"],
+      "firmware": "2.0.7371 or lower, with an unpatched CB",
+      "summary": "A permanent boot-time exploit on phat consoles running old kernels with an unpatched coprocessor. Not available on slims.",
+      "source": "https://consolemods.org/wiki/Xbox_360:Getting_Started",
+      "kind": "hardmod",
+      "compatibility": [
+        {
+          "models": ["phat"],
+          "supportedFirmware": ["2.0.7371"],
+          "status": "documented",
+          "note": "Some Jasper consoles with 2.0.7371 are already patched; refurbished Xenons with Elpis GPUs also have a patched CB. Dump the NAND and check the CB before assuming a console is JTAG-able."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Dashboard 2.0.7371 or lower with an unpatched coprocessor.",
+        "A NAND dump to verify the CB state."
+      ],
+      "warnings": [
+        "A dashboard version alone does not prove JTAG — the CB must be unpatched."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox 360 Getting Started", "url": "https://consolemods.org/wiki/Xbox_360:Getting_Started" }
+      ]
+    },
+    {
+      "name": "Peer Pressure",
+      "models": ["phat", "slim"],
+      "firmware": "2.0.17559; Trinity only on slim",
+      "summary": "A software exploit for phat consoles and Trinity slims at dashboard 2.0.17559. Does not work on Corona, Waitsburg or 360 E boards.",
+      "source": "https://consolemods.org/wiki/Xbox_360:Getting_Started",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["phat"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "Phat consoles at 2.0.17559 are supported."
+        },
+        {
+          "models": ["slim"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "Only Trinity boards support Peer Pressure. Corona and Waitsburg do not."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "Dashboard 2.0.17559 on a phat or a Trinity slim."
+      ],
+      "warnings": [
+        "Winchester (Barracuda) boards do not support RGH or Peer Pressure."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox 360 Getting Started", "url": "https://consolemods.org/wiki/Xbox_360:Getting_Started" }
+      ]
+    },
+    {
+      "name": "Linux (free60 distributions)",
+      "models": ["phat", "slim"],
+      "firmware": "Requires a modded console with XeLL; no firmware-specific limit",
+      "summary": "An archive of 2007–2012-era Linux distributions (Debian, Ubuntu, Arch POWER) and the LibXenon toolchain from free60. Booting any of it needs a hacked console. These images are not maintained current distributions.",
+      "source": "https://free60.org/Linux/Distros/",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": ["phat", "slim"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Historical archive; booting requires XeLL and a modded console."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A modded Xbox 360 with XeLL installed."
+      ],
+      "warnings": [
+        "Not a supported way to run Linux today. Kernels and distro images are historical."
+      ],
+      "links": [
+        { "label": "free60: Linux distros", "url": "https://free60.org/Linux/Distros/" }
+      ]
+    },
+    {
+      "name": "Xbox 360 system software update and reinstall",
+      "models": ["phat", "slim", "e"],
+      "firmware": "Latest official system software: 2.0.17559",
+      "summary": "Official update and recovery for Xbox 360. The final dashboard is 2.0.17559; reinstalling does not accept older firmware.",
+      "source": "https://consolemods.org/wiki/Xbox_360",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": ["phat", "slim", "e"],
+          "supportedFirmware": ["2.0.17559"],
+          "status": "documented",
+          "note": "Official update track shared by the whole family."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "USB drive with the official update file."
+      ],
+      "warnings": [
+        "No official downgrade below 2.0.17559 exists."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox 360 hub", "url": "https://consolemods.org/wiki/Xbox_360" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "ConsoleMods: Xbox 360 hub", "url": "https://consolemods.org/wiki/Xbox_360" },
+    { "label": "ConsoleMods: Xbox 360 Getting Started", "url": "https://consolemods.org/wiki/Xbox_360:Getting_Started" },
+    { "label": "ConsoleMods: Xbox 360 Motherboard Information", "url": "https://consolemods.org/wiki/Xbox_360:Motherboard_Information" },
+    { "label": "ConsoleMods: Bad Update", "url": "https://consolemods.org/wiki/Xbox_360:Bad_Update" },
+    { "label": "free60: Reset Glitch Hack", "url": "https://free60.org/Hacks/Reset_Glitch_Hack/" },
+    { "label": "free60: Linux distros", "url": "https://free60.org/Linux/Distros/" },
+    { "label": "free60 wiki", "url": "https://free60.org/" }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "source": "https://consolemods.org/wiki/Xbox_360",
+    "summary": "Microsoft no longer ships new dashboards; the 2024-07-29 Store closure ended purchases, not system updates."
+  }
+}

@@ -10,6 +10,11 @@ import wii from '../../catalog/devices/consoles/nintendo/wii/wii.json' with { ty
 import nintendo3ds from '../../catalog/devices/consoles/nintendo/3ds/3ds.json' with { type: 'json' };
 import wiiU from '../../catalog/devices/consoles/nintendo/wii-u/wii-u.json' with { type: 'json' };
 import switchConsole from '../../catalog/devices/consoles/nintendo/switch/switch.json' with { type: 'json' };
+import xbox from '../../catalog/devices/consoles/microsoft/xbox/xbox.json' with { type: 'json' };
+import xbox360 from '../../catalog/devices/consoles/microsoft/xbox360/xbox360.json' with { type: 'json' };
+import xboxOne from '../../catalog/devices/consoles/microsoft/xboxone/xboxone.json' with { type: 'json' };
+import xboxSeries from '../../catalog/devices/consoles/microsoft/xboxseries/xboxseries.json' with { type: 'json' };
+import dreamcast from '../../catalog/devices/consoles/sega/dreamcast/dreamcast.json' with { type: 'json' };
 import rg35xx from '../../catalog/devices/consoles/anbernic/rg35xx/rg35xx.json' with { type: 'json' };
 import rg405 from '../../catalog/devices/consoles/anbernic/rg405/rg405.json' with { type: 'json' };
 import rg505 from '../../catalog/devices/consoles/anbernic/rg505/rg505.json' with { type: 'json' };
@@ -74,6 +79,7 @@ import trimuiSmartPro from '../../catalog/devices/consoles/trimui/smart-pro/smar
  * @type {ConsoleEntry[]} */
 export const CONSOLES = [
   ps2, psp, ps3, vita, ps4, ps5, ds, wii, nintendo3ds, wiiU, switchConsole,
+  xbox, xbox360, xboxOne, xboxSeries, dreamcast,
   rg35xx, rg405, rg505, rg556, rogAlly,
   odin2, thor,
   retroidPocket5, retroidPocketMini,

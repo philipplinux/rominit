@@ -1,0 +1,204 @@
+{
+  "id": "dreamcast",
+  "name": "Sega Dreamcast family",
+  "manufacturer": "Sega",
+  "releaseYear": 1998,
+  "models": [
+    { "id": "jp", "name": "Dreamcast (HKT-3000, Japan)" },
+    { "id": "asia", "name": "Dreamcast (HKT-3010, Asia)" },
+    { "id": "na", "name": "Dreamcast (HKT-3020, North America)" },
+    { "id": "pal", "name": "Dreamcast (HKT-3030, Europe)" }
+  ],
+  "summary": "Explore the Dreamcast hardware across its four regional models. Region changes the BIOS and pack-in peripherals, not the hardware capability. The production revision decides whether MIL-CD booting still works — the final revisions removed MIL-CD support.",
+  "specs": {
+    "cpu": "Hitachi SH-4 at 200 MHz, RISC superscalar",
+    "gpu": "NEC-VideLogic PowerVR CLX2 at 100 MHz",
+    "memory": "26.125 MB total: 16 MB SDRAM main RAM + 8 MB SDRAM VRAM + 2 MB SDRAM sound RAM + 128 KB GD-ROM buffer",
+    "storage": "None internal; VMU memory cards in the controller",
+    "media": "GD-ROM (~1 GB); CD-ROM/CD-R via MIL-CD on most units",
+    "display": "320×240 to 800×608 (TV), up to 1600×1200 internal; AV cable, optional VGA box",
+    "network": "Built-in 56k modem; broadband adapter sold separately"
+  },
+  "variants": [
+    {
+      "model": "Dreamcast (HKT-3000, Japan)",
+      "region": "Japan",
+      "releaseYear": 1998,
+      "storage": "VMU memory cards; no internal storage",
+      "notes": "Launch 1998-11-27. Transparent plastic piece on the lid front; 'Designed for Microsoft Windows CE' text. Same hardware spec as Western models, different BIOS region and pack-in.",
+      "specs": {
+        "cpu": "Hitachi SH-4 at 200 MHz",
+        "gpu": "PowerVR CLX2 at 100 MHz",
+        "memory": "16 MB SDRAM main + 8 MB SDRAM VRAM + 2 MB SDRAM audio",
+        "storage": "VMU cards",
+        "media": "GD-ROM; MIL-CD on most revisions"
+      }
+    },
+    {
+      "model": "Dreamcast (HKT-3010, Asia)",
+      "region": "Asia",
+      "releaseYear": 1998,
+      "storage": "VMU memory cards; no internal storage",
+      "notes": "Asian launch 1998-11. Same hardware spec; region-specific BIOS and pack-in.",
+      "specs": {
+        "cpu": "Hitachi SH-4 at 200 MHz",
+        "gpu": "PowerVR CLX2 at 100 MHz",
+        "memory": "16 MB SDRAM main + 8 MB SDRAM VRAM + 2 MB SDRAM audio",
+        "storage": "VMU cards",
+        "media": "GD-ROM; MIL-CD on most revisions"
+      }
+    },
+    {
+      "model": "Dreamcast (HKT-3020, North America)",
+      "region": "North America",
+      "releaseYear": 1999,
+      "storage": "VMU memory cards; no internal storage",
+      "notes": "US launch 1999-09-09 at $199.99. Grey lid piece, 'Compatible with Microsoft Windows CE' text. Same hardware spec; region-specific BIOS and pack-in.",
+      "specs": {
+        "cpu": "Hitachi SH-4 at 200 MHz",
+        "gpu": "PowerVR CLX2 at 100 MHz",
+        "memory": "16 MB SDRAM main + 8 MB SDRAM VRAM + 2 MB SDRAM audio",
+        "storage": "VMU cards",
+        "media": "GD-ROM; MIL-CD on most revisions"
+      }
+    },
+    {
+      "model": "Dreamcast (HKT-3030, Europe)",
+      "region": "Europe",
+      "releaseYear": 1999,
+      "storage": "VMU memory cards; no internal storage",
+      "notes": "EU launch 1999-10-14 in UK, Germany, France, Spain and others. Same hardware spec; region-specific BIOS and pack-in.",
+      "specs": {
+        "cpu": "Hitachi SH-4 at 200 MHz",
+        "gpu": "PowerVR CLX2 at 100 MHz",
+        "memory": "16 MB SDRAM main + 8 MB SDRAM VRAM + 2 MB SDRAM audio",
+        "storage": "VMU cards",
+        "media": "GD-ROM; MIL-CD on most revisions"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "No updatable system software; the BIOS is stored in the hardware and does not change",
+    "shortVersion": "N/A",
+    "checkedDate": "2026-10-28",
+    "source": "https://segaretro.org/Dreamcast"
+  },
+  "homebrew": [
+    {
+      "name": "MIL-CD boot",
+      "models": ["jp", "asia", "na", "pal"],
+      "firmware": "No firmware to update; works on units that retain MIL-CD support",
+      "summary": "The console can boot code from a standard CD-R using the MIL-CD format, without a modchip. Sega left this path open on most units, but removed MIL-CD support from the final production revisions toward the end of the console's life.",
+      "source": "https://dreamcast.wiki/MIL-CD",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["jp", "asia", "na", "pal"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Works on most units. Late production revisions removed MIL-CD support — the model code alone does not tell you which revision is inside."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A CD-R with MIL-CD-compatible content and a unit that retained MIL-CD support."
+      ],
+      "warnings": [
+        "Check MIL-CD support before buying a homebrew unit. Late revisions do not support it.",
+        "CD-R quality matters — the GD-ROM laser is hard on marginal media."
+      ],
+      "links": [
+        { "label": "dreamcast.wiki: MIL-CD", "url": "https://dreamcast.wiki/MIL-CD" },
+        { "label": "Sega Retro: Dreamcast", "url": "https://segaretro.org/Dreamcast" }
+      ]
+    },
+    {
+      "name": "KallistiOS",
+      "models": ["jp", "asia", "na", "pal"],
+      "firmware": "Requires a MIL-CD-bootable disc or a hacked console",
+      "summary": "The homebrew minimal operating system most Dreamcast software uses. It supports most of the hardware but is not a multitasking OS.",
+      "source": "https://segaretro.org/Dreamcast",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": ["jp", "asia", "na", "pal"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Most Dreamcast homebrew games, emulators and tools are built on KallistiOS."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A MIL-CD-bootable disc or an already-hacked console."
+      ],
+      "warnings": [
+        "Not a multitasking OS — it is superfluous for games."
+      ],
+      "links": [
+        { "label": "Sega Retro: Dreamcast", "url": "https://segaretro.org/Dreamcast" }
+      ]
+    },
+    {
+      "name": "LinuxDC / NetBSD/dreamcast",
+      "models": ["jp", "asia", "na", "pal"],
+      "firmware": "Historical ports; requires a hacked console",
+      "summary": "Linux and NetBSD ports existed for the Dreamcast. They do not really support the console's fast graphics — treat them as historical research, not usable desktops.",
+      "source": "https://segaretro.org/Dreamcast",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": ["jp", "asia", "na", "pal"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Historical ports; graphics performance is poor."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A hacked Dreamcast."
+      ],
+      "warnings": [
+        "Not a usable Linux install; graphics-poor historical ports."
+      ],
+      "links": [
+        { "label": "Sega Retro: Dreamcast", "url": "https://segaretro.org/Dreamcast" }
+      ]
+    },
+    {
+      "name": "dreamcast.wiki homebrew index",
+      "models": ["jp", "asia", "na", "pal"],
+      "firmware": "Requires a MIL-CD-bootable disc or a hacked console",
+      "summary": "A collection of homebrew games, emulators, media players and image viewers written to a bootable CD-R.",
+      "source": "https://dreamcast.wiki/",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["jp", "asia", "na", "pal"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Homebrew CD-Rs are normally region-free; retail games are region-locked to the BIOS."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A MIL-CD-bootable disc or a hacked console."
+      ],
+      "warnings": [],
+      "links": [
+        { "label": "dreamcast.wiki", "url": "https://dreamcast.wiki/" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "Sega Retro: Dreamcast", "url": "https://segaretro.org/Dreamcast" },
+    { "label": "Sega Retro: Dreamcast Technical specifications", "url": "https://segaretro.org/Sega_Dreamcast/Technical_specifications" },
+    { "label": "dreamcast.wiki: MIL-CD", "url": "https://dreamcast.wiki/MIL-CD" },
+    { "label": "dreamcast.wiki", "url": "https://dreamcast.wiki/" }
+  ],
+  "officialSupport": {
+    "status": "dropped",
+    "until": "2001-03",
+    "source": "https://segaretro.org/Dreamcast",
+    "summary": "Sega discontinued the Dreamcast in early 2001 after financial constraints; no official support or updates since."
+  }
+}

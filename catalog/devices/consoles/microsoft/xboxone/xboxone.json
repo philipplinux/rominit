@@ -1,0 +1,158 @@
+{
+  "id": "xboxone",
+  "name": "Microsoft Xbox One family",
+  "manufacturer": "Microsoft",
+  "releaseYear": 2013,
+  "models": [
+    { "id": "original", "name": "Xbox One (original / fat)" },
+    { "id": "one-s", "name": "Xbox One S" },
+    { "id": "one-x", "name": "Xbox One X" }
+  ],
+  "summary": "Explore the Xbox One family — the 2013 original, the One S and the One X. There is no retail-mode homebrew route comparable to the 360's RGH or the original Xbox's softmod; the documented path is Microsoft's own Developer Mode, plus research-level privilege escalation inside it.",
+  "specs": {
+    "cpu": "Custom AMD Jaguar 8-core",
+    "gpu": "Custom AMD GCN",
+    "memory": "8 GB DDR3",
+    "storage": "Internal hard drive, model-dependent; external USB storage supported",
+    "media": "Blu-ray drive; 4K UHD Blu-ray on the One S and One X",
+    "display": "1080p (One); 4K upscaling and HDR10 (One S); native 4K (One X)"
+  },
+  "variants": [
+    {
+      "model": "Xbox One (original / fat)",
+      "region": "Worldwide",
+      "releaseYear": 2013,
+      "storage": "500 GB or 1 TB hard drive",
+      "notes": "Launch 2013-11-22 (NA/EU), 2014-09-04 (Japan). External power supply, Kinect port. All three models run the same system software and take the same Developer Mode activation.",
+      "specs": {
+        "cpu": "Custom AMD Jaguar 8-core",
+        "gpu": "Custom AMD GCN",
+        "memory": "8 GB DDR3",
+        "storage": "500 GB / 1 TB HDD",
+        "media": "Blu-ray; 1080p display"
+      }
+    },
+    {
+      "model": "Xbox One S",
+      "region": "Worldwide",
+      "releaseYear": 2016,
+      "storage": "500 GB, 1 TB or 2 TB hard drive",
+      "notes": "Adds 4K video output and upscaling, HDR10 support. Smaller case, internal power supply, no Kinect port. Does not provide native 4K game rendering.",
+      "specs": {
+        "cpu": "Custom AMD Jaguar 8-core",
+        "gpu": "Custom AMD GCN",
+        "memory": "8 GB DDR3",
+        "storage": "500 GB / 1 TB / 2 TB HDD",
+        "media": "Blu-ray; 4K UHD Blu-ray; 4K upscaling"
+      }
+    },
+    {
+      "model": "Xbox One X",
+      "region": "Worldwide",
+      "releaseYear": 2017,
+      "storage": "1 TB hard drive",
+      "notes": "Mid-generation performance model. Native 4K game rendering. All three models run the same system software line.",
+      "specs": {
+        "cpu": "Custom AMD Jaguar 8-core",
+        "gpu": "Custom AMD GCN (higher clock)",
+        "memory": "8 GB DDR3",
+        "storage": "1 TB HDD",
+        "media": "Blu-ray; 4K UHD Blu-ray; native 4K"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Microsoft system software, updated online with preview/insider rings",
+    "shortVersion": "Dynamic (per console)",
+    "checkedDate": "2026-10-28",
+    "source": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation"
+  },
+  "homebrew": [
+    {
+      "name": "Developer Mode",
+      "models": ["original", "one-s", "one-x"],
+      "firmware": "All firmware versions; entered through the Dev Mode app",
+      "summary": "Microsoft's sanctioned development environment for retail Xbox One consoles. It runs UWP apps including homebrew apps and emulators packaged for the console. It needs a Microsoft account and the Dev Mode activation; it does not give kernel-level control of the retail OS.",
+      "source": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": ["original", "one-s", "one-x"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Model does not change eligibility. All three models take the same Developer Mode activation per Microsoft."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A Microsoft account and the Dev Mode app from the store."
+      ],
+      "warnings": [
+        "Developer Mode is not a jailbreak. It is a Microsoft-provided environment with its own limits."
+      ],
+      "links": [
+        { "label": "Microsoft: Xbox Developer Mode activation", "url": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation" }
+      ]
+    },
+    {
+      "name": "Security research (privilege escalation, browser issues)",
+      "models": ["original", "one-s", "one-x"],
+      "firmware": "Varies; no confirmed user route",
+      "summary": "The Xbox One Research Wiki catalogues exploits such as Developer Mode privilege escalation and browser-based issues. These are security research, not a maintained CFW path.",
+      "source": "https://xboxoneresearch.github.io/wiki/",
+      "kind": "research",
+      "compatibility": [
+        {
+          "models": ["original", "one-s", "one-x"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Research-only; no public retail exploit route is documented."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [],
+      "warnings": [
+        "Not a user route. No custom firmware or NAND-based CFW project is documented."
+      ],
+      "links": [
+        { "label": "Xbox One Research Wiki", "url": "https://xboxoneresearch.github.io/wiki/" }
+      ]
+    },
+    {
+      "name": "Xbox One offline system update (OSU)",
+      "models": ["original", "one-s", "one-x"],
+      "firmware": "Latest official system software",
+      "summary": "Microsoft's USB-based update and recovery for a console that will not boot. It reinstalls the system software and keeps or erases data depending on the option chosen.",
+      "source": "https://consolemods.org/wiki/Xbox_One",
+      "kind": "recovery",
+      "compatibility": [
+        {
+          "models": ["original", "one-s", "one-x"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Official recovery track shared by the whole family."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "USB drive with the official OSU file."
+      ],
+      "warnings": [
+        "Switching back to Retail Mode and removing the Dev Mode storage returns the console to a normal state."
+      ],
+      "links": [
+        { "label": "ConsoleMods: Xbox One", "url": "https://consolemods.org/wiki/Xbox_One" }
+      ]
+    }
+  ],
+  "sources": [
+    { "label": "ConsoleMods: Xbox One hub", "url": "https://consolemods.org/wiki/Xbox_One" },
+    { "label": "Microsoft: Xbox Developer Mode activation", "url": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation" },
+    { "label": "Xbox One Research Wiki", "url": "https://xboxoneresearch.github.io/wiki/" }
+  ],
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://learn.microsoft.com/en-us/previous-versions/windows/uwp/xbox-apps/devkit-activation",
+    "summary": "Xbox One remains supported; Developer Mode is active for all models."
+  }
+}
