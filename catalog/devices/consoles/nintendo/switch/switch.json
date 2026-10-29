@@ -92,7 +92,7 @@
           "note": "Atmosphère bundles a specific CFW release for each firmware line; 1.12.1 (2026-10-16) targets firmware 23.0.0. The project does not publish a model-specific matrix; it is designed to run on any Switch that can load the payload, which requires either RCM (unpatched Erista) or a modchip (patched Erista, Mariko, Lite, OLED)."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "An exploitable entry point: fusee-gelee via RCM on unpatched Erista, or a modchip on patched Erista / Mariko / Lite / OLED.",
         "Atmosphere payload loaded through hekate (or modchip firmware) before first boot."
@@ -105,6 +105,9 @@
           "label": "Atmosphere releases",
           "url": "https://github.com/Atmosphere-NX/Atmosphere/releases"
         }
+      ],
+      "opens": [
+        "kernel"
       ]
     },
     {
@@ -162,11 +165,21 @@
             "erista-unpatched"
           ],
           "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream and the record summary: works on unpatched Erista consoles on every firmware version."
+        },
+        {
+          "models": [
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
           "status": "unverified",
-          "note": "The community guide states fusee-gelee works on all firmware versions for unpatched Erista. The bug is in the Tegra X1 boot ROM, not in system firmware. Patched Erista, Mariko, Lite and OLED cannot use it."
+          "note": "The boot-ROM bug is fixed on these models; they need a modchip instead."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "An unpatched Erista Switch (HAC-001 with early board revision).",
         "A way to enter RCM (jig or grounded pin on X9 connector pins 10–11).",
@@ -201,11 +214,19 @@
             "oled"
           ],
           "supportedFirmware": [],
+          "status": "documented",
+          "note": "Modchip firmware glitches the boot chain before Horizon loads, so it is not tied to a system version."
+        },
+        {
+          "models": [
+            "erista-unpatched"
+          ],
+          "supportedFirmware": [],
           "status": "unverified",
-          "note": "For patched Erista, Mariko, Lite and OLED consoles. RCM-only payloads do not work on these chips; Spacecraft-NX payloads must support the specific silicon."
+          "note": "Unpatched Erista consoles use the RCM route instead; a modchip is not required."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A modchip soldered to the Switch motherboard.",
         "A PC connected via USB to flash the chip firmware."
@@ -299,6 +320,247 @@
           "url": "https://switchroot.org/"
         }
       ]
+    },
+    {
+      "name": "Homebrew App Store",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Runs from the Homebrew Menu under Atmosphère; no firmware matrix is published.",
+      "summary": "A GUI store for open-source Switch homebrew, with browsing, downloads and updates from the console.",
+      "source": "https://github.com/fortheusers/hb-appstore",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README: place it in sd:/switch/appstore and run it from hbmenu; the console needs homebrew access."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Switch running Atmosphère with the Homebrew Menu.",
+        "An SD card for the app and its downloads."
+      ],
+      "warnings": [
+        "Only lists open-source homebrew; review each app before installing it."
+      ],
+      "links": [
+        {
+          "label": "Source",
+          "url": "https://github.com/fortheusers/hb-appstore"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/fortheusers/hb-appstore/releases"
+        },
+        {
+          "label": "Web catalogue",
+          "url": "https://apps.fortheusers.org"
+        }
+      ],
+      "availability": "Open source (GPL-3.0); releases published by the project."
+    },
+    {
+      "name": "nx-hbmenu (Homebrew Menu)",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Loaded by Atmosphère once an entry point runs; no firmware matrix is published.",
+      "summary": "The Homebrew Menu for Switch. It lists and launches homebrew from the SD card and is included with Atmosphère.",
+      "source": "https://github.com/switchbrew/nx-hbmenu",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README documents the SD layout and release; it is the menu Atmosphère loads after an entry point."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Switch that can run Atmosphère.",
+        "An SD card with homebrew in the documented layout."
+      ],
+      "warnings": [
+        "The menu only launches homebrew; it does not provide the entry point itself."
+      ],
+      "links": [
+        {
+          "label": "Source and SD layout",
+          "url": "https://github.com/switchbrew/nx-hbmenu"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/switchbrew/nx-hbmenu/releases"
+        },
+        {
+          "label": "Switchbrew: Homebrew Menu",
+          "url": "https://switchbrew.org/wiki/Homebrew_Menu"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "TegraExplorer",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Payload injection needs an unpatched Erista console or a modchip; the project does not list console firmware versions.",
+      "summary": "A payload-based file explorer for Switch. It browses and edits SD and NAND contents and runs scripts before Horizon starts.",
+      "source": "https://github.com/suchmememanyskill/TegraExplorer",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README: inject TegraExplorer as a payload; unpatched Erista consoles accept RCM payloads on any firmware."
+        },
+        {
+          "models": [
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "These models need a modchip to run payloads; the project does not list modchip models."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "An unpatched Erista console with a payload injector, or a modchip on a patched console.",
+        "An SD card for the files you want to browse or edit."
+      ],
+      "warnings": [
+        "Writing to NAND can brick the console; the project warns to keep backups.",
+        "No entry point is provided by the app itself."
+      ],
+      "links": [
+        {
+          "label": "Source and usage",
+          "url": "https://github.com/suchmememanyskill/TegraExplorer"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/suchmememanyskill/TegraExplorer/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "MissionControl",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "The project says it supports all Switch firmware versions; it requires Atmosphère.",
+      "summary": "A sysmodule that connects controllers from other consoles over Bluetooth, with rumble, motion and native pairing menus.",
+      "source": "https://github.com/ndeadly/MissionControl",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README: supports all Switch firmware versions; install requires Atmosphère."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Switch running Atmosphère.",
+        "An SD card for the sysmodule files."
+      ],
+      "warnings": [
+        "Controller compatibility varies by model; see the project compatibility list."
+      ],
+      "links": [
+        {
+          "label": "Source and compatibility",
+          "url": "https://github.com/ndeadly/MissionControl"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/ndeadly/MissionControl/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "Checkpoint",
+      "models": [
+        "erista-unpatched",
+        "erista-mariko",
+        "lite",
+        "oled"
+      ],
+      "firmware": "Homebrew app; needs Atmosphère and the Homebrew Menu.",
+      "summary": "A save manager for Switch and 3DS. It backs up and restores saves for the titles you have played.",
+      "source": "https://github.com/FlagBrew/Checkpoint",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "erista-unpatched",
+            "erista-mariko",
+            "lite",
+            "oled"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README describes a homebrew save manager for Switch; it runs under an existing homebrew environment."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Switch running Atmosphère with the Homebrew Menu.",
+        "An SD card for the backup files."
+      ],
+      "warnings": [
+        "Restoring a save overwrites the current save; keep the original backup."
+      ],
+      "links": [
+        {
+          "label": "Source and features",
+          "url": "https://github.com/FlagBrew/Checkpoint"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/FlagBrew/Checkpoint/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
     }
   ],
   "sources": [
@@ -337,6 +599,26 @@
     {
       "label": "Nintendo system update information",
       "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/22525"
+    },
+    {
+      "label": "Homebrew App Store",
+      "url": "https://github.com/fortheusers/hb-appstore"
+    },
+    {
+      "label": "nx-hbmenu (Homebrew Menu)",
+      "url": "https://github.com/switchbrew/nx-hbmenu"
+    },
+    {
+      "label": "TegraExplorer",
+      "url": "https://github.com/suchmememanyskill/TegraExplorer"
+    },
+    {
+      "label": "MissionControl",
+      "url": "https://github.com/ndeadly/MissionControl"
+    },
+    {
+      "label": "Checkpoint",
+      "url": "https://github.com/FlagBrew/Checkpoint"
     }
   ],
   "media": {},

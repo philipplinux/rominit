@@ -361,7 +361,7 @@
             "7.0",
             "8.0",
             "9.0",
-                    "9.2",
+            "9.2",
             "9.3",
             "9.4",
             "9.5",
@@ -447,7 +447,7 @@
             "7.0",
             "8.0",
             "9.0",
-                    "9.2",
+            "9.2",
             "9.3",
             "9.4",
             "9.5",
@@ -522,7 +522,7 @@
             "7.0",
             "8.0",
             "9.0",
-                    "9.2",
+            "9.2",
             "9.3",
             "9.4",
             "9.5",
@@ -610,7 +610,7 @@
             "7.0",
             "8.0",
             "9.0",
-                    "9.2",
+            "9.2",
             "9.3",
             "9.4",
             "9.5",
@@ -699,7 +699,7 @@
             "7.0",
             "8.0",
             "9.0",
-                    "9.2",
+            "9.2",
             "9.3",
             "9.4",
             "9.5",
@@ -980,6 +980,162 @@
           "url": "https://3ds.hacks.guide/ctrtransfer"
         }
       ]
+    },
+    {
+      "name": "boot9strap",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Installed through a compatible entry point such as ntrboot or a hardmod; the bootrom code execution is not tied to a system version.",
+      "summary": "Boot9/Boot11 code execution that launches boot.firm from the SD card or CTRNAND. It is the boot stage Luma3DS and other 3DS custom firmware run on.",
+      "source": "https://github.com/SciresM/boot9strap",
+      "kind": "entrypoint",
+      "opens": [
+        "kernel"
+      ],
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream describes Boot9/Boot11 code execution and loading boot.firm; the installer route (ntrboot, hardmod) supplies any-version reach."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A compatible install route: ntrboot with a supported DS flashcart, or a hardmod.",
+        "SafeB9SInstaller and the boot.firm of the custom firmware you want to run."
+      ],
+      "warnings": [
+        "A failed boot9strap install can leave the console unable to boot; the guide requires a NAND backup first.",
+        "boot9strap is the boot stage, not a user-facing app."
+      ],
+      "links": [
+        {
+          "label": "Source",
+          "url": "https://github.com/SciresM/boot9strap"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/SciresM/boot9strap/releases"
+        },
+        {
+          "label": "Installer",
+          "url": "https://github.com/d0k3/SafeB9SInstaller"
+        }
+      ],
+      "availability": "Open source (GPL-3.0); releases published by the project."
+    },
+    {
+      "name": "FBI",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Runs as a CIA or 3DSX under Luma3DS; NAND features require custom firmware.",
+      "summary": "An open-source title manager for the 3DS. It installs titles and tickets from SD, network or QR code, and manages saves, TWL photos and system data.",
+      "source": "https://github.com/Steveice10/FBI",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README: runs from a CIA, 3DS or 3DSX under Luma3DS; NAND and system-data features need that custom firmware."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A 3DS with Luma3DS (or another boot9strap-based CFW).",
+        "The FBI CIA/3DSX and, for installs, the title files or a network source you own."
+      ],
+      "warnings": [
+        "Installing titles and tickets changes system data; a NAND backup is advised.",
+        "No titles, tickets or keys are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and features",
+          "url": "https://github.com/Steveice10/FBI"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Steveice10/FBI/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "Checkpoint",
+      "models": [
+        "3ds",
+        "3ds-xl",
+        "2ds",
+        "new-3ds",
+        "new-3ds-xl",
+        "new-2ds-xl"
+      ],
+      "firmware": "Homebrew app; needs a homebrew entry point such as Luma3DS.",
+      "summary": "A save manager for 3DS and Switch. It backs up and restores saves for cartridges, digital titles, extdata, DSiWare and GBA Virtual Console games.",
+      "source": "https://github.com/FlagBrew/Checkpoint",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "3ds",
+            "3ds-xl",
+            "2ds",
+            "new-3ds",
+            "new-3ds-xl",
+            "new-2ds-xl"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README describes a homebrew save manager for 3DS; it runs under an existing homebrew entry point."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A 3DS with a homebrew entry point (Luma3DS or a save exploit).",
+        "An SD card for the backup files."
+      ],
+      "warnings": [
+        "Restoring a save overwrites the current save; keep the original backup."
+      ],
+      "links": [
+        {
+          "label": "Source and features",
+          "url": "https://github.com/FlagBrew/Checkpoint"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/FlagBrew/Checkpoint/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
     }
   ],
   "sources": [
@@ -1054,6 +1210,18 @@
     {
       "label": "super-skaterhax upstream",
       "url": "https://github.com/zoogie/super-skaterhax"
+    },
+    {
+      "label": "boot9strap",
+      "url": "https://github.com/SciresM/boot9strap"
+    },
+    {
+      "label": "FBI",
+      "url": "https://github.com/Steveice10/FBI"
+    },
+    {
+      "label": "Checkpoint",
+      "url": "https://github.com/FlagBrew/Checkpoint"
     }
   ],
   "media": {},

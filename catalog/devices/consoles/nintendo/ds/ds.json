@@ -248,9 +248,7 @@
         "A DSi with Unlaunch or hiyaCFW.",
         "nds-bootstrap installed to the SD card."
       ],
-      "warnings": [
-        "DSi games are region-locked; DS games are region-free."
-      ],
+      "warnings": ["DSi games are region-locked; DS games are region-free."],
       "links": [
         { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" }
       ]
@@ -284,13 +282,80 @@
       "links": [
         { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" }
       ]
+    },
+    {
+      "name": "GodMode9i",
+      "models": ["ds-phat", "ds-lite", "dsi", "dsi-xl"],
+      "firmware": "No system firmware dependency: it runs from a Slot-1 flashcard on DS/DS Lite or from SD/NAND under DSi homebrew.",
+      "summary": "A full-access file browser for DS and DSi. It dumps DS, DSi and GBA cartridges, restores saves, mounts NitroFS images and edits files, and also runs on the 3DS TWL_FIRM.",
+      "source": "https://github.com/DS-Homebrew/GodMode9i",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["ds-phat", "ds-lite", "dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream describes DS, DSi and 3DS TWL_FIRM support; it needs a flashcard or DSi homebrew, not a specific system version."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Slot-1 flashcard on DS/DS Lite, or DSi homebrew (Unlaunch or hiyaCFW) on DSi.",
+        "An SD card or flashcard microSD for the files you read or write."
+      ],
+      "warnings": [
+        "File and save operations can overwrite data; back up before writing to cartridges or NAND.",
+        "Cartridge dumping needs the right slot and, on DS/DS Lite, a Slot-2 card for some save operations."
+      ],
+      "links": [
+        { "label": "Source and feature list", "url": "https://github.com/DS-Homebrew/GodMode9i" },
+        { "label": "Releases", "url": "https://github.com/DS-Homebrew/GodMode9i/releases" }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "DSLinux",
+      "models": ["ds-phat", "ds-lite", "dsi", "dsi-xl"],
+      "firmware": "DS and DS Lite are supported; the project says newer models such as DSi and 3DS might work in DS-compatibility mode.",
+      "summary": "A port of Linux to the Nintendo DS and DS Lite, with a shell and text-mode applications. It also runs on some DS emulators.",
+      "source": "https://www.dslinux.org/",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": ["ds-phat", "ds-lite"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Project site names the DS and DS Lite as supported hardware."
+        },
+        {
+          "models": ["dsi", "dsi-xl"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Site says newer models might work in DS-compatibility mode; no DSi support is claimed."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A DS or DS Lite with a homebrew entry point such as a Slot-1 flashcard.",
+        "An SD card or flashcard storage for the Linux image."
+      ],
+      "warnings": [
+        "DSi and 3DS support is not claimed; treat it as experimental DS-compatibility mode.",
+        "Text-mode system with limited memory; it is not a desktop environment."
+      ],
+      "links": [
+        { "label": "Project site", "url": "https://www.dslinux.org/" }
+      ],
+      "availability": "Open source; images published by the project."
     }
   ],
   "sources": [
     { "label": "DSi Guide", "url": "https://dsi.cfw.guide/" },
     { "label": "DS-Homebrew Wiki", "url": "https://wiki.ds-homebrew.com/" },
     { "label": "TWiLight Menu++", "url": "https://github.com/DS-Homebrew/TWiLightMenu" },
-    { "label": "Nintendo DSi system software updates", "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/4514" }
+    { "label": "Nintendo DSi system software updates", "url": "https://en-americas-support.nintendo.com/app/answers/detail/a_id/4514" },
+    { "label": "GodMode9i", "url": "https://github.com/DS-Homebrew/GodMode9i" },
+    { "label": "DSLinux", "url": "https://www.dslinux.org/" }
   ],
   "media": {},
   "highlights": [],

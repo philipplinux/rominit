@@ -467,6 +467,97 @@
           "url": "https://wiiu.hacks.guide/faq"
         }
       ]
+    },
+    {
+      "name": "Homebrew App Store",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Runs from the Homebrew Launcher under Aroma or Tiramisu; no firmware matrix is published.",
+      "summary": "A GUI store for open-source Wii U homebrew, with browsing, downloads and updates from the console.",
+      "source": "https://github.com/fortheusers/hb-appstore",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "README: place it in sd:/wiiu/apps/appstore and run it from the Homebrew Launcher; the console needs a working homebrew environment."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Wii U with homebrew access and the Homebrew Launcher (Aroma or Tiramisu).",
+        "An SD card for the app and its downloads."
+      ],
+      "warnings": [
+        "Only lists open-source homebrew; review each app before installing it."
+      ],
+      "links": [
+        {
+          "label": "Source",
+          "url": "https://github.com/fortheusers/hb-appstore"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/fortheusers/hb-appstore/releases"
+        },
+        {
+          "label": "Web catalogue",
+          "url": "https://apps.fortheusers.org"
+        }
+      ],
+      "availability": "Open source (GPL-3.0); releases published by the project."
+    },
+    {
+      "name": "linux-wiiu",
+      "models": [
+        "basic",
+        "deluxe"
+      ],
+      "firmware": "Install guide assumes Cafe OS homebrew (Aroma) and states no model or firmware limit.",
+      "summary": "A Linux port for the Wii U that exposes the console hardware from a normal Linux environment. Distributions include Adélie, ArchPOWER, Debian and Gentoo, booted through petitboot.",
+      "source": "https://gitlab.com/linux-wiiu/linux-wiiu",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "basic",
+            "deluxe"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Install guide targets the Wii U with Aroma homebrew and gives no model or firmware restriction."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Wii U with Aroma homebrew working.",
+        "An SD card for the bootloader plus a USB drive, SD partition or SATA device for the distribution."
+      ],
+      "warnings": [
+        "Flashable disk images erase the target device; the guide warns before each destructive step.",
+        "Performance depends on the storage medium; USB 2.0 is slow, SD or SATA is recommended."
+      ],
+      "links": [
+        {
+          "label": "Source",
+          "url": "https://gitlab.com/linux-wiiu/linux-wiiu"
+        },
+        {
+          "label": "Project site and distributions",
+          "url": "https://linux-wiiu.org/"
+        },
+        {
+          "label": "Install guide",
+          "url": "https://linux-wiiu.org/install"
+        }
+      ],
+      "availability": "Open source; distribution images published by the project."
     }
   ],
   "sources": [
@@ -541,6 +632,14 @@
     {
       "label": "Hacks Guide Wiki: ISFShax",
       "url": "https://wiki.hacks.guide/wiki/Wii_U:ISFShax"
+    },
+    {
+      "label": "Homebrew App Store",
+      "url": "https://github.com/fortheusers/hb-appstore"
+    },
+    {
+      "label": "linux-wiiu",
+      "url": "https://gitlab.com/linux-wiiu/linux-wiiu"
     }
   ],
   "media": {},

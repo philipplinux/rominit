@@ -188,13 +188,19 @@
       "kind": "recovery",
       "compatibility": [
         {
-          "models": ["wii", "family-edition", "wii-mini"],
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "BootMii-IOS runs from the Homebrew Channel on any Wii Menu; BootMii-boot2 only installs on consoles with the old boot1 signing bug."
+        },
+        {
+          "models": ["wii-mini"],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "BootMii-boot2 availability varies by revision; the HackMii installer decides what a console supports. BootMii-IOS is the fallback where boot2 is unavailable."
+          "note": "No BootMii install route is documented for the Wii Mini."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "The HackMii installer completed successfully.",
         "A supported BootMii form for the console revision."
@@ -216,13 +222,19 @@
       "kind": "recovery",
       "compatibility": [
         {
-          "models": ["wii", "family-edition", "wii-mini"],
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "wiibrew says Priiloader works on all Wiis; it installs before the system menu, not per firmware version."
+        },
+        {
+          "models": ["wii-mini"],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "Priiloader is installed from the Homebrew Channel; it only helps if it was installed before the failure."
+          "note": "No Priiloader install route is documented for the Wii Mini."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "The Homebrew Channel running.",
         "Priiloader installed before the failure it is meant to recover from."
@@ -237,30 +249,139 @@
     {
       "name": "d2x cIOS",
       "models": ["wii", "family-edition", "wii-mini"],
-      "firmware": "Wii Menu 4.3",
+      "firmware": "Installed from the Homebrew Channel on Wii Menu 4.3; the project says not to use it on the Wii Mini.",
       "summary": "Patched IOS installed by the guide so USB loaders work. Wrong base slots are a brick risk.",
-      "source": "https://wii.hacks.guide/",
+      "source": "https://github.com/davebaol/d2x-cios",
       "kind": "payload/app",
       "compatibility": [
         {
-          "models": ["wii", "family-edition", "wii-mini"],
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "Installed through the Homebrew Channel on the current Wii Menu; README describes it as a custom IOS."
+        },
+        {
+          "models": ["wii-mini"],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "Installed by the guide for USB loaders; exact model and firmware support is not published beyond the guide's 4.3 path."
+          "note": "README says do not use d2x cIOS on the Wii Mini."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
-        "The Homebrew Channel running.",
-        "The guide's d2x installation steps followed exactly."
+        "A Wii with the Homebrew Channel installed.",
+        "The correct d2x package for the console, installed with the d2x cIOS installer."
       ],
       "warnings": [
-        "cIOS installs can break the console; use the guide's region-matched bases.",
-        "USB loaders need cIOS, but the menu works before cIOSes are installed."
+        "README says do not use this on the Wii Mini.",
+        "Wrong base slots or an interrupted install can make the console unbootable; follow the project slots."
       ],
       "links": [
-        { "label": "Wii Hacks Guide", "url": "https://wii.hacks.guide/" }
-      ]
+        { "label": "Source and documentation", "url": "https://github.com/davebaol/d2x-cios" },
+        { "label": "Releases", "url": "https://github.com/davebaol/d2x-cios/releases" },
+        { "label": "Wiki", "url": "https://github.com/davebaol/d2x-cios/wiki" }
+      ],
+      "opens": ["kernel"],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "USB Loader GX",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3 with the Homebrew Channel and d2x cIOS installed.",
+      "summary": "A Wii and GameCube USB/SD loader with cover art, cheats and backup creation. It also launches other homebrew apps.",
+      "source": "https://github.com/wiidev/usbloadergx",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "Install guide requires the Homebrew Channel and d2x cIOS on Wii Menu 4.3."
+        },
+        {
+          "models": ["wii-mini"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Guide covers Wii and vWii; no Wii Mini support is stated."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "The Homebrew Channel and d2x cIOS installed on the console.",
+        "A FAT32 USB drive or SD card for games and the loader."
+      ],
+      "warnings": [
+        "Depends on d2x cIOS; without it, game loading fails.",
+        "No games are bundled."
+      ],
+      "links": [
+        { "label": "Source and install guide", "url": "https://github.com/wiidev/usbloadergx" },
+        { "label": "Releases", "url": "https://github.com/wiidev/usbloadergx/releases" }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "WiiFlow Lite",
+      "models": ["wii", "family-edition", "wii-mini"],
+      "firmware": "Wii Menu 4.3 with the Homebrew Channel; games need d2x cIOS.",
+      "summary": "A cover-flow game and app launcher for Wii and vWii that runs titles from a USB device or SD card.",
+      "source": "https://github.com/Fledge68/WiiFlow_Lite",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": ["4.3"],
+          "status": "documented",
+          "note": "README requires the Homebrew Channel or a forwarder on Wii Menu 4.3."
+        },
+        {
+          "models": ["wii-mini"],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "README covers Wii and vWii; no Wii Mini support is stated."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "The Homebrew Channel or a WiiFlow forwarder installed.",
+        "A FAT32 USB drive or SD card, and d2x cIOS for game loading."
+      ],
+      "warnings": ["Game loading depends on d2x cIOS; no games are bundled."],
+      "links": [
+        { "label": "Source and install notes", "url": "https://github.com/Fledge68/WiiFlow_Lite" },
+        { "label": "Releases", "url": "https://github.com/Fledge68/WiiFlow_Lite/releases" }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "WiiLink Patcher",
+      "models": ["wii", "family-edition"],
+      "firmware": "Desktop patcher; the console side only needs a homebrew route to install the patched WADs.",
+      "summary": "Patches WiiConnect24-based channels such as Wii Room and the Photo Prints and Food channels to work with the WiiLink service. It replaces the deprecated RiiConnect24 patcher.",
+      "source": "https://github.com/WiiLink24/WiiLink-Patcher-GUI",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": ["wii", "family-edition"],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Runs on a computer; installing the patched WADs needs homebrew on the console."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Windows, macOS or Linux computer to run the patcher.",
+        "A Wii with a homebrew route for installing WAD files."
+      ],
+      "warnings": [
+        "The older RiiConnect24 patcher is deprecated in favour of this patcher and WiiLink.",
+        "The patcher downloads channel content; it bundles no Nintendo files."
+      ],
+      "links": [
+        { "label": "Source and releases", "url": "https://github.com/WiiLink24/WiiLink-Patcher-GUI" },
+        { "label": "Install guide", "url": "https://www.wiilink24.com/guide/install" }
+      ],
+      "availability": "Open source; releases published by the project."
     }
   ],
   "sources": [
@@ -268,7 +389,10 @@
     { "label": "Wii Hacks Guide", "url": "https://wii.hacks.guide/" },
     { "label": "Wii Hacks Guide: Get Started", "url": "https://wii.hacks.guide/get-started" },
     { "label": "Wii Hacks Guide: BlueBomb", "url": "https://wii.hacks.guide/bluebomb" },
-    { "label": "WiiBrew: BootMii", "url": "https://wiibrew.org/wiki/BootMii" }
+    { "label": "WiiBrew: BootMii", "url": "https://wiibrew.org/wiki/BootMii" },
+    { "label": "USB Loader GX", "url": "https://github.com/wiidev/usbloadergx" },
+    { "label": "WiiFlow Lite", "url": "https://github.com/Fledge68/WiiFlow_Lite" },
+    { "label": "WiiLink Patcher", "url": "https://github.com/WiiLink24/WiiLink-Patcher-GUI" }
   ],
   "media": {},
   "highlights": [],
