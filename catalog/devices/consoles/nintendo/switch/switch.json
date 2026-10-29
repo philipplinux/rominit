@@ -88,8 +88,8 @@
             "oled"
           ],
           "supportedFirmware": [],
-          "status": "unverified",
-          "note": "Atmosphère bundles a specific CFW release for each firmware line; 1.12.1 (2026-10-16) targets firmware 23.0.0. The project does not publish a model-specific matrix; it is designed to run on any Switch that can load the payload, which requires either RCM (unpatched Erista) or a modchip (patched Erista, Mariko, Lite, OLED)."
+          "status": "documented",
+          "note": "Atmosphère's README describes a custom Switch firmware replacing the stock kernel with exosphere. It targets any console able to load fusee; project compatibility requires an exploit or modchip for patched models. Firmware release line is 1.12.1 for 23.0.0."
         }
       ],
       "checkedDate": "2026-10-29",
