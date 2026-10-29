@@ -3,7 +3,7 @@
 /** Page sections in display order, with the project kinds each one holds. Every kind a catalog uses must appear here. */
 export const CONSOLE_SECTIONS = [
   ['entrypoints', ['entrypoint']],
-  ['kernel', ['kernel', 'research']],
+  ['kernel', ['kernel', 'research', 'hardmod']],
   ['linux', ['linux']],
   ['os', ['os']],
   ['apps', ['payload/app']],
@@ -11,6 +11,7 @@ export const CONSOLE_SECTIONS = [
   ['research', ['emulation-research']],
   ['pc', ['pc-port']],
   ['rollback', ['rollback']],
+  ['kernel', ['kernel', 'research', 'hardmod']],
   ['recovery', ['recovery']],
   ['tools', ['tool', 'usb-tool']]
 ];
