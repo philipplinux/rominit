@@ -11,7 +11,7 @@
       "notes": "Single model; Android-based handheld"
     }
   ],
-  "summary": "AYN's Android-based handheld. KNULLI's supported-device table does not list this device (checked 2026-10-28).",
+  "summary": "AYN's Android-based handheld (Qualcomm SM8550). ROCKNIX (mainline Linux) publishes a build; KNULLI's supported-device table does not list it (checked 2026-10-29).",
   "specs": {
     "cpu": "not sourced",
     "gpu": "not sourced",
@@ -24,7 +24,7 @@
       "model": "Odin 2",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Android-based AYN handheld. Not listed in KNULLI's supported-device table (checked 2026-10-28).",
+      "notes": "Android-based AYN handheld. ROCKNIX lists Base / Pro / Max (SM8550) on its device page; not listed in KNULLI's supported-device table (checked 2026-10-29).",
       "specs": {}
     }
   ],
@@ -35,7 +35,52 @@
     "source": "https://www.ayntec.com/collections/odin"
   },
   "firmwareOptions": [],
-  "homebrew": [],
+  "homebrew": [
+    {
+      "name": "ROCKNIX",
+      "kind": "os",
+      "models": [
+        "odin-2"
+      ],
+      "firmware": "SD card image (SM8550 build); ROCKNIX ABL boot-mode switch.",
+      "summary": "Mainline-Linux retro gaming OS (Sway + Emulation Station) for the AYN Odin 2. Image is written to an SD card; internal installation is optional.",
+      "source": "https://rocknix.org/devices/ayn/odin2/",
+      "compatibility": [
+        {
+          "models": [
+            "odin-2"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "ROCKNIX lists the AYN Odin 2 (Base / Pro / Max, Qualcomm 8gen2 SM8550) with a mainline Linux kernel and Freedreno/Turnip graphics. The device page states no stability or status rating and no model limits beyond Base / Pro / Max. The ROCKNIX ABL steps are 'only required if your device doesn't have a fastboot menu to switch the Boot Mode'; the page does not say which units already have one, so whether the ABL flash is needed is unclear. ROCKNIX does not state a bootloader-unlock requirement on this page."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer (Rufus, Raspberry Pi Imager or dd).",
+        "Possibly the ROCKNIX ABL (flashed from Android as root with backup_abl.sh then flash_abl.sh) if the unit has no fastboot boot-mode menu; the page does not say which units need it."
+      ],
+      "warnings": [
+        "Flashing the ROCKNIX ABL replaces the device's ABL; run backup_abl.sh first, as the page instructs.",
+        "installtointernal (optional) resets Android userdata, like a factory reset."
+      ],
+      "links": [
+        {
+          "label": "ROCKNIX: AYN Odin 2",
+          "url": "https://rocknix.org/devices/ayn/odin2/"
+        },
+        {
+          "label": "ROCKNIX: Install",
+          "url": "https://rocknix.org/play/install/"
+        },
+        {
+          "label": "ROCKNIX: Install (internal)",
+          "url": "https://rocknix.org/play/installtointernal/"
+        }
+      ]
+    }
+  ],
   "highlights": [],
   "communities": [],
   "sources": [
@@ -50,6 +95,10 @@
     {
       "label": "KNULLI: supported devices (no AYN device listed)",
       "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: Install (SD card image)",
+      "url": "https://rocknix.org/play/install/"
     }
   ]
 }

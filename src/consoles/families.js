@@ -71,19 +71,19 @@ export const FAMILIES = [
   {
     id: 'ayn',
     name: 'AYN',
-    summary: 'AYN\'s Android-based handhelds; no verified Linux custom firmware yet.',
+    summary: 'AYN\'s Android-based handhelds; ROCKNIX publishes Linux builds for Odin 2 and Thor.',
     consoles: [
-      { name: 'Odin 2', page: 'odin-2', status: 'Android handheld; no community Linux OS found (checked 2026-10-28)' },
-      { name: 'Thor', page: 'thor', status: 'Android handheld; no community Linux OS found (checked 2026-10-28)' }
+      { name: 'Odin 2', page: 'odin-2', status: 'Android handheld; ROCKNIX (mainline Linux) from SD card (checked 2026-10-29)' },
+      { name: 'Thor', page: 'thor', status: 'Android handheld; ROCKNIX (mainline Linux) from SD card (checked 2026-10-29)' }
     ]
   },
   {
     id: 'goretroid',
     name: 'GoRetroid',
-    summary: 'GoRetroid\'s Android handhelds with KNULLI dual-boot support.',
+    summary: 'GoRetroid\'s Android handhelds with KNULLI and ROCKNIX Linux dual-boot support.',
     consoles: [
-      { name: 'Retroid Pocket 5', page: 'retroid-pocket-5', status: 'Snapdragon 865; KNULLI dual-boot from SD card (early release)' },
-      { name: 'Retroid Pocket Mini', page: 'retroid-pocket-mini', status: 'Snapdragon 865; KNULLI dual-boot from SD card (early release)' }
+      { name: 'Retroid Pocket 5', page: 'retroid-pocket-5', status: 'Snapdragon 865; KNULLI (early release) or ROCKNIX dual-boot from SD card' },
+      { name: 'Retroid Pocket Mini', page: 'retroid-pocket-mini', status: 'Snapdragon 865; KNULLI (early release) or ROCKNIX dual-boot from SD card' }
     ]
   },
   {

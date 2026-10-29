@@ -11,7 +11,7 @@
       "notes": "Single model; Snapdragon 865, Android/Linux dual boot"
     }
   ],
-  "summary": "GoRetroid's Snapdragon 865-based Android handheld with Linux dual-boot capability. Boots KNULLI from SD card by holding Volume Up at power-on; returns to Android on next boot without SD card. Identical KNULLI procedure to the Retroid Pocket 5.",
+  "summary": "GoRetroid's Snapdragon 865-based Android handheld with Linux dual-boot capability; KNULLI and ROCKNIX both publish builds. Boots KNULLI from SD card by holding Volume Up at power-on; returns to Android on next boot without SD card. Identical KNULLI procedure to the Retroid Pocket 5.",
   "specs": {
     "cpu": "Qualcomm Snapdragon 865",
     "gpu": "Adreno 650 (Snapdragon 865)",
@@ -24,7 +24,7 @@
       "model": "Retroid Pocket Mini",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Snapdragon 865 SoC. Android/Linux dual boot — boots KNULLI from SD card by holding Volume Up at power-on, returns to Android when booted normally. KNULLI interface: Emulation Station.",
+      "notes": "Snapdragon 865 SoC. Android/Linux dual boot — boots KNULLI from SD card by holding Volume Up at power-on, returns to Android when booted normally. KNULLI interface: Emulation Station. ROCKNIX (SM8250 build) is installed via an SD card image plus the ROCKNIX ABL.",
       "specs": {
         "cpu": "Qualcomm Snapdragon 865",
         "gpu": "Adreno 650"
@@ -77,6 +77,50 @@
           "url": "https://knulli.org/play/quick-start/"
         }
       ]
+    },
+    {
+      "name": "ROCKNIX",
+      "kind": "os",
+      "models": [
+        "retroid-pocket-mini"
+      ],
+      "firmware": "SD card image (SM8250 build); ROCKNIX ABL boot-mode switch.",
+      "summary": "Mainline-Linux retro gaming OS (Sway + Emulation Station) for the Retroid Pocket Mini. Image the SM8250 build to an SD card, flash the ROCKNIX ABL from Android, then switch boot mode to Linux in the ABL.",
+      "source": "https://rocknix.org/devices/retroid/retroid-pocket-mini/",
+      "compatibility": [
+        {
+          "models": [
+            "retroid-pocket-mini"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "ROCKNIX lists the Retroid Pocket Mini (Qualcomm SD865 SM8250) with a mainline Linux kernel and Freedreno/Turnip graphics. The device page states no stability or status rating. Installation: image the SM8250 build to an SD card, boot Android and copy rocknix_abl to internal storage, run backup_abl.sh then flash_abl.sh via Settings -> Handheld Settings -> Advanced -> Run Script as Root, restart holding Vol-, set the device model, switch boot mode to 'Linux' and Start. In the ABL, 'Set device model' offers Retroid Pocket Mini or Retroid Pocket Mini V2 as appropriate. For the Mini V2, the page says Retroid's latest Android OTA ships a faulty bootloader that hides the GRUB boot selection screen; the fix is to reflash the loader partition with fastboot (fastboot flash loader u-boot-sm8250-retroidpocket-rpminiv2.img, entered by holding Volume Down at power-on)."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer (Rufus, Raspberry Pi Imager or dd).",
+        "Android boot with the Run Script as Root option (Settings -> Handheld Settings -> Advanced) to flash the ROCKNIX ABL; the page does not mention a bootloader unlock."
+      ],
+      "warnings": [
+        "Flashing the ROCKNIX ABL replaces the device's ABL; run backup_abl.sh first, as the page instructs.",
+        "installtointernal (optional) resets Android userdata, like a factory reset."
+      ],
+      "links": [
+        {
+          "label": "ROCKNIX: Retroid Pocket Mini",
+          "url": "https://rocknix.org/devices/retroid/retroid-pocket-mini/"
+        },
+        {
+          "label": "ROCKNIX: Install",
+          "url": "https://rocknix.org/play/install/"
+        },
+        {
+          "label": "ROCKNIX: Install (internal)",
+          "url": "https://rocknix.org/play/installtointernal/"
+        }
+      ]
     }
   ],
   "highlights": [],
@@ -89,6 +133,10 @@
     {
       "label": "KNULLI: release 20260511 (Early releases: Retroid Pocket 5, Flip2, Mini, Mini V2)",
       "url": "https://github.com/knulli-cfw/knulli-linux/releases/tag/20260511"
+    },
+    {
+      "label": "ROCKNIX: Retroid Pocket Mini",
+      "url": "https://rocknix.org/devices/retroid/retroid-pocket-mini/"
     }
   ]
 }
