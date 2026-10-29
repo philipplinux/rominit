@@ -12,6 +12,7 @@
     }
   ],
   "summary": "GoRetroid's Snapdragon 865-based Android handheld with Linux dual-boot capability; KNULLI and ROCKNIX both publish builds. Boots KNULLI from SD card by holding Volume Up at power-on; returns to Android on next boot without SD card. Identical KNULLI procedure to the Retroid Pocket 5.",
+  "openByDesign": "KNULLI boots from an SD card through the bootloader's boot menu, with no unlock or ABL flash",
   "specs": {
     "cpu": "Qualcomm Snapdragon 865",
     "gpu": "Adreno 650 (Snapdragon 865)",
@@ -58,7 +59,7 @@
           "note": "The Retroid Pocket Mini boots both Android and Linux. KNULLI release 20260511 lists it under 'Early releases' (builds provided as is; most features working, work still to be done). KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Retroid Pocket Mini unit.",
         "A good-quality SD card (SanDisk, Lexar, etc.).",

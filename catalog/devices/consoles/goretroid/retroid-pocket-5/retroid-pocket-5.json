@@ -11,7 +11,8 @@
       "notes": "Single model; Snapdragon 865, Android/Linux dual boot"
     }
   ],
-  "summary": "GoRetroid's Snapdragon 865-based Android handheld with Linux dual-boot capability; KNULLI and ROCKNIX both publish builds. Boots KNULLI from SD card by holding Volume Up at power-on; returns to Android on next boot without SD card.",
+  "summary": "GoRetroid's Snapdragon 865-based Android handheld with Linux dual-boot capability; KNULLI, ROCKNIX and Batocera publish SM8250 builds. KNULLI boots from SD card by holding Volume Up at power-on and returns to Android on the next boot without the card; ROCKNIX and Batocera replace the ABL from Android to switch boot mode.",
+  "openByDesign": "the bootloader boots Linux from an SD card: KNULLI needs only its boot menu, while ROCKNIX and Batocera flash their own ABL from Android's root script, with no unlock",
   "specs": {
     "cpu": "Qualcomm Snapdragon 865",
     "gpu": "Adreno 650 (Snapdragon 865)",
@@ -24,7 +25,7 @@
       "model": "Retroid Pocket 5",
       "region": "Worldwide",
       "storage": "not sourced",
-      "notes": "Snapdragon 865 SoC. Android/Linux dual boot — boots KNULLI from SD card by holding Volume Up at power-on, returns to Android when booted normally. KNULLI interface: Emulation Station. ROCKNIX (SM8250 build) is installed via an SD card image plus the ROCKNIX ABL.",
+      "notes": "Snapdragon 865 SoC. Android/Linux dual boot — boots KNULLI from SD card by holding Volume Up at power-on, returns to Android when booted normally. KNULLI interface: Emulation Station. ROCKNIX (SM8250 build) and Batocera 43.1 (sm8250 build) are installed via an SD card image plus their own ABL, flashed from Android.",
       "specs": {
         "cpu": "Qualcomm Snapdragon 865",
         "gpu": "Adreno 650"
@@ -58,7 +59,7 @@
           "note": "The Retroid Pocket 5 boots both Android and Linux. KNULLI release 20260511 lists it under 'Early releases' (builds provided as is; most features working, work still to be done). KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Retroid Pocket 5 unit.",
         "A good-quality SD card (SanDisk, Lexar, etc.).",
@@ -121,6 +122,46 @@
           "url": "https://rocknix.org/play/installtointernal/"
         }
       ]
+    },
+    {
+      "name": "Batocera.linux",
+      "kind": "os",
+      "models": [
+        "retroid-pocket-5"
+      ],
+      "firmware": "SD card image (Batocera 43.1 sm8250 build); written to an SD card, with the Batocera ABL flashed from Android.",
+      "summary": "Batocera.linux's own handheld build, the upstream project ROCKNIX and KNULLI derive from. Written to an SD card after the Batocera ABL is flashed from Android.",
+      "source": "https://batocera.org/download",
+      "compatibility": [
+        {
+          "models": [
+            "retroid-pocket-5"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Batocera 43.1's handheld download list names 'Retroid Pocket 5' (sm8250 image). The wiki's SM8250 install section names the Retroid Pocket 5 as the device to pick: copy the extracted files into an 'odin2_custom_abl' directory in Android storage, run backup_and_flash.sh via Settings -> Handheld Settings -> Advanced -> Run Script as Root (it backs up the original bootloader to /sdcard/backup/), write the image to an SD card, then enter fastboot with Vol- + Power, set Boot Mode to Linux and the device model, and Start. Batocera v43 needs an updated bootloader. No bootloader unlock is mentioned."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer.",
+        "Android boot with the Run Script as Root option (Settings -> Handheld Settings -> Advanced) to flash the Batocera ABL."
+      ],
+      "warnings": [
+        "Flashing the Batocera ABL replaces the device's ABL; the script backs up the original to /sdcard/backup/, keep that backup for rollback.",
+        "Return to Android by removing the SD card and switching Boot Mode back to Android with Vol- + Power."
+      ],
+      "links": [
+        {
+          "label": "Batocera: downloads (Retroid Pocket 5, sm8250)",
+          "url": "https://batocera.org/download"
+        },
+        {
+          "label": "Batocera: Choose a handheld (SM8250 ABL install)",
+          "url": "https://wiki.batocera.org/choose_a_handheld"
+        }
+      ]
     }
   ],
   "highlights": [],
@@ -137,6 +178,14 @@
     {
       "label": "ROCKNIX: Retroid Pocket 5",
       "url": "https://rocknix.org/devices/retroid/retroid-pocket-5/"
+    },
+    {
+      "label": "Batocera: downloads (Retroid Pocket 5, sm8250 43.1)",
+      "url": "https://batocera.org/download"
+    },
+    {
+      "label": "Batocera: Choose a handheld (SM8250 ABL install)",
+      "url": "https://wiki.batocera.org/choose_a_handheld"
     }
   ]
 }

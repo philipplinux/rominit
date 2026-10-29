@@ -12,6 +12,7 @@
     }
   ],
   "summary": "Powkiddy's 5.5-inch RK3566-based Android/Linux handheld with a 1280×720 landscape IPS display. Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "openByDesign": "KNULLI and ROCKNIX boot from an SD card with no unlock or patch",
   "specs": {
     "cpu": "Rockchip RK3566 Quad-core ARM Cortex-A55, 1.8 GHz",
     "gpu": "Mali-G52",
@@ -64,7 +65,7 @@
           "note": "KNULLI publishes an RK3566 image for the X55 with Rockchip BSP 4.19 and Mali GL driver."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Powkiddy X55 unit.",
         "A good-quality SD card.",
@@ -99,7 +100,7 @@
           "note": "ROCKNIX lists the X55 as a supported RK3566 device."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Powkiddy X55 unit.",
         "A good-quality SD card.",

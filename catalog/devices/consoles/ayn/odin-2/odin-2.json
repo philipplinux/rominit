@@ -79,6 +79,41 @@
           "url": "https://rocknix.org/play/installtointernal/"
         }
       ]
+    },
+    {
+      "name": "Batocera.linux",
+      "kind": "os",
+      "models": [
+        "odin-2"
+      ],
+      "firmware": "SD card image (Batocera 43.1 handheld build); written to an SD card.",
+      "summary": "Batocera.linux's own handheld build, the upstream project ROCKNIX and KNULLI derive from. Written to an SD card.",
+      "source": "https://batocera.org/download",
+      "compatibility": [
+        {
+          "models": [
+            "odin-2"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Batocera 43.1's handheld download list names 'Odin 2' (alongside Odin 2 Mini and Odin 2 Portal, which are not models in this record). The page gives the download only, not install steps."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A device from Batocera's handheld download list.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "Batocera publishes a separate image per device; check the exact row before writing."
+      ],
+      "links": [
+        {
+          "label": "Batocera: handheld downloads",
+          "url": "https://batocera.org/download"
+        }
+      ]
     }
   ],
   "highlights": [],
@@ -99,6 +134,10 @@
     {
       "label": "ROCKNIX: Install (SD card image)",
       "url": "https://rocknix.org/play/install/"
+    },
+    {
+      "label": "Batocera: handheld downloads (43.1, lists Odin 2)",
+      "url": "https://batocera.org/download"
     }
   ]
 }

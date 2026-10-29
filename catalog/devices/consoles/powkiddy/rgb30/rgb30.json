@@ -12,6 +12,7 @@
     }
   ],
   "summary": "Powkiddy's 4-inch RK3566-based handheld with a square 720×720 vertical display and dual TF-card design (TF1 for OS, TF2 for games). Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "openByDesign": "the OS lives on the TF card, so KNULLI and ROCKNIX boot from a written card with no unlock",
   "specs": {
     "cpu": "ARM quad-core 1.8 GHz (vendor: RK3566)",
     "gpu": "Mali-G52",
@@ -64,7 +65,7 @@
           "note": "KNULLI Scarab provides knulli-rk3568-powkiddy-rgb30 image. KNULLI wiki page documents device as RK3566 with Rockchip BSP 4.19 and Mali GL driver."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Powkiddy RGB30 unit.",
         "A good-quality SD card.",
@@ -104,7 +105,7 @@
           "note": "ROCKNIX lists the RGB30 as a supported RK3566 device."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Powkiddy RGB30 unit.",
         "A good-quality SD card.",
@@ -118,6 +119,41 @@
         {
           "label": "ROCKNIX device index",
           "url": "https://rocknix.org/devices/"
+        }
+      ]
+    },
+    {
+      "name": "Batocera.linux",
+      "kind": "os",
+      "models": [
+        "rgb30"
+      ],
+      "firmware": "SD card image (Batocera 43.1 handheld build); written to an SD card.",
+      "summary": "Batocera.linux's own handheld build, the upstream project ROCKNIX and KNULLI derive from. Written to an SD card.",
+      "source": "https://batocera.org/download",
+      "compatibility": [
+        {
+          "models": [
+            "rgb30"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Batocera 43.1's handheld download list names 'RGB30'. The page gives the download only, not install steps."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A device from Batocera's handheld download list.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "Batocera publishes a separate image per device; check the exact row before writing."
+      ],
+      "links": [
+        {
+          "label": "Batocera: handheld downloads",
+          "url": "https://batocera.org/download"
         }
       ]
     },
@@ -137,10 +173,10 @@
           ],
           "supportedFirmware": [],
           "status": "documented",
-          "note": "spruceOS lists the Powkiddy RGB30 with 'Stable' support status (checked 2026-10-28)."
+          "note": "spruceOS lists the Powkiddy RGB30 with 'Stable' support status (checked 2026-10-29)."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible Powkiddy RGB30 unit.",
         "A new branded microSD card (do NOT use the stock card)."
@@ -206,6 +242,10 @@
     {
       "label": "spruceOS: supported devices",
       "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "Batocera: handheld downloads (43.1, lists RGB30)",
+      "url": "https://batocera.org/download"
     }
   ]
 }
