@@ -1,0 +1,41 @@
+{
+  "id": "odin-2",
+  "name": "AYN Odin 2",
+  "manufacturer": "AYN",
+  "releaseYear": null,
+  "family": "ayn",
+  "models": [
+    {
+      "id": "odin-2",
+      "name": "Odin 2",
+      "notes": "Single model; Android-based handheld"
+    }
+  ],
+  "summary": "AYN's Android-based handheld. AYN official site (ayn.cc) was unreachable at time of check (DNS failure). No hardware specifications sourced from verified vendor pages. KNULLI and spruceOS supported-device tables do not list this device.",
+  "specs": {
+    "cpu": "not sourced",
+    "gpu": "not sourced",
+    "memory": "not sourced",
+    "storage": "not sourced",
+    "media": "not sourced"
+  },
+  "variants": [
+    {
+      "model": "Odin 2",
+      "region": "Worldwide",
+      "storage": "not sourced",
+      "notes": "Android-based AYN handheld. AYN official site (ayn.cc) was unreachable at time of check (DNS failure). No hardware specifications sourced from verified vendor pages. Not listed in KNULLI or spruceOS supported-device tables (checked 2026-10-28).",
+      "specs": {}
+    }
+  ],
+  "firmware": {
+    "version": "Android (stock OS)",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28"
+  },
+  "firmwareOptions": [],
+  "homebrew": [],
+  "highlights": [],
+  "communities": [],
+  "sources": []
+}

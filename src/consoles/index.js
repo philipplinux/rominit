@@ -15,6 +15,18 @@ import rg405 from '../../catalog/devices/consoles/anbernic/rg405/rg405.json' wit
 import rg505 from '../../catalog/devices/consoles/anbernic/rg505/rg505.json' with { type: 'json' };
 import rg556 from '../../catalog/devices/consoles/anbernic/rg556/rg556.json' with { type: 'json' };
 import rogAlly from '../../catalog/devices/consoles/asus/rog-ally/rog-ally.json' with { type: 'json' };
+import odin2 from '../../catalog/devices/consoles/ayn/odin-2/odin-2.json' with { type: 'json' };
+import thor from '../../catalog/devices/consoles/ayn/thor/thor.json' with { type: 'json' };
+import retroidPocket5 from '../../catalog/devices/consoles/goretroid/retroid-pocket-5/retroid-pocket-5.json' with { type: 'json' };
+import retroidPocketMini from '../../catalog/devices/consoles/goretroid/retroid-pocket-mini/retroid-pocket-mini.json' with { type: 'json' };
+import miyooA30 from '../../catalog/devices/consoles/miyoo/a30/a30.json' with { type: 'json' };
+import miyooFlip from '../../catalog/devices/consoles/miyoo/flip/flip.json' with { type: 'json' };
+import miyooMini from '../../catalog/devices/consoles/miyoo/mini/mini.json' with { type: 'json' };
+import miyooMiniFlip from '../../catalog/devices/consoles/miyoo/mini-flip/mini-flip.json' with { type: 'json' };
+import powkiddyRgb30 from '../../catalog/devices/consoles/powkiddy/rgb30/rgb30.json' with { type: 'json' };
+import powkiddyX55 from '../../catalog/devices/consoles/powkiddy/x55/x55.json' with { type: 'json' };
+import trimuiBrick from '../../catalog/devices/consoles/trimui/brick/brick.json' with { type: 'json' };
+import trimuiSmartPro from '../../catalog/devices/consoles/trimui/smart-pro/smart-pro.json' with { type: 'json' };
 
 /** One project claim on a console page.
  * @typedef {Object} ConsoleProject
@@ -60,7 +72,15 @@ import rogAlly from '../../catalog/devices/consoles/asus/rog-ally/rog-ally.json'
 
 /** Console families with a ROMinit research page.
  * @type {ConsoleEntry[]} */
-export const CONSOLES = [ps2, psp, ps3, vita, ps4, ps5, ds, wii, nintendo3ds, wiiU, switchConsole, rg35xx, rg405, rg505, rg556, rogAlly];
+export const CONSOLES = [
+  ps2, psp, ps3, vita, ps4, ps5, ds, wii, nintendo3ds, wiiU, switchConsole,
+  rg35xx, rg405, rg505, rg556, rogAlly,
+  odin2, thor,
+  retroidPocket5, retroidPocketMini,
+  miyooA30, miyooFlip, miyooMini, miyooMiniFlip,
+  powkiddyRgb30, powkiddyX55,
+  trimuiBrick, trimuiSmartPro
+];
 
 /** Evaluate only explicit project claims; an unlisted firmware never inherits support from a range.
  * @param {{compatibility: {models: string[], supportedFirmware: string[], status: string}[]}} project

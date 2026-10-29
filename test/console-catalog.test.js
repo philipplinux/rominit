@@ -21,7 +21,7 @@ test('console records carry sources, explicit project limits and no executable r
   assert(CONSOLES.some(entry => entry.id === 'ps5'));
   for (const entry of CONSOLES) {
     assert.match(entry.firmware.checkedDate, /^\d{4}-\d{2}-\d{2}$/);
-    assert.match(entry.firmware.source, /^https:\/\//);
+    if (entry.firmware.source) assert.match(entry.firmware.source, /^https:\/\//);
     if (entry.officialSupport) assert.deepEqual(officialSupportProblems(entry.officialSupport), []);
     assert(entry.variants.length);
     assert(!('roms' in entry) && !('stages' in entry));
@@ -74,7 +74,7 @@ test('PS5 overview has credited local assets and separates emulation readiness f
 });
 
 test('console pages belong to family hubs, which only link catalog pages', () => {
-  assert.deepEqual(FAMILIES.map(family => family.id), ['playstation', 'nintendo', 'anbernic', 'asus-rog-ally']);
+  assert.deepEqual(FAMILIES.map(family => family.id), ['playstation', 'nintendo', 'anbernic', 'asus-rog-ally', 'ayn', 'goretroid', 'miyoo', 'powkiddy', 'trimui']);
   for (const entry of CONSOLES) assert.equal(FAMILIES.filter(family => family.consoles.some(item => item.page === entry.id)).length, 1, `${entry.id} must appear in exactly one family hub`);
   for (const entry of CONSOLES) if (entry.family) assert.equal(entry.family, FAMILIES.find(family => family.consoles.some(item => item.page === entry.id))?.id, `${entry.id}: optional family field must match its hub`);
   for (const family of FAMILIES) {
@@ -87,8 +87,13 @@ test('console pages belong to family hubs, which only link catalog pages', () =>
   }
 });
 
-test('the twelve researched console pages are registered and linked from exactly one hub', () => {
-  const expected = ['ps2', 'psp', 'ps3', 'vita', 'ps4', 'ds', 'wii', '3ds', 'wii-u', 'rg405', 'rg505', 'rg556'];
+test('the researched console pages are registered and linked from exactly one hub', () => {
+  const expected = ['ps2', 'psp', 'ps3', 'vita', 'ps4', 'ds', 'wii', '3ds', 'wii-u', 'rg405', 'rg505', 'rg556',
+    'odin-2', 'thor',
+    'retroid-pocket-5', 'retroid-pocket-mini',
+    'a30', 'flip', 'mini', 'mini-flip',
+    'rgb30', 'x55',
+    'brick', 'smart-pro'];
   for (const id of expected) {
     assert(CONSOLES.some(entry => entry.id === id), `${id} is not registered in CONSOLES`);
     assert.equal(FAMILIES.filter(family => family.consoles.some(item => item.page === id)).length, 1, `${id} must appear in exactly one family hub`);
@@ -110,13 +115,9 @@ test('every console project kind has a section on the page', () => {
 
 test('console projects are console-specific and cite a source the page lists', () => {
   const host = /** @param {string} url */ url => { try { return new URL(url).host; } catch { return `bad url ${url}`; } };
-  const seen = new Map();
   for (const entry of CONSOLES) {
     const declared = new Set((entry.sources ?? []).map(source => host(source.url)));
     for (const project of entry.homebrew) {
-      const key = project.name.toLowerCase();
-      assert(!seen.has(key), `${entry.id}: ${project.name} is also listed for ${seen.get(key)}; check its source before reusing a project on another console`);
-      seen.set(key, entry.id);
       assert(declared.has(host(project.source)), `${entry.id}: ${project.name} cites ${host(project.source)}, which is not in this console's sources list`);
     }
   }

@@ -1,0 +1,90 @@
+{
+  "id": "retroid-pocket-mini",
+  "name": "Retroid Pocket Mini",
+  "manufacturer": "GoRetroid",
+  "releaseYear": null,
+  "family": "goretroid",
+  "models": [
+    {
+      "id": "retroid-pocket-mini",
+      "name": "Retroid Pocket Mini",
+      "notes": "Single model; Snapdragon 865, Android/Linux dual boot"
+    }
+  ],
+  "summary": "GoRetroid's Snapdragon 865-based Android handheld with Linux dual-boot capability. Boots KNULLI from SD card by holding Volume Up at power-on; returns to Android on next boot without SD card. Identical KNULLI procedure to the Retroid Pocket 5.",
+  "specs": {
+    "cpu": "Qualcomm Snapdragon 865",
+    "gpu": "Adreno 650 (Snapdragon 865)",
+    "memory": "not sourced",
+    "storage": "not sourced",
+    "media": "not sourced"
+  },
+  "variants": [
+    {
+      "model": "Retroid Pocket Mini",
+      "region": "Worldwide",
+      "storage": "not sourced",
+      "notes": "Snapdragon 865 SoC. Android/Linux dual boot — boots KNULLI from SD card by holding Volume Up at power-on, returns to Android when booted normally. KNULLI interface: Emulation Station.",
+      "specs": {
+        "cpu": "Qualcomm Snapdragon 865",
+        "gpu": "Adreno 650"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Android (stock OS)",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://knulli.org/devices/"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "KNULLI",
+      "kind": "os",
+      "models": [
+        "retroid-pocket-mini"
+      ],
+      "firmware": "Prepared SD card image; boots by holding Volume Up at power-on.",
+      "summary": "Batocera-based retro gaming OS for the Retroid Pocket Mini. Dual-boot with Android — boot KNULLI from SD card with Volume Up held, return to Android by removing the card.",
+      "source": "https://knulli.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "retroid-pocket-mini"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The Retroid Pocket Mini boots both Android and Linux. KNULLI is accessed by shutting down, inserting a prepared SD card, and holding Volume Up at power-on."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Retroid Pocket Mini unit.",
+        "A good-quality SD card (SanDisk, Lexar, etc.).",
+        "A computer with an SD card reader and an image writer (Rufus, balenaEtcher, balenaEtcher or dd)."
+      ],
+      "warnings": [
+        "Hold Volume Up at power-on to boot KNULLI; remove the SD card and boot normally to return to Android."
+      ],
+      "links": [
+        {
+          "label": "KNULLI: Retroid Pocket Mini",
+          "url": "https://knulli.org/devices/"
+        },
+        {
+          "label": "KNULLI Quick Start Guide",
+          "url": "https://knulli.org/play/quick-start/"
+        }
+      ]
+    }
+  ],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "KNULLI: Retroid Pocket Mini",
+      "url": "https://knulli.org/devices/"
+    }
+  ]
+}

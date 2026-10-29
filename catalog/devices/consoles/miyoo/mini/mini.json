@@ -1,0 +1,83 @@
+{
+  "id": "mini",
+  "name": "Miyoo Mini",
+  "manufacturer": "MiiiNILab",
+  "releaseYear": null,
+  "family": "miyoo",
+  "models": [
+    {
+      "id": "mini-v1-4",
+      "name": "Mini v1–4",
+      "notes": "Grouped by spruceOS as 'Mini v1-4'; four model revisions share the same form factor and hardware"
+    }
+  ],
+  "summary": "Miyoo's pocket-sized Linux handheld. spruceOS groups Mini revisions v1–4 under a single supported entry with 'Stable' status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
+  "specs": {
+    "cpu": "not sourced",
+    "gpu": "not sourced",
+    "memory": "not sourced",
+    "storage": "not sourced",
+    "media": "not sourced"
+  },
+  "variants": [
+    {
+      "model": "Mini v1–4",
+      "region": "Worldwide",
+      "storage": "not sourced",
+      "notes": "Pocket-sized Miyoo device. spruceOS groups Mini revisions v1–4 under one supported entry ('Stable'). Four documented model revisions share the same form factor. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
+      "specs": {}
+    }
+  ],
+  "firmware": {
+    "version": "Linux (stock OS)",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "spruceOS",
+      "kind": "os",
+      "models": [
+        "mini-v1-4"
+      ],
+      "firmware": "Custom Python-based frontend on top of stock Linux OS.",
+      "summary": "Custom frontend that runs on top of the stock OS on supported Miyoo devices.",
+      "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
+      "compatibility": [
+        {
+          "models": [
+            "mini-v1-4"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "spruceOS lists 'Miyoo Mini v1-4' with 'Stable' support status (checked 2026-10-28)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Miyoo Mini unit (v1–4).",
+        "A new branded microSD card (do NOT use the stock card)."
+      ],
+      "warnings": [
+        "spruceOS is a frontend, not a full OS replacement; it runs on top of the stock OS.",
+        "spruceOS groups Mini revisions v1–4 as a single entry; hardware differences between revisions are undocumented."
+      ],
+      "links": [
+        {
+          "label": "spruceOS supported devices",
+          "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+        }
+      ]
+    }
+  ],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "spruceOS: supported devices",
+      "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    }
+  ]
+}

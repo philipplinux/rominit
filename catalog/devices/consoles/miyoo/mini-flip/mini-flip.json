@@ -1,0 +1,82 @@
+{
+  "id": "mini-flip",
+  "name": "Miyoo Mini Flip",
+  "manufacturer": "MiiiNILab",
+  "releaseYear": null,
+  "family": "miyoo",
+  "models": [
+    {
+      "id": "mini-flip",
+      "name": "Mini Flip",
+      "notes": "Single model; clamshell form factor, Linux-based"
+    }
+  ],
+  "summary": "Miyoo's clamshell-form-factor Linux handheld. spruceOS lists it with 'Stable' support status. No KNULLI image available. Hardware specifications not sourced from verified vendor or community pages at the time of check (2026-10-28).",
+  "specs": {
+    "cpu": "not sourced",
+    "gpu": "not sourced",
+    "memory": "not sourced",
+    "storage": "not sourced",
+    "media": "not sourced"
+  },
+  "variants": [
+    {
+      "model": "Mini Flip",
+      "region": "Worldwide",
+      "storage": "not sourced",
+      "notes": "Clamshell Miyoo device. spruceOS reports 'Stable' compatibility. No KNULLI image available (checked KNULLI Scarab 2026-05-11 releases). Hardware specifications not sourced from verified vendor or community pages at the time of check.",
+      "specs": {}
+    }
+  ],
+  "firmware": {
+    "version": "Linux (stock OS)",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "spruceOS",
+      "kind": "os",
+      "models": [
+        "mini-flip"
+      ],
+      "firmware": "Custom Python-based frontend on top of stock Linux OS.",
+      "summary": "Custom frontend that runs on top of the stock OS on supported Miyoo devices.",
+      "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
+      "compatibility": [
+        {
+          "models": [
+            "mini-flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "spruceOS lists the Miyoo Mini Flip with 'Stable' support status (checked 2026-10-28)."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Miyoo Mini Flip unit.",
+        "A new branded microSD card (do NOT use the stock card)."
+      ],
+      "warnings": [
+        "spruceOS is a frontend, not a full OS replacement; it runs on top of the stock OS."
+      ],
+      "links": [
+        {
+          "label": "spruceOS supported devices",
+          "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+        }
+      ]
+    }
+  ],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "spruceOS: supported devices",
+      "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    }
+  ]
+}

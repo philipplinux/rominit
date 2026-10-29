@@ -1,0 +1,179 @@
+{
+  "id": "smart-pro",
+  "name": "TriMUI Smart Pro",
+  "manufacturer": "TriMUI",
+  "releaseYear": null,
+  "family": "trimui",
+  "models": [
+    {
+      "id": "smart-pro",
+      "name": "Smart Pro",
+      "notes": "Single model; large 4.96\" square display"
+    }
+  ],
+  "summary": "TriMUI's 4.96-inch A133P-based Android handheld with a fully laminated square IPS display. Runs Android stock OS with ADB access for calibration and customization. KNULLI and spruceOS support available.",
+  "specs": {
+    "cpu": "Allwinner A133P (A133+), 1.8 GHz",
+    "gpu": "Imagination PowerVR GE8300",
+    "memory": "not sourced",
+    "storage": "not sourced",
+    "media": "4.96-inch IPS fully laminated"
+  },
+  "variants": [
+    {
+      "model": "Smart Pro",
+      "region": "Worldwide",
+      "storage": "not sourced",
+      "notes": "Large 4.96-inch fully laminated IPS display. Allwinner A133P (A133+) @1.8 GHz with PowerVR GE8300 GPU. RGB charging status light, RGB status indicator, RGB dual-joystick ambient light. Two USB-C ports: bottom (charging + OTG), top (USB host for controller). Battery life claimed 5 hours. Emulator support includes PS1, GBA, GBC, GB, FC, SFC, MD, MAME, CPS1-3, NEOGEO, PCE, NGP, WSC, NDS, N64, DC, PSP, SS (20+ formats). Dual-controller support with WiFi online two-player battles.",
+      "specs": {
+        "cpu": "Allwinner A133P (A133+), 1.8 GHz",
+        "gpu": "PowerVR GE8300",
+        "memory": "not sourced",
+        "storage": "not sourced",
+        "media": "4.96\" IPS fully laminated",
+        "battery": "4000 mAh, 5 h claimed",
+        "wireless": "Built-in Wi-Fi (online two-player)",
+        "interfaces": "Bottom USB-C (charging + OTG), Top USB-C (host)"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Android (stock OS with ADB)",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://powkiddy.com/products/pre-sale-trimui-smart-pro-console"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "KNULLI",
+      "kind": "os",
+      "models": [
+        "smart-pro"
+      ],
+      "firmware": "Per-model image (knulli-a133-trimui-smart-pro); boots from SD card. Requires Joystick calibration via stock OS ADB pull + KNULLI overlay/custom.sh.",
+      "summary": "Retro gaming OS for the TriMUI Smart Pro based on Allwinner A133. Boots from a prepared SD card.",
+      "source": "https://knulli.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "smart-pro"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "KNULLI publishes an A133 image for the Smart Pro with Allwinner BSP and pvrsrvkm GL driver. Joystick calibration via stock OS is required in some cases."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible TriMUI Smart Pro unit.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer.",
+        "ADB platform tools for joystick calibration (required in rare cases)."
+      ],
+      "warnings": [
+        "Joystick calibration may be needed — follow the stock-OS calibration + ADB pull procedure before or after installing KNULLI.",
+        "If using overlay for calibration persistence, delete and reapply the overlay on every system update."
+      ],
+      "links": [
+        {
+          "label": "KNULLI: TrimUI Smart Pro",
+          "url": "https://knulli.org/devices/"
+        },
+        {
+          "label": "KNULLI A133 firmware extraction",
+          "url": "https://knulli.org/guides/firmware-extraction/A133-firmware-extract/"
+        }
+      ]
+    },
+    {
+      "name": "ROCKNIX",
+      "kind": "os",
+      "models": [
+        "smart-pro"
+      ],
+      "firmware": "Per-model A133 image; boots from SD card.",
+      "summary": "Mainline-Linux retro gaming OS for the TriMUI Smart Pro. Boots from SD card.",
+      "source": "https://rocknix.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "smart-pro"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "ROCKNIX lists the Smart Pro as a supported Allwinner A133 device."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible TriMUI Smart Pro unit.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "ROCKNIX ships a separate image per model; cross-flashing does not boot."
+      ],
+      "links": [
+        {
+          "label": "ROCKNIX device index",
+          "url": "https://rocknix.org/devices/"
+        }
+      ]
+    },
+    {
+      "name": "spruceOS",
+      "kind": "os",
+      "models": [
+        "smart-pro"
+      ],
+      "firmware": "Frontend on top of the stock OS.",
+      "summary": "Custom Python-based frontend that runs on top of the stock OS on supported TriMUI devices.",
+      "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
+      "compatibility": [
+        {
+          "models": [
+            "smart-pro"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "spruceOS lists the TrimUI Smart Pro with 'Stable' support status."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible TriMUI Smart Pro unit.",
+        "A new branded microSD card (do NOT use the stock card)."
+      ],
+      "warnings": [
+        "spruceOS is a frontend, not a full OS replacement; it runs on top of the stock OS."
+      ],
+      "links": [
+        {
+          "label": "spruceOS supported devices",
+          "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+        }
+      ]
+    }
+  ],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "Powkiddy: Trimui Smart Pro product page (A133P, 4.96\" IPS fully laminated, 4000 mAh)",
+      "url": "https://powkiddy.com/products/pre-sale-trimui-smart-pro-console"
+    },
+    {
+      "label": "KNULLI: TrimUI Smart Pro",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: device index",
+      "url": "https://rocknix.org/devices/"
+    },
+    {
+      "label": "spruceOS: supported devices",
+      "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    }
+  ]
+}

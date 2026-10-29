@@ -1,0 +1,182 @@
+{
+  "id": "flip",
+  "name": "Miyoo Flip",
+  "manufacturer": "MiiiNILab",
+  "releaseYear": null,
+  "family": "miyoo",
+  "models": [
+    {
+      "id": "flip",
+      "name": "Flip",
+      "notes": "Single model; RK3566, requires GammaLoader patch for SD boot"
+    }
+  ],
+  "summary": "Miyoo's RK3566-based Linux handheld. Requires GammaLoader patching of the stock firmware before it can boot KNULLI from SD card. Primary SD card slot is on the right side.",
+  "specs": {
+    "cpu": "Rockchip RK3566",
+    "gpu": "Mali-G52 (RK3566)",
+    "memory": "not sourced",
+    "storage": "not sourced",
+    "media": "not sourced"
+  },
+  "variants": [
+    {
+      "model": "Flip",
+      "region": "Worldwide",
+      "storage": "not sourced",
+      "notes": "RK3566 SoC. Requires GammaLoader patch before KNULLI installation — install the Gamma Bootloader Installer from stock OS to enable SD-card boot. After patching, the primary SD card slot is on the right side. KNULLI interface: Emulation Station. No permanent damage: stock OS remains functional.",
+      "specs": {
+        "cpu": "Rockchip RK3566"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Linux (stock OS)",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://knulli.org/devices/"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "KNULLI",
+      "kind": "os",
+      "models": [
+        "flip"
+      ],
+      "firmware": "Per-model image (knulli-rk3568-miyoo-flip); boots from SD card after GammaLoader patch.",
+      "summary": "Batocera-based retro gaming OS for the Miyoo Flip. Requires GammaLoader patch of stock firmware to enable SD-card boot.",
+      "source": "https://knulli.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The Miyoo Flip needs a GammaLoader patch before it can boot KNULLI. KNULLI Scarab provides knulli-rk3568-miyoo-flip image. Stock OS remains intact after patching."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Miyoo Flip unit.",
+        "A good-quality SD card formatted to FAT32.",
+        "GammaLoaderMiyooFlip.zip from the GammaOS releases page.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "Follow the GammaLoader installation precisely; if the device stops booting, unbricking requires opening the shell and pressing a button on the mainboard.",
+        "After GammaLoader installation, the primary SD card slot is on the right side (not the left).",
+        "DO NOT INTERRUPT the GammaLoader installation process."
+      ],
+      "links": [
+        {
+          "label": "KNULLI: Miyoo Flip",
+          "url": "https://knulli.org/devices/"
+        },
+        {
+          "label": "KNULLI Quick Start Guide",
+          "url": "https://knulli.org/play/quick-start/"
+        },
+        {
+          "label": "GammaLoader releases",
+          "url": "https://github.com/TheGammaSqueeze/GammaOSCore/releases"
+        },
+        {
+          "label": "Miyoo Flip unbricking guide",
+          "url": "https://github.com/spruceUI/spruceOS/wiki/16.-Miyoo-Flip-Unbricking"
+        }
+      ]
+    },
+    {
+      "name": "ROCKNIX",
+      "kind": "os",
+      "models": [
+        "flip"
+      ],
+      "firmware": "Per-model RK3566 image; boots from SD card after GammaLoader patch.",
+      "summary": "Mainline-Linux retro gaming OS for the Miyoo Flip. Requires GammaLoader patch first.",
+      "source": "https://rocknix.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "ROCKNIX lists the Flip as a supported RK3566 device."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Miyoo Flip unit.",
+        "GammaLoader patch applied to stock firmware.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "GammaLoader must be installed first before any custom OS can boot from SD card."
+      ],
+      "links": [
+        {
+          "label": "ROCKNIX device index",
+          "url": "https://rocknix.org/devices/"
+        }
+      ]
+    },
+    {
+      "name": "spruceOS",
+      "kind": "os",
+      "models": [
+        "flip"
+      ],
+      "firmware": "Frontend on top of the stock OS.",
+      "summary": "Custom Python-based frontend that runs on top of the stock OS on supported Miyoo devices.",
+      "source": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices",
+      "compatibility": [
+        {
+          "models": [
+            "flip"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "spruceOS lists the Miyoo Flip with 'Stable' support status."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Miyoo Flip unit.",
+        "A new branded microSD card (do NOT use the stock card)."
+      ],
+      "warnings": [
+        "spruceOS is a frontend, not a full OS replacement; it runs on top of the stock OS."
+      ],
+      "links": [
+        {
+          "label": "spruceOS supported devices",
+          "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+        }
+      ]
+    }
+  ],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "KNULLI: Miyoo Flip",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: device index",
+      "url": "https://rocknix.org/devices/"
+    },
+    {
+      "label": "spruceOS: supported devices",
+      "url": "https://github.com/spruceUI/spruceOS/wiki/Supported-Devices"
+    },
+    {
+      "label": "KNULLI: releases (Scarab 2026-05-11, knulli-rk3568-miyoo-flip)",
+      "url": "https://github.com/knulli-cfw/knulli-linux/releases/tag/20260511"
+    }
+  ]
+}

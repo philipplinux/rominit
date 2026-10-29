@@ -1,0 +1,167 @@
+{
+  "id": "x55",
+  "name": "Powkiddy X55",
+  "manufacturer": "Powkiddy",
+  "releaseYear": null,
+  "family": "powkiddy",
+  "models": [
+    {
+      "id": "x55",
+      "name": "X55",
+      "notes": "Single model; large 5.5\" landscape display"
+    }
+  ],
+  "summary": "Powkiddy's 5.5-inch RK3566-based Android/Linux handheld with a 1280×720 landscape IPS display. Boots open-source Linux from SD; stock card is the whole system, so a replacement OS is a card swap and going back to stock is a card write.",
+  "specs": {
+    "cpu": "Rockchip RK3566 Quad-core ARM Cortex-A55, 1.8 GHz",
+    "gpu": "ARM Mali-G52 (KNULLI: Mali / Rockchip BSP 4.19)",
+    "memory": "1 GB LPDDR4X",
+    "storage": "16 GB built-in; TF card expansion up to 256 GB",
+    "media": "5.5-inch IPS RGB, 1280×720"
+  },
+  "variants": [
+    {
+      "model": "X55",
+      "region": "Worldwide",
+      "storage": "16 GB built-in, TF up to 256 GB",
+      "notes": "Large 5.5-inch landscape IPS display at 1280×720. RK3566 with 1 GB LPDDR4X RAM. TF card support up to 256 GB. Battery life claimed 4 hours, 2 h charge. Supports HDMI video output via USB-C. Console weight 293 g, dimensions 212.5×94.5×19 mm.",
+      "specs": {
+        "cpu": "Rockchip RK3566 Quad-core Cortex-A55 @1.8 GHz",
+        "gpu": "Mali-G52",
+        "memory": "1 GB LPDDR4X",
+        "storage": "16 GB built-in, TF up to 256 GB",
+        "media": "5.5\" IPS RGB, 1280×720",
+        "battery": "4000 mAh, 4 h claimed, 2 h charge",
+        "wireless": "Built-in Wi-Fi",
+        "interfaces": "USB-C fast charging, HDMI display via OTG, 3.5 mm stereo jack"
+      }
+    }
+  ],
+  "firmware": {
+    "version": "Open source Linux (stock); Jelos system variant exists",
+    "shortVersion": "varies",
+    "checkedDate": "2026-10-28",
+    "source": "https://powkiddy.com/products/powkiddy-x55-5-5-inch-1280-720-ips-screen-rk3566-handheld-game-console-jelos-system-open-source-retro-console-childrens-gifts"
+  },
+  "firmwareOptions": [],
+  "homebrew": [
+    {
+      "name": "KNULLI",
+      "kind": "os",
+      "models": [
+        "x55"
+      ],
+      "firmware": "Per-model image (knulli-rk3568-powkiddy-x55); boots from SD card with no stock-firmware dependency.",
+      "summary": "Batocera-based retro gaming OS for the Powkiddy X55. Boots from a prepared SD card.",
+      "source": "https://knulli.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "x55"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "KNULLI publishes an RK3566 image for the X55 with Rockchip BSP 4.19 and Mali GL driver."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Powkiddy X55 unit.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "KNULLI ships a separate image per model; cross-flashing does not boot."
+      ],
+      "links": [
+        {
+          "label": "KNULLI supported devices",
+          "url": "https://knulli.org/devices/"
+        }
+      ]
+    },
+    {
+      "name": "ROCKNIX",
+      "kind": "os",
+      "models": [
+        "x55"
+      ],
+      "firmware": "Per-model RK3566 image; boots from SD card.",
+      "summary": "Mainline-Linux retro gaming OS for the Powkiddy X55. Boots from SD card.",
+      "source": "https://rocknix.org/devices/",
+      "compatibility": [
+        {
+          "models": [
+            "x55"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "ROCKNIX lists the X55 as a supported RK3566 device."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "A compatible Powkiddy X55 unit.",
+        "A good-quality SD card.",
+        "A computer with an SD card reader and an image writer."
+      ],
+      "warnings": [
+        "ROCKNIX ships a separate image per model; cross-flashing does not boot."
+      ],
+      "links": [
+        {
+          "label": "ROCKNIX device index",
+          "url": "https://rocknix.org/devices/"
+        }
+      ]
+    },
+    {
+      "name": "Powkiddy stock firmware",
+      "kind": "recovery",
+      "models": [
+        "x55"
+      ],
+      "firmware": "Open source Linux on TF card; restore by writing the stock image.",
+      "summary": "Powkiddy's own Linux OS image on the TF card. Restoring the stock card restores the factory system.",
+      "source": "https://powkiddy.com/products/powkiddy-x55-5-5-inch-1280-720-ips-screen-rk3566-handheld-game-console-jelos-system-open-source-retro-console-childrens-gifts",
+      "compatibility": [
+        {
+          "models": [
+            "x55"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The stock OS lives on the TF card."
+        }
+      ],
+      "checkedDate": "2026-10-28",
+      "requirements": [
+        "The stock TF card or a freshly flashed one from Powkiddy."
+      ],
+      "warnings": [
+        "Remove any third-party OS card before booting stock."
+      ],
+      "links": []
+    }
+  ],
+  "highlights": [],
+  "communities": [],
+  "sources": [
+    {
+      "label": "Powkiddy: X55 product page (RK3566, 5.5\" 1280×720, 4000 mAh)",
+      "url": "https://powkiddy.com/products/powkiddy-x55-5-5-inch-1280-720-ips-screen-rk3566-handheld-game-console-jelos-system-open-source-retro-console-childrens-gifts"
+    },
+    {
+      "label": "KNULLI: Powkiddy X55",
+      "url": "https://knulli.org/devices/"
+    },
+    {
+      "label": "ROCKNIX: device index",
+      "url": "https://rocknix.org/devices/"
+    },
+    {
+      "label": "KNULLI: releases (Scarab 2026-05-11, knulli-rk3568-powkiddy-x55)",
+      "url": "https://github.com/knulli-cfw/knulli-linux/releases/tag/20260511"
+    }
+  ]
+}
