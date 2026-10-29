@@ -158,9 +158,10 @@ export function lint(vault = VAULT) {
       for (const os of links(file).filter(f => /^os\//.test(relative(vault, f)) && pages.has(f) && folderType(relative(vault, f)) === 'project'))
         if (!linksTo(os, device)) say(os, `does not list ${relative(vault, device)} (its ROM ${rel} links here; run scripts/romvault-net.mjs fix)`);
     }
-    if (rel.startsWith('os/') && fm.type === 'project') { // OS → group page up, and something in the group links down to it
+    if (rel.startsWith('os/') && fm.type === 'project') { // OS → group page up (or a release child → the OS page that lists it), and something in the group links down to it
       const group = join(vault, 'os', rel.split('/')[1], `${rel.split('/')[1]}-os.md`);
-      if (!linksTo(file, group)) say(file, `does not link up to ${relative(vault, group)}`);
+      const parentOs = [...pages.keys()].some(f => f !== file && f !== group && dirname(f) === dirname(file) && linksTo(f, file) && linksTo(file, f));
+      if (!linksTo(file, group) && !parentOs) say(file, `does not link up to ${relative(vault, group)} or its parent OS page`);
       if (![...pages.keys()].some(f => f !== file && dirname(f) === dirname(file) && linksTo(f, file))) say(file, `not listed by ${relative(vault, group)} or a sibling OS page`);
     }
     const up = UP_PAGE[/** @type {keyof typeof UP_PAGE} */ (fm.type)];
