@@ -80,10 +80,13 @@
         "slim",
         "super-slim"
       ],
-      "firmware": "PS3HEN v3.6.0 Supported Firmwares (checked 2026-10-28): CEX OFW 4.80-4.82, DEX OFW 4.82, CEX HFW 4.83.1-4.93.1, DEX HFW 4.84.2",
+      "firmware": "PS3HEN v3.6.0 Supported Firmwares (checked 2026-10-29): CEX OFW 4.80-4.82, DEX OFW 4.82, CEX HFW 4.83.1-4.93.1, DEX HFW 4.84.2",
       "summary": "Homebrew ENabler for PS3. It adds homebrew and plugin support without replacing the system firmware; on 4.83 and newer it needs the matching hybrid firmware (HFW) installed first.",
       "source": "https://github.com/PS3Xploit/PS3HEN",
       "kind": "entrypoint",
+      "opens": [
+        "kernel"
+      ],
       "compatibility": [
         {
           "models": [
@@ -122,7 +125,7 @@
           "note": "CEX hybrid firmware builds listed by PS3HEN; install the matching HFW before HEN. PS3HEN separately lists a DEX HFW 4.84.2 build, which this CEX list does not cover."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "PS3 on one of the listed official or hybrid firmware builds.",
         "For 4.83 and newer, the matching HFW image installed first.",
@@ -307,16 +310,78 @@
       ]
     },
     {
-      "name": "webMAN MOD / MultiMAN-class managers",
+      "name": "webMAN MOD",
       "models": [
         "phat",
         "slim",
         "super-slim"
       ],
-      "firmware": "Follows the HEN or CFW route's own version; no exact firmware matrix verified",
-      "summary": "Community game and file managers for a jailbroken PS3. They run on top of HEN or CFW and have no verified firmware matrix of their own.",
-      "source": "https://www.psdevwiki.com/ps3/Main_Page",
+      "firmware": "Custom firmware 4.46-4.93, Evilnat 4.87.2-4.93, or PS3HEN on HFW 4.84-4.93, as listed upstream.",
+      "summary": "A homebrew plugin for a jailbroken PS3 with a web server, FTP server, file manager, ISO mounting, gamepad emulation and PS3MAPI. It is the maintained fork of the original webMAN/sMAN.",
+      "source": "https://github.com/aldostools/webMAN-MOD",
       "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "phat",
+            "slim",
+            "super-slim"
+          ],
+          "supportedFirmware": [
+            "4.84",
+            "4.85",
+            "4.86",
+            "4.87",
+            "4.88",
+            "4.89",
+            "4.90",
+            "4.91",
+            "4.92",
+            "4.93"
+          ],
+          "status": "documented",
+          "note": "README lists CFW 4.46-4.93, Evilnat 4.87.2-4.93 and PS3HEN/HFW 4.84-4.93; the versions here are the PS3HEN/HFW range."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A PS3 running custom firmware with Cobra, Evilnat/REBUG firmware, or PS3HEN on HFW.",
+        "The matching webMAN MOD package for the firmware route."
+      ],
+      "warnings": [
+        "webMAN MOD is a plugin, not a jailbreak: it adds nothing on stock official firmware.",
+        "Features vary by firmware route and Cobra/Mamba availability."
+      ],
+      "links": [
+        {
+          "label": "Source and feature list",
+          "url": "https://github.com/aldostools/webMAN-MOD"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/aldostools/webMAN-MOD/releases"
+        },
+        {
+          "label": "Wiki",
+          "url": "https://github.com/aldostools/webMAN-MOD/wiki"
+        }
+      ],
+      "availability": "Open source; releases and wiki published by the project."
+    },
+    {
+      "name": "Mamba",
+      "models": [
+        "phat",
+        "slim",
+        "super-slim"
+      ],
+      "firmware": "No firmware matrix published. The README documents booting on REBUG 4.84.2 and was originally tested on CFW 4.46 and 4.53; Mamba is loaded by a payload loader on an already jailbroken console.",
+      "summary": "A payload derived from Cobra that adds CFW syscalls (LV2 and LV1 peek/poke, syscall 8), ISO and network ISO mounting, kernel plugins and PS3MAPI. It is loaded by a payload loader such as webMAN MOD, IRISMAN or the Mamba/PRX loader; it does not jailbreak a console on its own.",
+      "source": "https://github.com/aldostools/Mamba",
+      "kind": "payload/app",
+      "opens": [
+        "kernel"
+      ],
       "compatibility": [
         {
           "models": [
@@ -326,22 +391,31 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "No exact firmware or model matrix verified; compatibility follows the HEN or CFW route used."
+          "note": "The README gives no supported-firmware list: it documents loading on REBUG 4.84.2 and names CFW 4.46 and 4.53 as originally tested. Payload builds are per firmware, so check the release that matches your CFW or HEN."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
-        "A jailbroken PS3 with HEN or CFW running."
+        "A PS3 already running custom firmware or PS3HEN.",
+        "A payload loader that can load Mamba (webMAN MOD, IRISMAN or the Mamba/PRX loader).",
+        "The Mamba payload build matching the installed firmware."
       ],
       "warnings": [
-        "These managers depend on the underlying jailbreak; their features vary by route."
+        "Mamba is a payload, not a jailbreak: it adds nothing on stock official firmware.",
+        "On REBUG, the README says to disable the Cobra payload before loading Mamba.",
+        "Syscall and feature support vary by firmware build."
       ],
       "links": [
         {
-          "label": "psdevwiki: PS3 wiki",
-          "url": "https://www.psdevwiki.com/ps3/Main_Page"
+          "label": "Source and feature list",
+          "url": "https://github.com/aldostools/Mamba"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/aldostools/Mamba/releases"
         }
-      ]
+      ],
+      "availability": "Open source (GPL v3); payloads published by the project."
     },
     {
       "name": "Sony PS3 system software update and reinstall",
@@ -438,6 +512,14 @@
     {
       "label": "Evilnat Cobra-PS3 repository",
       "url": "https://github.com/xXEvilnatXx/Cobra-PS3"
+    },
+    {
+      "label": "webMAN MOD",
+      "url": "https://github.com/aldostools/webMAN-MOD"
+    },
+    {
+      "label": "Mamba",
+      "url": "https://github.com/aldostools/Mamba"
     }
   ]
 }

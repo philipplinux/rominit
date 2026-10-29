@@ -109,7 +109,7 @@
           "note": "Upstream states official 6.60/6.61 (including TT and DT variants) are the install range; claims every retail PSP model."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "PSP on official System Software 6.60 or 6.61; update if necessary via Sony's update.",
         "A Memory Stick Duo (or Memory Stick Micro on the Go) with extracted FasterARK package."
@@ -127,6 +127,9 @@
           "label": "ARK-5 (CFW source)",
           "url": "https://github.com/PSP-Arkfive/ARK-5"
         }
+      ],
+      "opens": [
+        "kernel"
       ]
     },
     {
@@ -247,6 +250,119 @@
           "url": "https://github.com/PSP-Arkfive/Despertar-Del-Cementerio"
         }
       ]
+    },
+    {
+      "name": "Infinity (persistent CFW patch)",
+      "models": [
+        "1000",
+        "2000",
+        "3000",
+        "go",
+        "street"
+      ],
+      "firmware": "Official System Software 6.60 or 6.61; the installer runs from the firmware update slot.",
+      "summary": "Installs persistent custom firmware on PSP 6.60/6.61 for every model, so ARK or PRO/ME starts at boot instead of being re-launched as an exploit.",
+      "source": "https://github.com/DaveeFTW/Infinity",
+      "kind": "entrypoint",
+      "opens": [
+        "kernel"
+      ],
+      "compatibility": [
+        {
+          "models": [
+            "1000",
+            "2000",
+            "3000",
+            "go",
+            "street"
+          ],
+          "supportedFirmware": [
+            "6.60",
+            "6.61"
+          ],
+          "status": "documented",
+          "note": "README: persistent custom firmware on 6.60 and 6.61 for every model, with separate standard and PSPgo packages."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A PSP on official firmware 6.60 or 6.61.",
+        "The matching Infinity package (standard or PSPgo).",
+        "A custom firmware such as ARK or PRO/ME to enable after installing Infinity."
+      ],
+      "warnings": [
+        "Installing Infinity modifies the firmware; a failed or interrupted install can leave the console needing recovery.",
+        "Uninstall Infinity versions below 2.0 with Chronoswitch 7 or newer first."
+      ],
+      "links": [
+        {
+          "label": "Source and instructions",
+          "url": "https://github.com/DaveeFTW/Infinity"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/DaveeFTW/Infinity/releases"
+        }
+      ],
+      "availability": "Open source (MIT); releases published by the project."
+    },
+    {
+      "name": "Chronoswitch Downgrader",
+      "models": [
+        "1000",
+        "2000",
+        "3000",
+        "go",
+        "street"
+      ],
+      "firmware": "Runs from official or custom firmware; the README documents downgrading with the matching official update, for example to 6.60.",
+      "summary": "A signed downgrader for the PSP that installs an older official firmware from a memory stick or internal storage. It is also the documented way to uninstall old Infinity versions.",
+      "source": "https://github.com/PSP-Archive/Chronoswitch",
+      "kind": "rollback",
+      "compatibility": [
+        {
+          "models": [
+            "1000",
+            "2000",
+            "3000",
+            "go"
+          ],
+          "supportedFirmware": [
+            "6.60",
+            "6.61"
+          ],
+          "status": "documented",
+          "note": "README documents running the downgrader and flashing the matching official update; PSPgo needs the PSPgo firmware image."
+        },
+        {
+          "models": [
+            "street"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "README names the PSP and PSPgo; the Street/E1000 is not called out."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "The official firmware update for the version you want to install, placed at PSP/GAME/UPDATE/EBOOT.PBP.",
+        "The correct model firmware image: PSPgo images only on PSPgo."
+      ],
+      "warnings": [
+        "Downgrading flashes system software; an interrupted install or a wrong-model update can brick the console.",
+        "Use only the official update that matches the model."
+      ],
+      "links": [
+        {
+          "label": "Source and instructions",
+          "url": "https://github.com/PSP-Archive/Chronoswitch"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/PSP-Archive/Chronoswitch/releases"
+        }
+      ],
+      "availability": "Signed build; releases published by the project."
     }
   ],
   "sources": [
@@ -273,6 +389,14 @@
     {
       "label": "ARK-5 (CFW source)",
       "url": "https://github.com/PSP-Arkfive/ARK-5"
+    },
+    {
+      "label": "Infinity (persistent CFW patch)",
+      "url": "https://github.com/DaveeFTW/Infinity"
+    },
+    {
+      "label": "Chronoswitch Downgrader",
+      "url": "https://github.com/PSP-Archive/Chronoswitch"
     }
   ],
   "officialSupport": {

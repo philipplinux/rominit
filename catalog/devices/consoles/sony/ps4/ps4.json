@@ -351,6 +351,157 @@
           "url": "https://www.playstation.com/en-us/support/hardware/ps4/system-software/"
         }
       ]
+    },
+    {
+      "name": "PSFree / Lapse",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "PSFree 7.00-9.60 as a browser entry point, with the Lapse kernel exploit on the same range, per the repository support table.",
+      "summary": "A combined browser entry point (PSFree) and kernel exploit (Lapse) for PS4. It auto-detects the firmware and listens for a payload on port 9020 after escalation.",
+      "source": "https://github.com/Al-Azif/psfree-lapse",
+      "kind": "entrypoint",
+      "opens": [
+        "kernel"
+      ],
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [
+            "7.00",
+            "7.01",
+            "7.02",
+            "7.50",
+            "7.51",
+            "7.55",
+            "8.00",
+            "8.01",
+            "8.03",
+            "8.50",
+            "8.52",
+            "9.00",
+            "9.03",
+            "9.04",
+            "9.50",
+            "9.51",
+            "9.60"
+          ],
+          "status": "documented",
+          "note": "Repository support table lists PSFree and Lapse as functional and tested on PS4 7.00-9.60; wider vulnerability scope is not current support."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A PS4 on a firmware in the supported range with the console browser available.",
+        "A payload sender for port 9020 after the chain succeeds."
+      ],
+      "warnings": [
+        "The repository warns that support outside its current table may be unfinished or historical.",
+        "The PS5 side of this repository version is marked N/A; do not treat it as a PS5 route."
+      ],
+      "links": [
+        {
+          "label": "Source, support table and changelog",
+          "url": "https://github.com/Al-Azif/psfree-lapse"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Al-Azif/psfree-lapse/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "ps4-exploit-host",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "A LAN host for exploits you already have; it adds no firmware support of its own.",
+      "summary": "A self-hosted exploit page and payload sender for a local network. It can cache exploits offline and block update and telemetry domains.",
+      "source": "https://github.com/Al-Azif/ps4-exploit-host",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Desktop/LAN host; the console must already be on an exploitable firmware."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A computer on the same network, or the project remote DNS option.",
+        "An exploit and payload for your exact firmware."
+      ],
+      "warnings": [
+        "The README says releases include no exploits or payloads unless you download them separately."
+      ],
+      "links": [
+        {
+          "label": "Source and FAQ",
+          "url": "https://github.com/Al-Azif/ps4-exploit-host"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Al-Azif/ps4-exploit-host/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "PS4 Payload SDK",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Development SDK; the target console must already be exploited.",
+      "summary": "An SDK for building payloads for exploited PS4 consoles, with the ELF loaders the project lists as known to work.",
+      "source": "https://github.com/ps4-payload-dev/sdk",
+      "kind": "tool",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Build tooling; firmware support comes from the exploit and ELF loader used to run the payload."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Linux, macOS or Windows development host with the listed compilers.",
+        "An exploited PS4 and a compatible ELF loader to run the built payload."
+      ],
+      "warnings": [
+        "Source tooling only; it is not an installable homebrew app."
+      ],
+      "links": [
+        {
+          "label": "Source and prerequisites",
+          "url": "https://github.com/ps4-payload-dev/sdk"
+        },
+        {
+          "label": "ELF loader",
+          "url": "https://github.com/ps4-payload-dev/elfldr"
+        }
+      ],
+      "availability": "Open source; built from source."
     }
   ],
   "sources": [
@@ -385,6 +536,18 @@
     {
       "label": "Sony PS4 system software info",
       "url": "https://www.playstation.com/en-us/support/hardware/ps4/system-software-info/"
+    },
+    {
+      "label": "PSFree / Lapse",
+      "url": "https://github.com/Al-Azif/psfree-lapse"
+    },
+    {
+      "label": "ps4-exploit-host",
+      "url": "https://github.com/Al-Azif/ps4-exploit-host"
+    },
+    {
+      "label": "PS4 Payload SDK",
+      "url": "https://github.com/ps4-payload-dev/sdk"
     }
   ],
   "highlights": [

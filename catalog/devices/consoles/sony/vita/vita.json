@@ -260,12 +260,23 @@
             "pch2000",
             "pstv"
           ],
-          "supportedFirmware": [],
+          "supportedFirmware": [
+            "3.65",
+            "3.66",
+            "3.67",
+            "3.68",
+            "3.69",
+            "3.70",
+            "3.71",
+            "3.72",
+            "3.73",
+            "3.74"
+          ],
           "status": "documented",
           "note": "Upstream states support for firmware 3.65-3.74. On a phat OLED a memory card is mandatory; a PSN-linked account and about 270 MB free space are required."
         }
       ],
-      "checkedDate": "2026-10-28",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "PS Vita or PSTV on firmware 3.65-3.74.",
         "On phat OLED models, a Vita memory card.",
@@ -506,6 +517,146 @@
           "url": "https://github.com/TheOfficialFloW/modoru"
         }
       ]
+    },
+    {
+      "name": "Adrenaline",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Requires taiHEN (HENkaku/Enso); the changelog names 3.65, 3.67 and 3.68 support, but no current firmware matrix is published.",
+      "summary": "Modifies the official PSP emulator with taiHEN so it runs a PSP 6.61 custom firmware. It adds PS1 and PSP game launching, savestates, screen filters and a recovery menu.",
+      "source": "https://github.com/TheOfficialFloW/Adrenaline",
+      "kind": "emulation",
+      "runtime": "native (ePSP emulator)",
+      "systems": "PlayStation Portable, PlayStation 1",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "README and changelog describe taiHEN-based installs and 3.65/3.67/3.68 support; no current model/firmware matrix."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Vita or PSTV with taiHEN installed (HENkaku or Enso).",
+        "VitaShell to install the VPK, and the PSP 6.61 firmware downloaded by the app."
+      ],
+      "warnings": [
+        "PSP games and the 6.61 firmware are not bundled; the app downloads the firmware on first launch.",
+        "Without Enso, the README documents a double-launch workaround after each reboot."
+      ],
+      "links": [
+        {
+          "label": "Source and setup",
+          "url": "https://github.com/TheOfficialFloW/Adrenaline"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/TheOfficialFloW/Adrenaline/releases"
+        }
+      ],
+      "availability": "Open source (GPL-3.0); VPK releases published by the project."
+    },
+    {
+      "name": "VitaDB Downloader",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Requires a jailbroken Vita with taiHEN; the app itself has no firmware matrix.",
+      "summary": "The official client for VitaDB, the Vita homebrew database. It searches, downloads and installs homebrew VPKs and their data files on the console.",
+      "source": "https://github.com/Rinnegatamante/VitaDB-Downloader",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Requires taiHEN and network access; no project firmware matrix."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A jailbroken Vita or PSTV with taiHEN.",
+        "A Wi-Fi connection for the catalogue and downloads."
+      ],
+      "warnings": [
+        "Only installs homebrew listed by VitaDB; review each app before running it."
+      ],
+      "links": [
+        {
+          "label": "Source",
+          "url": "https://github.com/Rinnegatamante/VitaDB-Downloader"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Rinnegatamante/VitaDB-Downloader/releases"
+        },
+        {
+          "label": "VitaDB catalogue",
+          "url": "https://www.rinnegatamante.eu/vitadb"
+        }
+      ],
+      "availability": "Open source; VPK releases published by the project."
+    },
+    {
+      "name": "VitaGrafix",
+      "models": [
+        "pch1000",
+        "pch2000",
+        "pstv"
+      ],
+      "firmware": "Requires taiHEN; the plugin has no firmware matrix of its own.",
+      "summary": "A taiHEN plugin that changes the resolution and FPS cap of Vita games, with a separate community patchlist per title.",
+      "source": "https://github.com/Electry/VitaGrafix",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "pch1000",
+            "pch2000",
+            "pstv"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Plugin requires taiHEN; no firmware matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A Vita with taiHEN and a plugin loader.",
+        "The VitaGrafix patchlist for the games you want to patch."
+      ],
+      "warnings": [
+        "Resolution and frame-rate patches can cause slowdowns or instability in some titles."
+      ],
+      "links": [
+        {
+          "label": "Plugin source",
+          "url": "https://github.com/Electry/VitaGrafix"
+        },
+        {
+          "label": "Patchlist",
+          "url": "https://github.com/Electry/VitaGrafixPatchlist"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Electry/VitaGrafix/releases"
+        }
+      ],
+      "availability": "Open source (GPL-3.0); releases and patchlist published by the project."
     }
   ],
   "sources": [
@@ -544,6 +695,18 @@
     {
       "label": "psdevwiki: Vita SKU Models",
       "url": "https://www.psdevwiki.com/vita/SKU_Models"
+    },
+    {
+      "label": "Adrenaline",
+      "url": "https://github.com/TheOfficialFloW/Adrenaline"
+    },
+    {
+      "label": "VitaDB Downloader",
+      "url": "https://github.com/Rinnegatamante/VitaDB-Downloader"
+    },
+    {
+      "label": "VitaGrafix",
+      "url": "https://github.com/Electry/VitaGrafix"
     }
   ]
 }

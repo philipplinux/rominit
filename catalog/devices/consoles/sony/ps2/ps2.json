@@ -131,6 +131,139 @@
           "url": "https://github.com/CTurt/FreeDVDBoot"
         }
       ]
+    },
+    {
+      "name": "Open PS2 Loader (OPL)",
+      "models": [
+        "fat",
+        "slim"
+      ],
+      "firmware": "No firmware dependency: OPL is a PS2 application launched from an existing entry point such as FMCB/FHDB or FreeDVDBoot.",
+      "summary": "An open-source game and application loader for the PS2. It plays games from USB storage, MX4SIO SD adapters, iLink (IEEE 1394) devices, SMB shares, or an internal HDD/SSD in a fat console.",
+      "source": "https://github.com/ps2homebrew/Open-PS2-Loader",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "fat",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream describes OPL as a PS2 application loader; it depends on a homebrew entry point, not a system version."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A working PS2 entry point such as FMCB/FHDB or FreeDVDBoot.",
+        "A supported storage source: USB drive, MX4SIO adapter, iLink device, SMB share, or an internal drive in a fat console."
+      ],
+      "warnings": [
+        "Game compatibility and load speed vary by storage type and title.",
+        "No games are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and setup",
+          "url": "https://github.com/ps2homebrew/Open-PS2-Loader"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/ps2homebrew/Open-PS2-Loader/releases"
+        }
+      ],
+      "availability": "Open source (AFL-3.0); builds published by the project."
+    },
+    {
+      "name": "wLaunchELF",
+      "models": [
+        "fat",
+        "slim"
+      ],
+      "firmware": "No firmware dependency: a PS2 application launched from an existing entry point.",
+      "summary": "An open-source file manager and executable launcher for the PS2, formerly known as uLaunchELF. It adds a text editor, hard-drive manager and FTP support.",
+      "source": "https://github.com/ps2homebrew/wLaunchELF",
+      "kind": "payload/app",
+      "compatibility": [
+        {
+          "models": [
+            "fat",
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "Upstream describes a PS2 application; it runs under any working homebrew entry point."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A PS2 entry point such as FMCB/FHDB or FreeDVDBoot."
+      ],
+      "warnings": [
+        "File operations can delete data; back up memory cards and drives before moving system files."
+      ],
+      "links": [
+        {
+          "label": "Source",
+          "url": "https://github.com/ps2homebrew/wLaunchELF"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/ps2homebrew/wLaunchELF/releases"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
+    },
+    {
+      "name": "Kernelloader (PS2 Linux bootloader)",
+      "models": [
+        "fat",
+        "slim"
+      ],
+      "firmware": "No firmware dependency: a homebrew bootloader that starts a Linux kernel and initrd from memory card, USB, network share or the Live Linux DVD.",
+      "summary": "A free, open-source bootloader for PS2 Linux, the community replacement for Sony's discontinued commercial Linux kit. The project also ships a BlackRhino-based Live Linux DVD that boots on fat and slim consoles without a modchip.",
+      "source": "https://kernelloader.sourceforge.net/",
+      "kind": "linux",
+      "compatibility": [
+        {
+          "models": [
+            "fat"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The project's hardware table lists fat models from V1 through V11 as working; its site states Linux runs stably on the fat PS2."
+        },
+        {
+          "models": [
+            "slim"
+          ],
+          "supportedFirmware": [],
+          "status": "documented",
+          "note": "The project's hardware table lists slim V12/V13 and V14+ as working with network support, but calls USB write access unstable and recommends the Live Linux DVD."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A homebrew entry point such as FMCB, a memory card exploit or Action Replay Media Player.",
+        "A Linux kernel (vmlinux) and initrd on memory card, USB or a network share; or the Live Linux DVD.",
+        "For a hard-drive install, a fat console with network adapter and HDD."
+      ],
+      "warnings": [
+        "Slim PSTwo support is less stable: the project notes unstable USB write access and recommends the Live DVD or an SMB share.",
+        "Sony's official PS2 Linux kit is discontinued and does not support slim consoles.",
+        "The Live DVD is a video DVD: the console reads burned video DVDs without a modchip, but a homebrew loader must be started before the disc is inserted."
+      ],
+      "links": [
+        {
+          "label": "Project site",
+          "url": "https://kernelloader.sourceforge.net/"
+        },
+        {
+          "label": "SourceForge project",
+          "url": "https://sourceforge.net/projects/kernelloader/"
+        }
+      ],
+      "availability": "Open source (GPLv2/AFL); releases and the Live Linux DVD published on SourceForge."
     }
   ],
   "sources": [
@@ -145,6 +278,18 @@
     {
       "label": "FreeDVDBoot (upstream)",
       "url": "https://github.com/CTurt/FreeDVDBoot"
+    },
+    {
+      "label": "Open PS2 Loader (OPL)",
+      "url": "https://github.com/ps2homebrew/Open-PS2-Loader"
+    },
+    {
+      "label": "wLaunchELF",
+      "url": "https://github.com/ps2homebrew/wLaunchELF"
+    },
+    {
+      "label": "Kernelloader (PS2 Linux bootloader)",
+      "url": "https://kernelloader.sourceforge.net/"
     }
   ],
   "officialSupport": {

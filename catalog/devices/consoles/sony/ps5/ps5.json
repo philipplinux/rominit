@@ -266,10 +266,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "The upstream README does not state Pro-specific support; do not infer it from the generic PS5 firmware list."
+          "note": "The upstream README lists PS5 firmware 7.00–13.60 but does not name Pro; Pro support is not stated."
         }
       ],
-      "checkedDate": "2026-10-21",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "PS5 on a firmware revision represented in the upstream offset list."
       ],
@@ -281,6 +281,9 @@
           "label": "Upstream repository",
           "url": "https://github.com/ntfargo/Relapse-Exploit"
         }
+      ],
+      "opens": [
+        "kernel"
       ]
     },
     {
@@ -310,10 +313,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "The README does not state PS5 Pro-specific support."
+          "note": "The README requires a PS5 on 4.03 or newer and does not name Pro; Pro support is not stated."
         }
       ],
-      "checkedDate": "2026-10-21",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "PS5 system software 4.03 or newer.",
         "Follow upstream account activation instructions; its fake-activation section requires a separate fake-activated account when a legit PSN account already exists.",
@@ -357,10 +360,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "No Pro-specific support is stated."
+          "note": "Y2JB and PSFree/Lapse state a PS5 firmware ceiling only; neither names Pro."
         }
       ],
-      "checkedDate": "2026-10-21",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "Y2JB userland running on the console.",
         "Firmware no higher than 10.01 per the Y2JB Lapse payload note.",
@@ -411,10 +414,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "The repository does not state PS5 Pro-specific support."
+          "note": "The repository states PS5 firmware 11.00–12.00 and does not name Pro; Pro support is not stated."
         }
       ],
-      "checkedDate": "2026-10-21",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "Y2JB userland running on the console.",
         "One of the exact firmware revisions listed by this implementation.",
@@ -634,10 +637,10 @@
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "No exact current firmware/model matrix was published in the reviewed upstream README."
+          "note": "The upstream README and 2.4B release notes give no exact model/firmware matrix and do not name Pro."
         }
       ],
-      "checkedDate": "2026-10-21",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible exploit and Payload SDK ELF loader (required by upstream 2.4B release notes)."
       ],
@@ -656,23 +659,95 @@
         "slim",
         "pro"
       ],
-      "firmware": "Kernel payload; an exact supported-firmware list was not confirmed from its upstream README.",
-      "summary": "Adds kernel support that some homebrew and package features rely on after a compatible jailbreak. Support can vary by build, and the project has no exact firmware list.",
+      "firmware": "Release v1.11 lists firmware 1.00–13.60; it does not name Pro.",
+      "summary": "Adds kernel support that some homebrew and package features rely on after a compatible jailbreak. Support can vary by build; release v1.11 lists firmware 1.00–13.60.",
       "source": "https://github.com/EchoStretch/kstuff-lite",
       "kind": "payload/app",
       "compatibility": [
         {
           "models": [
             "original",
-            "slim",
+            "slim"
+          ],
+          "supportedFirmware": [
+            "1.00",
+            "1.01",
+            "1.02",
+            "1.05",
+            "1.10",
+            "1.11",
+            "1.12",
+            "1.13",
+            "1.14",
+            "2.00",
+            "2.20",
+            "2.25",
+            "2.26",
+            "2.30",
+            "2.50",
+            "2.70",
+            "3.00",
+            "3.10",
+            "3.20",
+            "3.21",
+            "4.00",
+            "4.02",
+            "4.03",
+            "4.50",
+            "4.51",
+            "5.00",
+            "5.02",
+            "5.10",
+            "5.50",
+            "6.00",
+            "6.02",
+            "6.50",
+            "7.00",
+            "7.01",
+            "7.20",
+            "7.40",
+            "7.60",
+            "7.61",
+            "8.00",
+            "8.20",
+            "8.40",
+            "8.60",
+            "9.00",
+            "9.20",
+            "9.40",
+            "9.60",
+            "10.00",
+            "10.01",
+            "10.20",
+            "10.40",
+            "11.00",
+            "11.20",
+            "11.60",
+            "12.00",
+            "12.02",
+            "12.20",
+            "12.40",
+            "12.60",
+            "12.70",
+            "13.00",
+            "13.20",
+            "13.40",
+            "13.42",
+            "13.60"
+          ],
+          "status": "documented",
+          "note": "The v1.11 release states firmware 1.00–13.60 for PS5 without a model split."
+        },
+        {
+          "models": [
             "pro"
           ],
           "supportedFirmware": [],
           "status": "unverified",
-          "note": "No exact current firmware/model matrix verified; firmware support must be checked against the specific release."
+          "note": "The v1.11 release lists PS5 firmware but does not name Pro; Pro support is not stated."
         }
       ],
-      "checkedDate": "2026-10-21",
+      "checkedDate": "2026-10-29",
       "requirements": [
         "A compatible jailbroken PS5 and a kstuff build matching its firmware."
       ],
@@ -681,7 +756,14 @@
         {
           "label": "Upstream repository",
           "url": "https://github.com/EchoStretch/kstuff-lite"
+        },
+        {
+          "label": "v1.11 release (firmware list)",
+          "url": "https://github.com/EchoStretch/kstuff-lite/releases/tag/v1.11"
         }
+      ],
+      "opens": [
+        "kernel"
       ]
     },
     {
@@ -871,7 +953,7 @@
             "13.60"
           ],
           "status": "documented",
-          "note": "Upstream explicitly handles Pro and non-Pro memory layouts."
+          "note": "Upstream documents Pro and non-Pro units; main.c detects a Pro unit and uses the Pro hypervisor physical address. Supported firmware is 13.20 and 13.60."
         },
         {
           "models": [
@@ -900,7 +982,7 @@
           "url": "https://github.com/PS5Dev/Byepervisor-Reborn"
         }
       ],
-      "checkedDate": "2026-10-21"
+      "checkedDate": "2026-10-29"
     },
     {
       "name": "PS5 Payload Web Server",
@@ -2113,6 +2195,55 @@
           "url": "https://www.playstation.com/en-us/support/hardware/ps5/system-software/"
         }
       ]
+    },
+    {
+      "name": "Luac0re",
+      "models": [
+        "original",
+        "slim",
+        "pro"
+      ],
+      "firmware": "Version 2.0 adds a JIT exploit for userland code on then-latest PS4/PS5 firmware without a kernel exploit; its Poopsploit payload is limited to PS5 12.00 or lower.",
+      "summary": "A mast1c0re variation that uses the Lua interpreter in Star Wars Racer Revenge to run native userland code on PS4 and PS5. It needs no kernel exploit, but it also gives no kernel access.",
+      "source": "https://github.com/Gezine/Luac0re",
+      "kind": "entrypoint",
+      "compatibility": [
+        {
+          "models": [
+            "original",
+            "slim",
+            "pro"
+          ],
+          "supportedFirmware": [],
+          "status": "unverified",
+          "note": "Project claims userland code execution on the latest firmware at release, but names 12.00 as the Poopsploit ceiling; no model or firmware matrix is published."
+        }
+      ],
+      "checkedDate": "2026-10-29",
+      "requirements": [
+        "A disc or digital copy of Star Wars Racer Revenge, US CUSA03474 or EU CUSA03492.",
+        "The project savedata, resigned with the remote_lua_loader setup guide."
+      ],
+      "warnings": [
+        "Userland only: it does not provide kernel access, and the project describes the JIT route as an exploit-development aid.",
+        "The Poopsploit payload is capped at PS5 firmware 12.00.",
+        "No game files are bundled."
+      ],
+      "links": [
+        {
+          "label": "Source and requirements",
+          "url": "https://github.com/Gezine/Luac0re"
+        },
+        {
+          "label": "Releases",
+          "url": "https://github.com/Gezine/Luac0re/releases"
+        },
+        {
+          "label": "Savedata resigning guide",
+          "url": "https://github.com/shahrilnet/remote_lua_loader/blob/main/SETUP.md"
+        }
+      ],
+      "availability": "Open source; releases published by the project."
     }
   ],
   "sources": [
@@ -2403,6 +2534,10 @@
     {
       "label": "Community SHA-256 and MD5 checksum list",
       "url": "https://github.com/MewX/ps5-official-firmware-list"
+    },
+    {
+      "label": "Luac0re",
+      "url": "https://github.com/Gezine/Luac0re"
     }
   ],
   "media": {
@@ -2517,5 +2652,8 @@
       "note": "A USB image writer prepares a drive; a payload sender uses an existing loader. Neither is automatically a PS5 firmware flasher."
     }
   },
-  "officialSupport": {"status": "ongoing", "source": "https://www.playstation.com/en-us/support/hardware/ps5/system-software-info/"}
+  "officialSupport": {
+    "status": "ongoing",
+    "source": "https://www.playstation.com/en-us/support/hardware/ps5/system-software-info/"
+  }
 }
