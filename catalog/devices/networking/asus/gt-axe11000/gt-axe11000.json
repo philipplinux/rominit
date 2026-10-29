@@ -30,7 +30,7 @@
   },
   "supportRoutes": [
     {
-      "section": "projects",
+      "section": "custom-os",
       "name": "AsusWrt-Merlin",
       "kind": "Community firmware",
       "description": "AsusWrt-Merlin 3004.388.12_2 (2026-08-20) is listed for this model. Check the supported-device list for the model and any hardware-revision distinctions.",
@@ -38,6 +38,30 @@
         "Confirm the exact model and any hardware revision against the linked supported-device list; similar model names can use different firmware."
       ],
       "url": "https://www.asuswrt-merlin.net/about",
+      "checked": "2026-10-28"
+    },
+    {
+      "section": "recovery",
+      "name": "ASUS stock firmware",
+      "kind": "Official release and rollback reference",
+      "description": "ASUS lists 3.0.0.4.388_24059 dated 2026-10-22 for GT-AXE11000 on its model support page.",
+      "requirements": [
+        "Match GT-AXE11000 exactly and check the model support page before downloading.",
+        "ASUS demonstrates Firmware Restoration separately as its rescue-mode route."
+      ],
+      "url": "https://www.asus.com/uk/supportonly/gt-axe11000/helpdesk_bios/",
+      "checked": "2026-10-28"
+    },
+    {
+      "section": "recovery",
+      "name": "Firmware Restoration",
+      "kind": "ASUS rescue-mode recovery utility",
+      "description": "ASUS documents Firmware Restoration for rescue mode. Its FAQ demonstrates the procedure on an RT-AC68U, so its LED timing is not confirmed for this model.",
+      "requirements": [
+        "Unzip the stock firmware before using the utility; it cannot upload an archive.",
+        "Use a wired PC with the documented static IP, enter rescue mode by holding Reset while powering on, then restore the stock image."
+      ],
+      "url": "https://www.asus.com/support/faq/1000814/",
       "checked": "2026-10-28"
     }
   ],
