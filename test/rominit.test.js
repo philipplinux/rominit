@@ -684,6 +684,10 @@ test('ROMvault net fix: rebuilds a deleted series page, a SoC page and their lin
     assert.ok(lint(vault).some(p => p.includes('cheetah.md: ## Links skips up to vendors/google/google.md')), 'device links only its series');
     writeFileSync(otherPage, otherText);
     writeFileSync(tabletPage, tabletText);
+    const ps5Series = join(vault, 'vendors/sony/series/sony-playstation-5.md'), ps5Text = readFileSync(ps5Series, 'utf8');
+    writeFileSync(ps5Series, ps5Text.replace('\n## Links\n', '\n## Links\n- Homebrew: [PS5 homebrew](../../../devices/consoles/sony/ps5/ps5-homebrew.md)\n'));
+    assert.ok(lint(vault).some(p => p.includes('sony-playstation-5.md: links devices/consoles/sony/ps5/ps5-homebrew.md: device topic pages')), 'topic pages hang under their device only');
+    writeFileSync(ps5Series, ps5Text);
     assert.match(tree(vault), /Google Pixel 7 {2}\(vendors\/google\/series\/google-pixel-7\.md\)\n {8}Google Pixel 7 Pro \(cheetah\) {2}\[\w+ · \d+ turns · reviewed .+ · .+\]/);
     assert.equal(fix(vault, 'test').update.size, 0, 'second run changes nothing');
   } finally { rmSync(dir, { recursive: true, force: true }); }

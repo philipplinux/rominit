@@ -151,6 +151,12 @@ export function lint(vault = VAULT) {
     const fm = frontmatter(text) ?? {};
     // OS links come from ROM pages, or from a device page without a ROM page for that OS; vendor/line/series pages never carry them.
     if (rel.startsWith('vendors/')) for (const o of new Set(links(file).filter(isOs))) say(file, `links ${relative(vault, o)}: OS pages are linked from device or ROM pages only`);
+    // Device topic pages (homebrew, cfw, mods) hang under their device only; categories reach devices through vendors.
+    const inDevices = (/** @type {string} */ f) => relative(vault, f).startsWith('devices/');
+    const isTopic = (/** @type {string} */ f) => inDevices(f) && !['device', 'rom'].includes(frontmatter(pages.get(f) ?? '')?.type);
+    if (rel.startsWith('vendors/')) for (const t of new Set(links(file).filter(isTopic))) say(file, `links ${relative(vault, t)}: device topic pages are linked from their device page only`);
+    if (rel.startsWith('categories/')) for (const d of new Set(links(file).filter(inDevices))) say(file, `links ${relative(vault, d)}: categories link vendors, not devices`);
+    if (isTopic(file)) for (const u of new Set(links(file).filter(f => relative(vault, f).startsWith('vendors/')))) say(file, `links ${relative(vault, u)}: a device topic page links up to its device only`);
     if (fm.type === 'device') {
       const viaRoms = new Set([...pages.keys()].filter(f => f.startsWith(join(dirname(file), 'roms') + '/')).flatMap(links));
       for (const o of new Set(links(file).filter(f => isOs(f) && viaRoms.has(f)))) say(file, `links ${relative(vault, o)}, which its ROM page already links`);
